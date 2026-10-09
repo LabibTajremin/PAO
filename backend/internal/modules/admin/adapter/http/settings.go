@@ -7,6 +7,7 @@ import (
 
 	"github.com/LabibTajremin/PAO/backend/internal/modules/admin/app"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/admin/domain"
+	identity "github.com/LabibTajremin/PAO/backend/internal/modules/identity/contract"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/httpx"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/httpx/api"
 )
@@ -26,6 +27,8 @@ var errorMap = httpx.ErrorMap{
 	domain.ErrInvalidPhoto:      httpx.NewError(http.StatusUnprocessableEntity, "UPLOAD_INVALID", "Attach confirmed complaint photos only."),
 	domain.ErrInvalidAssignee:   httpx.NewError(http.StatusUnprocessableEntity, "VALIDATION_FAILED", "This admin cannot work complaints."),
 	domain.ErrInvalidTransition: httpx.NewError(http.StatusConflict, "COMPLAINT_INVALID_TRANSITION", "This complaint is already resolved."),
+	domain.ErrPersonNotFound:    httpx.ErrNotFound,
+	identity.ErrStatusInvalid:   httpx.NewError(http.StatusConflict, "CONFLICT", "The account already has this status."),
 }
 
 func toSetting(s domain.Setting) api.Setting {

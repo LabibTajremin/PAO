@@ -57,6 +57,7 @@ type Repository interface {
 	Load(ctx context.Context, id uuid.UUID) (domain.State, error)
 	Change(ctx context.Context, id uuid.UUID, fn Change) (domain.State, error)
 	Levels(ctx context.Context, ids []uuid.UUID) (map[uuid.UUID]int, error)
+	CountPendingReviews(ctx context.Context) (int, error)
 	Queue(ctx context.Context, f QueueFilter, p Page) ([]QueueRow, error)
 	Sessions(ctx context.Context, f SessionFilter, p Page) ([]domain.Session, error)
 	Session(ctx context.Context, id uuid.UUID) (domain.Session, error)

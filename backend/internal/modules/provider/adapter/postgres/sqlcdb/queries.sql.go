@@ -323,6 +323,94 @@ func (q *Queries) SaveProfile(ctx context.Context, arg SaveProfileParams) error 
 	return err
 }
 
+const searchProviders = `-- name: SearchProviders :many
+SELECT p.id, p.full_name, p.phone,
+    (CASE WHEN p.account_status = 'active' AND p.level = 0 THEN 'pending' ELSE p.account_status END)::text AS status,
+    p.level, p.rating_avg, p.rating_count, p.completed_jobs, p.flagged_for_review, p.flag_reason, p.created_at,
+    COALESCE(array_agg(s.service_id ORDER BY s.service_id) FILTER (WHERE s.service_id IS NOT NULL), '{}')::uuid[] AS service_ids
+FROM provider.providers p
+LEFT JOIN provider.provider_services s ON s.provider_id = p.id
+WHERE ($1::uuid IS NULL OR p.id = $1::uuid)
+  AND ($2::text = '' OR lower(p.full_name) LIKE $2::text OR p.phone LIKE $2::text)
+  AND ($3::text IS NULL
+       OR (CASE WHEN p.account_status = 'active' AND p.level = 0 THEN 'pending' ELSE p.account_status END) = $3::text)
+  AND ($4::int IS NULL OR p.level = $4::int)
+  AND ($5::bool IS NULL OR p.flagged_for_review = $5::bool)
+  AND ($6::timestamptz IS NULL OR (p.created_at, p.id) < ($6::timestamptz, $7::uuid))
+GROUP BY p.id
+ORDER BY p.created_at DESC, p.id DESC
+LIMIT $8
+`
+
+type SearchProvidersParams struct {
+	ID       *uuid.UUID
+	Pattern  string
+	Status   *string
+	Level    *int32
+	Flagged  *bool
+	BeforeAt *time.Time
+	BeforeID uuid.UUID
+	MaxRows  int32
+}
+
+type SearchProvidersRow struct {
+	ID               uuid.UUID
+	FullName         string
+	Phone            string
+	Status           string
+	Level            int32
+	RatingAvg        float64
+	RatingCount      int32
+	CompletedJobs    int32
+	FlaggedForReview bool
+	FlagReason       string
+	CreatedAt        time.Time
+	ServiceIds       []uuid.UUID
+}
+
+// An active provider without Level 1 is listed as pending verification (PRD §6.4).
+func (q *Queries) SearchProviders(ctx context.Context, arg SearchProvidersParams) ([]SearchProvidersRow, error) {
+	rows, err := q.db.Query(ctx, searchProviders,
+		arg.ID,
+		arg.Pattern,
+		arg.Status,
+		arg.Level,
+		arg.Flagged,
+		arg.BeforeAt,
+		arg.BeforeID,
+		arg.MaxRows,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []SearchProvidersRow
+	for rows.Next() {
+		var i SearchProvidersRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.FullName,
+			&i.Phone,
+			&i.Status,
+			&i.Level,
+			&i.RatingAvg,
+			&i.RatingCount,
+			&i.CompletedJobs,
+			&i.FlaggedForReview,
+			&i.FlagReason,
+			&i.CreatedAt,
+			&i.ServiceIds,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const setAccountStatus = `-- name: SetAccountStatus :exec
 UPDATE provider.providers SET account_status = $2 WHERE id = $1
 `

@@ -16,8 +16,8 @@ it first and continues from **Current task**.
 | P06 Provider & verification | done | — | |
 | P07 Discovery & booking | done | — | |
 | P08 Rating, notification, complaints | done | — | |
-| P09 Admin API | in_progress | — | |
-| P10 Flutter foundation | todo | — | |
+| P09 Admin API | done | — | ADR-0026 |
+| P10 Flutter foundation | in_progress | — | |
 | P11 Partner app | todo | — | |
 | P12 Customer app | todo | — | |
 | P13 Admin web | todo | — | |
@@ -28,8 +28,8 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P09 / task 1 — read `docs/build/phases/P09-*.md` and start its first task
-(complaint endpoints already exist from P08).
+P10 / task 1 — read `docs/build/phases/P10-*.md`; the backend is feature-complete
+(every OpenAPI operation is implemented).
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
@@ -63,6 +63,9 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-10-09 P09 admin API: dashboard read model from events (cached 60 s), provider
+  and customer search/detail/status via owners' contracts (ADR-0026), bookings monitor
+  with filters, per-role RBAC table test over every protected route.
 - 2026-10-09 P08.3 complaints: either party reports a booking (reason, description,
   ≤ 5 confirmed photos), TCK ticket numbers, admin queue with filters and cursor,
   assign/comment/resolve; `ComplaintResolved` notifies the reporter, is audited and a

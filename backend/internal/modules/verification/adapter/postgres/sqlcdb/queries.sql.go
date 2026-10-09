@@ -28,6 +28,19 @@ func (q *Queries) BlockNID(ctx context.Context, arg BlockNIDParams) error {
 	return err
 }
 
+const countPendingReviews = `-- name: CountPendingReviews :one
+SELECT count(DISTINCT l.provider_id) FROM verification.levels l
+JOIN verification.items i ON i.provider_id = l.provider_id AND i.status = 'pending'
+WHERE l.submitted_at IS NOT NULL
+`
+
+func (q *Queries) CountPendingReviews(ctx context.Context) (int64, error) {
+	row := q.db.QueryRow(ctx, countPendingReviews)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const currentDocuments = `-- name: CurrentDocuments :many
 SELECT id, item_type, kind, media_id, created_at FROM verification.documents
 WHERE provider_id = $1 AND current ORDER BY created_at, id

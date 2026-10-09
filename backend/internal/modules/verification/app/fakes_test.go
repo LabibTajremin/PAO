@@ -57,6 +57,8 @@ func (f *fakeRepo) Levels(_ context.Context, ids []uuid.UUID) (map[uuid.UUID]int
 	return out, f.err
 }
 
+func (f *fakeRepo) CountPendingReviews(context.Context) (int, error) { return len(f.states), f.err }
+
 func (f *fakeRepo) Queue(context.Context, port.QueueFilter, port.Page) ([]port.QueueRow, error) {
 	return f.queue, f.listErr
 }

@@ -14,14 +14,8 @@ import (
 	media "github.com/LabibTajremin/PAO/backend/internal/modules/media/contract"
 )
 
-// BookingReader is the part of the booking contract complaints need; the booking module
-// is built after admin, so the composition root passes a forwarder.
-type BookingReader interface {
-	GetBooking(ctx context.Context, bookingID uuid.UUID) (booking.Booking, error)
-}
-
 // Bookings implements port.Bookings.
-type Bookings struct{ Svc BookingReader }
+type Bookings struct{ Svc booking.BookingService }
 
 // Parties implements port.Bookings.
 func (b Bookings) Parties(ctx context.Context, id uuid.UUID) (customerID, providerID uuid.UUID, err error) {

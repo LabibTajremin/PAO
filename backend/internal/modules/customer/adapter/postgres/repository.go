@@ -32,7 +32,7 @@ func New(pool *pgxpool.Pool, w *outbox.Writer) *Repository {
 func (r *Repository) SaveCustomer(ctx context.Context, c domain.Customer, e eventbus.Event) error {
 	return db.WithTx(ctx, r.pool, func(tx pgx.Tx) error {
 		err := r.q.WithTx(tx).UpsertCustomer(ctx, sqlcdb.UpsertCustomerParams{ID: c.ID, Name: c.Name, PhotoMediaID: c.PhotoMediaID,
-			Language: c.Language, CreatedAt: c.UpdatedAt})
+			Language: c.Language, CreatedAt: c.UpdatedAt, Phone: c.Phone, AccountStatus: c.Status})
 		if err == nil {
 			err = r.outbox.Write(ctx, tx, c.ID.String(), e)
 		}

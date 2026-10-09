@@ -118,3 +118,8 @@ func (s *Service) CountActive(ctx context.Context, provider uuid.UUID) (int, err
 func (s *Service) Get(ctx context.Context, id uuid.UUID) (domain.Booking, error) {
 	return s.d.Repo.Get(ctx, id)
 }
+
+// Monitor lists bookings for the admin monitor (A-06).
+func (s *Service) Monitor(ctx context.Context, f port.Filter, p port.Page) ([]port.Summary, error) {
+	return s.d.Repo.Monitor(ctx, f, p)
+}

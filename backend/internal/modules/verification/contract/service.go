@@ -17,4 +17,8 @@ type VerificationService interface {
 	// service: Level ≥ the service's required level (Level 2 when flagged), no expired
 	// document and not blocked (PRD §6.1, §6.4). uuid.Nil checks any service.
 	CanReceiveBookings(ctx context.Context, providerID, serviceID uuid.UUID) (bool, error)
+	// GetItems returns the provider's verification items sorted by type (A-05).
+	GetItems(ctx context.Context, providerID uuid.UUID) ([]Item, error)
+	// CountPendingReviews counts submitted providers with an item awaiting review (A-09).
+	CountPendingReviews(ctx context.Context) (int, error)
 }

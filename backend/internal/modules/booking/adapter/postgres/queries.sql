@@ -90,3 +90,14 @@ ORDER BY completed_at DESC, id DESC LIMIT sqlc.arg(max_rows);
 SELECT count(*) FILTER (WHERE status = 'completed')::int AS completed,
     count(*) FILTER (WHERE status = 'cancelled' AND cancelled_by = 'provider' AND accepted_at IS NOT NULL AND cancelled_at > sqlc.arg(since))::int AS cancellations
 FROM booking.bookings WHERE provider_id = sqlc.arg(provider_id);
+
+-- name: AdminListBookings :many
+SELECT id, number, status, service_name_en, service_name_bn, customer_name, provider_name, timing, scheduled_at, total_paisa, created_at
+FROM booking.bookings
+WHERE (sqlc.narg(status)::text IS NULL OR status = sqlc.narg(status)::text)
+  AND (sqlc.narg(service_id)::uuid IS NULL OR service_id = sqlc.narg(service_id)::uuid)
+  AND (sqlc.narg(from_at)::timestamptz IS NULL OR created_at >= sqlc.narg(from_at)::timestamptz)
+  AND (sqlc.narg(until_at)::timestamptz IS NULL OR created_at < sqlc.narg(until_at)::timestamptz)
+  AND (sqlc.arg(area)::text = '' OR lower(address_area) = lower(sqlc.arg(area)::text))
+  AND (sqlc.narg(before_at)::timestamptz IS NULL OR (created_at, id) < (sqlc.narg(before_at)::timestamptz, sqlc.arg(before_id)::uuid))
+ORDER BY created_at DESC, id DESC LIMIT sqlc.arg(max_rows);

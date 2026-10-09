@@ -96,3 +96,20 @@ func (r *Repository) SaveComplaint(ctx context.Context, id uuid.UUID, change fun
 func (r *Repository) AddComment(ctx context.Context, c domain.Comment) error {
 	return r.q.InsertComment(ctx, sqlcdb.InsertCommentParams{ID: c.ID, ComplaintID: c.ComplaintID, AuthorID: c.AuthorID, Body: c.Body, At: c.At})
 }
+
+// CountComplaintsAgainst implements port.Repository.
+func (r *Repository) CountComplaintsAgainst(ctx context.Context, id uuid.UUID) (int, error) {
+	n, err := r.q.CountComplaintsAgainst(ctx, id)
+	return int(n), err
+}
+
+// ComplaintsInvolving implements port.Repository.
+func (r *Repository) ComplaintsInvolving(ctx context.Context, id uuid.UUID, limit int) ([]domain.Complaint, error) {
+	rows, err := r.q.ComplaintsInvolving(ctx, sqlcdb.ComplaintsInvolvingParams{ReporterID: id,
+		Limit: int32(limit)}) //nolint:gosec // callers pass small constants
+	out := make([]domain.Complaint, 0, len(rows))
+	for _, row := range rows {
+		out = append(out, toComplaint(row))
+	}
+	return out, err
+}

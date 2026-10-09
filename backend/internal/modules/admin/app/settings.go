@@ -22,16 +22,27 @@ const settingsTTL = 10 * time.Minute
 
 // Deps are the admin collaborators.
 type Deps struct {
-	Repo     port.Repository
-	Cache    port.Cache
-	Keys     redisx.Keys
-	Clock    clock.Clock
-	IDs      idgen.Generator
-	Log      *slog.Logger
-	Bookings port.Bookings
-	Media    port.Media
-	Admins   port.Admins
+	Repo   port.Repository
+	Cache  port.Cache
+	Keys   redisx.Keys
+	Clock  clock.Clock
+	IDs    idgen.Generator
+	Log    *slog.Logger
+	Media  port.Media
+	Admins port.Admins
+	Peers
 }
+
+// Peers are modules built after admin, because they read admin settings; Connect
+// supplies them once everything is wired.
+type Peers struct {
+	Bookings     port.Bookings
+	Verification port.Verification
+	Console      Console
+}
+
+// Connect supplies the peers built after admin. It runs before the server starts.
+func (s *Service) Connect(p Peers) { s.d.Peers = p }
 
 // Service implements the admin use cases.
 type Service struct{ d Deps }

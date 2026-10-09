@@ -37,10 +37,10 @@ func (m Media) URL(ctx context.Context, viewer, id uuid.UUID) (string, error) {
 // Accounts implements port.Accounts.
 type Accounts struct{ Svc identity.IdentityService }
 
-// Phone implements port.Accounts.
-func (a Accounts) Phone(ctx context.Context, id uuid.UUID) (string, error) {
+// Account implements port.Accounts.
+func (a Accounts) Account(ctx context.Context, id uuid.UUID) (phone, status string, err error) {
 	acc, err := a.Svc.GetAccount(ctx, id)
-	return acc.Phone, err
+	return acc.Phone, string(acc.Status), err
 }
 
 // Area implements port.Area.

@@ -74,6 +74,15 @@ func (q *Queries) CountAddresses(ctx context.Context, customerID uuid.UUID) (int
 	return count, err
 }
 
+const countCustomerBooking = `-- name: CountCustomerBooking :exec
+UPDATE customer.customers SET bookings = bookings + 1 WHERE id = $1
+`
+
+func (q *Queries) CountCustomerBooking(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, countCustomerBooking, id)
+	return err
+}
+
 const customerByID = `-- name: CustomerByID :one
 SELECT id, name, photo_media_id, language, updated_at FROM customer.customers WHERE id = $1
 `
@@ -247,6 +256,82 @@ func (q *Queries) PromoteNewest(ctx context.Context, customerID uuid.UUID) error
 	return err
 }
 
+const searchCustomers = `-- name: SearchCustomers :many
+SELECT id, name, phone, account_status, bookings, created_at FROM customer.customers
+WHERE ($1::uuid IS NULL OR id = $1::uuid)
+  AND ($2::text = '' OR lower(name) LIKE $2::text OR phone LIKE $2::text)
+  AND ($3::text IS NULL OR account_status = $3::text)
+  AND ($4::timestamptz IS NULL OR (created_at, id) < ($4::timestamptz, $5::uuid))
+ORDER BY created_at DESC, id DESC
+LIMIT $6
+`
+
+type SearchCustomersParams struct {
+	ID       *uuid.UUID
+	Pattern  string
+	Status   *string
+	BeforeAt *time.Time
+	BeforeID uuid.UUID
+	MaxRows  int32
+}
+
+type SearchCustomersRow struct {
+	ID            uuid.UUID
+	Name          string
+	Phone         string
+	AccountStatus string
+	Bookings      int32
+	CreatedAt     time.Time
+}
+
+func (q *Queries) SearchCustomers(ctx context.Context, arg SearchCustomersParams) ([]SearchCustomersRow, error) {
+	rows, err := q.db.Query(ctx, searchCustomers,
+		arg.ID,
+		arg.Pattern,
+		arg.Status,
+		arg.BeforeAt,
+		arg.BeforeID,
+		arg.MaxRows,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []SearchCustomersRow
+	for rows.Next() {
+		var i SearchCustomersRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Phone,
+			&i.AccountStatus,
+			&i.Bookings,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const setCustomerStatus = `-- name: SetCustomerStatus :exec
+UPDATE customer.customers SET account_status = $2 WHERE id = $1
+`
+
+type SetCustomerStatusParams struct {
+	ID            uuid.UUID
+	AccountStatus string
+}
+
+func (q *Queries) SetCustomerStatus(ctx context.Context, arg SetCustomerStatusParams) error {
+	_, err := q.db.Exec(ctx, setCustomerStatus, arg.ID, arg.AccountStatus)
+	return err
+}
+
 const updateAddress = `-- name: UpdateAddress :execrows
 UPDATE customer.addresses SET label = $1, line1 = $2, line2 = $3, area = $4,
     location = ST_SetSRID(ST_MakePoint($5::float8, $6::float8), 4326)::geography,
@@ -285,18 +370,21 @@ func (q *Queries) UpdateAddress(ctx context.Context, arg UpdateAddressParams) (i
 }
 
 const upsertCustomer = `-- name: UpsertCustomer :exec
-INSERT INTO customer.customers (id, name, photo_media_id, language, created_at, updated_at)
-VALUES ($1, $2, $3, $4, $5, $5)
+INSERT INTO customer.customers (id, name, photo_media_id, language, created_at, updated_at, phone, account_status)
+VALUES ($1, $2, $3, $4, $5, $5, $6, $7)
 ON CONFLICT (id) DO UPDATE SET name = excluded.name, photo_media_id = excluded.photo_media_id,
-    language = excluded.language, updated_at = excluded.updated_at
+    language = excluded.language, updated_at = excluded.updated_at, phone = excluded.phone,
+    account_status = excluded.account_status
 `
 
 type UpsertCustomerParams struct {
-	ID           uuid.UUID
-	Name         string
-	PhotoMediaID *uuid.UUID
-	Language     string
-	CreatedAt    time.Time
+	ID            uuid.UUID
+	Name          string
+	PhotoMediaID  *uuid.UUID
+	Language      string
+	CreatedAt     time.Time
+	Phone         string
+	AccountStatus string
 }
 
 func (q *Queries) UpsertCustomer(ctx context.Context, arg UpsertCustomerParams) error {
@@ -306,6 +394,8 @@ func (q *Queries) UpsertCustomer(ctx context.Context, arg UpsertCustomerParams) 
 		arg.PhotoMediaID,
 		arg.Language,
 		arg.CreatedAt,
+		arg.Phone,
+		arg.AccountStatus,
 	)
 	return err
 }

@@ -4,6 +4,8 @@ package app
 
 import (
 	"context"
+	"slices"
+	"strings"
 
 	"github.com/google/uuid"
 
@@ -71,4 +73,21 @@ func (s *Service) CanReceiveBookings(ctx context.Context, id, serviceID uuid.UUI
 		return false, err
 	}
 	return st.CanReceiveBookings(svc.MinLevel), nil
+}
+
+// Items lists the provider's items for the admin provider record (A-05).
+func (s *Service) Items(ctx context.Context, id uuid.UUID) ([]contract.Item, error) {
+	st, err := s.d.Repo.Load(ctx, id)
+	out := make([]contract.Item, 0, len(st.Items))
+	for _, it := range st.Items {
+		out = append(out, contract.Item{Type: contract.ItemType(it.Type), Status: it.Status, Reason: it.Reason, Required: domain.Required(it.Type),
+			DecidedAt: it.DecidedAt, ExpiresAt: it.ExpiresAt})
+	}
+	slices.SortFunc(out, func(a, b contract.Item) int { return strings.Compare(string(a.Type), string(b.Type)) })
+	return out, err
+}
+
+// CountPendingReviews counts providers waiting in the review queue (A-09).
+func (s *Service) CountPendingReviews(ctx context.Context) (int, error) {
+	return s.d.Repo.CountPendingReviews(ctx)
 }

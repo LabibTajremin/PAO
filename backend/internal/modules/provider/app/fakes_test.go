@@ -16,7 +16,9 @@ import (
 
 var errBoom = errors.New("boom")
 
+// fakeRepo embeds port.Repository so admin search, tested against Postgres, need not be faked.
 type fakeRepo struct {
+	port.Repository
 	rows       map[uuid.UUID]domain.Provider
 	events     []eventbus.Event
 	err        error

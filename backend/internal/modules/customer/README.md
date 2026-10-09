@@ -7,6 +7,7 @@ Customer profiles and saved addresses with map pins; the launch-area check.
 - `GetCustomer`
 - `GetAddress`
 - `IsInServiceArea`
+- `SearchCustomers` (admin console list and record, ADR-0026)
 
 ## Events published
 
@@ -15,6 +16,7 @@ Customer profiles and saved addresses with map pins; the launch-area check.
 ## Events consumed
 
 - `identity.AccountDeleted (erase profile and addresses)`
+- `identity.AccountStatusChanged`, `booking.BookingRequested` (admin list copies)
 
 ## Tables (schema `customer`)
 

@@ -24,12 +24,15 @@ type CustomerAddress struct {
 }
 
 type CustomerCustomer struct {
-	ID           uuid.UUID
-	Name         string
-	PhotoMediaID *uuid.UUID
-	Language     string
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	ID            uuid.UUID
+	Name          string
+	PhotoMediaID  *uuid.UUID
+	Language      string
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	Phone         string
+	AccountStatus string
+	Bookings      int32
 }
 
 type CustomerOutbox struct {

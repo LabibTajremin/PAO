@@ -32,3 +32,13 @@ func (s *Service) GetLevels(ctx context.Context, ids []uuid.UUID) (map[uuid.UUID
 func (s *Service) CanReceiveBookings(ctx context.Context, id, serviceID uuid.UUID) (bool, error) {
 	return s.svc.CanReceiveBookings(ctx, id, serviceID)
 }
+
+// GetItems implements contract.VerificationService.
+func (s *Service) GetItems(ctx context.Context, id uuid.UUID) ([]contract.Item, error) {
+	return s.svc.Items(ctx, id)
+}
+
+// CountPendingReviews implements contract.VerificationService.
+func (s *Service) CountPendingReviews(ctx context.Context) (int, error) {
+	return s.svc.CountPendingReviews(ctx)
+}

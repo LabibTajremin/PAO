@@ -57,3 +57,22 @@ SELECT count(*) FROM provider.cancellations WHERE provider_id = $1 AND at > $2;
 
 -- name: DeleteProvider :exec
 DELETE FROM provider.providers WHERE id = $1;
+
+-- An active provider without Level 1 is listed as pending verification (PRD §6.4).
+-- name: SearchProviders :many
+SELECT p.id, p.full_name, p.phone,
+    (CASE WHEN p.account_status = 'active' AND p.level = 0 THEN 'pending' ELSE p.account_status END)::text AS status,
+    p.level, p.rating_avg, p.rating_count, p.completed_jobs, p.flagged_for_review, p.flag_reason, p.created_at,
+    COALESCE(array_agg(s.service_id ORDER BY s.service_id) FILTER (WHERE s.service_id IS NOT NULL), '{}')::uuid[] AS service_ids
+FROM provider.providers p
+LEFT JOIN provider.provider_services s ON s.provider_id = p.id
+WHERE (sqlc.narg(id)::uuid IS NULL OR p.id = sqlc.narg(id)::uuid)
+  AND (sqlc.arg(pattern)::text = '' OR lower(p.full_name) LIKE sqlc.arg(pattern)::text OR p.phone LIKE sqlc.arg(pattern)::text)
+  AND (sqlc.narg(status)::text IS NULL
+       OR (CASE WHEN p.account_status = 'active' AND p.level = 0 THEN 'pending' ELSE p.account_status END) = sqlc.narg(status)::text)
+  AND (sqlc.narg(level)::int IS NULL OR p.level = sqlc.narg(level)::int)
+  AND (sqlc.narg(flagged)::bool IS NULL OR p.flagged_for_review = sqlc.narg(flagged)::bool)
+  AND (sqlc.narg(before_at)::timestamptz IS NULL OR (p.created_at, p.id) < (sqlc.narg(before_at)::timestamptz, sqlc.arg(before_id)::uuid))
+GROUP BY p.id
+ORDER BY p.created_at DESC, p.id DESC
+LIMIT sqlc.arg(max_rows);

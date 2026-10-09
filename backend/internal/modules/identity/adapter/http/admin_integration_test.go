@@ -4,13 +4,10 @@ package http_test
 
 import (
 	"net/http"
-	"os"
-	"regexp"
 	"strings"
 	"testing"
 
 	"github.com/google/uuid"
-	"gopkg.in/yaml.v3"
 
 	"github.com/LabibTajremin/PAO/backend/internal/platform/auth"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/httpx/api"
@@ -109,36 +106,14 @@ func TestAdminUsersAndRoles(t *testing.T) {
 // TestEveryProtectedRoute_RefusesATokenWithoutItsPermission walks the whole spec.
 func TestEveryProtectedRoute_RefusesATokenWithoutItsPermission(t *testing.T) {
 	a := testkit.NewAPI(t)
-	token := a.Token(t, uuid.New())
-	raw, err := os.ReadFile("../../../../platform/httpx/api/openapi.gen.yaml")
-	if err != nil {
-		t.Fatal(err)
-	}
-	var spec struct {
-		Paths map[string]map[string]struct {
-			Permission string `yaml:"x-permission"`
-		} `yaml:"paths"`
-	}
-	if err := yaml.Unmarshal(raw, &spec); err != nil {
-		t.Fatal(err)
-	}
-	fill := strings.NewReplacer("{role}", "customer", "{itemType}", "nid", "{key}", "booking.accept_timeout_asap_seconds")
-	param := regexp.MustCompile(`\{[a-zA-Z]+\}`)
-	checked := 0
-	for path, ops := range spec.Paths {
-		for method, op := range ops {
-			if op.Permission == "public" || op.Permission == "authenticated" {
-				continue
-			}
-			url := param.ReplaceAllString(fill.Replace(path), uuid.NewString())
-			r := a.Do(t, strings.ToUpper(method), url, nil, testkit.Bearer(token))
-			if r.Status != http.StatusForbidden {
-				t.Errorf("%s %s (%s) = %d", strings.ToUpper(method), path, op.Permission, r.Status)
-			}
-			checked++
+	token := testkit.Bearer(a.Token(t, uuid.New()))
+	ops := protectedOperations(t)
+	for _, op := range ops {
+		if r := a.Do(t, op.method, op.path, nil, token); r.Status != http.StatusForbidden {
+			t.Errorf("%s %s (%s) = %d", op.method, op.path, op.permission, r.Status)
 		}
 	}
-	if checked < 100 {
-		t.Fatalf("only %d operations checked", checked)
+	if len(ops) < 100 {
+		t.Fatalf("only %d operations checked", len(ops))
 	}
 }

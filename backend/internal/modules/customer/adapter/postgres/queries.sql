@@ -1,8 +1,9 @@
 -- name: UpsertCustomer :exec
-INSERT INTO customer.customers (id, name, photo_media_id, language, created_at, updated_at)
-VALUES ($1, $2, $3, $4, $5, $5)
+INSERT INTO customer.customers (id, name, photo_media_id, language, created_at, updated_at, phone, account_status)
+VALUES ($1, $2, $3, $4, $5, $5, $6, $7)
 ON CONFLICT (id) DO UPDATE SET name = excluded.name, photo_media_id = excluded.photo_media_id,
-    language = excluded.language, updated_at = excluded.updated_at;
+    language = excluded.language, updated_at = excluded.updated_at, phone = excluded.phone,
+    account_status = excluded.account_status;
 
 -- name: CustomerByID :one
 SELECT id, name, photo_media_id, language, updated_at FROM customer.customers WHERE id = $1;
@@ -50,3 +51,18 @@ FROM customer.addresses WHERE customer_id = $1 ORDER BY is_default DESC, created
 SELECT id, customer_id, label, line1, line2, area, ST_Y(location::geometry)::float8 AS lat,
     ST_X(location::geometry)::float8 AS lng, is_default, created_at
 FROM customer.addresses WHERE id = $1 AND customer_id = $2;
+
+-- name: SetCustomerStatus :exec
+UPDATE customer.customers SET account_status = $2 WHERE id = $1;
+
+-- name: CountCustomerBooking :exec
+UPDATE customer.customers SET bookings = bookings + 1 WHERE id = $1;
+
+-- name: SearchCustomers :many
+SELECT id, name, phone, account_status, bookings, created_at FROM customer.customers
+WHERE (sqlc.narg(id)::uuid IS NULL OR id = sqlc.narg(id)::uuid)
+  AND (sqlc.arg(pattern)::text = '' OR lower(name) LIKE sqlc.arg(pattern)::text OR phone LIKE sqlc.arg(pattern)::text)
+  AND (sqlc.narg(status)::text IS NULL OR account_status = sqlc.narg(status)::text)
+  AND (sqlc.narg(before_at)::timestamptz IS NULL OR (created_at, id) < (sqlc.narg(before_at)::timestamptz, sqlc.arg(before_id)::uuid))
+ORDER BY created_at DESC, id DESC
+LIMIT sqlc.arg(max_rows);

@@ -12,6 +12,84 @@ import (
 	"github.com/google/uuid"
 )
 
+const adminListBookings = `-- name: AdminListBookings :many
+SELECT id, number, status, service_name_en, service_name_bn, customer_name, provider_name, timing, scheduled_at, total_paisa, created_at
+FROM booking.bookings
+WHERE ($1::text IS NULL OR status = $1::text)
+  AND ($2::uuid IS NULL OR service_id = $2::uuid)
+  AND ($3::timestamptz IS NULL OR created_at >= $3::timestamptz)
+  AND ($4::timestamptz IS NULL OR created_at < $4::timestamptz)
+  AND ($5::text = '' OR lower(address_area) = lower($5::text))
+  AND ($6::timestamptz IS NULL OR (created_at, id) < ($6::timestamptz, $7::uuid))
+ORDER BY created_at DESC, id DESC LIMIT $8
+`
+
+type AdminListBookingsParams struct {
+	Status    *string
+	ServiceID *uuid.UUID
+	FromAt    *time.Time
+	UntilAt   *time.Time
+	Area      string
+	BeforeAt  *time.Time
+	BeforeID  uuid.UUID
+	MaxRows   int32
+}
+
+type AdminListBookingsRow struct {
+	ID            uuid.UUID
+	Number        int64
+	Status        string
+	ServiceNameEn string
+	ServiceNameBn string
+	CustomerName  string
+	ProviderName  string
+	Timing        string
+	ScheduledAt   *time.Time
+	TotalPaisa    int64
+	CreatedAt     time.Time
+}
+
+func (q *Queries) AdminListBookings(ctx context.Context, arg AdminListBookingsParams) ([]AdminListBookingsRow, error) {
+	rows, err := q.db.Query(ctx, adminListBookings,
+		arg.Status,
+		arg.ServiceID,
+		arg.FromAt,
+		arg.UntilAt,
+		arg.Area,
+		arg.BeforeAt,
+		arg.BeforeID,
+		arg.MaxRows,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []AdminListBookingsRow
+	for rows.Next() {
+		var i AdminListBookingsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Number,
+			&i.Status,
+			&i.ServiceNameEn,
+			&i.ServiceNameBn,
+			&i.CustomerName,
+			&i.ProviderName,
+			&i.Timing,
+			&i.ScheduledAt,
+			&i.TotalPaisa,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const bookingByID = `-- name: BookingByID :one
 SELECT id, number, customer_id, provider_id, service_id, service_name_en, service_name_bn, service_model, customer_name,
     customer_phone, provider_name, provider_phone, address_id, address_area, address_line1, address_line2,

@@ -49,3 +49,8 @@ func (s *Service) GetAddress(ctx context.Context, customerID, addressID uuid.UUI
 func (s *Service) IsInServiceArea(ctx context.Context, p geo.Point) (bool, error) {
 	return s.svc.Covered(ctx, p)
 }
+
+// SearchCustomers implements contract.CustomerService.
+func (s *Service) SearchCustomers(ctx context.Context, q contract.CustomerQuery) ([]contract.CustomerRecord, error) {
+	return s.svc.Search(ctx, q)
+}

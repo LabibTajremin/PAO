@@ -9,6 +9,7 @@ Provider enrolment profile (personal info, services, service area, emergency con
 - `FindNearby`
 - `ForceOffline`
 - `Enrolment`, `MarkStepDone`, `MarkSubmitted` (verification reports document steps)
+- `SearchProviders` (admin console list and record, ADR-0026)
 
 ## Events published
 

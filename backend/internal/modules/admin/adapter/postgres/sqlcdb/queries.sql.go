@@ -12,6 +12,56 @@ import (
 	"github.com/google/uuid"
 )
 
+const addStatsProvider = `-- name: AddStatsProvider :exec
+INSERT INTO admin.stats_providers (provider_id, status, level) VALUES ($1, 'active', 0) ON CONFLICT DO NOTHING
+`
+
+func (q *Queries) AddStatsProvider(ctx context.Context, providerID uuid.UUID) error {
+	_, err := q.db.Exec(ctx, addStatsProvider, providerID)
+	return err
+}
+
+const bookingsSince = `-- name: BookingsSince :many
+SELECT day, requested, completed FROM admin.stats_bookings_daily WHERE day >= $1 ORDER BY day
+`
+
+func (q *Queries) BookingsSince(ctx context.Context, day time.Time) ([]AdminStatsBookingsDaily, error) {
+	rows, err := q.db.Query(ctx, bookingsSince, day)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []AdminStatsBookingsDaily
+	for rows.Next() {
+		var i AdminStatsBookingsDaily
+		if err := rows.Scan(&i.Day, &i.Requested, &i.Completed); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const bumpBookings = `-- name: BumpBookings :exec
+INSERT INTO admin.stats_bookings_daily (day, requested, completed) VALUES ($1, $2, $3)
+ON CONFLICT (day) DO UPDATE SET requested = admin.stats_bookings_daily.requested + EXCLUDED.requested,
+    completed = admin.stats_bookings_daily.completed + EXCLUDED.completed
+`
+
+type BumpBookingsParams struct {
+	Day       time.Time
+	Requested int32
+	Completed int32
+}
+
+func (q *Queries) BumpBookings(ctx context.Context, arg BumpBookingsParams) error {
+	_, err := q.db.Exec(ctx, bumpBookings, arg.Day, arg.Requested, arg.Completed)
+	return err
+}
+
 const complaintByID = `-- name: ComplaintByID :one
 SELECT id, ticket_number, booking_id, reporter_id, reporter_role, against_id, reason, description, photo_media_ids, status, assignee_id, resolution, verified, created_at, updated_at, resolved_at FROM admin.complaints WHERE id = $1
 `
@@ -40,6 +90,74 @@ func (q *Queries) ComplaintByID(ctx context.Context, id uuid.UUID) (AdminComplai
 	return i, err
 }
 
+const complaintsInvolving = `-- name: ComplaintsInvolving :many
+SELECT id, ticket_number, booking_id, reporter_id, reporter_role, against_id, reason, description, photo_media_ids, status, assignee_id, resolution, verified, created_at, updated_at, resolved_at FROM admin.complaints WHERE reporter_id = $1 OR against_id = $1 ORDER BY created_at DESC, id DESC LIMIT $2
+`
+
+type ComplaintsInvolvingParams struct {
+	ReporterID uuid.UUID
+	Limit      int32
+}
+
+func (q *Queries) ComplaintsInvolving(ctx context.Context, arg ComplaintsInvolvingParams) ([]AdminComplaint, error) {
+	rows, err := q.db.Query(ctx, complaintsInvolving, arg.ReporterID, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []AdminComplaint
+	for rows.Next() {
+		var i AdminComplaint
+		if err := rows.Scan(
+			&i.ID,
+			&i.TicketNumber,
+			&i.BookingID,
+			&i.ReporterID,
+			&i.ReporterRole,
+			&i.AgainstID,
+			&i.Reason,
+			&i.Description,
+			&i.PhotoMediaIds,
+			&i.Status,
+			&i.AssigneeID,
+			&i.Resolution,
+			&i.Verified,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.ResolvedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const countComplaintsAgainst = `-- name: CountComplaintsAgainst :one
+SELECT count(*) FROM admin.complaints WHERE against_id = $1
+`
+
+func (q *Queries) CountComplaintsAgainst(ctx context.Context, againstID uuid.UUID) (int64, error) {
+	row := q.db.QueryRow(ctx, countComplaintsAgainst, againstID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countOpenComplaints = `-- name: CountOpenComplaints :one
+SELECT count(*) FROM admin.complaints WHERE status <> 'resolved'
+`
+
+func (q *Queries) CountOpenComplaints(ctx context.Context) (int64, error) {
+	row := q.db.QueryRow(ctx, countOpenComplaints)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const countVerifiedComplaints = `-- name: CountVerifiedComplaints :one
 SELECT count(*) FROM admin.complaints WHERE against_id = $1 AND verified
 `
@@ -49,6 +167,15 @@ func (q *Queries) CountVerifiedComplaints(ctx context.Context, againstID uuid.UU
 	var count int64
 	err := row.Scan(&count)
 	return count, err
+}
+
+const deleteStatsProvider = `-- name: DeleteStatsProvider :exec
+DELETE FROM admin.stats_providers WHERE provider_id = $1
+`
+
+func (q *Queries) DeleteStatsProvider(ctx context.Context, providerID uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteStatsProvider, providerID)
+	return err
 }
 
 const insertComment = `-- name: InsertComment :exec
@@ -256,6 +383,96 @@ func (q *Queries) LockComplaint(ctx context.Context, id uuid.UUID) (AdminComplai
 		&i.ResolvedAt,
 	)
 	return i, err
+}
+
+const providersByLevel = `-- name: ProvidersByLevel :many
+SELECT level, count(*) AS n FROM admin.stats_providers GROUP BY level
+`
+
+type ProvidersByLevelRow struct {
+	Level int32
+	N     int64
+}
+
+func (q *Queries) ProvidersByLevel(ctx context.Context) ([]ProvidersByLevelRow, error) {
+	rows, err := q.db.Query(ctx, providersByLevel)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ProvidersByLevelRow
+	for rows.Next() {
+		var i ProvidersByLevelRow
+		if err := rows.Scan(&i.Level, &i.N); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const providersByStatus = `-- name: ProvidersByStatus :many
+SELECT (CASE WHEN status = 'active' AND level = 0 THEN 'pending' ELSE status END)::text AS status, count(*) AS n
+FROM admin.stats_providers GROUP BY 1
+`
+
+type ProvidersByStatusRow struct {
+	Status string
+	N      int64
+}
+
+// An active provider without Level 1 is still pending verification (PRD §6.4).
+func (q *Queries) ProvidersByStatus(ctx context.Context) ([]ProvidersByStatusRow, error) {
+	rows, err := q.db.Query(ctx, providersByStatus)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ProvidersByStatusRow
+	for rows.Next() {
+		var i ProvidersByStatusRow
+		if err := rows.Scan(&i.Status, &i.N); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const setStatsLevel = `-- name: SetStatsLevel :exec
+INSERT INTO admin.stats_providers (provider_id, status, level) VALUES ($1, 'active', $2)
+ON CONFLICT (provider_id) DO UPDATE SET level = EXCLUDED.level
+`
+
+type SetStatsLevelParams struct {
+	ProviderID uuid.UUID
+	Level      int32
+}
+
+func (q *Queries) SetStatsLevel(ctx context.Context, arg SetStatsLevelParams) error {
+	_, err := q.db.Exec(ctx, setStatsLevel, arg.ProviderID, arg.Level)
+	return err
+}
+
+const setStatsStatus = `-- name: SetStatsStatus :exec
+INSERT INTO admin.stats_providers (provider_id, status, level) VALUES ($1, $2, 0)
+ON CONFLICT (provider_id) DO UPDATE SET status = EXCLUDED.status
+`
+
+type SetStatsStatusParams struct {
+	ProviderID uuid.UUID
+	Status     string
+}
+
+func (q *Queries) SetStatsStatus(ctx context.Context, arg SetStatsStatusParams) error {
+	_, err := q.db.Exec(ctx, setStatsStatus, arg.ProviderID, arg.Status)
+	return err
 }
 
 const settingByKey = `-- name: SettingByKey :one

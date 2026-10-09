@@ -37,6 +37,9 @@ type Customer struct {
 	PhotoMediaID *uuid.UUID
 	Language     string
 	UpdatedAt    time.Time
+	// Phone and Status are copies from identity for the admin customer list (A-05).
+	Phone  string
+	Status string
 }
 
 // Validate checks the profile fields.

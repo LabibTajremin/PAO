@@ -7,6 +7,7 @@ import (
 
 	"github.com/google/uuid"
 
+	"github.com/LabibTajremin/PAO/backend/internal/modules/provider/contract"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/provider/domain"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/eventbus"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/i18n"
@@ -24,6 +25,8 @@ type Repository interface {
 	Publish(ctx context.Context, id uuid.UUID, events ...eventbus.Event) error
 	// Candidates loads active providers at or above minLevel among ids.
 	Candidates(ctx context.Context, ids []uuid.UUID, minLevel int) ([]Candidate, error)
+	// Search lists providers for the admin console; Online is left for presence.
+	Search(ctx context.Context, q contract.ProviderQuery) ([]contract.ProviderRecord, error)
 }
 
 // Candidate is a search row with the provider's own working radius.

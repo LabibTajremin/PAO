@@ -21,6 +21,15 @@ type Page struct {
 	Limit int
 }
 
+// Filter narrows the admin bookings monitor; From and Until bound created_at.
+type Filter struct {
+	Status    *string
+	ServiceID *uuid.UUID
+	From      *time.Time
+	Until     *time.Time
+	Area      string
+}
+
 // Summary is a list row.
 type Summary struct {
 	ID           uuid.UUID
@@ -62,6 +71,8 @@ type Repository interface {
 	Get(ctx context.Context, id uuid.UUID) (domain.Booking, error)
 	Change(ctx context.Context, id uuid.UUID, fn Change) (domain.Booking, error)
 	List(ctx context.Context, party uuid.UUID, asProvider bool, statuses []string, p Page) ([]Summary, error)
+	// Monitor lists every booking matching the admin filters (A-06).
+	Monitor(ctx context.Context, f Filter, p Page) ([]Summary, error)
 	Due(ctx context.Context, now time.Time) ([]uuid.UUID, error)
 	EarningsByDay(ctx context.Context, provider uuid.UUID, from, to time.Time) ([]DayTotal, error)
 	EarningsJobs(ctx context.Context, provider uuid.UUID, from, to time.Time, p Page) ([]EarningsJob, error)

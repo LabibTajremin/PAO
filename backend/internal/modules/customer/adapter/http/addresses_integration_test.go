@@ -68,7 +68,7 @@ func TestAddresses_DefaultsLimitAndOwnership(t *testing.T) {
 	if err != nil || got.Location.Lng != 90.4066 || got.Area != "Banani" {
 		t.Fatalf("contract address: %+v %v", got, err)
 	}
-	stranger := testkit.Bearer(a.Token(t, uuid.New(), "customer"))
+	stranger := testkit.Bearer(a.SignIn(t, "01912345679", "customer").AccessToken)
 	thirdPath := "/v1/customer/addresses/" + third["id"].(string)
 	a.Do(t, "PUT", "/v1/customer/profile", profile, stranger)
 	for _, c := range []struct {

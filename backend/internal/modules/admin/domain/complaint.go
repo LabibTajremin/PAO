@@ -19,6 +19,7 @@ var (
 	ErrInvalidPhoto      = errors.New("photo is not a confirmed complaint photo of the reporter")
 	ErrInvalidAssignee   = errors.New("assignee cannot work complaints")
 	ErrInvalidTransition = errors.New("complaint is already resolved")
+	ErrPersonNotFound    = errors.New("provider or customer not found")
 )
 
 // Complaint statuses (A-07).

@@ -26,4 +26,6 @@ type ProviderService interface {
 	// ForceOffline removes the provider from presence, e.g. after a ban or an expired
 	// document.
 	ForceOffline(ctx context.Context, providerID uuid.UUID) error
+	// SearchProviders lists providers for the admin console, newest first (A-05).
+	SearchProviders(ctx context.Context, q ProviderQuery) ([]ProviderRecord, error)
 }

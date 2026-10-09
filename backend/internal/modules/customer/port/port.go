@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
+	"github.com/LabibTajremin/PAO/backend/internal/modules/customer/contract"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/customer/domain"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/eventbus"
 )
@@ -15,6 +16,7 @@ import (
 type Repository interface {
 	SaveCustomer(ctx context.Context, c domain.Customer, e eventbus.Event) error
 	GetCustomer(ctx context.Context, id uuid.UUID) (domain.Customer, error)
+	Search(ctx context.Context, q contract.CustomerQuery) ([]contract.CustomerRecord, error)
 	// AddAddress inserts a, making it the default when asked or when it is the first.
 	AddAddress(ctx context.Context, a domain.Address, limit int) (domain.Address, error)
 	UpdateAddress(ctx context.Context, a domain.Address) error
@@ -36,7 +38,8 @@ type Media interface {
 
 // Accounts returns sign-in details owned by identity.
 type Accounts interface {
-	Phone(ctx context.Context, id uuid.UUID) (string, error)
+	// Account returns the phone number and account status.
+	Account(ctx context.Context, id uuid.UUID) (phone, status string, err error)
 }
 
 // Area returns the launch area GeoJSON from the admin settings.

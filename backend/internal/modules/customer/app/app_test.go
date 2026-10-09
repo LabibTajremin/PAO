@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/LabibTajremin/PAO/backend/internal/modules/customer/domain"
+	"github.com/LabibTajremin/PAO/backend/internal/modules/customer/port"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/clock"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/eventbus"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/geo"
@@ -17,7 +18,9 @@ import (
 
 var errBoom = errors.New("boom")
 
+// fakeRepo embeds port.Repository; admin search is tested against Postgres.
 type fakeRepo struct {
+	port.Repository
 	customers map[uuid.UUID]domain.Customer
 	addresses map[uuid.UUID]domain.Address
 	err       error
@@ -67,8 +70,8 @@ func (p *fakePeers) AttachAvatar(context.Context, uuid.UUID, uuid.UUID) error { 
 func (p *fakePeers) URL(context.Context, uuid.UUID, uuid.UUID) (string, error) {
 	return "https://photo", p.mediaErr
 }
-func (p *fakePeers) Phone(context.Context, uuid.UUID) (string, error) {
-	return "+8801712345678", p.phoneErr
+func (p *fakePeers) Account(context.Context, uuid.UUID) (phone, status string, err error) {
+	return "+8801712345678", "active", p.phoneErr
 }
 func (p *fakePeers) ServiceArea(context.Context) (string, error) { return "", p.areaErr }
 
@@ -96,6 +99,9 @@ func TestProfile(t *testing.T) {
 	}
 	p.phoneErr = errBoom
 	if _, err := s.Profile(ctx, id); !errors.Is(err, errBoom) {
+		t.Fatal(err)
+	}
+	if _, err := s.SaveProfile(ctx, domain.Customer{ID: id, Name: "Nusrat", Language: "bn"}); !errors.Is(err, errBoom) {
 		t.Fatal(err)
 	}
 	p.phoneErr, p.mediaErr = nil, errBoom

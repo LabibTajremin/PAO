@@ -51,7 +51,7 @@ func (s *Service) Profile(ctx context.Context, id uuid.UUID) (Profile, error) {
 		return Profile{}, err
 	}
 	p := Profile{Customer: c}
-	if p.Phone, err = s.d.Accounts.Phone(ctx, id); err != nil {
+	if p.Phone, _, err = s.d.Accounts.Account(ctx, id); err != nil {
 		return Profile{}, err
 	}
 	if c.PhotoMediaID != nil {
@@ -72,7 +72,11 @@ func (s *Service) SaveProfile(ctx context.Context, c domain.Customer) (Profile, 
 			return Profile{}, err
 		}
 	}
-	c.UpdatedAt = s.d.Clock.Now()
+	phone, status, err := s.d.Accounts.Account(ctx, c.ID)
+	if err != nil {
+		return Profile{}, err
+	}
+	c.UpdatedAt, c.Phone, c.Status = s.d.Clock.Now(), phone, status
 	if err := s.d.Repo.SaveCustomer(ctx, c, contract.CustomerProfileSaved{CustomerID: c.ID, Name: c.Name}); err != nil {
 		return Profile{}, err
 	}
@@ -130,4 +134,9 @@ func (s *Service) Covered(ctx context.Context, p geo.Point) (bool, error) {
 		return false, err
 	}
 	return domain.Covers(area, domain.Point(p)), nil
+}
+
+// Search lists customers for the admin console (A-05).
+func (s *Service) Search(ctx context.Context, q contract.CustomerQuery) ([]contract.CustomerRecord, error) {
+	return s.d.Repo.Search(ctx, q)
 }

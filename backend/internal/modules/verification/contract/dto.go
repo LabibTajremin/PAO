@@ -1,6 +1,9 @@
 package contract
 
-import "errors"
+import (
+	"errors"
+	"time"
+)
 
 // ItemType is one Level 1 requirement from PRD §6.2.
 type ItemType string
@@ -19,3 +22,13 @@ const (
 
 // ErrProviderNotFound is returned when verification has no record of the provider.
 var ErrProviderNotFound = errors.New("provider has no verification record")
+
+// Item is one verification requirement as admins see it beside the provider record.
+type Item struct {
+	Type      ItemType
+	Status    string
+	Reason    string
+	Required  bool
+	DecidedAt *time.Time
+	ExpiresAt *time.Time
+}

@@ -57,4 +57,7 @@ func (m *Module) Subscribe(bus *eventbus.Bus) {
 			}
 			return postgres.Erase(ctx, tx, e.AccountID)
 		}))
+	for name, h := range postgres.CopyHandlers() {
+		bus.Subscribe(name, "customer", outbox.Idempotent(m.pool, "customer", name, h))
+	}
 }

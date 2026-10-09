@@ -101,3 +101,8 @@ WHERE status = 'approved' AND expires_at > sqlc.arg(after_at) AND expires_at <= 
 -- name: RecordReminder :execrows
 INSERT INTO verification.reminders_sent (provider_id, item_type, expires_at, days_before, sent_at) VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT DO NOTHING;
+
+-- name: CountPendingReviews :one
+SELECT count(DISTINCT l.provider_id) FROM verification.levels l
+JOIN verification.items i ON i.provider_id = l.provider_id AND i.status = 'pending'
+WHERE l.submitted_at IS NOT NULL;

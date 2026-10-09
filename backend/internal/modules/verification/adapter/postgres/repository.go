@@ -84,6 +84,12 @@ func (r *Repository) Levels(ctx context.Context, ids []uuid.UUID) (map[uuid.UUID
 	return out, err
 }
 
+// CountPendingReviews implements port.Repository.
+func (r *Repository) CountPendingReviews(ctx context.Context) (int, error) {
+	n, err := r.q.CountPendingReviews(ctx)
+	return int(n), err
+}
+
 func optional(s string) *string {
 	if s == "" {
 		return nil

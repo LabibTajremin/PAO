@@ -7,6 +7,7 @@ Level 1 document items and their review, levels, Level 2 sessions, document expi
 - `GetLevel`
 - `GetLevels`
 - `CanReceiveBookings`
+- `GetItems`, `CountPendingReviews` (admin console)
 
 ## Events published
 

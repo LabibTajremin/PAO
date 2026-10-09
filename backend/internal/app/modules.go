@@ -14,7 +14,6 @@ import (
 	audithttp "github.com/LabibTajremin/PAO/backend/internal/modules/audit/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/booking"
 	bookinghttp "github.com/LabibTajremin/PAO/backend/internal/modules/booking/adapter/http"
-	bookingcontract "github.com/LabibTajremin/PAO/backend/internal/modules/booking/contract"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/catalog"
 	cataloghttp "github.com/LabibTajremin/PAO/backend/internal/modules/catalog/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/customer"
@@ -107,14 +106,6 @@ func (l levels) GetLevel(ctx context.Context, id uuid.UUID) (int, error) {
 	return l.m.Verification.Contract.GetLevel(ctx, id)
 }
 
-// bookings lets admin read booking parties for complaints; booking is built after
-// admin because it reads admin settings.
-type bookings struct{ m *Modules }
-
-func (b bookings) GetBooking(ctx context.Context, id uuid.UUID) (bookingcontract.Booking, error) {
-	return b.m.Booking.Contract.GetBooking(ctx, id)
-}
-
 // BuildModules wires every module on the infrastructure.
 func BuildModules(i *Infra) (*Modules, error) {
 	cipher, err := auth.NewCipher(i.Config.DataEncryptionKey)
@@ -132,7 +123,7 @@ func BuildModules(i *Infra) (*Modules, error) {
 	m.Audit = audit.New(i.Pool, i.Clock, i.IDs)
 	m.Media = media.New(media.Deps{Pool: i.Pool, Storage: i.Storage, Auditor: m.Audit.Contract, Bucket: i.Config.S3.BucketPrivate, Clock: i.Clock, IDs: i.IDs})
 	m.Admin = admin.New(admin.Deps{Pool: i.Pool, Redis: i.Redis, Keys: i.Keys, Clock: i.Clock, IDs: i.IDs, Log: i.Log,
-		Bookings: bookings{m}, Media: m.Media.Contract, Identity: m.Identity.Contract})
+		Media: m.Media.Contract, Identity: m.Identity.Contract})
 	m.Customer = customer.New(customer.Deps{Pool: i.Pool, Clock: i.Clock, IDs: i.IDs, Media: m.Media.Contract,
 		Identity: m.Identity.Contract, Admin: m.Admin.Contract})
 	m.Rating = rating.New(i.Pool, i.Clock, i.IDs)
@@ -147,6 +138,8 @@ func BuildModules(i *Infra) (*Modules, error) {
 	if err != nil {
 		return nil, err
 	}
+	m.Admin.Connect(admin.Late{Booking: m.Booking.Contract, Verification: m.Verification.Contract, Provider: m.Provider.Contract,
+		Customer: m.Customer.Contract, Rating: m.Rating.Contract, Audit: m.Audit.Contract, Catalog: m.Catalog.Contract})
 	m.Notification = notification.New(notification.Deps{Pool: i.Pool, Pusher: pusher, Clock: i.Clock, IDs: i.IDs, Log: i.Log,
 		Customer: m.Customer.Contract, Provider: m.Provider.Contract, Booking: m.Booking.Contract})
 	m.Server = Server{identityAPI: m.Identity.HTTP, catalogAPI: m.Catalog.HTTP, auditAPI: m.Audit.HTTP, mediaAPI: m.Media.HTTP, adminAPI: m.Admin.HTTP,
@@ -173,6 +166,7 @@ func smsAdapter(i *Infra, m *Modules) port.SMSSender {
 // Subscribe registers every module's event handlers on the bus (worker process).
 func (m *Modules) Subscribe(bus *eventbus.Bus) {
 	m.Audit.Subscribe(bus)
+	m.Admin.Subscribe(bus)
 	m.Customer.Subscribe(bus)
 	m.Provider.Subscribe(bus)
 	m.Verification.Subscribe(bus)

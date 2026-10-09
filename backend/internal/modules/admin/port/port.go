@@ -27,6 +27,16 @@ type Repository interface {
 	// SaveComplaint applies change to the locked row and writes its event, if any.
 	SaveComplaint(ctx context.Context, id uuid.UUID, change func(*domain.Complaint) (eventbus.Event, error)) (domain.Complaint, error)
 	AddComment(ctx context.Context, c domain.Comment) error
+	CountComplaintsAgainst(ctx context.Context, id uuid.UUID) (int, error)
+	// ComplaintsInvolving lists the newest complaints a person reported or received.
+	ComplaintsInvolving(ctx context.Context, id uuid.UUID, limit int) ([]domain.Complaint, error)
+	// Dashboard returns the read-model counts and stored booking days since a date.
+	Dashboard(ctx context.Context, since time.Time) (domain.Dashboard, []domain.DayCount, error)
+}
+
+// Verification counts providers waiting for document review.
+type Verification interface {
+	CountPendingReviews(ctx context.Context) (int, error)
 }
 
 // ComplaintFilter selects a page of the complaints queue, newest first.

@@ -97,3 +97,8 @@ func (s *Service) MarkSubmitted(ctx context.Context, id uuid.UUID) error {
 	}
 	return err
 }
+
+// SearchProviders implements contract.ProviderService.
+func (s *Service) SearchProviders(ctx context.Context, q contract.ProviderQuery) ([]contract.ProviderRecord, error) {
+	return s.svc.Search(ctx, q)
+}

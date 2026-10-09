@@ -39,3 +39,42 @@ INSERT INTO admin.complaint_comments (id, complaint_id, author_id, body, at) VAL
 
 -- name: ListComments :many
 SELECT id, complaint_id, author_id, body, at FROM admin.complaint_comments WHERE complaint_id = $1 ORDER BY at, id;
+
+-- name: AddStatsProvider :exec
+INSERT INTO admin.stats_providers (provider_id, status, level) VALUES ($1, 'active', 0) ON CONFLICT DO NOTHING;
+
+-- name: SetStatsLevel :exec
+INSERT INTO admin.stats_providers (provider_id, status, level) VALUES ($1, 'active', $2)
+ON CONFLICT (provider_id) DO UPDATE SET level = EXCLUDED.level;
+
+-- name: SetStatsStatus :exec
+INSERT INTO admin.stats_providers (provider_id, status, level) VALUES ($1, $2, 0)
+ON CONFLICT (provider_id) DO UPDATE SET status = EXCLUDED.status;
+
+-- name: DeleteStatsProvider :exec
+DELETE FROM admin.stats_providers WHERE provider_id = $1;
+
+-- name: BumpBookings :exec
+INSERT INTO admin.stats_bookings_daily (day, requested, completed) VALUES ($1, $2, $3)
+ON CONFLICT (day) DO UPDATE SET requested = admin.stats_bookings_daily.requested + EXCLUDED.requested,
+    completed = admin.stats_bookings_daily.completed + EXCLUDED.completed;
+
+-- An active provider without Level 1 is still pending verification (PRD §6.4).
+-- name: ProvidersByStatus :many
+SELECT (CASE WHEN status = 'active' AND level = 0 THEN 'pending' ELSE status END)::text AS status, count(*) AS n
+FROM admin.stats_providers GROUP BY 1;
+
+-- name: ProvidersByLevel :many
+SELECT level, count(*) AS n FROM admin.stats_providers GROUP BY level;
+
+-- name: BookingsSince :many
+SELECT day, requested, completed FROM admin.stats_bookings_daily WHERE day >= $1 ORDER BY day;
+
+-- name: CountOpenComplaints :one
+SELECT count(*) FROM admin.complaints WHERE status <> 'resolved';
+
+-- name: CountComplaintsAgainst :one
+SELECT count(*) FROM admin.complaints WHERE against_id = $1;
+
+-- name: ComplaintsInvolving :many
+SELECT * FROM admin.complaints WHERE reporter_id = $1 OR against_id = $1 ORDER BY created_at DESC, id DESC LIMIT $2;
