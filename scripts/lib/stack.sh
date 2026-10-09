@@ -5,6 +5,7 @@ compose() { docker compose -f "$PAO_ROOT/docker-compose.yml" "$@"; }
 
 cmd_up() {
   require_tool docker "https://docs.docker.com/engine/install/"
+  [[ -f "$PAO_ROOT/.env" ]] || create_env
   compose up -d --build --wait || die "stack failed to become healthy"
   ok "stack healthy — API on http://localhost:8080"
 }
@@ -40,6 +41,6 @@ cmd_seed() {
     . "$PAO_ROOT/.env"
     set +a
   fi
-  (cd "$BACKEND" && go run ./cmd/migrate up && go run ./cmd/migrate seed) || die "seed failed"
+  (cd "$BACKEND" && go run ./cmd/migrate up) || die "seed failed"
   ok "migrations applied and seed data loaded"
 }

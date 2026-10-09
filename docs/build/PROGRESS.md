@@ -9,8 +9,8 @@ it first and continues from **Current task**.
 |---|---|---|---|
 | P00 Bootstrap | done | — | single-branch build, see ADR-0009 |
 | P01 Contracts | done | — | OpenAPI 3.1 (120 ops), contracts, migrations |
-| P02 Backend platform | in_progress | — | |
-| P03 Identity & access | todo | — | |
+| P02 Backend platform | done | — | |
+| P03 Identity & access | in_progress | — | |
 | P04 Catalog, media, audit, settings | todo | — | |
 | P05 Customer | todo | — | |
 | P06 Provider & verification | todo | — | |
@@ -28,7 +28,7 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P02 / task 1 — `platform/config`: typed env config, validated at start-up.
+P03 / task 1 — identity domain: Account, phone value object, errors.
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
@@ -39,6 +39,8 @@ with `./pao ci` green and a `chore(progress): complete <id>` commit is pushed.
 - Go 1.27 (stdlib vulnerabilities in ≤ 1.26.8), golangci-lint v2.14, Flutter 3.47.7.
 - Local S3 is RustFS (ADR-0007); MinIO images are no longer published.
 - Docker Hub rate-limits pulls here; `mirror.gcr.io/library/<image>` works as a mirror.
+- Docker builds behind the sandbox proxy need `PAO_EXTRA_CA_FILE=/root/.ccr/ca-bundle.crt`
+  in `.env` (build secret `extra_ca`).
 - No Android SDK in the build container: APK builds run only in CI (`frontend.yml`).
 - Go integration tests live beside the code with the `integration` tag (ADR-0008).
 - `./pao gen` bundles the spec with redocly (npx) and builds `pao_api` with the
@@ -54,6 +56,10 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-10-09 P02 platform: config, logx, metrics, db (pool, tx, migrator), redisx (rate
+  limiter, lock, idempotency, denylist), httpx (errors, cursors, spec validation,
+  middleware chain, router, server), auth (EdDSA JWT, argon2id, TOTP), rbac cache,
+  eventbus + outbox relay, River jobs, S3 storage, health, internal/app wiring.
 - 2026-10-09 P01 contracts: OpenAPI spec + bundle, Go strict server and Dart client
   generation, 11 module contracts and READMEs, per-module migrations with RBAC seed,
   migration runner + test kit, booking state spec, catalog seed.

@@ -13,6 +13,7 @@ vendors:
 components:
   platform: { in: platform/** }
   testkit: { in: testkit }
+  app: { in: app }
   identity_contract: { in: modules/identity/contract }
   customer_contract: { in: modules/customer/contract }
   provider_contract: { in: modules/provider/contract }
@@ -30,6 +31,9 @@ deps:
     anyVendorDeps: true
     mayDependOn: [platform]
   testkit:
+    anyVendorDeps: true
+    anyProjectDeps: true
+  app:
     anyVendorDeps: true
     anyProjectDeps: true
   identity_contract:

@@ -23,7 +23,6 @@ jobs:
           cache-dependency-path: backend/go.sum
       - name: Stack healthy
         run: |
-          cp .env.example .env
           ./pao up
           curl -fsS http://localhost:8080/healthz
       - name: API journeys

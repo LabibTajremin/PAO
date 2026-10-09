@@ -19,6 +19,7 @@ import (
 	_ "github.com/jackc/pgx/v5/stdlib" // registers the "pgx" database/sql driver
 
 	"github.com/LabibTajremin/PAO/backend/internal/platform/db"
+	"github.com/LabibTajremin/PAO/backend/internal/platform/jobs"
 	"github.com/LabibTajremin/PAO/backend/migrations"
 )
 
@@ -111,7 +112,11 @@ func buildTemplate(t testing.TB, conn *sql.Conn, name string) {
 		t.Fatalf("open template: %v", err)
 	}
 	defer func() { _ = tpl.Close() }()
-	if err := db.NewMigrator(tpl, migrations.FS, migrations.Modules).Up(ctx); err != nil {
+	err = db.NewMigrator(tpl, migrations.FS, migrations.Modules).Up(ctx)
+	if err == nil {
+		err = migrateRiver(ctx, withDatabase(t, Env(t, "PAO_TEST_DATABASE_URL"), name))
+	}
+	if err != nil {
 		_, _ = conn.ExecContext(ctx, "DROP DATABASE IF EXISTS "+name+" WITH (FORCE)")
 		t.Fatalf("migrate template: %v", err)
 	}
@@ -120,6 +125,7 @@ func buildTemplate(t testing.TB, conn *sql.Conn, name string) {
 func migrationsHash(t testing.TB) string {
 	t.Helper()
 	h := sha256.New()
+	_, _ = h.Write([]byte("river:v0.49.0\n"))
 	err := fs.WalkDir(migrations.FS, ".", func(path string, d fs.DirEntry, err error) error {
 		if err != nil || d.IsDir() {
 			return err
@@ -145,4 +151,13 @@ func withDatabase(t testing.TB, raw, name string) string {
 	}
 	u.Path = "/" + name
 	return u.String()
+}
+
+func migrateRiver(ctx context.Context, url string) error {
+	pool, err := db.Connect(ctx, url)
+	if err != nil {
+		return err
+	}
+	defer pool.Close()
+	return jobs.Migrate(ctx, pool)
 }

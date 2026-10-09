@@ -31,7 +31,7 @@ jobs:
         options: --health-cmd "redis-cli ping" --health-interval 5s --health-retries 20
       storage:
         image: rustfs/rustfs:1.0.1
-        env: { RUSTFS_ACCESS_KEY: pao-ci, RUSTFS_SECRET_KEY: pao-ci-secret }
+        env: { RUSTFS_ACCESS_KEY: pao-ci, RUSTFS_SECRET_KEY: pao-ci-secret, RUSTFS_SSE_S3_MASTER_KEY: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" }
         ports: ["9000:9000"]
         options: >-
           --health-cmd "curl -fsS http://localhost:9000/health" --health-interval 5s --health-retries 20

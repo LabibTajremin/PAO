@@ -34,8 +34,19 @@ cmd_setup() {
   require_tool docker "https://docs.docker.com/engine/install/"
   command -v flutter >/dev/null 2>&1 || log "flutter not found — Flutter commands will fail"
   git -C "$PAO_ROOT" config core.hooksPath scripts/hooks
-  [[ -f "$PAO_ROOT/.env" ]] || cp "$PAO_ROOT/.env.example" "$PAO_ROOT/.env"
+  [[ -f "$PAO_ROOT/.env" ]] || create_env
   ok "setup complete — hooks installed from scripts/hooks"
+}
+
+# create_env copies .env.example and fills the local-only keys with fresh random values.
+create_env() {
+  local jwt data
+  jwt=$(head -c 32 /dev/urandom | base64)
+  data=$(head -c 32 /dev/urandom | base64)
+  sed -e "s|^JWT_SIGNING_KEY=.*|JWT_SIGNING_KEY=$jwt|" -e "s|^DATA_ENCRYPTION_KEY=.*|DATA_ENCRYPTION_KEY=$data|" \
+    -e "s|^SEED_ADMIN_PASSWORD=.*|SEED_ADMIN_PASSWORD=local-$(head -c 9 /dev/urandom | base64 | tr -d '/+')|" \
+    "$PAO_ROOT/.env.example" >"$PAO_ROOT/.env"
+  log "created .env with fresh local keys"
 }
 
 cmd_ci() {

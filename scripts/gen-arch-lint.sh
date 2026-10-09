@@ -68,12 +68,15 @@ vendors:
 components:
   platform: { in: platform/** }
   testkit: { in: testkit }
+  app: { in: app }
 HEAD
   for c in "${components[@]+"${components[@]}"}"; do
     printf '  %s: { in: %s }\n' "$c" "$(layer_glob "${c%_*}" "${c##*_}")"
   done
   printf 'commonComponents: []\ndeps:\n  platform:\n    anyVendorDeps: true\n    mayDependOn: [platform]\n'
   printf '  testkit:\n    anyVendorDeps: true\n    anyProjectDeps: true\n'
+  # The composition root wires every module, so it may import anything.
+  printf '  app:\n    anyVendorDeps: true\n    anyProjectDeps: true\n'
   for c in "${components[@]+"${components[@]}"}"; do
     m="${c%_*}" l="${c##*_}"
     printf '  %s:\n' "$c"

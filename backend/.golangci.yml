@@ -34,6 +34,8 @@ linters:
       min-complexity: 3
     misspell:
       locale: UK
+      # Library identifiers keep their American spelling.
+      ignore-rules: [sanitize]
     revive:
       rules:
         - name: exported
