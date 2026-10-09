@@ -18,11 +18,11 @@ tokens in P10. `on-primary` is `#FFFFFF` in every mode. **Midnight is the defaul
 | Champagne | `#FBF7EF` | `#F2E8D5` | `#8F6420` | `#6E4C17` | `#2E2108` |
 | Merlot | `#FBF2F4` | `#F4E1E7` | `#8A1C3F` | `#69142F` | `#330818` |
 | Petrol | `#EFF8F9` | `#D7ECEF` | `#0B5F6B` | `#084852` | `#042A30` |
-| Indigo | `#EEF2FF` | `#E0E7FF` | `#4F46E5` | `#3730A3` | `#1E1B4B` |
-| Rose | `#FFF1F2` | `#FFE4E6` | `#E11D48` | `#BE123C` | `#4C0519` |
-| Tangerine | `#FFF7ED` | `#FFEDD5` | `#EA580C` | `#C2410C` | `#431407` |
-| Ocean | `#F0F9FF` | `#E0F2FE` | `#0284C7` | `#075985` | `#082F49` |
-| Violet | `#F5F3FF` | `#EDE9FE` | `#7C3AED` | `#5B21B6` | `#2E1065` |
+| Sapphire | `#F2F5FC` | `#DFE7F7` | `#2350A8` | `#1A3D82` | `#0C1F45` |
+| Plum | `#F8F3FA` | `#EEE2F2` | `#5E2A6E` | `#472054` | `#240F2C` |
+| Terracotta | `#FCF5F2` | `#F6E3DB` | `#A4472C` | `#803620` | `#3A170D` |
+| Espresso | `#F8F5F2` | `#EEE5DE` | `#5C3D2E` | `#462E22` | `#221610` |
+| Rosewood | `#FBF4F6` | `#F4E2E8` | `#9E4A66` | `#7B384F` | `#381521` |
 
 Usage: `primary` = buttons, active tabs, links; `soft` = selected chips, active-tab pill;
 `tint` = icon tiles, highlighted cards; `strong` = text on `soft`/`tint`; `deep` = hero
