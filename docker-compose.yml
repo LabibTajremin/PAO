@@ -106,9 +106,10 @@ services:
       retries: 10
 
 secrets:
-  # Optional CA bundle for builds behind a TLS-intercepting proxy (empty by default).
+  # Optional CA bundle for builds behind a TLS-intercepting proxy. The default is an
+  # empty file inside the project, because compose bake refuses files outside it.
   extra_ca:
-    file: ${PAO_EXTRA_CA_FILE:-/dev/null}
+    file: ${PAO_EXTRA_CA_FILE:-./docker/no-extra-ca.pem}
 
 volumes:
   pgdata:
