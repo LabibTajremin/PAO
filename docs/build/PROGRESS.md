@@ -17,8 +17,8 @@ it first and continues from **Current task**.
 | P07 Discovery & booking | done | — | |
 | P08 Rating, notification, complaints | done | — | |
 | P09 Admin API | done | — | ADR-0026 |
-| P10 Flutter foundation | in_progress | — | |
-| P11 Partner app | todo | — | |
+| P10 Flutter foundation | done | — | ADR-0027 |
+| P11 Partner app | in_progress | — | |
 | P12 Customer app | todo | — | |
 | P13 Admin web | todo | — | |
 | P14 End-to-end | todo | — | |
@@ -28,8 +28,8 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P10 / task 1 — read `docs/build/phases/P10-*.md`; the backend is feature-complete
-(every OpenAPI operation is implemented).
+P11 / task 1 — read `docs/build/phases/P11-*.md`; the Figma file only has the theme
+page, so screens follow `05-screens.md` and the `pao_ui` components.
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
@@ -53,6 +53,8 @@ with `./pao ci` green and a `chore(progress): complete <id>` commit is pushed.
 - Request timeouts run as a 15 s periodic sweep (`booking.expire_requests`) rather than a
   job per booking, so a missed run catches up on the next one.
 - k6 v1.3.0 is installed in this container from the GitHub release tarball.
+- Flutter tests that await real I/O (http_mock_adapter) inside `testWidgets` must use
+  `tester.runAsync`, or they hang in fake async.
 - `testkit.VerifiedProvider` enrols and approves a provider end to end for later phases.
 
 ## Blockers
@@ -63,6 +65,11 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-10-09 P10 Flutter foundation: pao_core (Dio client, AppFailure, sessions with
+  single-flight refresh, permissions, route guard + verification gate, connectivity,
+  photo compression), pao_ui (10 accents, tokens, bundled fonts, 25 components, gallery,
+  a11y tests), pao_l10n (en/bn ARB, every API error code, money/count/Dhaka-date
+  formatters); the three apps boot with theme, language switch and a guarded route.
 - 2026-10-09 P09 admin API: dashboard read model from events (cached 60 s), provider
   and customer search/detail/status via owners' contracts (ADR-0026), bookings monitor
   with filters, per-role RBAC table test over every protected route.

@@ -11,6 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.3
 
 dev_dependencies:
   dart_code_linter: ^4.4.2
@@ -19,4 +22,8 @@ dev_dependencies:
   very_good_analysis: ^11.0.0
 
 flutter:
+  generate: true
   uses-material-design: true
+
+coverage_exclude:
+  - 'lib/l10n/generated/'

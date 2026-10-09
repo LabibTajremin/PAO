@@ -1,0 +1,374 @@
+{
+  "@@locale": "en",
+  "appName": "PAO",
+  "@appName": {
+    "description": "Product name."
+  },
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "English language name, always in English."
+  },
+  "languageBangla": "বাংলা",
+  "@languageBangla": {
+    "description": "Bangla language name, always in Bangla."
+  },
+  "actionRetry": "Try again",
+  "@actionRetry": {
+    "description": "Retry button."
+  },
+  "actionContinue": "Continue",
+  "@actionContinue": {
+    "description": "Continue button."
+  },
+  "actionCancel": "Cancel",
+  "@actionCancel": {
+    "description": "Cancel button."
+  },
+  "actionSave": "Save",
+  "@actionSave": {
+    "description": "Save button."
+  },
+  "actionBack": "Back",
+  "@actionBack": {
+    "description": "Back button semantic label."
+  },
+  "actionClose": "Close",
+  "@actionClose": {
+    "description": "Close button."
+  },
+  "actionSeeAll": "See all",
+  "@actionSeeAll": {
+    "description": "Link to a full list."
+  },
+  "actionSignOut": "Log out",
+  "@actionSignOut": {
+    "description": "Sign-out action."
+  },
+  "offlineBanner": "You are offline. We will reconnect when the network is back.",
+  "@offlineBanner": {
+    "description": "C36 offline banner."
+  },
+  "loading": "Loading",
+  "@loading": {
+    "description": "Semantic label for skeleton loaders."
+  },
+  "emptyTitle": "Nothing here yet",
+  "@emptyTitle": {
+    "description": "Generic empty state title."
+  },
+  "errorTitle": "Something went wrong",
+  "@errorTitle": {
+    "description": "Generic error state title."
+  },
+  "accessDenied": "You do not have access to this screen.",
+  "@accessDenied": {
+    "description": "Shown when a role may not open a screen."
+  },
+  "sessionExpiredTitle": "Welcome back",
+  "@sessionExpiredTitle": {
+    "description": "C63 title."
+  },
+  "sessionExpiredBody": "For your safety we signed you out. Sign in again to continue.",
+  "@sessionExpiredBody": {
+    "description": "C63 body."
+  },
+  "navHome": "Home",
+  "@navHome": {
+    "description": "Bottom navigation."
+  },
+  "navBookings": "Bookings",
+  "@navBookings": {
+    "description": "Bottom navigation."
+  },
+  "navJobs": "Jobs",
+  "@navJobs": {
+    "description": "Partner bottom navigation."
+  },
+  "navEarnings": "Earnings",
+  "@navEarnings": {
+    "description": "Partner bottom navigation."
+  },
+  "navNotifications": "Notifications",
+  "@navNotifications": {
+    "description": "Bottom navigation."
+  },
+  "navAccount": "Account",
+  "@navAccount": {
+    "description": "Bottom navigation."
+  },
+  "ratingLabel": "{rating} out of 5 stars",
+  "@ratingLabel": {
+    "description": "Semantic label of rating stars.",
+    "placeholders": {
+      "rating": {
+        "type": "String"
+      }
+    }
+  },
+  "itemCount": "{count, plural, =0{No items} =1{1 item} other{{count} items}}",
+  "@itemCount": {
+    "description": "Item count.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesAway": "{count, plural, =1{1 min away} other{{count} min away}}",
+  "@minutesAway": {
+    "description": "Arrival estimate.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "failureNetwork": "No connection. Check your internet and try again.",
+  "@failureNetwork": {
+    "description": "Network failure."
+  },
+  "failureTimeout": "The network is slow. Please try again.",
+  "@failureTimeout": {
+    "description": "Timeout failure."
+  },
+  "failureSessionExpired": "Your session ended. Please sign in again.",
+  "@failureSessionExpired": {
+    "description": "Session expired."
+  },
+  "failureUnexpected": "Something went wrong. Please try again.",
+  "@failureUnexpected": {
+    "description": "Fallback failure."
+  },
+  "errorValidationFailed": "Please check the highlighted fields.",
+  "@errorValidationFailed": {
+    "description": "API error VALIDATION_FAILED."
+  },
+  "errorUnauthenticated": "Please sign in again.",
+  "@errorUnauthenticated": {
+    "description": "API error UNAUTHENTICATED."
+  },
+  "errorTokenExpired": "Your session ended. Please sign in again.",
+  "@errorTokenExpired": {
+    "description": "API error TOKEN_EXPIRED."
+  },
+  "errorForbidden": "You are not allowed to do this.",
+  "@errorForbidden": {
+    "description": "API error FORBIDDEN."
+  },
+  "errorNotFound": "We could not find that.",
+  "@errorNotFound": {
+    "description": "API error NOT_FOUND."
+  },
+  "errorConflict": "This was already changed. Refresh and try again.",
+  "@errorConflict": {
+    "description": "API error CONFLICT."
+  },
+  "errorRateLimited": "Too many tries. Please wait a little.",
+  "@errorRateLimited": {
+    "description": "API error RATE_LIMITED."
+  },
+  "errorInternal": "Our service had a problem. Please try again.",
+  "@errorInternal": {
+    "description": "API error INTERNAL."
+  },
+  "errorNotImplemented": "This is not available yet.",
+  "@errorNotImplemented": {
+    "description": "API error NOT_IMPLEMENTED."
+  },
+  "errorOtpInvalid": "That code is not right.",
+  "@errorOtpInvalid": {
+    "description": "API error OTP_INVALID."
+  },
+  "errorOtpExpired": "That code has expired. Ask for a new one.",
+  "@errorOtpExpired": {
+    "description": "API error OTP_EXPIRED."
+  },
+  "errorOtpLocked": "Too many wrong codes. Try again later.",
+  "@errorOtpLocked": {
+    "description": "API error OTP_LOCKED."
+  },
+  "errorAccountBanned": "This account has been closed.",
+  "@errorAccountBanned": {
+    "description": "API error ACCOUNT_BANNED."
+  },
+  "errorAccountSuspended": "This account is suspended. Contact support.",
+  "@errorAccountSuspended": {
+    "description": "API error ACCOUNT_SUSPENDED."
+  },
+  "errorInvalidCredentials": "Email or password is wrong.",
+  "@errorInvalidCredentials": {
+    "description": "API error INVALID_CREDENTIALS."
+  },
+  "errorAccountLocked": "Too many attempts. The account is locked for a while.",
+  "@errorAccountLocked": {
+    "description": "API error ACCOUNT_LOCKED."
+  },
+  "errorTotpInvalid": "That authenticator code is not right.",
+  "@errorTotpInvalid": {
+    "description": "API error TOTP_INVALID."
+  },
+  "errorMfaChallengeExpired": "Sign-in took too long. Start again.",
+  "@errorMfaChallengeExpired": {
+    "description": "API error MFA_CHALLENGE_EXPIRED."
+  },
+  "errorRefreshTokenInvalid": "Your session ended. Please sign in again.",
+  "@errorRefreshTokenInvalid": {
+    "description": "API error REFRESH_TOKEN_INVALID."
+  },
+  "errorIdempotencyKeyRequired": "Something went wrong. Please try again.",
+  "@errorIdempotencyKeyRequired": {
+    "description": "API error IDEMPOTENCY_KEY_REQUIRED."
+  },
+  "errorIdempotencyKeyReused": "This request was already sent.",
+  "@errorIdempotencyKeyReused": {
+    "description": "API error IDEMPOTENCY_KEY_REUSED."
+  },
+  "errorAddressLimitReached": "You have saved the most addresses allowed.",
+  "@errorAddressLimitReached": {
+    "description": "API error ADDRESS_LIMIT_REACHED."
+  },
+  "errorOutsideServiceArea": "PAO is not available in this area yet.",
+  "@errorOutsideServiceArea": {
+    "description": "API error OUTSIDE_SERVICE_AREA."
+  },
+  "errorServiceUnavailable": "This service is not available right now.",
+  "@errorServiceUnavailable": {
+    "description": "API error SERVICE_UNAVAILABLE."
+  },
+  "errorProviderUnavailable": "This provider is not available now.",
+  "@errorProviderUnavailable": {
+    "description": "API error PROVIDER_UNAVAILABLE."
+  },
+  "errorDuplicateBookingRequest": "You already have a request with this provider.",
+  "@errorDuplicateBookingRequest": {
+    "description": "API error DUPLICATE_BOOKING_REQUEST."
+  },
+  "errorBookingInvalidTransition": "This booking cannot change that way now.",
+  "@errorBookingInvalidTransition": {
+    "description": "API error BOOKING_INVALID_TRANSITION."
+  },
+  "errorBookingAlreadyResponded": "This request was already answered.",
+  "@errorBookingAlreadyResponded": {
+    "description": "API error BOOKING_ALREADY_RESPONDED."
+  },
+  "errorActiveJobExists": "Finish your current job first.",
+  "@errorActiveJobExists": {
+    "description": "API error ACTIVE_JOB_EXISTS."
+  },
+  "errorStartCodeInvalid": "That start code is not right.",
+  "@errorStartCodeInvalid": {
+    "description": "API error START_CODE_INVALID."
+  },
+  "errorStartCodeLocked": "Too many wrong codes. Try again in a few minutes.",
+  "@errorStartCodeLocked": {
+    "description": "API error START_CODE_LOCKED."
+  },
+  "errorCancellationNotAllowed": "This booking can no longer be cancelled.",
+  "@errorCancellationNotAllowed": {
+    "description": "API error CANCELLATION_NOT_ALLOWED."
+  },
+  "errorExtraItemInvalid": "One of the extra items is not valid.",
+  "@errorExtraItemInvalid": {
+    "description": "API error EXTRA_ITEM_INVALID."
+  },
+  "errorExtrasPending": "Extra items are waiting for the customer.",
+  "@errorExtrasPending": {
+    "description": "API error EXTRAS_PENDING."
+  },
+  "errorCashConfirmationRequired": "Confirm that you received the cash.",
+  "@errorCashConfirmationRequired": {
+    "description": "API error CASH_CONFIRMATION_REQUIRED."
+  },
+  "errorReviewNotAllowed": "You can rate only after the job is done.",
+  "@errorReviewNotAllowed": {
+    "description": "API error REVIEW_NOT_ALLOWED."
+  },
+  "errorReviewAlreadySubmitted": "You have already rated this job.",
+  "@errorReviewAlreadySubmitted": {
+    "description": "API error REVIEW_ALREADY_SUBMITTED."
+  },
+  "errorUploadInvalid": "This file cannot be used. Try another photo.",
+  "@errorUploadInvalid": {
+    "description": "API error UPLOAD_INVALID."
+  },
+  "errorUploadNotFound": "The upload did not finish. Try again.",
+  "@errorUploadNotFound": {
+    "description": "API error UPLOAD_NOT_FOUND."
+  },
+  "errorEnrolmentIncomplete": "Complete every enrolment step first.",
+  "@errorEnrolmentIncomplete": {
+    "description": "API error ENROLMENT_INCOMPLETE."
+  },
+  "errorNotVerified": "Your verification is not complete yet.",
+  "@errorNotVerified": {
+    "description": "API error NOT_VERIFIED."
+  },
+  "errorAgeRequirement": "Providers must be at least 18 years old.",
+  "@errorAgeRequirement": {
+    "description": "API error AGE_REQUIREMENT."
+  },
+  "errorLevel2CoolingOff": "You can book Level 2 again after the waiting period.",
+  "@errorLevel2CoolingOff": {
+    "description": "API error LEVEL2_COOLING_OFF."
+  },
+  "errorComplaintInvalidTransition": "This report is already resolved.",
+  "@errorComplaintInvalidTransition": {
+    "description": "API error COMPLAINT_INVALID_TRANSITION."
+  },
+  "errorSettingInvalid": "This value does not fit the setting.",
+  "@errorSettingInvalid": {
+    "description": "API error SETTING_INVALID."
+  },
+  "errorRoleInvalid": "This role is not valid.",
+  "@errorRoleInvalid": {
+    "description": "API error ROLE_INVALID."
+  },
+  "errorProfileNotFound": "Set up your profile first.",
+  "@errorProfileNotFound": {
+    "description": "API error PROFILE_NOT_FOUND."
+  },
+  "errorProfileRequired": "Set up your profile first.",
+  "@errorProfileRequired": {
+    "description": "API error PROFILE_REQUIRED."
+  },
+  "errorEmergencyContactMissing": "Add an emergency contact first.",
+  "@errorEmergencyContactMissing": {
+    "description": "API error EMERGENCY_CONTACT_MISSING."
+  },
+  "errorServiceAreaMissing": "Set your service area first.",
+  "@errorServiceAreaMissing": {
+    "description": "API error SERVICE_AREA_MISSING."
+  },
+  "errorOffline": "Go online to receive requests.",
+  "@errorOffline": {
+    "description": "API error OFFLINE."
+  },
+  "errorItemNotPending": "This item is not waiting for review.",
+  "@errorItemNotPending": {
+    "description": "API error ITEM_NOT_PENDING."
+  },
+  "errorClearanceTooOld": "The police clearance is too old.",
+  "@errorClearanceTooOld": {
+    "description": "API error CLEARANCE_TOO_OLD."
+  },
+  "errorNidBlocked": "This NID cannot be used on PAO.",
+  "@errorNidBlocked": {
+    "description": "API error NID_BLOCKED."
+  },
+  "errorLevel2NotEligible": "You are not eligible for Level 2 yet.",
+  "@errorLevel2NotEligible": {
+    "description": "API error LEVEL2_NOT_ELIGIBLE."
+  },
+  "errorSessionClosed": "This Level 2 session is closed.",
+  "@errorSessionClosed": {
+    "description": "API error SESSION_CLOSED."
+  },
+  "errorAcceptDeadlinePassed": "The time to accept has passed.",
+  "@errorAcceptDeadlinePassed": {
+    "description": "API error ACCEPT_DEADLINE_PASSED."
+  },
+  "errorNoPendingExtras": "There are no extra items to decide on.",
+  "@errorNoPendingExtras": {
+    "description": "API error NO_PENDING_EXTRAS."
+  }
+}

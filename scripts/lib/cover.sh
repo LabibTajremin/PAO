@@ -21,7 +21,7 @@ cover_go() {
 
 # dart_excludes prints the regexes listed under coverage_exclude in a pubspec.
 dart_excludes() {
-  awk '/^coverage_exclude:/{on=1;next} on&&/^  - /{sub(/^  - /,"");gsub(/"/,"");print;next} on&&!/^  /{on=0}' "$1"
+  awk '/^coverage_exclude:/{on=1;next} on&&/^  - /{sub(/^  - /,"");gsub(/["\047]/,"");print;next} on&&!/^  /{on=0}' "$1"
 }
 
 cover_dart_package() {

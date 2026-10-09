@@ -39,7 +39,10 @@ gen_l10n() {
 # tree_fingerprint hashes every modified or untracked file, so a generator run that
 # changes anything is detected even before the work is committed.
 tree_fingerprint() {
-  (cd "$PAO_ROOT" && git ls-files -m -o --exclude-standard -z | xargs -0 -r sha1sum | sha1sum)
+  # Deleted files are listed as modified but cannot be hashed; their absence is
+  # already part of the git state.
+  (cd "$PAO_ROOT" && git ls-files -m -o --exclude-standard -z |
+    while IFS= read -r -d '' f; do [[ ! -f "$f" ]] || sha1sum "$f"; done | sha1sum)
 }
 
 cmd_gen() {
