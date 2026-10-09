@@ -14,6 +14,7 @@ func TestEventNames(t *testing.T) {
 		"verification.DocumentExpired":        DocumentExpired{},
 		"verification.DocumentExpiring":       DocumentExpiring{},
 		"verification.Level2SessionScheduled": Level2SessionScheduled{},
+		"verification.Level2ResultRecorded":   Level2ResultRecorded{},
 	}
 	for want, e := range events {
 		if got := e.EventName(); got != want {

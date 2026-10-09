@@ -1,7 +1,6 @@
 package app
 
 import (
-	"context"
 	"testing"
 
 	"github.com/LabibTajremin/PAO/backend/internal/modules/identity/adapter/sms"
@@ -40,8 +39,5 @@ func TestSMSAdapter_ChosenByConfig(t *testing.T) {
 func TestBuildModules_RejectsBadDataKey(t *testing.T) {
 	if _, err := BuildModules(&Infra{Config: config.Config{DataEncryptionKey: []byte("short")}}); err == nil {
 		t.Fatal("short key accepted")
-	}
-	if got, err := (levelZero{}).GetLevel(context.Background(), [16]byte{}); got != 0 || err != nil {
-		t.Fatal("levelZero")
 	}
 }

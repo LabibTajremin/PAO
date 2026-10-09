@@ -63,3 +63,15 @@ type Level2SessionScheduled struct {
 
 // EventName implements eventbus.Event.
 func (Level2SessionScheduled) EventName() string { return "verification.Level2SessionScheduled" }
+
+// Level2ResultRecorded is published when a verifier records a Level 2 result, so the
+// decision is audited (PRD §6.4).
+type Level2ResultRecorded struct {
+	ProviderID uuid.UUID
+	SessionID  uuid.UUID
+	Result     string
+	ActorID    uuid.UUID
+}
+
+// EventName implements eventbus.Event.
+func (Level2ResultRecorded) EventName() string { return "verification.Level2ResultRecorded" }

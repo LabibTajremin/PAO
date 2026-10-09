@@ -8,6 +8,7 @@ Provider enrolment profile (personal info, services, service area, emergency con
 - `IsAvailable`
 - `FindNearby`
 - `ForceOffline`
+- `Enrolment`, `MarkStepDone`, `MarkSubmitted` (verification reports document steps)
 
 ## Events published
 

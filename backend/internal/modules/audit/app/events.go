@@ -15,11 +15,15 @@ import (
 // Handlers maps event names to the functions that audit them. Every event that changes
 // a person's status, a price or a decision is audited (02-architecture §8).
 func (s *Service) Handlers() map[string]eventbus.Handler {
-	return map[string]eventbus.Handler{
+	hs := map[string]eventbus.Handler{
 		identity.AccountStatusChanged{}.EventName(): s.onAccountStatusChanged,
 		catalog.PriceChanged{}.EventName():          s.onPriceChanged,
 		admin.SettingChanged{}.EventName():          s.onSettingChanged,
 	}
+	for name, h := range s.verificationHandlers() {
+		hs[name] = h
+	}
+	return hs
 }
 
 func (s *Service) fromEvent(ctx context.Context, env eventbus.Envelope, e domain.Entry) error {

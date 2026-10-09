@@ -33,6 +33,11 @@ components:
   provider_adapter: { in: modules/provider/adapter/** }
   provider_root: { in: modules/provider }
   verification_contract: { in: modules/verification/contract }
+  verification_domain: { in: modules/verification/domain/** }
+  verification_port: { in: modules/verification/port }
+  verification_app: { in: modules/verification/app/** }
+  verification_adapter: { in: modules/verification/adapter/** }
+  verification_root: { in: modules/verification }
   catalog_contract: { in: modules/catalog/contract }
   catalog_domain: { in: modules/catalog/domain/** }
   catalog_port: { in: modules/catalog/port }
@@ -322,6 +327,83 @@ deps:
     mayDependOn:
       - platform
       - verification_contract
+  verification_domain:
+    canUse: [uuid]
+    mayDependOn: [verification_domain]
+  verification_port:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+      - verification_port
+      - verification_domain
+      - verification_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
+  verification_app:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+      - verification_app
+      - verification_domain
+      - verification_port
+      - verification_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
+  verification_adapter:
+    anyVendorDeps: true
+    mayDependOn:
+      - platform
+      - verification_adapter
+      - verification_domain
+      - verification_port
+      - verification_app
+      - verification_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
+  verification_root:
+    anyVendorDeps: true
+    mayDependOn:
+      - platform
+      - verification_root
+      - verification_domain
+      - verification_port
+      - verification_app
+      - verification_adapter
+      - verification_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
   catalog_contract:
     canUse: [uuid]
     mayDependOn:

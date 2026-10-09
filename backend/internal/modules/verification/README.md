@@ -16,6 +16,7 @@ Level 1 document items and their review, levels, Level 2 sessions, document expi
 - `DocumentExpired`
 - `DocumentExpiring`
 - `Level2SessionScheduled`
+- `Level2ResultRecorded`
 
 ## Events consumed
 

@@ -23,6 +23,8 @@ import (
 	mediahttp "github.com/LabibTajremin/PAO/backend/internal/modules/media/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/provider"
 	providerhttp "github.com/LabibTajremin/PAO/backend/internal/modules/provider/adapter/http"
+	"github.com/LabibTajremin/PAO/backend/internal/modules/verification"
+	verificationhttp "github.com/LabibTajremin/PAO/backend/internal/modules/verification/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/auth"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/config"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/eventbus"
@@ -32,13 +34,14 @@ import (
 
 // Aliases give each module's handler a distinct embedded field name.
 type (
-	identityAPI = identityhttp.Handler
-	catalogAPI  = cataloghttp.Handler
-	auditAPI    = audithttp.Handler
-	mediaAPI    = mediahttp.Handler
-	adminAPI    = adminhttp.Handler
-	customerAPI = customerhttp.Handler
-	providerAPI = providerhttp.Handler
+	identityAPI     = identityhttp.Handler
+	catalogAPI      = cataloghttp.Handler
+	auditAPI        = audithttp.Handler
+	mediaAPI        = mediahttp.Handler
+	adminAPI        = adminhttp.Handler
+	customerAPI     = customerhttp.Handler
+	providerAPI     = providerhttp.Handler
+	verificationAPI = verificationhttp.Handler
 )
 
 // Server serves every API operation. Each module's handler is embedded at depth one;
@@ -51,6 +54,7 @@ type Server struct {
 	*adminAPI
 	*customerAPI
 	*providerAPI
+	*verificationAPI
 	unimplemented
 }
 
@@ -68,14 +72,19 @@ type Modules struct {
 	Admin    *admin.Module
 	Customer *customer.Module
 	Provider *provider.Module
+	// Verification is built last: it reads providers, media, catalog and settings.
+	Verification *verification.Module
 	// SMSCapture is set when APP_ENV=test, so e2e tests can read one-time codes.
 	SMSCapture *sms.Capture
 }
 
-// levelZero answers Level 0 for everyone until the verification module provides levels.
-type levelZero struct{}
+// levels lets identity's provider gate read levels from verification, which is built
+// after identity because it depends on modules that depend on identity.
+type levels struct{ m *Modules }
 
-func (levelZero) GetLevel(context.Context, uuid.UUID) (int, error) { return 0, nil }
+func (l levels) GetLevel(ctx context.Context, id uuid.UUID) (int, error) {
+	return l.m.Verification.Contract.GetLevel(ctx, id)
+}
 
 // BuildModules wires every module on the infrastructure.
 func BuildModules(i *Infra) (*Modules, error) {
@@ -88,7 +97,7 @@ func BuildModules(i *Infra) (*Modules, error) {
 	m.Identity = identity.New(identity.Deps{
 		Pool: i.Pool, Redis: i.Redis, Keys: i.Keys, Clock: i.Clock, IDs: i.IDs, Log: i.Log,
 		Signer: auth.NewSigner(i.Config.JWT.KeyID, i.Config.JWT.SigningKey, 15*time.Minute, i.Clock, i.IDs),
-		Cipher: cipher, SMS: smsSender, Levels: levelZero{},
+		Cipher: cipher, SMS: smsSender, Levels: levels{m},
 	})
 	m.Catalog = catalog.New(catalog.Deps{Pool: i.Pool, Redis: i.Redis, Keys: i.Keys, Clock: i.Clock, IDs: i.IDs, Log: i.Log})
 	m.Audit = audit.New(i.Pool, i.Clock, i.IDs)
@@ -98,8 +107,11 @@ func BuildModules(i *Infra) (*Modules, error) {
 		Identity: m.Identity.Contract, Admin: m.Admin.Contract})
 	m.Provider = provider.New(provider.Deps{Pool: i.Pool, Redis: i.Redis, Keys: i.Keys, Clock: i.Clock, IDs: i.IDs, Log: i.Log,
 		Catalog: m.Catalog.Contract, Identity: m.Identity.Contract, Media: m.Media.Contract, Admin: m.Admin.Contract})
+	m.Verification = verification.New(verification.Deps{Pool: i.Pool, Cipher: cipher, Clock: i.Clock, IDs: i.IDs,
+		Provider: m.Provider.Contract, Media: m.Media.Contract, Catalog: m.Catalog.Contract, Admin: m.Admin.Contract})
 	m.Server = Server{identityAPI: m.Identity.HTTP, catalogAPI: m.Catalog.HTTP, auditAPI: m.Audit.HTTP, mediaAPI: m.Media.HTTP, adminAPI: m.Admin.HTTP,
-		customerAPI: m.Customer.HTTP, providerAPI: m.Provider.HTTP}
+		customerAPI: m.Customer.HTTP, providerAPI: m.Provider.HTTP,
+		verificationAPI: m.Verification.HTTP}
 	return m, nil
 }
 
@@ -122,10 +134,12 @@ func (m *Modules) Subscribe(bus *eventbus.Bus) {
 	m.Audit.Subscribe(bus)
 	m.Customer.Subscribe(bus)
 	m.Provider.Subscribe(bus)
+	m.Verification.Subscribe(bus)
 }
 
 // RegisterJobs adds every module's background jobs (worker process).
 func (m *Modules) RegisterJobs(r *jobs.Registry) {
 	m.Media.RegisterJobs(r)
 	m.Provider.RegisterJobs(r)
+	m.Verification.RegisterJobs(r)
 }

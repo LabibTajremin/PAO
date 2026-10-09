@@ -50,9 +50,14 @@ func TestHandlers_AuditEventsAndRejectBadPayloads(t *testing.T) {
 	s := New(repo, clock.NewFake(time.Now()), idgen.V7{})
 	actor := uuid.New()
 	payloads := map[string]any{
-		"identity.AccountStatusChanged": map[string]any{"AccountID": uuid.New(), "From": "active", "To": "banned", "ActorID": actor},
-		"catalog.PriceChanged":          map[string]any{"SubServiceID": uuid.New(), "AmountPaisa": 100, "ActorID": uuid.Nil},
-		"admin.SettingChanged":          map[string]any{"Key": "search.default_radius_m", "Before": "5000", "After": "6000", "ActorID": actor},
+		"identity.AccountStatusChanged":     map[string]any{"AccountID": uuid.New(), "From": "active", "To": "banned", "ActorID": actor},
+		"catalog.PriceChanged":              map[string]any{"SubServiceID": uuid.New(), "AmountPaisa": 100, "ActorID": uuid.Nil},
+		"verification.DocumentApproved":     map[string]any{"ProviderID": uuid.New(), "Item": "nid", "ActorID": actor},
+		"verification.DocumentRejected":     map[string]any{"ProviderID": uuid.New(), "Item": "nid", "Reason": "blurred", "ActorID": actor},
+		"verification.ProviderLevelChanged": map[string]any{"ProviderID": uuid.New(), "From": 0, "To": 1},
+		"verification.Level2ResultRecorded": map[string]any{"ProviderID": uuid.New(), "SessionID": uuid.New(), "Result": "pass", "ActorID": actor},
+		"verification.DocumentExpired":      map[string]any{"ProviderID": uuid.New(), "Item": "police_clearance"},
+		"admin.SettingChanged":              map[string]any{"Key": "search.default_radius_m", "Before": "5000", "After": "6000", "ActorID": actor},
 	}
 	for name, h := range s.Handlers() {
 		raw, _ := json.Marshal(payloads[name])
