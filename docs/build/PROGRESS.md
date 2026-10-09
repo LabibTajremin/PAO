@@ -28,7 +28,7 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P06 / task 1 — provider domain (read docs/build/phases/P06-provider-verification.md).
+P06 / task 3 — verification domain (provider tasks 1, 2, 7, 8 and 9 are done; read docs/build/phases/P06-provider-verification.md).
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
@@ -58,6 +58,9 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-10-09 P06.1/2/7/8/9 provider: resumable enrolment wizard (profile steps, emergency
+  contact OTP), profile with avatar, Redis GEO presence with heartbeat reaper,
+  FindNearby (Level 2 first, women-only, working radius), read-model and quality flags.
 - 2026-10-09 P05 customer: profile with verified avatar, up to 10 addresses with PostGIS
   pins inside Bangladesh, default switching and promotion on delete, launch-area check
   from the service_area setting, erase on AccountDeleted.

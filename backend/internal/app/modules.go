@@ -21,6 +21,8 @@ import (
 	"github.com/LabibTajremin/PAO/backend/internal/modules/identity/port"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/media"
 	mediahttp "github.com/LabibTajremin/PAO/backend/internal/modules/media/adapter/http"
+	"github.com/LabibTajremin/PAO/backend/internal/modules/provider"
+	providerhttp "github.com/LabibTajremin/PAO/backend/internal/modules/provider/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/auth"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/config"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/eventbus"
@@ -36,6 +38,7 @@ type (
 	mediaAPI    = mediahttp.Handler
 	adminAPI    = adminhttp.Handler
 	customerAPI = customerhttp.Handler
+	providerAPI = providerhttp.Handler
 )
 
 // Server serves every API operation. Each module's handler is embedded at depth one;
@@ -47,6 +50,7 @@ type Server struct {
 	*mediaAPI
 	*adminAPI
 	*customerAPI
+	*providerAPI
 	unimplemented
 }
 
@@ -63,6 +67,7 @@ type Modules struct {
 	Media    *media.Module
 	Admin    *admin.Module
 	Customer *customer.Module
+	Provider *provider.Module
 	// SMSCapture is set when APP_ENV=test, so e2e tests can read one-time codes.
 	SMSCapture *sms.Capture
 }
@@ -91,8 +96,10 @@ func BuildModules(i *Infra) (*Modules, error) {
 	m.Media = media.New(media.Deps{Pool: i.Pool, Storage: i.Storage, Auditor: m.Audit.Contract, Bucket: i.Config.S3.BucketPrivate, Clock: i.Clock, IDs: i.IDs})
 	m.Customer = customer.New(customer.Deps{Pool: i.Pool, Clock: i.Clock, IDs: i.IDs, Media: m.Media.Contract,
 		Identity: m.Identity.Contract, Admin: m.Admin.Contract})
+	m.Provider = provider.New(provider.Deps{Pool: i.Pool, Redis: i.Redis, Keys: i.Keys, Clock: i.Clock, IDs: i.IDs, Log: i.Log,
+		Catalog: m.Catalog.Contract, Identity: m.Identity.Contract, Media: m.Media.Contract, Admin: m.Admin.Contract})
 	m.Server = Server{identityAPI: m.Identity.HTTP, catalogAPI: m.Catalog.HTTP, auditAPI: m.Audit.HTTP, mediaAPI: m.Media.HTTP, adminAPI: m.Admin.HTTP,
-		customerAPI: m.Customer.HTTP}
+		customerAPI: m.Customer.HTTP, providerAPI: m.Provider.HTTP}
 	return m, nil
 }
 
@@ -114,9 +121,11 @@ func smsAdapter(i *Infra, m *Modules) port.SMSSender {
 func (m *Modules) Subscribe(bus *eventbus.Bus) {
 	m.Audit.Subscribe(bus)
 	m.Customer.Subscribe(bus)
+	m.Provider.Subscribe(bus)
 }
 
 // RegisterJobs adds every module's background jobs (worker process).
 func (m *Modules) RegisterJobs(r *jobs.Registry) {
 	m.Media.RegisterJobs(r)
+	m.Provider.RegisterJobs(r)
 }

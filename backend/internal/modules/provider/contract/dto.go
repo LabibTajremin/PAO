@@ -78,5 +78,22 @@ type NearbyProvider struct {
 	DistanceM     int
 }
 
-// ErrProviderNotFound is returned for an unknown provider.
-var ErrProviderNotFound = errors.New("provider not found")
+// StepStatus is one wizard step's progress.
+type StepStatus struct {
+	Step     EnrolmentStep
+	Done     bool
+	Required bool
+}
+
+// EnrolmentStatus is the wizard progress (M05–M13); saved steps survive app restarts.
+type EnrolmentStatus struct {
+	Steps     []StepStatus
+	Complete  bool
+	Submitted bool
+}
+
+// Errors returned through the contract.
+var (
+	ErrProviderNotFound    = errors.New("provider not found")
+	ErrEnrolmentIncomplete = errors.New("enrolment has open required steps")
+)

@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type AdminComplaint struct {
@@ -67,7 +66,7 @@ type AdminSetting struct {
 }
 
 type AdminStatsBookingsDaily struct {
-	Day       pgtype.Date
+	Day       time.Time
 	Requested int32
 	Completed int32
 }

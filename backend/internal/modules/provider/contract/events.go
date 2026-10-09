@@ -5,11 +5,17 @@ import "github.com/google/uuid"
 // EnrolmentStep names a wizard step (M05–M13).
 type EnrolmentStep string
 
-// Enrolment steps owned by the provider module; document steps belong to verification.
+// Enrolment steps in wizard order. The provider module saves the profile steps; the
+// document steps (NID, selfie, police clearance, skill proof) are saved by
+// verification, which reports them done through MarkStepDone.
 const (
 	StepPersonal         EnrolmentStep = "personal"
 	StepServices         EnrolmentStep = "services"
 	StepArea             EnrolmentStep = "area"
+	StepNID              EnrolmentStep = "nid"
+	StepSelfie           EnrolmentStep = "selfie"
+	StepPoliceClearance  EnrolmentStep = "police_clearance"
+	StepSkillProof       EnrolmentStep = "skill_proof"
 	StepEmergencyContact EnrolmentStep = "emergency_contact"
 	StepCodeOfConduct    EnrolmentStep = "code_of_conduct"
 )
