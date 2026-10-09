@@ -1,0 +1,8 @@
+# Go paths excluded from the 100% coverage gate, one regex per line, matched against
+# the package path. Adding a line requires an ADR (docs/build/03-testing.md §2).
+# Generated code: sqlc, oapi-codegen and mockgen output.
+\.sql\.go$
+\.gen\.go$
+/mock_[^/]*\.go$
+# Composition roots, covered by the e2e start-up smoke test instead.
+/cmd/[^/]+/main\.go$

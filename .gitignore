@@ -1,0 +1,27 @@
+# Environment and secrets
+.env
+*.pem
+*.key
+
+# Go
+/backend/bin/
+*.test
+*.out
+/coverage/
+
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub-cache/
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+**/coverage/
+*.iml
+.idea/
+pubspec_overrides.yaml
+
+# OS / editors
+.DS_Store
+.vscode/
+*.swp

@@ -1,0 +1,6 @@
+# go-test-coverage thresholds (docs/build/03-testing.md §2). Exclusions live in
+# .coverage-exclude and are appended by ./pao cover; adding one requires an ADR.
+threshold:
+  file: 100
+  package: 100
+  total: 100

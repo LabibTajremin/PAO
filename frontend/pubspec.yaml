@@ -1,0 +1,34 @@
+name: pao_workspace
+description: PAO Flutter workspace (customer, partner and admin apps plus shared packages).
+publish_to: none
+
+environment:
+  sdk: ^3.13.0
+
+workspace:
+  - apps/customer
+  - apps/partner
+  - apps/admin
+  - packages/pao_core
+  - packages/pao_ui
+  - packages/pao_l10n
+
+dev_dependencies:
+  melos: ^8.9.0
+
+melos:
+  name: pao
+  scripts:
+    analyze:
+      run: dart analyze --fatal-infos .
+      description: Static analysis across every package.
+    format:
+      run: dart format --output=none --set-exit-if-changed .
+      description: Fails when any Dart file is not formatted.
+    test:
+      run: flutter test --coverage
+      exec:
+        concurrency: 1
+      packageFilters:
+        dirExists: test
+      description: Unit and widget tests with coverage per package.

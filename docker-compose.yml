@@ -1,0 +1,95 @@
+# Local and CI stack: PostgreSQL+PostGIS, Redis, S3 storage, the API and the worker.
+# Start with ./pao up; every service reports healthy before dependants start.
+name: pao
+
+x-backend-env: &backend-env
+  APP_ENV: ${APP_ENV:-dev}
+  LOG_LEVEL: ${LOG_LEVEL:-info}
+  HTTP_ADDR: ":8080"
+  METRICS_ADDR: ":9090"
+  DATABASE_URL: postgres://pao:pao@postgres:5432/pao?sslmode=disable
+  REDIS_URL: redis://redis:6379/0
+  S3_ENDPOINT: http://minio:9000
+  S3_PUBLIC_ENDPOINT: ${S3_PUBLIC_ENDPOINT:-http://localhost:9000}
+  S3_REGION: us-east-1
+  S3_ACCESS_KEY: ${S3_ACCESS_KEY:-pao-local}
+  S3_SECRET_KEY: ${S3_SECRET_KEY:-change-me-local-only}
+  S3_BUCKET_PRIVATE: pao-private
+  S3_BUCKET_PUBLIC: pao-public
+  JWT_SIGNING_KEY: ${JWT_SIGNING_KEY:-}
+  JWT_KEY_ID: ${JWT_KEY_ID:-k1}
+  NID_ENCRYPTION_KEY: ${NID_ENCRYPTION_KEY:-}
+  ADMIN_CORS_ORIGIN: ${ADMIN_CORS_ORIGIN:-http://localhost:5000}
+  SMS_ADAPTER: console
+  PUSH_ADAPTER: log
+  SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-}
+
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: pao
+      POSTGRES_PASSWORD: pao
+      POSTGRES_DB: pao
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pao -d pao"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # S3-compatible storage. RustFS replaces MinIO, whose images are no longer published
+  # (ADR-0007); the service keeps the name "minio" so S3 settings read naturally.
+  minio:
+    image: rustfs/rustfs:1.0.1
+    command: ["/data"]
+    environment:
+      RUSTFS_ACCESS_KEY: ${S3_ACCESS_KEY:-pao-local}
+      RUSTFS_SECRET_KEY: ${S3_SECRET_KEY:-change-me-local-only}
+    ports: ["9000:9000"]
+    volumes: [objectdata:/data]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build: ./backend
+    environment: *backend-env
+    ports: ["8080:8080"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+      minio: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "/app/api", "healthcheck"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  worker:
+    build: ./backend
+    entrypoint: ["/app/worker"]
+    environment: *backend-env
+    depends_on:
+      api: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "/app/worker", "healthcheck"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
+  objectdata:

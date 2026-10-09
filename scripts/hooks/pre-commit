@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Fast checks before each commit: lint and unit tests.
+set -euo pipefail
+root="$(git rev-parse --show-toplevel)"
+"$root/pao" lint
+"$root/pao" test unit

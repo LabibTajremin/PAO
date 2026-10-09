@@ -1,0 +1,75 @@
+version: "2"
+
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  default: none
+  enable:
+    - errcheck
+    - govet
+    - staticcheck
+    - gosec
+    - revive
+    - funlen
+    - gocyclo
+    - nestif
+    - gocritic
+    - misspell
+    - unparam
+    - bodyclose
+    - sqlclosecheck
+    - depguard
+    - ineffassign
+    - unused
+  settings:
+    funlen:
+      lines: 40
+      statements: -1
+      ignore-comments: true
+    gocyclo:
+      min-complexity: 10
+    nestif:
+      min-complexity: 3
+    misspell:
+      locale: UK
+    revive:
+      rules:
+        - name: exported
+        - name: package-comments
+        - name: var-naming
+        - name: error-naming
+        - name: error-strings
+        - name: receiver-naming
+        - name: indent-error-flow
+        - name: unexported-return
+    depguard:
+      rules:
+        banned:
+          deny:
+            - pkg: "github.com/pkg/errors"
+              desc: "use fmt.Errorf with %w"
+            - pkg: "io/ioutil"
+              desc: "deprecated"
+            - pkg: "math/rand$"
+              desc: "inject a random source; use crypto/rand for secrets"
+    gosec:
+      excludes:
+        - G104 # covered by errcheck with explicit exclusions
+  exclusions:
+    generated: strict
+    rules:
+      - path: _test\.go
+        linters: [funlen, gocyclo, gosec, unparam, nestif]
+      - path: \.gen\.go
+        linters: [revive, funlen, gocyclo]
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/LabibTajremin/PAO

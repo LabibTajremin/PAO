@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+# pao — the single developer entry point used by humans, git hooks and CI.
+# Every command exits non-zero on failure. See docs/build/03-testing.md §3.
+set -euo pipefail
+
+PAO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export PAO_ROOT
+for lib in common lint test cover stack gen security phase; do
+  # shellcheck source=/dev/null
+  . "$PAO_ROOT/scripts/lib/$lib.sh"
+done
+
+usage() {
+  cat <<'USAGE'
+usage: pao <command>
+
+  setup                 check tools, install git hooks, create .env
+  up | down             start or stop the Docker stack
+  seed                  apply migrations and load seed data
+  gen [--check]         run code generators (fail on drift with --check or CI=true)
+  lint [go|dart|shell]  formatting, linters, architecture rules, file sizes
+  test unit|integration|e2e|all (or go|dart for one stack's unit tests)
+  cover [go|dart]       enforce 100% coverage, write coverage/summary.md
+  security              gitleaks, govulncheck, osv-scanner, trivy
+  ci                    lint → gen check → test all → cover → security
+  phase finish <id>     ci, push the branch, open the PR
+  perf                  k6 performance scripts against the local stack
+USAGE
+}
+
+cmd_setup() {
+  require_tool git "https://git-scm.com"
+  require_tool go "https://go.dev/dl/ (1.27+)"
+  require_tool docker "https://docs.docker.com/engine/install/"
+  command -v flutter >/dev/null 2>&1 || log "flutter not found — Flutter commands will fail"
+  git -C "$PAO_ROOT" config core.hooksPath scripts/hooks
+  [[ -f "$PAO_ROOT/.env" ]] || cp "$PAO_ROOT/.env.example" "$PAO_ROOT/.env"
+  ok "setup complete — hooks installed from scripts/hooks"
+}
+
+cmd_ci() {
+  cmd_lint
+  cmd_gen --check
+  cmd_test all
+  cmd_cover
+  cmd_security
+  ok "ci passed"
+}
+
+cmd_perf() {
+  compgen -G "$PAO_ROOT/test/perf/*.js" >/dev/null || {
+    nothing_to_run "perf"
+    return 0
+  }
+  require_tool k6 "https://grafana.com/docs/k6/latest/set-up/install-k6/"
+  local script
+  for script in "$PAO_ROOT"/test/perf/*.js; do
+    k6 run --quiet "$script" || die "performance threshold missed in ${script##*/}"
+  done
+  ok "performance thresholds met"
+}
+
+main() {
+  local cmd="${1:-}"
+  [[ $# -gt 0 ]] && shift
+  case "$cmd" in
+    setup | up | down | seed | gen | lint | test | cover | security | ci | phase | perf)
+      "cmd_$cmd" "$@"
+      ;;
+    -h | --help | help) usage ;;
+    *)
+      usage >&2
+      exit 2
+      ;;
+  esac
+}
+
+main "$@"
