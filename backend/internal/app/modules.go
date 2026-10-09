@@ -14,6 +14,7 @@ import (
 	audithttp "github.com/LabibTajremin/PAO/backend/internal/modules/audit/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/booking"
 	bookinghttp "github.com/LabibTajremin/PAO/backend/internal/modules/booking/adapter/http"
+	bookingcontract "github.com/LabibTajremin/PAO/backend/internal/modules/booking/contract"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/catalog"
 	cataloghttp "github.com/LabibTajremin/PAO/backend/internal/modules/catalog/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/customer"
@@ -106,6 +107,14 @@ func (l levels) GetLevel(ctx context.Context, id uuid.UUID) (int, error) {
 	return l.m.Verification.Contract.GetLevel(ctx, id)
 }
 
+// bookings lets admin read booking parties for complaints; booking is built after
+// admin because it reads admin settings.
+type bookings struct{ m *Modules }
+
+func (b bookings) GetBooking(ctx context.Context, id uuid.UUID) (bookingcontract.Booking, error) {
+	return b.m.Booking.Contract.GetBooking(ctx, id)
+}
+
 // BuildModules wires every module on the infrastructure.
 func BuildModules(i *Infra) (*Modules, error) {
 	cipher, err := auth.NewCipher(i.Config.DataEncryptionKey)
@@ -121,8 +130,9 @@ func BuildModules(i *Infra) (*Modules, error) {
 	})
 	m.Catalog = catalog.New(catalog.Deps{Pool: i.Pool, Redis: i.Redis, Keys: i.Keys, Clock: i.Clock, IDs: i.IDs, Log: i.Log})
 	m.Audit = audit.New(i.Pool, i.Clock, i.IDs)
-	m.Admin = admin.New(admin.Deps{Pool: i.Pool, Redis: i.Redis, Keys: i.Keys, Clock: i.Clock, IDs: i.IDs, Log: i.Log})
 	m.Media = media.New(media.Deps{Pool: i.Pool, Storage: i.Storage, Auditor: m.Audit.Contract, Bucket: i.Config.S3.BucketPrivate, Clock: i.Clock, IDs: i.IDs})
+	m.Admin = admin.New(admin.Deps{Pool: i.Pool, Redis: i.Redis, Keys: i.Keys, Clock: i.Clock, IDs: i.IDs, Log: i.Log,
+		Bookings: bookings{m}, Media: m.Media.Contract, Identity: m.Identity.Contract})
 	m.Customer = customer.New(customer.Deps{Pool: i.Pool, Clock: i.Clock, IDs: i.IDs, Media: m.Media.Contract,
 		Identity: m.Identity.Contract, Admin: m.Admin.Contract})
 	m.Rating = rating.New(i.Pool, i.Clock, i.IDs)

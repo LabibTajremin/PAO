@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/LabibTajremin/PAO/backend/internal/modules/admin/domain"
+	"github.com/LabibTajremin/PAO/backend/internal/modules/admin/port"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/clock"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/eventbus"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/logx"
@@ -17,7 +18,9 @@ import (
 
 var errBoom = errors.New("boom")
 
+// fakeRepo covers settings; complaints are exercised against Postgres.
 type fakeRepo struct {
+	port.Repository
 	settings map[string]domain.Setting
 	events   []eventbus.Event
 	err      error

@@ -58,6 +58,7 @@ func TestHandlers_AuditEventsAndRejectBadPayloads(t *testing.T) {
 		"verification.Level2ResultRecorded": map[string]any{"ProviderID": uuid.New(), "SessionID": uuid.New(), "Result": "pass", "ActorID": actor},
 		"verification.DocumentExpired":      map[string]any{"ProviderID": uuid.New(), "Item": "police_clearance"},
 		"admin.SettingChanged":              map[string]any{"Key": "search.default_radius_m", "Before": "5000", "After": "6000", "ActorID": actor},
+		"admin.ComplaintResolved":           map[string]any{"ComplaintID": uuid.New(), "TicketNumber": "TCK-000001", "Verified": true, "ActorID": actor},
 	}
 	for name, h := range s.Handlers() {
 		raw, _ := json.Marshal(payloads[name])

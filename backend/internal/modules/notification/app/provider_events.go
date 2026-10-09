@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
+	admin "github.com/LabibTajremin/PAO/backend/internal/modules/admin/contract"
 	identity "github.com/LabibTajremin/PAO/backend/internal/modules/identity/contract"
 	verification "github.com/LabibTajremin/PAO/backend/internal/modules/verification/contract"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/eventbus"
@@ -64,6 +65,11 @@ func (s *Service) Handlers() map[string]eventbus.Handler {
 			return s.toProvider(ctx, env, e.ProviderID, "level2_scheduled", func(string) map[string]string {
 				return map[string]string{"location": e.Location, "when": e.ScheduledAt}
 			})
+		}),
+		admin.ComplaintResolved{}.EventName(): decoded(func(ctx context.Context, env eventbus.Envelope, e admin.ComplaintResolved) error {
+			app := map[string]string{"customer": "customer", "provider": "partner"}[e.ReporterRole]
+			return s.Send(ctx, Message{Recipient: e.ReporterID, App: app, Template: "complaint_resolved", Data: map[string]string{"ticket": e.TicketNumber},
+				DedupeKey: env.ID.String(), Language: s.d.Languages.Language(ctx, e.ReporterID, app)})
 		}),
 		identity.AccountDeleted{}.EventName(): decoded(func(ctx context.Context, _ eventbus.Envelope, e identity.AccountDeleted) error {
 			return s.Forget(ctx, e.AccountID)

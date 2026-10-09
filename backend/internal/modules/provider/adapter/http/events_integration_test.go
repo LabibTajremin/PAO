@@ -54,8 +54,8 @@ func TestEvents_QualityFlagsAndReadModel(t *testing.T) {
 		t.Fatalf("cancellation flag: %v %s", f, reason)
 	}
 	complained, auth := online(t, a, "01712345603", "male", 1, electrician)
-	a.Deliver(t, admin.ComplaintResolved{AgainstID: complained, Verified: false})
-	a.Deliver(t, admin.ComplaintResolved{AgainstID: complained, Verified: true})
+	a.Deliver(t, admin.ComplaintResolved{AgainstID: complained, ReporterID: uuid.New(), ReporterRole: "customer", TicketNumber: "TCK-000001", Verified: false})
+	a.Deliver(t, admin.ComplaintResolved{AgainstID: complained, ReporterID: uuid.New(), ReporterRole: "customer", TicketNumber: "TCK-000002", Verified: true})
 	if f, reason := flagged(t, a, complained); !f || reason != "verified_complaint" {
 		t.Fatalf("complaint flag: %v %s", f, reason)
 	}

@@ -8,6 +8,8 @@ type ComplaintCreated struct {
 	TicketNumber string
 	BookingID    uuid.UUID
 	ReporterID   uuid.UUID
+	ReporterRole string
+	AgainstID    uuid.UUID
 }
 
 // EventName implements eventbus.Event.
@@ -19,8 +21,10 @@ type ComplaintResolved struct {
 	TicketNumber string
 	BookingID    uuid.UUID
 	ReporterID   uuid.UUID
+	ReporterRole string
 	AgainstID    uuid.UUID
 	Verified     bool
+	ActorID      uuid.UUID
 }
 
 // EventName implements eventbus.Event.

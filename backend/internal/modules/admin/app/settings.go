@@ -13,6 +13,7 @@ import (
 	"github.com/LabibTajremin/PAO/backend/internal/modules/admin/domain"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/admin/port"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/clock"
+	"github.com/LabibTajremin/PAO/backend/internal/platform/idgen"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/redisx"
 )
 
@@ -21,11 +22,15 @@ const settingsTTL = 10 * time.Minute
 
 // Deps are the admin collaborators.
 type Deps struct {
-	Repo  port.Repository
-	Cache port.Cache
-	Keys  redisx.Keys
-	Clock clock.Clock
-	Log   *slog.Logger
+	Repo     port.Repository
+	Cache    port.Cache
+	Keys     redisx.Keys
+	Clock    clock.Clock
+	IDs      idgen.Generator
+	Log      *slog.Logger
+	Bookings port.Bookings
+	Media    port.Media
+	Admins   port.Admins
 }
 
 // Service implements the admin use cases.

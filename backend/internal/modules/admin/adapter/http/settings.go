@@ -18,8 +18,14 @@ type Handler struct{ svc *app.Service }
 func NewHandler(svc *app.Service) *Handler { return &Handler{svc: svc} }
 
 var errorMap = httpx.ErrorMap{
-	domain.ErrNotFound: httpx.ErrNotFound,
-	domain.ErrInvalid:  httpx.NewError(http.StatusUnprocessableEntity, "SETTING_INVALID", "This value does not fit the setting."),
+	domain.ErrNotFound:          httpx.ErrNotFound,
+	domain.ErrInvalid:           httpx.NewError(http.StatusUnprocessableEntity, "SETTING_INVALID", "This value does not fit the setting."),
+	domain.ErrComplaintNotFound: httpx.ErrNotFound,
+	domain.ErrBookingNotFound:   httpx.ErrNotFound,
+	domain.ErrInvalidComplaint:  httpx.ErrValidation,
+	domain.ErrInvalidPhoto:      httpx.NewError(http.StatusUnprocessableEntity, "UPLOAD_INVALID", "Attach confirmed complaint photos only."),
+	domain.ErrInvalidAssignee:   httpx.NewError(http.StatusUnprocessableEntity, "VALIDATION_FAILED", "This admin cannot work complaints."),
+	domain.ErrInvalidTransition: httpx.NewError(http.StatusConflict, "COMPLAINT_INVALID_TRANSITION", "This complaint is already resolved."),
 }
 
 func toSetting(s domain.Setting) api.Setting {
@@ -45,8 +51,7 @@ func (h *Handler) ListSettings(ctx context.Context, _ api.ListSettingsRequestObj
 
 // UpdateSetting implements PUT /v1/admin/settings/{key}.
 func (h *Handler) UpdateSetting(ctx context.Context, req api.UpdateSettingRequestObject) (api.UpdateSettingResponseObject, error) {
-	p, _ := httpx.PrincipalFrom(ctx)
-	s, err := h.svc.UpdateSetting(ctx, p.AccountID, req.Key, req.Body.Value)
+	s, err := h.svc.UpdateSetting(ctx, me(ctx), req.Key, req.Body.Value)
 	if err != nil {
 		return nil, errorMap.Map(err)
 	}

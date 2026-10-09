@@ -15,8 +15,8 @@ it first and continues from **Current task**.
 | P05 Customer | done | — | |
 | P06 Provider & verification | done | — | |
 | P07 Discovery & booking | done | — | |
-| P08 Rating, notification, complaints | in_progress | — | |
-| P09 Admin API | todo | — | |
+| P08 Rating, notification, complaints | done | — | |
+| P09 Admin API | in_progress | — | |
 | P10 Flutter foundation | todo | — | |
 | P11 Partner app | todo | — | |
 | P12 Customer app | todo | — | |
@@ -28,7 +28,8 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P08 / task 3 — complaints (rating and notification are done).
+P09 / task 1 — read `docs/build/phases/P09-*.md` and start its first task
+(complaint endpoints already exist from P08).
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
@@ -62,6 +63,10 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-10-09 P08.3 complaints: either party reports a booking (reason, description,
+  ≤ 5 confirmed photos), TCK ticket numbers, admin queue with filters and cursor,
+  assign/comment/resolve; `ComplaintResolved` notifies the reporter, is audited and a
+  verified one flags the provider.
 - 2026-10-09 P08.2 notification: bilingual templates for booking and verification
   events, inbox with read state, device tokens, FCM HTTP v1 push (capture adapter in
   dev/test), invalid tokens dropped, deduped per event; events for unknown bookings skip.

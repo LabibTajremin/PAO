@@ -19,6 +19,7 @@ func (s *Service) Handlers() map[string]eventbus.Handler {
 		identity.AccountStatusChanged{}.EventName(): s.onAccountStatusChanged,
 		catalog.PriceChanged{}.EventName():          s.onPriceChanged,
 		admin.SettingChanged{}.EventName():          s.onSettingChanged,
+		admin.ComplaintResolved{}.EventName():       s.onComplaintResolved,
 	}
 	for name, h := range s.verificationHandlers() {
 		hs[name] = h
@@ -69,5 +70,16 @@ func (s *Service) onSettingChanged(ctx context.Context, env eventbus.Envelope) e
 	return s.fromEvent(ctx, env, domain.Entry{
 		ActorID: actor(e.ActorID), Action: "settings.changed", SubjectType: "setting", SubjectID: e.Key,
 		Before: map[string]any{"value": e.Before}, After: map[string]any{"value": e.After},
+	})
+}
+
+func (s *Service) onComplaintResolved(ctx context.Context, env eventbus.Envelope) error {
+	e, err := eventbus.Decode[admin.ComplaintResolved](env)
+	if err != nil {
+		return err
+	}
+	return s.fromEvent(ctx, env, domain.Entry{
+		ActorID: actor(e.ActorID), Action: "complaint.resolved", SubjectType: "complaint", SubjectID: e.ComplaintID.String(),
+		After: map[string]any{"ticket": e.TicketNumber, "verified": e.Verified, "againstId": e.AgainstID.String()},
 	})
 }

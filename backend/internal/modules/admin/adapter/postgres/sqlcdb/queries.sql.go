@@ -12,6 +12,34 @@ import (
 	"github.com/google/uuid"
 )
 
+const complaintByID = `-- name: ComplaintByID :one
+SELECT id, ticket_number, booking_id, reporter_id, reporter_role, against_id, reason, description, photo_media_ids, status, assignee_id, resolution, verified, created_at, updated_at, resolved_at FROM admin.complaints WHERE id = $1
+`
+
+func (q *Queries) ComplaintByID(ctx context.Context, id uuid.UUID) (AdminComplaint, error) {
+	row := q.db.QueryRow(ctx, complaintByID, id)
+	var i AdminComplaint
+	err := row.Scan(
+		&i.ID,
+		&i.TicketNumber,
+		&i.BookingID,
+		&i.ReporterID,
+		&i.ReporterRole,
+		&i.AgainstID,
+		&i.Reason,
+		&i.Description,
+		&i.PhotoMediaIds,
+		&i.Status,
+		&i.AssigneeID,
+		&i.Resolution,
+		&i.Verified,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.ResolvedAt,
+	)
+	return i, err
+}
+
 const countVerifiedComplaints = `-- name: CountVerifiedComplaints :one
 SELECT count(*) FROM admin.complaints WHERE against_id = $1 AND verified
 `
@@ -21,6 +49,154 @@ func (q *Queries) CountVerifiedComplaints(ctx context.Context, againstID uuid.UU
 	var count int64
 	err := row.Scan(&count)
 	return count, err
+}
+
+const insertComment = `-- name: InsertComment :exec
+INSERT INTO admin.complaint_comments (id, complaint_id, author_id, body, at) VALUES ($1, $2, $3, $4, $5)
+`
+
+type InsertCommentParams struct {
+	ID          uuid.UUID
+	ComplaintID uuid.UUID
+	AuthorID    uuid.UUID
+	Body        string
+	At          time.Time
+}
+
+func (q *Queries) InsertComment(ctx context.Context, arg InsertCommentParams) error {
+	_, err := q.db.Exec(ctx, insertComment,
+		arg.ID,
+		arg.ComplaintID,
+		arg.AuthorID,
+		arg.Body,
+		arg.At,
+	)
+	return err
+}
+
+const insertComplaint = `-- name: InsertComplaint :one
+INSERT INTO admin.complaints (id, booking_id, reporter_id, reporter_role, against_id, reason, description, photo_media_ids, created_at, updated_at)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $9)
+RETURNING ticket_number
+`
+
+type InsertComplaintParams struct {
+	ID            uuid.UUID
+	BookingID     uuid.UUID
+	ReporterID    uuid.UUID
+	ReporterRole  string
+	AgainstID     uuid.UUID
+	Reason        string
+	Description   string
+	PhotoMediaIds []uuid.UUID
+	CreatedAt     time.Time
+}
+
+func (q *Queries) InsertComplaint(ctx context.Context, arg InsertComplaintParams) (int64, error) {
+	row := q.db.QueryRow(ctx, insertComplaint,
+		arg.ID,
+		arg.BookingID,
+		arg.ReporterID,
+		arg.ReporterRole,
+		arg.AgainstID,
+		arg.Reason,
+		arg.Description,
+		arg.PhotoMediaIds,
+		arg.CreatedAt,
+	)
+	var ticket_number int64
+	err := row.Scan(&ticket_number)
+	return ticket_number, err
+}
+
+const listComments = `-- name: ListComments :many
+SELECT id, complaint_id, author_id, body, at FROM admin.complaint_comments WHERE complaint_id = $1 ORDER BY at, id
+`
+
+func (q *Queries) ListComments(ctx context.Context, complaintID uuid.UUID) ([]AdminComplaintComment, error) {
+	rows, err := q.db.Query(ctx, listComments, complaintID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []AdminComplaintComment
+	for rows.Next() {
+		var i AdminComplaintComment
+		if err := rows.Scan(
+			&i.ID,
+			&i.ComplaintID,
+			&i.AuthorID,
+			&i.Body,
+			&i.At,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listComplaints = `-- name: ListComplaints :many
+SELECT id, ticket_number, booking_id, reporter_id, reporter_role, against_id, reason, description, photo_media_ids, status, assignee_id, resolution, verified, created_at, updated_at, resolved_at FROM admin.complaints
+WHERE ($1::text IS NULL OR status = $1::text)
+  AND ($2::uuid IS NULL OR assignee_id = $2::uuid)
+  AND ($3::timestamptz IS NULL OR (created_at, id) < ($3::timestamptz, $4::uuid))
+ORDER BY created_at DESC, id DESC
+LIMIT $5
+`
+
+type ListComplaintsParams struct {
+	Status     *string
+	AssigneeID *uuid.UUID
+	BeforeAt   *time.Time
+	BeforeID   uuid.UUID
+	MaxRows    int32
+}
+
+func (q *Queries) ListComplaints(ctx context.Context, arg ListComplaintsParams) ([]AdminComplaint, error) {
+	rows, err := q.db.Query(ctx, listComplaints,
+		arg.Status,
+		arg.AssigneeID,
+		arg.BeforeAt,
+		arg.BeforeID,
+		arg.MaxRows,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []AdminComplaint
+	for rows.Next() {
+		var i AdminComplaint
+		if err := rows.Scan(
+			&i.ID,
+			&i.TicketNumber,
+			&i.BookingID,
+			&i.ReporterID,
+			&i.ReporterRole,
+			&i.AgainstID,
+			&i.Reason,
+			&i.Description,
+			&i.PhotoMediaIds,
+			&i.Status,
+			&i.AssigneeID,
+			&i.Resolution,
+			&i.Verified,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.ResolvedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const listSettings = `-- name: ListSettings :many
@@ -54,6 +230,34 @@ func (q *Queries) ListSettings(ctx context.Context) ([]AdminSetting, error) {
 	return items, nil
 }
 
+const lockComplaint = `-- name: LockComplaint :one
+SELECT id, ticket_number, booking_id, reporter_id, reporter_role, against_id, reason, description, photo_media_ids, status, assignee_id, resolution, verified, created_at, updated_at, resolved_at FROM admin.complaints WHERE id = $1 FOR UPDATE
+`
+
+func (q *Queries) LockComplaint(ctx context.Context, id uuid.UUID) (AdminComplaint, error) {
+	row := q.db.QueryRow(ctx, lockComplaint, id)
+	var i AdminComplaint
+	err := row.Scan(
+		&i.ID,
+		&i.TicketNumber,
+		&i.BookingID,
+		&i.ReporterID,
+		&i.ReporterRole,
+		&i.AgainstID,
+		&i.Reason,
+		&i.Description,
+		&i.PhotoMediaIds,
+		&i.Status,
+		&i.AssigneeID,
+		&i.Resolution,
+		&i.Verified,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.ResolvedAt,
+	)
+	return i, err
+}
+
 const settingByKey = `-- name: SettingByKey :one
 SELECT key, value, type, description, updated_at, updated_by FROM admin.settings WHERE key = $1
 `
@@ -70,6 +274,35 @@ func (q *Queries) SettingByKey(ctx context.Context, key string) (AdminSetting, e
 		&i.UpdatedBy,
 	)
 	return i, err
+}
+
+const updateComplaint = `-- name: UpdateComplaint :exec
+UPDATE admin.complaints
+SET status = $2, assignee_id = $3, resolution = $4, verified = $5, updated_at = $6, resolved_at = $7
+WHERE id = $1
+`
+
+type UpdateComplaintParams struct {
+	ID         uuid.UUID
+	Status     string
+	AssigneeID *uuid.UUID
+	Resolution string
+	Verified   bool
+	UpdatedAt  time.Time
+	ResolvedAt *time.Time
+}
+
+func (q *Queries) UpdateComplaint(ctx context.Context, arg UpdateComplaintParams) error {
+	_, err := q.db.Exec(ctx, updateComplaint,
+		arg.ID,
+		arg.Status,
+		arg.AssigneeID,
+		arg.Resolution,
+		arg.Verified,
+		arg.UpdatedAt,
+		arg.ResolvedAt,
+	)
+	return err
 }
 
 const updateSetting = `-- name: UpdateSetting :exec

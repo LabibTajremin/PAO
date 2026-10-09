@@ -18,6 +18,42 @@ type Repository interface {
 	// UpdateSetting saves the value and writes the event to the outbox in one transaction.
 	UpdateSetting(ctx context.Context, s domain.Setting, e eventbus.Event) error
 	CountVerifiedComplaints(ctx context.Context, againstID uuid.UUID) (int, error)
+	// CreateComplaint assigns the ticket number and writes the event built from the
+	// stored complaint in the same transaction.
+	CreateComplaint(ctx context.Context, c domain.Complaint, event func(domain.Complaint) eventbus.Event) (domain.Complaint, error)
+	// GetComplaint returns a complaint with its comments, or domain.ErrComplaintNotFound.
+	GetComplaint(ctx context.Context, id uuid.UUID) (domain.Complaint, error)
+	ListComplaints(ctx context.Context, f ComplaintFilter) ([]domain.Complaint, error)
+	// SaveComplaint applies change to the locked row and writes its event, if any.
+	SaveComplaint(ctx context.Context, id uuid.UUID, change func(*domain.Complaint) (eventbus.Event, error)) (domain.Complaint, error)
+	AddComment(ctx context.Context, c domain.Comment) error
+}
+
+// ComplaintFilter selects a page of the complaints queue, newest first.
+type ComplaintFilter struct {
+	Status     *string
+	AssigneeID *uuid.UUID
+	At         *time.Time
+	ID         uuid.UUID
+	Limit      int
+}
+
+// Bookings finds who took part in a booking.
+type Bookings interface {
+	// Parties returns the booking's customer and provider, or domain.ErrBookingNotFound.
+	Parties(ctx context.Context, bookingID uuid.UUID) (customerID, providerID uuid.UUID, err error)
+}
+
+// Media attaches evidence photos.
+type Media interface {
+	// AttachComplaintPhotos fails with domain.ErrInvalidPhoto unless every photo is the
+	// owner's confirmed complaint photo.
+	AttachComplaintPhotos(ctx context.Context, owner uuid.UUID, ids []uuid.UUID) error
+}
+
+// Admins answers who may work the complaints queue.
+type Admins interface {
+	CanWorkComplaints(ctx context.Context, id uuid.UUID) (bool, error)
 }
 
 // Cache keeps rebuildable reads.
