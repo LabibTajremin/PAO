@@ -91,11 +91,11 @@ HEAD
     fi
     printf '    mayDependOn:\n      - platform\n      - %s\n' "$c"
     for dep in $(allowed_layers "$l"); do
-      has "${m}_${dep}" && printf '      - %s_%s\n' "$m" "$dep"
+      if has "${m}_${dep}"; then printf '      - %s_%s\n' "$m" "$dep"; fi
     done
     [[ "$l" == contract ]] && continue
     for other in "${all_modules[@]}"; do
-      [[ "$other" != "$m" ]] && has "${other}_contract" && printf '      - %s_contract\n' "$other"
+      if [[ "$other" != "$m" ]] && has "${other}_contract"; then printf '      - %s_contract\n' "$other"; fi
     done
   done
 } >"$out"
