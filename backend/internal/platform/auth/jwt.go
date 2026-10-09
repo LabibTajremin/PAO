@@ -24,16 +24,19 @@ var (
 
 // Claims are the access-token claims.
 type Claims struct {
-	Subject   uuid.UUID
-	Roles     []string
-	ID        string
+	Subject uuid.UUID
+	Roles   []string
+	ID      string
+	// SessionID names the refresh-token family (device) the token belongs to.
+	SessionID uuid.UUID
 	Version   int64
 	ExpiresAt time.Time
 }
 
 type wireClaims struct {
-	Roles   []string `json:"roles"`
-	Version int64    `json:"ver"`
+	Roles     []string  `json:"roles"`
+	Version   int64     `json:"ver"`
+	SessionID uuid.UUID `json:"sid"`
 	jwt.RegisteredClaims
 }
 
@@ -52,14 +55,15 @@ func NewSigner(keyID string, key crypto.Signer, ttl time.Duration, clk clock.Clo
 	return &Signer{keyID: keyID, key: key, ttl: ttl, clock: clk, ids: ids}
 }
 
-// Sign issues a token for an account. version is the RBAC version the roles were read at.
-func (s *Signer) Sign(subject uuid.UUID, roles []string, version int64) (string, Claims, error) {
+// Sign issues a token. c.ID and c.ExpiresAt are filled in; c.Version is the RBAC
+// version the roles were read at.
+func (s *Signer) Sign(c Claims) (string, Claims, error) {
 	now := s.clock.Now()
-	c := Claims{Subject: subject, Roles: roles, ID: s.ids.New().String(), Version: version, ExpiresAt: now.Add(s.ttl)}
+	c.ID, c.ExpiresAt = s.ids.New().String(), now.Add(s.ttl)
 	tok := jwt.NewWithClaims(jwt.SigningMethodEdDSA, wireClaims{
-		Roles: roles, Version: version,
+		Roles: c.Roles, Version: c.Version, SessionID: c.SessionID,
 		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: subject.String(), ID: c.ID, Issuer: "pao",
+			Subject: c.Subject.String(), ID: c.ID, Issuer: "pao",
 			IssuedAt: jwt.NewNumericDate(now), ExpiresAt: jwt.NewNumericDate(c.ExpiresAt),
 		},
 	})
@@ -99,7 +103,7 @@ func (v *Verifier) Verify(token string) (Claims, error) {
 	if err != nil {
 		return Claims{}, fmt.Errorf("%w: subject", ErrTokenInvalid)
 	}
-	return Claims{Subject: sub, Roles: wc.Roles, ID: wc.ID, Version: wc.Version, ExpiresAt: wc.ExpiresAt.Time}, nil
+	return Claims{Subject: sub, Roles: wc.Roles, ID: wc.ID, SessionID: wc.SessionID, Version: wc.Version, ExpiresAt: wc.ExpiresAt.Time}, nil
 }
 
 func (v *Verifier) key(t *jwt.Token) (any, error) {

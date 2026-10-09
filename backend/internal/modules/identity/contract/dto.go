@@ -59,48 +59,6 @@ type SetAccountStatusInput struct {
 	ActorID   uuid.UUID
 }
 
-// AdminAccount is an operations staff member.
-type AdminAccount struct {
-	ID           uuid.UUID
-	Email        string
-	Name         string
-	Roles        []Role
-	Active       bool
-	TOTPEnrolled bool
-	LastLoginAt  *time.Time
-}
-
-// CreateAdminInput invites a new admin.
-type CreateAdminInput struct {
-	Email   string
-	Name    string
-	Roles   []Role
-	ActorID uuid.UUID
-}
-
-// UpdateAdminInput changes an admin; nil fields stay unchanged.
-type UpdateAdminInput struct {
-	AdminID uuid.UUID
-	Roles   []Role
-	Active  *bool
-	ActorID uuid.UUID
-}
-
-// RoleDefinition is a role with its permission and screen sets.
-type RoleDefinition struct {
-	Role        Role
-	Permissions []string
-	Screens     []string
-}
-
-// UpdateRoleInput replaces a role's permissions and screens.
-type UpdateRoleInput struct {
-	Role        Role
-	Permissions []string
-	Screens     []string
-	ActorID     uuid.UUID
-}
-
 // Errors returned through the contract.
 var (
 	ErrAccountNotFound = errors.New("account not found")
@@ -108,7 +66,5 @@ var (
 	ErrCodeExpired     = errors.New("one-time code expired")
 	ErrCodeLocked      = errors.New("too many wrong codes")
 	ErrRateLimited     = errors.New("too many codes requested")
-	ErrEmailTaken      = errors.New("email already in use")
-	ErrRoleInvalid     = errors.New("unknown role, permission or screen")
 	ErrStatusInvalid   = errors.New("status change not allowed")
 )

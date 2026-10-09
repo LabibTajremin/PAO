@@ -15,11 +15,8 @@ type TxHandler func(ctx context.Context, tx pgx.Tx, env eventbus.Envelope) error
 
 // Idempotent wraps h so each event is applied once per handler: the processed-event
 // row and h's writes commit together, and a redelivered event is skipped.
-func Idempotent(conn db.Beginner, module, handlerName string, h TxHandler) (eventbus.Handler, error) {
-	tbl, err := table(module, "processed_events")
-	if err != nil {
-		return nil, err
-	}
+func Idempotent(conn db.Beginner, module, handlerName string, h TxHandler) eventbus.Handler {
+	tbl := table(module, "processed_events")
 	return func(ctx context.Context, env eventbus.Envelope) error {
 		return db.WithTx(ctx, conn, func(tx pgx.Tx) error {
 			tag, err := tx.Exec(ctx, "INSERT INTO "+tbl+" (handler, event_id) VALUES ($1, $2) ON CONFLICT DO NOTHING", handlerName, env.ID)
@@ -31,5 +28,5 @@ func Idempotent(conn db.Beginner, module, handlerName string, h TxHandler) (even
 			}
 			return h(ctx, tx, env)
 		})
-	}, nil
+	}
 }

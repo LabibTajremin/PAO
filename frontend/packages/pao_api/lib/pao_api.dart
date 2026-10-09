@@ -35,6 +35,7 @@ export 'package:pao_api/src/model/admin_customer_list.dart';
 export 'package:pao_api/src/model/admin_customer_summary.dart';
 export 'package:pao_api/src/model/admin_login_challenge.dart';
 export 'package:pao_api/src/model/admin_login_request.dart';
+export 'package:pao_api/src/model/admin_password_change.dart';
 export 'package:pao_api/src/model/admin_provider_detail.dart';
 export 'package:pao_api/src/model/admin_provider_list.dart';
 export 'package:pao_api/src/model/admin_provider_summary.dart';

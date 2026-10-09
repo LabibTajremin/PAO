@@ -84,8 +84,12 @@ HEAD
       adapter | root) printf '    anyVendorDeps: true\n' ;;
       *) printf '    canUse: [uuid]\n' ;;
     esac
-    [[ "$l" == domain ]] && continue
-    printf '    mayDependOn:\n      - platform\n'
+    # A component may import its own sub-packages (e.g. adapter/postgres/sqlcdb).
+    if [[ "$l" == domain ]]; then
+      printf '    mayDependOn: [%s]\n' "$c"
+      continue
+    fi
+    printf '    mayDependOn:\n      - platform\n      - %s\n' "$c"
     for dep in $(allowed_layers "$l"); do
       has "${m}_${dep}" && printf '      - %s_%s\n' "$m" "$dep"
     done

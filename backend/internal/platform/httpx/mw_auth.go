@@ -19,6 +19,7 @@ type Principal struct {
 	AccountID uuid.UUID
 	Roles     []string
 	TokenID   string
+	SessionID uuid.UUID
 	ExpiresAt time.Time
 }
 
@@ -98,7 +99,7 @@ func principal(r *http.Request, v TokenVerifier, revoked RevocationChecker) (Pri
 	if denied {
 		return Principal{}, ErrUnauthenticated
 	}
-	return Principal{AccountID: claims.Subject, Roles: claims.Roles, TokenID: claims.ID, ExpiresAt: claims.ExpiresAt}, nil
+	return Principal{AccountID: claims.Subject, Roles: claims.Roles, TokenID: claims.ID, SessionID: claims.SessionID, ExpiresAt: claims.ExpiresAt}, nil
 }
 
 // Authorize enforces the operation's x-permission. A missing x-permission denies the

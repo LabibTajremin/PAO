@@ -218,6 +218,11 @@ func (StrictUnimplemented) AdminLogin(context.Context, AdminLoginRequestObject) 
 	return nil, ErrNotImplemented
 }
 
+// ChangeAdminPassword is not implemented yet.
+func (StrictUnimplemented) ChangeAdminPassword(context.Context, ChangeAdminPasswordRequestObject) (ChangeAdminPasswordResponseObject, error) {
+	return nil, ErrNotImplemented
+}
+
 // AdminVerifyTotp is not implemented yet.
 func (StrictUnimplemented) AdminVerifyTotp(context.Context, AdminVerifyTotpRequestObject) (AdminVerifyTotpResponseObject, error) {
 	return nil, ErrNotImplemented

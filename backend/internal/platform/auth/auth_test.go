@@ -28,19 +28,19 @@ func TestJWT_SignVerifyAndRotation(t *testing.T) {
 	oldPub, oldPriv := keyPair(1)
 	newPub, newPriv := keyPair(2)
 	v := NewVerifier(map[string]ed25519.PublicKey{"k1": oldPub, "k2": newPub}, clk)
-	sub := uuid.New()
+	sub, sid := uuid.New(), uuid.New()
 
 	for kid, priv := range map[string]ed25519.PrivateKey{"k1": oldPriv, "k2": newPriv} {
-		tok, c, err := NewSigner(kid, priv, 15*time.Minute, clk, idgen.V7{}).Sign(sub, []string{"customer"}, 3)
+		tok, c, err := NewSigner(kid, priv, 15*time.Minute, clk, idgen.V7{}).Sign(Claims{Subject: sub, Roles: []string{"customer"}, Version: 3, SessionID: sid})
 		if err != nil {
 			t.Fatal(err)
 		}
 		got, err := v.Verify(tok)
-		if err != nil || got.Subject != sub || got.ID != c.ID || got.Version != 3 || got.Roles[0] != "customer" {
+		if err != nil || got.Subject != sub || got.ID != c.ID || got.Version != 3 || got.Roles[0] != "customer" || got.SessionID != sid {
 			t.Fatalf("kid %s: %+v %v", kid, got, err)
 		}
 	}
-	tok, _, _ := NewSigner("k2", newPriv, 15*time.Minute, clk, idgen.V7{}).Sign(sub, nil, 1)
+	tok, _, _ := NewSigner("k2", newPriv, 15*time.Minute, clk, idgen.V7{}).Sign(Claims{Subject: sub})
 	clk.Advance(16 * time.Minute)
 	if _, err := v.Verify(tok); !errors.Is(err, ErrTokenExpired) {
 		t.Fatalf("expired: %v", err)
@@ -52,8 +52,8 @@ func TestJWT_RejectsForgedOrMalformedTokens(t *testing.T) {
 	pub, _ := keyPair(1)
 	_, attacker := keyPair(9)
 	v := NewVerifier(map[string]ed25519.PublicKey{"k1": pub}, clk)
-	forged, _, _ := NewSigner("k1", attacker, time.Minute, clk, idgen.V7{}).Sign(uuid.New(), nil, 1)
-	unknownKid, _, _ := NewSigner("k9", attacker, time.Minute, clk, idgen.V7{}).Sign(uuid.New(), nil, 1)
+	forged, _, _ := NewSigner("k1", attacker, time.Minute, clk, idgen.V7{}).Sign(Claims{Subject: uuid.New()})
+	unknownKid, _, _ := NewSigner("k9", attacker, time.Minute, clk, idgen.V7{}).Sign(Claims{Subject: uuid.New()})
 	_, priv := keyPair(1)
 	badSub := jwt.NewWithClaims(jwt.SigningMethodEdDSA, jwt.RegisteredClaims{
 		Subject: "not-a-uuid", Issuer: "pao", ExpiresAt: jwt.NewNumericDate(clk.Now().Add(time.Minute)),
@@ -70,7 +70,7 @@ func TestJWT_RejectsForgedOrMalformedTokens(t *testing.T) {
 func TestSign_ReportsInvalidKey(t *testing.T) {
 	rsaKey, _ := rsa.GenerateKey(rand.Reader, 1024)
 	s := NewSigner("k1", rsaKey, time.Minute, clock.System{}, idgen.V7{})
-	if _, _, err := s.Sign(uuid.New(), nil, 1); err == nil {
+	if _, _, err := s.Sign(Claims{Subject: uuid.New()}); err == nil {
 		t.Fatal("signed with a broken key")
 	}
 }

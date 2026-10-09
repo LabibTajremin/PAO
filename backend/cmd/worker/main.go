@@ -54,10 +54,7 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	relay, err := outbox.NewRelay(infra.Pool, bus, migrations.Modules, infra.Clock, log)
-	if err != nil {
-		return err
-	}
+	relay := outbox.NewRelay(infra.Pool, bus, migrations.Modules, infra.Clock, log)
 	go relay.Run(ctx, 250*time.Millisecond)
 
 	mux := http.NewServeMux()
@@ -75,11 +72,7 @@ func run() error {
 
 func startJobs(ctx context.Context, infra *app.Infra) (*jobs.Client, error) {
 	registry := jobs.NewRegistry()
-	purge, err := outbox.NewPurgeWorker(infra.Pool, migrations.Modules, infra.Clock, 7*24*time.Hour)
-	if err != nil {
-		return nil, err
-	}
-	jobs.Register(registry, purge)
+	jobs.Register(registry, outbox.NewPurgeWorker(infra.Pool, migrations.Modules, infra.Clock, 7*24*time.Hour))
 	registry.Daily(3, 0, outbox.PurgeArgs{})
 	client, err := jobs.NewClient(infra.Pool, registry, 20, infra.Log)
 	if err != nil {

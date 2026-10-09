@@ -48,9 +48,10 @@ func newTestRouter(t *testing.T) *SpecRouter {
 
 func TestSpecRouter(t *testing.T) {
 	var seen Operation
-	h := newTestRouter(t).Middleware(http.HandlerFunc(func(_ http.ResponseWriter, r *http.Request) {
+	sr := newTestRouter(t)
+	h := sr.Match(sr.Validate(http.HandlerFunc(func(_ http.ResponseWriter, r *http.Request) {
 		seen, _ = OperationFrom(r.Context())
-	}))
+	})))
 	tests := []struct {
 		name, method, path, body string
 		idem                     bool

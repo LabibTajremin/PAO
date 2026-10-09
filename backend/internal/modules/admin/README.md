@@ -1,6 +1,6 @@
 # admin
 
-Platform settings, complaints (customer and provider reports), the dashboard read model and admin-user and role management screens (credentials live in identity).
+Platform settings, complaints (customer and provider reports), the dashboard read model and admin-user and role management are served by identity.
 
 ## Contract (`contract/service.go`, `AdminService`)
 
@@ -36,8 +36,6 @@ Platform settings, complaints (customer and provider reports), the dashboard rea
 - `/v1/admin/dashboard`
 - `/v1/admin/settings*`
 - `/v1/admin/complaints*`
-- `/v1/admin/admin-users*`
-- `/v1/admin/roles*`
 - `/v1/customer/bookings/{id}/reports`
 - `/v1/provider/jobs/{id}/reports`
 

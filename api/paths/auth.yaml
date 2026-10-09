@@ -1,4 +1,4 @@
-# Generated from the operation table during P01; edit by hand from now on.
+# Sign-in, tokens and admin 2FA.
 otpRequest:
   post:
     operationId: requestOtp
@@ -74,12 +74,26 @@ refresh:
           application/json:
             schema:
               $ref: ../schemas/auth.yaml#/TokenPair
+        headers: &id002
+          Set-Cookie:
+            description: 'Admin web only: the rotated refresh token as an HttpOnly, Secure, SameSite=Strict
+              cookie.'
+            schema:
+              type: string
       '401':
         $ref: ../components/responses.yaml#/Unauthenticated
       '403':
         $ref: ../components/responses.yaml#/Forbidden
       '422':
         $ref: ../components/responses.yaml#/ValidationFailed
+    parameters:
+    - &id001
+      name: pao_refresh
+      in: cookie
+      required: false
+      description: Admin web refresh token (HttpOnly cookie).
+      schema:
+        type: string
 logout:
   post:
     operationId: logout
@@ -96,12 +110,19 @@ logout:
     responses:
       '204':
         description: No content
+        headers:
+          Set-Cookie:
+            description: Clears the admin refresh cookie.
+            schema:
+              type: string
       '401':
         $ref: ../components/responses.yaml#/Unauthenticated
       '403':
         $ref: ../components/responses.yaml#/Forbidden
       '422':
         $ref: ../components/responses.yaml#/ValidationFailed
+    parameters:
+    - *id001
 adminLogin:
   post:
     operationId: adminLogin
@@ -152,9 +173,32 @@ adminTotp:
           application/json:
             schema:
               $ref: ../schemas/auth.yaml#/TokenPair
+        headers: *id002
       '401':
         $ref: ../components/responses.yaml#/Unauthenticated
       '422':
         $ref: ../components/responses.yaml#/ValidationFailed
       '429':
         $ref: ../components/responses.yaml#/TooManyRequests
+adminPassword:
+  post:
+    operationId: changeAdminPassword
+    tags:
+    - Auth
+    summary: 'Admin: replace the temporary or current password'
+    x-permission: authenticated
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/auth.yaml#/AdminPasswordChange
+    responses:
+      '204':
+        description: No content
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

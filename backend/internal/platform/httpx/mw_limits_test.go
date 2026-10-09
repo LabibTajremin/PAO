@@ -144,7 +144,12 @@ func TestIdempotency_EdgeCases(t *testing.T) {
 
 func TestProxiedClientIP(t *testing.T) {
 	var seen string
-	h := ProxiedClientIP(http.HandlerFunc(func(_ http.ResponseWriter, r *http.Request) { seen = ClientIP(r) }))
+	h := ProxiedClientIP(http.HandlerFunc(func(_ http.ResponseWriter, r *http.Request) {
+		seen = ClientIP(r)
+		if ClientIPFrom(r.Context()) != seen {
+			t.Errorf("context IP %q != %q", ClientIPFrom(r.Context()), seen)
+		}
+	}))
 	tests := []struct{ remote, xff, want string }{
 		{"10.0.0.5:443", "1.2.3.4, 203.0.113.9", "203.0.113.9"},
 		{"203.0.113.50:443", "1.2.3.4", "203.0.113.50"},

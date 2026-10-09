@@ -8,6 +8,7 @@ import 'package:pao_api/src/model/admin_customer_list.dart';
 import 'package:pao_api/src/model/admin_customer_summary.dart';
 import 'package:pao_api/src/model/admin_login_challenge.dart';
 import 'package:pao_api/src/model/admin_login_request.dart';
+import 'package:pao_api/src/model/admin_password_change.dart';
 import 'package:pao_api/src/model/admin_provider_detail.dart';
 import 'package:pao_api/src/model/admin_provider_list.dart';
 import 'package:pao_api/src/model/admin_provider_summary.dart';
@@ -181,6 +182,9 @@ ReturnType deserialize<ReturnType, BaseType>(
           as ReturnType;
     case 'AdminLoginRequest':
       return AdminLoginRequest.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'AdminPasswordChange':
+      return AdminPasswordChange.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'AdminProviderDetail':
       return AdminProviderDetail.fromJson(value as Map<String, dynamic>)

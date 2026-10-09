@@ -15,6 +15,11 @@ components:
   testkit: { in: testkit }
   app: { in: app }
   identity_contract: { in: modules/identity/contract }
+  identity_domain: { in: modules/identity/domain/** }
+  identity_port: { in: modules/identity/port }
+  identity_app: { in: modules/identity/app/** }
+  identity_adapter: { in: modules/identity/adapter/** }
+  identity_root: { in: modules/identity }
   customer_contract: { in: modules/customer/contract }
   provider_contract: { in: modules/provider/contract }
   verification_contract: { in: modules/verification/contract }
@@ -40,43 +45,131 @@ deps:
     canUse: [uuid]
     mayDependOn:
       - platform
+      - identity_contract
+  identity_domain:
+    canUse: [uuid]
+    mayDependOn: [identity_domain]
+  identity_port:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+      - identity_port
+      - identity_domain
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
+  identity_app:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+      - identity_app
+      - identity_domain
+      - identity_port
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
+  identity_adapter:
+    anyVendorDeps: true
+    mayDependOn:
+      - platform
+      - identity_adapter
+      - identity_domain
+      - identity_port
+      - identity_app
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
+  identity_root:
+    anyVendorDeps: true
+    mayDependOn:
+      - platform
+      - identity_root
+      - identity_domain
+      - identity_port
+      - identity_app
+      - identity_adapter
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
   customer_contract:
     canUse: [uuid]
     mayDependOn:
       - platform
+      - customer_contract
   provider_contract:
     canUse: [uuid]
     mayDependOn:
       - platform
+      - provider_contract
   verification_contract:
     canUse: [uuid]
     mayDependOn:
       - platform
+      - verification_contract
   catalog_contract:
     canUse: [uuid]
     mayDependOn:
       - platform
+      - catalog_contract
   booking_contract:
     canUse: [uuid]
     mayDependOn:
       - platform
+      - booking_contract
   rating_contract:
     canUse: [uuid]
     mayDependOn:
       - platform
+      - rating_contract
   notification_contract:
     canUse: [uuid]
     mayDependOn:
       - platform
+      - notification_contract
   media_contract:
     canUse: [uuid]
     mayDependOn:
       - platform
+      - media_contract
   admin_contract:
     canUse: [uuid]
     mayDependOn:
       - platform
+      - admin_contract
   audit_contract:
     canUse: [uuid]
     mayDependOn:
       - platform
+      - audit_contract

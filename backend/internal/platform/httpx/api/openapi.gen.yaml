@@ -125,12 +125,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TokenPair'
+          headers:
+            Set-Cookie:
+              description: 'Admin web only: the rotated refresh token as an HttpOnly, Secure, SameSite=Strict cookie.'
+              schema:
+                type: string
         '401':
           $ref: '#/components/responses/Unauthenticated'
         '403':
           $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/ValidationFailed'
+      parameters:
+        - name: pao_refresh
+          in: cookie
+          required: false
+          description: Admin web refresh token (HttpOnly cookie).
+          schema:
+            type: string
   /v1/auth/logout:
     post:
       operationId: logout
@@ -147,12 +159,24 @@ paths:
       responses:
         '204':
           description: No content
+          headers:
+            Set-Cookie:
+              description: Clears the admin refresh cookie.
+              schema:
+                type: string
         '401':
           $ref: '#/components/responses/Unauthenticated'
         '403':
           $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/ValidationFailed'
+      parameters:
+        - name: pao_refresh
+          in: cookie
+          required: false
+          description: Admin web refresh token (HttpOnly cookie).
+          schema:
+            type: string
   /v1/auth/admin/login:
     post:
       operationId: adminLogin
@@ -203,12 +227,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TokenPair'
+          headers:
+            Set-Cookie:
+              description: 'Admin web only: the rotated refresh token as an HttpOnly, Secure, SameSite=Strict cookie.'
+              schema:
+                type: string
         '401':
           $ref: '#/components/responses/Unauthenticated'
         '422':
           $ref: '#/components/responses/ValidationFailed'
         '429':
           $ref: '#/components/responses/TooManyRequests'
+  /v1/auth/admin/password:
+    post:
+      operationId: changeAdminPassword
+      tags:
+        - Auth
+      summary: 'Admin: replace the temporary or current password'
+      x-permission: authenticated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminPasswordChange'
+      responses:
+        '204':
+          description: No content
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
   /v1/me:
     get:
       operationId: getMe
@@ -3932,6 +3983,9 @@ components:
           example: 300
         totpEnrolment:
           $ref: '#/components/schemas/TotpEnrolment'
+        mustChangePassword:
+          type: boolean
+          description: True while the admin still uses the temporary password from the invite.
     TotpEnrolment:
       type: object
       description: Present on the first login; the admin scans it before entering a code.
@@ -3959,6 +4013,21 @@ components:
           type: string
           pattern: ^[0-9]{6}$
           example: '123456'
+    AdminPasswordChange:
+      type: object
+      required:
+        - currentPassword
+        - newPassword
+      properties:
+        currentPassword:
+          type: string
+          minLength: 8
+          maxLength: 128
+        newPassword:
+          type: string
+          minLength: 12
+          maxLength: 128
+          example: a-much-longer-passphrase
     AccountStatus:
       type: string
       description: PRD §6.4 account lifecycle.

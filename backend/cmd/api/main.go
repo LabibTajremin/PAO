@@ -17,13 +17,7 @@ import (
 	"github.com/LabibTajremin/PAO/backend/internal/platform/httpx"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/httpx/api"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/logx"
-	"github.com/LabibTajremin/PAO/backend/internal/platform/rbac"
 )
-
-// noGrants denies every permission until the identity module provides the RBAC source.
-type noGrants struct{}
-
-func (noGrants) LoadGrants(context.Context, string) (rbac.Grants, error) { return rbac.Grants{}, nil }
 
 func main() {
 	if len(os.Args) > 1 && os.Args[1] == "healthcheck" {
@@ -55,7 +49,11 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	handler, err := app.APIHandler(infra, spec, api.StrictUnimplemented{}, noGrants{})
+	modules, err := app.BuildModules(infra)
+	if err != nil {
+		return err
+	}
+	handler, err := app.APIHandler(infra, spec, modules.Server, modules.Identity.Permissions)
 	if err != nil {
 		return err
 	}

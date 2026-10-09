@@ -14,7 +14,6 @@ import (
 	"github.com/LabibTajremin/PAO/backend/internal/platform/health"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/httpx"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/httpx/api"
-	"github.com/LabibTajremin/PAO/backend/internal/platform/rbac"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/redisx"
 )
 
@@ -23,7 +22,7 @@ var apiLimits = httpx.RateLimits{PerUser: 120, PerIP: 60, Window: time.Minute}
 
 // APIHandler builds the public HTTP handler around the module servers. spec is the
 // embedded contract (api.GetSpec).
-func APIHandler(i *Infra, spec *openapi3.T, server api.StrictServerInterface, grants rbac.Source) (http.Handler, error) {
+func APIHandler(i *Infra, spec *openapi3.T, server api.StrictServerInterface, perms httpx.PermissionChecker) (http.Handler, error) {
 	specRouter, err := httpx.NewSpecRouter(spec, i.Log)
 	if err != nil {
 		return nil, fmt.Errorf("build spec router: %w", err)
@@ -32,7 +31,7 @@ func APIHandler(i *Infra, spec *openapi3.T, server api.StrictServerInterface, gr
 		Log: i.Log, Spec: specRouter, Metrics: i.Metrics.Middleware,
 		Verifier:    auth.NewVerifier(verificationKeys(i), i.Clock),
 		Revoked:     redisx.NewDenylist(i.Redis, i.Keys),
-		Permissions: rbac.NewChecker(i.Redis, i.Keys, grants),
+		Permissions: perms,
 		Limiter:     redisx.NewRateLimiter(i.Redis, i.Clock, i.IDs),
 		Keys:        i.Keys, Limits: apiLimits,
 		Idempotency: redisx.NewIdempotencyStore(i.Redis, 24*time.Hour),

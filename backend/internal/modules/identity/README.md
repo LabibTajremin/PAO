@@ -1,5 +1,9 @@
 # identity
 
+Sign-in for customers and providers is phone + OTP; admins use email + password + TOTP.
+Sessions are refresh-token families in Redis; access tokens are 15-minute EdDSA JWTs.
+The repository also serves the RBAC source (`LoadGrants`) behind the Redis grant cache.
+
 Accounts, phone OTP sign-in, admin email + password + TOTP, sessions (JWT access + rotating refresh in Redis), roles, permissions and screen permissions.
 
 ## Contract (`contract/service.go`, `IdentityService`)
@@ -9,11 +13,6 @@ Accounts, phone OTP sign-in, admin email + password + TOTP, sessions (JWT access
 - `SetAccountStatus`
 - `SendPhoneCode`
 - `CheckPhoneCode`
-- `CreateAdminAccount`
-- `UpdateAdminAccount`
-- `ListAdminAccounts`
-- `ListRoles`
-- `UpdateRole`
 
 ## Events published
 
@@ -45,5 +44,6 @@ None.
 - `/v1/auth/*`
 - `/v1/me`
 - `/v1/me/permissions`
+- `/v1/admin/admin-users*`, `/v1/admin/roles*` (admin users and the role editor, A-01/A-10)
 
 Migrations: `backend/migrations/identity/`.

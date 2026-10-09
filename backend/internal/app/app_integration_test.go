@@ -15,13 +15,12 @@ import (
 	"github.com/LabibTajremin/PAO/backend/internal/platform/config"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/httpx/api"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/logx"
-	"github.com/LabibTajremin/PAO/backend/internal/platform/rbac"
 	"github.com/LabibTajremin/PAO/backend/internal/testkit"
 )
 
 type noGrants struct{}
 
-func (noGrants) LoadGrants(context.Context, string) (rbac.Grants, error) { return rbac.Grants{}, nil }
+func (noGrants) Has(context.Context, []string, string) (bool, error) { return false, nil }
 
 func testConfig(t *testing.T) config.Config {
 	t.Helper()

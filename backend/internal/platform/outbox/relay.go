@@ -32,16 +32,12 @@ type Relay struct {
 }
 
 // NewRelay returns a relay over the given modules' outboxes.
-func NewRelay(conn db.Beginner, bus Dispatcher, modules []string, clk clock.Clock, log *slog.Logger) (*Relay, error) {
+func NewRelay(conn db.Beginner, bus Dispatcher, modules []string, clk clock.Clock, log *slog.Logger) *Relay {
 	tables := map[string]string{}
 	for _, m := range modules {
-		t, err := table(m, "outbox")
-		if err != nil {
-			return nil, err
-		}
-		tables[m] = t
+		tables[m] = table(m, "outbox")
 	}
-	return &Relay{db: conn, bus: bus, modules: tables, clock: clk, log: log, batch: 100}, nil
+	return &Relay{db: conn, bus: bus, modules: tables, clock: clk, log: log, batch: 100}
 }
 
 // Run relays until ctx ends, pausing interval between empty passes.

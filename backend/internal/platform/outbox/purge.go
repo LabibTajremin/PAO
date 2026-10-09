@@ -28,16 +28,12 @@ type PurgeWorker struct {
 }
 
 // NewPurgeWorker returns the purge worker for the modules' outboxes.
-func NewPurgeWorker(conn db.Querier, modules []string, clk clock.Clock, retention time.Duration) (*PurgeWorker, error) {
+func NewPurgeWorker(conn db.Querier, modules []string, clk clock.Clock, retention time.Duration) *PurgeWorker {
 	w := &PurgeWorker{db: conn, clock: clk, retention: retention}
 	for _, m := range modules {
-		t, err := table(m, "outbox")
-		if err != nil {
-			return nil, err
-		}
-		w.tables = append(w.tables, t)
+		w.tables = append(w.tables, table(m, "outbox"))
 	}
-	return w, nil
+	return w
 }
 
 // Work implements river.Worker.

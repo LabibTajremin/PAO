@@ -1,5 +1,5 @@
 # shellcheck shell=bash
-# Code generation (sqlc, oapi-codegen, mockgen, Dart API client, l10n) and the
+# Code generation (sqlc, oapi-codegen, Dart API client, l10n) and the
 # "generated code is committed" check used by CI.
 
 REDOCLY_CLI="@redocly/cli@1.34.3"

@@ -25,6 +25,8 @@ class AdminLoginChallenge {
     required this.expiresInSeconds,
 
     this.totpEnrolment,
+
+    this.mustChangePassword,
   });
 
   @JsonKey(name: r'challengeId', required: true, includeIfNull: false)
@@ -36,20 +38,39 @@ class AdminLoginChallenge {
   @JsonKey(name: r'totpEnrolment', required: false, includeIfNull: false)
   final TotpEnrolment? totpEnrolment;
 
+  /// True while the admin still uses the temporary password from the invite.
+  @JsonKey(name: r'mustChangePassword', required: false, includeIfNull: false)
+  final bool? mustChangePassword;
+
   bool operator ==(Object other) {
     return identical(this, other) ||
         other is AdminLoginChallenge &&
             runtimeType == other.runtimeType &&
             equals(
-              [challengeId, expiresInSeconds, totpEnrolment],
-              [other.challengeId, other.expiresInSeconds, other.totpEnrolment],
+              [
+                challengeId,
+                expiresInSeconds,
+                totpEnrolment,
+                mustChangePassword,
+              ],
+              [
+                other.challengeId,
+                other.expiresInSeconds,
+                other.totpEnrolment,
+                other.mustChangePassword,
+              ],
             );
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      mapPropsToHashCode([challengeId, expiresInSeconds, totpEnrolment]);
+      mapPropsToHashCode([
+        challengeId,
+        expiresInSeconds,
+        totpEnrolment,
+        mustChangePassword,
+      ]);
 
   factory AdminLoginChallenge.fromJson(Map<String, dynamic> json) =>
       _$AdminLoginChallengeFromJson(json);

@@ -64,6 +64,8 @@ paths:
     $ref: ./paths/auth.yaml#/adminLogin
   /v1/auth/admin/totp:
     $ref: ./paths/auth.yaml#/adminTotp
+  /v1/auth/admin/password:
+    $ref: ./paths/auth.yaml#/adminPassword
   /v1/me:
     $ref: ./paths/me.yaml#/me
   /v1/me/permissions:
@@ -409,6 +411,8 @@ components:
       $ref: ./schemas/auth.yaml#/TotpEnrolment
     AdminTotpRequest:
       $ref: ./schemas/auth.yaml#/AdminTotpRequest
+    AdminPasswordChange:
+      $ref: ./schemas/auth.yaml#/AdminPasswordChange
     AccountStatus:
       $ref: ./schemas/auth.yaml#/AccountStatus
     Role:

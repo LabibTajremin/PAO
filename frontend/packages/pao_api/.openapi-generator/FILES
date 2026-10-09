@@ -32,6 +32,7 @@ lib/src/model/admin_customer_list.dart
 lib/src/model/admin_customer_summary.dart
 lib/src/model/admin_login_challenge.dart
 lib/src/model/admin_login_request.dart
+lib/src/model/admin_password_change.dart
 lib/src/model/admin_provider_detail.dart
 lib/src/model/admin_provider_list.dart
 lib/src/model/admin_provider_summary.dart

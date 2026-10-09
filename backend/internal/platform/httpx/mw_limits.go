@@ -169,8 +169,17 @@ func ProxiedClientIP(next http.Handler) http.Handler {
 				r.RemoteAddr = net.JoinHostPort(ip.String(), "0")
 			}
 		}
-		next.ServeHTTP(w, r)
+		next.ServeHTTP(w, r.WithContext(context.WithValue(r.Context(), clientIPKey{}, ClientIP(r))))
 	})
+}
+
+type clientIPKey struct{}
+
+// ClientIPFrom returns the client address ProxiedClientIP stored, for handlers that
+// only see the context (rate limits per IP in use cases).
+func ClientIPFrom(ctx context.Context) string {
+	ip, _ := ctx.Value(clientIPKey{}).(string)
+	return ip
 }
 
 func isPrivate(ip net.IP) bool {

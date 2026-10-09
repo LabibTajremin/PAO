@@ -12,6 +12,7 @@ import 'package:dio/dio.dart';
 
 import 'package:pao_api/src/model/admin_login_challenge.dart';
 import 'package:pao_api/src/model/admin_login_request.dart';
+import 'package:pao_api/src/model/admin_password_change.dart';
 import 'package:pao_api/src/model/admin_totp_request.dart';
 import 'package:pao_api/src/model/error_response.dart';
 import 'package:pao_api/src/model/logout_request.dart';
@@ -200,10 +201,73 @@ class AuthApi {
     );
   }
 
+  /// Admin: replace the temporary or current password
+  ///
+  ///
+  /// Parameters:
+  /// * [adminPasswordChange]
+  /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
+  /// * [headers] - Can be used to add additional headers to the request
+  /// * [extras] - Can be used to add flags to the request
+  /// * [validateStatus] - A [ValidateStatus] callback that can be used to determine request success based on the HTTP status of the response
+  /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
+  /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
+  ///
+  /// Returns a [Future]
+  /// Throws [DioException] if API call or serialization fails
+  Future<Response<void>> changeAdminPassword({
+    required AdminPasswordChange adminPasswordChange,
+    CancelToken? cancelToken,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? extra,
+    ValidateStatus? validateStatus,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    final _path = r'/v1/auth/admin/password';
+    final _options = Options(
+      method: r'POST',
+      headers: <String, dynamic>{...?headers},
+      extra: <String, dynamic>{
+        'secure': <Map<String, String>>[
+          {'type': 'http', 'scheme': 'bearer', 'name': 'bearerAuth'},
+        ],
+        ...?extra,
+      },
+      contentType: 'application/json',
+      validateStatus: validateStatus,
+    );
+
+    dynamic _bodyData;
+
+    try {
+      _bodyData = jsonEncode(adminPasswordChange);
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _options.compose(_dio.options, _path),
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    final _response = await _dio.request<Object>(
+      _path,
+      data: _bodyData,
+      options: _options,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+
+    return _response;
+  }
+
   /// Sign out this device, or every device
   ///
   ///
   /// Parameters:
+  /// * [paoRefresh] - Admin web refresh token (HttpOnly cookie).
   /// * [logoutRequest]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -266,6 +330,7 @@ class AuthApi {
   ///
   ///
   /// Parameters:
+  /// * [paoRefresh] - Admin web refresh token (HttpOnly cookie).
   /// * [refreshRequest]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request

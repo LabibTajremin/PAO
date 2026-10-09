@@ -1,0 +1,26 @@
+# sqlc: one entry per module. Queries live in adapter/postgres/queries.sql; generated
+# files end in .gen.go / .sql.go and are excluded from coverage.
+version: "2"
+sql:
+  - engine: postgresql
+    schema: migrations/identity
+    queries: internal/modules/identity/adapter/postgres/queries.sql
+    gen:
+      go: &gogen
+        package: sqlcdb
+        out: internal/modules/identity/adapter/postgres/sqlcdb
+        sql_package: pgx/v5
+        output_db_file_name: db.gen.go
+        output_models_file_name: models.gen.go
+        emit_pointers_for_null_types: true
+        overrides:
+          - db_type: uuid
+            go_type: github.com/google/uuid.UUID
+          - db_type: uuid
+            nullable: true
+            go_type: { import: github.com/google/uuid, type: UUID, pointer: true }
+          - db_type: timestamptz
+            go_type: time.Time
+          - db_type: timestamptz
+            nullable: true
+            go_type: { import: time, type: Time, pointer: true }

@@ -63,6 +63,7 @@ AdminLoginChallenge:
     challengeId: { type: string, format: uuid, example: 0192f4a6-1c2b-7c1d-9e3f-5a6b7c8d9e0f }
     expiresInSeconds: { type: integer, example: 300 }
     totpEnrolment: { $ref: "#/TotpEnrolment" }
+    mustChangePassword: { type: boolean, description: True while the admin still uses the temporary password from the invite. }
 TotpEnrolment:
   type: object
   description: Present on the first login; the admin scans it before entering a code.
@@ -117,3 +118,9 @@ DeleteAccountRequest:
   required: [code]
   properties:
     code: { type: string, pattern: "^[0-9]{6}$", example: "482913" }
+AdminPasswordChange:
+  type: object
+  required: [currentPassword, newPassword]
+  properties:
+    currentPassword: { type: string, minLength: 8, maxLength: 128 }
+    newPassword: { type: string, minLength: 12, maxLength: 128, example: a-much-longer-passphrase }

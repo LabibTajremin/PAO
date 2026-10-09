@@ -13,6 +13,8 @@ abstract class _$AdminLoginChallengeCWProxy {
 
   AdminLoginChallenge totpEnrolment(TotpEnrolment? totpEnrolment);
 
+  AdminLoginChallenge mustChangePassword(bool? mustChangePassword);
+
   /// Creates a new instance with the provided field values.
   /// Omitted fields keep their values; explicit `null` clears nullable fields.
   /// The public API rejects `null` for non-nullable fields. To update a single field use `AdminLoginChallenge(...).copyWith.fieldName(value)`.
@@ -25,6 +27,7 @@ abstract class _$AdminLoginChallengeCWProxy {
     String challengeId,
     int expiresInSeconds,
     TotpEnrolment? totpEnrolment,
+    bool? mustChangePassword,
   });
 }
 
@@ -47,6 +50,10 @@ class _$AdminLoginChallengeCWProxyImpl implements _$AdminLoginChallengeCWProxy {
   AdminLoginChallenge totpEnrolment(TotpEnrolment? totpEnrolment) =>
       call(totpEnrolment: totpEnrolment);
 
+  @override
+  AdminLoginChallenge mustChangePassword(bool? mustChangePassword) =>
+      call(mustChangePassword: mustChangePassword);
+
   /// Creates a new instance with the provided field values.
   /// Omitted fields keep their values; explicit `null` clears nullable fields.
   /// The public API rejects `null` for non-nullable fields. To update a single field use `AdminLoginChallenge(...).copyWith.fieldName(value)`.
@@ -60,6 +67,7 @@ class _$AdminLoginChallengeCWProxyImpl implements _$AdminLoginChallengeCWProxy {
     Object? challengeId = const $CopyWithPlaceholder(),
     Object? expiresInSeconds = const $CopyWithPlaceholder(),
     Object? totpEnrolment = const $CopyWithPlaceholder(),
+    Object? mustChangePassword = const $CopyWithPlaceholder(),
   }) {
     return AdminLoginChallenge(
       challengeId:
@@ -77,6 +85,10 @@ class _$AdminLoginChallengeCWProxyImpl implements _$AdminLoginChallengeCWProxy {
           ? _value.totpEnrolment
           // ignore: cast_nullable_to_non_nullable
           : totpEnrolment as TotpEnrolment?,
+      mustChangePassword: mustChangePassword == const $CopyWithPlaceholder()
+          ? _value.mustChangePassword
+          // ignore: cast_nullable_to_non_nullable
+          : mustChangePassword as bool?,
     );
   }
 }
@@ -108,6 +120,10 @@ AdminLoginChallenge _$AdminLoginChallengeFromJson(Map<String, dynamic> json) =>
               ? null
               : TotpEnrolment.fromJson(v as Map<String, dynamic>),
         ),
+        mustChangePassword: $checkedConvert(
+          'mustChangePassword',
+          (v) => v as bool?,
+        ),
       );
       return val;
     });
@@ -118,4 +134,5 @@ Map<String, dynamic> _$AdminLoginChallengeToJson(
   'challengeId': instance.challengeId,
   'expiresInSeconds': instance.expiresInSeconds,
   'totpEnrolment': ?instance.totpEnrolment?.toJson(),
+  'mustChangePassword': ?instance.mustChangePassword,
 };

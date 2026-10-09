@@ -7,7 +7,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"regexp"
 
 	"github.com/jackc/pgx/v5"
 
@@ -16,15 +15,10 @@ import (
 	"github.com/LabibTajremin/PAO/backend/internal/platform/idgen"
 )
 
-var moduleName = regexp.MustCompile(`^[a-z]+$`)
-
-// table returns "<module>.<name>" for a module schema. Module names come from code,
-// never from input, and are checked so they cannot inject SQL.
-func table(module, name string) (string, error) {
-	if !moduleName.MatchString(module) {
-		return "", fmt.Errorf("invalid module name %q", module)
-	}
-	return pgx.Identifier{module, name}.Sanitize(), nil
+// table returns the quoted "<module>"."<name>" for a module schema; quoting keeps the
+// identifier safe even though module names only ever come from code.
+func table(module, name string) string {
+	return pgx.Identifier{module, name}.Sanitize()
 }
 
 // Writer appends events to a module's outbox inside a transaction.
@@ -36,12 +30,8 @@ type Writer struct {
 }
 
 // NewWriter returns the outbox writer for module.
-func NewWriter(module string, ids idgen.Generator, clk clock.Clock) (*Writer, error) {
-	t, err := table(module, "outbox")
-	if err != nil {
-		return nil, err
-	}
-	return &Writer{module: module, table: t, ids: ids, clock: clk}, nil
+func NewWriter(module string, ids idgen.Generator, clk clock.Clock) *Writer {
+	return &Writer{module: module, table: table(module, "outbox"), ids: ids, clock: clk}
 }
 
 // Write stores e for aggregateID in tx.

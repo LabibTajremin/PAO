@@ -58,24 +58,40 @@ func NewSpecRouter(spec *openapi3.T, log *slog.Logger) (*SpecRouter, error) {
 	return &SpecRouter{router: router, log: log}, nil
 }
 
-// Middleware rejects unknown routes (404/405) and invalid requests (422), then stores
-// the matched Operation in the context.
-func (s *SpecRouter) Middleware(next http.Handler) http.Handler {
+type matchKey struct{}
+
+type match struct {
+	route  *routers.Route
+	params map[string]string
+}
+
+// Match rejects unknown routes (404/405) and stores the matched Operation, so
+// authentication and authorisation run before the body is looked at.
+func (s *SpecRouter) Match(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		route, params, err := s.router.FindRoute(r)
 		if err != nil {
 			WriteError(w, r, s.log, routeError(err))
 			return
 		}
+		ctx := context.WithValue(WithOperation(r.Context(), describe(route.Operation)), matchKey{}, match{route, params})
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
+
+// Validate rejects requests that do not match the matched operation's schema (422).
+func (s *SpecRouter) Validate(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		m, _ := r.Context().Value(matchKey{}).(match)
 		input := &openapi3filter.RequestValidationInput{
-			Request: r, PathParams: params, Route: route,
+			Request: r, PathParams: m.params, Route: m.route,
 			Options: &openapi3filter.Options{AuthenticationFunc: openapi3filter.NoopAuthenticationFunc},
 		}
 		if err := openapi3filter.ValidateRequest(r.Context(), input); err != nil {
 			WriteError(w, r, s.log, ErrValidation.WithDetails(map[string]any{"reason": err.Error()}))
 			return
 		}
-		next.ServeHTTP(w, r.WithContext(WithOperation(r.Context(), describe(route.Operation))))
+		next.ServeHTTP(w, r)
 	})
 }
 

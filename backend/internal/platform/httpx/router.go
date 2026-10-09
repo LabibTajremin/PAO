@@ -31,8 +31,8 @@ type RouterDeps struct {
 }
 
 // NewRouter assembles the middleware chain in front of the generated handlers:
-// transport concerns first, then contract validation, authentication, authorisation,
-// rate limits and idempotency.
+// transport concerns first, then route matching, authentication, authorisation, rate
+// limits, request validation and idempotency.
 func NewRouter(d RouterDeps) http.Handler {
 	r := chi.NewRouter()
 	r.Use(ProxiedClientIP, RequestID, Recover(d.Log), SecurityHeaders, CORS(d.AdminOrigin), BodyLimit, d.Metrics)
@@ -44,8 +44,8 @@ func NewRouter(d RouterDeps) http.Handler {
 		d.Mount(r)
 	}
 	r.Group(func(g chi.Router) {
-		g.Use(d.Spec.Middleware, Authenticate(d.Verifier, d.Revoked, d.Log), Authorize(d.Permissions, d.Log),
-			RateLimit(d.Limiter, d.Keys, d.Limits, d.Log), Idempotency(d.Idempotency, d.Keys, d.Log))
+		g.Use(d.Spec.Match, Authenticate(d.Verifier, d.Revoked, d.Log), Authorize(d.Permissions, d.Log),
+			RateLimit(d.Limiter, d.Keys, d.Limits, d.Log), d.Spec.Validate, Idempotency(d.Idempotency, d.Keys, d.Log))
 		strict := api.NewStrictHandlerWithOptions(d.API, nil, api.StrictHTTPServerOptions{
 			RequestErrorHandlerFunc:  validationError(d.Log),
 			ResponseErrorHandlerFunc: responseError(d.Log),
