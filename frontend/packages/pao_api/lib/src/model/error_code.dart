@@ -189,7 +189,55 @@ enum ErrorCode {
 
   /// Stable error codes the apps translate (04-decisions.md E11).
   @JsonValue(r'ROLE_INVALID')
-  ROLE_INVALID(r'ROLE_INVALID');
+  ROLE_INVALID(r'ROLE_INVALID'),
+
+  /// Stable error codes the apps translate (04-decisions.md E11).
+  @JsonValue(r'PROFILE_NOT_FOUND')
+  PROFILE_NOT_FOUND(r'PROFILE_NOT_FOUND'),
+
+  /// Stable error codes the apps translate (04-decisions.md E11).
+  @JsonValue(r'PROFILE_REQUIRED')
+  PROFILE_REQUIRED(r'PROFILE_REQUIRED'),
+
+  /// Stable error codes the apps translate (04-decisions.md E11).
+  @JsonValue(r'EMERGENCY_CONTACT_MISSING')
+  EMERGENCY_CONTACT_MISSING(r'EMERGENCY_CONTACT_MISSING'),
+
+  /// Stable error codes the apps translate (04-decisions.md E11).
+  @JsonValue(r'SERVICE_AREA_MISSING')
+  SERVICE_AREA_MISSING(r'SERVICE_AREA_MISSING'),
+
+  /// Stable error codes the apps translate (04-decisions.md E11).
+  @JsonValue(r'OFFLINE')
+  OFFLINE(r'OFFLINE'),
+
+  /// Stable error codes the apps translate (04-decisions.md E11).
+  @JsonValue(r'ITEM_NOT_PENDING')
+  ITEM_NOT_PENDING(r'ITEM_NOT_PENDING'),
+
+  /// Stable error codes the apps translate (04-decisions.md E11).
+  @JsonValue(r'CLEARANCE_TOO_OLD')
+  CLEARANCE_TOO_OLD(r'CLEARANCE_TOO_OLD'),
+
+  /// Stable error codes the apps translate (04-decisions.md E11).
+  @JsonValue(r'NID_BLOCKED')
+  NID_BLOCKED(r'NID_BLOCKED'),
+
+  /// Stable error codes the apps translate (04-decisions.md E11).
+  @JsonValue(r'LEVEL2_NOT_ELIGIBLE')
+  lEVEL2NOTELIGIBLE(r'LEVEL2_NOT_ELIGIBLE'),
+
+  /// Stable error codes the apps translate (04-decisions.md E11).
+  @JsonValue(r'SESSION_CLOSED')
+  SESSION_CLOSED(r'SESSION_CLOSED'),
+
+  /// Stable error codes the apps translate (04-decisions.md E11).
+  @JsonValue(r'ACCEPT_DEADLINE_PASSED')
+  ACCEPT_DEADLINE_PASSED(r'ACCEPT_DEADLINE_PASSED'),
+
+  /// Stable error codes the apps translate (04-decisions.md E11).
+  @JsonValue(r'NO_PENDING_EXTRAS')
+  NO_PENDING_EXTRAS(r'NO_PENDING_EXTRAS');
 
   const ErrorCode(this.value);
 

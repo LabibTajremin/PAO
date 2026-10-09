@@ -136,7 +136,7 @@ func (h *Handlers) onCancelled(ctx context.Context, q *sqlcdb.Queries, tx pgx.Tx
 	if err == nil {
 		t, err = h.settings.Quality(ctx)
 	}
-	if err == nil && n >= int64(t.MaxCancellations) {
+	if err == nil && n > int64(t.MaxCancellations) {
 		err = h.flag(ctx, q, tx, e.ProviderID, "cancellations")
 	}
 	return err

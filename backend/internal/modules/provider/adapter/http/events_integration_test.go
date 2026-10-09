@@ -43,7 +43,7 @@ func TestEvents_QualityFlagsAndReadModel(t *testing.T) {
 		t.Fatalf("rating flag: %v %s", f, reason)
 	}
 	canceller, _ := online(t, a, "01712345602", "male", 1, electrician)
-	for i := range 4 {
+	for i := range 5 {
 		by := "provider"
 		if i == 0 {
 			by = "customer"

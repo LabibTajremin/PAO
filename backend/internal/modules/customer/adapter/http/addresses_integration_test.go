@@ -61,7 +61,7 @@ func TestAddresses_DefaultsLimitAndOwnership(t *testing.T) {
 	for range 9 {
 		a.Do(t, "POST", "/v1/customer/addresses", address("other", false), auth)
 	}
-	if r := a.Do(t, "POST", "/v1/customer/addresses", address("other", false), auth); r.Code(t) != "ADDRESS_LIMIT" {
+	if r := a.Do(t, "POST", "/v1/customer/addresses", address("other", false), auth); r.Code(t) != "ADDRESS_LIMIT_REACHED" {
 		t.Fatalf("eleventh address: %s", r.Body)
 	}
 	got, err := a.Modules.Customer.Contract.GetAddress(context.Background(), tp.Account.Id, uuid.MustParse(third["id"].(string)))
@@ -89,7 +89,7 @@ func TestAddresses_ValidationAndServiceArea(t *testing.T) {
 	a.Do(t, "PUT", "/v1/customer/profile", profile, auth)
 	abroad := address("home", false)
 	abroad["location"] = map[string]float64{"lat": 51.5, "lng": -0.12}
-	if r := a.Do(t, "POST", "/v1/customer/addresses", abroad, auth); r.Code(t) != "LOCATION_OUTSIDE_BANGLADESH" {
+	if r := a.Do(t, "POST", "/v1/customer/addresses", abroad, auth); r.Code(t) != "OUTSIDE_SERVICE_AREA" {
 		t.Fatalf("abroad: %s", r.Body)
 	}
 	if r := a.Do(t, "PUT", "/v1/customer/addresses/"+uuid.NewString(), address("home", false), auth); r.Status != 404 {

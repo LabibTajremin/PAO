@@ -78,3 +78,10 @@ sql:
       go:
         <<: *gogen
         out: internal/modules/verification/adapter/postgres/sqlcdb
+  - engine: postgresql
+    schema: migrations/booking
+    queries: internal/modules/booking/adapter/postgres/queries.sql
+    gen:
+      go:
+        <<: *gogen
+        out: internal/modules/booking/adapter/postgres/sqlcdb

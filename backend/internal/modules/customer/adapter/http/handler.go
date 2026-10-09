@@ -24,9 +24,9 @@ var errorMap = httpx.ErrorMap{
 	domain.ErrNotFound:        httpx.NewError(http.StatusNotFound, "PROFILE_NOT_FOUND", "Set up your profile first."),
 	domain.ErrAddressNotFound: httpx.ErrNotFound,
 	domain.ErrInvalid:         httpx.NewError(http.StatusUnprocessableEntity, "VALIDATION_FAILED", "Check the details and try again."),
-	domain.ErrInvalidPhoto:    httpx.NewError(http.StatusUnprocessableEntity, "PHOTO_INVALID", "Upload the photo again."),
-	domain.ErrOutsideCountry:  httpx.NewError(http.StatusUnprocessableEntity, "LOCATION_OUTSIDE_BANGLADESH", "Place the pin inside Bangladesh."),
-	domain.ErrAddressLimit:    httpx.NewError(http.StatusConflict, "ADDRESS_LIMIT", "You can save up to 10 addresses. Delete one first."),
+	domain.ErrInvalidPhoto:    httpx.NewError(http.StatusUnprocessableEntity, "UPLOAD_INVALID", "Upload the photo again."),
+	domain.ErrOutsideCountry:  httpx.NewError(http.StatusUnprocessableEntity, "OUTSIDE_SERVICE_AREA", "Place the pin inside Bangladesh."),
+	domain.ErrAddressLimit:    httpx.NewError(http.StatusConflict, "ADDRESS_LIMIT_REACHED", "You can save up to 10 addresses. Delete one first."),
 	domain.ErrProfileRequired: httpx.NewError(http.StatusConflict, "PROFILE_REQUIRED", "Set up your profile first."),
 }
 

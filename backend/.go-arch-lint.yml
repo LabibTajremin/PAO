@@ -45,6 +45,11 @@ components:
   catalog_adapter: { in: modules/catalog/adapter/** }
   catalog_root: { in: modules/catalog }
   booking_contract: { in: modules/booking/contract }
+  booking_domain: { in: modules/booking/domain/** }
+  booking_port: { in: modules/booking/port }
+  booking_app: { in: modules/booking/app/** }
+  booking_adapter: { in: modules/booking/adapter/** }
+  booking_root: { in: modules/booking }
   rating_contract: { in: modules/rating/contract }
   notification_contract: { in: modules/notification/contract }
   media_contract: { in: modules/media/contract }
@@ -491,6 +496,83 @@ deps:
     mayDependOn:
       - platform
       - booking_contract
+  booking_domain:
+    canUse: [uuid]
+    mayDependOn: [booking_domain]
+  booking_port:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+      - booking_port
+      - booking_domain
+      - booking_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
+  booking_app:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+      - booking_app
+      - booking_domain
+      - booking_port
+      - booking_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
+  booking_adapter:
+    anyVendorDeps: true
+    mayDependOn:
+      - platform
+      - booking_adapter
+      - booking_domain
+      - booking_port
+      - booking_app
+      - booking_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
+  booking_root:
+    anyVendorDeps: true
+    mayDependOn:
+      - platform
+      - booking_root
+      - booking_domain
+      - booking_port
+      - booking_app
+      - booking_adapter
+      - booking_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
   rating_contract:
     canUse: [uuid]
     mayDependOn:

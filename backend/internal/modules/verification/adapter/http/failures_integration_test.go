@@ -50,9 +50,9 @@ func TestDocuments_Validation(t *testing.T) {
 		body any
 		code string
 	}{
-		{"/v1/provider/enrolment/selfie", map[string]any{"mediaId": foreign}, "DOCUMENT_INVALID"},
-		{"/v1/provider/enrolment/selfie", map[string]any{"mediaId": uuid.New()}, "DOCUMENT_INVALID"},
-		{"/v1/provider/enrolment/police-clearance", map[string]any{"mediaId": selfie, "issueDate": a.Clock.Now().Format("2006-01-02")}, "DOCUMENT_INVALID"},
+		{"/v1/provider/enrolment/selfie", map[string]any{"mediaId": foreign}, "UPLOAD_INVALID"},
+		{"/v1/provider/enrolment/selfie", map[string]any{"mediaId": uuid.New()}, "UPLOAD_INVALID"},
+		{"/v1/provider/enrolment/police-clearance", map[string]any{"mediaId": selfie, "issueDate": a.Clock.Now().Format("2006-01-02")}, "UPLOAD_INVALID"},
 		{"/v1/provider/enrolment/police-clearance", map[string]any{"mediaId": selfie, "issueDate": old}, "CLEARANCE_TOO_OLD"},
 		{"/v1/provider/enrolment/skill-proof", map[string]any{"mediaIds": []uuid.UUID{}}, "VALIDATION_FAILED"},
 	}

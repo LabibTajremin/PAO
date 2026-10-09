@@ -118,7 +118,7 @@ func TestEnrolment_Validation(t *testing.T) {
 		body any
 		code string
 	}{
-		{"/v1/provider/enrolment/personal", young, "PROVIDER_TOO_YOUNG"},
+		{"/v1/provider/enrolment/personal", young, "AGE_REQUIREMENT"},
 		{"/v1/provider/enrolment/personal", map[string]any{"fullName": "Rahim", "dateOfBirth": "1990-01-01", "gender": "male", "presentAddress": "     ", "permanentAddress": "Cumilla"}, "VALIDATION_FAILED"},
 		{"/v1/provider/enrolment/services", map[string]any{"serviceIds": []uuid.UUID{uuid.New()}, "experienceYears": 1}, "SERVICE_UNAVAILABLE"},
 		{"/v1/provider/enrolment/area", map[string]any{"homeBase": map[string]float64{"lat": 51.5, "lng": 0}, "workingRadiusM": 5000}, "VALIDATION_FAILED"},
@@ -135,7 +135,7 @@ func TestEnrolment_Validation(t *testing.T) {
 	}
 	contact := map[string]string{"name": "Karim Uddin", "relation": "Brother", "phone": "01812345678"}
 	a.Do(t, "PUT", "/v1/provider/enrolment/emergency-contact", contact, auth)
-	if r := a.Do(t, "PUT", "/v1/provider/enrolment/emergency-contact", contact, auth); r.Code(t) != "OTP_RATE_LIMITED" {
+	if r := a.Do(t, "PUT", "/v1/provider/enrolment/emergency-contact", contact, auth); r.Code(t) != "RATE_LIMITED" {
 		t.Fatalf("second code at once: %d %s", r.Status, r.Body)
 	}
 }
@@ -165,7 +165,7 @@ func TestProfile_PhotoAndLanguage(t *testing.T) {
 	if r.Status != 200 || j["photoUrl"] == nil || j["language"] != "en" || j["badge"] != "none" || len(j["services"].([]any)) != 1 || j["homeBase"] == nil {
 		t.Fatalf("profile: %d %s", r.Status, r.Body)
 	}
-	if r := a.Do(t, "PUT", "/v1/provider/profile", map[string]any{"language": "bn", "photoMediaId": uuid.New()}, auth); r.Code(t) != "PHOTO_INVALID" {
+	if r := a.Do(t, "PUT", "/v1/provider/profile", map[string]any{"language": "bn", "photoMediaId": uuid.New()}, auth); r.Code(t) != "UPLOAD_INVALID" {
 		t.Fatalf("unknown photo: %s", r.Body)
 	}
 	other := testkit.Bearer(a.SignIn(t, "01912345678", "partner").AccessToken)

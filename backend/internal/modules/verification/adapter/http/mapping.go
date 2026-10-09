@@ -23,7 +23,7 @@ func NewHandler(svc *app.Service) *Handler { return &Handler{svc: svc} }
 var errorMap = httpx.ErrorMap{
 	domain.ErrNotFound:         httpx.ErrNotFound,
 	domain.ErrInvalid:          httpx.NewError(http.StatusUnprocessableEntity, "VALIDATION_FAILED", "Check the details and try again."),
-	domain.ErrBadDocument:      httpx.NewError(http.StatusUnprocessableEntity, "DOCUMENT_INVALID", "Upload the document again."),
+	domain.ErrBadDocument:      httpx.NewError(http.StatusUnprocessableEntity, "UPLOAD_INVALID", "Upload the document again."),
 	domain.ErrClearanceTooOld:  httpx.NewError(http.StatusUnprocessableEntity, "CLEARANCE_TOO_OLD", "The police clearance must be issued within the last 12 months."),
 	domain.ErrNIDBlocked:       httpx.NewError(http.StatusForbidden, "NID_BLOCKED", "This NID cannot be used to register."),
 	domain.ErrNotPending:       httpx.NewError(http.StatusConflict, "ITEM_NOT_PENDING", "This item is not waiting for a decision."),

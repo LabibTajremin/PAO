@@ -3763,6 +3763,18 @@ components:
         - COMPLAINT_INVALID_TRANSITION
         - SETTING_INVALID
         - ROLE_INVALID
+        - PROFILE_NOT_FOUND
+        - PROFILE_REQUIRED
+        - EMERGENCY_CONTACT_MISSING
+        - SERVICE_AREA_MISSING
+        - OFFLINE
+        - ITEM_NOT_PENDING
+        - CLEARANCE_TOO_OLD
+        - NID_BLOCKED
+        - LEVEL2_NOT_ELIGIBLE
+        - SESSION_CLOSED
+        - ACCEPT_DEADLINE_PASSED
+        - NO_PENDING_EXTRAS
     Money:
       type: integer
       format: int64

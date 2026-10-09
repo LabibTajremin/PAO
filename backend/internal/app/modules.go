@@ -11,6 +11,8 @@ import (
 	adminhttp "github.com/LabibTajremin/PAO/backend/internal/modules/admin/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/audit"
 	audithttp "github.com/LabibTajremin/PAO/backend/internal/modules/audit/adapter/http"
+	"github.com/LabibTajremin/PAO/backend/internal/modules/booking"
+	bookinghttp "github.com/LabibTajremin/PAO/backend/internal/modules/booking/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/catalog"
 	cataloghttp "github.com/LabibTajremin/PAO/backend/internal/modules/catalog/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/customer"
@@ -42,6 +44,7 @@ type (
 	customerAPI     = customerhttp.Handler
 	providerAPI     = providerhttp.Handler
 	verificationAPI = verificationhttp.Handler
+	bookingAPI      = bookinghttp.Handler
 )
 
 // Server serves every API operation. Each module's handler is embedded at depth one;
@@ -55,6 +58,7 @@ type Server struct {
 	*customerAPI
 	*providerAPI
 	*verificationAPI
+	*bookingAPI
 	unimplemented
 }
 
@@ -74,6 +78,7 @@ type Modules struct {
 	Provider *provider.Module
 	// Verification is built last: it reads providers, media, catalog and settings.
 	Verification *verification.Module
+	Booking      *booking.Module
 	// SMSCapture is set when APP_ENV=test, so e2e tests can read one-time codes.
 	SMSCapture *sms.Capture
 }
@@ -109,9 +114,12 @@ func BuildModules(i *Infra) (*Modules, error) {
 		Catalog: m.Catalog.Contract, Identity: m.Identity.Contract, Media: m.Media.Contract, Admin: m.Admin.Contract})
 	m.Verification = verification.New(verification.Deps{Pool: i.Pool, Cipher: cipher, Clock: i.Clock, IDs: i.IDs,
 		Provider: m.Provider.Contract, Media: m.Media.Contract, Catalog: m.Catalog.Contract, Admin: m.Admin.Contract})
+	m.Booking = booking.New(booking.Deps{Pool: i.Pool, Clock: i.Clock, IDs: i.IDs, Catalog: m.Catalog.Contract, Customer: m.Customer.Contract,
+		Identity: m.Identity.Contract, Provider: m.Provider.Contract, Verification: m.Verification.Contract, Media: m.Media.Contract,
+		Admin: m.Admin.Contract})
 	m.Server = Server{identityAPI: m.Identity.HTTP, catalogAPI: m.Catalog.HTTP, auditAPI: m.Audit.HTTP, mediaAPI: m.Media.HTTP, adminAPI: m.Admin.HTTP,
 		customerAPI: m.Customer.HTTP, providerAPI: m.Provider.HTTP,
-		verificationAPI: m.Verification.HTTP}
+		verificationAPI: m.Verification.HTTP, bookingAPI: m.Booking.HTTP}
 	return m, nil
 }
 
@@ -142,4 +150,5 @@ func (m *Modules) RegisterJobs(r *jobs.Registry) {
 	m.Media.RegisterJobs(r)
 	m.Provider.RegisterJobs(r)
 	m.Verification.RegisterJobs(r)
+	m.Booking.RegisterJobs(r)
 }

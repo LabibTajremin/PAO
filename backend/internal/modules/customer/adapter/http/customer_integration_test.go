@@ -61,7 +61,7 @@ func TestCustomer_ProfileWithPhotoAndDeletion(t *testing.T) {
 	if r := a.Do(t, "POST", "/v1/customer/addresses", address("home", false), auth); r.Code(t) != "PROFILE_REQUIRED" {
 		t.Fatalf("address before profile: %s", r.Body)
 	}
-	if r := a.Do(t, "PUT", "/v1/customer/profile", map[string]any{"name": "Nusrat", "language": "bn", "photoMediaId": uuid.New()}, auth); r.Code(t) != "PHOTO_INVALID" {
+	if r := a.Do(t, "PUT", "/v1/customer/profile", map[string]any{"name": "Nusrat", "language": "bn", "photoMediaId": uuid.New()}, auth); r.Code(t) != "UPLOAD_INVALID" {
 		t.Fatalf("unknown photo: %s", r.Body)
 	}
 	photo := avatar(t, a, tp.Account.Id)
@@ -73,7 +73,7 @@ func TestCustomer_ProfileWithPhotoAndDeletion(t *testing.T) {
 		t.Fatalf("get profile: %s", r.Body)
 	}
 	other := avatar(t, a, uuid.New())
-	if r := a.Do(t, "PUT", "/v1/customer/profile", map[string]any{"name": "Nusrat", "language": "bn", "photoMediaId": other}, auth); r.Code(t) != "PHOTO_INVALID" {
+	if r := a.Do(t, "PUT", "/v1/customer/profile", map[string]any{"name": "Nusrat", "language": "bn", "photoMediaId": other}, auth); r.Code(t) != "UPLOAD_INVALID" {
 		t.Fatalf("someone else's photo: %s", r.Body)
 	}
 	if r := a.Do(t, "PUT", "/v1/customer/profile", map[string]any{"name": "N", "language": "bn"}, auth); r.Status != 422 {
@@ -111,7 +111,7 @@ func TestCustomer_ContractAndPeerFailures(t *testing.T) {
 	}
 	unconfirmed, _ := a.Modules.Media.Contract.CreateUploadURL(ctx, media.UploadRequest{OwnerID: uuid.New(), Purpose: media.PurposeLevel2Photo, ContentType: "image/png", SizeBytes: 3})
 	tok := testkit.Bearer(a.Token(t, uuid.New(), "customer"))
-	if r := a.Do(t, "PUT", "/v1/customer/profile", map[string]any{"name": "Nusrat", "language": "bn", "photoMediaId": unconfirmed.MediaID}, tok); r.Code(t) != "PHOTO_INVALID" {
+	if r := a.Do(t, "PUT", "/v1/customer/profile", map[string]any{"name": "Nusrat", "language": "bn", "photoMediaId": unconfirmed.MediaID}, tok); r.Code(t) != "UPLOAD_INVALID" {
 		t.Fatalf("level 2 photo as avatar: %s", r.Body)
 	}
 	id := uuid.New()
