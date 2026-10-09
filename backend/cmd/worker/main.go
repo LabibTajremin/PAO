@@ -49,12 +49,17 @@ func run() error {
 	}
 	defer infra.Close()
 
-	bus := eventbus.NewBus()
-	client, err := startJobs(ctx, infra)
+	modules, err := app.BuildModules(infra)
 	if err != nil {
 		return err
 	}
-	relay := outbox.NewRelay(infra.Pool, bus, migrations.Modules, infra.Clock, log)
+	bus := eventbus.NewBus()
+	modules.Subscribe(bus)
+	client, err := startJobs(ctx, infra, modules)
+	if err != nil {
+		return err
+	}
+	relay := outbox.NewRelay(infra.Pool, bus, migrations.OutboxModules, infra.Clock, log)
 	go relay.Run(ctx, 250*time.Millisecond)
 
 	mux := http.NewServeMux()
@@ -70,9 +75,10 @@ func run() error {
 	return err
 }
 
-func startJobs(ctx context.Context, infra *app.Infra) (*jobs.Client, error) {
+func startJobs(ctx context.Context, infra *app.Infra, modules *app.Modules) (*jobs.Client, error) {
 	registry := jobs.NewRegistry()
-	jobs.Register(registry, outbox.NewPurgeWorker(infra.Pool, migrations.Modules, infra.Clock, 7*24*time.Hour))
+	modules.RegisterJobs(registry)
+	jobs.Register(registry, outbox.NewPurgeWorker(infra.Pool, migrations.OutboxModules, infra.Clock, 7*24*time.Hour))
 	registry.Daily(3, 0, outbox.PurgeArgs{})
 	client, err := jobs.NewClient(infra.Pool, registry, 20, infra.Log)
 	if err != nil {

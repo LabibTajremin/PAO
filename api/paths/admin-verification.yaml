@@ -130,7 +130,7 @@ reject:
         $ref: ../components/responses.yaml#/ValidationFailed
 documentView:
   get:
-    operationId: getDocumentViewUrl
+    operationId: getDocumentViewURL
     tags:
     - Admin verification
     summary: 5-minute signed URL for a verification document; every view is audited

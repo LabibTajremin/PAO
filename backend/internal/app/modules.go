@@ -7,19 +7,42 @@ import (
 
 	"github.com/google/uuid"
 
+	"github.com/LabibTajremin/PAO/backend/internal/modules/admin"
+	adminhttp "github.com/LabibTajremin/PAO/backend/internal/modules/admin/adapter/http"
+	"github.com/LabibTajremin/PAO/backend/internal/modules/audit"
+	audithttp "github.com/LabibTajremin/PAO/backend/internal/modules/audit/adapter/http"
+	"github.com/LabibTajremin/PAO/backend/internal/modules/catalog"
+	cataloghttp "github.com/LabibTajremin/PAO/backend/internal/modules/catalog/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/identity"
 	identityhttp "github.com/LabibTajremin/PAO/backend/internal/modules/identity/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/identity/adapter/sms"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/identity/port"
+	"github.com/LabibTajremin/PAO/backend/internal/modules/media"
+	mediahttp "github.com/LabibTajremin/PAO/backend/internal/modules/media/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/auth"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/config"
+	"github.com/LabibTajremin/PAO/backend/internal/platform/eventbus"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/httpx/api"
+	"github.com/LabibTajremin/PAO/backend/internal/platform/jobs"
+)
+
+// Aliases give each module's handler a distinct embedded field name.
+type (
+	identityAPI = identityhttp.Handler
+	catalogAPI  = cataloghttp.Handler
+	auditAPI    = audithttp.Handler
+	mediaAPI    = mediahttp.Handler
+	adminAPI    = adminhttp.Handler
 )
 
 // Server serves every API operation. Each module's handler is embedded at depth one;
 // operations no module implements yet fall through to the depth-two fallback.
 type Server struct {
-	*identityhttp.Handler
+	*identityAPI
+	*catalogAPI
+	*auditAPI
+	*mediaAPI
+	*adminAPI
 	unimplemented
 }
 
@@ -31,6 +54,10 @@ var _ api.StrictServerInterface = Server{}
 type Modules struct {
 	Server   Server
 	Identity *identity.Module
+	Catalog  *catalog.Module
+	Audit    *audit.Module
+	Media    *media.Module
+	Admin    *admin.Module
 	// SMSCapture is set when APP_ENV=test, so e2e tests can read one-time codes.
 	SMSCapture *sms.Capture
 }
@@ -53,7 +80,11 @@ func BuildModules(i *Infra) (*Modules, error) {
 		Signer: auth.NewSigner(i.Config.JWT.KeyID, i.Config.JWT.SigningKey, 15*time.Minute, i.Clock, i.IDs),
 		Cipher: cipher, SMS: smsSender, Levels: levelZero{},
 	})
-	m.Server = Server{Handler: m.Identity.HTTP}
+	m.Catalog = catalog.New(catalog.Deps{Pool: i.Pool, Redis: i.Redis, Keys: i.Keys, Clock: i.Clock, IDs: i.IDs, Log: i.Log})
+	m.Audit = audit.New(i.Pool, i.Clock, i.IDs)
+	m.Admin = admin.New(admin.Deps{Pool: i.Pool, Redis: i.Redis, Keys: i.Keys, Clock: i.Clock, IDs: i.IDs, Log: i.Log})
+	m.Media = media.New(media.Deps{Pool: i.Pool, Storage: i.Storage, Auditor: m.Audit.Contract, Bucket: i.Config.S3.BucketPrivate, Clock: i.Clock, IDs: i.IDs})
+	m.Server = Server{identityAPI: m.Identity.HTTP, catalogAPI: m.Catalog.HTTP, auditAPI: m.Audit.HTTP, mediaAPI: m.Media.HTTP, adminAPI: m.Admin.HTTP}
 	return m, nil
 }
 
@@ -69,4 +100,14 @@ func smsAdapter(i *Infra, m *Modules) port.SMSSender {
 		}
 	}
 	return sms.Console{Log: i.Log}
+}
+
+// Subscribe registers every module's event handlers on the bus (worker process).
+func (m *Modules) Subscribe(bus *eventbus.Bus) {
+	m.Audit.Subscribe(bus)
+}
+
+// RegisterJobs adds every module's background jobs (worker process).
+func (m *Modules) RegisterJobs(r *jobs.Registry) {
+	m.Media.RegisterJobs(r)
 }

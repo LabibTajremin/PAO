@@ -24,3 +24,31 @@ sql:
           - db_type: timestamptz
             nullable: true
             go_type: { import: time, type: Time, pointer: true }
+  - engine: postgresql
+    schema: migrations/catalog
+    queries: internal/modules/catalog/adapter/postgres/queries.sql
+    gen:
+      go:
+        <<: *gogen
+        out: internal/modules/catalog/adapter/postgres/sqlcdb
+  - engine: postgresql
+    schema: migrations/audit
+    queries: internal/modules/audit/adapter/postgres/queries.sql
+    gen:
+      go:
+        <<: *gogen
+        out: internal/modules/audit/adapter/postgres/sqlcdb
+  - engine: postgresql
+    schema: migrations/media
+    queries: internal/modules/media/adapter/postgres/queries.sql
+    gen:
+      go:
+        <<: *gogen
+        out: internal/modules/media/adapter/postgres/sqlcdb
+  - engine: postgresql
+    schema: migrations/admin
+    queries: internal/modules/admin/adapter/postgres/queries.sql
+    gen:
+      go:
+        <<: *gogen
+        out: internal/modules/admin/adapter/postgres/sqlcdb

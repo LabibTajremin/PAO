@@ -41,6 +41,6 @@ cmd_seed() {
     . "$PAO_ROOT/.env"
     set +a
   fi
-  (cd "$BACKEND" && go run ./cmd/migrate up) || die "seed failed"
+  (cd "$BACKEND" && go run ./cmd/migrate up && go run ./cmd/migrate seed) || die "seed failed"
   ok "migrations applied and seed data loaded"
 }

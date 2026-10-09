@@ -207,3 +207,24 @@ func TestCreateAndUpdateAdmin_Failures(t *testing.T) {
 		}
 	}
 }
+
+func TestEnsureAdmin(t *testing.T) {
+	h := newHarness()
+	in := CreateAdminInput{Email: "super@pao.bd", Name: "Super", Roles: []string{"super_admin"}}
+	if err := h.svc.EnsureAdmin(ctx, in, "demo password 123"); err != nil {
+		t.Fatal(err)
+	}
+	if err := h.svc.EnsureAdmin(ctx, in, "other password 123"); err != nil || len(h.repo.admins) != 1 {
+		t.Fatal("second ensure duplicated the admin")
+	}
+	if _, err := h.svc.AdminLogin(ctx, "super@pao.bd", "demo password 123"); err != nil {
+		t.Fatalf("seeded password: %v", err)
+	}
+	if err := h.svc.EnsureAdmin(ctx, CreateAdminInput{Email: "x@pao.bd", Roles: []string{"customer"}}, "p"); !errors.Is(err, domain.ErrRoleInvalid) {
+		t.Fatal("bad role")
+	}
+	h.repo.faults["AdminByEmail"] = errBoom
+	if err := h.svc.EnsureAdmin(ctx, in, "p"); !errors.Is(err, errBoom) {
+		t.Fatal("lookup failure")
+	}
+}

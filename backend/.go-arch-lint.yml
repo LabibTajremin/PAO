@@ -24,12 +24,32 @@ components:
   provider_contract: { in: modules/provider/contract }
   verification_contract: { in: modules/verification/contract }
   catalog_contract: { in: modules/catalog/contract }
+  catalog_domain: { in: modules/catalog/domain/** }
+  catalog_port: { in: modules/catalog/port }
+  catalog_app: { in: modules/catalog/app/** }
+  catalog_adapter: { in: modules/catalog/adapter/** }
+  catalog_root: { in: modules/catalog }
   booking_contract: { in: modules/booking/contract }
   rating_contract: { in: modules/rating/contract }
   notification_contract: { in: modules/notification/contract }
   media_contract: { in: modules/media/contract }
+  media_domain: { in: modules/media/domain/** }
+  media_port: { in: modules/media/port }
+  media_app: { in: modules/media/app/** }
+  media_adapter: { in: modules/media/adapter/** }
+  media_root: { in: modules/media }
   admin_contract: { in: modules/admin/contract }
+  admin_domain: { in: modules/admin/domain/** }
+  admin_port: { in: modules/admin/port }
+  admin_app: { in: modules/admin/app/** }
+  admin_adapter: { in: modules/admin/adapter/** }
+  admin_root: { in: modules/admin }
   audit_contract: { in: modules/audit/contract }
+  audit_domain: { in: modules/audit/domain/** }
+  audit_port: { in: modules/audit/port }
+  audit_app: { in: modules/audit/app/** }
+  audit_adapter: { in: modules/audit/adapter/** }
+  audit_root: { in: modules/audit }
 commonComponents: []
 deps:
   platform:
@@ -143,6 +163,83 @@ deps:
     mayDependOn:
       - platform
       - catalog_contract
+  catalog_domain:
+    canUse: [uuid]
+    mayDependOn: [catalog_domain]
+  catalog_port:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+      - catalog_port
+      - catalog_domain
+      - catalog_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
+  catalog_app:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+      - catalog_app
+      - catalog_domain
+      - catalog_port
+      - catalog_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
+  catalog_adapter:
+    anyVendorDeps: true
+    mayDependOn:
+      - platform
+      - catalog_adapter
+      - catalog_domain
+      - catalog_port
+      - catalog_app
+      - catalog_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
+  catalog_root:
+    anyVendorDeps: true
+    mayDependOn:
+      - platform
+      - catalog_root
+      - catalog_domain
+      - catalog_port
+      - catalog_app
+      - catalog_adapter
+      - catalog_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
   booking_contract:
     canUse: [uuid]
     mayDependOn:
@@ -163,13 +260,244 @@ deps:
     mayDependOn:
       - platform
       - media_contract
+  media_domain:
+    canUse: [uuid]
+    mayDependOn: [media_domain]
+  media_port:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+      - media_port
+      - media_domain
+      - media_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - admin_contract
+      - audit_contract
+  media_app:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+      - media_app
+      - media_domain
+      - media_port
+      - media_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - admin_contract
+      - audit_contract
+  media_adapter:
+    anyVendorDeps: true
+    mayDependOn:
+      - platform
+      - media_adapter
+      - media_domain
+      - media_port
+      - media_app
+      - media_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - admin_contract
+      - audit_contract
+  media_root:
+    anyVendorDeps: true
+    mayDependOn:
+      - platform
+      - media_root
+      - media_domain
+      - media_port
+      - media_app
+      - media_adapter
+      - media_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - admin_contract
+      - audit_contract
   admin_contract:
     canUse: [uuid]
     mayDependOn:
       - platform
       - admin_contract
+  admin_domain:
+    canUse: [uuid]
+    mayDependOn: [admin_domain]
+  admin_port:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+      - admin_port
+      - admin_domain
+      - admin_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - audit_contract
+  admin_app:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+      - admin_app
+      - admin_domain
+      - admin_port
+      - admin_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - audit_contract
+  admin_adapter:
+    anyVendorDeps: true
+    mayDependOn:
+      - platform
+      - admin_adapter
+      - admin_domain
+      - admin_port
+      - admin_app
+      - admin_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - audit_contract
+  admin_root:
+    anyVendorDeps: true
+    mayDependOn:
+      - platform
+      - admin_root
+      - admin_domain
+      - admin_port
+      - admin_app
+      - admin_adapter
+      - admin_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - audit_contract
   audit_contract:
     canUse: [uuid]
     mayDependOn:
       - platform
       - audit_contract
+  audit_domain:
+    canUse: [uuid]
+    mayDependOn: [audit_domain]
+  audit_port:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+      - audit_port
+      - audit_domain
+      - audit_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+  audit_app:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+      - audit_app
+      - audit_domain
+      - audit_port
+      - audit_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+  audit_adapter:
+    anyVendorDeps: true
+    mayDependOn:
+      - platform
+      - audit_adapter
+      - audit_domain
+      - audit_port
+      - audit_app
+      - audit_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract
+  audit_root:
+    anyVendorDeps: true
+    mayDependOn:
+      - platform
+      - audit_root
+      - audit_domain
+      - audit_port
+      - audit_app
+      - audit_adapter
+      - audit_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - notification_contract
+      - media_contract
+      - admin_contract

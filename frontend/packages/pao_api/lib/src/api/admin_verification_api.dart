@@ -131,7 +131,7 @@ class AdminVerificationApi {
   ///
   /// Returns a [Future] containing a [Response] with a [ViewUrl] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<ViewUrl>> getDocumentViewUrl({
+  Future<Response<ViewUrl>> getDocumentViewURL({
     required String mediaId,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,

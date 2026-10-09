@@ -11,8 +11,8 @@ it first and continues from **Current task**.
 | P01 Contracts | done | — | OpenAPI 3.1 (120 ops), contracts, migrations |
 | P02 Backend platform | done | — | |
 | P03 Identity & access | done | — | |
-| P04 Catalog, media, audit, settings | in_progress | — | |
-| P05 Customer | todo | — | |
+| P04 Catalog, media, audit, settings | done | — | |
+| P05 Customer | in_progress | — | |
 | P06 Provider & verification | todo | — | |
 | P07 Discovery & booking | todo | — | |
 | P08 Rating, notification, complaints | todo | — | |
@@ -28,7 +28,7 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P04 / task 1 — catalog domain (Category → Service → Sub-service, versioned prices).
+P05 / task 1 — customer profile (read docs/build/phases/P05-customer.md).
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
@@ -58,6 +58,10 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-10-09 P04 catalog, media, audit, settings: versioned prices with cached published
+  tree and BN/EN trigram search, idempotent YAML seed (`./pao seed`), presigned uploads
+  with per-purpose rules and audited 5-minute document views, orphan purge job,
+  append-only audit log fed by events, typed admin settings with cache invalidation.
 - 2026-10-09 P03 identity: phone OTP sign-in with rate limits and lockout, rotating
   refresh families with reuse detection, admin password + TOTP with cookie refresh,
   /v1/me*, account deletion, status changes with phone block, admin users and role

@@ -26,9 +26,12 @@ type ComplaintResolved struct {
 // EventName implements eventbus.Event.
 func (ComplaintResolved) EventName() string { return "admin.ComplaintResolved" }
 
-// SettingChanged is published when an admin edits a setting, so caches refresh.
+// SettingChanged is published when an admin edits a setting; the audit trail keeps
+// both values.
 type SettingChanged struct {
 	Key     string
+	Before  string
+	After   string
 	ActorID uuid.UUID
 }
 

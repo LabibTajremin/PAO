@@ -15,3 +15,9 @@ var Modules = []string{
 	"identity", "customer", "provider", "verification", "catalog", "booking",
 	"rating", "notification", "media", "admin", "audit",
 }
+
+// OutboxModules are the modules that publish events and so own an outbox table; audit
+// and notification only consume.
+var OutboxModules = []string{
+	"identity", "customer", "provider", "verification", "catalog", "booking", "rating", "media", "admin",
+}

@@ -20,9 +20,12 @@ import (
 	"github.com/LabibTajremin/PAO/backend/internal/platform/auth"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/clock"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/config"
+	"github.com/LabibTajremin/PAO/backend/internal/platform/eventbus"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/httpx/api"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/idgen"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/logx"
+	"github.com/LabibTajremin/PAO/backend/internal/platform/outbox"
+	"github.com/LabibTajremin/PAO/backend/migrations"
 )
 
 // API is a running API server on a private database, Redis prefix and buckets.
@@ -32,7 +35,25 @@ type API struct {
 	Clock   *clock.Fake
 	Infra   *app.Infra
 	Modules *app.Modules
+	Bus     *eventbus.Bus
 	signer  *auth.Signer
+}
+
+// RelayEvents delivers every pending outbox event to the modules' subscribers, as the
+// worker would, until nothing is left.
+func (a *API) RelayEvents(t testing.TB) {
+	t.Helper()
+	relay := outbox.NewRelay(a.Infra.Pool, a.Bus, migrations.OutboxModules, a.Clock, logx.Discard())
+	for i := 0; i < 20; i++ {
+		n, err := relay.RunOnce(context.Background())
+		if err != nil {
+			t.Fatalf("relay: %v", err)
+		}
+		if n == 0 {
+			return
+		}
+	}
+	t.Fatal("events kept coming after 20 relay passes")
 }
 
 // Config returns a complete test configuration on the PAO_TEST_* services.
@@ -72,7 +93,9 @@ func NewAPI(t testing.TB) *API {
 	}
 	srv := httptest.NewServer(h)
 	t.Cleanup(srv.Close)
-	return &API{URL: srv.URL, Clock: clk, Infra: infra, Modules: modules,
+	bus := eventbus.NewBus()
+	modules.Subscribe(bus)
+	return &API{URL: srv.URL, Clock: clk, Infra: infra, Modules: modules, Bus: bus,
 		signer: auth.NewSigner("k1", cfg.JWT.SigningKey, 15*time.Minute, infra.Clock, idgen.V7{})}
 }
 

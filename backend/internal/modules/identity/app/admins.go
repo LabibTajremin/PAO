@@ -91,3 +91,17 @@ func (s *Service) UpdateAdmin(ctx context.Context, in UpdateAdminInput) (domain.
 func (s *Service) ListAdmins(ctx context.Context) ([]domain.Admin, error) {
 	return s.d.Repo.ListAdmins(ctx)
 }
+
+// EnsureAdmin creates a demo admin with a known password unless the email exists; used
+// by the seed for dev and staging. TOTP enrolment still happens at first login.
+func (s *Service) EnsureAdmin(ctx context.Context, in CreateAdminInput, password string) error {
+	if _, err := s.d.Repo.AdminByEmail(ctx, strings.ToLower(in.Email)); !errors.Is(err, domain.ErrAccountNotFound) {
+		return err
+	}
+	admin, _, err := s.CreateAdmin(ctx, in)
+	if err != nil {
+		return err
+	}
+	admin.PasswordHash, admin.MustChangePassword = auth.Hash(password, auth.PasswordParams), false
+	return s.saveAdmin(ctx, admin)
+}

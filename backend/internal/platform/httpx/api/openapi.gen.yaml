@@ -2543,7 +2543,7 @@ paths:
           $ref: '#/components/responses/ValidationFailed'
   /v1/admin/documents/{mediaId}/view-url:
     get:
-      operationId: getDocumentViewUrl
+      operationId: getDocumentViewURL
       tags:
         - Admin verification
       summary: 5-minute signed URL for a verification document; every view is audited

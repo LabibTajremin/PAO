@@ -133,8 +133,8 @@ func (StrictUnimplemented) GetDashboard(context.Context, GetDashboardRequestObje
 	return nil, ErrNotImplemented
 }
 
-// GetDocumentViewUrl is not implemented yet.
-func (StrictUnimplemented) GetDocumentViewUrl(context.Context, GetDocumentViewUrlRequestObject) (GetDocumentViewUrlResponseObject, error) {
+// GetDocumentViewURL is not implemented yet.
+func (StrictUnimplemented) GetDocumentViewURL(context.Context, GetDocumentViewURLRequestObject) (GetDocumentViewURLResponseObject, error) {
 	return nil, ErrNotImplemented
 }
 

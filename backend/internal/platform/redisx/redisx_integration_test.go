@@ -149,3 +149,25 @@ func TestDenylist(t *testing.T) {
 		t.Fatal("closed check")
 	}
 }
+
+func TestCache(t *testing.T) {
+	ctx := context.Background()
+	rdb, keys := testkit.Redis(t)
+	c := redisx.NewCache(rdb)
+	k := keys.Key("cache", "x")
+	if _, ok, err := c.Get(ctx, k); ok || err != nil {
+		t.Fatal("empty cache hit")
+	}
+	if err := c.Set(ctx, k, []byte("v"), time.Minute); err != nil {
+		t.Fatal(err)
+	}
+	if v, ok, _ := c.Get(ctx, k); !ok || string(v) != "v" {
+		t.Fatal("cache miss")
+	}
+	if err := c.Delete(ctx, k); err != nil {
+		t.Fatal(err)
+	}
+	if _, _, err := redisx.NewCache(testkit.ClosedRedis(t)).Get(ctx, k); err == nil {
+		t.Fatal("closed cache")
+	}
+}
