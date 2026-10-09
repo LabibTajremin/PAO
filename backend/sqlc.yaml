@@ -85,3 +85,10 @@ sql:
       go:
         <<: *gogen
         out: internal/modules/booking/adapter/postgres/sqlcdb
+  - engine: postgresql
+    schema: migrations/rating
+    queries: internal/modules/rating/adapter/postgres/queries.sql
+    gen:
+      go:
+        <<: *gogen
+        out: internal/modules/rating/adapter/postgres/sqlcdb

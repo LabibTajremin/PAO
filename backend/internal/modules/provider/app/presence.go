@@ -155,3 +155,32 @@ func eligible(rows []port.Candidate, dist map[uuid.UUID]int, womenOnly bool) []d
 	}
 	return out
 }
+
+// PublicProfile is what customers see of a provider (C11): never documents or contacts.
+type PublicProfile struct {
+	Profile
+	Rating port.Rating
+}
+
+// PublicProfile returns a verified provider's public profile.
+func (s *Service) PublicProfile(ctx context.Context, viewer, id uuid.UUID) (PublicProfile, error) {
+	p, err := s.d.Repo.Get(ctx, id)
+	if err == nil && (p.Level < 1 || p.AccountStatus != "active") {
+		err = domain.ErrNotFound
+	}
+	out := PublicProfile{Profile: Profile{Provider: p}}
+	if err == nil && p.PhotoMediaID != nil {
+		out.PhotoURL, err = s.d.Media.URL(ctx, viewer, *p.PhotoMediaID)
+	}
+	for _, sid := range p.ServiceIDs {
+		var svc port.Service
+		if err == nil {
+			svc, err = s.d.Catalog.Service(ctx, sid)
+			out.Services = append(out.Services, svc)
+		}
+	}
+	if err == nil {
+		out.Rating, err = s.d.Ratings.ProviderRating(ctx, id)
+	}
+	return out, err
+}

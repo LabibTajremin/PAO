@@ -7,8 +7,10 @@ import (
 	"crypto/rand"
 	"encoding/json"
 	"io"
+	"log/slog"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"regexp"
 	"testing"
 	"time"
@@ -74,7 +76,12 @@ func Config(t testing.TB) config.Config {
 func NewAPI(t testing.TB) *API {
 	t.Helper()
 	cfg := Config(t)
-	infra, err := app.Connect(context.Background(), cfg, logx.Discard())
+	log := logx.Discard()
+	// PAO_TEST_LOG=1 shows server logs, e.g. the cause behind a 500.
+	if os.Getenv("PAO_TEST_LOG") != "" {
+		log = logx.New(os.Stderr, slog.LevelDebug)
+	}
+	infra, err := app.Connect(context.Background(), cfg, log)
 	if err != nil {
 		t.Fatalf("connect: %v", err)
 	}

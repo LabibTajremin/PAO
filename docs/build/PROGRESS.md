@@ -28,7 +28,7 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P08 / task 1 — read docs/build/phases/P08-rating-notification.md and start with its first task.
+P08 / task 2 — notification module (rating is done).
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
@@ -62,6 +62,9 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-10-09 P08.1 rating: reviews of completed bookings once per side with tags,
+  incremental aggregates with distribution, public review lists, provider public
+  profile; `testkit.CompletedJob` and `PAO_TEST_LOG=1` for server logs in tests.
 - 2026-10-09 P07 perf: `./pao perf` seeds 2,000 online providers (`migrate perf-seed`)
   and runs `test/perf/nearby.js`; nearby search p95 14 ms locally (limit 300 ms).
 - 2026-10-09 P07.1–9 booking: state machine per booking-states.md, idempotent create with

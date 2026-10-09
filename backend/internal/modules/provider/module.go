@@ -22,6 +22,7 @@ import (
 	"github.com/LabibTajremin/PAO/backend/internal/modules/provider/adapter/redis"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/provider/app"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/provider/domain"
+	rating "github.com/LabibTajremin/PAO/backend/internal/modules/rating/contract"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/clock"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/eventbus"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/idgen"
@@ -42,6 +43,7 @@ type Deps struct {
 	Identity identity.IdentityService
 	Media    media.MediaService
 	Admin    admin.AdminService
+	Rating   rating.RatingService
 }
 
 // Module is the wired provider module.
@@ -56,7 +58,7 @@ type Module struct {
 func New(d Deps) *Module {
 	repo := postgres.New(d.Pool, outbox.NewWriter("provider", d.IDs, d.Clock), d.Clock)
 	svc := app.New(app.Deps{Repo: repo, Presence: redis.New(d.Redis, d.Keys), Catalog: peers.Catalog{Svc: d.Catalog},
-		Accounts: peers.Accounts{Svc: d.Identity}, Media: peers.Media{Svc: d.Media}, Clock: d.Clock, Log: d.Log})
+		Accounts: peers.Accounts{Svc: d.Identity}, Media: peers.Media{Svc: d.Media}, Ratings: peers.Ratings{Svc: d.Rating}, Clock: d.Clock, Log: d.Log})
 	// Events also arrive for accounts that never enrolled as providers.
 	offline := func(ctx context.Context, id uuid.UUID, reason string) error {
 		if err := svc.GoOffline(ctx, id, reason); !errors.Is(err, domain.ErrNotFound) {

@@ -90,3 +90,15 @@ type Quality struct {
 type Settings interface {
 	Quality(ctx context.Context) (Quality, error)
 }
+
+// Rating is a provider's rating breakdown.
+type Rating struct {
+	Average      float64
+	Count        int
+	Distribution [5]int
+}
+
+// Ratings reads provider ratings.
+type Ratings interface {
+	ProviderRating(ctx context.Context, id uuid.UUID) (Rating, error)
+}

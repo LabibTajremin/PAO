@@ -4,6 +4,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+
+	"github.com/LabibTajremin/PAO/backend/internal/platform/i18n"
 )
 
 // Parties identifies who a booking event concerns; every booking event embeds it so
@@ -67,6 +69,7 @@ type BookingCompleted struct {
 	TotalPaisa   int64
 	CustomerName string
 	ProviderName string
+	ServiceName  i18n.Text
 }
 
 // BookingCancelled is published when either side cancels.

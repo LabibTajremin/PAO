@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/LabibTajremin/PAO/backend/internal/modules/provider/app"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/provider/domain"
@@ -75,4 +76,26 @@ func (h *Handler) SendHeartbeat(ctx context.Context, req api.SendHeartbeatReques
 		return nil, errorMap.Map(err)
 	}
 	return api.SendHeartbeat200JSONResponse(presence(true)), nil
+}
+
+// GetProviderPublicProfile implements GET /v1/customer/providers/{providerId}.
+func (h *Handler) GetProviderPublicProfile(ctx context.Context, req api.GetProviderPublicProfileRequestObject) (api.GetProviderPublicProfileResponseObject, error) {
+	p, err := h.svc.PublicProfile(ctx, me(ctx), req.ProviderId)
+	if err != nil {
+		return nil, errorMap.Map(err)
+	}
+	dist := map[string]int{}
+	for i, n := range p.Rating.Distribution {
+		dist[strconv.Itoa(i+1)] = n
+	}
+	out := api.GetProviderPublicProfile200JSONResponse{Id: p.ID, Name: p.FullName, Badge: api.Badge(domain.Badge(p.Level)), Level: p.Level,
+		Bio: p.Bio, ExperienceYears: p.ExperienceYears, CompletedJobs: p.CompletedJobs, MemberSince: p.CreatedAt.UTC(), Services: []api.ServiceRef{},
+		Rating: api.RatingBreakdown{Average: p.Rating.Average, Count: p.Rating.Count, Distribution: dist}}
+	if p.PhotoURL != "" {
+		out.PhotoUrl = &p.PhotoURL
+	}
+	for _, s := range p.Services {
+		out.Services = append(out.Services, api.ServiceRef{Id: s.ID, Name: api.LocalizedText{En: s.Name.EN, Bn: s.Name.BN}})
+	}
+	return out, nil
 }

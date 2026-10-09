@@ -25,6 +25,8 @@ import (
 	mediahttp "github.com/LabibTajremin/PAO/backend/internal/modules/media/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/provider"
 	providerhttp "github.com/LabibTajremin/PAO/backend/internal/modules/provider/adapter/http"
+	"github.com/LabibTajremin/PAO/backend/internal/modules/rating"
+	ratinghttp "github.com/LabibTajremin/PAO/backend/internal/modules/rating/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/verification"
 	verificationhttp "github.com/LabibTajremin/PAO/backend/internal/modules/verification/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/auth"
@@ -45,6 +47,7 @@ type (
 	providerAPI     = providerhttp.Handler
 	verificationAPI = verificationhttp.Handler
 	bookingAPI      = bookinghttp.Handler
+	ratingAPI       = ratinghttp.Handler
 )
 
 // Server serves every API operation. Each module's handler is embedded at depth one;
@@ -59,6 +62,7 @@ type Server struct {
 	*providerAPI
 	*verificationAPI
 	*bookingAPI
+	*ratingAPI
 	unimplemented
 }
 
@@ -79,6 +83,7 @@ type Modules struct {
 	// Verification is built last: it reads providers, media, catalog and settings.
 	Verification *verification.Module
 	Booking      *booking.Module
+	Rating       *rating.Module
 	// SMSCapture is set when APP_ENV=test, so e2e tests can read one-time codes.
 	SMSCapture *sms.Capture
 }
@@ -110,8 +115,9 @@ func BuildModules(i *Infra) (*Modules, error) {
 	m.Media = media.New(media.Deps{Pool: i.Pool, Storage: i.Storage, Auditor: m.Audit.Contract, Bucket: i.Config.S3.BucketPrivate, Clock: i.Clock, IDs: i.IDs})
 	m.Customer = customer.New(customer.Deps{Pool: i.Pool, Clock: i.Clock, IDs: i.IDs, Media: m.Media.Contract,
 		Identity: m.Identity.Contract, Admin: m.Admin.Contract})
+	m.Rating = rating.New(i.Pool, i.Clock, i.IDs)
 	m.Provider = provider.New(provider.Deps{Pool: i.Pool, Redis: i.Redis, Keys: i.Keys, Clock: i.Clock, IDs: i.IDs, Log: i.Log,
-		Catalog: m.Catalog.Contract, Identity: m.Identity.Contract, Media: m.Media.Contract, Admin: m.Admin.Contract})
+		Catalog: m.Catalog.Contract, Identity: m.Identity.Contract, Media: m.Media.Contract, Admin: m.Admin.Contract, Rating: m.Rating.Contract})
 	m.Verification = verification.New(verification.Deps{Pool: i.Pool, Cipher: cipher, Clock: i.Clock, IDs: i.IDs,
 		Provider: m.Provider.Contract, Media: m.Media.Contract, Catalog: m.Catalog.Contract, Admin: m.Admin.Contract})
 	m.Booking = booking.New(booking.Deps{Pool: i.Pool, Clock: i.Clock, IDs: i.IDs, Catalog: m.Catalog.Contract, Customer: m.Customer.Contract,
@@ -119,7 +125,8 @@ func BuildModules(i *Infra) (*Modules, error) {
 		Admin: m.Admin.Contract})
 	m.Server = Server{identityAPI: m.Identity.HTTP, catalogAPI: m.Catalog.HTTP, auditAPI: m.Audit.HTTP, mediaAPI: m.Media.HTTP, adminAPI: m.Admin.HTTP,
 		customerAPI: m.Customer.HTTP, providerAPI: m.Provider.HTTP,
-		verificationAPI: m.Verification.HTTP, bookingAPI: m.Booking.HTTP}
+		verificationAPI: m.Verification.HTTP, bookingAPI: m.Booking.HTTP,
+		ratingAPI: m.Rating.HTTP}
 	return m, nil
 }
 
@@ -143,6 +150,7 @@ func (m *Modules) Subscribe(bus *eventbus.Bus) {
 	m.Customer.Subscribe(bus)
 	m.Provider.Subscribe(bus)
 	m.Verification.Subscribe(bus)
+	m.Rating.Subscribe(bus)
 }
 
 // RegisterJobs adds every module's background jobs (worker process).

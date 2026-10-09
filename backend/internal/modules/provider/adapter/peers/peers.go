@@ -13,6 +13,7 @@ import (
 	media "github.com/LabibTajremin/PAO/backend/internal/modules/media/contract"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/provider/domain"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/provider/port"
+	rating "github.com/LabibTajremin/PAO/backend/internal/modules/rating/contract"
 )
 
 // Catalog implements port.Catalog.
@@ -89,4 +90,13 @@ type Settings struct{ Svc admin.AdminService }
 func (s Settings) Quality(ctx context.Context) (port.Quality, error) {
 	v, err := s.Svc.GetSettings(ctx)
 	return port.Quality{RatingFloor: v.RatingFloor, RatingMinJobs: v.RatingMinJobs, MaxCancellations: v.MaxProviderCancellations30d}, err
+}
+
+// Ratings implements port.Ratings.
+type Ratings struct{ Svc rating.RatingService }
+
+// ProviderRating implements port.Ratings.
+func (r Ratings) ProviderRating(ctx context.Context, id uuid.UUID) (port.Rating, error) {
+	s, err := r.Svc.GetProviderRating(ctx, id)
+	return port.Rating(s), err
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/LabibTajremin/PAO/backend/internal/modules/booking/contract"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/booking/domain"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/eventbus"
+	"github.com/LabibTajremin/PAO/backend/internal/platform/i18n"
 )
 
 // Advance is transitions 5 (on the way) and 6 (arrived).
@@ -97,6 +98,6 @@ func (s *Service) Complete(ctx context.Context, provider, id uuid.UUID, cash boo
 			return nil, err
 		}
 		return []eventbus.Event{contract.BookingCompleted{Parties: s.parties(*b), TotalPaisa: b.TotalPaisa,
-			CustomerName: b.Customer.Name, ProviderName: b.Provider.Name}}, nil
+			CustomerName: b.Customer.Name, ProviderName: b.Provider.Name, ServiceName: i18n.Text(b.ServiceName)}}, nil
 	})
 }

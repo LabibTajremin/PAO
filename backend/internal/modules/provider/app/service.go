@@ -21,6 +21,7 @@ type Deps struct {
 	Catalog  port.Catalog
 	Accounts port.Accounts
 	Media    port.Media
+	Ratings  port.Ratings
 	Clock    clock.Clock
 	Log      *slog.Logger
 }
