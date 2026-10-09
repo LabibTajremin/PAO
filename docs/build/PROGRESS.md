@@ -14,8 +14,8 @@ it first and continues from **Current task**.
 | P04 Catalog, media, audit, settings | done | — | |
 | P05 Customer | done | — | |
 | P06 Provider & verification | done | — | |
-| P07 Discovery & booking | in_progress | — | |
-| P08 Rating, notification, complaints | todo | — | |
+| P07 Discovery & booking | done | — | |
+| P08 Rating, notification, complaints | in_progress | — | |
 | P09 Admin API | todo | — | |
 | P10 Flutter foundation | todo | — | |
 | P11 Partner app | todo | — | |
@@ -28,7 +28,7 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P07 / perf smoke — `test/perf` nearby search with 2,000 online providers (tasks 1–9 done).
+P08 / task 1 — read docs/build/phases/P08-rating-notification.md and start with its first task.
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
@@ -51,6 +51,7 @@ with `./pao ci` green and a `chore(progress): complete <id>` commit is pushed.
   `internal/app/modules.go` (verification is built after identity).
 - Request timeouts run as a 15 s periodic sweep (`booking.expire_requests`) rather than a
   job per booking, so a missed run catches up on the next one.
+- k6 v1.3.0 is installed in this container from the GitHub release tarball.
 - `testkit.VerifiedProvider` enrols and approves a provider end to end for later phases.
 
 ## Blockers
@@ -61,6 +62,8 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-10-09 P07 perf: `./pao perf` seeds 2,000 online providers (`migrate perf-seed`)
+  and runs `test/perf/nearby.js`; nearby search p95 14 ms locally (limit 300 ms).
 - 2026-10-09 P07.1–9 booking: state machine per booking-states.md, idempotent create with
   price/name snapshots, accept under provider + row locks (one active ASAP job), reject,
   timeout sweep, start code with lockout, catalog-only extras, cancel rules, lists,

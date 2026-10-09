@@ -1,11 +1,13 @@
-// Command migrate applies the module migrations and River's schema ("up") and loads
-// seed data ("seed"). ./pao seed runs both.
+// Command migrate applies the module migrations and River's schema ("up"), loads seed
+// data ("seed") and prepares the performance smoke test ("perf-seed N", which prints
+// the fixture JSON). ./pao seed runs up and seed; ./pao perf runs perf-seed.
 package main
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"os"
+	"strconv"
 
 	"github.com/jackc/pgx/v5/stdlib"
 
@@ -25,17 +27,39 @@ func main() {
 	}
 }
 
+const usage = "usage: migrate up|seed|perf-seed N"
+
 func run(args []string) error {
-	if len(args) != 1 {
-		return fmt.Errorf("usage: migrate up|seed")
-	}
-	switch args[0] {
-	case "up":
+	switch {
+	case len(args) == 1 && args[0] == "up":
 		return up(context.Background())
-	case "seed":
+	case len(args) == 1 && args[0] == "seed":
 		return seedData(context.Background())
+	case len(args) == 2 && args[0] == "perf-seed":
+		n, err := strconv.Atoi(args[1])
+		if err != nil || n < 1 {
+			return errors.New(usage)
+		}
+		return perfSeed(context.Background(), n)
 	}
-	return fmt.Errorf("usage: migrate up|seed")
+	return errors.New(usage)
+}
+
+func perfSeed(ctx context.Context, n int) error {
+	cfg, err := config.Load(os.Getenv)
+	if err != nil {
+		return err
+	}
+	infra, err := app.Connect(ctx, cfg, logx.New(os.Stderr, cfg.LogLevel))
+	if err != nil {
+		return err
+	}
+	defer infra.Close()
+	modules, err := app.BuildModules(infra)
+	if err != nil {
+		return err
+	}
+	return app.SeedPerf(ctx, infra, modules, n, os.Stdout)
 }
 
 func up(ctx context.Context) error {

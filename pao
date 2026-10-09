@@ -64,9 +64,12 @@ cmd_perf() {
     return 0
   }
   require_tool k6 "https://grafana.com/docs/k6/latest/set-up/install-k6/"
-  local script
+  cmd_up
+  cmd_seed
+  local fixture="$PAO_ROOT/.perf-fixture.json" script
+  compose run --rm -T --entrypoint /app/migrate migrate perf-seed 2000 >"$fixture" || die "perf seed failed"
   for script in "$PAO_ROOT"/test/perf/*.js; do
-    k6 run --quiet "$script" || die "performance threshold missed in ${script##*/}"
+    FIXTURE="$fixture" k6 run --quiet "$script" || die "performance threshold missed in ${script##*/}"
   done
   ok "performance thresholds met"
 }

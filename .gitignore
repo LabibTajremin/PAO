@@ -27,3 +27,4 @@ pubspec_overrides.yaml
 *.swp
 # An empty CA bundle the compose build uses when PAO_EXTRA_CA_FILE is unset.
 !docker/no-extra-ca.pem
+.perf-fixture.json
