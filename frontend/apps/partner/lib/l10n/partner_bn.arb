@@ -1,0 +1,13 @@
+{
+  "@@locale": "bn",
+  "partnerTitle": "পাও পার্টনার",
+  "authPhoneTitle": "আপনার ফোন নম্বর কত?",
+  "authPhoneBody": "সাইন ইনের জন্য আমরা একটি কোড পাঠাব।",
+  "authPhoneLabel": "মোবাইল নম্বর",
+  "authPhoneInvalid": "১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন।",
+  "authSendCode": "কোড পাঠান",
+  "authOtpTitle": "৬ সংখ্যার কোডটি দিন",
+  "authOtpSentTo": "আমরা {phone} নম্বরে পাঠিয়েছি।",
+  "authResendIn": "{seconds} সেকেন্ড পর আবার কোড পাঠান",
+  "authResend": "আবার কোড পাঠান"
+}

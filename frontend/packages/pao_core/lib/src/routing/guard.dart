@@ -63,13 +63,12 @@ class RouteGuard {
     if (!sessions.signedIn) {
       return sessions.expired ? paths.expired : paths.signIn;
     }
-    for (final MapEntry(key: pattern, value: id) in screens.entries) {
-      if (routeMatches(pattern, path) && !permissions.canSee(id)) {
-        return path == paths.denied ? null : paths.denied;
-      }
-    }
-    return null;
+    return path == paths.denied || _allowed(path) ? null : paths.denied;
   }
+
+  bool _allowed(String path) => screens.entries.every(
+    (e) => !routeMatches(e.key, path) || permissions.canSee(e.value),
+  );
 }
 
 /// Whether [path] fits [pattern], where `:name` segments match any one segment.

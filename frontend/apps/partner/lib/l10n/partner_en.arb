@@ -1,0 +1,53 @@
+{
+  "@@locale": "en",
+  "partnerTitle": "PAO Partner",
+  "@partnerTitle": {
+    "description": "App name."
+  },
+  "authPhoneTitle": "What is your phone number?",
+  "@authPhoneTitle": {
+    "description": "M03 title."
+  },
+  "authPhoneBody": "We will text you a code to sign in.",
+  "@authPhoneBody": {
+    "description": "M03 body."
+  },
+  "authPhoneLabel": "Mobile number",
+  "@authPhoneLabel": {
+    "description": "Phone field label."
+  },
+  "authPhoneInvalid": "Enter an 11-digit Bangladeshi mobile number.",
+  "@authPhoneInvalid": {
+    "description": "Phone validation."
+  },
+  "authSendCode": "Send code",
+  "@authSendCode": {
+    "description": "M03 button."
+  },
+  "authOtpTitle": "Enter the 6-digit code",
+  "@authOtpTitle": {
+    "description": "M04 title."
+  },
+  "authOtpSentTo": "We sent it to {phone}.",
+  "@authOtpSentTo": {
+    "description": "M04 body.",
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "authResendIn": "Resend code in {seconds}s",
+  "@authResendIn": {
+    "description": "Resend countdown.",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authResend": "Resend code",
+  "@authResend": {
+    "description": "Resend button."
+  }
+}

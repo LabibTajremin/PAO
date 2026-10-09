@@ -32,8 +32,10 @@ gen_dart_client() {
 }
 
 gen_l10n() {
-  [[ -f "$FRONTEND/packages/pao_l10n/l10n.yaml" ]] || return 0
-  (cd "$FRONTEND/packages/pao_l10n" && flutter gen-l10n >/dev/null) || die "flutter gen-l10n failed"
+  local cfg
+  while IFS= read -r cfg; do
+    (cd "$(dirname "$cfg")" && flutter gen-l10n >/dev/null) || die "flutter gen-l10n failed in ${cfg%/l10n.yaml}"
+  done < <(find "$FRONTEND/packages" "$FRONTEND/apps" -maxdepth 2 -name l10n.yaml 2>/dev/null)
 }
 
 # tree_fingerprint hashes every modified or untracked file, so a generator run that

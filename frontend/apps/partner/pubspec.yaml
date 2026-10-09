@@ -10,11 +10,17 @@ environment:
 
 dependencies:
   dio: ^5.11.1
+  firebase_core: ^4.15.0
+  firebase_messaging: ^16.7.0
   flutter:
     sdk: flutter
+  flutter_bloc: ^9.1.1
   flutter_localizations:
     sdk: flutter
   go_router: ^18.0.2
+  intl: ^0.20.3
+  pao_api:
+    path: ../../packages/pao_api
   pao_core:
     path: ../../packages/pao_core
   pao_l10n:
@@ -27,10 +33,16 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   http_mock_adapter: ^0.6.1
+  image_picker: ^1.2.4
+  mocktail: ^1.0.5
+  plugin_platform_interface: ^2.1.8
+  shared_preferences: ^2.5.6
   very_good_analysis: ^11.0.0
 
 flutter:
+  generate: true
   uses-material-design: true
 
 coverage_exclude:
   - 'lib/main\.dart$'
+  - 'lib/l10n/generated/'

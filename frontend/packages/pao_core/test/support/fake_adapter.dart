@@ -26,9 +26,11 @@ class FakeAdapter implements HttpClientAdapter {
     RequestOptions options,
     Stream<List<int>>? requestStream,
     Future<void>? cancelFuture,
-  ) {
+  ) async {
     requests.add(options);
-    return replies.removeAt(0)(options);
+    // Reading the body drives Dio's upload progress, as a real socket would.
+    await requestStream?.drain<void>();
+    return await replies.removeAt(0)(options);
   }
 
   @override
