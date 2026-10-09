@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/google/uuid"
@@ -23,6 +24,10 @@ import (
 	"github.com/LabibTajremin/PAO/backend/internal/modules/identity/port"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/media"
 	mediahttp "github.com/LabibTajremin/PAO/backend/internal/modules/media/adapter/http"
+	"github.com/LabibTajremin/PAO/backend/internal/modules/notification"
+	notificationhttp "github.com/LabibTajremin/PAO/backend/internal/modules/notification/adapter/http"
+	"github.com/LabibTajremin/PAO/backend/internal/modules/notification/adapter/push"
+	notifport "github.com/LabibTajremin/PAO/backend/internal/modules/notification/port"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/provider"
 	providerhttp "github.com/LabibTajremin/PAO/backend/internal/modules/provider/adapter/http"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/rating"
@@ -48,6 +53,7 @@ type (
 	verificationAPI = verificationhttp.Handler
 	bookingAPI      = bookinghttp.Handler
 	ratingAPI       = ratinghttp.Handler
+	notificationAPI = notificationhttp.Handler
 )
 
 // Server serves every API operation. Each module's handler is embedded at depth one;
@@ -63,6 +69,7 @@ type Server struct {
 	*verificationAPI
 	*bookingAPI
 	*ratingAPI
+	*notificationAPI
 	unimplemented
 }
 
@@ -84,6 +91,9 @@ type Modules struct {
 	Verification *verification.Module
 	Booking      *booking.Module
 	Rating       *rating.Module
+	Notification *notification.Module
+	// PushCapture is set unless PUSH_ADAPTER=fcm, so tests can read pushes.
+	PushCapture *push.Capture
 	// SMSCapture is set when APP_ENV=test, so e2e tests can read one-time codes.
 	SMSCapture *sms.Capture
 }
@@ -123,10 +133,16 @@ func BuildModules(i *Infra) (*Modules, error) {
 	m.Booking = booking.New(booking.Deps{Pool: i.Pool, Clock: i.Clock, IDs: i.IDs, Catalog: m.Catalog.Contract, Customer: m.Customer.Contract,
 		Identity: m.Identity.Contract, Provider: m.Provider.Contract, Verification: m.Verification.Contract, Media: m.Media.Contract,
 		Admin: m.Admin.Contract})
+	pusher, err := pushAdapter(i, m)
+	if err != nil {
+		return nil, err
+	}
+	m.Notification = notification.New(notification.Deps{Pool: i.Pool, Pusher: pusher, Clock: i.Clock, IDs: i.IDs, Log: i.Log,
+		Customer: m.Customer.Contract, Provider: m.Provider.Contract, Booking: m.Booking.Contract})
 	m.Server = Server{identityAPI: m.Identity.HTTP, catalogAPI: m.Catalog.HTTP, auditAPI: m.Audit.HTTP, mediaAPI: m.Media.HTTP, adminAPI: m.Admin.HTTP,
 		customerAPI: m.Customer.HTTP, providerAPI: m.Provider.HTTP,
 		verificationAPI: m.Verification.HTTP, bookingAPI: m.Booking.HTTP,
-		ratingAPI: m.Rating.HTTP}
+		ratingAPI: m.Rating.HTTP, notificationAPI: m.Notification.HTTP}
 	return m, nil
 }
 
@@ -151,6 +167,7 @@ func (m *Modules) Subscribe(bus *eventbus.Bus) {
 	m.Provider.Subscribe(bus)
 	m.Verification.Subscribe(bus)
 	m.Rating.Subscribe(bus)
+	m.Notification.Subscribe(bus)
 }
 
 // RegisterJobs adds every module's background jobs (worker process).
@@ -159,4 +176,16 @@ func (m *Modules) RegisterJobs(r *jobs.Registry) {
 	m.Provider.RegisterJobs(r)
 	m.Verification.RegisterJobs(r)
 	m.Booking.RegisterJobs(r)
+}
+
+func pushAdapter(i *Infra, m *Modules) (notifport.Pusher, error) {
+	if i.Config.PushAdapter == "fcm" {
+		creds, err := os.ReadFile(i.Config.FCMCredentialsFile)
+		if err != nil {
+			return nil, err
+		}
+		return push.NewFCM(context.Background(), creds)
+	}
+	m.PushCapture = push.NewCapture(i.Log)
+	return m.PushCapture, nil
 }

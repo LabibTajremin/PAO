@@ -92,3 +92,10 @@ sql:
       go:
         <<: *gogen
         out: internal/modules/rating/adapter/postgres/sqlcdb
+  - engine: postgresql
+    schema: migrations/notification
+    queries: internal/modules/notification/adapter/postgres/queries.sql
+    gen:
+      go:
+        <<: *gogen
+        out: internal/modules/notification/adapter/postgres/sqlcdb

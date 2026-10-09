@@ -28,7 +28,7 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P08 / task 2 — notification module (rating is done).
+P08 / task 3 — complaints (rating and notification are done).
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
@@ -62,6 +62,9 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-10-09 P08.2 notification: bilingual templates for booking and verification
+  events, inbox with read state, device tokens, FCM HTTP v1 push (capture adapter in
+  dev/test), invalid tokens dropped, deduped per event; events for unknown bookings skip.
 - 2026-10-09 P08.1 rating: reviews of completed bookings once per side with tags,
   incremental aggregates with distribution, public review lists, provider public
   profile; `testkit.CompletedJob` and `PAO_TEST_LOG=1` for server logs in tests.

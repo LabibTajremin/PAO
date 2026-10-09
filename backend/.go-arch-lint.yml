@@ -57,6 +57,11 @@ components:
   rating_adapter: { in: modules/rating/adapter/** }
   rating_root: { in: modules/rating }
   notification_contract: { in: modules/notification/contract }
+  notification_domain: { in: modules/notification/domain/** }
+  notification_port: { in: modules/notification/port }
+  notification_app: { in: modules/notification/app/** }
+  notification_adapter: { in: modules/notification/adapter/** }
+  notification_root: { in: modules/notification }
   media_contract: { in: modules/media/contract }
   media_domain: { in: modules/media/domain/** }
   media_port: { in: modules/media/port }
@@ -665,6 +670,83 @@ deps:
     mayDependOn:
       - platform
       - notification_contract
+  notification_domain:
+    canUse: [uuid]
+    mayDependOn: [notification_domain]
+  notification_port:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+      - notification_port
+      - notification_domain
+      - notification_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
+  notification_app:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+      - notification_app
+      - notification_domain
+      - notification_port
+      - notification_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
+  notification_adapter:
+    anyVendorDeps: true
+    mayDependOn:
+      - platform
+      - notification_adapter
+      - notification_domain
+      - notification_port
+      - notification_app
+      - notification_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
+  notification_root:
+    anyVendorDeps: true
+    mayDependOn:
+      - platform
+      - notification_root
+      - notification_domain
+      - notification_port
+      - notification_app
+      - notification_adapter
+      - notification_contract
+      - identity_contract
+      - customer_contract
+      - provider_contract
+      - verification_contract
+      - catalog_contract
+      - booking_contract
+      - rating_contract
+      - media_contract
+      - admin_contract
+      - audit_contract
   media_contract:
     canUse: [uuid]
     mayDependOn:
