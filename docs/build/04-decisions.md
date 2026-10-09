@@ -40,6 +40,6 @@ revise)`. Changing one later means a new ADR, not silent edits.
 | E9 | Money | `int64` paisa; formatted `৳1,130` in apps. |
 | E10 | API versioning | `/v1/...`; breaking changes need `/v2`. |
 | E11 | Error codes | `{ "error": { "code", "message", "details" } }`; codes are `UPPER_SNAKE` and listed in `api/openapi.yaml` `components/schemas/ErrorCode`. |
-| E12 | Design | Figma file below is the visual source of truth; accent colours are a theme token with six presets. |
+| E12 | Design | Figma file below is the visual source of truth; accent colours are a theme token with ten presets; Midnight is the default (`05-screens.md`). |
 
 Figma: <https://www.figma.com/design/ytbbSEIF1I6cZN0iWJVQsC>

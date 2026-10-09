@@ -24,9 +24,9 @@ permissions, design system, translations and routing.
    lives in each app's `data/` layer (not in `pao_api`).
 3. **pao_ui**
    - Tokens: colours mirrored from Figma `Base` + `Accent`, as a `ThemeExtension`
-     `PaoColors`; six `AccentPreset`s; spacing (4-pt scale), radii, type scale with Plus
+     `PaoColors`; ten `AccentPreset`s (values in `05-screens.md`); spacing (4-pt scale), radii, type scale with Plus
      Jakarta Sans and Hind Siliguri fallback for Bangla and ৳.
-   - `PaoTheme.light(accent: AccentPreset.emerald)` — changing the accent re-themes every
+   - `PaoTheme.light(accent: AccentPreset.midnight)` — changing the accent re-themes every
      component.
    - Components (one file each, with widget tests and a gallery page in `example/`):
      buttons (primary, soft, outline, ghost, danger), text field, OTP input, chip,

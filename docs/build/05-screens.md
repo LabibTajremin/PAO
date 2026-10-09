@@ -6,10 +6,27 @@ that matches the Figma frame name prefix. Build each screen from its Figma frame
 use `get_design_context` on the frame; otherwise follow the layout described here and the
 `pao_ui` components.
 
-Theme: colours come from the Figma variable collections `Accent` (6 modes: Emerald —
-default, Indigo, Rose, Tangerine, Ocean, Violet; tokens `tint, soft, primary, strong,
-deep, on-primary`) and `Base` (neutrals and status). Font: Plus Jakarta Sans, with Hind
-Siliguri for Bangla and ৳. Implement these as `pao_ui` tokens in P10.
+Theme: colours come from the Figma variable collections `Accent` (10 modes, tokens
+`tint, soft, primary, strong, deep, on-primary`) and `Base` (neutrals and status). Font:
+Plus Jakarta Sans, with Hind Siliguri for Bangla and ৳. Implement these as `pao_ui`
+tokens in P10. `on-primary` is `#FFFFFF` in every mode. **Midnight is the default.**
+
+| Mode | tint | soft | primary | strong | deep |
+|---|---|---|---|---|---|
+| Midnight (default) | `#F3F5FA` | `#E2E7F2` | `#1F3A6E` | `#162B52` | `#0D1B36` |
+| Onyx | `#F5F5F6` | `#E6E6E9` | `#1C1C21` | `#0E0E12` | `#0A0A0C` |
+| Champagne | `#FBF7EF` | `#F2E8D5` | `#8F6420` | `#6E4C17` | `#2E2108` |
+| Merlot | `#FBF2F4` | `#F4E1E7` | `#8A1C3F` | `#69142F` | `#330818` |
+| Petrol | `#EFF8F9` | `#D7ECEF` | `#0B5F6B` | `#084852` | `#042A30` |
+| Indigo | `#EEF2FF` | `#E0E7FF` | `#4F46E5` | `#3730A3` | `#1E1B4B` |
+| Rose | `#FFF1F2` | `#FFE4E6` | `#E11D48` | `#BE123C` | `#4C0519` |
+| Tangerine | `#FFF7ED` | `#FFEDD5` | `#EA580C` | `#C2410C` | `#431407` |
+| Ocean | `#F0F9FF` | `#E0F2FE` | `#0284C7` | `#075985` | `#082F49` |
+| Violet | `#F5F3FF` | `#EDE9FE` | `#7C3AED` | `#5B21B6` | `#2E1065` |
+
+Usage: `primary` = buttons, active tabs, links; `soft` = selected chips, active-tab pill;
+`tint` = icon tiles, highlighted cards; `strong` = text on `soft`/`tint`; `deep` = hero
+banners and dark headers.
 
 ## Customer app (`apps/customer`) — role `customer`
 
