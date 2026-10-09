@@ -1,0 +1,669 @@
+# PAO REST contract. Paths and schemas live in ./paths and ./schemas; `./pao gen` bundles
+# them for the generators. See docs/build/phases/P01-contracts.md.
+openapi: 3.1.0
+info:
+  title: PAO API
+  version: 1.0.0
+  license:
+    name: Proprietary — all rights reserved
+    url: https://getpao.com/legal
+  description: |
+    REST contract shared by the PAO Go backend and the Flutter apps.
+
+    - Versioned under `/v1`, with route groups `/v1/customer`, `/v1/provider` and `/v1/admin` (PRD §9.6).
+    - Every error uses `ErrorResponse`; `code` is a stable `ErrorCode` the apps translate.
+    - `x-permission` on each operation names the permission the caller must hold
+      (`public` = no token, `authenticated` = any signed-in account). `:own` permissions
+      are also checked against the resource owner.
+    - Lists use cursor pagination (`cursor`, `limit` ≤ 100, `nextCursor`).
+    - Money is integer paisa. Times are UTC (RFC 3339); apps display Asia/Dhaka.
+servers:
+- url: http://localhost:8080
+  description: Local Docker stack
+tags:
+- name: Auth
+  description: Sign-in by OTP, token refresh, logout and admin 2FA.
+- name: Me
+  description: The signed-in account, its permissions and deletion.
+- name: Customer
+  description: Customer profile, addresses, catalog and provider discovery.
+- name: Customer bookings
+  description: Booking lifecycle from the customer side.
+- name: Provider
+  description: Provider profile, catalog and reviews.
+- name: Provider enrolment
+  description: The enrolment wizard and verification status.
+- name: Provider jobs
+  description: Presence, requests, job actions and earnings.
+- name: Admin
+  description: Dashboard.
+- name: Admin catalog
+  description: Catalog and price management.
+- name: Admin verification
+  description: Verification queue, document review and Level 2 sessions.
+- name: Admin people
+  description: Provider and customer management.
+- name: Admin bookings
+  description: Bookings monitor.
+- name: Admin complaints
+  description: Complaints queue.
+- name: Admin settings
+  description: Settings, audit log, admin users and roles.
+security:
+- bearerAuth: []
+paths:
+  /v1/auth/otp/request:
+    $ref: ./paths/auth.yaml#/otpRequest
+  /v1/auth/otp/verify:
+    $ref: ./paths/auth.yaml#/otpVerify
+  /v1/auth/refresh:
+    $ref: ./paths/auth.yaml#/refresh
+  /v1/auth/logout:
+    $ref: ./paths/auth.yaml#/logout
+  /v1/auth/admin/login:
+    $ref: ./paths/auth.yaml#/adminLogin
+  /v1/auth/admin/totp:
+    $ref: ./paths/auth.yaml#/adminTotp
+  /v1/me:
+    $ref: ./paths/me.yaml#/me
+  /v1/me/permissions:
+    $ref: ./paths/me.yaml#/permissions
+  /v1/customer/profile:
+    $ref: ./paths/customer-profile.yaml#/profile
+  /v1/customer/addresses:
+    $ref: ./paths/customer-profile.yaml#/addresses
+  /v1/customer/addresses/{addressId}:
+    $ref: ./paths/customer-profile.yaml#/address
+  /v1/customer/addresses/{addressId}/default:
+    $ref: ./paths/customer-profile.yaml#/addressDefault
+  /v1/customer/service-area:
+    $ref: ./paths/customer-profile.yaml#/serviceArea
+  /v1/customer/catalog:
+    $ref: ./paths/customer-catalog.yaml#/catalog
+  /v1/customer/catalog/search:
+    $ref: ./paths/customer-catalog.yaml#/search
+  /v1/customer/services/{serviceId}:
+    $ref: ./paths/customer-catalog.yaml#/service
+  /v1/customer/providers/nearby:
+    $ref: ./paths/customer-catalog.yaml#/nearby
+  /v1/customer/providers/{providerId}:
+    $ref: ./paths/customer-catalog.yaml#/provider
+  /v1/customer/providers/{providerId}/reviews:
+    $ref: ./paths/customer-catalog.yaml#/providerReviews
+  /v1/customer/bookings:
+    $ref: ./paths/customer-bookings.yaml#/bookings
+  /v1/customer/bookings/{bookingId}:
+    $ref: ./paths/customer-bookings.yaml#/booking
+  /v1/customer/bookings/{bookingId}/start-code:
+    $ref: ./paths/customer-bookings.yaml#/startCode
+  /v1/customer/bookings/{bookingId}/cancel:
+    $ref: ./paths/customer-bookings.yaml#/cancel
+  /v1/customer/bookings/{bookingId}/extras/decision:
+    $ref: ./paths/customer-bookings.yaml#/extrasDecision
+  /v1/customer/bookings/{bookingId}/receipt:
+    $ref: ./paths/customer-bookings.yaml#/receipt
+  /v1/customer/bookings/{bookingId}/review:
+    $ref: ./paths/customer-bookings.yaml#/review
+  /v1/customer/bookings/{bookingId}/reports:
+    $ref: ./paths/customer-bookings.yaml#/report
+  /v1/customer/notifications:
+    $ref: ./paths/notifications.yaml#/customerNotifications
+  /v1/customer/notifications/{notificationId}/read:
+    $ref: ./paths/notifications.yaml#/customerNotificationRead
+  /v1/customer/notifications/read-all:
+    $ref: ./paths/notifications.yaml#/customerNotificationsReadAll
+  /v1/customer/device-token:
+    $ref: ./paths/notifications.yaml#/customerDeviceToken
+  /v1/customer/uploads:
+    $ref: ./paths/uploads.yaml#/customerUploads
+  /v1/customer/uploads/{mediaId}/confirm:
+    $ref: ./paths/uploads.yaml#/customerUploadConfirm
+  /v1/provider/notifications:
+    $ref: ./paths/notifications.yaml#/providerNotifications
+  /v1/provider/notifications/{notificationId}/read:
+    $ref: ./paths/notifications.yaml#/providerNotificationRead
+  /v1/provider/notifications/read-all:
+    $ref: ./paths/notifications.yaml#/providerNotificationsReadAll
+  /v1/provider/device-token:
+    $ref: ./paths/notifications.yaml#/providerDeviceToken
+  /v1/provider/uploads:
+    $ref: ./paths/uploads.yaml#/providerUploads
+  /v1/provider/uploads/{mediaId}/confirm:
+    $ref: ./paths/uploads.yaml#/providerUploadConfirm
+  /v1/provider/profile:
+    $ref: ./paths/provider-profile.yaml#/profile
+  /v1/provider/catalog:
+    $ref: ./paths/provider-profile.yaml#/catalog
+  /v1/provider/reviews:
+    $ref: ./paths/provider-profile.yaml#/reviews
+  /v1/provider/rating:
+    $ref: ./paths/provider-profile.yaml#/rating
+  /v1/provider/enrolment:
+    $ref: ./paths/provider-enrolment.yaml#/enrolment
+  /v1/provider/enrolment/personal:
+    $ref: ./paths/provider-enrolment.yaml#/stepPersonal
+  /v1/provider/enrolment/services:
+    $ref: ./paths/provider-enrolment.yaml#/stepServices
+  /v1/provider/enrolment/area:
+    $ref: ./paths/provider-enrolment.yaml#/stepArea
+  /v1/provider/enrolment/nid:
+    $ref: ./paths/provider-enrolment.yaml#/stepNid
+  /v1/provider/enrolment/selfie:
+    $ref: ./paths/provider-enrolment.yaml#/stepSelfie
+  /v1/provider/enrolment/police-clearance:
+    $ref: ./paths/provider-enrolment.yaml#/stepPoliceClearance
+  /v1/provider/enrolment/skill-proof:
+    $ref: ./paths/provider-enrolment.yaml#/stepSkillProof
+  /v1/provider/enrolment/emergency-contact:
+    $ref: ./paths/provider-enrolment.yaml#/stepEmergencyContact
+  /v1/provider/enrolment/code-of-conduct:
+    $ref: ./paths/provider-enrolment.yaml#/stepCodeOfConduct
+  /v1/provider/enrolment/emergency-contact/verify:
+    $ref: ./paths/provider-verification.yaml#/emergencyVerify
+  /v1/provider/enrolment/submit:
+    $ref: ./paths/provider-verification.yaml#/submit
+  /v1/provider/verification:
+    $ref: ./paths/provider-verification.yaml#/verification
+  /v1/provider/presence/online:
+    $ref: ./paths/provider-presence.yaml#/online
+  /v1/provider/presence/offline:
+    $ref: ./paths/provider-presence.yaml#/offline
+  /v1/provider/presence/heartbeat:
+    $ref: ./paths/provider-presence.yaml#/heartbeat
+  /v1/provider/jobs:
+    $ref: ./paths/provider-jobs.yaml#/jobs
+  /v1/provider/jobs/{bookingId}:
+    $ref: ./paths/provider-jobs.yaml#/job
+  /v1/provider/jobs/{bookingId}/accept:
+    $ref: ./paths/provider-jobs.yaml#/jobAcceptRequest
+  /v1/provider/jobs/{bookingId}/reject:
+    $ref: ./paths/provider-jobs.yaml#/jobRejectRequest
+  /v1/provider/jobs/{bookingId}/on-the-way:
+    $ref: ./paths/provider-jobs.yaml#/jobMarkOnTheWay
+  /v1/provider/jobs/{bookingId}/arrived:
+    $ref: ./paths/provider-jobs.yaml#/jobMarkArrived
+  /v1/provider/jobs/{bookingId}/start:
+    $ref: ./paths/provider-jobs.yaml#/jobStartJob
+  /v1/provider/jobs/{bookingId}/extras:
+    $ref: ./paths/provider-jobs.yaml#/jobProposeExtras
+  /v1/provider/jobs/{bookingId}/complete:
+    $ref: ./paths/provider-jobs.yaml#/jobCompleteJob
+  /v1/provider/jobs/{bookingId}/cancel:
+    $ref: ./paths/provider-jobs.yaml#/jobCancelProviderJob
+  /v1/provider/jobs/{bookingId}/review:
+    $ref: ./paths/provider-jobs.yaml#/jobReview
+  /v1/provider/jobs/{bookingId}/reports:
+    $ref: ./paths/provider-jobs.yaml#/jobReport
+  /v1/provider/jobs/{bookingId}/receipt:
+    $ref: ./paths/provider-earnings.yaml#/receipt
+  /v1/provider/earnings/summary:
+    $ref: ./paths/provider-earnings.yaml#/earnings
+  /v1/provider/earnings/jobs:
+    $ref: ./paths/provider-earnings.yaml#/earningsJobs
+  /v1/admin/dashboard:
+    $ref: ./paths/admin-ops.yaml#/dashboard
+  /v1/admin/catalog:
+    $ref: ./paths/admin-catalog.yaml#/catalog
+  /v1/admin/catalog/categories:
+    $ref: ./paths/admin-catalog.yaml#/categoriesCreate
+  /v1/admin/catalog/categories/{categoryId}:
+    $ref: ./paths/admin-catalog.yaml#/categoriesUpdate
+  /v1/admin/catalog/services:
+    $ref: ./paths/admin-catalog.yaml#/servicesCreate
+  /v1/admin/catalog/services/{serviceId}:
+    $ref: ./paths/admin-catalog.yaml#/servicesUpdate
+  /v1/admin/catalog/sub-services:
+    $ref: ./paths/admin-catalog.yaml#/subservicesCreate
+  /v1/admin/catalog/sub-services/{subServiceId}:
+    $ref: ./paths/admin-catalog.yaml#/subservicesUpdate
+  /v1/admin/catalog/sub-services/{subServiceId}/prices:
+    $ref: ./paths/admin-catalog.yaml#/prices
+  /v1/admin/verifications:
+    $ref: ./paths/admin-verification.yaml#/queue
+  /v1/admin/verifications/{providerId}:
+    $ref: ./paths/admin-verification.yaml#/review
+  /v1/admin/verifications/{providerId}/items/{itemType}/approve:
+    $ref: ./paths/admin-verification.yaml#/approve
+  /v1/admin/verifications/{providerId}/items/{itemType}/reject:
+    $ref: ./paths/admin-verification.yaml#/reject
+  /v1/admin/documents/{mediaId}/view-url:
+    $ref: ./paths/admin-verification.yaml#/documentView
+  /v1/admin/level2-sessions:
+    $ref: ./paths/admin-verification.yaml#/sessions
+  /v1/admin/level2-sessions/{sessionId}:
+    $ref: ./paths/admin-verification.yaml#/session
+  /v1/admin/level2-sessions/{sessionId}/result:
+    $ref: ./paths/admin-verification.yaml#/sessionResult
+  /v1/admin/providers:
+    $ref: ./paths/admin-people.yaml#/providers
+  /v1/admin/providers/{providerId}:
+    $ref: ./paths/admin-people.yaml#/provider
+  /v1/admin/providers/{providerId}/status:
+    $ref: ./paths/admin-people.yaml#/providerStatus
+  /v1/admin/customers:
+    $ref: ./paths/admin-people.yaml#/customers
+  /v1/admin/customers/{customerId}:
+    $ref: ./paths/admin-people.yaml#/customer
+  /v1/admin/customers/{customerId}/status:
+    $ref: ./paths/admin-people.yaml#/customerStatus
+  /v1/admin/bookings:
+    $ref: ./paths/admin-ops.yaml#/bookings
+  /v1/admin/bookings/{bookingId}:
+    $ref: ./paths/admin-ops.yaml#/booking
+  /v1/admin/complaints:
+    $ref: ./paths/admin-ops.yaml#/complaints
+  /v1/admin/complaints/{complaintId}:
+    $ref: ./paths/admin-ops.yaml#/complaint
+  /v1/admin/complaints/{complaintId}/assign:
+    $ref: ./paths/admin-ops.yaml#/complaintAssign
+  /v1/admin/complaints/{complaintId}/comments:
+    $ref: ./paths/admin-ops.yaml#/complaintComment
+  /v1/admin/complaints/{complaintId}/resolve:
+    $ref: ./paths/admin-ops.yaml#/complaintResolve
+  /v1/admin/settings:
+    $ref: ./paths/admin-settings.yaml#/settings
+  /v1/admin/settings/{key}:
+    $ref: ./paths/admin-settings.yaml#/setting
+  /v1/admin/audit:
+    $ref: ./paths/admin-settings.yaml#/audit
+  /v1/admin/admin-users:
+    $ref: ./paths/admin-settings.yaml#/adminUsers
+  /v1/admin/admin-users/{adminUserId}:
+    $ref: ./paths/admin-settings.yaml#/adminUser
+  /v1/admin/roles:
+    $ref: ./paths/admin-settings.yaml#/roles
+  /v1/admin/roles/{role}:
+    $ref: ./paths/admin-settings.yaml#/role
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: EdDSA access token (15 minutes).
+    refreshCookie:
+      type: apiKey
+      in: cookie
+      name: pao_refresh
+      description: Admin web refresh token (HttpOnly, Secure, SameSite=Strict).
+  parameters:
+    Cursor:
+      $ref: ./components/parameters.yaml#/Cursor
+    Limit:
+      $ref: ./components/parameters.yaml#/Limit
+    IdempotencyKey:
+      $ref: ./components/parameters.yaml#/IdempotencyKey
+    AddressId:
+      $ref: ./components/parameters.yaml#/AddressId
+    ServiceId:
+      $ref: ./components/parameters.yaml#/ServiceId
+    CategoryId:
+      $ref: ./components/parameters.yaml#/CategoryId
+    SubServiceId:
+      $ref: ./components/parameters.yaml#/SubServiceId
+    ProviderId:
+      $ref: ./components/parameters.yaml#/ProviderId
+    CustomerId:
+      $ref: ./components/parameters.yaml#/CustomerId
+    BookingId:
+      $ref: ./components/parameters.yaml#/BookingId
+    NotificationId:
+      $ref: ./components/parameters.yaml#/NotificationId
+    MediaId:
+      $ref: ./components/parameters.yaml#/MediaId
+    SessionId:
+      $ref: ./components/parameters.yaml#/SessionId
+    ComplaintId:
+      $ref: ./components/parameters.yaml#/ComplaintId
+    AdminUserId:
+      $ref: ./components/parameters.yaml#/AdminUserId
+    SettingKey:
+      $ref: ./components/parameters.yaml#/SettingKey
+    RolePath:
+      $ref: ./components/parameters.yaml#/RolePath
+    ItemTypePath:
+      $ref: ./components/parameters.yaml#/ItemTypePath
+    ServiceIdQuery:
+      $ref: ./components/parameters.yaml#/ServiceIdQuery
+    SubServiceIdQuery:
+      $ref: ./components/parameters.yaml#/SubServiceIdQuery
+    SearchQuery:
+      $ref: ./components/parameters.yaml#/SearchQuery
+    Lat:
+      $ref: ./components/parameters.yaml#/Lat
+    Lng:
+      $ref: ./components/parameters.yaml#/Lng
+    LatOptional:
+      $ref: ./components/parameters.yaml#/LatOptional
+    LngOptional:
+      $ref: ./components/parameters.yaml#/LngOptional
+    BookingTab:
+      $ref: ./components/parameters.yaml#/BookingTab
+    JobTab:
+      $ref: ./components/parameters.yaml#/JobTab
+    PeriodParam:
+      $ref: ./components/parameters.yaml#/PeriodParam
+  responses:
+    Unauthenticated:
+      $ref: ./components/responses.yaml#/Unauthenticated
+    Forbidden:
+      $ref: ./components/responses.yaml#/Forbidden
+    NotFound:
+      $ref: ./components/responses.yaml#/NotFound
+    Conflict:
+      $ref: ./components/responses.yaml#/Conflict
+    ValidationFailed:
+      $ref: ./components/responses.yaml#/ValidationFailed
+    TooManyRequests:
+      $ref: ./components/responses.yaml#/TooManyRequests
+  schemas:
+    ErrorResponse:
+      $ref: ./schemas/common.yaml#/ErrorResponse
+    ErrorBody:
+      $ref: ./schemas/common.yaml#/ErrorBody
+    ErrorCode:
+      $ref: ./schemas/common.yaml#/ErrorCode
+    Money:
+      $ref: ./schemas/common.yaml#/Money
+    PageCursor:
+      $ref: ./schemas/common.yaml#/PageCursor
+    Point:
+      $ref: ./schemas/common.yaml#/Point
+    LocalizedText:
+      $ref: ./schemas/common.yaml#/LocalizedText
+    Language:
+      $ref: ./schemas/common.yaml#/Language
+    Phone:
+      $ref: ./schemas/common.yaml#/Phone
+    Level:
+      $ref: ./schemas/common.yaml#/Level
+    Gender:
+      $ref: ./schemas/common.yaml#/Gender
+    Platform:
+      $ref: ./schemas/common.yaml#/Platform
+    DeviceTokenInput:
+      $ref: ./schemas/common.yaml#/DeviceTokenInput
+    StatusReason:
+      $ref: ./schemas/common.yaml#/StatusReason
+    OtpPurpose:
+      $ref: ./schemas/auth.yaml#/OtpPurpose
+    OtpRequest:
+      $ref: ./schemas/auth.yaml#/OtpRequest
+    OtpRequestAccepted:
+      $ref: ./schemas/auth.yaml#/OtpRequestAccepted
+    AppKind:
+      $ref: ./schemas/auth.yaml#/AppKind
+    OtpVerifyRequest:
+      $ref: ./schemas/auth.yaml#/OtpVerifyRequest
+    TokenPair:
+      $ref: ./schemas/auth.yaml#/TokenPair
+    RefreshRequest:
+      $ref: ./schemas/auth.yaml#/RefreshRequest
+    LogoutRequest:
+      $ref: ./schemas/auth.yaml#/LogoutRequest
+    AdminLoginRequest:
+      $ref: ./schemas/auth.yaml#/AdminLoginRequest
+    AdminLoginChallenge:
+      $ref: ./schemas/auth.yaml#/AdminLoginChallenge
+    TotpEnrolment:
+      $ref: ./schemas/auth.yaml#/TotpEnrolment
+    AdminTotpRequest:
+      $ref: ./schemas/auth.yaml#/AdminTotpRequest
+    AccountStatus:
+      $ref: ./schemas/auth.yaml#/AccountStatus
+    Role:
+      $ref: ./schemas/auth.yaml#/Role
+    Account:
+      $ref: ./schemas/auth.yaml#/Account
+    MyPermissions:
+      $ref: ./schemas/auth.yaml#/MyPermissions
+    DeleteAccountRequest:
+      $ref: ./schemas/auth.yaml#/DeleteAccountRequest
+    CustomerProfile:
+      $ref: ./schemas/customer.yaml#/CustomerProfile
+    CustomerProfileUpdate:
+      $ref: ./schemas/customer.yaml#/CustomerProfileUpdate
+    AddressLabel:
+      $ref: ./schemas/customer.yaml#/AddressLabel
+    AddressInput:
+      $ref: ./schemas/customer.yaml#/AddressInput
+    Address:
+      $ref: ./schemas/customer.yaml#/Address
+    AddressList:
+      $ref: ./schemas/customer.yaml#/AddressList
+    ServiceAreaCheck:
+      $ref: ./schemas/customer.yaml#/ServiceAreaCheck
+    ServiceModel:
+      $ref: ./schemas/catalog.yaml#/ServiceModel
+    PriceUnit:
+      $ref: ./schemas/catalog.yaml#/PriceUnit
+    SubService:
+      $ref: ./schemas/catalog.yaml#/SubService
+    Service:
+      $ref: ./schemas/catalog.yaml#/Service
+    Category:
+      $ref: ./schemas/catalog.yaml#/Category
+    CatalogTree:
+      $ref: ./schemas/catalog.yaml#/CatalogTree
+    CatalogSearchResults:
+      $ref: ./schemas/catalog.yaml#/CatalogSearchResults
+    CategoryInput:
+      $ref: ./schemas/catalog.yaml#/CategoryInput
+    ServiceInput:
+      $ref: ./schemas/catalog.yaml#/ServiceInput
+    SubServiceInput:
+      $ref: ./schemas/catalog.yaml#/SubServiceInput
+    PriceInput:
+      $ref: ./schemas/catalog.yaml#/PriceInput
+    PriceVersion:
+      $ref: ./schemas/catalog.yaml#/PriceVersion
+    PriceHistory:
+      $ref: ./schemas/catalog.yaml#/PriceHistory
+    Badge:
+      $ref: ./schemas/provider.yaml#/Badge
+    ProviderCard:
+      $ref: ./schemas/provider.yaml#/ProviderCard
+    NearbyProviders:
+      $ref: ./schemas/provider.yaml#/NearbyProviders
+    PriceSummary:
+      $ref: ./schemas/provider.yaml#/PriceSummary
+    RatingBreakdown:
+      $ref: ./schemas/provider.yaml#/RatingBreakdown
+    ProviderPublicProfile:
+      $ref: ./schemas/provider.yaml#/ProviderPublicProfile
+    ServiceRef:
+      $ref: ./schemas/provider.yaml#/ServiceRef
+    ProviderProfile:
+      $ref: ./schemas/provider.yaml#/ProviderProfile
+    ProviderProfileUpdate:
+      $ref: ./schemas/provider.yaml#/ProviderProfileUpdate
+    EnrolmentStep:
+      $ref: ./schemas/provider.yaml#/EnrolmentStep
+    EnrolmentStatus:
+      $ref: ./schemas/provider.yaml#/EnrolmentStatus
+    PersonalInfoInput:
+      $ref: ./schemas/provider.yaml#/PersonalInfoInput
+    ServicesInput:
+      $ref: ./schemas/provider.yaml#/ServicesInput
+    ServiceAreaInput:
+      $ref: ./schemas/provider.yaml#/ServiceAreaInput
+    NidInput:
+      $ref: ./schemas/provider.yaml#/NidInput
+    SelfieInput:
+      $ref: ./schemas/provider.yaml#/SelfieInput
+    PoliceClearanceInput:
+      $ref: ./schemas/provider.yaml#/PoliceClearanceInput
+    SkillProofInput:
+      $ref: ./schemas/provider.yaml#/SkillProofInput
+    EmergencyContactInput:
+      $ref: ./schemas/provider.yaml#/EmergencyContactInput
+    EmergencyContactVerifyInput:
+      $ref: ./schemas/provider.yaml#/EmergencyContactVerifyInput
+    CodeOfConductInput:
+      $ref: ./schemas/provider.yaml#/CodeOfConductInput
+    HeartbeatInput:
+      $ref: ./schemas/provider.yaml#/HeartbeatInput
+    PresenceState:
+      $ref: ./schemas/provider.yaml#/PresenceState
+    ItemType:
+      $ref: ./schemas/verification.yaml#/ItemType
+    ItemStatus:
+      $ref: ./schemas/verification.yaml#/ItemStatus
+    VerificationItem:
+      $ref: ./schemas/verification.yaml#/VerificationItem
+    VerificationStatus:
+      $ref: ./schemas/verification.yaml#/VerificationStatus
+    Level2Info:
+      $ref: ./schemas/verification.yaml#/Level2Info
+    VerificationQueueItem:
+      $ref: ./schemas/verification.yaml#/VerificationQueueItem
+    VerificationQueue:
+      $ref: ./schemas/verification.yaml#/VerificationQueue
+    ReviewDocument:
+      $ref: ./schemas/verification.yaml#/ReviewDocument
+    ReviewItem:
+      $ref: ./schemas/verification.yaml#/ReviewItem
+    VerificationReview:
+      $ref: ./schemas/verification.yaml#/VerificationReview
+    Level2Result:
+      $ref: ./schemas/verification.yaml#/Level2Result
+    Level2SessionInput:
+      $ref: ./schemas/verification.yaml#/Level2SessionInput
+    Level2ResultInput:
+      $ref: ./schemas/verification.yaml#/Level2ResultInput
+    Level2Session:
+      $ref: ./schemas/verification.yaml#/Level2Session
+    Level2SessionList:
+      $ref: ./schemas/verification.yaml#/Level2SessionList
+    BookingStatus:
+      $ref: ./schemas/booking.yaml#/BookingStatus
+    Timing:
+      $ref: ./schemas/booking.yaml#/Timing
+    BookingItemInput:
+      $ref: ./schemas/booking.yaml#/BookingItemInput
+    BookingCreate:
+      $ref: ./schemas/booking.yaml#/BookingCreate
+    BookingItem:
+      $ref: ./schemas/booking.yaml#/BookingItem
+    TimelineEntry:
+      $ref: ./schemas/booking.yaml#/TimelineEntry
+    ExtrasProposal:
+      $ref: ./schemas/booking.yaml#/ExtrasProposal
+    BookingAddress:
+      $ref: ./schemas/booking.yaml#/BookingAddress
+    BookingParty:
+      $ref: ./schemas/booking.yaml#/BookingParty
+    Booking:
+      $ref: ./schemas/booking.yaml#/Booking
+    BookingSummary:
+      $ref: ./schemas/booking.yaml#/BookingSummary
+    BookingList:
+      $ref: ./schemas/booking.yaml#/BookingList
+    CustomerCancelInput:
+      $ref: ./schemas/booking.yaml#/CustomerCancelInput
+    ProviderCancelInput:
+      $ref: ./schemas/booking.yaml#/ProviderCancelInput
+    RejectInput:
+      $ref: ./schemas/booking.yaml#/RejectInput
+    StartCode:
+      $ref: ./schemas/booking.yaml#/StartCode
+    ExtrasInput:
+      $ref: ./schemas/booking.yaml#/ExtrasInput
+    ExtrasDecisionInput:
+      $ref: ./schemas/booking.yaml#/ExtrasDecisionInput
+    CompleteInput:
+      $ref: ./schemas/booking.yaml#/CompleteInput
+    Receipt:
+      $ref: ./schemas/booking.yaml#/Receipt
+    EarningsPeriod:
+      $ref: ./schemas/booking.yaml#/EarningsPeriod
+    EarningsSummary:
+      $ref: ./schemas/booking.yaml#/EarningsSummary
+    EarningsJob:
+      $ref: ./schemas/booking.yaml#/EarningsJob
+    EarningsJobList:
+      $ref: ./schemas/booking.yaml#/EarningsJobList
+    ReviewTag:
+      $ref: ./schemas/rating.yaml#/ReviewTag
+    ReviewInput:
+      $ref: ./schemas/rating.yaml#/ReviewInput
+    Review:
+      $ref: ./schemas/rating.yaml#/Review
+    ReviewList:
+      $ref: ./schemas/rating.yaml#/ReviewList
+    Notification:
+      $ref: ./schemas/notification.yaml#/Notification
+    NotificationList:
+      $ref: ./schemas/notification.yaml#/NotificationList
+    UploadPurpose:
+      $ref: ./schemas/media.yaml#/UploadPurpose
+    UploadRequest:
+      $ref: ./schemas/media.yaml#/UploadRequest
+    UploadTicket:
+      $ref: ./schemas/media.yaml#/UploadTicket
+    MediaObject:
+      $ref: ./schemas/media.yaml#/MediaObject
+    ViewUrl:
+      $ref: ./schemas/media.yaml#/ViewUrl
+    ComplaintReason:
+      $ref: ./schemas/admin.yaml#/ComplaintReason
+    ComplaintInput:
+      $ref: ./schemas/admin.yaml#/ComplaintInput
+    ComplaintStatus:
+      $ref: ./schemas/admin.yaml#/ComplaintStatus
+    ComplaintComment:
+      $ref: ./schemas/admin.yaml#/ComplaintComment
+    Complaint:
+      $ref: ./schemas/admin.yaml#/Complaint
+    ComplaintList:
+      $ref: ./schemas/admin.yaml#/ComplaintList
+    ComplaintAssignInput:
+      $ref: ./schemas/admin.yaml#/ComplaintAssignInput
+    ComplaintCommentInput:
+      $ref: ./schemas/admin.yaml#/ComplaintCommentInput
+    ComplaintResolveInput:
+      $ref: ./schemas/admin.yaml#/ComplaintResolveInput
+    Dashboard:
+      $ref: ./schemas/admin.yaml#/Dashboard
+    AdminRole:
+      $ref: ./schemas/admin.yaml#/AdminRole
+    AdminUser:
+      $ref: ./schemas/admin.yaml#/AdminUser
+    AdminUserList:
+      $ref: ./schemas/admin.yaml#/AdminUserList
+    AdminUserInvite:
+      $ref: ./schemas/admin.yaml#/AdminUserInvite
+    AdminUserInvited:
+      $ref: ./schemas/admin.yaml#/AdminUserInvited
+    AdminUserUpdate:
+      $ref: ./schemas/admin.yaml#/AdminUserUpdate
+    RoleDefinition:
+      $ref: ./schemas/admin.yaml#/RoleDefinition
+    RoleList:
+      $ref: ./schemas/admin.yaml#/RoleList
+    RoleUpdate:
+      $ref: ./schemas/admin.yaml#/RoleUpdate
+    Setting:
+      $ref: ./schemas/admin.yaml#/Setting
+    SettingList:
+      $ref: ./schemas/admin.yaml#/SettingList
+    SettingUpdate:
+      $ref: ./schemas/admin.yaml#/SettingUpdate
+    AuditEntry:
+      $ref: ./schemas/admin.yaml#/AuditEntry
+    AuditList:
+      $ref: ./schemas/admin.yaml#/AuditList
+    AccountStatusChange:
+      $ref: ./schemas/admin.yaml#/AccountStatusChange
+    AdminProviderSummary:
+      $ref: ./schemas/admin.yaml#/AdminProviderSummary
+    AdminProviderList:
+      $ref: ./schemas/admin.yaml#/AdminProviderList
+    AdminProviderDetail:
+      $ref: ./schemas/admin.yaml#/AdminProviderDetail
+    AdminCustomerSummary:
+      $ref: ./schemas/admin.yaml#/AdminCustomerSummary
+    AdminCustomerList:
+      $ref: ./schemas/admin.yaml#/AdminCustomerList
+    AdminCustomerDetail:
+      $ref: ./schemas/admin.yaml#/AdminCustomerDetail

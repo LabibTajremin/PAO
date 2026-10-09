@@ -1,0 +1,107 @@
+# Generated from the operation table during P01; edit by hand from now on.
+profile:
+  get:
+    operationId: getProviderProfile
+    tags:
+    - Provider
+    summary: The provider's own profile (M28)
+    x-permission: provider:manage:own
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/ProviderProfile
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+  put:
+    operationId: updateProviderProfile
+    tags:
+    - Provider
+    summary: Update bio, photo and language
+    x-permission: provider:manage:own
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/provider.yaml#/ProviderProfileUpdate
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/ProviderProfile
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+catalog:
+  get:
+    operationId: getProviderCatalog
+    tags:
+    - Provider
+    summary: The catalog, for choosing services and extra items
+    x-permission: catalog:read
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/CatalogTree
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+reviews:
+  get:
+    operationId: listMyReviews
+    tags:
+    - Provider
+    summary: Reviews received (M30)
+    x-permission: provider:manage:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/rating.yaml#/ReviewList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+rating:
+  get:
+    operationId: getMyRating
+    tags:
+    - Provider
+    summary: Rating breakdown
+    x-permission: provider:manage:own
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/RatingBreakdown
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden

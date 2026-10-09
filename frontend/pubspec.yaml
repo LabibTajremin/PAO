@@ -12,6 +12,7 @@ workspace:
   - packages/pao_core
   - packages/pao_ui
   - packages/pao_l10n
+  - packages/pao_api
 
 dev_dependencies:
   melos: ^8.9.0

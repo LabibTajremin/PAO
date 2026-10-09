@@ -1,0 +1,205 @@
+# Generated from the operation table during P01; edit by hand from now on.
+providers:
+  get:
+    operationId: listAdminProviders
+    tags:
+    - Admin people
+    summary: Search providers by name or phone (A08)
+    x-permission: provider:read
+    parameters:
+    - name: q
+      in: query
+      description: Name or phone.
+      required: false
+      schema:
+        type: string
+    - name: status
+      in: query
+      description: Account status.
+      required: false
+      schema:
+        type: string
+        enum:
+        - pending
+        - active
+        - suspended
+        - banned
+    - name: level
+      in: query
+      description: Verification level.
+      required: false
+      schema:
+        type: integer
+    - name: flagged
+      in: query
+      description: Only providers flagged for review.
+      required: false
+      schema:
+        type: boolean
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/AdminProviderList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+provider:
+  get:
+    operationId: getAdminProvider
+    tags:
+    - Admin people
+    summary: Provider detail and history
+    x-permission: provider:read
+    parameters:
+    - $ref: ../components/parameters.yaml#/ProviderId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/AdminProviderDetail
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+providerStatus:
+  post:
+    operationId: changeProviderStatus
+    tags:
+    - Admin people
+    summary: Suspend, ban or reinstate a provider (ban blocks NID, phone and face)
+    x-permission: provider:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/ProviderId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/admin.yaml#/AccountStatusChange
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/AdminProviderDetail
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+customers:
+  get:
+    operationId: listAdminCustomers
+    tags:
+    - Admin people
+    summary: Search customers (A09)
+    x-permission: customer:read
+    parameters:
+    - name: q
+      in: query
+      description: Name or phone.
+      required: false
+      schema:
+        type: string
+    - name: status
+      in: query
+      description: Account status.
+      required: false
+      schema:
+        type: string
+        enum:
+        - pending
+        - active
+        - suspended
+        - banned
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/AdminCustomerList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+customer:
+  get:
+    operationId: getAdminCustomer
+    tags:
+    - Admin people
+    summary: Customer detail with bookings and reports
+    x-permission: customer:read
+    parameters:
+    - $ref: ../components/parameters.yaml#/CustomerId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/AdminCustomerDetail
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+customerStatus:
+  post:
+    operationId: changeCustomerStatus
+    tags:
+    - Admin people
+    summary: Suspend, ban or reinstate a customer
+    x-permission: customer:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/CustomerId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/admin.yaml#/AccountStatusChange
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/AdminCustomerDetail
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

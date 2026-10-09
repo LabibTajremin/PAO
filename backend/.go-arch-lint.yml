@@ -5,12 +5,74 @@ version: 3
 workdir: internal
 allow:
   depOnAnyVendor: false
+# Tests may use the test kit and fixtures freely.
+excludeFiles:
+  - "^.*_test\\.go$"
 vendors:
   uuid: { in: github.com/google/uuid }
 components:
   platform: { in: platform/** }
+  testkit: { in: testkit }
+  identity_contract: { in: modules/identity/contract }
+  customer_contract: { in: modules/customer/contract }
+  provider_contract: { in: modules/provider/contract }
+  verification_contract: { in: modules/verification/contract }
+  catalog_contract: { in: modules/catalog/contract }
+  booking_contract: { in: modules/booking/contract }
+  rating_contract: { in: modules/rating/contract }
+  notification_contract: { in: modules/notification/contract }
+  media_contract: { in: modules/media/contract }
+  admin_contract: { in: modules/admin/contract }
+  audit_contract: { in: modules/audit/contract }
 commonComponents: []
 deps:
   platform:
     anyVendorDeps: true
     mayDependOn: [platform]
+  testkit:
+    anyVendorDeps: true
+    anyProjectDeps: true
+  identity_contract:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+  customer_contract:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+  provider_contract:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+  verification_contract:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+  catalog_contract:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+  booking_contract:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+  rating_contract:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+  notification_contract:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+  media_contract:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+  admin_contract:
+    canUse: [uuid]
+    mayDependOn:
+      - platform
+  audit_contract:
+    canUse: [uuid]
+    mayDependOn:
+      - platform

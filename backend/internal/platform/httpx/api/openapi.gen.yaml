@@ -1,0 +1,6537 @@
+openapi: 3.1.0
+info:
+  title: PAO API
+  version: 1.0.0
+  license:
+    name: Proprietary — all rights reserved
+    url: https://getpao.com/legal
+  description: |
+    REST contract shared by the PAO Go backend and the Flutter apps.
+
+    - Versioned under `/v1`, with route groups `/v1/customer`, `/v1/provider` and `/v1/admin` (PRD §9.6).
+    - Every error uses `ErrorResponse`; `code` is a stable `ErrorCode` the apps translate.
+    - `x-permission` on each operation names the permission the caller must hold
+      (`public` = no token, `authenticated` = any signed-in account). `:own` permissions
+      are also checked against the resource owner.
+    - Lists use cursor pagination (`cursor`, `limit` ≤ 100, `nextCursor`).
+    - Money is integer paisa. Times are UTC (RFC 3339); apps display Asia/Dhaka.
+servers:
+  - url: http://localhost:8080
+    description: Local Docker stack
+security:
+  - bearerAuth: []
+tags:
+  - name: Auth
+    description: Sign-in by OTP, token refresh, logout and admin 2FA.
+  - name: Me
+    description: The signed-in account, its permissions and deletion.
+  - name: Customer
+    description: Customer profile, addresses, catalog and provider discovery.
+  - name: Customer bookings
+    description: Booking lifecycle from the customer side.
+  - name: Provider
+    description: Provider profile, catalog and reviews.
+  - name: Provider enrolment
+    description: The enrolment wizard and verification status.
+  - name: Provider jobs
+    description: Presence, requests, job actions and earnings.
+  - name: Admin
+    description: Dashboard.
+  - name: Admin catalog
+    description: Catalog and price management.
+  - name: Admin verification
+    description: Verification queue, document review and Level 2 sessions.
+  - name: Admin people
+    description: Provider and customer management.
+  - name: Admin bookings
+    description: Bookings monitor.
+  - name: Admin complaints
+    description: Complaints queue.
+  - name: Admin settings
+    description: Settings, audit log, admin users and roles.
+paths:
+  /v1/auth/otp/request:
+    post:
+      operationId: requestOtp
+      tags:
+        - Auth
+      summary: Send a 6-digit sign-in code by SMS
+      x-permission: public
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OtpRequest'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OtpRequestAccepted'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/auth/otp/verify:
+    post:
+      operationId: verifyOtp
+      tags:
+        - Auth
+      summary: Verify the code and sign in (creates the account on first use)
+      x-permission: public
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OtpVerifyRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenPair'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/auth/refresh:
+    post:
+      operationId: refreshToken
+      tags:
+        - Auth
+      summary: Rotate the refresh token and issue a new access token
+      x-permission: public
+      security: []
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenPair'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/auth/logout:
+    post:
+      operationId: logout
+      tags:
+        - Auth
+      summary: Sign out this device, or every device
+      x-permission: authenticated
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+      responses:
+        '204':
+          description: No content
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/auth/admin/login:
+    post:
+      operationId: adminLogin
+      tags:
+        - Auth
+      summary: 'Admin step 1: email and password; returns a TOTP challenge'
+      x-permission: public
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminLoginRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminLoginChallenge'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/auth/admin/totp:
+    post:
+      operationId: adminVerifyTotp
+      tags:
+        - Auth
+      summary: 'Admin step 2: TOTP code; sets the refresh cookie'
+      x-permission: public
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminTotpRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenPair'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/me:
+    get:
+      operationId: getMe
+      tags:
+        - Me
+      summary: The signed-in account
+      x-permission: authenticated
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    delete:
+      operationId: deleteMe
+      tags:
+        - Me
+      summary: Delete the account after re-confirming with an OTP (PRD §11)
+      x-permission: authenticated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteAccountRequest'
+      responses:
+        '204':
+          description: No content
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/me/permissions:
+    get:
+      operationId: getMyPermissions
+      tags:
+        - Me
+      summary: Roles, permissions and screen IDs for route guards
+      x-permission: authenticated
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MyPermissions'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/customer/profile:
+    get:
+      operationId: getCustomerProfile
+      tags:
+        - Customer
+      summary: The customer profile
+      x-permission: profile:manage:own
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerProfile'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateCustomerProfile
+      tags:
+        - Customer
+      summary: Create or update the customer profile
+      x-permission: profile:manage:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerProfileUpdate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerProfile'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/addresses:
+    get:
+      operationId: listAddresses
+      tags:
+        - Customer
+      summary: Saved addresses
+      x-permission: address:manage:own
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      operationId: createAddress
+      tags:
+        - Customer
+      summary: Save an address (max 10)
+      x-permission: address:manage:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddressInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/addresses/{addressId}:
+    put:
+      operationId: updateAddress
+      tags:
+        - Customer
+      summary: Edit a saved address
+      x-permission: address:manage:own
+      parameters:
+        - $ref: '#/components/parameters/AddressId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddressInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+    delete:
+      operationId: deleteAddress
+      tags:
+        - Customer
+      summary: Delete a saved address
+      x-permission: address:manage:own
+      parameters:
+        - $ref: '#/components/parameters/AddressId'
+      responses:
+        '204':
+          description: No content
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/addresses/{addressId}/default:
+    post:
+      operationId: setDefaultAddress
+      tags:
+        - Customer
+      summary: Make an address the default
+      x-permission: address:manage:own
+      parameters:
+        - $ref: '#/components/parameters/AddressId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/service-area:
+    get:
+      operationId: checkServiceArea
+      tags:
+        - Customer
+      summary: Is this point inside an active launch area? (C35)
+      x-permission: catalog:read
+      parameters:
+        - $ref: '#/components/parameters/Lat'
+        - $ref: '#/components/parameters/Lng'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceAreaCheck'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/catalog:
+    get:
+      operationId: getCatalog
+      tags:
+        - Customer
+      summary: Published categories, services and sub-services with prices
+      x-permission: catalog:read
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogTree'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/customer/catalog/search:
+    get:
+      operationId: searchCatalog
+      tags:
+        - Customer
+      summary: Search services and sub-services in Bangla or English
+      x-permission: catalog:read
+      parameters:
+        - $ref: '#/components/parameters/SearchQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogSearchResults'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/services/{serviceId}:
+    get:
+      operationId: getService
+      tags:
+        - Customer
+      summary: Service detail with sub-services and fixed prices
+      x-permission: catalog:read
+      parameters:
+        - $ref: '#/components/parameters/ServiceId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/providers/nearby:
+    get:
+      operationId: findNearbyProviders
+      tags:
+        - Customer
+      summary: Verified, online providers near an address for a sub-service (C10)
+      x-permission: provider:browse
+      parameters:
+        - $ref: '#/components/parameters/ServiceIdQuery'
+        - $ref: '#/components/parameters/SubServiceIdQuery'
+        - name: quantity
+          in: query
+          description: Quantity of the sub-service.
+          required: true
+          schema:
+            type: integer
+        - name: addressId
+          in: query
+          description: Saved address to search around.
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/LatOptional'
+        - $ref: '#/components/parameters/LngOptional'
+        - name: sort
+          in: query
+          description: Sort order.
+          required: false
+          schema:
+            type: string
+            enum:
+              - distance
+              - rating
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NearbyProviders'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/providers/{providerId}:
+    get:
+      operationId: getProviderPublicProfile
+      tags:
+        - Customer
+      summary: Public provider profile (C11)
+      x-permission: provider:browse
+      parameters:
+        - $ref: '#/components/parameters/ProviderId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderPublicProfile'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/providers/{providerId}/reviews:
+    get:
+      operationId: listProviderReviews
+      tags:
+        - Customer
+      summary: Reviews of a provider (C42)
+      x-permission: provider:browse
+      parameters:
+        - $ref: '#/components/parameters/ProviderId'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/bookings:
+    post:
+      operationId: createBooking
+      tags:
+        - Customer bookings
+      summary: Request a booking with one provider (idempotent)
+      x-permission: booking:create
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+    get:
+      operationId: listCustomerBookings
+      tags:
+        - Customer bookings
+      summary: Upcoming or past bookings (C18)
+      x-permission: booking:read:own
+      parameters:
+        - $ref: '#/components/parameters/BookingTab'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/bookings/{bookingId}:
+    get:
+      operationId: getCustomerBooking
+      tags:
+        - Customer bookings
+      summary: Booking detail with timeline (C19)
+      x-permission: booking:read:own
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/bookings/{bookingId}/start-code:
+    get:
+      operationId: getStartCode
+      tags:
+        - Customer bookings
+      summary: The 4-digit start code, shown only to the customer
+      x-permission: booking:read:own
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartCode'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/bookings/{bookingId}/cancel:
+    post:
+      operationId: cancelCustomerBooking
+      tags:
+        - Customer bookings
+      summary: Cancel until the start code is entered (C-10)
+      x-permission: booking:cancel:own
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerCancelInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/bookings/{bookingId}/extras/decision:
+    post:
+      operationId: decideExtras
+      tags:
+        - Customer bookings
+      summary: Approve or decline proposed extra items (C15)
+      x-permission: booking:update:own
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtrasDecisionInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/bookings/{bookingId}/receipt:
+    get:
+      operationId: getCustomerReceipt
+      tags:
+        - Customer bookings
+      summary: Receipt of a completed booking (C64)
+      x-permission: booking:read:own
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Receipt'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/bookings/{bookingId}/review:
+    post:
+      operationId: reviewProvider
+      tags:
+        - Customer bookings
+      summary: Rate the provider after completion (C-11)
+      x-permission: review:create
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/bookings/{bookingId}/reports:
+    post:
+      operationId: reportCustomerProblem
+      tags:
+        - Customer bookings
+      summary: Report a problem on a booking (C-14)
+      x-permission: complaint:create
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComplaintInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complaint'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/notifications:
+    get:
+      operationId: listCustomerNotifications
+      tags:
+        - Customer
+      summary: In-app notifications, newest first
+      x-permission: notification:read:own
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/notifications/{notificationId}/read:
+    post:
+      operationId: markCustomerNotificationRead
+      tags:
+        - Customer
+      summary: Mark one notification read
+      x-permission: notification:read:own
+      parameters:
+        - $ref: '#/components/parameters/NotificationId'
+      responses:
+        '204':
+          description: No content
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/notifications/read-all:
+    post:
+      operationId: markAllCustomerNotificationsRead
+      tags:
+        - Customer
+      summary: Mark every notification read
+      x-permission: notification:read:own
+      responses:
+        '204':
+          description: No content
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/customer/device-token:
+    put:
+      operationId: registerCustomerDeviceToken
+      tags:
+        - Customer
+      summary: Register this device for push notifications
+      x-permission: device:register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceTokenInput'
+      responses:
+        '204':
+          description: No content
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/uploads:
+    post:
+      operationId: createCustomerUpload
+      tags:
+        - Customer
+      summary: Get a signed URL to upload a file directly to storage
+      x-permission: media:upload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadTicket'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/uploads/{mediaId}/confirm:
+    post:
+      operationId: confirmCustomerUpload
+      tags:
+        - Customer
+      summary: Confirm the file arrived and matches the request
+      x-permission: media:upload
+      parameters:
+        - $ref: '#/components/parameters/MediaId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaObject'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/notifications:
+    get:
+      operationId: listProviderNotifications
+      tags:
+        - Provider
+      summary: In-app notifications, newest first
+      x-permission: notification:read:own
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/notifications/{notificationId}/read:
+    post:
+      operationId: markProviderNotificationRead
+      tags:
+        - Provider
+      summary: Mark one notification read
+      x-permission: notification:read:own
+      parameters:
+        - $ref: '#/components/parameters/NotificationId'
+      responses:
+        '204':
+          description: No content
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/notifications/read-all:
+    post:
+      operationId: markAllProviderNotificationsRead
+      tags:
+        - Provider
+      summary: Mark every notification read
+      x-permission: notification:read:own
+      responses:
+        '204':
+          description: No content
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/provider/device-token:
+    put:
+      operationId: registerProviderDeviceToken
+      tags:
+        - Provider
+      summary: Register this device for push notifications
+      x-permission: device:register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceTokenInput'
+      responses:
+        '204':
+          description: No content
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/uploads:
+    post:
+      operationId: createProviderUpload
+      tags:
+        - Provider
+      summary: Get a signed URL to upload a file directly to storage
+      x-permission: media:upload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadTicket'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/uploads/{mediaId}/confirm:
+    post:
+      operationId: confirmProviderUpload
+      tags:
+        - Provider
+      summary: Confirm the file arrived and matches the request
+      x-permission: media:upload
+      parameters:
+        - $ref: '#/components/parameters/MediaId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaObject'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/profile:
+    get:
+      operationId: getProviderProfile
+      tags:
+        - Provider
+      summary: The provider's own profile (M28)
+      x-permission: provider:manage:own
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderProfile'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateProviderProfile
+      tags:
+        - Provider
+      summary: Update bio, photo and language
+      x-permission: provider:manage:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderProfileUpdate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderProfile'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/catalog:
+    get:
+      operationId: getProviderCatalog
+      tags:
+        - Provider
+      summary: The catalog, for choosing services and extra items
+      x-permission: catalog:read
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogTree'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/provider/reviews:
+    get:
+      operationId: listMyReviews
+      tags:
+        - Provider
+      summary: Reviews received (M30)
+      x-permission: provider:manage:own
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/rating:
+    get:
+      operationId: getMyRating
+      tags:
+        - Provider
+      summary: Rating breakdown
+      x-permission: provider:manage:own
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatingBreakdown'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/provider/enrolment:
+    get:
+      operationId: getEnrolment
+      tags:
+        - Provider enrolment
+      summary: Completion per wizard step (resumable)
+      x-permission: provider:manage:own
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrolmentStatus'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/provider/enrolment/personal:
+    put:
+      operationId: savePersonalStep
+      tags:
+        - Provider enrolment
+      summary: 'M05: name as on NID, date of birth, gender, addresses'
+      x-permission: provider:manage:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonalInfoInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrolmentStatus'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/enrolment/services:
+    put:
+      operationId: saveServicesStep
+      tags:
+        - Provider enrolment
+      summary: 'M06: services offered and experience'
+      x-permission: provider:manage:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServicesInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrolmentStatus'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/enrolment/area:
+    put:
+      operationId: saveAreaStep
+      tags:
+        - Provider enrolment
+      summary: 'M07: home base and working radius'
+      x-permission: provider:manage:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceAreaInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrolmentStatus'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/enrolment/nid:
+    put:
+      operationId: saveNidStep
+      tags:
+        - Provider enrolment
+      summary: 'M08: NID number and photos'
+      x-permission: provider:manage:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NidInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrolmentStatus'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/enrolment/selfie:
+    put:
+      operationId: saveSelfieStep
+      tags:
+        - Provider enrolment
+      summary: 'M09: live selfie'
+      x-permission: provider:manage:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelfieInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrolmentStatus'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/enrolment/police-clearance:
+    put:
+      operationId: savePoliceClearanceStep
+      tags:
+        - Provider enrolment
+      summary: 'M10: police clearance certificate'
+      x-permission: provider:manage:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PoliceClearanceInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrolmentStatus'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/enrolment/skill-proof:
+    put:
+      operationId: saveSkillProofStep
+      tags:
+        - Provider enrolment
+      summary: 'M11: optional skill proof'
+      x-permission: provider:manage:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillProofInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrolmentStatus'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/enrolment/emergency-contact:
+    put:
+      operationId: saveEmergencyContactStep
+      tags:
+        - Provider enrolment
+      summary: 'M12: emergency contact; sends an OTP to their phone'
+      x-permission: provider:manage:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmergencyContactInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrolmentStatus'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/enrolment/code-of-conduct:
+    put:
+      operationId: saveCodeOfConductStep
+      tags:
+        - Provider enrolment
+      summary: 'M13: accept the code of conduct'
+      x-permission: provider:manage:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CodeOfConductInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrolmentStatus'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/enrolment/emergency-contact/verify:
+    post:
+      operationId: verifyEmergencyContact
+      tags:
+        - Provider enrolment
+      summary: Verify the emergency contact's phone with the OTP they received
+      x-permission: provider:manage:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmergencyContactVerifyInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrolmentStatus'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/provider/enrolment/submit:
+    post:
+      operationId: submitEnrolment
+      tags:
+        - Provider enrolment
+      summary: Submit every completed step for verification
+      x-permission: verification:submit
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationStatus'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /v1/provider/verification:
+    get:
+      operationId: getVerificationStatus
+      tags:
+        - Provider enrolment
+      summary: Per-item status, rejection reasons and level (M14)
+      x-permission: provider:manage:own
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationStatus'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/provider/presence/online:
+    post:
+      operationId: goOnline
+      tags:
+        - Provider jobs
+      summary: Go online (only when the provider can receive bookings)
+      x-permission: provider:manage:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HeartbeatInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PresenceState'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/presence/offline:
+    post:
+      operationId: goOffline
+      tags:
+        - Provider jobs
+      summary: Go offline; location stops being stored
+      x-permission: provider:manage:own
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PresenceState'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/provider/presence/heartbeat:
+    post:
+      operationId: sendHeartbeat
+      tags:
+        - Provider jobs
+      summary: Location heartbeat every 30 s while online
+      x-permission: provider:manage:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HeartbeatInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PresenceState'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/jobs:
+    get:
+      operationId: listProviderJobs
+      tags:
+        - Provider jobs
+      summary: Requests, upcoming and past jobs (M23)
+      x-permission: job:read:own
+      parameters:
+        - $ref: '#/components/parameters/JobTab'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/jobs/{bookingId}:
+    get:
+      operationId: getProviderJob
+      tags:
+        - Provider jobs
+      summary: Job or request detail; exact address only after acceptance
+      x-permission: job:read:own
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/jobs/{bookingId}/accept:
+    post:
+      operationId: acceptRequest
+      tags:
+        - Provider jobs
+      summary: Accept a request (one active ASAP job at a time)
+      x-permission: job:respond
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/jobs/{bookingId}/reject:
+    post:
+      operationId: rejectRequest
+      tags:
+        - Provider jobs
+      summary: Reject a request with a reason
+      x-permission: job:respond
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RejectInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/jobs/{bookingId}/on-the-way:
+    post:
+      operationId: markOnTheWay
+      tags:
+        - Provider jobs
+      summary: Mark "On the way"
+      x-permission: job:progress
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/jobs/{bookingId}/arrived:
+    post:
+      operationId: markArrived
+      tags:
+        - Provider jobs
+      summary: Mark "Arrived"
+      x-permission: job:progress
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/jobs/{bookingId}/start:
+    post:
+      operationId: startJob
+      tags:
+        - Provider jobs
+      summary: Start the job with the customer's 4-digit code
+      x-permission: job:progress
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartCode'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/provider/jobs/{bookingId}/extras:
+    post:
+      operationId: proposeExtras
+      tags:
+        - Provider jobs
+      summary: Propose extra catalog items for customer approval
+      x-permission: job:progress
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtrasInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/jobs/{bookingId}/complete:
+    post:
+      operationId: completeJob
+      tags:
+        - Provider jobs
+      summary: Complete the job and confirm cash received
+      x-permission: job:progress
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/jobs/{bookingId}/cancel:
+    post:
+      operationId: cancelProviderJob
+      tags:
+        - Provider jobs
+      summary: Cancel after acceptance with a reason (counts for quality)
+      x-permission: job:respond
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderCancelInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/jobs/{bookingId}/review:
+    post:
+      operationId: reviewCustomer
+      tags:
+        - Provider jobs
+      summary: Rate the customer after completion (P-09)
+      x-permission: review:create
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/jobs/{bookingId}/reports:
+    post:
+      operationId: reportProviderProblem
+      tags:
+        - Provider jobs
+      summary: Report a problem on a job
+      x-permission: complaint:create
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComplaintInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complaint'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/jobs/{bookingId}/receipt:
+    get:
+      operationId: getProviderReceipt
+      tags:
+        - Provider jobs
+      summary: Receipt of a completed job
+      x-permission: job:read:own
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Receipt'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/earnings/summary:
+    get:
+      operationId: getEarningsSummary
+      tags:
+        - Provider jobs
+      summary: Earnings by day, week or month in Asia/Dhaka (M26)
+      x-permission: earnings:read:own
+      parameters:
+        - $ref: '#/components/parameters/PeriodParam'
+        - name: date
+          in: query
+          description: Any date inside the period (Asia/Dhaka); defaults to today.
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EarningsSummary'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/earnings/jobs:
+    get:
+      operationId: listEarningsJobs
+      tags:
+        - Provider jobs
+      summary: Completed jobs with amounts (M27)
+      x-permission: earnings:read:own
+      parameters:
+        - name: from
+          in: query
+          description: First day (Asia/Dhaka).
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: to
+          in: query
+          description: Last day (Asia/Dhaka).
+          required: false
+          schema:
+            type: string
+            format: date
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EarningsJobList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/dashboard:
+    get:
+      operationId: getDashboard
+      tags:
+        - Admin
+      summary: Key counts and bookings per day (A-09)
+      x-permission: dashboard:read
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dashboard'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/admin/catalog:
+    get:
+      operationId: getAdminCatalog
+      tags:
+        - Admin catalog
+      summary: Full catalog including unpublished items (A03)
+      x-permission: catalog:manage
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogTree'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/admin/catalog/categories:
+    post:
+      operationId: createCategory
+      tags:
+        - Admin catalog
+      summary: Create a category
+      x-permission: catalog:manage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/catalog/categories/{categoryId}:
+    put:
+      operationId: updateCategory
+      tags:
+        - Admin catalog
+      summary: Update a category (publish/unpublish with `published`)
+      x-permission: catalog:manage
+      parameters:
+        - $ref: '#/components/parameters/CategoryId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/catalog/services:
+    post:
+      operationId: createService
+      tags:
+        - Admin catalog
+      summary: Create a service
+      x-permission: catalog:manage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/catalog/services/{serviceId}:
+    put:
+      operationId: updateService
+      tags:
+        - Admin catalog
+      summary: Update a service (publish/unpublish with `published`)
+      x-permission: catalog:manage
+      parameters:
+        - $ref: '#/components/parameters/ServiceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/catalog/sub-services:
+    post:
+      operationId: createSubService
+      tags:
+        - Admin catalog
+      summary: Create a subservice
+      x-permission: catalog:manage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubServiceInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubService'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/catalog/sub-services/{subServiceId}:
+    put:
+      operationId: updateSubService
+      tags:
+        - Admin catalog
+      summary: Update a subservice (publish/unpublish with `published`)
+      x-permission: catalog:manage
+      parameters:
+        - $ref: '#/components/parameters/SubServiceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubServiceInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubService'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/catalog/sub-services/{subServiceId}/prices:
+    get:
+      operationId: listPriceHistory
+      tags:
+        - Admin catalog
+      summary: Price versions of a sub-service
+      x-permission: catalog:manage
+      parameters:
+        - $ref: '#/components/parameters/SubServiceId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceHistory'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+    post:
+      operationId: changePrice
+      tags:
+        - Admin catalog
+      summary: Set a new price (inserts an immutable version)
+      x-permission: catalog:manage
+      parameters:
+        - $ref: '#/components/parameters/SubServiceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceVersion'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/verifications:
+    get:
+      operationId: listVerificationQueue
+      tags:
+        - Admin verification
+      summary: Providers waiting for review, oldest first (A05)
+      x-permission: verification:review
+      parameters:
+        - name: serviceId
+          in: query
+          description: Only providers offering this service.
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - name: itemType
+          in: query
+          description: Only providers with this item pending.
+          required: false
+          schema:
+            type: string
+            enum:
+              - nid
+              - selfie
+              - police_clearance
+              - address
+              - emergency_contact
+              - skill_proof
+              - service_area
+              - code_of_conduct
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationQueue'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/verifications/{providerId}:
+    get:
+      operationId: getVerificationReview
+      tags:
+        - Admin verification
+      summary: Everything needed to review one provider (A06)
+      x-permission: verification:review
+      parameters:
+        - $ref: '#/components/parameters/ProviderId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationReview'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/verifications/{providerId}/items/{itemType}/approve:
+    post:
+      operationId: approveVerificationItem
+      tags:
+        - Admin verification
+      summary: Approve one item; Level 1 follows when all required items are approved
+      x-permission: verification:review
+      parameters:
+        - $ref: '#/components/parameters/ProviderId'
+        - $ref: '#/components/parameters/ItemTypePath'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationReview'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/verifications/{providerId}/items/{itemType}/reject:
+    post:
+      operationId: rejectVerificationItem
+      tags:
+        - Admin verification
+      summary: Reject one item with a reason the provider sees
+      x-permission: verification:review
+      parameters:
+        - $ref: '#/components/parameters/ProviderId'
+        - $ref: '#/components/parameters/ItemTypePath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusReason'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationReview'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/documents/{mediaId}/view-url:
+    get:
+      operationId: getDocumentViewUrl
+      tags:
+        - Admin verification
+      summary: 5-minute signed URL for a verification document; every view is audited
+      x-permission: verification:docs:view
+      parameters:
+        - $ref: '#/components/parameters/MediaId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ViewUrl'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/level2-sessions:
+    get:
+      operationId: listLevel2Sessions
+      tags:
+        - Admin verification
+      summary: Level 2 sessions (A07)
+      x-permission: level2:manage
+      parameters:
+        - name: providerId
+          in: query
+          description: Only this provider.
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: query
+          description: Session status.
+          required: false
+          schema:
+            type: string
+            enum:
+              - scheduled
+              - completed
+              - cancelled
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Level2SessionList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+    post:
+      operationId: scheduleLevel2Session
+      tags:
+        - Admin verification
+      summary: Schedule a Level 2 interview or skill test
+      x-permission: level2:manage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Level2SessionInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Level2Session'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/level2-sessions/{sessionId}:
+    get:
+      operationId: getLevel2Session
+      tags:
+        - Admin verification
+      summary: One Level 2 session
+      x-permission: level2:manage
+      parameters:
+        - $ref: '#/components/parameters/SessionId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Level2Session'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/level2-sessions/{sessionId}/result:
+    post:
+      operationId: recordLevel2Result
+      tags:
+        - Admin verification
+      summary: Record pass, fail or retest with the checklist
+      x-permission: level2:manage
+      parameters:
+        - $ref: '#/components/parameters/SessionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Level2ResultInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Level2Session'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/providers:
+    get:
+      operationId: listAdminProviders
+      tags:
+        - Admin people
+      summary: Search providers by name or phone (A08)
+      x-permission: provider:read
+      parameters:
+        - name: q
+          in: query
+          description: Name or phone.
+          required: false
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Account status.
+          required: false
+          schema:
+            type: string
+            enum:
+              - pending
+              - active
+              - suspended
+              - banned
+        - name: level
+          in: query
+          description: Verification level.
+          required: false
+          schema:
+            type: integer
+        - name: flagged
+          in: query
+          description: Only providers flagged for review.
+          required: false
+          schema:
+            type: boolean
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminProviderList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/providers/{providerId}:
+    get:
+      operationId: getAdminProvider
+      tags:
+        - Admin people
+      summary: Provider detail and history
+      x-permission: provider:read
+      parameters:
+        - $ref: '#/components/parameters/ProviderId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminProviderDetail'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/providers/{providerId}/status:
+    post:
+      operationId: changeProviderStatus
+      tags:
+        - Admin people
+      summary: Suspend, ban or reinstate a provider (ban blocks NID, phone and face)
+      x-permission: provider:manage
+      parameters:
+        - $ref: '#/components/parameters/ProviderId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountStatusChange'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminProviderDetail'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/customers:
+    get:
+      operationId: listAdminCustomers
+      tags:
+        - Admin people
+      summary: Search customers (A09)
+      x-permission: customer:read
+      parameters:
+        - name: q
+          in: query
+          description: Name or phone.
+          required: false
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Account status.
+          required: false
+          schema:
+            type: string
+            enum:
+              - pending
+              - active
+              - suspended
+              - banned
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminCustomerList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/customers/{customerId}:
+    get:
+      operationId: getAdminCustomer
+      tags:
+        - Admin people
+      summary: Customer detail with bookings and reports
+      x-permission: customer:read
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminCustomerDetail'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/customers/{customerId}/status:
+    post:
+      operationId: changeCustomerStatus
+      tags:
+        - Admin people
+      summary: Suspend, ban or reinstate a customer
+      x-permission: customer:manage
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountStatusChange'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminCustomerDetail'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/bookings:
+    get:
+      operationId: listAdminBookings
+      tags:
+        - Admin bookings
+      summary: Bookings monitor with filters (A-06)
+      x-permission: booking:read:any
+      parameters:
+        - name: status
+          in: query
+          description: Booking status.
+          required: false
+          schema:
+            type: string
+            enum:
+              - requested
+              - accepted
+              - on_the_way
+              - arrived
+              - in_progress
+              - completed
+              - rejected
+              - timed_out
+              - cancelled
+        - name: serviceId
+          in: query
+          description: Service.
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - name: from
+          in: query
+          description: Created on or after (Asia/Dhaka).
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: to
+          in: query
+          description: Created on or before (Asia/Dhaka).
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: area
+          in: query
+          description: Area name.
+          required: false
+          schema:
+            type: string
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/bookings/{bookingId}:
+    get:
+      operationId: getAdminBooking
+      tags:
+        - Admin bookings
+      summary: Booking with both parties and the full timeline
+      x-permission: booking:read:any
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/complaints:
+    get:
+      operationId: listComplaints
+      tags:
+        - Admin complaints
+      summary: Complaints queue (A-07)
+      x-permission: complaint:manage
+      parameters:
+        - name: status
+          in: query
+          description: Complaint status.
+          required: false
+          schema:
+            type: string
+            enum:
+              - open
+              - assigned
+              - resolved
+        - name: assigneeId
+          in: query
+          description: Assigned admin.
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplaintList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/complaints/{complaintId}:
+    get:
+      operationId: getComplaint
+      tags:
+        - Admin complaints
+      summary: One complaint with comments
+      x-permission: complaint:manage
+      parameters:
+        - $ref: '#/components/parameters/ComplaintId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complaint'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/complaints/{complaintId}/assign:
+    post:
+      operationId: assignComplaint
+      tags:
+        - Admin complaints
+      summary: Assign to an admin
+      x-permission: complaint:manage
+      parameters:
+        - $ref: '#/components/parameters/ComplaintId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComplaintAssignInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complaint'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/complaints/{complaintId}/comments:
+    post:
+      operationId: commentOnComplaint
+      tags:
+        - Admin complaints
+      summary: Add an internal comment
+      x-permission: complaint:manage
+      parameters:
+        - $ref: '#/components/parameters/ComplaintId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComplaintCommentInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complaint'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/complaints/{complaintId}/resolve:
+    post:
+      operationId: resolveComplaint
+      tags:
+        - Admin complaints
+      summary: Resolve with a note; verified complaints feed quality review
+      x-permission: complaint:manage
+      parameters:
+        - $ref: '#/components/parameters/ComplaintId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComplaintResolveInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complaint'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/settings:
+    get:
+      operationId: listSettings
+      tags:
+        - Admin settings
+      summary: Platform settings (A-10)
+      x-permission: settings:read
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/admin/settings/{key}:
+    put:
+      operationId: updateSetting
+      tags:
+        - Admin settings
+      summary: Change one setting (audited)
+      x-permission: settings:manage
+      parameters:
+        - $ref: '#/components/parameters/SettingKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SettingUpdate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Setting'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/audit:
+    get:
+      operationId: listAuditEntries
+      tags:
+        - Admin settings
+      summary: Audit log with filters (A-08)
+      x-permission: audit:read
+      parameters:
+        - name: actorId
+          in: query
+          description: Who acted.
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - name: action
+          in: query
+          description: Action name, e.g. verification.item_approved.
+          required: false
+          schema:
+            type: string
+        - name: subjectId
+          in: query
+          description: Subject ID.
+          required: false
+          schema:
+            type: string
+        - name: from
+          in: query
+          description: On or after.
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          description: On or before.
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/admin-users:
+    get:
+      operationId: listAdminUsers
+      tags:
+        - Admin settings
+      summary: Admin users (A-01)
+      x-permission: admin_user:manage
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUserList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      operationId: inviteAdminUser
+      tags:
+        - Admin settings
+      summary: Invite an admin with a temporary password and forced TOTP enrolment
+      x-permission: admin_user:manage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUserInvite'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUserInvited'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/admin-users/{adminUserId}:
+    patch:
+      operationId: updateAdminUser
+      tags:
+        - Admin settings
+      summary: Change roles or deactivate (revokes sessions)
+      x-permission: admin_user:manage
+      parameters:
+        - $ref: '#/components/parameters/AdminUserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUserUpdate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUser'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/roles:
+    get:
+      operationId: listRoles
+      tags:
+        - Admin settings
+      summary: Roles with their permissions and screens
+      x-permission: role:manage
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/admin/roles/{role}:
+    put:
+      operationId: updateRole
+      tags:
+        - Admin settings
+      summary: Replace a role's permissions and screens (bumps rbac:version)
+      x-permission: role:manage
+      parameters:
+        - $ref: '#/components/parameters/RolePath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleUpdate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleDefinition'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: EdDSA access token (15 minutes).
+    refreshCookie:
+      type: apiKey
+      in: cookie
+      name: pao_refresh
+      description: Admin web refresh token (HttpOnly, Secure, SameSite=Strict).
+  parameters:
+    Cursor:
+      name: cursor
+      in: query
+      description: Cursor from the previous page's `nextCursor`.
+      schema:
+        type: string
+        maxLength: 200
+    Limit:
+      name: limit
+      in: query
+      description: Page size (default 20, max 100).
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: Client-generated key; repeating a request with the same key returns the first result for 24 h (PRD §9.6).
+      schema:
+        type: string
+        minLength: 8
+        maxLength: 100
+        example: 6f1c2a9e-booking-1
+    AddressId:
+      name: addressId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ServiceId:
+      name: serviceId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    CategoryId:
+      name: categoryId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    SubServiceId:
+      name: subServiceId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProviderId:
+      name: providerId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    BookingId:
+      name: bookingId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    NotificationId:
+      name: notificationId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    MediaId:
+      name: mediaId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    SessionId:
+      name: sessionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ComplaintId:
+      name: complaintId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    AdminUserId:
+      name: adminUserId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    SettingKey:
+      name: key
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^[a-z0-9_.]{3,80}$
+    RolePath:
+      name: role
+      in: path
+      required: true
+      schema:
+        type: string
+        enum:
+          - customer
+          - provider
+          - verifier
+          - catalog_manager
+          - support_agent
+          - super_admin
+    ItemTypePath:
+      name: itemType
+      in: path
+      required: true
+      schema:
+        type: string
+        enum:
+          - nid
+          - selfie
+          - police_clearance
+          - address
+          - emergency_contact
+          - skill_proof
+          - service_area
+          - code_of_conduct
+    ServiceIdQuery:
+      name: serviceId
+      in: query
+      required: true
+      schema:
+        type: string
+        format: uuid
+    SubServiceIdQuery:
+      name: subServiceId
+      in: query
+      required: true
+      schema:
+        type: string
+        format: uuid
+    SearchQuery:
+      name: q
+      in: query
+      required: true
+      description: Bangla or English text.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 80
+    Lat:
+      name: lat
+      in: query
+      required: true
+      schema:
+        type: number
+        format: double
+        minimum: -90
+        maximum: 90
+    Lng:
+      name: lng
+      in: query
+      required: true
+      schema:
+        type: number
+        format: double
+        minimum: -180
+        maximum: 180
+    LatOptional:
+      name: lat
+      in: query
+      description: Use with lng instead of addressId.
+      schema:
+        type: number
+        format: double
+        minimum: -90
+        maximum: 90
+    LngOptional:
+      name: lng
+      in: query
+      description: Use with lat instead of addressId.
+      schema:
+        type: number
+        format: double
+        minimum: -180
+        maximum: 180
+    BookingTab:
+      name: tab
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+          - upcoming
+          - past
+    JobTab:
+      name: tab
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+          - requests
+          - upcoming
+          - past
+    PeriodParam:
+      name: period
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+          - day
+          - week
+          - month
+  responses:
+    Unauthenticated:
+      description: Missing, invalid or expired access token (UNAUTHENTICATED, TOKEN_EXPIRED) or a failed credential check.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: UNAUTHENTICATED
+              message: Sign in again.
+    Forbidden:
+      description: The caller lacks the operation's x-permission, does not own the resource, or the account is banned or suspended.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: FORBIDDEN
+              message: Permission booking:cancel:own required.
+    NotFound:
+      description: The resource does not exist or is not visible to the caller.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: NOT_FOUND
+              message: Booking not found.
+    Conflict:
+      description: The request conflicts with the current state (e.g. BOOKING_INVALID_TRANSITION).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: BOOKING_INVALID_TRANSITION
+              message: The booking is no longer requested.
+    ValidationFailed:
+      description: The request does not match the schema or a business validation rule.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: VALIDATION_FAILED
+              message: Invalid request.
+              details:
+                field: phone
+    TooManyRequests:
+      description: Rate limit or attempt limit reached; retry after the given number of seconds.
+      headers:
+        Retry-After:
+          description: Seconds to wait before retrying.
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: RATE_LIMITED
+              message: Too many requests.
+  schemas:
+    ErrorResponse:
+      type: object
+      description: The single error format used by every endpoint (PRD §9.6).
+      required:
+        - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      example:
+        error:
+          code: NOT_FOUND
+          message: Booking not found.
+    ErrorBody:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+        message:
+          type: string
+          description: English description for logs; apps translate `code` instead.
+        details:
+          type: object
+          description: Machine-readable context, e.g. the invalid fields.
+          additionalProperties: true
+    ErrorCode:
+      type: string
+      description: Stable error codes the apps translate (04-decisions.md E11).
+      enum:
+        - VALIDATION_FAILED
+        - UNAUTHENTICATED
+        - TOKEN_EXPIRED
+        - FORBIDDEN
+        - NOT_FOUND
+        - CONFLICT
+        - RATE_LIMITED
+        - INTERNAL
+        - NOT_IMPLEMENTED
+        - OTP_INVALID
+        - OTP_EXPIRED
+        - OTP_LOCKED
+        - ACCOUNT_BANNED
+        - ACCOUNT_SUSPENDED
+        - INVALID_CREDENTIALS
+        - ACCOUNT_LOCKED
+        - TOTP_INVALID
+        - MFA_CHALLENGE_EXPIRED
+        - REFRESH_TOKEN_INVALID
+        - IDEMPOTENCY_KEY_REQUIRED
+        - IDEMPOTENCY_KEY_REUSED
+        - ADDRESS_LIMIT_REACHED
+        - OUTSIDE_SERVICE_AREA
+        - SERVICE_UNAVAILABLE
+        - PROVIDER_UNAVAILABLE
+        - DUPLICATE_BOOKING_REQUEST
+        - BOOKING_INVALID_TRANSITION
+        - BOOKING_ALREADY_RESPONDED
+        - ACTIVE_JOB_EXISTS
+        - START_CODE_INVALID
+        - START_CODE_LOCKED
+        - CANCELLATION_NOT_ALLOWED
+        - EXTRA_ITEM_INVALID
+        - EXTRAS_PENDING
+        - CASH_CONFIRMATION_REQUIRED
+        - REVIEW_NOT_ALLOWED
+        - REVIEW_ALREADY_SUBMITTED
+        - UPLOAD_INVALID
+        - UPLOAD_NOT_FOUND
+        - ENROLMENT_INCOMPLETE
+        - NOT_VERIFIED
+        - AGE_REQUIREMENT
+        - LEVEL2_COOLING_OFF
+        - COMPLAINT_INVALID_TRANSITION
+        - SETTING_INVALID
+        - ROLE_INVALID
+    Money:
+      type: integer
+      format: int64
+      description: Amount in paisa (1 BDT = 100 paisa). Never a float (04-decisions.md E9).
+      example: 113000
+    PageCursor:
+      type: string
+      description: Opaque cursor for the next page (base64 of created_at and id).
+      example: eyJ0IjoiMjAyNi0xMC0wOVQxMDowMDowMFoifQ
+    Point:
+      type: object
+      description: WGS84 position.
+      required:
+        - lat
+        - lng
+      properties:
+        lat:
+          type: number
+          format: double
+          minimum: -90
+          maximum: 90
+          example: 23.7808
+        lng:
+          type: number
+          format: double
+          minimum: -180
+          maximum: 180
+          example: 90.4152
+    LocalizedText:
+      type: object
+      description: A text in both product languages.
+      required:
+        - en
+        - bn
+      properties:
+        en:
+          type: string
+          minLength: 1
+          maxLength: 200
+          example: Electrician
+        bn:
+          type: string
+          minLength: 1
+          maxLength: 200
+          example: ইলেকট্রিশিয়ান
+    Language:
+      type: string
+      enum:
+        - en
+        - bn
+      example: bn
+    Phone:
+      type: string
+      description: Bangladeshi mobile number; the API normalises to +8801XXXXXXXXX.
+      pattern: ^(\+?880|0)?1[3-9][0-9]{8}$
+      example: '+8801712345678'
+    Level:
+      type: integer
+      description: Verification level (PRD §6.1) — 0 Registered, 1 Verified, 2 PAO Verified Pro.
+      minimum: 0
+      maximum: 2
+      example: 1
+    Gender:
+      type: string
+      enum:
+        - female
+        - male
+        - other
+      example: female
+    Platform:
+      type: string
+      enum:
+        - android
+        - ios
+        - web
+      example: android
+    DeviceTokenInput:
+      type: object
+      required:
+        - token
+        - platform
+      properties:
+        token:
+          type: string
+          minLength: 10
+          maxLength: 4096
+          example: fcm-token-abc123...
+        platform:
+          $ref: '#/components/schemas/Platform'
+    StatusReason:
+      type: object
+      description: A free-text reason recorded with a decision.
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          minLength: 3
+          maxLength: 500
+          example: Document is blurred.
+    OtpPurpose:
+      type: string
+      description: Why the code is sent. `delete_account` re-confirms account deletion.
+      enum:
+        - login
+        - delete_account
+      example: login
+    OtpRequest:
+      type: object
+      required:
+        - phone
+      properties:
+        phone:
+          $ref: '#/components/schemas/Phone'
+        purpose:
+          $ref: '#/components/schemas/OtpPurpose'
+      example:
+        phone: '+8801712345678'
+        purpose: login
+    OtpRequestAccepted:
+      type: object
+      required:
+        - expiresInSeconds
+        - resendAfterSeconds
+      properties:
+        expiresInSeconds:
+          type: integer
+          example: 300
+        resendAfterSeconds:
+          type: integer
+          example: 60
+    AppKind:
+      type: string
+      description: The app signing in; signing in to the partner app adds the provider role (PRD §3).
+      enum:
+        - customer
+        - partner
+      example: customer
+    OtpVerifyRequest:
+      type: object
+      required:
+        - phone
+        - code
+        - app
+      properties:
+        phone:
+          $ref: '#/components/schemas/Phone'
+        code:
+          type: string
+          pattern: ^[0-9]{6}$
+          example: '482913'
+        app:
+          $ref: '#/components/schemas/AppKind'
+    TokenPair:
+      type: object
+      required:
+        - accessToken
+        - expiresInSeconds
+        - account
+      properties:
+        accessToken:
+          type: string
+          example: eyJhbGciOiJFZERTQSIsImtpZCI6ImsxIn0...
+        refreshToken:
+          type: string
+          description: Omitted for the admin web app, which receives it as an HttpOnly cookie.
+          example: 3q2-7wRk5sQ0x9nVb...
+        expiresInSeconds:
+          type: integer
+          example: 900
+        isNewAccount:
+          type: boolean
+          example: false
+        account:
+          $ref: '#/components/schemas/Account'
+    RefreshRequest:
+      type: object
+      description: Mobile apps send the token in the body; the admin web app sends none and relies on the cookie.
+      properties:
+        refreshToken:
+          type: string
+          example: 3q2-7wRk5sQ0x9nVb...
+    LogoutRequest:
+      type: object
+      properties:
+        allDevices:
+          type: boolean
+          default: false
+          example: false
+    AdminLoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          example: verifier@pao.bd
+        password:
+          type: string
+          minLength: 8
+          maxLength: 128
+          example: correct-horse-battery
+    AdminLoginChallenge:
+      type: object
+      required:
+        - challengeId
+        - expiresInSeconds
+      properties:
+        challengeId:
+          type: string
+          format: uuid
+          example: 0192f4a6-1c2b-7c1d-9e3f-5a6b7c8d9e0f
+        expiresInSeconds:
+          type: integer
+          example: 300
+        totpEnrolment:
+          $ref: '#/components/schemas/TotpEnrolment'
+    TotpEnrolment:
+      type: object
+      description: Present on the first login; the admin scans it before entering a code.
+      required:
+        - secret
+        - otpauthUrl
+      properties:
+        secret:
+          type: string
+          example: JBSWY3DPEHPK3PXP
+        otpauthUrl:
+          type: string
+          example: otpauth://totp/PAO:verifier@pao.bd?secret=JBSWY3DPEHPK3PXP&issuer=PAO
+    AdminTotpRequest:
+      type: object
+      required:
+        - challengeId
+        - code
+      properties:
+        challengeId:
+          type: string
+          format: uuid
+          example: 0192f4a6-1c2b-7c1d-9e3f-5a6b7c8d9e0f
+        code:
+          type: string
+          pattern: ^[0-9]{6}$
+          example: '123456'
+    AccountStatus:
+      type: string
+      description: PRD §6.4 account lifecycle.
+      enum:
+        - pending
+        - active
+        - suspended
+        - banned
+      example: active
+    Role:
+      type: string
+      enum:
+        - customer
+        - provider
+        - verifier
+        - catalog_manager
+        - support_agent
+        - super_admin
+      example: customer
+    Account:
+      type: object
+      required:
+        - id
+        - roles
+        - status
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 0192f4a6-1c2b-7c1d-9e3f-5a6b7c8d9e0f
+        phone:
+          type: string
+          example: '+8801712345678'
+        email:
+          type: string
+          format: email
+          example: verifier@pao.bd
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
+        status:
+          $ref: '#/components/schemas/AccountStatus'
+        createdAt:
+          type: string
+          format: date-time
+    MyPermissions:
+      type: object
+      required:
+        - roles
+        - permissions
+        - screens
+      properties:
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
+        permissions:
+          type: array
+          items:
+            type: string
+          example:
+            - booking:create
+            - booking:read:own
+        screens:
+          type: array
+          items:
+            type: string
+          example:
+            - C01
+            - C07
+            - C10
+        providerGate:
+          type: boolean
+          description: True while a provider is below Level 1 and limited to screens M01–M14.
+          example: false
+    DeleteAccountRequest:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          pattern: ^[0-9]{6}$
+          example: '482913'
+    CustomerProfile:
+      type: object
+      required:
+        - id
+        - name
+        - language
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Nusrat Jahan
+        phone:
+          type: string
+          example: '+8801712345678'
+        photoUrl:
+          type: string
+          description: Short-lived signed URL of the profile photo.
+        language:
+          $ref: '#/components/schemas/Language'
+    CustomerProfileUpdate:
+      type: object
+      required:
+        - name
+        - language
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 80
+          example: Nusrat Jahan
+        photoMediaId:
+          type: string
+          format: uuid
+          description: A confirmed upload with purpose `avatar`.
+        language:
+          $ref: '#/components/schemas/Language'
+    AddressLabel:
+      type: string
+      enum:
+        - home
+        - office
+        - other
+      example: home
+    AddressInput:
+      type: object
+      required:
+        - label
+        - line1
+        - location
+      properties:
+        label:
+          $ref: '#/components/schemas/AddressLabel'
+        line1:
+          type: string
+          minLength: 3
+          maxLength: 200
+          example: House 12, Road 5, Block C
+        line2:
+          type: string
+          maxLength: 200
+          example: Banani
+        area:
+          type: string
+          maxLength: 80
+          example: Banani
+        location:
+          $ref: '#/components/schemas/Point'
+        isDefault:
+          type: boolean
+          example: true
+    Address:
+      allOf:
+        - $ref: '#/components/schemas/AddressInput'
+        - type: object
+          required:
+            - id
+            - isDefault
+          properties:
+            id:
+              type: string
+              format: uuid
+    AddressList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/Address'
+    ServiceAreaCheck:
+      type: object
+      required:
+        - covered
+      properties:
+        covered:
+          type: boolean
+          example: true
+        areaName:
+          type: string
+          example: Dhaka
+    ServiceModel:
+      type: string
+      enum:
+        - on_demand
+        - duration_hire
+        - listing
+        - partner_referral
+      example: on_demand
+    PriceUnit:
+      type: string
+      description: What one quantity means for a sub-service.
+      enum:
+        - job
+        - unit
+        - hour
+        - day
+      example: unit
+    SubService:
+      type: object
+      required:
+        - id
+        - serviceId
+        - name
+        - unit
+        - price
+        - priceVersionId
+        - published
+      properties:
+        id:
+          type: string
+          format: uuid
+        serviceId:
+          type: string
+          format: uuid
+        name:
+          $ref: '#/components/schemas/LocalizedText'
+        description:
+          $ref: '#/components/schemas/LocalizedText'
+        inclusions:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedText'
+        exclusions:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedText'
+        unit:
+          $ref: '#/components/schemas/PriceUnit'
+        price:
+          $ref: '#/components/schemas/Money'
+        priceVersionId:
+          type: string
+          format: uuid
+        maxQuantity:
+          type: integer
+          minimum: 1
+          example: 10
+        published:
+          type: boolean
+    Service:
+      type: object
+      required:
+        - id
+        - categoryId
+        - name
+        - iconKey
+        - serviceModel
+        - requiredLevel
+        - searchRadiusM
+        - womenProvidersOnly
+        - requiresLevel2
+        - published
+      properties:
+        id:
+          type: string
+          format: uuid
+        categoryId:
+          type: string
+          format: uuid
+        name:
+          $ref: '#/components/schemas/LocalizedText'
+        iconKey:
+          type: string
+          example: bolt
+        serviceModel:
+          $ref: '#/components/schemas/ServiceModel'
+        requiredLevel:
+          $ref: '#/components/schemas/Level'
+        searchRadiusM:
+          type: integer
+          minimum: 500
+          maximum: 50000
+          example: 5000
+        womenProvidersOnly:
+          type: boolean
+          example: false
+        requiresLevel2:
+          type: boolean
+          example: false
+        level2Checklist:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedText'
+        published:
+          type: boolean
+        subServices:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubService'
+    Category:
+      type: object
+      required:
+        - id
+        - name
+        - iconKey
+        - sortOrder
+        - published
+        - services
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          $ref: '#/components/schemas/LocalizedText'
+        iconKey:
+          type: string
+          example: plug
+        sortOrder:
+          type: integer
+          example: 1
+        published:
+          type: boolean
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/Service'
+    CatalogTree:
+      type: object
+      required:
+        - version
+        - categories
+      properties:
+        version:
+          type: integer
+          format: int64
+          description: Bumped on every catalog change.
+          example: 7
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+    CatalogSearchResults:
+      type: object
+      required:
+        - services
+        - subServices
+      properties:
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/Service'
+        subServices:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubService'
+    CategoryInput:
+      type: object
+      required:
+        - name
+        - iconKey
+      properties:
+        name:
+          $ref: '#/components/schemas/LocalizedText'
+        iconKey:
+          type: string
+          minLength: 1
+          maxLength: 40
+          example: plug
+        sortOrder:
+          type: integer
+          example: 1
+        published:
+          type: boolean
+          example: true
+    ServiceInput:
+      type: object
+      required:
+        - categoryId
+        - name
+        - iconKey
+        - serviceModel
+        - requiredLevel
+        - searchRadiusM
+      properties:
+        categoryId:
+          type: string
+          format: uuid
+        name:
+          $ref: '#/components/schemas/LocalizedText'
+        iconKey:
+          type: string
+          minLength: 1
+          maxLength: 40
+          example: bolt
+        serviceModel:
+          $ref: '#/components/schemas/ServiceModel'
+        requiredLevel:
+          $ref: '#/components/schemas/Level'
+        searchRadiusM:
+          type: integer
+          minimum: 500
+          maximum: 50000
+          example: 5000
+        womenProvidersOnly:
+          type: boolean
+          example: false
+        requiresLevel2:
+          type: boolean
+          example: false
+        level2Checklist:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedText'
+        published:
+          type: boolean
+          example: true
+    SubServiceInput:
+      type: object
+      required:
+        - serviceId
+        - name
+        - unit
+      properties:
+        serviceId:
+          type: string
+          format: uuid
+        name:
+          $ref: '#/components/schemas/LocalizedText'
+        description:
+          $ref: '#/components/schemas/LocalizedText'
+        inclusions:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedText'
+        exclusions:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedText'
+        unit:
+          $ref: '#/components/schemas/PriceUnit'
+        maxQuantity:
+          type: integer
+          minimum: 1
+          example: 10
+        initialPrice:
+          $ref: '#/components/schemas/Money'
+        published:
+          type: boolean
+          example: true
+    PriceInput:
+      type: object
+      required:
+        - amount
+      properties:
+        amount:
+          type: integer
+          format: int64
+          minimum: 0
+          example: 50000
+    PriceVersion:
+      type: object
+      required:
+        - id
+        - subServiceId
+        - amount
+        - effectiveFrom
+        - createdBy
+      properties:
+        id:
+          type: string
+          format: uuid
+        subServiceId:
+          type: string
+          format: uuid
+        amount:
+          $ref: '#/components/schemas/Money'
+        effectiveFrom:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+          format: uuid
+    PriceHistory:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceVersion'
+    Badge:
+      type: string
+      description: Customer-facing badge for the level (PRD §6.1).
+      enum:
+        - none
+        - verified
+        - verified_pro
+      example: verified
+    ProviderCard:
+      type: object
+      description: One row of the nearby provider list (C10). Never includes documents.
+      required:
+        - id
+        - name
+        - badge
+        - level
+        - rating
+        - ratingCount
+        - completedJobs
+        - distanceM
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Rahim Uddin
+        photoUrl:
+          type: string
+        badge:
+          $ref: '#/components/schemas/Badge'
+        level:
+          $ref: '#/components/schemas/Level'
+        rating:
+          type: number
+          format: double
+          example: 4.8
+        ratingCount:
+          type: integer
+          example: 132
+        completedJobs:
+          type: integer
+          example: 210
+        distanceM:
+          type: integer
+          example: 1200
+    NearbyProviders:
+      type: object
+      required:
+        - items
+        - priceSummary
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderCard'
+        priceSummary:
+          $ref: '#/components/schemas/PriceSummary'
+        nextCursor:
+          $ref: '#/components/schemas/PageCursor'
+    PriceSummary:
+      type: object
+      description: The fixed price for the chosen sub-service and quantity (C10).
+      required:
+        - subServiceId
+        - quantity
+        - unitPrice
+        - total
+      properties:
+        subServiceId:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+          example: 2
+        unitPrice:
+          $ref: '#/components/schemas/Money'
+        total:
+          $ref: '#/components/schemas/Money'
+    RatingBreakdown:
+      type: object
+      required:
+        - average
+        - count
+        - distribution
+      properties:
+        average:
+          type: number
+          format: double
+          example: 4.8
+        count:
+          type: integer
+          example: 132
+        distribution:
+          type: object
+          description: Count of reviews per star value "1".."5".
+          additionalProperties:
+            type: integer
+          example:
+            '1': 1
+            '2': 0
+            '3': 4
+            '4': 20
+            '5': 107
+    ProviderPublicProfile:
+      type: object
+      description: What customers see (C11). Never includes documents or contact details.
+      required:
+        - id
+        - name
+        - badge
+        - level
+        - bio
+        - experienceYears
+        - services
+        - rating
+        - completedJobs
+        - memberSince
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Rahim Uddin
+        photoUrl:
+          type: string
+        badge:
+          $ref: '#/components/schemas/Badge'
+        level:
+          $ref: '#/components/schemas/Level'
+        bio:
+          type: string
+          example: Licensed electrician with 8 years of experience.
+        experienceYears:
+          type: integer
+          example: 8
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceRef'
+        rating:
+          $ref: '#/components/schemas/RatingBreakdown'
+        completedJobs:
+          type: integer
+          example: 210
+        memberSince:
+          type: string
+          format: date-time
+    ServiceRef:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          $ref: '#/components/schemas/LocalizedText'
+    ProviderProfile:
+      type: object
+      description: The provider's own profile (M28).
+      required:
+        - id
+        - name
+        - phone
+        - status
+        - level
+        - badge
+        - online
+        - language
+        - services
+        - experienceYears
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Rahim Uddin
+        phone:
+          type: string
+          example: '+8801712345678'
+        photoUrl:
+          type: string
+        bio:
+          type: string
+        status:
+          $ref: '#/components/schemas/AccountStatus'
+        level:
+          $ref: '#/components/schemas/Level'
+        badge:
+          $ref: '#/components/schemas/Badge'
+        online:
+          type: boolean
+        language:
+          $ref: '#/components/schemas/Language'
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceRef'
+        experienceYears:
+          type: integer
+        homeBase:
+          $ref: '#/components/schemas/Point'
+        workingRadiusM:
+          type: integer
+        flaggedForReview:
+          type: boolean
+    ProviderProfileUpdate:
+      type: object
+      required:
+        - language
+      properties:
+        bio:
+          type: string
+          maxLength: 500
+        photoMediaId:
+          type: string
+          format: uuid
+        language:
+          $ref: '#/components/schemas/Language'
+    EnrolmentStep:
+      type: string
+      enum:
+        - personal
+        - services
+        - area
+        - nid
+        - selfie
+        - police_clearance
+        - skill_proof
+        - emergency_contact
+        - code_of_conduct
+      example: personal
+    EnrolmentStatus:
+      type: object
+      required:
+        - steps
+        - complete
+        - submitted
+      properties:
+        steps:
+          type: array
+          items:
+            type: object
+            required:
+              - step
+              - done
+              - required
+            properties:
+              step:
+                $ref: '#/components/schemas/EnrolmentStep'
+              done:
+                type: boolean
+              required:
+                type: boolean
+                description: Skill proof is optional for Level 1.
+        complete:
+          type: boolean
+          description: Every required step is done.
+        submitted:
+          type: boolean
+    PersonalInfoInput:
+      type: object
+      required:
+        - fullName
+        - dateOfBirth
+        - gender
+        - presentAddress
+        - permanentAddress
+      properties:
+        fullName:
+          type: string
+          minLength: 3
+          maxLength: 100
+          description: Name exactly as on the NID.
+          example: Rahim Uddin
+        dateOfBirth:
+          type: string
+          format: date
+          example: '1990-04-12'
+        gender:
+          $ref: '#/components/schemas/Gender'
+        presentAddress:
+          type: string
+          minLength: 5
+          maxLength: 300
+        permanentAddress:
+          type: string
+          minLength: 5
+          maxLength: 300
+        bio:
+          type: string
+          maxLength: 500
+    ServicesInput:
+      type: object
+      required:
+        - serviceIds
+        - experienceYears
+      properties:
+        serviceIds:
+          type: array
+          minItems: 1
+          maxItems: 5
+          items:
+            type: string
+            format: uuid
+        experienceYears:
+          type: integer
+          minimum: 0
+          maximum: 60
+          example: 8
+    ServiceAreaInput:
+      type: object
+      required:
+        - homeBase
+        - workingRadiusM
+      properties:
+        homeBase:
+          $ref: '#/components/schemas/Point'
+        workingRadiusM:
+          type: integer
+          minimum: 1000
+          maximum: 30000
+          example: 8000
+    NidInput:
+      type: object
+      required:
+        - nidNumber
+        - frontMediaId
+        - backMediaId
+      properties:
+        nidNumber:
+          type: string
+          pattern: ^([0-9]{10}|[0-9]{13}|[0-9]{17})$
+          example: '1234567890'
+        frontMediaId:
+          type: string
+          format: uuid
+        backMediaId:
+          type: string
+          format: uuid
+    SelfieInput:
+      type: object
+      required:
+        - mediaId
+      properties:
+        mediaId:
+          type: string
+          format: uuid
+    PoliceClearanceInput:
+      type: object
+      required:
+        - mediaId
+        - issueDate
+      properties:
+        mediaId:
+          type: string
+          format: uuid
+        issueDate:
+          type: string
+          format: date
+          example: '2026-06-01'
+    SkillProofInput:
+      type: object
+      required:
+        - mediaIds
+      properties:
+        mediaIds:
+          type: array
+          maxItems: 10
+          items:
+            type: string
+            format: uuid
+    EmergencyContactInput:
+      type: object
+      required:
+        - name
+        - relation
+        - phone
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 80
+          example: Karim Uddin
+        relation:
+          type: string
+          minLength: 2
+          maxLength: 40
+          example: Brother
+        phone:
+          $ref: '#/components/schemas/Phone'
+    EmergencyContactVerifyInput:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          pattern: ^[0-9]{6}$
+          example: '482913'
+    CodeOfConductInput:
+      type: object
+      required:
+        - version
+        - accepted
+      properties:
+        version:
+          type: string
+          example: 2026-10
+        accepted:
+          type: boolean
+          description: Must be true.
+    HeartbeatInput:
+      type: object
+      required:
+        - location
+      properties:
+        location:
+          $ref: '#/components/schemas/Point'
+    PresenceState:
+      type: object
+      required:
+        - online
+      properties:
+        online:
+          type: boolean
+        heartbeatIntervalSeconds:
+          type: integer
+          example: 30
+    ItemType:
+      type: string
+      enum:
+        - nid
+        - selfie
+        - police_clearance
+        - address
+        - emergency_contact
+        - skill_proof
+        - service_area
+        - code_of_conduct
+      example: nid
+    ItemStatus:
+      type: string
+      enum:
+        - missing
+        - pending
+        - approved
+        - rejected
+        - expired
+      example: pending
+    VerificationItem:
+      type: object
+      required:
+        - type
+        - status
+        - required
+      properties:
+        type:
+          $ref: '#/components/schemas/ItemType'
+        status:
+          $ref: '#/components/schemas/ItemStatus'
+        required:
+          type: boolean
+        rejectionReason:
+          type: string
+          example: Photo is blurred; retake in daylight.
+        expiresAt:
+          type: string
+          format: date-time
+        decidedAt:
+          type: string
+          format: date-time
+    VerificationStatus:
+      type: object
+      required:
+        - level
+        - badge
+        - items
+        - canReceiveBookings
+      properties:
+        level:
+          $ref: '#/components/schemas/Level'
+        badge:
+          $ref: '#/components/schemas/Badge'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerificationItem'
+        canReceiveBookings:
+          type: boolean
+        level2:
+          $ref: '#/components/schemas/Level2Info'
+    Level2Info:
+      type: object
+      required:
+        - eligible
+      properties:
+        eligible:
+          type: boolean
+        nextSession:
+          $ref: '#/components/schemas/Level2Session'
+        retryAfter:
+          type: string
+          format: date-time
+          description: End of the cooling-off period after a failed session.
+    VerificationQueueItem:
+      type: object
+      required:
+        - providerId
+        - name
+        - pendingItems
+        - submittedAt
+        - ageHours
+      properties:
+        providerId:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Rahim Uddin
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceRef'
+        pendingItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemType'
+        submittedAt:
+          type: string
+          format: date-time
+        ageHours:
+          type: integer
+          example: 18
+    VerificationQueue:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerificationQueueItem'
+        nextCursor:
+          $ref: '#/components/schemas/PageCursor'
+    ReviewDocument:
+      type: object
+      required:
+        - mediaId
+        - kind
+      properties:
+        mediaId:
+          type: string
+          format: uuid
+        kind:
+          type: string
+          example: nid_front
+    ReviewItem:
+      allOf:
+        - $ref: '#/components/schemas/VerificationItem'
+        - type: object
+          properties:
+            documents:
+              type: array
+              items:
+                $ref: '#/components/schemas/ReviewDocument'
+            fields:
+              type: object
+              description: Submitted values to check (e.g. issue date, emergency contact).
+              additionalProperties:
+                type: string
+    VerificationReview:
+      type: object
+      description: Everything a verifier needs for A06. NID number decrypted only here.
+      required:
+        - providerId
+        - profile
+        - items
+        - level
+      properties:
+        providerId:
+          type: string
+          format: uuid
+        level:
+          $ref: '#/components/schemas/Level'
+        profile:
+          type: object
+          required:
+            - fullName
+            - dateOfBirth
+            - gender
+            - phone
+          properties:
+            fullName:
+              type: string
+            dateOfBirth:
+              type: string
+              format: date
+            gender:
+              $ref: '#/components/schemas/Gender'
+            phone:
+              type: string
+            presentAddress:
+              type: string
+            permanentAddress:
+              type: string
+            nidNumber:
+              type: string
+        faceMatch:
+          type: string
+          description: Result of the face check; the manual adapter leaves it to the verifier (D10).
+          enum:
+            - not_run
+            - match
+            - no_match
+            - manual_review
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReviewItem'
+    Level2Result:
+      type: string
+      enum:
+        - pass
+        - fail
+        - retest
+      example: pass
+    Level2SessionInput:
+      type: object
+      required:
+        - providerId
+        - serviceId
+        - scheduledAt
+        - location
+      properties:
+        providerId:
+          type: string
+          format: uuid
+        serviceId:
+          type: string
+          format: uuid
+        scheduledAt:
+          type: string
+          format: date-time
+        location:
+          type: string
+          maxLength: 200
+          example: PAO office, Gulshan 1
+    Level2ResultInput:
+      type: object
+      required:
+        - result
+        - checklist
+      properties:
+        result:
+          $ref: '#/components/schemas/Level2Result'
+        checklist:
+          type: array
+          items:
+            type: object
+            required:
+              - item
+              - passed
+            properties:
+              item:
+                type: string
+                example: Safe wiring
+              passed:
+                type: boolean
+        notes:
+          type: string
+          maxLength: 1000
+        visitLocation:
+          $ref: '#/components/schemas/Point'
+        photoMediaIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+    Level2Session:
+      type: object
+      required:
+        - id
+        - providerId
+        - serviceId
+        - scheduledAt
+        - location
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        providerId:
+          type: string
+          format: uuid
+        serviceId:
+          type: string
+          format: uuid
+        scheduledAt:
+          type: string
+          format: date-time
+        location:
+          type: string
+        status:
+          type: string
+          enum:
+            - scheduled
+            - completed
+            - cancelled
+        result:
+          $ref: '#/components/schemas/Level2Result'
+        checklist:
+          type: array
+          items:
+            type: object
+            required:
+              - item
+              - passed
+            properties:
+              item:
+                type: string
+              passed:
+                type: boolean
+        notes:
+          type: string
+        decidedBy:
+          type: string
+          format: uuid
+    Level2SessionList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Level2Session'
+        nextCursor:
+          $ref: '#/components/schemas/PageCursor'
+    BookingStatus:
+      type: string
+      enum:
+        - requested
+        - accepted
+        - on_the_way
+        - arrived
+        - in_progress
+        - completed
+        - rejected
+        - timed_out
+        - cancelled
+      example: accepted
+    Timing:
+      type: string
+      enum:
+        - asap
+        - scheduled
+      example: asap
+    BookingItemInput:
+      type: object
+      required:
+        - subServiceId
+        - quantity
+      properties:
+        subServiceId:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+          minimum: 1
+          maximum: 50
+          example: 2
+    BookingCreate:
+      type: object
+      required:
+        - providerId
+        - serviceId
+        - items
+        - timing
+        - addressId
+      properties:
+        providerId:
+          type: string
+          format: uuid
+        serviceId:
+          type: string
+          format: uuid
+        items:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/BookingItemInput'
+        timing:
+          $ref: '#/components/schemas/Timing'
+        scheduledAt:
+          type: string
+          format: date-time
+          description: Required when timing is scheduled; for duration hire it is the start.
+        addressId:
+          type: string
+          format: uuid
+        note:
+          type: string
+          maxLength: 500
+          example: Gate code 1234; second floor.
+    BookingItem:
+      type: object
+      description: A line copied from the catalog at booking time (PRD §9.3 rule 4).
+      required:
+        - subServiceId
+        - priceVersionId
+        - name
+        - unit
+        - quantity
+        - unitPrice
+        - total
+        - extra
+      properties:
+        subServiceId:
+          type: string
+          format: uuid
+        priceVersionId:
+          type: string
+          format: uuid
+        name:
+          $ref: '#/components/schemas/LocalizedText'
+        unit:
+          $ref: '#/components/schemas/PriceUnit'
+        quantity:
+          type: integer
+          example: 2
+        unitPrice:
+          $ref: '#/components/schemas/Money'
+        total:
+          $ref: '#/components/schemas/Money'
+        extra:
+          type: boolean
+          description: Added during the job and approved by the customer.
+    TimelineEntry:
+      type: object
+      required:
+        - status
+        - at
+        - actor
+      properties:
+        status:
+          $ref: '#/components/schemas/BookingStatus'
+        at:
+          type: string
+          format: date-time
+        actor:
+          type: string
+          enum:
+            - customer
+            - provider
+            - system
+            - admin
+        reason:
+          type: string
+    ExtrasProposal:
+      type: object
+      required:
+        - id
+        - items
+        - addedTotal
+        - newTotal
+        - status
+        - proposedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingItem'
+        addedTotal:
+          $ref: '#/components/schemas/Money'
+        newTotal:
+          $ref: '#/components/schemas/Money'
+        status:
+          type: string
+          enum:
+            - pending
+            - approved
+            - declined
+        proposedAt:
+          type: string
+          format: date-time
+    BookingAddress:
+      type: object
+      description: The service address snapshot. Exact lines only after acceptance (PRD §11).
+      required:
+        - area
+      properties:
+        area:
+          type: string
+          example: Banani
+        line1:
+          type: string
+        line2:
+          type: string
+        location:
+          $ref: '#/components/schemas/Point'
+        distanceM:
+          type: integer
+          description: Provider view before acceptance.
+    BookingParty:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Rahim Uddin
+        photoUrl:
+          type: string
+        phone:
+          type: string
+          description: Shown to the other side only after acceptance (PRD §5 step 6).
+        badge:
+          $ref: '#/components/schemas/Badge'
+        rating:
+          type: number
+          format: double
+          example: 4.8
+        ratingCount:
+          type: integer
+          example: 132
+    Booking:
+      type: object
+      required:
+        - id
+        - number
+        - status
+        - serviceId
+        - serviceName
+        - items
+        - total
+        - timing
+        - address
+        - createdAt
+        - timeline
+        - paymentMethod
+      properties:
+        id:
+          type: string
+          format: uuid
+        number:
+          type: string
+          example: PAO-104233
+        status:
+          $ref: '#/components/schemas/BookingStatus'
+        serviceId:
+          type: string
+          format: uuid
+        serviceName:
+          $ref: '#/components/schemas/LocalizedText'
+        serviceModel:
+          $ref: '#/components/schemas/ServiceModel'
+        provider:
+          $ref: '#/components/schemas/BookingParty'
+        customer:
+          $ref: '#/components/schemas/BookingParty'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingItem'
+        total:
+          $ref: '#/components/schemas/Money'
+        timing:
+          $ref: '#/components/schemas/Timing'
+        scheduledAt:
+          type: string
+          format: date-time
+        endsAt:
+          type: string
+          format: date-time
+          description: End of a duration hire.
+        address:
+          $ref: '#/components/schemas/BookingAddress'
+        note:
+          type: string
+        acceptDeadline:
+          type: string
+          format: date-time
+        pendingExtras:
+          $ref: '#/components/schemas/ExtrasProposal'
+        cancellable:
+          type: boolean
+        paymentMethod:
+          type: string
+          enum:
+            - cash
+        cashReceived:
+          type: boolean
+        reviewedByMe:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        timeline:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimelineEntry'
+    BookingSummary:
+      type: object
+      required:
+        - id
+        - number
+        - status
+        - serviceName
+        - total
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        number:
+          type: string
+          example: PAO-104233
+        status:
+          $ref: '#/components/schemas/BookingStatus'
+        serviceName:
+          $ref: '#/components/schemas/LocalizedText'
+        counterpartName:
+          type: string
+          example: Rahim Uddin
+        timing:
+          $ref: '#/components/schemas/Timing'
+        scheduledAt:
+          type: string
+          format: date-time
+        total:
+          $ref: '#/components/schemas/Money'
+        createdAt:
+          type: string
+          format: date-time
+    BookingList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingSummary'
+        nextCursor:
+          $ref: '#/components/schemas/PageCursor'
+    CustomerCancelInput:
+      type: object
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          enum:
+            - changed_mind
+            - found_other_provider
+            - provider_late
+            - booked_by_mistake
+            - other
+        note:
+          type: string
+          maxLength: 300
+    ProviderCancelInput:
+      type: object
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          enum:
+            - emergency
+            - customer_unreachable
+            - unsafe_location
+            - other
+        note:
+          type: string
+          maxLength: 300
+    RejectInput:
+      type: object
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          enum:
+            - busy
+            - too_far
+            - not_my_service
+            - other
+        note:
+          type: string
+          maxLength: 300
+    StartCode:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          pattern: ^[0-9]{4}$
+          example: '4821'
+    ExtrasInput:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/BookingItemInput'
+    ExtrasDecisionInput:
+      type: object
+      required:
+        - proposalId
+        - approve
+      properties:
+        proposalId:
+          type: string
+          format: uuid
+        approve:
+          type: boolean
+    CompleteInput:
+      type: object
+      required:
+        - cashReceived
+      properties:
+        cashReceived:
+          type: boolean
+          description: Must be true — the provider confirms cash was received (D4).
+    Receipt:
+      type: object
+      required:
+        - bookingId
+        - number
+        - completedAt
+        - serviceName
+        - providerName
+        - customerName
+        - items
+        - total
+        - paymentMethod
+      properties:
+        bookingId:
+          type: string
+          format: uuid
+        number:
+          type: string
+          example: PAO-104233
+        completedAt:
+          type: string
+          format: date-time
+        serviceName:
+          $ref: '#/components/schemas/LocalizedText'
+        providerName:
+          type: string
+        customerName:
+          type: string
+        area:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingItem'
+        total:
+          $ref: '#/components/schemas/Money'
+        paymentMethod:
+          type: string
+          enum:
+            - cash
+    EarningsPeriod:
+      type: string
+      enum:
+        - day
+        - week
+        - month
+      example: week
+    EarningsSummary:
+      type: object
+      description: Totals by Asia/Dhaka calendar period (P-08).
+      required:
+        - period
+        - from
+        - to
+        - total
+        - jobs
+        - buckets
+      properties:
+        period:
+          $ref: '#/components/schemas/EarningsPeriod'
+        from:
+          type: string
+          format: date
+        to:
+          type: string
+          format: date
+        total:
+          $ref: '#/components/schemas/Money'
+        jobs:
+          type: integer
+        buckets:
+          type: array
+          items:
+            type: object
+            required:
+              - date
+              - total
+              - jobs
+            properties:
+              date:
+                type: string
+                format: date
+              total:
+                $ref: '#/components/schemas/Money'
+              jobs:
+                type: integer
+    EarningsJob:
+      type: object
+      required:
+        - bookingId
+        - number
+        - completedAt
+        - serviceName
+        - total
+      properties:
+        bookingId:
+          type: string
+          format: uuid
+        number:
+          type: string
+        completedAt:
+          type: string
+          format: date-time
+        serviceName:
+          $ref: '#/components/schemas/LocalizedText'
+        total:
+          $ref: '#/components/schemas/Money'
+    EarningsJobList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/EarningsJob'
+        nextCursor:
+          $ref: '#/components/schemas/PageCursor'
+    ReviewTag:
+      type: string
+      description: Fixed tag list; apps translate the keys.
+      enum:
+        - on_time
+        - professional
+        - quality_work
+        - clean
+        - friendly
+        - fair_price
+        - late
+        - rude
+        - poor_quality
+        - messy
+        - polite
+        - clear_instructions
+        - paid_promptly
+        - safe_place
+        - unclear_instructions
+        - unsafe_place
+      example: on_time
+    ReviewInput:
+      type: object
+      required:
+        - stars
+      properties:
+        stars:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 5
+        tags:
+          type: array
+          maxItems: 6
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/ReviewTag'
+        comment:
+          type: string
+          maxLength: 500
+          example: Fixed the fan quickly and cleaned up.
+    Review:
+      type: object
+      required:
+        - id
+        - bookingId
+        - stars
+        - tags
+        - createdAt
+        - authorName
+      properties:
+        id:
+          type: string
+          format: uuid
+        bookingId:
+          type: string
+          format: uuid
+        stars:
+          type: integer
+          example: 5
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReviewTag'
+        comment:
+          type: string
+        authorName:
+          type: string
+          description: First name only.
+          example: Nusrat
+        serviceName:
+          $ref: '#/components/schemas/LocalizedText'
+        createdAt:
+          type: string
+          format: date-time
+    ReviewList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Review'
+        nextCursor:
+          $ref: '#/components/schemas/PageCursor'
+    Notification:
+      type: object
+      required:
+        - id
+        - type
+        - title
+        - body
+        - read
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          description: The event that caused it.
+          example: BookingAccepted
+        title:
+          type: string
+          example: Booking accepted
+        body:
+          type: string
+          example: Rahim is on the way soon.
+        bookingId:
+          type: string
+          format: uuid
+        read:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+    NotificationList:
+      type: object
+      required:
+        - items
+        - unreadCount
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+        unreadCount:
+          type: integer
+          example: 3
+        nextCursor:
+          $ref: '#/components/schemas/PageCursor'
+    UploadPurpose:
+      type: string
+      enum:
+        - avatar
+        - nid_front
+        - nid_back
+        - selfie
+        - police_clearance
+        - skill_proof
+        - address_proof
+        - complaint_photo
+        - level2_photo
+      example: nid_front
+    UploadRequest:
+      type: object
+      required:
+        - purpose
+        - contentType
+        - sizeBytes
+      properties:
+        purpose:
+          $ref: '#/components/schemas/UploadPurpose'
+        contentType:
+          type: string
+          enum:
+            - image/jpeg
+            - image/png
+            - application/pdf
+          example: image/jpeg
+        sizeBytes:
+          type: integer
+          format: int64
+          minimum: 1
+          maximum: 5242880
+          example: 845123
+    UploadTicket:
+      type: object
+      description: PUT the file to uploadUrl with these headers, then confirm the upload.
+      required:
+        - mediaId
+        - uploadUrl
+        - headers
+        - expiresAt
+      properties:
+        mediaId:
+          type: string
+          format: uuid
+        uploadUrl:
+          type: string
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+        expiresAt:
+          type: string
+          format: date-time
+    MediaObject:
+      type: object
+      required:
+        - id
+        - purpose
+        - contentType
+        - sizeBytes
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        purpose:
+          $ref: '#/components/schemas/UploadPurpose'
+        contentType:
+          type: string
+        sizeBytes:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+            - pending
+            - confirmed
+    ViewUrl:
+      type: object
+      required:
+        - url
+        - expiresAt
+      properties:
+        url:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+    ComplaintReason:
+      type: string
+      enum:
+        - no_show
+        - late
+        - poor_quality
+        - overcharge
+        - damage
+        - behaviour
+        - safety
+        - customer_unavailable
+        - payment
+        - other
+      example: poor_quality
+    ComplaintInput:
+      type: object
+      required:
+        - reason
+        - description
+      properties:
+        reason:
+          $ref: '#/components/schemas/ComplaintReason'
+        description:
+          type: string
+          minLength: 10
+          maxLength: 1000
+          example: The fan still wobbles after installation.
+        photoMediaIds:
+          type: array
+          maxItems: 5
+          items:
+            type: string
+            format: uuid
+    ComplaintStatus:
+      type: string
+      enum:
+        - open
+        - assigned
+        - resolved
+      example: open
+    ComplaintComment:
+      type: object
+      required:
+        - authorId
+        - body
+        - at
+      properties:
+        authorId:
+          type: string
+          format: uuid
+        body:
+          type: string
+        at:
+          type: string
+          format: date-time
+    Complaint:
+      type: object
+      required:
+        - id
+        - ticketNumber
+        - bookingId
+        - reporterRole
+        - reporterId
+        - reason
+        - description
+        - status
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        ticketNumber:
+          type: string
+          example: TCK-002341
+        bookingId:
+          type: string
+          format: uuid
+        reporterRole:
+          type: string
+          enum:
+            - customer
+            - provider
+        reporterId:
+          type: string
+          format: uuid
+        againstId:
+          type: string
+          format: uuid
+        reason:
+          $ref: '#/components/schemas/ComplaintReason'
+        description:
+          type: string
+        photoMediaIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        status:
+          $ref: '#/components/schemas/ComplaintStatus'
+        assigneeId:
+          type: string
+          format: uuid
+        resolution:
+          type: string
+        verified:
+          type: boolean
+          description: A verified complaint feeds the provider quality review (PRD §6.4).
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComplaintComment'
+        createdAt:
+          type: string
+          format: date-time
+        resolvedAt:
+          type: string
+          format: date-time
+    ComplaintList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Complaint'
+        nextCursor:
+          $ref: '#/components/schemas/PageCursor'
+    ComplaintAssignInput:
+      type: object
+      required:
+        - assigneeId
+      properties:
+        assigneeId:
+          type: string
+          format: uuid
+    ComplaintCommentInput:
+      type: object
+      required:
+        - body
+      properties:
+        body:
+          type: string
+          minLength: 1
+          maxLength: 1000
+    ComplaintResolveInput:
+      type: object
+      required:
+        - resolution
+        - verified
+      properties:
+        resolution:
+          type: string
+          minLength: 5
+          maxLength: 1000
+        verified:
+          type: boolean
+    Dashboard:
+      type: object
+      required:
+        - providersByStatus
+        - providersByLevel
+        - bookingsPerDay
+        - completionRate
+        - openComplaints
+        - pendingVerifications
+        - generatedAt
+      properties:
+        providersByStatus:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            active: 120
+            pending: 34
+            suspended: 2
+            banned: 1
+        providersByLevel:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            '0': 34
+            '1': 100
+            '2': 20
+        bookingsPerDay:
+          type: array
+          items:
+            type: object
+            required:
+              - date
+              - total
+              - completed
+            properties:
+              date:
+                type: string
+                format: date
+              total:
+                type: integer
+              completed:
+                type: integer
+        completionRate:
+          type: number
+          format: double
+          example: 0.86
+        openComplaints:
+          type: integer
+        pendingVerifications:
+          type: integer
+        generatedAt:
+          type: string
+          format: date-time
+    AdminRole:
+      type: string
+      enum:
+        - verifier
+        - catalog_manager
+        - support_agent
+        - super_admin
+      example: verifier
+    AdminUser:
+      type: object
+      required:
+        - id
+        - email
+        - name
+        - roles
+        - active
+        - totpEnrolled
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminRole'
+        active:
+          type: boolean
+        totpEnrolled:
+          type: boolean
+        lastLoginAt:
+          type: string
+          format: date-time
+    AdminUserList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminUser'
+    AdminUserInvite:
+      type: object
+      required:
+        - email
+        - name
+        - roles
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        name:
+          type: string
+          minLength: 2
+          maxLength: 80
+        roles:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/AdminRole'
+    AdminUserInvited:
+      type: object
+      required:
+        - user
+        - temporaryPassword
+      properties:
+        user:
+          $ref: '#/components/schemas/AdminUser'
+        temporaryPassword:
+          type: string
+          description: Shown once; the admin must change it and enrol TOTP on first login.
+    AdminUserUpdate:
+      type: object
+      properties:
+        roles:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/AdminRole'
+        active:
+          type: boolean
+    RoleDefinition:
+      type: object
+      required:
+        - role
+        - permissions
+        - screens
+      properties:
+        role:
+          $ref: '#/components/schemas/Role'
+        permissions:
+          type: array
+          items:
+            type: string
+        screens:
+          type: array
+          items:
+            type: string
+    RoleList:
+      type: object
+      required:
+        - items
+        - allPermissions
+        - allScreens
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleDefinition'
+        allPermissions:
+          type: array
+          items:
+            type: string
+        allScreens:
+          type: array
+          items:
+            type: string
+    RoleUpdate:
+      type: object
+      required:
+        - permissions
+        - screens
+      properties:
+        permissions:
+          type: array
+          items:
+            type: string
+        screens:
+          type: array
+          items:
+            type: string
+    Setting:
+      type: object
+      required:
+        - key
+        - value
+        - type
+        - description
+      properties:
+        key:
+          type: string
+          example: booking.accept_timeout_asap_seconds
+        value:
+          type: string
+          description: The value encoded as text; `type` says how to read it.
+          example: '180'
+        type:
+          type: string
+          enum:
+            - integer
+            - number
+            - boolean
+            - string
+            - geojson
+        description:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+          format: uuid
+    SettingList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Setting'
+    SettingUpdate:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: string
+          maxLength: 20000
+          example: '240'
+    AuditEntry:
+      type: object
+      required:
+        - id
+        - at
+        - action
+        - subjectType
+        - subjectId
+      properties:
+        id:
+          type: string
+          format: uuid
+        at:
+          type: string
+          format: date-time
+        actorId:
+          type: string
+          format: uuid
+        actorRole:
+          type: string
+          example: verifier
+        action:
+          type: string
+          example: verification.item_approved
+        subjectType:
+          type: string
+          example: provider
+        subjectId:
+          type: string
+        reason:
+          type: string
+        before:
+          type: object
+          additionalProperties: true
+        after:
+          type: object
+          additionalProperties: true
+    AuditList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEntry'
+        nextCursor:
+          $ref: '#/components/schemas/PageCursor'
+    AccountStatusChange:
+      type: object
+      required:
+        - status
+        - reason
+      properties:
+        status:
+          type: string
+          enum:
+            - active
+            - suspended
+            - banned
+        reason:
+          type: string
+          minLength: 3
+          maxLength: 500
+    AdminProviderSummary:
+      type: object
+      required:
+        - id
+        - name
+        - status
+        - level
+        - rating
+        - completedJobs
+        - flaggedForReview
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        phone:
+          type: string
+        status:
+          $ref: '#/components/schemas/AccountStatus'
+        level:
+          $ref: '#/components/schemas/Level'
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceRef'
+        rating:
+          type: number
+          format: double
+        completedJobs:
+          type: integer
+        flaggedForReview:
+          type: boolean
+        online:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+    AdminProviderList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminProviderSummary'
+        nextCursor:
+          $ref: '#/components/schemas/PageCursor'
+    AdminProviderDetail:
+      type: object
+      required:
+        - summary
+        - items
+        - recentBookings
+        - statusHistory
+      properties:
+        summary:
+          $ref: '#/components/schemas/AdminProviderSummary'
+        gender:
+          $ref: '#/components/schemas/Gender'
+        experienceYears:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerificationItem'
+        recentBookings:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingSummary'
+        complaints:
+          type: integer
+        cancellations30d:
+          type: integer
+        statusHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEntry'
+    AdminCustomerSummary:
+      type: object
+      required:
+        - id
+        - name
+        - status
+        - bookings
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        phone:
+          type: string
+        status:
+          $ref: '#/components/schemas/AccountStatus'
+        bookings:
+          type: integer
+        rating:
+          type: number
+          format: double
+        createdAt:
+          type: string
+          format: date-time
+    AdminCustomerList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminCustomerSummary'
+        nextCursor:
+          $ref: '#/components/schemas/PageCursor'
+    AdminCustomerDetail:
+      type: object
+      required:
+        - summary
+        - recentBookings
+        - complaints
+        - statusHistory
+      properties:
+        summary:
+          $ref: '#/components/schemas/AdminCustomerSummary'
+        recentBookings:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingSummary'
+        complaints:
+          type: array
+          items:
+            $ref: '#/components/schemas/Complaint'
+        statusHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEntry'

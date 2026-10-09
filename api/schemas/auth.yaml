@@ -1,0 +1,119 @@
+# Identity and access: OTP, tokens, admin 2FA, the current account and permissions.
+OtpPurpose:
+  type: string
+  description: Why the code is sent. `delete_account` re-confirms account deletion.
+  enum: [login, delete_account]
+  example: login
+OtpRequest:
+  type: object
+  required: [phone]
+  properties:
+    phone: { $ref: "./common.yaml#/Phone" }
+    purpose: { $ref: "#/OtpPurpose" }
+  example: { phone: "+8801712345678", purpose: login }
+OtpRequestAccepted:
+  type: object
+  required: [expiresInSeconds, resendAfterSeconds]
+  properties:
+    expiresInSeconds: { type: integer, example: 300 }
+    resendAfterSeconds: { type: integer, example: 60 }
+AppKind:
+  type: string
+  description: The app signing in; signing in to the partner app adds the provider role (PRD §3).
+  enum: [customer, partner]
+  example: customer
+OtpVerifyRequest:
+  type: object
+  required: [phone, code, app]
+  properties:
+    phone: { $ref: "./common.yaml#/Phone" }
+    code: { type: string, pattern: "^[0-9]{6}$", example: "482913" }
+    app: { $ref: "#/AppKind" }
+TokenPair:
+  type: object
+  required: [accessToken, expiresInSeconds, account]
+  properties:
+    accessToken: { type: string, example: eyJhbGciOiJFZERTQSIsImtpZCI6ImsxIn0... }
+    refreshToken:
+      type: string
+      description: Omitted for the admin web app, which receives it as an HttpOnly cookie.
+      example: 3q2-7wRk5sQ0x9nVb...
+    expiresInSeconds: { type: integer, example: 900 }
+    isNewAccount: { type: boolean, example: false }
+    account: { $ref: "#/Account" }
+RefreshRequest:
+  type: object
+  description: Mobile apps send the token in the body; the admin web app sends none and relies on the cookie.
+  properties:
+    refreshToken: { type: string, example: 3q2-7wRk5sQ0x9nVb... }
+LogoutRequest:
+  type: object
+  properties:
+    allDevices: { type: boolean, default: false, example: false }
+AdminLoginRequest:
+  type: object
+  required: [email, password]
+  properties:
+    email: { type: string, format: email, maxLength: 254, example: verifier@pao.bd }
+    password: { type: string, minLength: 8, maxLength: 128, example: correct-horse-battery }
+AdminLoginChallenge:
+  type: object
+  required: [challengeId, expiresInSeconds]
+  properties:
+    challengeId: { type: string, format: uuid, example: 0192f4a6-1c2b-7c1d-9e3f-5a6b7c8d9e0f }
+    expiresInSeconds: { type: integer, example: 300 }
+    totpEnrolment: { $ref: "#/TotpEnrolment" }
+TotpEnrolment:
+  type: object
+  description: Present on the first login; the admin scans it before entering a code.
+  required: [secret, otpauthUrl]
+  properties:
+    secret: { type: string, example: JBSWY3DPEHPK3PXP }
+    otpauthUrl: { type: string, example: "otpauth://totp/PAO:verifier@pao.bd?secret=JBSWY3DPEHPK3PXP&issuer=PAO" }
+AdminTotpRequest:
+  type: object
+  required: [challengeId, code]
+  properties:
+    challengeId: { type: string, format: uuid, example: 0192f4a6-1c2b-7c1d-9e3f-5a6b7c8d9e0f }
+    code: { type: string, pattern: "^[0-9]{6}$", example: "123456" }
+AccountStatus:
+  type: string
+  description: PRD §6.4 account lifecycle.
+  enum: [pending, active, suspended, banned]
+  example: active
+Role:
+  type: string
+  enum: [customer, provider, verifier, catalog_manager, support_agent, super_admin]
+  example: customer
+Account:
+  type: object
+  required: [id, roles, status, createdAt]
+  properties:
+    id: { type: string, format: uuid, example: 0192f4a6-1c2b-7c1d-9e3f-5a6b7c8d9e0f }
+    phone: { type: string, example: "+8801712345678" }
+    email: { type: string, format: email, example: verifier@pao.bd }
+    roles: { type: array, items: { $ref: "#/Role" } }
+    status: { $ref: "#/AccountStatus" }
+    createdAt: { type: string, format: date-time }
+MyPermissions:
+  type: object
+  required: [roles, permissions, screens]
+  properties:
+    roles: { type: array, items: { $ref: "#/Role" } }
+    permissions:
+      type: array
+      items: { type: string }
+      example: [booking:create, booking:read:own]
+    screens:
+      type: array
+      items: { type: string }
+      example: [C01, C07, C10]
+    providerGate:
+      type: boolean
+      description: True while a provider is below Level 1 and limited to screens M01–M14.
+      example: false
+DeleteAccountRequest:
+  type: object
+  required: [code]
+  properties:
+    code: { type: string, pattern: "^[0-9]{6}$", example: "482913" }

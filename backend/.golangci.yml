@@ -64,6 +64,9 @@ linters:
         linters: [funlen, gocyclo, gosec, unparam, nestif]
       - path: \.gen\.go
         linters: [revive, funlen, gocyclo]
+      # Test support code builds throwaway databases from generated names.
+      - path: internal/testkit/
+        linters: [gosec]
 
 formatters:
   enable:

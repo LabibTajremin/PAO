@@ -1,0 +1,187 @@
+# Generated from the operation table during P01; edit by hand from now on.
+profile:
+  get:
+    operationId: getCustomerProfile
+    tags:
+    - Customer
+    summary: The customer profile
+    x-permission: profile:manage:own
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/customer.yaml#/CustomerProfile
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+  put:
+    operationId: updateCustomerProfile
+    tags:
+    - Customer
+    summary: Create or update the customer profile
+    x-permission: profile:manage:own
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/customer.yaml#/CustomerProfileUpdate
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/customer.yaml#/CustomerProfile
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+addresses:
+  get:
+    operationId: listAddresses
+    tags:
+    - Customer
+    summary: Saved addresses
+    x-permission: address:manage:own
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/customer.yaml#/AddressList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+  post:
+    operationId: createAddress
+    tags:
+    - Customer
+    summary: Save an address (max 10)
+    x-permission: address:manage:own
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/customer.yaml#/AddressInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/customer.yaml#/Address
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+address:
+  put:
+    operationId: updateAddress
+    tags:
+    - Customer
+    summary: Edit a saved address
+    x-permission: address:manage:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/AddressId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/customer.yaml#/AddressInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/customer.yaml#/Address
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+  delete:
+    operationId: deleteAddress
+    tags:
+    - Customer
+    summary: Delete a saved address
+    x-permission: address:manage:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/AddressId
+    responses:
+      '204':
+        description: No content
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+addressDefault:
+  post:
+    operationId: setDefaultAddress
+    tags:
+    - Customer
+    summary: Make an address the default
+    x-permission: address:manage:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/AddressId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/customer.yaml#/Address
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+serviceArea:
+  get:
+    operationId: checkServiceArea
+    tags:
+    - Customer
+    summary: Is this point inside an active launch area? (C35)
+    x-permission: catalog:read
+    parameters:
+    - $ref: ../components/parameters.yaml#/Lat
+    - $ref: ../components/parameters.yaml#/Lng
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/customer.yaml#/ServiceAreaCheck
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

@@ -1,0 +1,19 @@
+# In-app inbox entries (C-13, P-12).
+Notification:
+  type: object
+  required: [id, type, title, body, read, createdAt]
+  properties:
+    id: { type: string, format: uuid }
+    type: { type: string, description: The event that caused it., example: BookingAccepted }
+    title: { type: string, example: Booking accepted }
+    body: { type: string, example: Rahim is on the way soon. }
+    bookingId: { type: string, format: uuid }
+    read: { type: boolean }
+    createdAt: { type: string, format: date-time }
+NotificationList:
+  type: object
+  required: [items, unreadCount]
+  properties:
+    items: { type: array, items: { $ref: "#/Notification" } }
+    unreadCount: { type: integer, example: 3 }
+    nextCursor: { $ref: "./common.yaml#/PageCursor" }

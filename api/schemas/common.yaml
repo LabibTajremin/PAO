@@ -1,0 +1,133 @@
+# Shared building blocks: errors, money, pagination, places and names.
+ErrorResponse:
+  type: object
+  description: The single error format used by every endpoint (PRD §9.6).
+  required: [error]
+  properties:
+    error:
+      $ref: "#/ErrorBody"
+  example:
+    error:
+      code: NOT_FOUND
+      message: Booking not found.
+ErrorBody:
+  type: object
+  required: [code, message]
+  properties:
+    code:
+      $ref: "#/ErrorCode"
+    message:
+      type: string
+      description: English description for logs; apps translate `code` instead.
+    details:
+      type: object
+      description: Machine-readable context, e.g. the invalid fields.
+      additionalProperties: true
+ErrorCode:
+  type: string
+  description: Stable error codes the apps translate (04-decisions.md E11).
+  enum:
+    - VALIDATION_FAILED
+    - UNAUTHENTICATED
+    - TOKEN_EXPIRED
+    - FORBIDDEN
+    - NOT_FOUND
+    - CONFLICT
+    - RATE_LIMITED
+    - INTERNAL
+    - NOT_IMPLEMENTED
+    - OTP_INVALID
+    - OTP_EXPIRED
+    - OTP_LOCKED
+    - ACCOUNT_BANNED
+    - ACCOUNT_SUSPENDED
+    - INVALID_CREDENTIALS
+    - ACCOUNT_LOCKED
+    - TOTP_INVALID
+    - MFA_CHALLENGE_EXPIRED
+    - REFRESH_TOKEN_INVALID
+    - IDEMPOTENCY_KEY_REQUIRED
+    - IDEMPOTENCY_KEY_REUSED
+    - ADDRESS_LIMIT_REACHED
+    - OUTSIDE_SERVICE_AREA
+    - SERVICE_UNAVAILABLE
+    - PROVIDER_UNAVAILABLE
+    - DUPLICATE_BOOKING_REQUEST
+    - BOOKING_INVALID_TRANSITION
+    - BOOKING_ALREADY_RESPONDED
+    - ACTIVE_JOB_EXISTS
+    - START_CODE_INVALID
+    - START_CODE_LOCKED
+    - CANCELLATION_NOT_ALLOWED
+    - EXTRA_ITEM_INVALID
+    - EXTRAS_PENDING
+    - CASH_CONFIRMATION_REQUIRED
+    - REVIEW_NOT_ALLOWED
+    - REVIEW_ALREADY_SUBMITTED
+    - UPLOAD_INVALID
+    - UPLOAD_NOT_FOUND
+    - ENROLMENT_INCOMPLETE
+    - NOT_VERIFIED
+    - AGE_REQUIREMENT
+    - LEVEL2_COOLING_OFF
+    - COMPLAINT_INVALID_TRANSITION
+    - SETTING_INVALID
+    - ROLE_INVALID
+Money:
+  type: integer
+  format: int64
+  description: Amount in paisa (1 BDT = 100 paisa). Never a float (04-decisions.md E9).
+  example: 113000
+PageCursor:
+  type: string
+  description: Opaque cursor for the next page (base64 of created_at and id).
+  example: eyJ0IjoiMjAyNi0xMC0wOVQxMDowMDowMFoifQ
+Point:
+  type: object
+  description: WGS84 position.
+  required: [lat, lng]
+  properties:
+    lat: { type: number, format: double, minimum: -90, maximum: 90, example: 23.7808 }
+    lng: { type: number, format: double, minimum: -180, maximum: 180, example: 90.4152 }
+LocalizedText:
+  type: object
+  description: A text in both product languages.
+  required: [en, bn]
+  properties:
+    en: { type: string, minLength: 1, maxLength: 200, example: Electrician }
+    bn: { type: string, minLength: 1, maxLength: 200, example: ইলেকট্রিশিয়ান }
+Language:
+  type: string
+  enum: [en, bn]
+  example: bn
+Phone:
+  type: string
+  description: Bangladeshi mobile number; the API normalises to +8801XXXXXXXXX.
+  pattern: "^(\\+?880|0)?1[3-9][0-9]{8}$"
+  example: "+8801712345678"
+Level:
+  type: integer
+  description: Verification level (PRD §6.1) — 0 Registered, 1 Verified, 2 PAO Verified Pro.
+  minimum: 0
+  maximum: 2
+  example: 1
+Gender:
+  type: string
+  enum: [female, male, other]
+  example: female
+Platform:
+  type: string
+  enum: [android, ios, web]
+  example: android
+DeviceTokenInput:
+  type: object
+  required: [token, platform]
+  properties:
+    token: { type: string, minLength: 10, maxLength: 4096, example: "fcm-token-abc123..." }
+    platform: { $ref: "#/Platform" }
+StatusReason:
+  type: object
+  description: A free-text reason recorded with a decision.
+  required: [reason]
+  properties:
+    reason: { type: string, minLength: 3, maxLength: 500, example: Document is blurred. }

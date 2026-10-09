@@ -1,0 +1,7 @@
+# gitleaks configuration: the default rules plus one allowlisted file.
+[extend]
+useDefault = true
+
+[allowlist]
+description = ".env.example documents variable names with empty or local-only placeholder values"
+paths = ['''^\.env\.example$''']

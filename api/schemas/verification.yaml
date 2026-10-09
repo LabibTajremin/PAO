@@ -1,0 +1,145 @@
+# Verification items, levels and Level 2 sessions (PRD §6.1–6.3, A-03, A-04).
+ItemType:
+  type: string
+  enum: [nid, selfie, police_clearance, address, emergency_contact, skill_proof, service_area, code_of_conduct]
+  example: nid
+ItemStatus:
+  type: string
+  enum: [missing, pending, approved, rejected, expired]
+  example: pending
+VerificationItem:
+  type: object
+  required: [type, status, required]
+  properties:
+    type: { $ref: "#/ItemType" }
+    status: { $ref: "#/ItemStatus" }
+    required: { type: boolean }
+    rejectionReason: { type: string, example: Photo is blurred; retake in daylight. }
+    expiresAt: { type: string, format: date-time }
+    decidedAt: { type: string, format: date-time }
+VerificationStatus:
+  type: object
+  required: [level, badge, items, canReceiveBookings]
+  properties:
+    level: { $ref: "./common.yaml#/Level" }
+    badge: { $ref: "./provider.yaml#/Badge" }
+    items: { type: array, items: { $ref: "#/VerificationItem" } }
+    canReceiveBookings: { type: boolean }
+    level2: { $ref: "#/Level2Info" }
+Level2Info:
+  type: object
+  required: [eligible]
+  properties:
+    eligible: { type: boolean }
+    nextSession: { $ref: "#/Level2Session" }
+    retryAfter: { type: string, format: date-time, description: End of the cooling-off period after a failed session. }
+VerificationQueueItem:
+  type: object
+  required: [providerId, name, pendingItems, submittedAt, ageHours]
+  properties:
+    providerId: { type: string, format: uuid }
+    name: { type: string, example: Rahim Uddin }
+    services: { type: array, items: { $ref: "./provider.yaml#/ServiceRef" } }
+    pendingItems: { type: array, items: { $ref: "#/ItemType" } }
+    submittedAt: { type: string, format: date-time }
+    ageHours: { type: integer, example: 18 }
+VerificationQueue:
+  type: object
+  required: [items]
+  properties:
+    items: { type: array, items: { $ref: "#/VerificationQueueItem" } }
+    nextCursor: { $ref: "./common.yaml#/PageCursor" }
+ReviewDocument:
+  type: object
+  required: [mediaId, kind]
+  properties:
+    mediaId: { type: string, format: uuid }
+    kind: { type: string, example: nid_front }
+ReviewItem:
+  allOf:
+    - $ref: "#/VerificationItem"
+    - type: object
+      properties:
+        documents: { type: array, items: { $ref: "#/ReviewDocument" } }
+        fields:
+          type: object
+          description: Submitted values to check (e.g. issue date, emergency contact).
+          additionalProperties: { type: string }
+VerificationReview:
+  type: object
+  description: Everything a verifier needs for A06. NID number decrypted only here.
+  required: [providerId, profile, items, level]
+  properties:
+    providerId: { type: string, format: uuid }
+    level: { $ref: "./common.yaml#/Level" }
+    profile:
+      type: object
+      required: [fullName, dateOfBirth, gender, phone]
+      properties:
+        fullName: { type: string }
+        dateOfBirth: { type: string, format: date }
+        gender: { $ref: "./common.yaml#/Gender" }
+        phone: { type: string }
+        presentAddress: { type: string }
+        permanentAddress: { type: string }
+        nidNumber: { type: string }
+    faceMatch:
+      type: string
+      description: Result of the face check; the manual adapter leaves it to the verifier (D10).
+      enum: [not_run, match, no_match, manual_review]
+    items: { type: array, items: { $ref: "#/ReviewItem" } }
+Level2Result:
+  type: string
+  enum: [pass, fail, retest]
+  example: pass
+Level2SessionInput:
+  type: object
+  required: [providerId, serviceId, scheduledAt, location]
+  properties:
+    providerId: { type: string, format: uuid }
+    serviceId: { type: string, format: uuid }
+    scheduledAt: { type: string, format: date-time }
+    location: { type: string, maxLength: 200, example: "PAO office, Gulshan 1" }
+Level2ResultInput:
+  type: object
+  required: [result, checklist]
+  properties:
+    result: { $ref: "#/Level2Result" }
+    checklist:
+      type: array
+      items:
+        type: object
+        required: [item, passed]
+        properties:
+          item: { type: string, example: Safe wiring }
+          passed: { type: boolean }
+    notes: { type: string, maxLength: 1000 }
+    visitLocation: { $ref: "./common.yaml#/Point" }
+    photoMediaIds: { type: array, items: { type: string, format: uuid } }
+Level2Session:
+  type: object
+  required: [id, providerId, serviceId, scheduledAt, location, status]
+  properties:
+    id: { type: string, format: uuid }
+    providerId: { type: string, format: uuid }
+    serviceId: { type: string, format: uuid }
+    scheduledAt: { type: string, format: date-time }
+    location: { type: string }
+    status: { type: string, enum: [scheduled, completed, cancelled] }
+    result: { $ref: "#/Level2Result" }
+    checklist:
+      type: array
+      items:
+        type: object
+        required: [item, passed]
+        properties:
+          item: { type: string }
+          passed: { type: boolean }
+    notes: { type: string }
+    decidedBy: { type: string, format: uuid }
+Level2SessionList:
+  type: object
+  required: [items]
+  properties:
+    items: { type: array, items: { $ref: "#/Level2Session" } }
+    nextCursor: { $ref: "./common.yaml#/PageCursor" }

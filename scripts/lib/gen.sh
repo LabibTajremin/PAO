@@ -2,8 +2,17 @@
 # Code generation (sqlc, oapi-codegen, mockgen, Dart API client, l10n) and the
 # "generated code is committed" check used by CI.
 
-OPENAPI_GENERATOR_VERSION=7.10.0
-OPENAPI_GENERATOR_JAR="${XDG_CACHE_HOME:-$HOME/.cache}/pao/openapi-generator-cli-$OPENAPI_GENERATOR_VERSION.jar"
+REDOCLY_CLI="@redocly/cli@1.34.3"
+SPEC_BUNDLE="backend/internal/platform/httpx/api/openapi.gen.yaml"
+
+# gen_spec bundles the split api/ files into the single document the generators and
+# the request validator read.
+gen_spec() {
+  [[ -f "$PAO_ROOT/api/openapi.yaml" ]] || return 0
+  require_tool npx "install Node.js 22"
+  (cd "$PAO_ROOT" && npx --yes "$REDOCLY_CLI" bundle api/openapi.yaml -o "$SPEC_BUNDLE" >/dev/null 2>&1) ||
+    die "OpenAPI bundle failed"
+}
 
 gen_go() {
   [[ -f "$BACKEND/go.mod" ]] || return 0
@@ -16,18 +25,10 @@ gen_go() {
   fi
 }
 
-openapi_generator_jar() {
-  [[ -f "$OPENAPI_GENERATOR_JAR" ]] && return 0
-  mkdir -p "$(dirname "$OPENAPI_GENERATOR_JAR")"
-  retry curl -fsSL -o "$OPENAPI_GENERATOR_JAR" \
-    "https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/$OPENAPI_GENERATOR_VERSION/openapi-generator-cli-$OPENAPI_GENERATOR_VERSION.jar"
-}
-
 gen_dart_client() {
   [[ -f "$PAO_ROOT/api/openapi.yaml" && -d "$FRONTEND/packages/pao_api" ]] || return 0
-  require_tool java "install a JDK (17+)"
-  openapi_generator_jar || die "could not download openapi-generator"
-  "$PAO_ROOT/scripts/gen-dart-client.sh" "$OPENAPI_GENERATOR_JAR" || die "Dart client generation failed"
+  require_tool docker "https://docs.docker.com/engine/install/"
+  "$PAO_ROOT/scripts/gen-dart-client.sh" || die "Dart client generation failed"
 }
 
 gen_l10n() {
@@ -44,6 +45,7 @@ tree_fingerprint() {
 cmd_gen() {
   local before
   before=$(tree_fingerprint)
+  gen_spec
   gen_go
   gen_dart_client
   gen_l10n

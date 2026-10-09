@@ -36,7 +36,7 @@ jobs:
       - name: Install generators
         run: |
           go install github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0
-          go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@v2.4.1
+          go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@v2.8.0
           go install go.uber.org/mock/mockgen@v0.5.0
       - name: Generated code is up to date
         run: ./pao gen --check

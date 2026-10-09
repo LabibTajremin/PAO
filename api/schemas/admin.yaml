@@ -1,0 +1,247 @@
+# Admin panel resources: complaints, dashboard, admin users, roles, settings, audit,
+# provider/customer management and the bookings monitor (PRD §7.3).
+ComplaintReason:
+  type: string
+  enum: [no_show, late, poor_quality, overcharge, damage, behaviour, safety, customer_unavailable, payment, other]
+  example: poor_quality
+ComplaintInput:
+  type: object
+  required: [reason, description]
+  properties:
+    reason: { $ref: "#/ComplaintReason" }
+    description: { type: string, minLength: 10, maxLength: 1000, example: The fan still wobbles after installation. }
+    photoMediaIds: { type: array, maxItems: 5, items: { type: string, format: uuid } }
+ComplaintStatus:
+  type: string
+  enum: [open, assigned, resolved]
+  example: open
+ComplaintComment:
+  type: object
+  required: [authorId, body, at]
+  properties:
+    authorId: { type: string, format: uuid }
+    body: { type: string }
+    at: { type: string, format: date-time }
+Complaint:
+  type: object
+  required: [id, ticketNumber, bookingId, reporterRole, reporterId, reason, description, status, createdAt]
+  properties:
+    id: { type: string, format: uuid }
+    ticketNumber: { type: string, example: TCK-002341 }
+    bookingId: { type: string, format: uuid }
+    reporterRole: { type: string, enum: [customer, provider] }
+    reporterId: { type: string, format: uuid }
+    againstId: { type: string, format: uuid }
+    reason: { $ref: "#/ComplaintReason" }
+    description: { type: string }
+    photoMediaIds: { type: array, items: { type: string, format: uuid } }
+    status: { $ref: "#/ComplaintStatus" }
+    assigneeId: { type: string, format: uuid }
+    resolution: { type: string }
+    verified: { type: boolean, description: A verified complaint feeds the provider quality review (PRD §6.4). }
+    comments: { type: array, items: { $ref: "#/ComplaintComment" } }
+    createdAt: { type: string, format: date-time }
+    resolvedAt: { type: string, format: date-time }
+ComplaintList:
+  type: object
+  required: [items]
+  properties:
+    items: { type: array, items: { $ref: "#/Complaint" } }
+    nextCursor: { $ref: "./common.yaml#/PageCursor" }
+ComplaintAssignInput:
+  type: object
+  required: [assigneeId]
+  properties:
+    assigneeId: { type: string, format: uuid }
+ComplaintCommentInput:
+  type: object
+  required: [body]
+  properties:
+    body: { type: string, minLength: 1, maxLength: 1000 }
+ComplaintResolveInput:
+  type: object
+  required: [resolution, verified]
+  properties:
+    resolution: { type: string, minLength: 5, maxLength: 1000 }
+    verified: { type: boolean }
+Dashboard:
+  type: object
+  required: [providersByStatus, providersByLevel, bookingsPerDay, completionRate, openComplaints, pendingVerifications, generatedAt]
+  properties:
+    providersByStatus: { type: object, additionalProperties: { type: integer }, example: { active: 120, pending: 34, suspended: 2, banned: 1 } }
+    providersByLevel: { type: object, additionalProperties: { type: integer }, example: { "0": 34, "1": 100, "2": 20 } }
+    bookingsPerDay:
+      type: array
+      items:
+        type: object
+        required: [date, total, completed]
+        properties:
+          date: { type: string, format: date }
+          total: { type: integer }
+          completed: { type: integer }
+    completionRate: { type: number, format: double, example: 0.86 }
+    openComplaints: { type: integer }
+    pendingVerifications: { type: integer }
+    generatedAt: { type: string, format: date-time }
+AdminRole:
+  type: string
+  enum: [verifier, catalog_manager, support_agent, super_admin]
+  example: verifier
+AdminUser:
+  type: object
+  required: [id, email, name, roles, active, totpEnrolled]
+  properties:
+    id: { type: string, format: uuid }
+    email: { type: string, format: email }
+    name: { type: string }
+    roles: { type: array, items: { $ref: "#/AdminRole" } }
+    active: { type: boolean }
+    totpEnrolled: { type: boolean }
+    lastLoginAt: { type: string, format: date-time }
+AdminUserList:
+  type: object
+  required: [items]
+  properties:
+    items: { type: array, items: { $ref: "#/AdminUser" } }
+AdminUserInvite:
+  type: object
+  required: [email, name, roles]
+  properties:
+    email: { type: string, format: email, maxLength: 254 }
+    name: { type: string, minLength: 2, maxLength: 80 }
+    roles: { type: array, minItems: 1, items: { $ref: "#/AdminRole" } }
+AdminUserInvited:
+  type: object
+  required: [user, temporaryPassword]
+  properties:
+    user: { $ref: "#/AdminUser" }
+    temporaryPassword: { type: string, description: Shown once; the admin must change it and enrol TOTP on first login. }
+AdminUserUpdate:
+  type: object
+  properties:
+    roles: { type: array, minItems: 1, items: { $ref: "#/AdminRole" } }
+    active: { type: boolean }
+RoleDefinition:
+  type: object
+  required: [role, permissions, screens]
+  properties:
+    role: { $ref: "./auth.yaml#/Role" }
+    permissions: { type: array, items: { type: string } }
+    screens: { type: array, items: { type: string } }
+RoleList:
+  type: object
+  required: [items, allPermissions, allScreens]
+  properties:
+    items: { type: array, items: { $ref: "#/RoleDefinition" } }
+    allPermissions: { type: array, items: { type: string } }
+    allScreens: { type: array, items: { type: string } }
+RoleUpdate:
+  type: object
+  required: [permissions, screens]
+  properties:
+    permissions: { type: array, items: { type: string } }
+    screens: { type: array, items: { type: string } }
+Setting:
+  type: object
+  required: [key, value, type, description]
+  properties:
+    key: { type: string, example: booking.accept_timeout_asap_seconds }
+    value: { type: string, description: The value encoded as text; `type` says how to read it., example: "180" }
+    type: { type: string, enum: [integer, number, boolean, string, geojson] }
+    description: { type: string }
+    updatedAt: { type: string, format: date-time }
+    updatedBy: { type: string, format: uuid }
+SettingList:
+  type: object
+  required: [items]
+  properties:
+    items: { type: array, items: { $ref: "#/Setting" } }
+SettingUpdate:
+  type: object
+  required: [value]
+  properties:
+    value: { type: string, maxLength: 20000, example: "240" }
+AuditEntry:
+  type: object
+  required: [id, at, action, subjectType, subjectId]
+  properties:
+    id: { type: string, format: uuid }
+    at: { type: string, format: date-time }
+    actorId: { type: string, format: uuid }
+    actorRole: { type: string, example: verifier }
+    action: { type: string, example: verification.item_approved }
+    subjectType: { type: string, example: provider }
+    subjectId: { type: string }
+    reason: { type: string }
+    before: { type: object, additionalProperties: true }
+    after: { type: object, additionalProperties: true }
+AuditList:
+  type: object
+  required: [items]
+  properties:
+    items: { type: array, items: { $ref: "#/AuditEntry" } }
+    nextCursor: { $ref: "./common.yaml#/PageCursor" }
+AccountStatusChange:
+  type: object
+  required: [status, reason]
+  properties:
+    status: { type: string, enum: [active, suspended, banned] }
+    reason: { type: string, minLength: 3, maxLength: 500 }
+AdminProviderSummary:
+  type: object
+  required: [id, name, status, level, rating, completedJobs, flaggedForReview, createdAt]
+  properties:
+    id: { type: string, format: uuid }
+    name: { type: string }
+    phone: { type: string }
+    status: { $ref: "./auth.yaml#/AccountStatus" }
+    level: { $ref: "./common.yaml#/Level" }
+    services: { type: array, items: { $ref: "./provider.yaml#/ServiceRef" } }
+    rating: { type: number, format: double }
+    completedJobs: { type: integer }
+    flaggedForReview: { type: boolean }
+    online: { type: boolean }
+    createdAt: { type: string, format: date-time }
+AdminProviderList:
+  type: object
+  required: [items]
+  properties:
+    items: { type: array, items: { $ref: "#/AdminProviderSummary" } }
+    nextCursor: { $ref: "./common.yaml#/PageCursor" }
+AdminProviderDetail:
+  type: object
+  required: [summary, items, recentBookings, statusHistory]
+  properties:
+    summary: { $ref: "#/AdminProviderSummary" }
+    gender: { $ref: "./common.yaml#/Gender" }
+    experienceYears: { type: integer }
+    items: { type: array, items: { $ref: "./verification.yaml#/VerificationItem" } }
+    recentBookings: { type: array, items: { $ref: "./booking.yaml#/BookingSummary" } }
+    complaints: { type: integer }
+    cancellations30d: { type: integer }
+    statusHistory: { type: array, items: { $ref: "#/AuditEntry" } }
+AdminCustomerSummary:
+  type: object
+  required: [id, name, status, bookings, createdAt]
+  properties:
+    id: { type: string, format: uuid }
+    name: { type: string }
+    phone: { type: string }
+    status: { $ref: "./auth.yaml#/AccountStatus" }
+    bookings: { type: integer }
+    rating: { type: number, format: double }
+    createdAt: { type: string, format: date-time }
+AdminCustomerList:
+  type: object
+  required: [items]
+  properties:
+    items: { type: array, items: { $ref: "#/AdminCustomerSummary" } }
+    nextCursor: { $ref: "./common.yaml#/PageCursor" }
+AdminCustomerDetail:
+  type: object
+  required: [summary, recentBookings, complaints, statusHistory]
+  properties:
+    summary: { $ref: "#/AdminCustomerSummary" }
+    recentBookings: { type: array, items: { $ref: "./booking.yaml#/BookingSummary" } }
+    complaints: { type: array, items: { $ref: "#/Complaint" } }
+    statusHistory: { type: array, items: { $ref: "#/AuditEntry" } }

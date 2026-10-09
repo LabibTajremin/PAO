@@ -1,0 +1,10 @@
+# oapi-codegen settings for the generated server types (docs/build/phases/P01-contracts.md).
+package: api
+generate:
+  chi-server: true
+  strict-server: true
+  models: true
+  embedded-spec: true
+output: api.gen.go
+output-options:
+  skip-prune: true

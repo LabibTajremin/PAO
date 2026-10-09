@@ -1,0 +1,166 @@
+# Generated from the operation table during P01; edit by hand from now on.
+catalog:
+  get:
+    operationId: getCatalog
+    tags:
+    - Customer
+    summary: Published categories, services and sub-services with prices
+    x-permission: catalog:read
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/CatalogTree
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+search:
+  get:
+    operationId: searchCatalog
+    tags:
+    - Customer
+    summary: Search services and sub-services in Bangla or English
+    x-permission: catalog:read
+    parameters:
+    - $ref: ../components/parameters.yaml#/SearchQuery
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/CatalogSearchResults
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+service:
+  get:
+    operationId: getService
+    tags:
+    - Customer
+    summary: Service detail with sub-services and fixed prices
+    x-permission: catalog:read
+    parameters:
+    - $ref: ../components/parameters.yaml#/ServiceId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/Service
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+nearby:
+  get:
+    operationId: findNearbyProviders
+    tags:
+    - Customer
+    summary: Verified, online providers near an address for a sub-service (C10)
+    x-permission: provider:browse
+    parameters:
+    - $ref: ../components/parameters.yaml#/ServiceIdQuery
+    - $ref: ../components/parameters.yaml#/SubServiceIdQuery
+    - name: quantity
+      in: query
+      description: Quantity of the sub-service.
+      required: true
+      schema:
+        type: integer
+    - name: addressId
+      in: query
+      description: Saved address to search around.
+      required: false
+      schema:
+        type: string
+        format: uuid
+    - $ref: ../components/parameters.yaml#/LatOptional
+    - $ref: ../components/parameters.yaml#/LngOptional
+    - name: sort
+      in: query
+      description: Sort order.
+      required: false
+      schema:
+        type: string
+        enum:
+        - distance
+        - rating
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/NearbyProviders
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+provider:
+  get:
+    operationId: getProviderPublicProfile
+    tags:
+    - Customer
+    summary: Public provider profile (C11)
+    x-permission: provider:browse
+    parameters:
+    - $ref: ../components/parameters.yaml#/ProviderId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/ProviderPublicProfile
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+providerReviews:
+  get:
+    operationId: listProviderReviews
+    tags:
+    - Customer
+    summary: Reviews of a provider (C42)
+    x-permission: provider:browse
+    parameters:
+    - $ref: ../components/parameters.yaml#/ProviderId
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/rating.yaml#/ReviewList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

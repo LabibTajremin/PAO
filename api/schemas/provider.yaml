@@ -1,0 +1,189 @@
+# Provider profile, enrolment wizard, presence and the customer-facing views (PRD §6).
+Badge:
+  type: string
+  description: Customer-facing badge for the level (PRD §6.1).
+  enum: [none, verified, verified_pro]
+  example: verified
+ProviderCard:
+  type: object
+  description: One row of the nearby provider list (C10). Never includes documents.
+  required: [id, name, badge, level, rating, ratingCount, completedJobs, distanceM]
+  properties:
+    id: { type: string, format: uuid }
+    name: { type: string, example: Rahim Uddin }
+    photoUrl: { type: string }
+    badge: { $ref: "#/Badge" }
+    level: { $ref: "./common.yaml#/Level" }
+    rating: { type: number, format: double, example: 4.8 }
+    ratingCount: { type: integer, example: 132 }
+    completedJobs: { type: integer, example: 210 }
+    distanceM: { type: integer, example: 1200 }
+NearbyProviders:
+  type: object
+  required: [items, priceSummary]
+  properties:
+    items: { type: array, items: { $ref: "#/ProviderCard" } }
+    priceSummary: { $ref: "#/PriceSummary" }
+    nextCursor: { $ref: "./common.yaml#/PageCursor" }
+PriceSummary:
+  type: object
+  description: The fixed price for the chosen sub-service and quantity (C10).
+  required: [subServiceId, quantity, unitPrice, total]
+  properties:
+    subServiceId: { type: string, format: uuid }
+    quantity: { type: integer, example: 2 }
+    unitPrice: { $ref: "./common.yaml#/Money" }
+    total: { $ref: "./common.yaml#/Money" }
+RatingBreakdown:
+  type: object
+  required: [average, count, distribution]
+  properties:
+    average: { type: number, format: double, example: 4.8 }
+    count: { type: integer, example: 132 }
+    distribution:
+      type: object
+      description: Count of reviews per star value "1".."5".
+      additionalProperties: { type: integer }
+      example: { "1": 1, "2": 0, "3": 4, "4": 20, "5": 107 }
+ProviderPublicProfile:
+  type: object
+  description: What customers see (C11). Never includes documents or contact details.
+  required: [id, name, badge, level, bio, experienceYears, services, rating, completedJobs, memberSince]
+  properties:
+    id: { type: string, format: uuid }
+    name: { type: string, example: Rahim Uddin }
+    photoUrl: { type: string }
+    badge: { $ref: "#/Badge" }
+    level: { $ref: "./common.yaml#/Level" }
+    bio: { type: string, example: Licensed electrician with 8 years of experience. }
+    experienceYears: { type: integer, example: 8 }
+    services: { type: array, items: { $ref: "#/ServiceRef" } }
+    rating: { $ref: "#/RatingBreakdown" }
+    completedJobs: { type: integer, example: 210 }
+    memberSince: { type: string, format: date-time }
+ServiceRef:
+  type: object
+  required: [id, name]
+  properties:
+    id: { type: string, format: uuid }
+    name: { $ref: "./common.yaml#/LocalizedText" }
+ProviderProfile:
+  type: object
+  description: The provider's own profile (M28).
+  required: [id, name, phone, status, level, badge, online, language, services, experienceYears]
+  properties:
+    id: { type: string, format: uuid }
+    name: { type: string, example: Rahim Uddin }
+    phone: { type: string, example: "+8801712345678" }
+    photoUrl: { type: string }
+    bio: { type: string }
+    status: { $ref: "./auth.yaml#/AccountStatus" }
+    level: { $ref: "./common.yaml#/Level" }
+    badge: { $ref: "#/Badge" }
+    online: { type: boolean }
+    language: { $ref: "./common.yaml#/Language" }
+    services: { type: array, items: { $ref: "#/ServiceRef" } }
+    experienceYears: { type: integer }
+    homeBase: { $ref: "./common.yaml#/Point" }
+    workingRadiusM: { type: integer }
+    flaggedForReview: { type: boolean }
+ProviderProfileUpdate:
+  type: object
+  required: [language]
+  properties:
+    bio: { type: string, maxLength: 500 }
+    photoMediaId: { type: string, format: uuid }
+    language: { $ref: "./common.yaml#/Language" }
+EnrolmentStep:
+  type: string
+  enum: [personal, services, area, nid, selfie, police_clearance, skill_proof, emergency_contact, code_of_conduct]
+  example: personal
+EnrolmentStatus:
+  type: object
+  required: [steps, complete, submitted]
+  properties:
+    steps:
+      type: array
+      items:
+        type: object
+        required: [step, done, required]
+        properties:
+          step: { $ref: "#/EnrolmentStep" }
+          done: { type: boolean }
+          required: { type: boolean, description: Skill proof is optional for Level 1. }
+    complete: { type: boolean, description: Every required step is done. }
+    submitted: { type: boolean }
+PersonalInfoInput:
+  type: object
+  required: [fullName, dateOfBirth, gender, presentAddress, permanentAddress]
+  properties:
+    fullName: { type: string, minLength: 3, maxLength: 100, description: Name exactly as on the NID., example: Rahim Uddin }
+    dateOfBirth: { type: string, format: date, example: "1990-04-12" }
+    gender: { $ref: "./common.yaml#/Gender" }
+    presentAddress: { type: string, minLength: 5, maxLength: 300 }
+    permanentAddress: { type: string, minLength: 5, maxLength: 300 }
+    bio: { type: string, maxLength: 500 }
+ServicesInput:
+  type: object
+  required: [serviceIds, experienceYears]
+  properties:
+    serviceIds: { type: array, minItems: 1, maxItems: 5, items: { type: string, format: uuid } }
+    experienceYears: { type: integer, minimum: 0, maximum: 60, example: 8 }
+ServiceAreaInput:
+  type: object
+  required: [homeBase, workingRadiusM]
+  properties:
+    homeBase: { $ref: "./common.yaml#/Point" }
+    workingRadiusM: { type: integer, minimum: 1000, maximum: 30000, example: 8000 }
+NidInput:
+  type: object
+  required: [nidNumber, frontMediaId, backMediaId]
+  properties:
+    nidNumber: { type: string, pattern: "^([0-9]{10}|[0-9]{13}|[0-9]{17})$", example: "1234567890" }
+    frontMediaId: { type: string, format: uuid }
+    backMediaId: { type: string, format: uuid }
+SelfieInput:
+  type: object
+  required: [mediaId]
+  properties:
+    mediaId: { type: string, format: uuid }
+PoliceClearanceInput:
+  type: object
+  required: [mediaId, issueDate]
+  properties:
+    mediaId: { type: string, format: uuid }
+    issueDate: { type: string, format: date, example: "2026-06-01" }
+SkillProofInput:
+  type: object
+  required: [mediaIds]
+  properties:
+    mediaIds: { type: array, maxItems: 10, items: { type: string, format: uuid } }
+EmergencyContactInput:
+  type: object
+  required: [name, relation, phone]
+  properties:
+    name: { type: string, minLength: 2, maxLength: 80, example: Karim Uddin }
+    relation: { type: string, minLength: 2, maxLength: 40, example: Brother }
+    phone: { $ref: "./common.yaml#/Phone" }
+EmergencyContactVerifyInput:
+  type: object
+  required: [code]
+  properties:
+    code: { type: string, pattern: "^[0-9]{6}$", example: "482913" }
+CodeOfConductInput:
+  type: object
+  required: [version, accepted]
+  properties:
+    version: { type: string, example: "2026-10" }
+    accepted: { type: boolean, description: Must be true. }
+HeartbeatInput:
+  type: object
+  required: [location]
+  properties:
+    location: { $ref: "./common.yaml#/Point" }
+PresenceState:
+  type: object
+  required: [online]
+  properties:
+    online: { type: boolean }
+    heartbeatIntervalSeconds: { type: integer, example: 30 }

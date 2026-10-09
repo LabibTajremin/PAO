@@ -1,0 +1,75 @@
+# Generated from the operation table during P01; edit by hand from now on.
+online:
+  post:
+    operationId: goOnline
+    tags:
+    - Provider jobs
+    summary: Go online (only when the provider can receive bookings)
+    x-permission: provider:manage:own
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/provider.yaml#/HeartbeatInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/PresenceState
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+offline:
+  post:
+    operationId: goOffline
+    tags:
+    - Provider jobs
+    summary: Go offline; location stops being stored
+    x-permission: provider:manage:own
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/PresenceState
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+heartbeat:
+  post:
+    operationId: sendHeartbeat
+    tags:
+    - Provider jobs
+    summary: Location heartbeat every 30 s while online
+    x-permission: provider:manage:own
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/provider.yaml#/HeartbeatInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/PresenceState
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

@@ -45,6 +45,7 @@ lint_dart() {
     dart analyze --fatal-infos . >/dev/null) || die "Dart format/analyze failed"
   local pkg
   while IFS= read -r pkg; do
+    [[ "${pkg##*/}" == pao_api ]] && continue
     (cd "$pkg" && dart run dart_code_linter:metrics analyze lib --fatal-style \
       --fatal-performance --fatal-warnings >/dev/null) || die "dart_code_linter failed in $pkg"
   done < <(dart_packages)

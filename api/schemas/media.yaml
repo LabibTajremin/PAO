@@ -1,0 +1,36 @@
+# Direct-to-storage uploads with signed URLs (PRD §6.6).
+UploadPurpose:
+  type: string
+  enum: [avatar, nid_front, nid_back, selfie, police_clearance, skill_proof, address_proof, complaint_photo, level2_photo]
+  example: nid_front
+UploadRequest:
+  type: object
+  required: [purpose, contentType, sizeBytes]
+  properties:
+    purpose: { $ref: "#/UploadPurpose" }
+    contentType: { type: string, enum: [image/jpeg, image/png, application/pdf], example: image/jpeg }
+    sizeBytes: { type: integer, format: int64, minimum: 1, maximum: 5242880, example: 845123 }
+UploadTicket:
+  type: object
+  description: PUT the file to uploadUrl with these headers, then confirm the upload.
+  required: [mediaId, uploadUrl, headers, expiresAt]
+  properties:
+    mediaId: { type: string, format: uuid }
+    uploadUrl: { type: string }
+    headers: { type: object, additionalProperties: { type: string } }
+    expiresAt: { type: string, format: date-time }
+MediaObject:
+  type: object
+  required: [id, purpose, contentType, sizeBytes, status]
+  properties:
+    id: { type: string, format: uuid }
+    purpose: { $ref: "#/UploadPurpose" }
+    contentType: { type: string }
+    sizeBytes: { type: integer, format: int64 }
+    status: { type: string, enum: [pending, confirmed] }
+ViewUrl:
+  type: object
+  required: [url, expiresAt]
+  properties:
+    url: { type: string }
+    expiresAt: { type: string, format: date-time }

@@ -1,0 +1,279 @@
+# Generated from the operation table during P01; edit by hand from now on.
+queue:
+  get:
+    operationId: listVerificationQueue
+    tags:
+    - Admin verification
+    summary: Providers waiting for review, oldest first (A05)
+    x-permission: verification:review
+    parameters:
+    - name: serviceId
+      in: query
+      description: Only providers offering this service.
+      required: false
+      schema:
+        type: string
+        format: uuid
+    - name: itemType
+      in: query
+      description: Only providers with this item pending.
+      required: false
+      schema:
+        type: string
+        enum:
+        - nid
+        - selfie
+        - police_clearance
+        - address
+        - emergency_contact
+        - skill_proof
+        - service_area
+        - code_of_conduct
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/verification.yaml#/VerificationQueue
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+review:
+  get:
+    operationId: getVerificationReview
+    tags:
+    - Admin verification
+    summary: Everything needed to review one provider (A06)
+    x-permission: verification:review
+    parameters:
+    - $ref: ../components/parameters.yaml#/ProviderId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/verification.yaml#/VerificationReview
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+approve:
+  post:
+    operationId: approveVerificationItem
+    tags:
+    - Admin verification
+    summary: Approve one item; Level 1 follows when all required items are approved
+    x-permission: verification:review
+    parameters:
+    - $ref: ../components/parameters.yaml#/ProviderId
+    - $ref: ../components/parameters.yaml#/ItemTypePath
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/verification.yaml#/VerificationReview
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+reject:
+  post:
+    operationId: rejectVerificationItem
+    tags:
+    - Admin verification
+    summary: Reject one item with a reason the provider sees
+    x-permission: verification:review
+    parameters:
+    - $ref: ../components/parameters.yaml#/ProviderId
+    - $ref: ../components/parameters.yaml#/ItemTypePath
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/common.yaml#/StatusReason
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/verification.yaml#/VerificationReview
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+documentView:
+  get:
+    operationId: getDocumentViewUrl
+    tags:
+    - Admin verification
+    summary: 5-minute signed URL for a verification document; every view is audited
+    x-permission: verification:docs:view
+    parameters:
+    - $ref: ../components/parameters.yaml#/MediaId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/media.yaml#/ViewUrl
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+sessions:
+  get:
+    operationId: listLevel2Sessions
+    tags:
+    - Admin verification
+    summary: Level 2 sessions (A07)
+    x-permission: level2:manage
+    parameters:
+    - name: providerId
+      in: query
+      description: Only this provider.
+      required: false
+      schema:
+        type: string
+        format: uuid
+    - name: status
+      in: query
+      description: Session status.
+      required: false
+      schema:
+        type: string
+        enum:
+        - scheduled
+        - completed
+        - cancelled
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/verification.yaml#/Level2SessionList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+  post:
+    operationId: scheduleLevel2Session
+    tags:
+    - Admin verification
+    summary: Schedule a Level 2 interview or skill test
+    x-permission: level2:manage
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/verification.yaml#/Level2SessionInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/verification.yaml#/Level2Session
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+session:
+  get:
+    operationId: getLevel2Session
+    tags:
+    - Admin verification
+    summary: One Level 2 session
+    x-permission: level2:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/SessionId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/verification.yaml#/Level2Session
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+sessionResult:
+  post:
+    operationId: recordLevel2Result
+    tags:
+    - Admin verification
+    summary: Record pass, fail or retest with the checklist
+    x-permission: level2:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/SessionId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/verification.yaml#/Level2ResultInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/verification.yaml#/Level2Session
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

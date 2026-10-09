@@ -1,19 +1,54 @@
 #!/usr/bin/env bash
-# Generates backend/.go-arch-lint.yml from the module list so the per-module boundary
-# rules of PRD §9.3 stay explicit without hand-maintaining 60+ components.
+# Generates backend/.go-arch-lint.yml from the module folders so the per-module boundary
+# rules of PRD §9.3 stay explicit without hand-maintaining 60+ components. Only layers
+# that exist on disk become components.
 set -euo pipefail
 
 all_modules=(identity customer provider verification catalog booking rating notification media admin audit)
-out="${1:-backend/.go-arch-lint.yml}"
+layers=(contract domain port app adapter root)
 root="$(cd "$(dirname "$0")/.." && pwd)"
-modules=()
+out="${1:-$root/backend/.go-arch-lint.yml}"
+modules_dir="$root/backend/internal/modules"
+
+layer_glob() {
+  case "$2" in
+    domain | app | adapter) printf 'modules/%s/%s/**' "$1" "$2" ;;
+    root) printf 'modules/%s' "$1" ;;
+    *) printf 'modules/%s/%s' "$1" "$2" ;;
+  esac
+}
+
+layer_exists() {
+  if [[ "$2" == root ]]; then
+    compgen -G "$modules_dir/$1/*.go" >/dev/null
+  else
+    [[ -d "$modules_dir/$1/$2" ]]
+  fi
+}
+
+# allowed_layers lists the same-module layers a layer may import (dependencies point inwards).
+allowed_layers() {
+  case "$1" in
+    contract) printf '' ;;
+    domain) printf '' ;;
+    port) printf 'domain contract' ;;
+    app) printf 'domain port contract' ;;
+    adapter) printf 'domain port app contract' ;;
+    root) printf 'domain port app adapter contract' ;;
+  esac
+}
+
+components=()
 for m in "${all_modules[@]}"; do
-  [[ -d "$root/backend/internal/modules/$m" ]] && modules+=("$m")
+  for l in "${layers[@]}"; do
+    layer_exists "$m" "$l" && components+=("${m}_${l}")
+  done
 done
 
-contracts() {
-  local m
-  for m in "${modules[@]+"${modules[@]}"}"; do printf '      - %s_contract\n' "$m"; done
+has() {
+  local c
+  for c in "${components[@]+"${components[@]}"}"; do [[ "$c" == "$1" ]] && return 0; done
+  return 1
 }
 
 {
@@ -25,65 +60,35 @@ version: 3
 workdir: internal
 allow:
   depOnAnyVendor: false
+# Tests may use the test kit and fixtures freely.
+excludeFiles:
+  - "^.*_test\\.go$"
 vendors:
   uuid: { in: github.com/google/uuid }
 components:
   platform: { in: platform/** }
+  testkit: { in: testkit }
 HEAD
-  for m in "${modules[@]+"${modules[@]}"}"; do
-    cat <<COMP
-  ${m}_contract: { in: modules/${m}/contract }
-  ${m}_domain: { in: modules/${m}/domain/** }
-  ${m}_port: { in: modules/${m}/port }
-  ${m}_app: { in: modules/${m}/app/** }
-  ${m}_adapter: { in: modules/${m}/adapter/** }
-  ${m}_root: { in: modules/${m} }
-COMP
+  for c in "${components[@]+"${components[@]}"}"; do
+    printf '  %s: { in: %s }\n' "$c" "$(layer_glob "${c%_*}" "${c##*_}")"
   done
-  cat <<'DEPS'
-commonComponents: []
-deps:
-  platform:
-    anyVendorDeps: true
-    mayDependOn: [platform]
-DEPS
-  for m in "${modules[@]+"${modules[@]}"}"; do
-    cat <<DEP
-  ${m}_contract:
-    canUse: [uuid]
-    mayDependOn: [platform]
-  ${m}_domain:
-    canUse: [uuid]
-  ${m}_port:
-    canUse: [uuid]
-    mayDependOn:
-      - ${m}_domain
-      - platform
-$(contracts)
-  ${m}_app:
-    canUse: [uuid]
-    mayDependOn:
-      - ${m}_domain
-      - ${m}_port
-      - platform
-$(contracts)
-  ${m}_adapter:
-    anyVendorDeps: true
-    mayDependOn:
-      - ${m}_domain
-      - ${m}_port
-      - ${m}_app
-      - platform
-$(contracts)
-  ${m}_root:
-    anyVendorDeps: true
-    mayDependOn:
-      - ${m}_domain
-      - ${m}_port
-      - ${m}_app
-      - ${m}_adapter
-      - platform
-$(contracts)
-DEP
+  printf 'commonComponents: []\ndeps:\n  platform:\n    anyVendorDeps: true\n    mayDependOn: [platform]\n'
+  printf '  testkit:\n    anyVendorDeps: true\n    anyProjectDeps: true\n'
+  for c in "${components[@]+"${components[@]}"}"; do
+    m="${c%_*}" l="${c##*_}"
+    printf '  %s:\n' "$c"
+    case "$l" in
+      adapter | root) printf '    anyVendorDeps: true\n' ;;
+      *) printf '    canUse: [uuid]\n' ;;
+    esac
+    [[ "$l" == domain ]] && continue
+    printf '    mayDependOn:\n      - platform\n'
+    for dep in $(allowed_layers "$l"); do
+      has "${m}_${dep}" && printf '      - %s_%s\n' "$m" "$dep"
+    done
+    [[ "$l" == contract ]] && continue
+    for other in "${all_modules[@]}"; do
+      [[ "$other" != "$m" ]] && has "${other}_contract" && printf '      - %s_contract\n' "$other"
+    done
   done
 } >"$out"

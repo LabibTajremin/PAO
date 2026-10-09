@@ -6,3 +6,5 @@
 /mock_[^/]*\.go$
 # Composition roots, covered by the e2e start-up smoke test instead.
 /cmd/[^/]+/main\.go$
+# Integration-test infrastructure (ADR-0008).
+internal/testkit/

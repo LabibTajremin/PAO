@@ -1,0 +1,159 @@
+# Generated from the operation table during P01; edit by hand from now on.
+customerNotifications:
+  get:
+    operationId: listCustomerNotifications
+    tags:
+    - Customer
+    summary: In-app notifications, newest first
+    x-permission: notification:read:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/notification.yaml#/NotificationList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+customerNotificationRead:
+  post:
+    operationId: markCustomerNotificationRead
+    tags:
+    - Customer
+    summary: Mark one notification read
+    x-permission: notification:read:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/NotificationId
+    responses:
+      '204':
+        description: No content
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+customerNotificationsReadAll:
+  post:
+    operationId: markAllCustomerNotificationsRead
+    tags:
+    - Customer
+    summary: Mark every notification read
+    x-permission: notification:read:own
+    responses:
+      '204':
+        description: No content
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+customerDeviceToken:
+  put:
+    operationId: registerCustomerDeviceToken
+    tags:
+    - Customer
+    summary: Register this device for push notifications
+    x-permission: device:register
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/common.yaml#/DeviceTokenInput
+    responses:
+      '204':
+        description: No content
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+providerNotifications:
+  get:
+    operationId: listProviderNotifications
+    tags:
+    - Provider
+    summary: In-app notifications, newest first
+    x-permission: notification:read:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/notification.yaml#/NotificationList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+providerNotificationRead:
+  post:
+    operationId: markProviderNotificationRead
+    tags:
+    - Provider
+    summary: Mark one notification read
+    x-permission: notification:read:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/NotificationId
+    responses:
+      '204':
+        description: No content
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+providerNotificationsReadAll:
+  post:
+    operationId: markAllProviderNotificationsRead
+    tags:
+    - Provider
+    summary: Mark every notification read
+    x-permission: notification:read:own
+    responses:
+      '204':
+        description: No content
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+providerDeviceToken:
+  put:
+    operationId: registerProviderDeviceToken
+    tags:
+    - Provider
+    summary: Register this device for push notifications
+    x-permission: device:register
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/common.yaml#/DeviceTokenInput
+    responses:
+      '204':
+        description: No content
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

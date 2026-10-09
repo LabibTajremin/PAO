@@ -1,0 +1,107 @@
+# MVP catalog (D2): five services with BN/EN names and fixed prices in BDT.
+# Loaded idempotently by `./pao seed`; `key` values derive stable IDs, so editing a price
+# here and reseeding inserts a new price version instead of changing history.
+# Prices are placeholders for the owner to confirm before launch.
+categories:
+  - key: electrical
+    name: { en: Electrical, bn: বৈদ্যুতিক }
+    icon: plug
+    services:
+      - key: electrician
+        name: { en: Electrician, bn: ইলেকট্রিশিয়ান }
+        icon: bolt
+        model: on_demand
+        required_level: 1
+        search_radius_m: 5000
+        level2_checklist:
+          - { en: Safe wiring, bn: নিরাপদ ওয়্যারিং }
+          - { en: Correct tool use, bn: সঠিক যন্ত্রপাতির ব্যবহার }
+          - { en: Earthing awareness, bn: আর্থিং সম্পর্কে জ্ঞান }
+        sub_services:
+          - { key: fan-install, name: { en: Ceiling fan installation, bn: সিলিং ফ্যান স্থাপন }, unit: unit, price: 500, max_quantity: 10 }
+          - { key: light-switch-repair, name: { en: Light or switch repair, bn: লাইট বা সুইচ মেরামত }, unit: unit, price: 300, max_quantity: 20 }
+          - { key: socket-install, name: { en: Socket installation, bn: সকেট স্থাপন }, unit: unit, price: 350, max_quantity: 20 }
+          - { key: breaker-replace, name: { en: Circuit breaker replacement, bn: সার্কিট ব্রেকার পরিবর্তন }, unit: unit, price: 900, max_quantity: 5 }
+          - { key: wiring-inspection, name: { en: Wiring inspection, bn: ওয়্যারিং পরিদর্শন }, unit: job, price: 800, max_quantity: 1 }
+  - key: plumbing
+    name: { en: Plumbing, bn: প্লাম্বিং }
+    icon: droplet
+    services:
+      - key: plumber
+        name: { en: Plumber, bn: প্লাম্বার }
+        icon: wrench
+        model: on_demand
+        required_level: 1
+        search_radius_m: 5000
+        level2_checklist:
+          - { en: Leak diagnosis, bn: লিক শনাক্তকরণ }
+          - { en: Pipe fitting, bn: পাইপ ফিটিং }
+        sub_services:
+          - { key: tap-repair, name: { en: Tap repair, bn: কল মেরামত }, unit: unit, price: 400, max_quantity: 10 }
+          - { key: leak-repair, name: { en: Pipe leak repair, bn: পাইপ লিক মেরামত }, unit: job, price: 700, max_quantity: 1 }
+          - { key: basin-install, name: { en: Basin installation, bn: বেসিন স্থাপন }, unit: unit, price: 1200, max_quantity: 5 }
+          - { key: commode-install, name: { en: Commode installation, bn: কমোড স্থাপন }, unit: unit, price: 2500, max_quantity: 3 }
+          - { key: drain-unclog, name: { en: Drain unclogging, bn: ড্রেন পরিষ্কার }, unit: job, price: 800, max_quantity: 1 }
+          - { key: tank-cleaning, name: { en: Water tank cleaning, bn: পানির ট্যাংক পরিষ্কার }, unit: job, price: 2000, max_quantity: 1 }
+  - key: appliances
+    name: { en: Appliances, bn: যন্ত্রপাতি }
+    icon: snowflake
+    services:
+      - key: ac-service
+        name: { en: AC service, bn: এসি সার্ভিস }
+        icon: snowflake
+        model: on_demand
+        required_level: 1
+        search_radius_m: 7000
+        level2_checklist:
+          - { en: Gas handling safety, bn: গ্যাস ব্যবহারে নিরাপত্তা }
+          - { en: Electrical isolation, bn: বৈদ্যুতিক বিচ্ছিন্নকরণ }
+        sub_services:
+          - { key: ac-cleaning, name: { en: AC general service, bn: এসি সাধারণ সার্ভিস }, unit: unit, price: 1200, max_quantity: 6 }
+          - { key: ac-gas-refill, name: { en: AC gas refill, bn: এসি গ্যাস রিফিল }, unit: unit, price: 3500, max_quantity: 6 }
+          - { key: ac-repair-check, name: { en: AC repair check-up, bn: এসি মেরামত পরীক্ষা }, unit: unit, price: 800, max_quantity: 6 }
+          - { key: ac-install, name: { en: AC installation, bn: এসি স্থাপন }, unit: unit, price: 3000, max_quantity: 6 }
+          - { key: ac-uninstall, name: { en: AC uninstallation, bn: এসি খোলা }, unit: unit, price: 1500, max_quantity: 6 }
+  - key: beauty
+    name: { en: Beauty, bn: বিউটি }
+    icon: sparkles
+    services:
+      - key: home-salon
+        name: { en: Home salon, bn: হোম স্যালন }
+        icon: scissors
+        model: on_demand
+        required_level: 1
+        search_radius_m: 6000
+        women_providers_only: true
+        level2_checklist:
+          - { en: Hygiene, bn: পরিচ্ছন্নতা }
+          - { en: Product knowledge, bn: পণ্য সম্পর্কে জ্ঞান }
+        sub_services:
+          - { key: haircut, name: { en: Haircut, bn: চুল কাটা }, unit: job, price: 600, max_quantity: 1 }
+          - { key: facial, name: { en: Facial, bn: ফেসিয়াল }, unit: job, price: 1500, max_quantity: 1 }
+          - { key: manicure, name: { en: Manicure, bn: ম্যানিকিউর }, unit: job, price: 700, max_quantity: 1 }
+          - { key: pedicure, name: { en: Pedicure, bn: পেডিকিউর }, unit: job, price: 800, max_quantity: 1 }
+          - { key: mehedi, name: { en: Mehedi (henna), bn: মেহেদি }, unit: job, price: 1000, max_quantity: 1 }
+          - { key: threading, name: { en: Eyebrow threading, bn: ভ্রু থ্রেডিং }, unit: unit, price: 200, max_quantity: 3 }
+  - key: transport
+    name: { en: Transport, bn: পরিবহন }
+    icon: car
+    services:
+      - key: driver
+        name: { en: Driver, bn: ড্রাইভার }
+        icon: steering-wheel
+        model: duration_hire
+        required_level: 1
+        search_radius_m: 10000
+        level2_checklist:
+          - { en: Valid driving licence, bn: বৈধ ড্রাইভিং লাইসেন্স }
+          - { en: Road test, bn: রোড টেস্ট }
+        sub_services:
+          - { key: driver-day, name: { en: Driver for 1 day (8 hours), bn: ১ দিনের জন্য ড্রাইভার (৮ ঘণ্টা) }, unit: day, price: 1500, max_quantity: 1 }
+
+# Demo admin users (dev and staging only). Passwords come from SEED_ADMIN_PASSWORD.
+admins:
+  - { email: super@pao.bd, name: Super Admin, roles: [super_admin] }
+  - { email: verifier@pao.bd, name: Verifier, roles: [verifier] }
+  - { email: catalog@pao.bd, name: Catalog Manager, roles: [catalog_manager] }
+  - { email: support@pao.bd, name: Support Agent, roles: [support_agent] }
