@@ -1,6 +1,6 @@
 import 'package:url_launcher/url_launcher.dart';
 
-/// Opens other apps: maps for directions (P-07) and the dialler.
+/// Opens other apps: maps for directions (P-07), the dialler and email.
 class Launcher {
   /// Creates the launcher; [open] is injectable for tests.
   Launcher({Future<bool> Function(Uri uri)? open}) : _open = open ?? _external;
@@ -20,4 +20,13 @@ class Launcher {
 
   /// Opens the dialler with [phone].
   Future<bool> call(String phone) => _open(Uri(scheme: 'tel', path: phone));
+
+  /// Opens the mail app with a message to [address] about [subject].
+  Future<bool> email(String address, {String? subject}) => _open(
+    Uri(
+      scheme: 'mailto',
+      path: address,
+      query: subject == null ? null : 'subject=${Uri.encodeComponent(subject)}',
+    ),
+  );
 }

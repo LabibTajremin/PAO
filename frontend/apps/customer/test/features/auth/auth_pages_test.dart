@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pao_customer/app/routes.dart';
+import 'package:pao_customer/features/account/presentation/legal_page.dart';
 import 'package:pao_customer/features/auth/presentation/profile_setup_page.dart';
-import 'package:pao_ui/pao_ui.dart';
 
 import '../../support/harness.dart';
 
@@ -102,7 +102,7 @@ void main() {
     final h = await start(tester);
     await tester.tap(find.text('Read the terms and privacy policy'));
     await h.settle(tester);
-    expect(find.byType(PlaceholderPage), findsOneWidget);
+    expect(find.byType(LegalPage), findsOneWidget);
   });
 
   testWidgets('resend becomes available after the countdown', (tester) async {
