@@ -26,10 +26,10 @@ void main() {
       ('Verification', 'A05'),
       ('Level 2 sessions', 'A07'),
       ('Catalog', 'A03'),
-      ('Providers', 'A08'),
-      ('Customers', 'A09'),
-      ('Bookings', 'A10'),
-      ('Complaints', 'A11'),
+      ('Providers', 'Search providers by name or phone'),
+      ('Customers', 'Search customers by name or phone'),
+      ('Bookings', 'Refreshes every 30 seconds'),
+      ('Complaints', 'Assigned to me'),
       ('Settings', 'A12'),
     ]) {
       await tester.tap(find.text(menu));
@@ -39,10 +39,10 @@ void main() {
     for (final (path, screen) in [
       (Routes.serviceOf('s1'), 'A04'),
       (Routes.reviewOf('p1'), 'A06'),
-      (Routes.detail(Routes.providers, 'p1'), 'A08'),
-      (Routes.detail(Routes.customers, 'c1'), 'A09'),
-      (Routes.detail(Routes.bookings, 'b1'), 'A10'),
-      (Routes.detail(Routes.complaints, 'k1'), 'A11'),
+      (Routes.detail(Routes.providers, 'p1'), 'All providers'),
+      (Routes.detail(Routes.customers, 'c1'), 'All customers'),
+      (Routes.detail(Routes.bookings, 'b1'), 'All bookings'),
+      (Routes.detail(Routes.complaints, 'k1'), 'All complaints'),
       (Routes.settingsTab('audit'), 'A12'),
       (Routes.settingsTab(''), 'A12'),
     ]) {

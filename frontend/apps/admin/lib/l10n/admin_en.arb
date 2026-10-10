@@ -108,5 +108,797 @@
         "type": "int"
       }
     }
+  },
+  "peopleStatusPending": "Pending",
+  "@peopleStatusPending": {
+    "description": "Account status (PRD §6.4)"
+  },
+  "peopleStatusActive": "Active",
+  "@peopleStatusActive": {
+    "description": "Account status"
+  },
+  "peopleStatusSuspended": "Suspended",
+  "@peopleStatusSuspended": {
+    "description": "Account status"
+  },
+  "peopleStatusBanned": "Banned",
+  "@peopleStatusBanned": {
+    "description": "Account status"
+  },
+  "peopleFilterStatus": "Status",
+  "@peopleFilterStatus": {
+    "description": "Filter and column: status"
+  },
+  "peopleFilterAny": "Any",
+  "@peopleFilterAny": {
+    "description": "Filter option: no filter"
+  },
+  "peopleName": "Name",
+  "@peopleName": {
+    "description": "Column: name"
+  },
+  "peoplePhone": "Phone",
+  "@peoplePhone": {
+    "description": "Column and fact: phone"
+  },
+  "peopleRating": "Rating",
+  "@peopleRating": {
+    "description": "Column and fact: average rating"
+  },
+  "peopleNoRating": "No rating yet",
+  "@peopleNoRating": {
+    "description": "Fact: no rating"
+  },
+  "peopleJoined": "Joined",
+  "@peopleJoined": {
+    "description": "Column and fact: sign-up date"
+  },
+  "peopleSuspend": "Suspend",
+  "@peopleSuspend": {
+    "description": "Account action"
+  },
+  "peopleBan": "Ban",
+  "@peopleBan": {
+    "description": "Account action"
+  },
+  "peopleReinstate": "Reinstate",
+  "@peopleReinstate": {
+    "description": "Account action"
+  },
+  "peopleSuspendTitle": "Suspend {name}?",
+  "@peopleSuspendTitle": {
+    "description": "Suspend dialog title",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "peopleBanTitle": "Ban {name}? Their phone cannot register again.",
+  "@peopleBanTitle": {
+    "description": "Customer ban dialog title",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "peopleReinstateTitle": "Reinstate {name}?",
+  "@peopleReinstateTitle": {
+    "description": "Reinstate dialog title",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "peopleReasonResolved": "Issue resolved after review",
+  "@peopleReasonResolved": {
+    "description": "Reinstate reason template"
+  },
+  "peopleReasonAppeal": "Appeal accepted",
+  "@peopleReasonAppeal": {
+    "description": "Reinstate reason template"
+  },
+  "peopleStatusChanged": "Account status updated.",
+  "@peopleStatusChanged": {
+    "description": "Status change succeeded"
+  },
+  "peopleRecentBookings": "Recent bookings",
+  "@peopleRecentBookings": {
+    "description": "Detail section"
+  },
+  "peopleNoBookings": "No bookings yet.",
+  "@peopleNoBookings": {
+    "description": "No recent bookings"
+  },
+  "peopleHistory": "Status history",
+  "@peopleHistory": {
+    "description": "Detail section: audit entries"
+  },
+  "peopleHistoryEmpty": "No status changes yet.",
+  "@peopleHistoryEmpty": {
+    "description": "Empty status history"
+  },
+  "peopleHistoryBy": "by {role}",
+  "@peopleHistoryBy": {
+    "description": "Who changed the status; role ID such as verifier",
+    "placeholders": {
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "providersTitle": "Providers",
+  "@providersTitle": {
+    "description": "A08 heading"
+  },
+  "providersSearch": "Search providers by name or phone",
+  "@providersSearch": {
+    "description": "A08 search box"
+  },
+  "providersEmpty": "No providers match these filters.",
+  "@providersEmpty": {
+    "description": "A08 empty list"
+  },
+  "providersAll": "All providers",
+  "@providersAll": {
+    "description": "Link back to the A08 list"
+  },
+  "providersLevel": "Level",
+  "@providersLevel": {
+    "description": "Filter and column: verification level"
+  },
+  "providersLevel0": "Registered",
+  "@providersLevel0": {
+    "description": "Level 0 (PRD §6.1)"
+  },
+  "providersLevel1": "Verified",
+  "@providersLevel1": {
+    "description": "Level 1"
+  },
+  "providersLevel2": "PAO Verified Pro",
+  "@providersLevel2": {
+    "description": "Level 2"
+  },
+  "providersFlagged": "Flagged for review",
+  "@providersFlagged": {
+    "description": "Filter and badge: provider flagged by quality thresholds"
+  },
+  "providersOnline": "Online",
+  "@providersOnline": {
+    "description": "Badge: provider is online"
+  },
+  "providersJobs": "Jobs done",
+  "@providersJobs": {
+    "description": "Column and fact: completed jobs"
+  },
+  "providersProfile": "Profile",
+  "@providersProfile": {
+    "description": "A08 detail section"
+  },
+  "providersServices": "Services",
+  "@providersServices": {
+    "description": "Fact: services offered"
+  },
+  "providersComplaints": "Complaints",
+  "@providersComplaints": {
+    "description": "Fact: complaint count"
+  },
+  "providersCancellations": "Cancellations (30 days)",
+  "@providersCancellations": {
+    "description": "Fact: cancellations in the last 30 days"
+  },
+  "providersGender": "Gender",
+  "@providersGender": {
+    "description": "Fact"
+  },
+  "providersGenderFemale": "Female",
+  "@providersGenderFemale": {
+    "description": "Gender"
+  },
+  "providersGenderMale": "Male",
+  "@providersGenderMale": {
+    "description": "Gender"
+  },
+  "providersGenderOther": "Other",
+  "@providersGenderOther": {
+    "description": "Gender"
+  },
+  "providersExperience": "Experience",
+  "@providersExperience": {
+    "description": "Fact"
+  },
+  "providersExperienceYears": "{years} years",
+  "@providersExperienceYears": {
+    "description": "Years of experience",
+    "placeholders": {
+      "years": {
+        "type": "String"
+      }
+    }
+  },
+  "providersVerification": "Verification",
+  "@providersVerification": {
+    "description": "A08 detail section"
+  },
+  "providersNoItems": "Nothing submitted yet.",
+  "@providersNoItems": {
+    "description": "No verification items"
+  },
+  "providersOptional": "optional",
+  "@providersOptional": {
+    "description": "Verification item not required"
+  },
+  "providersItemExpires": "Expires {date}",
+  "@providersItemExpires": {
+    "description": "Document expiry",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "providersItemNid": "National ID",
+  "@providersItemNid": {
+    "description": "Verification item"
+  },
+  "providersItemSelfie": "Selfie",
+  "@providersItemSelfie": {
+    "description": "Verification item"
+  },
+  "providersItemPoliceClearance": "Police clearance",
+  "@providersItemPoliceClearance": {
+    "description": "Verification item"
+  },
+  "providersItemAddress": "Address",
+  "@providersItemAddress": {
+    "description": "Verification item"
+  },
+  "providersItemEmergencyContact": "Emergency contact",
+  "@providersItemEmergencyContact": {
+    "description": "Verification item"
+  },
+  "providersItemSkillProof": "Skill proof",
+  "@providersItemSkillProof": {
+    "description": "Verification item"
+  },
+  "providersItemServiceArea": "Service area",
+  "@providersItemServiceArea": {
+    "description": "Verification item"
+  },
+  "providersItemCodeOfConduct": "Code of conduct",
+  "@providersItemCodeOfConduct": {
+    "description": "Verification item"
+  },
+  "providersItemMissing": "Missing",
+  "@providersItemMissing": {
+    "description": "Verification item status"
+  },
+  "providersItemPending": "Pending review",
+  "@providersItemPending": {
+    "description": "Verification item status"
+  },
+  "providersItemApproved": "Approved",
+  "@providersItemApproved": {
+    "description": "Verification item status"
+  },
+  "providersItemRejected": "Rejected",
+  "@providersItemRejected": {
+    "description": "Verification item status"
+  },
+  "providersItemExpired": "Expired",
+  "@providersItemExpired": {
+    "description": "Verification item status"
+  },
+  "providersBanTitle": "Ban {name}? Their NID, phone and face cannot register again.",
+  "@providersBanTitle": {
+    "description": "Provider ban dialog title (PRD §6.4)",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "providersReasonNoShow": "Repeated no-shows",
+  "@providersReasonNoShow": {
+    "description": "Reason template"
+  },
+  "providersReasonComplaint": "Verified complaint",
+  "@providersReasonComplaint": {
+    "description": "Reason template"
+  },
+  "providersReasonRating": "Rating below the floor",
+  "@providersReasonRating": {
+    "description": "Reason template"
+  },
+  "providersReasonFraud": "Forged documents",
+  "@providersReasonFraud": {
+    "description": "Reason template"
+  },
+  "customersTitle": "Customers",
+  "@customersTitle": {
+    "description": "A09 heading"
+  },
+  "customersSearch": "Search customers by name or phone",
+  "@customersSearch": {
+    "description": "A09 search box"
+  },
+  "customersEmpty": "No customers match these filters.",
+  "@customersEmpty": {
+    "description": "A09 empty list"
+  },
+  "customersAll": "All customers",
+  "@customersAll": {
+    "description": "Link back to the A09 list"
+  },
+  "customersBookings": "Total bookings",
+  "@customersBookings": {
+    "description": "Column and fact: booking count"
+  },
+  "customersProfile": "Profile",
+  "@customersProfile": {
+    "description": "A09 detail section"
+  },
+  "customersComplaints": "Complaints and reports",
+  "@customersComplaints": {
+    "description": "A09 detail section"
+  },
+  "customersNoComplaints": "No complaints yet.",
+  "@customersNoComplaints": {
+    "description": "No complaints"
+  },
+  "customersReasonAbuse": "Abusive behaviour",
+  "@customersReasonAbuse": {
+    "description": "Reason template"
+  },
+  "customersReasonFake": "Repeated fake bookings",
+  "@customersReasonFake": {
+    "description": "Reason template"
+  },
+  "customersReasonPayment": "Refused to pay",
+  "@customersReasonPayment": {
+    "description": "Reason template"
+  },
+  "bookingsTitle": "Bookings",
+  "@bookingsTitle": {
+    "description": "A10 heading"
+  },
+  "bookingsAutoRefresh": "Refreshes every {seconds} seconds",
+  "@bookingsAutoRefresh": {
+    "description": "A10 auto-refresh note",
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingsAreaHint": "Filter by area, e.g. Banani",
+  "@bookingsAreaHint": {
+    "description": "A10 area box"
+  },
+  "bookingsAnyDate": "Any date",
+  "@bookingsAnyDate": {
+    "description": "A10 date filter, none set"
+  },
+  "bookingsClearDates": "Clear dates",
+  "@bookingsClearDates": {
+    "description": "A10 clears the date filter"
+  },
+  "bookingsEmpty": "No bookings match these filters.",
+  "@bookingsEmpty": {
+    "description": "A10 empty list"
+  },
+  "bookingsAll": "All bookings",
+  "@bookingsAll": {
+    "description": "Link back to the A10 list"
+  },
+  "bookingsNumber": "Booking",
+  "@bookingsNumber": {
+    "description": "Column: booking number"
+  },
+  "bookingsService": "Service",
+  "@bookingsService": {
+    "description": "Column and fact"
+  },
+  "bookingsCreated": "Created",
+  "@bookingsCreated": {
+    "description": "Column and fact: creation time"
+  },
+  "bookingsTotal": "Total",
+  "@bookingsTotal": {
+    "description": "Column and fact"
+  },
+  "bookingsWhen": "Scheduled for",
+  "@bookingsWhen": {
+    "description": "Fact"
+  },
+  "bookingsAsap": "As soon as possible",
+  "@bookingsAsap": {
+    "description": "Timing: ASAP"
+  },
+  "bookingsEnds": "Hire ends",
+  "@bookingsEnds": {
+    "description": "Fact: end of a duration hire"
+  },
+  "bookingsStarted": "Work started",
+  "@bookingsStarted": {
+    "description": "Fact: in progress at"
+  },
+  "bookingsFinished": "Work completed",
+  "@bookingsFinished": {
+    "description": "Fact: completed at"
+  },
+  "bookingsPayment": "Payment",
+  "@bookingsPayment": {
+    "description": "Fact"
+  },
+  "bookingsCash": "Cash",
+  "@bookingsCash": {
+    "description": "Payment method"
+  },
+  "bookingsCashReceived": "Cash received",
+  "@bookingsCashReceived": {
+    "description": "Payment confirmed"
+  },
+  "bookingsAddress": "Address",
+  "@bookingsAddress": {
+    "description": "Fact"
+  },
+  "bookingsNote": "Customer note",
+  "@bookingsNote": {
+    "description": "Fact"
+  },
+  "bookingsCancelledBy": "Cancelled by {actor}",
+  "@bookingsCancelledBy": {
+    "description": "Fact: who cancelled; the value is the reason",
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingsParties": "Customer and provider",
+  "@bookingsParties": {
+    "description": "A10 detail section"
+  },
+  "bookingsCustomer": "Customer",
+  "@bookingsCustomer": {
+    "description": "Party and timeline actor"
+  },
+  "bookingsProvider": "Provider",
+  "@bookingsProvider": {
+    "description": "Party and timeline actor"
+  },
+  "bookingsNotAssigned": "Not assigned yet",
+  "@bookingsNotAssigned": {
+    "description": "No provider on the booking"
+  },
+  "bookingsActorSystem": "System",
+  "@bookingsActorSystem": {
+    "description": "Timeline actor"
+  },
+  "bookingsActorAdmin": "Admin",
+  "@bookingsActorAdmin": {
+    "description": "Timeline actor"
+  },
+  "bookingsItems": "Items",
+  "@bookingsItems": {
+    "description": "A10 detail section"
+  },
+  "bookingsQty": "{quantity} × {price}",
+  "@bookingsQty": {
+    "description": "Quantity times unit price",
+    "placeholders": {
+      "quantity": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingsExtra": "Extra",
+  "@bookingsExtra": {
+    "description": "Badge: line added during the job"
+  },
+  "bookingsExtras": "Proposed extras",
+  "@bookingsExtras": {
+    "description": "A10 detail section"
+  },
+  "bookingsExtrasPending": "Waiting for the customer",
+  "@bookingsExtrasPending": {
+    "description": "Extras status"
+  },
+  "bookingsExtrasApproved": "Approved by the customer",
+  "@bookingsExtrasApproved": {
+    "description": "Extras status"
+  },
+  "bookingsExtrasDeclined": "Declined by the customer",
+  "@bookingsExtrasDeclined": {
+    "description": "Extras status"
+  },
+  "bookingsExtrasAdded": "Adds {added}; new total {total}",
+  "@bookingsExtrasAdded": {
+    "description": "Extras amounts",
+    "placeholders": {
+      "added": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingsTimeline": "Timeline",
+  "@bookingsTimeline": {
+    "description": "A10 detail section"
+  },
+  "bookingsStatusRequested": "Requested",
+  "@bookingsStatusRequested": {
+    "description": "Booking status"
+  },
+  "bookingsStatusAccepted": "Accepted",
+  "@bookingsStatusAccepted": {
+    "description": "Booking status"
+  },
+  "bookingsStatusOnTheWay": "On the way",
+  "@bookingsStatusOnTheWay": {
+    "description": "Booking status"
+  },
+  "bookingsStatusArrived": "Arrived",
+  "@bookingsStatusArrived": {
+    "description": "Booking status"
+  },
+  "bookingsStatusInProgress": "In progress",
+  "@bookingsStatusInProgress": {
+    "description": "Booking status"
+  },
+  "bookingsStatusCompleted": "Completed",
+  "@bookingsStatusCompleted": {
+    "description": "Booking status"
+  },
+  "bookingsStatusRejected": "Rejected",
+  "@bookingsStatusRejected": {
+    "description": "Booking status"
+  },
+  "bookingsStatusTimedOut": "Timed out",
+  "@bookingsStatusTimedOut": {
+    "description": "Booking status"
+  },
+  "bookingsStatusCancelled": "Cancelled",
+  "@bookingsStatusCancelled": {
+    "description": "Booking status"
+  },
+  "complaintsTitle": "Complaints",
+  "@complaintsTitle": {
+    "description": "A11 heading"
+  },
+  "complaintsMine": "Assigned to me",
+  "@complaintsMine": {
+    "description": "A11 filter"
+  },
+  "complaintsEmpty": "No complaints match these filters.",
+  "@complaintsEmpty": {
+    "description": "A11 empty list"
+  },
+  "complaintsAll": "All complaints",
+  "@complaintsAll": {
+    "description": "Link back to the A11 list"
+  },
+  "complaintsTicket": "Ticket",
+  "@complaintsTicket": {
+    "description": "Column: ticket number"
+  },
+  "complaintsReason": "Reason",
+  "@complaintsReason": {
+    "description": "Column and fact"
+  },
+  "complaintsReporter": "Reported by",
+  "@complaintsReporter": {
+    "description": "Column and fact"
+  },
+  "complaintsOpened": "Opened",
+  "@complaintsOpened": {
+    "description": "Column and fact: creation time"
+  },
+  "complaintsStatusOpen": "Open",
+  "@complaintsStatusOpen": {
+    "description": "Complaint status"
+  },
+  "complaintsStatusAssigned": "Assigned",
+  "@complaintsStatusAssigned": {
+    "description": "Complaint status"
+  },
+  "complaintsStatusResolved": "Resolved",
+  "@complaintsStatusResolved": {
+    "description": "Complaint status"
+  },
+  "complaintsReasonNoShow": "No-show",
+  "@complaintsReasonNoShow": {
+    "description": "Complaint reason"
+  },
+  "complaintsReasonLate": "Late",
+  "@complaintsReasonLate": {
+    "description": "Complaint reason"
+  },
+  "complaintsReasonPoorQuality": "Poor quality",
+  "@complaintsReasonPoorQuality": {
+    "description": "Complaint reason"
+  },
+  "complaintsReasonOvercharge": "Overcharged",
+  "@complaintsReasonOvercharge": {
+    "description": "Complaint reason"
+  },
+  "complaintsReasonDamage": "Damage",
+  "@complaintsReasonDamage": {
+    "description": "Complaint reason"
+  },
+  "complaintsReasonBehaviour": "Behaviour",
+  "@complaintsReasonBehaviour": {
+    "description": "Complaint reason"
+  },
+  "complaintsReasonSafety": "Safety",
+  "@complaintsReasonSafety": {
+    "description": "Complaint reason"
+  },
+  "complaintsReasonCustomerUnavailable": "Customer unavailable",
+  "@complaintsReasonCustomerUnavailable": {
+    "description": "Complaint reason"
+  },
+  "complaintsReasonPayment": "Payment",
+  "@complaintsReasonPayment": {
+    "description": "Complaint reason"
+  },
+  "complaintsReasonOther": "Other",
+  "@complaintsReasonOther": {
+    "description": "Complaint reason"
+  },
+  "complaintsByCustomer": "Customer",
+  "@complaintsByCustomer": {
+    "description": "Reporter role"
+  },
+  "complaintsByProvider": "Provider",
+  "@complaintsByProvider": {
+    "description": "Reporter role"
+  },
+  "complaintsAssignee": "Assigned to",
+  "@complaintsAssignee": {
+    "description": "Fact"
+  },
+  "complaintsUnassigned": "Nobody yet",
+  "@complaintsUnassigned": {
+    "description": "No assignee"
+  },
+  "complaintsYou": "You",
+  "@complaintsYou": {
+    "description": "The signed-in admin"
+  },
+  "complaintsAgent": "Agent {id}",
+  "@complaintsAgent": {
+    "description": "Another admin, by short ID",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "complaintsDescription": "What happened",
+  "@complaintsDescription": {
+    "description": "Complaint description heading"
+  },
+  "complaintsOpenBooking": "Open the booking",
+  "@complaintsOpenBooking": {
+    "description": "Link to A10 detail"
+  },
+  "complaintsReporterProfile": "Reporter's profile",
+  "@complaintsReporterProfile": {
+    "description": "Link to the reporter"
+  },
+  "complaintsAgainstProfile": "Other party's profile",
+  "@complaintsAgainstProfile": {
+    "description": "Link to the person complained about"
+  },
+  "complaintsEvidence": "Evidence photos",
+  "@complaintsEvidence": {
+    "description": "A11 detail section"
+  },
+  "complaintsNoEvidence": "No photos attached.",
+  "@complaintsNoEvidence": {
+    "description": "No evidence"
+  },
+  "complaintsPhoto": "Photo {number}",
+  "@complaintsPhoto": {
+    "description": "One evidence photo",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "complaintsPhotoPending": "Opening complaint photos here is not available yet.",
+  "@complaintsPhotoPending": {
+    "description": "The API has no signed URL for complaint photos yet"
+  },
+  "complaintsComments": "Internal comments",
+  "@complaintsComments": {
+    "description": "A11 detail section"
+  },
+  "complaintsNoComments": "No comments yet.",
+  "@complaintsNoComments": {
+    "description": "No comments"
+  },
+  "complaintsCommentHint": "Add a note for the team",
+  "@complaintsCommentHint": {
+    "description": "Comment box"
+  },
+  "complaintsCommentSend": "Add comment",
+  "@complaintsCommentSend": {
+    "description": "Comment button"
+  },
+  "complaintsCommented": "Comment added.",
+  "@complaintsCommented": {
+    "description": "Comment saved"
+  },
+  "complaintsActions": "Actions",
+  "@complaintsActions": {
+    "description": "A11 detail section"
+  },
+  "complaintsAssignMe": "Assign to me",
+  "@complaintsAssignMe": {
+    "description": "Assign action"
+  },
+  "complaintsAssignOther": "Assign to another agent",
+  "@complaintsAssignOther": {
+    "description": "Assign action"
+  },
+  "complaintsPickAgent": "Choose a support agent",
+  "@complaintsPickAgent": {
+    "description": "Agent picker title"
+  },
+  "complaintsNoAgents": "No active support agents.",
+  "@complaintsNoAgents": {
+    "description": "Agent picker empty"
+  },
+  "complaintsAssigned": "Complaint assigned.",
+  "@complaintsAssigned": {
+    "description": "Assign succeeded"
+  },
+  "complaintsResolve": "Resolve",
+  "@complaintsResolve": {
+    "description": "Resolve action"
+  },
+  "complaintsResolveTitle": "Resolve {ticket}",
+  "@complaintsResolveTitle": {
+    "description": "Resolve dialog title",
+    "placeholders": {
+      "ticket": {
+        "type": "String"
+      }
+    }
+  },
+  "complaintsResolution": "Resolution note",
+  "@complaintsResolution": {
+    "description": "Resolve dialog field"
+  },
+  "complaintsVerified": "Verified complaint",
+  "@complaintsVerified": {
+    "description": "Resolve checkbox and badge"
+  },
+  "complaintsVerifiedHelp": "A verified complaint feeds the provider's quality review.",
+  "@complaintsVerifiedHelp": {
+    "description": "Resolve checkbox help (PRD §6.4)"
+  },
+  "complaintsNotVerified": "Not verified",
+  "@complaintsNotVerified": {
+    "description": "Badge"
+  },
+  "complaintsResolved": "Complaint resolved.",
+  "@complaintsResolved": {
+    "description": "Resolve succeeded"
+  },
+  "complaintsResolutionTitle": "Resolution",
+  "@complaintsResolutionTitle": {
+    "description": "A11 detail section"
   }
 }

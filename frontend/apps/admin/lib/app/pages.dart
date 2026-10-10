@@ -4,7 +4,17 @@ import 'package:pao_admin/app/routes.dart';
 import 'package:pao_admin/app/services.dart';
 import 'package:pao_admin/features/auth/presentation/login_page.dart';
 import 'package:pao_admin/features/auth/presentation/password_page.dart';
+import 'package:pao_admin/features/bookings/presentation/booking_detail_page.dart';
+import 'package:pao_admin/features/bookings/presentation/bookings_page.dart';
+import 'package:pao_admin/features/complaints/presentation/complaint_detail_page.dart';
+import 'package:pao_admin/features/complaints/presentation/complaints_page.dart';
+import 'package:pao_admin/features/customers/presentation/customer_detail_page.dart';
+import 'package:pao_admin/features/customers/presentation/customers_page.dart';
+import 'package:pao_admin/features/providers/presentation/provider_detail_page.dart';
+import 'package:pao_admin/features/providers/presentation/providers_page.dart';
 import 'package:pao_ui/pao_ui.dart';
+
+String _id(GoRouterState state) => state.pathParameters['id']!;
 
 GoRoute _page(String path, Widget Function(GoRouterState state) build) =>
     GoRoute(path: path, builder: (_, state) => build(state));
@@ -30,14 +40,17 @@ List<RouteBase> consoleRoutes(AppServices s) => [
   _page(Routes.verification, (_) => const PlaceholderPage(title: 'A05')),
   _page(Routes.review, (_) => const PlaceholderPage(title: 'A06')),
   _page(Routes.level2, (_) => const PlaceholderPage(title: 'A07')),
-  _page(Routes.providers, (_) => const PlaceholderPage(title: 'A08')),
-  _page('/providers/:id', (_) => const PlaceholderPage(title: 'A08')),
-  _page(Routes.customers, (_) => const PlaceholderPage(title: 'A09')),
-  _page('/customers/:id', (_) => const PlaceholderPage(title: 'A09')),
-  _page(Routes.bookings, (_) => const PlaceholderPage(title: 'A10')),
-  _page('/bookings/:id', (_) => const PlaceholderPage(title: 'A10')),
-  _page(Routes.complaints, (_) => const PlaceholderPage(title: 'A11')),
-  _page('/complaints/:id', (_) => const PlaceholderPage(title: 'A11')),
+  _page(Routes.providers, (_) => ProvidersPage(services: s)),
+  _page('/providers/:id', (st) => ProviderDetailPage(services: s, id: _id(st))),
+  _page(Routes.customers, (_) => CustomersPage(services: s)),
+  _page('/customers/:id', (st) => CustomerDetailPage(services: s, id: _id(st))),
+  _page(Routes.bookings, (_) => BookingsPage(services: s)),
+  _page('/bookings/:id', (st) => BookingDetailPage(services: s, id: _id(st))),
+  _page(Routes.complaints, (_) => ComplaintsPage(services: s)),
+  _page(
+    '/complaints/:id',
+    (st) => ComplaintDetailPage(services: s, id: _id(st)),
+  ),
   _page(Routes.settings, (_) => const PlaceholderPage(title: 'A12')),
   _page('/settings/:tab', (_) => const PlaceholderPage(title: 'A12')),
 ];
