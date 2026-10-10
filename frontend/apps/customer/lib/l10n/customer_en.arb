@@ -121,5 +121,563 @@
   "onbSlide3Body": "See the price before you book. Pay the provider in cash when the job is done.",
   "@onbSlide3Body": {
     "description": "C32 body"
+  },
+  "locPermTitle": "Find services near you",
+  "@locPermTitle": {
+    "description": "C34 heading"
+  },
+  "locPermBody": "PAO reads your location once to set your address and show providers nearby. We never track you in the background.",
+  "@locPermBody": {
+    "description": "C34 explanation"
+  },
+  "locPermAllow": "Allow location access",
+  "@locPermAllow": {
+    "description": "C34 primary button"
+  },
+  "locPermManual": "Enter address manually",
+  "@locPermManual": {
+    "description": "C34 secondary button"
+  },
+  "locTitleSet": "Set your location",
+  "@locTitleSet": {
+    "description": "C06 title"
+  },
+  "locTitleNew": "Add address",
+  "@locTitleNew": {
+    "description": "C25 title when adding"
+  },
+  "locTitleEdit": "Edit address",
+  "@locTitleEdit": {
+    "description": "C25 title when editing"
+  },
+  "locUseCurrent": "Use my current location",
+  "@locUseCurrent": {
+    "description": "Button that reads the GPS position"
+  },
+  "locLocateFailed": "We could not find your location. Search for your address or move the pin.",
+  "@locLocateFailed": {
+    "description": "GPS off or refused"
+  },
+  "locDragHint": "Drag the map to move the pin",
+  "@locDragHint": {
+    "description": "Hint under the map"
+  },
+  "locPinHere": "Your pin",
+  "@locPinHere": {
+    "description": "Map label before a place name is known"
+  },
+  "locSearch": "Search for an address",
+  "@locSearch": {
+    "description": "Address search field label"
+  },
+  "locSearchHint": "Road, area or landmark",
+  "@locSearchHint": {
+    "description": "Address search placeholder"
+  },
+  "locLabel": "Save as",
+  "@locLabel": {
+    "description": "Address label chooser heading"
+  },
+  "locLabelHome": "Home",
+  "@locLabelHome": {
+    "description": "Address label"
+  },
+  "locLabelOffice": "Office",
+  "@locLabelOffice": {
+    "description": "Address label"
+  },
+  "locLabelOther": "Other",
+  "@locLabelOther": {
+    "description": "Address label"
+  },
+  "locLine1": "House and road",
+  "@locLine1": {
+    "description": "Address line 1 label"
+  },
+  "locLine1Hint": "House 12, Road 5, Block C",
+  "@locLine1Hint": {
+    "description": "Address line 1 example"
+  },
+  "locLine1Invalid": "Enter 3 to 200 characters.",
+  "@locLine1Invalid": {
+    "description": "Address line 1 too short or long"
+  },
+  "locLine2": "Floor, flat or landmark (optional)",
+  "@locLine2": {
+    "description": "Address line 2 label"
+  },
+  "locArea": "Area",
+  "@locArea": {
+    "description": "Address area label"
+  },
+  "locSave": "Save address",
+  "@locSave": {
+    "description": "Save button"
+  },
+  "locCovered": "PAO works in {area}",
+  "@locCovered": {
+    "description": "The pin is inside a launch area",
+    "placeholders": {
+      "area": {
+        "type": "String"
+      }
+    }
+  },
+  "locNotCoveredTitle": "We are not here yet",
+  "@locNotCoveredTitle": {
+    "description": "C35 heading"
+  },
+  "locNotCoveredBody": "PAO is not available at this location yet. You can still save it and book once we arrive.",
+  "@locNotCoveredBody": {
+    "description": "C35 note on the address form"
+  },
+  "homeAddressTitle": "Your address",
+  "@homeAddressTitle": {
+    "description": "C07 address header caption"
+  },
+  "homeNoAddress": "Set your address",
+  "@homeNoAddress": {
+    "description": "C07 header without an address"
+  },
+  "homeNoAddressBody": "Add your address to see services near you.",
+  "@homeNoAddressBody": {
+    "description": "C07 without an address"
+  },
+  "homeSearchHint": "Search for a service",
+  "@homeSearchHint": {
+    "description": "C07 search bar"
+  },
+  "homeCategories": "Services",
+  "@homeCategories": {
+    "description": "C07 category grid heading"
+  },
+  "homeAllServices": "All services",
+  "@homeAllServices": {
+    "description": "C07 link and C37 title"
+  },
+  "homeNoServices": "No services yet",
+  "@homeNoServices": {
+    "description": "Empty catalog"
+  },
+  "homeAddressSheet": "Choose address",
+  "@homeAddressSheet": {
+    "description": "Address switch sheet title"
+  },
+  "homeAddAddress": "Add a new address",
+  "@homeAddAddress": {
+    "description": "Address sheet action"
+  },
+  "homeNotCoveredBody": "PAO is not available at this address yet. Choose another address to see services.",
+  "@homeNotCoveredBody": {
+    "description": "C35 on home"
+  },
+  "homeChangeAddress": "Change address",
+  "@homeChangeAddress": {
+    "description": "C35 button"
+  },
+  "homeActiveOpen": "Track",
+  "@homeActiveOpen": {
+    "description": "Active booking banner action"
+  },
+  "homeStatusRequested": "Waiting for the provider to accept",
+  "@homeStatusRequested": {
+    "description": "Active booking status"
+  },
+  "homeStatusAccepted": "The provider accepted",
+  "@homeStatusAccepted": {
+    "description": "Active booking status"
+  },
+  "homeStatusOnTheWay": "The provider is on the way",
+  "@homeStatusOnTheWay": {
+    "description": "Active booking status"
+  },
+  "homeStatusArrived": "The provider has arrived",
+  "@homeStatusArrived": {
+    "description": "Active booking status"
+  },
+  "homeStatusInProgress": "The job is in progress",
+  "@homeStatusInProgress": {
+    "description": "Active booking status"
+  },
+  "searchHint": "Search services, e.g. fan repair",
+  "@searchHint": {
+    "description": "C08 field placeholder"
+  },
+  "searchPrompt": "What do you need help with?",
+  "@searchPrompt": {
+    "description": "C08 before typing"
+  },
+  "searchServices": "Services",
+  "@searchServices": {
+    "description": "C08 services heading"
+  },
+  "searchSubServices": "Specific jobs",
+  "@searchSubServices": {
+    "description": "C08 sub-services heading"
+  },
+  "searchNoResults": "No results for \"{query}\"",
+  "@searchNoResults": {
+    "description": "C38 heading",
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchNoResultsBody": "Check the spelling or try another word. You can also browse all services.",
+  "@searchNoResultsBody": {
+    "description": "C38 explanation"
+  },
+  "svcPerJob": "per job",
+  "@svcPerJob": {
+    "description": "Price unit"
+  },
+  "svcPerUnit": "per unit",
+  "@svcPerUnit": {
+    "description": "Price unit"
+  },
+  "svcPerHour": "per hour",
+  "@svcPerHour": {
+    "description": "Price unit"
+  },
+  "svcPerDay": "per day",
+  "@svcPerDay": {
+    "description": "Price unit"
+  },
+  "svcIncluded": "Included",
+  "@svcIncluded": {
+    "description": "Inclusions heading"
+  },
+  "svcExcluded": "Not included",
+  "@svcExcluded": {
+    "description": "Exclusions heading"
+  },
+  "svcTotal": "Total",
+  "@svcTotal": {
+    "description": "Price total label"
+  },
+  "svcChooseHint": "Choose at least one item to continue.",
+  "@svcChooseHint": {
+    "description": "Nothing selected yet"
+  },
+  "svcWomenOnly": "Only women providers do this service.",
+  "@svcWomenOnly": {
+    "description": "C43 note"
+  },
+  "svcSeeProviders": "See providers",
+  "@svcSeeProviders": {
+    "description": "C09 continue button"
+  },
+  "svcFixedPrice": "Prices are fixed by PAO. Pay in cash after the job.",
+  "@svcFixedPrice": {
+    "description": "C09 price note"
+  },
+  "svcNoItems": "Nothing can be booked for this service yet.",
+  "@svcNoItems": {
+    "description": "Service without sub-services"
+  },
+  "svcHireStart": "Start",
+  "@svcHireStart": {
+    "description": "C44 start heading"
+  },
+  "svcHireDate": "Choose a date",
+  "@svcHireDate": {
+    "description": "C44 date button"
+  },
+  "svcHireTime": "Choose a time",
+  "@svcHireTime": {
+    "description": "C44 time button"
+  },
+  "svcHireDuty": "Duty",
+  "@svcHireDuty": {
+    "description": "C44 duty heading"
+  },
+  "svcHireStartPast": "Choose a start time in the future.",
+  "@svcHireStartPast": {
+    "description": "C44 start in the past"
+  },
+  "svcHireNeedStart": "Choose when the driver should start.",
+  "@svcHireNeedStart": {
+    "description": "C44 start missing"
+  },
+  "svcHours": "{count, plural, =1{{n} hour} other{{n} hours}}",
+  "@svcHours": {
+    "description": "Duty length; n is the count in local digits",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "svcDays": "{count, plural, =1{{n} day} other{{n} days}}",
+  "@svcDays": {
+    "description": "Duty length; n is the count in local digits",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "provTitle": "Providers near you",
+  "@provTitle": {
+    "description": "C10 title"
+  },
+  "provSortFilter": "Sort & filter",
+  "@provSortFilter": {
+    "description": "C40 button and sheet title"
+  },
+  "provSort": "Sort by",
+  "@provSort": {
+    "description": "C40 sort heading"
+  },
+  "provSortDistance": "Nearest",
+  "@provSortDistance": {
+    "description": "Sort option"
+  },
+  "provSortRating": "Top rated",
+  "@provSortRating": {
+    "description": "Sort option"
+  },
+  "provFilter": "Show only",
+  "@provFilter": {
+    "description": "C40 filter heading"
+  },
+  "provFilterTopRated": "4 stars and above",
+  "@provFilterTopRated": {
+    "description": "Filter option"
+  },
+  "provFilterPro": "PAO Verified Pro",
+  "@provFilterPro": {
+    "description": "Filter option"
+  },
+  "provApply": "Apply",
+  "@provApply": {
+    "description": "C40 apply button"
+  },
+  "provEmptyTitle": "No providers nearby right now",
+  "@provEmptyTitle": {
+    "description": "C39 heading"
+  },
+  "provEmptyBody": "Providers come online throughout the day. Try again in a few minutes or change the filters.",
+  "@provEmptyBody": {
+    "description": "C39 explanation"
+  },
+  "provNoAddressTitle": "Add your address first",
+  "@provNoAddressTitle": {
+    "description": "C10 without an address"
+  },
+  "provNoAddressBody": "We need your address to find providers near you.",
+  "@provNoAddressBody": {
+    "description": "C10 without an address"
+  },
+  "provNoDraft": "Choose what you need on the service page first.",
+  "@provNoDraft": {
+    "description": "C10 opened without a selection"
+  },
+  "provChooseItems": "Choose items",
+  "@provChooseItems": {
+    "description": "Back to the service page"
+  },
+  "provPriceFor": "Price for your selection",
+  "@provPriceFor": {
+    "description": "C10 price summary"
+  },
+  "provJobs": "{count, plural, =1{{n} job done} other{{n} jobs done}}",
+  "@provJobs": {
+    "description": "Completed jobs; n is the count in local digits",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "provKmAway": "{km} km away",
+  "@provKmAway": {
+    "description": "Distance in kilometres",
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "provMAway": "{m} m away",
+  "@provMAway": {
+    "description": "Distance in metres",
+    "placeholders": {
+      "m": {
+        "type": "String"
+      }
+    }
+  },
+  "provBadgeNone": "Not verified",
+  "@provBadgeNone": {
+    "description": "Badge"
+  },
+  "provBadgeVerified": "Verified",
+  "@provBadgeVerified": {
+    "description": "Badge"
+  },
+  "provBadgeVerifiedPro": "PAO Verified Pro",
+  "@provBadgeVerifiedPro": {
+    "description": "Badge"
+  },
+  "provBadgeWhat": "What do badges mean?",
+  "@provBadgeWhat": {
+    "description": "C41 link"
+  },
+  "provBadgeSheet": "About badges",
+  "@provBadgeSheet": {
+    "description": "C41 title"
+  },
+  "provBadgeVerifiedBody": "A PAO verifier checked their NID, selfie, police clearance, address and emergency contact.",
+  "@provBadgeVerifiedBody": {
+    "description": "C41 Level 1"
+  },
+  "provBadgeProBody": "Verified, and PAO also checked their work in person with a skill test or a supervised job. Pros are listed higher.",
+  "@provBadgeProBody": {
+    "description": "C41 Level 2"
+  },
+  "provExperience": "{count, plural, =1{{n} year of experience} other{{n} years of experience}}",
+  "@provExperience": {
+    "description": "Experience; n is the count in local digits",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "provMemberSince": "On PAO since {date}",
+  "@provMemberSince": {
+    "description": "Join date",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "provServices": "Services",
+  "@provServices": {
+    "description": "C11 services heading"
+  },
+  "provRatings": "Ratings",
+  "@provRatings": {
+    "description": "C11 rating heading"
+  },
+  "provRatingCount": "{count, plural, =0{No ratings yet} =1{{n} rating} other{{n} ratings}}",
+  "@provRatingCount": {
+    "description": "Number of ratings; n is the count in local digits",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "provReviews": "Recent reviews",
+  "@provReviews": {
+    "description": "C11 reviews heading"
+  },
+  "provAllReviews": "All reviews",
+  "@provAllReviews": {
+    "description": "C11 link and C42 title"
+  },
+  "provNoReviews": "No reviews yet",
+  "@provNoReviews": {
+    "description": "No reviews"
+  },
+  "provNoReviewsBody": "Reviews appear here after completed jobs.",
+  "@provNoReviewsBody": {
+    "description": "No reviews explanation"
+  },
+  "provBook": "Book {name}",
+  "@provBook": {
+    "description": "C11 book button",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "provAbout": "About",
+  "@provAbout": {
+    "description": "C11 bio heading"
+  },
+  "provTagOnTime": "On time",
+  "@provTagOnTime": {
+    "description": "Review tag"
+  },
+  "provTagProfessional": "Professional",
+  "@provTagProfessional": {
+    "description": "Review tag"
+  },
+  "provTagQualityWork": "Quality work",
+  "@provTagQualityWork": {
+    "description": "Review tag"
+  },
+  "provTagClean": "Clean",
+  "@provTagClean": {
+    "description": "Review tag"
+  },
+  "provTagFriendly": "Friendly",
+  "@provTagFriendly": {
+    "description": "Review tag"
+  },
+  "provTagFairPrice": "Fair price",
+  "@provTagFairPrice": {
+    "description": "Review tag"
+  },
+  "provTagLate": "Late",
+  "@provTagLate": {
+    "description": "Review tag"
+  },
+  "provTagRude": "Rude",
+  "@provTagRude": {
+    "description": "Review tag"
+  },
+  "provTagPoorQuality": "Poor quality",
+  "@provTagPoorQuality": {
+    "description": "Review tag"
+  },
+  "provTagMessy": "Messy",
+  "@provTagMessy": {
+    "description": "Review tag"
+  },
+  "provTagPolite": "Polite",
+  "@provTagPolite": {
+    "description": "Review tag"
+  },
+  "provTagClearInstructions": "Clear instructions",
+  "@provTagClearInstructions": {
+    "description": "Review tag"
+  },
+  "provTagPaidPromptly": "Paid promptly",
+  "@provTagPaidPromptly": {
+    "description": "Review tag"
+  },
+  "provTagSafePlace": "Safe place",
+  "@provTagSafePlace": {
+    "description": "Review tag"
+  },
+  "provTagUnclearInstructions": "Unclear instructions",
+  "@provTagUnclearInstructions": {
+    "description": "Review tag"
+  },
+  "provTagUnsafePlace": "Unsafe place",
+  "@provTagUnsafePlace": {
+    "description": "Review tag"
   }
 }

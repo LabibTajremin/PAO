@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pao_core/pao_core.dart';
 import 'package:pao_customer/app/gate.dart';
+import 'package:pao_customer/features/location/domain/places.dart';
 import 'package:pao_l10n/pao_l10n.dart';
 
 /// Long-lived services shared by every screen of the customer app. Feature
@@ -19,6 +20,7 @@ class AppServices {
     required this.launcher,
     required this.photos,
     required this.push,
+    this.places = const NoPlacesService(),
     DateTime Function()? clock,
   }) : now = clock ?? DateTime.now,
        gate = ProfileGate(api);
@@ -52,6 +54,9 @@ class AppServices {
 
   /// Push notifications.
   final PushService push;
+
+  /// Address search on the maps provider (C06).
+  final PlacesService places;
 
   /// Current time; injectable so countdowns are testable.
   final DateTime Function() now;

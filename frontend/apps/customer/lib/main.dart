@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:pao_core/pao_core.dart';
 import 'package:pao_customer/app/app.dart';
 import 'package:pao_customer/app/services.dart';
+import 'package:pao_customer/features/location/data/google_places.dart';
 import 'package:pao_l10n/pao_l10n.dart';
 
 Future<void> main() async {
@@ -32,6 +33,7 @@ Future<void> main() async {
     launcher: Launcher(),
     photos: PhotoSource(),
     push: await _push(),
+    places: placesFromEnvironment(),
   );
   await sessions.restore();
   if (sessions.signedIn) {
