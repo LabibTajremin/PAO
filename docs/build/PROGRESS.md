@@ -28,8 +28,12 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P12 / task 1 — read `docs/build/phases/P12-*.md`; follow the partner app's layout
-(`frontend/apps/partner/README.md`) and reuse `pao_core`/`pao_ui`.
+P12 / task 2 — customer features. Done: paging helpers moved to `pao_core`; customer
+foundation (services, profile gate, routes, router, tabs, harness), onboarding, auth and
+profile set-up (C01–C05, C31–C33, C63); `BookingDraft` query contract and address
+routes. Remaining screens still show `PlaceholderPage` in `apps/customer/lib/app/pages.dart`:
+discovery (location, home, search, service, providers), booking flow (booking, live,
+cancel, rating, connectivity) and after-care (bookings, report, notifications, account).
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
