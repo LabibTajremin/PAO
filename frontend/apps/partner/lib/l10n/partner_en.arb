@@ -49,5 +49,582 @@
   "authResend": "Resend code",
   "@authResend": {
     "description": "Resend button."
+  },
+  "onbTagline": "Work on your own terms",
+  "@onbTagline": {
+    "description": "M01 tagline under the app name."
+  },
+  "onbLanguage": "Language",
+  "@onbLanguage": {
+    "description": "M02 label of the language switch."
+  },
+  "onbSkip": "Skip",
+  "@onbSkip": {
+    "description": "M02 button that ends onboarding early."
+  },
+  "onbNext": "Next",
+  "@onbNext": {
+    "description": "M02 button to the next slide."
+  },
+  "onbStart": "Get started",
+  "@onbStart": {
+    "description": "M02 button on the last slide."
+  },
+  "onbSlide1Title": "Get jobs near you",
+  "@onbSlide1Title": {
+    "description": "M02 slide 1 title."
+  },
+  "onbSlide1Body": "Customers nearby book your services. Accept the jobs that suit you.",
+  "@onbSlide1Body": {
+    "description": "M02 slide 1 body."
+  },
+  "onbSlide2Title": "Fixed prices, cash in hand",
+  "@onbSlide2Title": {
+    "description": "M02 slide 2 title."
+  },
+  "onbSlide2Body": "PAO sets the prices, so there is no haggling. Customers pay you in cash when the job is done.",
+  "@onbSlide2Body": {
+    "description": "M02 slide 2 body."
+  },
+  "onbSlide3Title": "Verified and trusted",
+  "@onbSlide3Title": {
+    "description": "M02 slide 3 title."
+  },
+  "onbSlide3Body": "Verify your documents once to earn the Verified badge and start getting requests.",
+  "@onbSlide3Body": {
+    "description": "M02 slide 3 body."
+  },
+  "enrolTitle": "Enrolment",
+  "@enrolTitle": {
+    "description": "Enrolment wizard title while loading."
+  },
+  "enrolStepOf": "Step {current} of {total}",
+  "@enrolStepOf": {
+    "description": "Wizard progress.",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "enrolStepPersonal": "Personal information",
+  "@enrolStepPersonal": {
+    "description": "M05 title."
+  },
+  "enrolStepServices": "Your services",
+  "@enrolStepServices": {
+    "description": "M06 title."
+  },
+  "enrolStepArea": "Service area",
+  "@enrolStepArea": {
+    "description": "M07 title."
+  },
+  "enrolStepNid": "National ID",
+  "@enrolStepNid": {
+    "description": "M08 title."
+  },
+  "enrolStepSelfie": "Live selfie",
+  "@enrolStepSelfie": {
+    "description": "M09 title."
+  },
+  "enrolStepPolice": "Police clearance",
+  "@enrolStepPolice": {
+    "description": "M10 title."
+  },
+  "enrolStepSkill": "Skill proof",
+  "@enrolStepSkill": {
+    "description": "M11 title."
+  },
+  "enrolStepContact": "Emergency contact",
+  "@enrolStepContact": {
+    "description": "M12 title."
+  },
+  "enrolStepConduct": "Code of conduct",
+  "@enrolStepConduct": {
+    "description": "M13 title."
+  },
+  "enrolReviewTitle": "Review and submit",
+  "@enrolReviewTitle": {
+    "description": "Wizard review title."
+  },
+  "enrolSaveContinue": "Save and continue",
+  "@enrolSaveContinue": {
+    "description": "Wizard main button."
+  },
+  "enrolSkip": "Skip for now",
+  "@enrolSkip": {
+    "description": "Skips the optional skill proof."
+  },
+  "enrolPickDate": "Select a date",
+  "@enrolPickDate": {
+    "description": "Empty date field."
+  },
+  "enrolNameLabel": "Full name (as on your NID)",
+  "@enrolNameLabel": {
+    "description": "M05 name field."
+  },
+  "enrolNameError": "Enter your full name as written on your NID.",
+  "@enrolNameError": {
+    "description": "M05 name validation."
+  },
+  "enrolDobLabel": "Date of birth",
+  "@enrolDobLabel": {
+    "description": "M05 date of birth field."
+  },
+  "enrolDobError": "You must be at least 18 years old.",
+  "@enrolDobError": {
+    "description": "M05 age rule."
+  },
+  "enrolGenderLabel": "Gender",
+  "@enrolGenderLabel": {
+    "description": "M05 gender label."
+  },
+  "enrolGenderFemale": "Female",
+  "@enrolGenderFemale": {
+    "description": "Gender option."
+  },
+  "enrolGenderMale": "Male",
+  "@enrolGenderMale": {
+    "description": "Gender option."
+  },
+  "enrolGenderOther": "Other",
+  "@enrolGenderOther": {
+    "description": "Gender option."
+  },
+  "enrolGenderError": "Choose your gender.",
+  "@enrolGenderError": {
+    "description": "M05 gender validation."
+  },
+  "enrolPresentAddress": "Present address",
+  "@enrolPresentAddress": {
+    "description": "M05 field."
+  },
+  "enrolPermanentAddress": "Permanent address",
+  "@enrolPermanentAddress": {
+    "description": "M05 field."
+  },
+  "enrolAddressError": "Enter a full address.",
+  "@enrolAddressError": {
+    "description": "M05 address validation."
+  },
+  "enrolServicesHint": "Choose up to 5 services you offer.",
+  "@enrolServicesHint": {
+    "description": "M06 hint."
+  },
+  "enrolServicesError": "Choose at least one service.",
+  "@enrolServicesError": {
+    "description": "M06 validation."
+  },
+  "enrolServicesEmpty": "No services are open for enrolment yet.",
+  "@enrolServicesEmpty": {
+    "description": "M06 empty catalog."
+  },
+  "enrolExperience": "Years of experience",
+  "@enrolExperience": {
+    "description": "M06 experience stepper."
+  },
+  "enrolAreaHint": "Set your home base. You will get requests within your working radius.",
+  "@enrolAreaHint": {
+    "description": "M07 hint."
+  },
+  "enrolAreaLocate": "Use my current location",
+  "@enrolAreaLocate": {
+    "description": "M07 button."
+  },
+  "enrolAreaNoPin": "No location set yet",
+  "@enrolAreaNoPin": {
+    "description": "M07 map label without a pin."
+  },
+  "enrolAreaPinned": "Home base: {lat}, {lng}",
+  "@enrolAreaPinned": {
+    "description": "M07 map label with coordinates.",
+    "placeholders": {
+      "lat": {
+        "type": "String"
+      },
+      "lng": {
+        "type": "String"
+      }
+    }
+  },
+  "enrolAreaOff": "Turn on location and allow PAO Partner to use it.",
+  "@enrolAreaOff": {
+    "description": "M07 location unavailable."
+  },
+  "enrolAreaError": "Set your home base first.",
+  "@enrolAreaError": {
+    "description": "M07 validation."
+  },
+  "enrolAreaRadius": "Working radius: {km} km",
+  "@enrolAreaRadius": {
+    "description": "M07 radius slider label.",
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "enrolNidNumber": "NID number",
+  "@enrolNidNumber": {
+    "description": "M08 field."
+  },
+  "enrolNidError": "Enter the 10, 13 or 17-digit NID number.",
+  "@enrolNidError": {
+    "description": "M08 validation."
+  },
+  "enrolNidFront": "Front of the card",
+  "@enrolNidFront": {
+    "description": "M08 photo slot."
+  },
+  "enrolNidBack": "Back of the card",
+  "@enrolNidBack": {
+    "description": "M08 photo slot."
+  },
+  "enrolPhotoError": "Add every photo before you continue.",
+  "@enrolPhotoError": {
+    "description": "Missing uploads."
+  },
+  "enrolTakePhoto": "Take photo",
+  "@enrolTakePhoto": {
+    "description": "Opens the camera."
+  },
+  "enrolChoosePhoto": "Choose from gallery",
+  "@enrolChoosePhoto": {
+    "description": "Opens the gallery."
+  },
+  "enrolRetake": "Retake",
+  "@enrolRetake": {
+    "description": "Replaces a photo."
+  },
+  "enrolUploading": "Uploading {percent}%",
+  "@enrolUploading": {
+    "description": "Upload progress.",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "enrolUploaded": "Uploaded",
+  "@enrolUploaded": {
+    "description": "Upload done."
+  },
+  "enrolUploadFailed": "Upload failed.",
+  "@enrolUploadFailed": {
+    "description": "Upload failure, followed by the reason."
+  },
+  "enrolSelfieHint": "Hold the phone at eye level in good light, take off sunglasses or a cap, and look at the camera.",
+  "@enrolSelfieHint": {
+    "description": "M09 guidance."
+  },
+  "enrolPoliceHint": "Add your police clearance certificate. It must be issued within the last 12 months.",
+  "@enrolPoliceHint": {
+    "description": "M10 hint."
+  },
+  "enrolIssueDate": "Issue date",
+  "@enrolIssueDate": {
+    "description": "M10 date field."
+  },
+  "enrolIssueDateError": "Enter the issue date.",
+  "@enrolIssueDateError": {
+    "description": "M10 validation."
+  },
+  "enrolSkillHint": "Optional: add training certificates or photos of your work. They help you reach Level 2.",
+  "@enrolSkillHint": {
+    "description": "M11 hint."
+  },
+  "enrolSkillPhoto": "Photo {number}",
+  "@enrolSkillPhoto": {
+    "description": "M11 photo slot.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "enrolContactHint": "Someone we can call in an emergency. We will text them a code to confirm.",
+  "@enrolContactHint": {
+    "description": "M12 hint."
+  },
+  "enrolContactName": "Name",
+  "@enrolContactName": {
+    "description": "M12 field."
+  },
+  "enrolContactRelation": "Relation",
+  "@enrolContactRelation": {
+    "description": "M12 field."
+  },
+  "enrolContactPhone": "Mobile number",
+  "@enrolContactPhone": {
+    "description": "M12 field."
+  },
+  "enrolContactNameError": "Enter their name.",
+  "@enrolContactNameError": {
+    "description": "M12 validation."
+  },
+  "enrolContactRelationError": "Enter how you are related.",
+  "@enrolContactRelationError": {
+    "description": "M12 validation."
+  },
+  "enrolContactPhoneError": "Enter an 11-digit Bangladeshi mobile number.",
+  "@enrolContactPhoneError": {
+    "description": "M12 validation."
+  },
+  "enrolContactSendCode": "Send code",
+  "@enrolContactSendCode": {
+    "description": "M12 button."
+  },
+  "enrolContactCodeSent": "Enter the code we sent to {phone}.",
+  "@enrolContactCodeSent": {
+    "description": "M12 code entry.",
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "enrolContactResend": "Send the code again",
+  "@enrolContactResend": {
+    "description": "M12 resend."
+  },
+  "enrolContactChange": "Change contact",
+  "@enrolContactChange": {
+    "description": "M12 edit contact."
+  },
+  "enrolConductIntro": "As a PAO partner, I will:",
+  "@enrolConductIntro": {
+    "description": "M13 heading."
+  },
+  "enrolConductRule1": "Treat every customer with respect and keep their home and belongings safe.",
+  "@enrolConductRule1": {
+    "description": "M13 rule."
+  },
+  "enrolConductRule2": "Arrive on time and tell the customer if I am delayed.",
+  "@enrolConductRule2": {
+    "description": "M13 rule."
+  },
+  "enrolConductRule3": "Charge only the price shown in the app.",
+  "@enrolConductRule3": {
+    "description": "M13 rule."
+  },
+  "enrolConductRule4": "Never ask a customer for favours, extra money or contact outside PAO.",
+  "@enrolConductRule4": {
+    "description": "M13 rule."
+  },
+  "enrolConductRule5": "Never work under the influence of alcohol or drugs.",
+  "@enrolConductRule5": {
+    "description": "M13 rule."
+  },
+  "enrolConductAccept": "I have read and accept the code of conduct.",
+  "@enrolConductAccept": {
+    "description": "M13 checkbox."
+  },
+  "enrolReviewBody": "Check that every step is complete, then submit for verification.",
+  "@enrolReviewBody": {
+    "description": "Review body."
+  },
+  "enrolSubmittedBody": "Your enrolment has been submitted.",
+  "@enrolSubmittedBody": {
+    "description": "Review body after submission."
+  },
+  "enrolSubmit": "Submit for verification",
+  "@enrolSubmit": {
+    "description": "Review main button."
+  },
+  "enrolGoVerification": "See verification status",
+  "@enrolGoVerification": {
+    "description": "Review button after submission."
+  },
+  "enrolStepDone": "Done",
+  "@enrolStepDone": {
+    "description": "Step badge."
+  },
+  "enrolStepTodo": "To do",
+  "@enrolStepTodo": {
+    "description": "Step badge."
+  },
+  "enrolOptional": "Optional",
+  "@enrolOptional": {
+    "description": "Step badge."
+  },
+  "verifTitle": "Verification",
+  "@verifTitle": {
+    "description": "M14 title."
+  },
+  "verifLevel": "Level {level}",
+  "@verifLevel": {
+    "description": "M14 verification level.",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "verifBadgeNone": "Not verified yet",
+  "@verifBadgeNone": {
+    "description": "Level 0 badge."
+  },
+  "verifBadgeVerified": "Verified",
+  "@verifBadgeVerified": {
+    "description": "Level 1 badge."
+  },
+  "verifBadgePro": "PAO Verified Pro",
+  "@verifBadgePro": {
+    "description": "Level 2 badge."
+  },
+  "verifCleared": "You are verified and can receive bookings.",
+  "@verifCleared": {
+    "description": "M14 status when cleared."
+  },
+  "verifIncomplete": "Finish your enrolment so we can check your documents.",
+  "@verifIncomplete": {
+    "description": "M14 status before submission."
+  },
+  "verifAttention": "Some items need your attention. Upload them again below.",
+  "@verifAttention": {
+    "description": "M14 status with rejected or expired items."
+  },
+  "verifPending": "We are checking your documents. This usually takes up to 48 hours.",
+  "@verifPending": {
+    "description": "M14 status while in review."
+  },
+  "verifGoHome": "Go to home",
+  "@verifGoHome": {
+    "description": "M14 button once cleared."
+  },
+  "verifContinue": "Continue enrolment",
+  "@verifContinue": {
+    "description": "M14 button to the next missing step."
+  },
+  "verifSubmit": "Review and submit",
+  "@verifSubmit": {
+    "description": "M14 button when every step is done but not submitted."
+  },
+  "verifItemsTitle": "Documents",
+  "@verifItemsTitle": {
+    "description": "M14 section heading."
+  },
+  "verifNoItems": "No documents yet.",
+  "@verifNoItems": {
+    "description": "M14 empty list."
+  },
+  "verifItemNid": "National ID",
+  "@verifItemNid": {
+    "description": "Verification item."
+  },
+  "verifItemSelfie": "Live selfie",
+  "@verifItemSelfie": {
+    "description": "Verification item."
+  },
+  "verifItemPolice": "Police clearance",
+  "@verifItemPolice": {
+    "description": "Verification item."
+  },
+  "verifItemAddress": "Address",
+  "@verifItemAddress": {
+    "description": "Verification item."
+  },
+  "verifItemContact": "Emergency contact",
+  "@verifItemContact": {
+    "description": "Verification item."
+  },
+  "verifItemSkill": "Skill proof",
+  "@verifItemSkill": {
+    "description": "Verification item."
+  },
+  "verifItemArea": "Services and area",
+  "@verifItemArea": {
+    "description": "Verification item."
+  },
+  "verifItemConduct": "Code of conduct",
+  "@verifItemConduct": {
+    "description": "Verification item."
+  },
+  "verifStatusMissing": "Missing",
+  "@verifStatusMissing": {
+    "description": "Item status."
+  },
+  "verifStatusPending": "In review",
+  "@verifStatusPending": {
+    "description": "Item status."
+  },
+  "verifStatusApproved": "Approved",
+  "@verifStatusApproved": {
+    "description": "Item status."
+  },
+  "verifStatusRejected": "Rejected",
+  "@verifStatusRejected": {
+    "description": "Item status."
+  },
+  "verifStatusExpired": "Expired",
+  "@verifStatusExpired": {
+    "description": "Item status."
+  },
+  "verifReason": "Reason: {reason}",
+  "@verifReason": {
+    "description": "Rejection reason.",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "verifExpires": "Valid until {date}",
+  "@verifExpires": {
+    "description": "Document expiry.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "verifExpired": "Expired on {date}",
+  "@verifExpired": {
+    "description": "Expired document.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "verifReupload": "Upload again",
+  "@verifReupload": {
+    "description": "Re-upload button."
+  },
+  "verifLevel2Title": "Level 2: skill check",
+  "@verifLevel2Title": {
+    "description": "Level 2 card title."
+  },
+  "verifLevel2Eligible": "You can take a skill check to earn PAO Verified Pro. Our team will contact you to schedule it.",
+  "@verifLevel2Eligible": {
+    "description": "Level 2 eligible."
+  },
+  "verifLevel2NotEligible": "Reach Level 1 first, then you can take a skill check.",
+  "@verifLevel2NotEligible": {
+    "description": "Level 2 not eligible."
+  },
+  "verifLevel2Session": "Skill check on {date} at {place}",
+  "@verifLevel2Session": {
+    "description": "Scheduled Level 2 session.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "verifLevel2Retry": "You can try again after {date}.",
+  "@verifLevel2Retry": {
+    "description": "Level 2 cooling-off.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
   }
 }
