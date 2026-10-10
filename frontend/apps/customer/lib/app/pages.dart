@@ -5,8 +5,17 @@ import 'package:pao_customer/app/services.dart';
 import 'package:pao_customer/features/auth/presentation/otp_page.dart';
 import 'package:pao_customer/features/auth/presentation/phone_page.dart';
 import 'package:pao_customer/features/auth/presentation/profile_setup_page.dart';
+import 'package:pao_customer/features/booking/presentation/confirmed_page.dart';
+import 'package:pao_customer/features/booking/presentation/setup_page.dart';
+import 'package:pao_customer/features/booking/presentation/waiting_page.dart';
+import 'package:pao_customer/features/cancel/presentation/cancel_page.dart';
+import 'package:pao_customer/features/live/presentation/completed_page.dart';
+import 'package:pao_customer/features/live/presentation/extras_page.dart';
+import 'package:pao_customer/features/live/presentation/live_page.dart';
 import 'package:pao_customer/features/onboarding/presentation/onboarding_page.dart';
 import 'package:pao_customer/features/onboarding/presentation/splash_page.dart';
+import 'package:pao_customer/features/rating/presentation/rating_page.dart';
+import 'package:pao_customer/shared/booking_draft.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 GoRoute _page(String path, Widget Function(GoRouterState state) build) =>
@@ -37,7 +46,13 @@ List<RouteBase> entryRoutes(AppServices s) => [
   _page(Routes.service, (_) => const PlaceholderPage(title: 'C09')),
   _page(Routes.providers, (_) => const PlaceholderPage(title: 'C10')),
   _page(Routes.provider, (_) => const PlaceholderPage(title: 'C11')),
-  _page(Routes.book, (_) => const PlaceholderPage(title: 'C12')),
+  _page(
+    Routes.book,
+    (st) => SetupPage(
+      services: s,
+      draft: BookingDraft.fromQuery(st.uri.queryParameters),
+    ),
+  ),
 ];
 
 /// Full-screen booking screens opened over the tabs.
@@ -45,13 +60,13 @@ List<RouteBase> bookingRoutes(AppServices s) {
   GoRoute booking(String part, Widget Function(String id) build) =>
       _page('/bookings/:id/$part', (st) => build(st.pathParameters['id']!));
   return [
-    booking('waiting', (_) => const PlaceholderPage(title: 'C13')),
-    booking('confirmed', (_) => const PlaceholderPage(title: 'C48')),
-    booking('live', (_) => const PlaceholderPage(title: 'C14')),
-    booking('extras', (_) => const PlaceholderPage(title: 'C15')),
-    booking('cancel', (_) => const PlaceholderPage(title: 'C52')),
-    booking('completed', (_) => const PlaceholderPage(title: 'C16')),
-    booking('rate', (_) => const PlaceholderPage(title: 'C17')),
+    booking('waiting', (id) => WaitingPage(services: s, bookingId: id)),
+    booking('confirmed', (id) => ConfirmedPage(services: s, bookingId: id)),
+    booking('live', (id) => LivePage(services: s, bookingId: id)),
+    booking('extras', (id) => ExtrasPage(services: s, bookingId: id)),
+    booking('cancel', (id) => CancelPage(services: s, bookingId: id)),
+    booking('completed', (id) => CompletedPage(services: s, bookingId: id)),
+    booking('rate', (id) => RatingPage(services: s, bookingId: id)),
     booking('receipt', (_) => const PlaceholderPage(title: 'C64')),
     booking('report', (_) => const PlaceholderPage(title: 'C20')),
   ];

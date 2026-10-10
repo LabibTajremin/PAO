@@ -3,7 +3,15 @@ import 'package:pao_customer/app/routes.dart';
 import 'package:pao_customer/features/auth/presentation/otp_page.dart';
 import 'package:pao_customer/features/auth/presentation/phone_page.dart';
 import 'package:pao_customer/features/auth/presentation/profile_setup_page.dart';
+import 'package:pao_customer/features/booking/presentation/confirmed_page.dart';
+import 'package:pao_customer/features/booking/presentation/setup_page.dart';
+import 'package:pao_customer/features/booking/presentation/waiting_page.dart';
+import 'package:pao_customer/features/cancel/presentation/cancel_page.dart';
+import 'package:pao_customer/features/live/presentation/completed_page.dart';
+import 'package:pao_customer/features/live/presentation/extras_page.dart';
+import 'package:pao_customer/features/live/presentation/live_page.dart';
 import 'package:pao_customer/features/onboarding/presentation/onboarding_page.dart';
+import 'package:pao_customer/features/rating/presentation/rating_page.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 import '../support/harness.dart';
@@ -29,20 +37,16 @@ void main() {
       Routes.serviceOf('s1'): PlaceholderPage,
       Routes.providersOf('s1'): PlaceholderPage,
       Routes.providerOf('p1'): PlaceholderPage,
-      Routes.book: PlaceholderPage,
-      for (final part in [
-        '',
-        'waiting',
-        'confirmed',
-        'live',
-        'extras',
-        'cancel',
-        'completed',
-        'rate',
-        'receipt',
-        'report',
-      ])
+      Routes.book: SetupPage,
+      for (final part in ['', 'receipt', 'report'])
         Routes.booking('b1', part): PlaceholderPage,
+      Routes.booking('b1', 'waiting'): WaitingPage,
+      Routes.booking('b1', 'confirmed'): ConfirmedPage,
+      Routes.booking('b1', 'live'): LivePage,
+      Routes.booking('b1', 'extras'): ExtrasPage,
+      Routes.booking('b1', 'cancel'): CancelPage,
+      Routes.booking('b1', 'completed'): CompletedPage,
+      Routes.booking('b1', 'rate'): RatingPage,
       Routes.bookings: PlaceholderPage,
       Routes.notifications: PlaceholderPage,
       Routes.account: PlaceholderPage,
