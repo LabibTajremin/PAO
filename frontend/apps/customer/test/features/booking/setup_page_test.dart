@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:pao_customer/app/routes.dart';
 import 'package:pao_customer/features/booking/presentation/setup_page.dart';
 import 'package:pao_customer/features/booking/presentation/waiting_page.dart';
+import 'package:pao_customer/features/home/presentation/services_page.dart';
+import 'package:pao_customer/features/location/presentation/address_page.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 import '../../support/harness.dart';
@@ -42,7 +44,7 @@ Future<Harness> _open(
 }
 
 Future<void> _back(WidgetTester tester) async {
-  GoRouter.of(tester.element(find.text('C25'))).pop();
+  GoRouter.of(tester.element(find.byType(AddressPage))).pop();
   await tester.pumpAndSettle();
 }
 
@@ -58,7 +60,7 @@ void main() {
     expect(find.byType(NothingToBook), findsOneWidget);
     await tester.tap(find.text('Browse services'));
     await h.settle(tester);
-    expect(find.text('C37'), findsOneWidget);
+    expect(find.byType(ServicesPage), findsOneWidget);
   });
 
   testWidgets('shows the order and confirms an ASAP booking idempotently', (
@@ -119,7 +121,7 @@ void main() {
     await h.settle(tester);
     await tester.tap(find.text('Add address'));
     await h.settle(tester);
-    expect(find.text('C25'), findsOneWidget);
+    expect(find.byType(AddressPage), findsOneWidget);
     await _back(tester);
     await h.settle(tester);
     expect(find.text('Office'), findsOneWidget);

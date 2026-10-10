@@ -17,14 +17,21 @@ import 'package:pao_customer/features/bookings/presentation/booking_detail_page.
 import 'package:pao_customer/features/bookings/presentation/bookings_page.dart';
 import 'package:pao_customer/features/bookings/presentation/receipt_page.dart';
 import 'package:pao_customer/features/cancel/presentation/cancel_page.dart';
+import 'package:pao_customer/features/home/presentation/home_page.dart';
+import 'package:pao_customer/features/home/presentation/services_page.dart';
 import 'package:pao_customer/features/live/presentation/completed_page.dart';
 import 'package:pao_customer/features/live/presentation/extras_page.dart';
 import 'package:pao_customer/features/live/presentation/live_page.dart';
+import 'package:pao_customer/features/location/presentation/address_page.dart';
 import 'package:pao_customer/features/notifications/presentation/notifications_page.dart';
 import 'package:pao_customer/features/onboarding/presentation/onboarding_page.dart';
+import 'package:pao_customer/features/providers/presentation/provider_profile_page.dart';
+import 'package:pao_customer/features/providers/presentation/providers_page.dart';
+import 'package:pao_customer/features/providers/presentation/reviews_page.dart';
 import 'package:pao_customer/features/rating/presentation/rating_page.dart';
 import 'package:pao_customer/features/report/presentation/report_page.dart';
-import 'package:pao_ui/pao_ui.dart';
+import 'package:pao_customer/features/search/presentation/search_page.dart';
+import 'package:pao_customer/features/service/presentation/service_page.dart';
 
 import '../support/harness.dart';
 
@@ -43,12 +50,13 @@ void main() {
       Routes.onboarding: OnboardingPage,
       '${Routes.otp}?phone=01712345678': OtpPage,
       Routes.profileSetup: ProfileSetupPage,
-      Routes.location: PlaceholderPage,
-      Routes.services: PlaceholderPage,
-      Routes.search: PlaceholderPage,
-      Routes.serviceOf('s1'): PlaceholderPage,
-      Routes.providersOf('s1'): PlaceholderPage,
-      Routes.providerOf('p1'): PlaceholderPage,
+      Routes.location: AddressPage,
+      Routes.services: ServicesPage,
+      Routes.search: SearchPage,
+      Routes.serviceOf('s1'): ServicePage,
+      Routes.providersOf('s1'): ProvidersPage,
+      Routes.providerOf('p1'): ProviderProfilePage,
+      Routes.providerReviewsOf('p1'): ReviewsPage,
       Routes.book: SetupPage,
       Routes.booking('b1', 'waiting'): WaitingPage,
       Routes.booking('b1', 'confirmed'): ConfirmedPage,
@@ -69,8 +77,8 @@ void main() {
       Routes.accountPage('help'): HelpPage,
       Routes.accountPage('delete'): DeleteAccountPage,
       Routes.legal: LegalPage,
-      Routes.addressNew: PlaceholderPage,
-      Routes.addressEdit('a1'): PlaceholderPage,
+      Routes.addressNew: AddressPage,
+      Routes.addressEdit('a1'): AddressPage,
     };
     for (final MapEntry(key: path, value: type) in pages.entries) {
       await h.go(tester, path);
@@ -86,7 +94,7 @@ void main() {
     final h = await Harness.create();
     await h.signIn(tester, screens: ['C07']);
     await h.pumpApp(tester);
-    expect(find.text('C07'), findsOneWidget);
+    expect(find.byType(HomePage), findsOneWidget);
     await tester.tap(find.text('Bookings'));
     await h.settle(tester);
     expect(find.text('You do not have access to this screen.'), findsOneWidget);

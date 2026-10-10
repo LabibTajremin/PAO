@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pao_customer/app/routes.dart';
 import 'package:pao_customer/features/account/presentation/addresses_page.dart';
+import 'package:pao_customer/features/location/presentation/address_page.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 import '../../support/harness.dart';
@@ -107,19 +108,19 @@ void main() {
     expect(find.text('No saved addresses'), findsOneWidget);
     await tester.tap(find.text('Add address'));
     await h.settle(tester);
-    expect(find.text('C25'), findsOneWidget);
+    expect(find.byType(AddressPage), findsOneWidget);
     h.http.onGet(
       _path,
       (s) => s.reply(200, {
         'items': [_address('a9')],
       }),
     );
-    Navigator.of(tester.element(find.text('C25'))).pop();
+    Navigator.of(tester.element(find.byType(AddressPage))).pop();
     await h.settle(tester);
     expect(find.text('House a9, Banani'), findsOneWidget);
     await _menu(tester, h, 0, 'Edit');
-    expect(find.text('C25'), findsOneWidget);
-    Navigator.of(tester.element(find.text('C25'))).pop();
+    expect(find.byType(AddressPage), findsOneWidget);
+    Navigator.of(tester.element(find.byType(AddressPage))).pop();
     await h.settle(tester);
     expect(find.byType(AddressesPage), findsOneWidget);
   });

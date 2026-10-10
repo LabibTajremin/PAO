@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pao_customer/app/discovery_routes.dart';
 import 'package:pao_customer/app/routes.dart';
 import 'package:pao_customer/app/services.dart';
 import 'package:pao_customer/features/account/presentation/account_routes.dart';
@@ -13,9 +14,11 @@ import 'package:pao_customer/features/bookings/presentation/booking_detail_page.
 import 'package:pao_customer/features/bookings/presentation/bookings_page.dart';
 import 'package:pao_customer/features/bookings/presentation/receipt_page.dart';
 import 'package:pao_customer/features/cancel/presentation/cancel_page.dart';
+import 'package:pao_customer/features/home/presentation/home_page.dart';
 import 'package:pao_customer/features/live/presentation/completed_page.dart';
 import 'package:pao_customer/features/live/presentation/extras_page.dart';
 import 'package:pao_customer/features/live/presentation/live_page.dart';
+import 'package:pao_customer/features/location/presentation/address_page.dart';
 import 'package:pao_customer/features/notifications/presentation/notifications_page.dart';
 import 'package:pao_customer/features/onboarding/presentation/onboarding_page.dart';
 import 'package:pao_customer/features/onboarding/presentation/splash_page.dart';
@@ -37,7 +40,7 @@ List<RouteBase> entryRoutes(AppServices s) => [
     (st) => OtpPage(services: s, phone: st.uri.queryParameters['phone'] ?? ''),
   ),
   _page(Routes.profileSetup, (_) => ProfileSetupPage(services: s)),
-  _page(Routes.location, (_) => const PlaceholderPage(title: 'C06')),
+  _page(Routes.location, (_) => AddressPage(services: s, onboarding: true)),
   GoRoute(
     path: Routes.welcomeBack,
     builder: (context, _) => Scaffold(
@@ -46,13 +49,7 @@ List<RouteBase> entryRoutes(AppServices s) => [
   ),
   _page(Routes.denied, (_) => const Scaffold(body: PaoAccessDeniedView())),
   ...publicAccountRoutes(),
-  _page(Routes.addressNew, (_) => const PlaceholderPage(title: 'C25')),
-  _page('/account/addresses/:id', (_) => const PlaceholderPage(title: 'C25')),
-  _page(Routes.services, (_) => const PlaceholderPage(title: 'C37')),
-  _page(Routes.search, (_) => const PlaceholderPage(title: 'C08')),
-  _page(Routes.service, (_) => const PlaceholderPage(title: 'C09')),
-  _page(Routes.providers, (_) => const PlaceholderPage(title: 'C10')),
-  _page(Routes.provider, (_) => const PlaceholderPage(title: 'C11')),
+  ...discoveryRoutes(s),
   _page(
     Routes.book,
     (st) => SetupPage(
@@ -85,7 +82,7 @@ List<StatefulShellBranch> shellBranches(
   GlobalKey<NavigatorState> root,
 ) => [
   StatefulShellBranch(
-    routes: [_page(Routes.home, (_) => const PlaceholderPage(title: 'C07'))],
+    routes: [_page(Routes.home, (_) => HomePage(services: s))],
   ),
   StatefulShellBranch(
     routes: [

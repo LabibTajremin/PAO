@@ -3,8 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pao_customer/app/routes.dart';
+import 'package:pao_customer/features/booking/presentation/waiting_page.dart';
 import 'package:pao_customer/features/bookings/presentation/receipt_page.dart';
+import 'package:pao_customer/features/live/presentation/live_page.dart';
+import 'package:pao_customer/features/rating/presentation/rating_page.dart';
 import 'package:pao_customer/features/report/presentation/report_page.dart';
+import 'package:pao_customer/features/service/presentation/service_page.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 import '../../support/harness.dart';
@@ -61,7 +65,7 @@ void main() {
     await tester.tap(find.byTooltip('Call provider'));
     expect(h.launched.single.toString(), 'tel:+8801711111111');
     await _tapAndBack(tester, h, 'Track live');
-    expect(find.text('C14'), findsOneWidget);
+    expect(find.byType(LivePage), findsOneWidget);
     await _open(tester, h, booking());
     await _tapAndBack(tester, h, 'Report a problem');
     expect(find.byType(ReportPage), findsOneWidget);
@@ -79,12 +83,12 @@ void main() {
     expect(find.text('Report a problem'), findsNothing);
     expect(find.text('Timeline'), findsNothing);
     await _tapAndBack(tester, h, 'See request status');
-    expect(find.text('C13'), findsOneWidget);
+    expect(find.byType(WaitingPage), findsOneWidget);
     await _open(tester, h, booking(status: 'completed'));
     expect(find.text('Paid in cash'), findsOneWidget);
     expect(find.byTooltip('Call provider'), findsNothing);
     await _tapAndBack(tester, h, 'Rate provider');
-    expect(find.text('C17'), findsOneWidget);
+    expect(find.byType(RatingPage), findsOneWidget);
     await _open(
       tester,
       h,
@@ -145,7 +149,7 @@ void main() {
       }
     }
     await _tapAndBack(tester, h, 'Book again');
-    expect(find.text('C09'), findsOneWidget);
+    expect(find.byType(ServicePage), findsOneWidget);
   });
 
   testWidgets('a failed load retries; pulling refreshes', (tester) async {

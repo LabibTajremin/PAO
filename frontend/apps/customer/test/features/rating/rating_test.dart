@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pao_api/pao_api.dart';
 import 'package:pao_core/pao_core.dart';
+import 'package:pao_customer/features/bookings/presentation/bookings_page.dart';
+import 'package:pao_customer/features/home/presentation/home_page.dart';
 import 'package:pao_customer/features/rating/domain/rating_repository.dart';
 import 'package:pao_customer/features/rating/presentation/rating_cubit.dart';
 
@@ -101,7 +103,7 @@ void main() {
     expect(find.text('Thanks for your rating!'), findsOneWidget);
     await tester.tap(find.text('My bookings'));
     await h.settle(tester);
-    expect(find.text('C18'), findsOneWidget);
+    expect(find.byType(BookingsPage), findsOneWidget);
   });
 
   testWidgets('a rated booking thanks at once; skipping goes home', (
@@ -114,7 +116,7 @@ void main() {
     );
     await tester.tap(find.text('Back to home'));
     await h.settle(tester);
-    expect(find.text('C07'), findsOneWidget);
+    expect(find.byType(HomePage), findsOneWidget);
     await h.go(tester, '/bookings/b2/rate');
     expect(find.text('Try again'), findsOneWidget);
   });

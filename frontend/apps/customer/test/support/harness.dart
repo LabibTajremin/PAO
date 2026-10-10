@@ -13,6 +13,7 @@ import 'package:pao_core/pao_core.dart';
 import 'package:pao_customer/app/app.dart';
 import 'package:pao_customer/app/routes.dart';
 import 'package:pao_customer/app/services.dart';
+import 'package:pao_customer/features/location/domain/places.dart';
 import 'package:pao_l10n/pao_l10n.dart';
 import 'package:pao_ui/pao_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -115,8 +116,12 @@ class Harness {
   /// Location stand-in.
   FakeLocation get location => services.location as FakeLocation;
 
-  /// Builds the harness; [now] fixes the clock.
-  static Future<Harness> create({DateTime? now}) async {
+  /// Builds the harness; [now] fixes the clock and [places] answers address
+  /// searches.
+  static Future<Harness> create({
+    DateTime? now,
+    PlacesService places = const NoPlacesService(),
+  }) async {
     SharedPreferences.setMockInitialValues({});
     final dio = Dio(BaseOptions(baseUrl: 'http://api.test'));
     final http = DioAdapter(
@@ -150,6 +155,7 @@ class Harness {
       ),
       photos: PhotoSource(picker),
       push: FakePush(),
+      places: places,
       clock: () => now ?? DateTime.utc(2026, 10, 9, 4),
     );
     return Harness._(services, http, launched, picker, sent);

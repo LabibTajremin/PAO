@@ -15,9 +15,8 @@ lib/
   l10n/         customer strings (customer_en.arb / customer_bn.arb → CustomerL10n)
 ```
 
-`features/auth` is the reference feature: copy its shape. Routes still being built show
-`PlaceholderPage` from `pao_ui`; replace the entry in `app/pages.dart` when the screen
-lands.
+`features/auth` is the reference feature: copy its shape. Choices specific to this app
+(maps port, polling, start-code protection, receipt PDF) are in ADR-0029.
 
 ## Rules
 

@@ -12,7 +12,7 @@ import 'package:pao_customer/features/auth/data/api_profile_setup_repository.dar
 import 'package:pao_customer/features/auth/domain/profile_setup_repository.dart';
 import 'package:pao_customer/features/auth/presentation/profile_setup_cubit.dart';
 import 'package:pao_customer/features/auth/presentation/profile_setup_page.dart';
-import 'package:pao_ui/pao_ui.dart';
+import 'package:pao_customer/features/location/presentation/address_page.dart';
 
 import '../../support/harness.dart';
 
@@ -124,5 +124,5 @@ Future<void> _saveWithoutPhoto(WidgetTester tester, Harness h) async {
     'language': 'en',
   });
   expect(h.services.gate.missing, isFalse);
-  expect(find.byType(PlaceholderPage), findsOneWidget);
+  expect(find.byType(AddressPage), findsOneWidget);
 }

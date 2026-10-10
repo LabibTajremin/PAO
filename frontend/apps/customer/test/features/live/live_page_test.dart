@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pao_customer/app/routes.dart';
 import 'package:pao_customer/features/booking/presentation/waiting_page.dart';
+import 'package:pao_customer/features/bookings/presentation/receipt_page.dart';
 import 'package:pao_customer/features/cancel/presentation/cancel_page.dart';
 import 'package:pao_customer/features/connectivity/presentation/stale_notice.dart';
+import 'package:pao_customer/features/home/presentation/home_page.dart';
 import 'package:pao_customer/features/live/data/secure_screen.dart';
 import 'package:pao_customer/features/live/presentation/completed_page.dart';
 import 'package:pao_customer/features/live/presentation/extras_page.dart';
 import 'package:pao_customer/features/live/presentation/live_page.dart';
 import 'package:pao_customer/features/rating/presentation/rating_page.dart';
+import 'package:pao_customer/features/report/presentation/report_page.dart';
 
 import '../../support/harness.dart';
 import '../booking/booking_fixtures.dart';
@@ -96,7 +99,7 @@ void main() {
     expect(h.services.prefs.string('pao.startCode.b1'), '');
     await tester.tap(find.text('Report a problem'));
     await h.settle(tester);
-    expect(find.text('C20'), findsOneWidget);
+    expect(find.byType(ReportPage), findsOneWidget);
   });
 
   testWidgets('new extras open the approval screen', (tester) async {
@@ -177,7 +180,7 @@ void main() {
     expect(find.text('Extra'), findsOneWidget);
     await tester.tap(find.text('View receipt'));
     await h.settle(tester);
-    expect(find.text('C64'), findsOneWidget);
+    expect(find.byType(ReceiptPage), findsOneWidget);
     await h.go(tester, Routes.booking('b1', 'completed'));
     await tester.tap(find.text('Rate Rahim Uddin'));
     await h.settle(tester);
@@ -195,7 +198,7 @@ void main() {
     expect(find.textContaining('Rate'), findsNothing);
     await tester.tap(find.text('Back to home'));
     await h.settle(tester);
-    expect(find.text('C07'), findsOneWidget);
+    expect(find.byType(HomePage), findsOneWidget);
   });
 
   testWidgets('offline, the saved start code is still shown', (tester) async {

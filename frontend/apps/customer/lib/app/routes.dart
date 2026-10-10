@@ -85,6 +85,12 @@ abstract final class Routes {
   /// C62, shown once the account is deleted and the session is gone.
   static const accountDeleted = '/account/deleted';
 
+  /// C42, all reviews of a provider.
+  static const providerReviews = '/providers/:id/reviews';
+
+  /// All reviews of the provider [id].
+  static String providerReviewsOf(String id) => '/providers/$id/reviews';
+
   /// Screen ID per route, checked against the account's screens.
   static const Map<String, String> screens = {
     home: 'C07',
@@ -117,6 +123,7 @@ abstract final class Routes {
     '/account/delete': 'C29',
     profileSetup: 'C05',
     location: 'C06',
+    providerReviews: 'C42',
   };
 
   /// Open without signing in.

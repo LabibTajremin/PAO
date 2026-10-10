@@ -3,9 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pao_api/pao_api.dart';
 import 'package:pao_core/pao_core.dart';
 import 'package:pao_customer/app/routes.dart';
+import 'package:pao_customer/features/bookings/presentation/booking_detail_page.dart';
 import 'package:pao_customer/features/cancel/domain/cancel_repository.dart';
 import 'package:pao_customer/features/cancel/presentation/cancel_cubit.dart';
+import 'package:pao_customer/features/home/presentation/home_page.dart';
 import 'package:pao_customer/features/live/presentation/live_page.dart';
+import 'package:pao_customer/features/providers/presentation/providers_page.dart';
+import 'package:pao_customer/features/report/presentation/report_page.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 import '../../support/harness.dart';
@@ -106,7 +110,7 @@ void main() {
     expect(find.text('Booking cancelled'), findsOneWidget);
     await tester.tap(find.text('Book another provider'));
     await h.settle(tester);
-    expect(find.text('C10'), findsOneWidget);
+    expect(find.byType(ProvidersPage), findsOneWidget);
   });
 
   testWidgets('a started job cannot be cancelled', (tester) async {
@@ -122,7 +126,7 @@ void main() {
     expect(find.text('The job has already started'), findsOneWidget);
     await tester.tap(find.text('Back'));
     await h.settle(tester);
-    expect(find.text('C19'), findsOneWidget);
+    expect(find.byType(BookingDetailPage), findsOneWidget);
   });
 
   testWidgets('blocked leads to a report; keep returns to the booking', (
@@ -135,13 +139,13 @@ void main() {
     );
     await tester.tap(find.text('Report a problem'));
     await h.settle(tester);
-    expect(find.text('C20'), findsOneWidget);
+    expect(find.byType(ReportPage), findsOneWidget);
     await h.go(tester, Routes.booking('b1', 'live'));
     h.http.onGet(bookingPath, (s) => s.reply(200, booking()));
     await h.go(tester, Routes.booking('b1', 'cancel'));
     await tester.tap(find.text('Keep booking'));
     await h.settle(tester);
-    expect(find.text('C19'), findsOneWidget);
+    expect(find.byType(BookingDetailPage), findsOneWidget);
   });
 
   testWidgets('a declined booking has nothing to cancel', (tester) async {
@@ -149,7 +153,7 @@ void main() {
     expect(find.text('This booking is no longer active'), findsOneWidget);
     await tester.tap(find.text('Back to home'));
     await h.settle(tester);
-    expect(find.text('C07'), findsOneWidget);
+    expect(find.byType(HomePage), findsOneWidget);
   });
 
   testWidgets('cancelling from the live booking returns to it', (tester) async {

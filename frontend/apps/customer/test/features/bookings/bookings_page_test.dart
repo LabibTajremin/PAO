@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pao_customer/app/routes.dart';
 import 'package:pao_customer/features/bookings/presentation/booking_detail_page.dart';
+import 'package:pao_customer/features/home/presentation/home_page.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 import '../../support/harness.dart';
@@ -68,7 +69,7 @@ void main() {
     expect(find.text('No upcoming bookings'), findsOneWidget);
     await tester.tap(find.text('Book a service'));
     await h.settle(tester);
-    expect(find.text('C07'), findsOneWidget);
+    expect(find.byType(HomePage), findsOneWidget);
   });
 
   testWidgets('a failed list retries and pulls to refresh', (tester) async {

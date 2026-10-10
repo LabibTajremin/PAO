@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pao_customer/features/booking/presentation/confirmed_page.dart';
+import 'package:pao_customer/features/bookings/presentation/booking_detail_page.dart';
 import 'package:pao_customer/features/cancel/presentation/cancel_page.dart';
 import 'package:pao_customer/features/connectivity/presentation/stale_notice.dart';
+import 'package:pao_customer/features/home/presentation/home_page.dart';
 import 'package:pao_customer/features/live/presentation/live_page.dart';
+import 'package:pao_customer/features/providers/presentation/providers_page.dart';
 
 import '../../support/harness.dart';
 import 'booking_fixtures.dart';
@@ -61,11 +64,11 @@ void main() {
     await tester.tap(find.text('View booking'));
     await h.settle(tester);
     expect(h.launched.single.toString(), 'tel:01711111111');
-    expect(find.text('C19'), findsOneWidget);
+    expect(find.byType(BookingDetailPage), findsOneWidget);
     await h.go(tester, '/bookings/b1/confirmed');
     await tester.tap(find.text('Back to home'));
     await h.settle(tester);
-    expect(find.text('C07'), findsOneWidget);
+    expect(find.byType(HomePage), findsOneWidget);
   });
 
   testWidgets('a declined request sends the customer back to the list', (
@@ -79,7 +82,7 @@ void main() {
     expect(find.text("Rahim Uddin can't take this job"), findsOneWidget);
     await tester.tap(find.text('Choose another provider'));
     await tester.pumpAndSettle();
-    expect(find.text('C10'), findsOneWidget);
+    expect(find.byType(ProvidersPage), findsOneWidget);
     expect(_location(tester).queryParameters, {
       'service': 's1',
       'items': 'x1:2',
@@ -87,7 +90,7 @@ void main() {
     await h.go(tester, '/bookings/b1/waiting');
     await tester.tap(find.text('Back to home'));
     await h.settle(tester);
-    expect(find.text('C07'), findsOneWidget);
+    expect(find.byType(HomePage), findsOneWidget);
   });
 
   testWidgets('a hire that ran out of time keeps its start', (tester) async {
@@ -111,7 +114,7 @@ void main() {
     await h.go(tester, '/bookings/b1/waiting');
     await tester.tap(find.text('Back to home'));
     await h.settle(tester);
-    expect(find.text('C07'), findsOneWidget);
+    expect(find.byType(HomePage), findsOneWidget);
   });
 
   testWidgets('the request can be cancelled; a cancelled one goes home', (
@@ -130,7 +133,7 @@ void main() {
     expect(find.text('Booking cancelled'), findsOneWidget);
     await tester.tap(find.text('Back to home'));
     await h.settle(tester);
-    expect(find.text('C07'), findsOneWidget);
+    expect(find.byType(HomePage), findsOneWidget);
   });
 
   testWidgets('a failed load can be retried; home is one tap away', (
@@ -147,7 +150,7 @@ void main() {
     await h.settle(tester);
     await tester.tap(find.text('Back to home'));
     await h.settle(tester);
-    expect(find.text('C07'), findsOneWidget);
+    expect(find.byType(HomePage), findsOneWidget);
   });
 
   testWidgets('a completed booking moves on from waiting', (tester) async {
