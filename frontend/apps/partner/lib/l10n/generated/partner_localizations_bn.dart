@@ -484,9 +484,6 @@ class PartnerL10nBn extends PartnerL10n {
   String get jobsEmptyBody => 'কাজের অনুরোধ পেতে হোম থেকে অনলাইন হন।';
 
   @override
-  String get jobsLoadMore => 'আরও দেখুন';
-
-  @override
   String get jobsStatusRequested => 'অনুরোধ এসেছে';
 
   @override

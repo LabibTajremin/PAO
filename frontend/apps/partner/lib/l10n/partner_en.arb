@@ -651,10 +651,6 @@
   "@jobsEmptyBody": {
     "description": "M23 empty state hint."
   },
-  "jobsLoadMore": "Load more",
-  "@jobsLoadMore": {
-    "description": "Button that loads the next page of a list."
-  },
   "jobsStatusRequested": "Requested",
   "@jobsStatusRequested": {
     "description": "Booking status."

@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pao_core/pao_core.dart';
-import 'package:pao_partner/shared/paging/paged.dart';
+import 'package:pao_core/src/failure.dart';
+import 'package:pao_core/src/state/paging/paged.dart';
 
 /// A cursor-paged list: the rows so far, the next cursor and the last failure.
 class PagedState<T> {

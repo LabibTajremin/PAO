@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:pao_api/pao_api.dart';
-import 'package:pao_partner/shared/paging/paged.dart';
+import 'package:pao_core/pao_core.dart';
 
 /// The lists of M23.
 enum JobsTab {

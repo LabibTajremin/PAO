@@ -370,5 +370,9 @@
   "errorNoPendingExtras": "There are no extra items to decide on.",
   "@errorNoPendingExtras": {
     "description": "API error NO_PENDING_EXTRAS."
+  },
+  "actionLoadMore": "Load more",
+  "@actionLoadMore": {
+    "description": "Button that loads the next page of a list."
   }
 }

@@ -8,7 +8,6 @@ import 'package:pao_partner/features/profile/presentation/profile_cubit.dart';
 import 'package:pao_partner/features/profile/presentation/profile_header.dart';
 import 'package:pao_partner/features/profile/presentation/profile_menu.dart';
 import 'package:pao_partner/shared/l10n.dart';
-import 'package:pao_partner/shared/load_on_create.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 /// The profile tab: photo, name, badge, rating, bio and every sub-page (M28).

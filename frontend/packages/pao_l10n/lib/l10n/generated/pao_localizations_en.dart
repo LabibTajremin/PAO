@@ -316,4 +316,7 @@ class PaoL10nEn extends PaoL10n {
 
   @override
   String get errorNoPendingExtras => 'There are no extra items to decide on.';
+
+  @override
+  String get actionLoadMore => 'Load more';
 }

@@ -488,9 +488,6 @@ class PartnerL10nEn extends PartnerL10n {
   String get jobsEmptyBody => 'Go online on Home to receive job requests.';
 
   @override
-  String get jobsLoadMore => 'Load more';
-
-  @override
   String get jobsStatusRequested => 'Requested';
 
   @override

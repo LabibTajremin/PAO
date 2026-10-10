@@ -6,7 +6,6 @@ import 'package:pao_partner/app/services.dart';
 import 'package:pao_partner/features/jobs/data/api_jobs_repository.dart';
 import 'package:pao_partner/features/jobs/presentation/job_detail_view.dart';
 import 'package:pao_partner/shared/l10n.dart';
-import 'package:pao_partner/shared/load_on_create.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 /// One job: items, total, customer, area and timeline (M24).

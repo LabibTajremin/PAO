@@ -9,9 +9,6 @@ import 'package:pao_partner/features/earnings/data/api_earnings_repository.dart'
 import 'package:pao_partner/features/earnings/presentation/earnings_summary_card.dart';
 import 'package:pao_partner/shared/formats.dart';
 import 'package:pao_partner/shared/l10n.dart';
-import 'package:pao_partner/shared/load_on_create.dart';
-import 'package:pao_partner/shared/paging/paged_cubit.dart';
-import 'package:pao_partner/shared/paging/paged_view.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 /// Earnings by day, week or month, and by job (M26, M27).

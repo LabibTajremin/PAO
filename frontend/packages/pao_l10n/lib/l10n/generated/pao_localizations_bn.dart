@@ -312,4 +312,7 @@ class PaoL10nBn extends PaoL10n {
   @override
   String get errorNoPendingExtras =>
       'সিদ্ধান্ত নেওয়ার মতো কোনো অতিরিক্ত আইটেম নেই।';
+
+  @override
+  String get actionLoadMore => 'আরও দেখুন';
 }

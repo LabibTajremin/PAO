@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pao_api/pao_api.dart';
+import 'package:pao_core/pao_core.dart';
 import 'package:pao_partner/app/services.dart';
 import 'package:pao_partner/features/profile/data/api_profile_repository.dart';
 import 'package:pao_partner/features/profile/presentation/profile_labels.dart';
 import 'package:pao_partner/shared/formats.dart';
 import 'package:pao_partner/shared/l10n.dart';
-import 'package:pao_partner/shared/load_on_create.dart';
-import 'package:pao_partner/shared/paging/paged_cubit.dart';
-import 'package:pao_partner/shared/paging/paged_view.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 /// Reviews received from customers (M30).

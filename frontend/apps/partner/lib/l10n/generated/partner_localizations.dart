@@ -956,12 +956,6 @@ abstract class PartnerL10n {
   /// **'Go online on Home to receive job requests.'**
   String get jobsEmptyBody;
 
-  /// Button that loads the next page of a list.
-  ///
-  /// In en, this message translates to:
-  /// **'Load more'**
-  String get jobsLoadMore;
-
   /// Booking status.
   ///
   /// In en, this message translates to:

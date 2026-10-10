@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pao_partner/shared/l10n.dart';
-import 'package:pao_partner/shared/paging/paged_cubit.dart';
+import 'package:pao_core/src/state/paging/paged_cubit.dart';
+import 'package:pao_l10n/pao_l10n.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 /// A scrolling list over the nearest [PagedCubit]: skeletons, a retryable
@@ -42,14 +42,14 @@ class PagedView<T> extends StatelessWidget {
       );
 
   Widget _first(BuildContext context, PagedState<T> s) {
-    final common = context.common;
+    final common = PaoL10n.of(context);
     if (s.loading) return PaoSkeletonList(semanticLabel: common.loading);
     if (s.failure == null) return empty;
     return PaoErrorState(
-      title: context.common.errorTitle,
-      message: context.failureText(s.failure)!,
+      title: common.errorTitle,
+      message: failureMessage(common, s.failure!.code),
       onRetry: context.read<PagedCubit<T>>().load,
-      retryLabel: context.common.actionRetry,
+      retryLabel: common.actionRetry,
     );
   }
 
@@ -61,17 +61,18 @@ class PagedView<T> extends StatelessWidget {
       );
     }
     if (s.next == null) return const SizedBox.shrink();
+    final common = PaoL10n.of(context);
     return Padding(
       padding: const EdgeInsets.only(top: PaoSpace.md),
       child: Column(
         children: [
           if (s.failure != null)
             Text(
-              context.failureText(s.failure)!,
+              failureMessage(common, s.failure!.code),
               style: const TextStyle(color: PaoColors.danger),
             ),
           PaoButton(
-            label: context.t.jobsLoadMore,
+            label: common.actionLoadMore,
             variant: PaoButtonVariant.soft,
             onPressed: context.read<PagedCubit<T>>().more,
           ),

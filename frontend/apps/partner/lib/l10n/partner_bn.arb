@@ -143,7 +143,6 @@
   "jobsEmptyUpcoming": "কোনো আসন্ন কাজ নেই",
   "jobsEmptyPast": "এখনো কোনো আগের কাজ নেই",
   "jobsEmptyBody": "কাজের অনুরোধ পেতে হোম থেকে অনলাইন হন।",
-  "jobsLoadMore": "আরও দেখুন",
   "jobsStatusRequested": "অনুরোধ এসেছে",
   "jobsStatusAccepted": "গ্রহণ করা হয়েছে",
   "jobsStatusOnTheWay": "পথে আছেন",

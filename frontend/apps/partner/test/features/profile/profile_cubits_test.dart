@@ -10,7 +10,6 @@ import 'package:pao_partner/features/profile/presentation/language_cubit.dart';
 import 'package:pao_partner/features/profile/presentation/profile_cubit.dart';
 import 'package:pao_partner/features/profile/presentation/profile_labels.dart';
 import 'package:pao_partner/features/profile/presentation/services_cubit.dart';
-import 'package:pao_partner/shared/paging/paged.dart';
 
 import '../jobs/fixtures.dart';
 import 'fixtures.dart';

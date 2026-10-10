@@ -9,7 +9,6 @@ import 'package:pao_partner/features/profile/presentation/profile_labels.dart';
 import 'package:pao_partner/features/profile/presentation/rating_summary.dart';
 import 'package:pao_partner/shared/formats.dart';
 import 'package:pao_partner/shared/l10n.dart';
-import 'package:pao_partner/shared/load_on_create.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 /// The profile as customers see it (M29); never shows documents or phone.

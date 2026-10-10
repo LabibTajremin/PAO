@@ -1,5 +1,5 @@
 import 'package:pao_api/pao_api.dart';
-import 'package:pao_partner/shared/paging/paged.dart';
+import 'package:pao_core/pao_core.dart';
 
 /// What the provider earned (P-08).
 abstract interface class EarningsRepository {

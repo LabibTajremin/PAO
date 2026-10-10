@@ -630,6 +630,12 @@ abstract class PaoL10n {
   /// In en, this message translates to:
   /// **'There are no extra items to decide on.'**
   String get errorNoPendingExtras;
+
+  /// Button that loads the next page of a list.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get actionLoadMore;
 }
 
 class _PaoL10nDelegate extends LocalizationsDelegate<PaoL10n> {

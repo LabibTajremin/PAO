@@ -88,5 +88,6 @@
   "errorLevel2NotEligible": "আপনি এখনও লেভেল ২-এর যোগ্য নন।",
   "errorSessionClosed": "এই লেভেল ২ সেশনটি বন্ধ।",
   "errorAcceptDeadlinePassed": "গ্রহণ করার সময় পার হয়ে গেছে।",
-  "errorNoPendingExtras": "সিদ্ধান্ত নেওয়ার মতো কোনো অতিরিক্ত আইটেম নেই।"
+  "errorNoPendingExtras": "সিদ্ধান্ত নেওয়ার মতো কোনো অতিরিক্ত আইটেম নেই।",
+  "actionLoadMore": "আরও দেখুন"
 }

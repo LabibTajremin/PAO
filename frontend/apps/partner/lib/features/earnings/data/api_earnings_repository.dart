@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:pao_api/pao_api.dart';
+import 'package:pao_core/pao_core.dart';
 import 'package:pao_partner/features/earnings/domain/earnings_repository.dart';
-import 'package:pao_partner/shared/paging/paged.dart';
 
 /// [EarningsRepository] on the PAO API.
 class ApiEarningsRepository implements EarningsRepository {
