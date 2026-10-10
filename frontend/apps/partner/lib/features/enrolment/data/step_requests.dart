@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:pao_api/pao_api.dart' as gen show Gender;
 import 'package:pao_api/pao_api.dart' hide Gender;
 import 'package:pao_partner/features/enrolment/domain/step_input.dart';
 
@@ -6,17 +7,17 @@ import 'package:pao_partner/features/enrolment/domain/step_input.dart';
 Future<EnrolmentStatus> sendStep(Dio dio, StepInput input) {
   final api = ProviderEnrolmentApi(dio);
   return switch (input) {
-    PersonalDetails() => _putDated(dio, 'personal', {
-      'fullName': input.fullName,
-      'dateOfBirth': isoDate(input.dateOfBirth),
-      'gender': input.gender.name,
-      'presentAddress': input.presentAddress,
-      'permanentAddress': input.permanentAddress,
-    }),
-    PoliceClearance() => _putDated(dio, 'police-clearance', {
-      'mediaId': input.mediaId,
-      'issueDate': isoDate(input.issueDate),
-    }),
+    PersonalDetails() => _data(
+      api.savePersonalStep(personalInfoInput: _personal(input)),
+    ),
+    PoliceClearance() => _data(
+      api.savePoliceClearanceStep(
+        policeClearanceInput: PoliceClearanceInput(
+          mediaId: input.mediaId,
+          issueDate: isoDate(input.issueDate),
+        ),
+      ),
+    ),
     ServiceChoice() => _data(
       api.saveServicesStep(servicesInput: _services(input)),
     ),
@@ -44,6 +45,14 @@ Future<EnrolmentStatus> sendStep(Dio dio, StepInput input) {
   };
 }
 
+PersonalInfoInput _personal(PersonalDetails input) => PersonalInfoInput(
+  fullName: input.fullName,
+  dateOfBirth: isoDate(input.dateOfBirth),
+  gender: gen.Gender.values.byName(input.gender.name),
+  presentAddress: input.presentAddress,
+  permanentAddress: input.permanentAddress,
+);
+
 ServicesInput _services(ServiceChoice input) => ServicesInput(
   serviceIds: input.serviceIds,
   experienceYears: input.experienceYears,
@@ -65,20 +74,6 @@ EmergencyContactInput _contact(EmergencyContact input) => EmergencyContactInput(
   relation: input.relation,
   phone: input.phone,
 );
-
-// The generated client writes `format: date` fields as full ISO timestamps,
-// which the API's date parser rejects, so these two steps send plain JSON.
-Future<EnrolmentStatus> _putDated(
-  Dio dio,
-  String path,
-  Map<String, Object?> body,
-) async {
-  final res = await dio.put<Map<String, Object?>>(
-    '/v1/provider/enrolment/$path',
-    data: body,
-  );
-  return EnrolmentStatus.fromJson(res.data!);
-}
 
 Future<EnrolmentStatus> _data(Future<Response<EnrolmentStatus>> call) async =>
     (await call).data!;

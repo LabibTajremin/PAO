@@ -24,7 +24,7 @@ class PoliceClearanceInput {
   final String mediaId;
 
   @JsonKey(name: r'issueDate', required: true, includeIfNull: false)
-  final DateTime issueDate;
+  final String issueDate;
 
   bool operator ==(Object other) {
     return identical(this, other) ||

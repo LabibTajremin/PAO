@@ -7,7 +7,7 @@ part of 'earnings_summary_buckets_inner.dart';
 // **************************************************************************
 
 abstract class _$EarningsSummaryBucketsInnerCWProxy {
-  EarningsSummaryBucketsInner date(DateTime date);
+  EarningsSummaryBucketsInner date(String date);
 
   EarningsSummaryBucketsInner total(int total);
 
@@ -21,7 +21,7 @@ abstract class _$EarningsSummaryBucketsInnerCWProxy {
   /// ```dart
   /// EarningsSummaryBucketsInner(...).copyWith(id: 12, name: "My name")
   /// ```
-  EarningsSummaryBucketsInner call({DateTime date, int total, int jobs});
+  EarningsSummaryBucketsInner call({String date, int total, int jobs});
 }
 
 /// Callable proxy for `copyWith` functionality.
@@ -33,7 +33,7 @@ class _$EarningsSummaryBucketsInnerCWProxyImpl
   final EarningsSummaryBucketsInner _value;
 
   @override
-  EarningsSummaryBucketsInner date(DateTime date) => call(date: date);
+  EarningsSummaryBucketsInner date(String date) => call(date: date);
 
   @override
   EarningsSummaryBucketsInner total(int total) => call(total: total);
@@ -59,7 +59,7 @@ class _$EarningsSummaryBucketsInnerCWProxyImpl
       date: date == const $CopyWithPlaceholder() || date == null
           ? _value.date
           // ignore: cast_nullable_to_non_nullable
-          : date as DateTime,
+          : date as String,
       total: total == const $CopyWithPlaceholder() || total == null
           ? _value.total
           // ignore: cast_nullable_to_non_nullable
@@ -89,7 +89,7 @@ EarningsSummaryBucketsInner _$EarningsSummaryBucketsInnerFromJson(
 ) => $checkedCreate('EarningsSummaryBucketsInner', json, ($checkedConvert) {
   $checkKeys(json, requiredKeys: const ['date', 'total', 'jobs']);
   final val = EarningsSummaryBucketsInner(
-    date: $checkedConvert('date', (v) => DateTime.parse(v as String)),
+    date: $checkedConvert('date', (v) => v as String),
     total: $checkedConvert('total', (v) => (v as num).toInt()),
     jobs: $checkedConvert('jobs', (v) => (v as num).toInt()),
   );
@@ -99,7 +99,7 @@ EarningsSummaryBucketsInner _$EarningsSummaryBucketsInnerFromJson(
 Map<String, dynamic> _$EarningsSummaryBucketsInnerToJson(
   EarningsSummaryBucketsInner instance,
 ) => <String, dynamic>{
-  'date': instance.date.toIso8601String(),
+  'date': instance.date,
   'total': instance.total,
   'jobs': instance.jobs,
 };

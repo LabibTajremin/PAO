@@ -39,7 +39,7 @@ class VerificationReviewProfile {
   final String fullName;
 
   @JsonKey(name: r'dateOfBirth', required: true, includeIfNull: false)
-  final DateTime dateOfBirth;
+  final String dateOfBirth;
 
   @JsonKey(name: r'gender', required: true, includeIfNull: false)
   final Gender gender;

@@ -9,9 +9,9 @@ part of 'earnings_summary.dart';
 abstract class _$EarningsSummaryCWProxy {
   EarningsSummary period(EarningsPeriod period);
 
-  EarningsSummary from(DateTime from);
+  EarningsSummary from(String from);
 
-  EarningsSummary to(DateTime to);
+  EarningsSummary to(String to);
 
   EarningsSummary total(int total);
 
@@ -29,8 +29,8 @@ abstract class _$EarningsSummaryCWProxy {
   /// ```
   EarningsSummary call({
     EarningsPeriod period,
-    DateTime from,
-    DateTime to,
+    String from,
+    String to,
     int total,
     int jobs,
     List<EarningsSummaryBucketsInner> buckets,
@@ -48,10 +48,10 @@ class _$EarningsSummaryCWProxyImpl implements _$EarningsSummaryCWProxy {
   EarningsSummary period(EarningsPeriod period) => call(period: period);
 
   @override
-  EarningsSummary from(DateTime from) => call(from: from);
+  EarningsSummary from(String from) => call(from: from);
 
   @override
-  EarningsSummary to(DateTime to) => call(to: to);
+  EarningsSummary to(String to) => call(to: to);
 
   @override
   EarningsSummary total(int total) => call(total: total);
@@ -88,11 +88,11 @@ class _$EarningsSummaryCWProxyImpl implements _$EarningsSummaryCWProxy {
       from: from == const $CopyWithPlaceholder() || from == null
           ? _value.from
           // ignore: cast_nullable_to_non_nullable
-          : from as DateTime,
+          : from as String,
       to: to == const $CopyWithPlaceholder() || to == null
           ? _value.to
           // ignore: cast_nullable_to_non_nullable
-          : to as DateTime,
+          : to as String,
       total: total == const $CopyWithPlaceholder() || total == null
           ? _value.total
           // ignore: cast_nullable_to_non_nullable
@@ -132,8 +132,8 @@ EarningsSummary _$EarningsSummaryFromJson(
       'period',
       (v) => $enumDecode(_$EarningsPeriodEnumMap, v),
     ),
-    from: $checkedConvert('from', (v) => DateTime.parse(v as String)),
-    to: $checkedConvert('to', (v) => DateTime.parse(v as String)),
+    from: $checkedConvert('from', (v) => v as String),
+    to: $checkedConvert('to', (v) => v as String),
     total: $checkedConvert('total', (v) => (v as num).toInt()),
     jobs: $checkedConvert('jobs', (v) => (v as num).toInt()),
     buckets: $checkedConvert(
@@ -152,8 +152,8 @@ EarningsSummary _$EarningsSummaryFromJson(
 Map<String, dynamic> _$EarningsSummaryToJson(EarningsSummary instance) =>
     <String, dynamic>{
       'period': _$EarningsPeriodEnumMap[instance.period]!,
-      'from': instance.from.toIso8601String(),
-      'to': instance.to.toIso8601String(),
+      'from': instance.from,
+      'to': instance.to,
       'total': instance.total,
       'jobs': instance.jobs,
       'buckets': instance.buckets.map((e) => e.toJson()).toList(),

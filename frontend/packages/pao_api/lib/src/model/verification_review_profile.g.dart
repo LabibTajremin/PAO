@@ -9,7 +9,7 @@ part of 'verification_review_profile.dart';
 abstract class _$VerificationReviewProfileCWProxy {
   VerificationReviewProfile fullName(String fullName);
 
-  VerificationReviewProfile dateOfBirth(DateTime dateOfBirth);
+  VerificationReviewProfile dateOfBirth(String dateOfBirth);
 
   VerificationReviewProfile gender(Gender gender);
 
@@ -31,7 +31,7 @@ abstract class _$VerificationReviewProfileCWProxy {
   /// ```
   VerificationReviewProfile call({
     String fullName,
-    DateTime dateOfBirth,
+    String dateOfBirth,
     Gender gender,
     String phone,
     String? presentAddress,
@@ -53,7 +53,7 @@ class _$VerificationReviewProfileCWProxyImpl
       call(fullName: fullName);
 
   @override
-  VerificationReviewProfile dateOfBirth(DateTime dateOfBirth) =>
+  VerificationReviewProfile dateOfBirth(String dateOfBirth) =>
       call(dateOfBirth: dateOfBirth);
 
   @override
@@ -101,7 +101,7 @@ class _$VerificationReviewProfileCWProxyImpl
           dateOfBirth == const $CopyWithPlaceholder() || dateOfBirth == null
           ? _value.dateOfBirth
           // ignore: cast_nullable_to_non_nullable
-          : dateOfBirth as DateTime,
+          : dateOfBirth as String,
       gender: gender == const $CopyWithPlaceholder() || gender == null
           ? _value.gender
           // ignore: cast_nullable_to_non_nullable
@@ -147,10 +147,7 @@ VerificationReviewProfile _$VerificationReviewProfileFromJson(
   );
   final val = VerificationReviewProfile(
     fullName: $checkedConvert('fullName', (v) => v as String),
-    dateOfBirth: $checkedConvert(
-      'dateOfBirth',
-      (v) => DateTime.parse(v as String),
-    ),
+    dateOfBirth: $checkedConvert('dateOfBirth', (v) => v as String),
     gender: $checkedConvert('gender', (v) => $enumDecode(_$GenderEnumMap, v)),
     phone: $checkedConvert('phone', (v) => v as String),
     presentAddress: $checkedConvert('presentAddress', (v) => v as String?),
@@ -164,7 +161,7 @@ Map<String, dynamic> _$VerificationReviewProfileToJson(
   VerificationReviewProfile instance,
 ) => <String, dynamic>{
   'fullName': instance.fullName,
-  'dateOfBirth': instance.dateOfBirth.toIso8601String(),
+  'dateOfBirth': instance.dateOfBirth,
   'gender': _$GenderEnumMap[instance.gender]!,
   'phone': instance.phone,
   'presentAddress': ?instance.presentAddress,

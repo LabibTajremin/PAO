@@ -7,7 +7,7 @@ part of 'dashboard_bookings_per_day_inner.dart';
 // **************************************************************************
 
 abstract class _$DashboardBookingsPerDayInnerCWProxy {
-  DashboardBookingsPerDayInner date(DateTime date);
+  DashboardBookingsPerDayInner date(String date);
 
   DashboardBookingsPerDayInner total(int total);
 
@@ -21,7 +21,7 @@ abstract class _$DashboardBookingsPerDayInnerCWProxy {
   /// ```dart
   /// DashboardBookingsPerDayInner(...).copyWith(id: 12, name: "My name")
   /// ```
-  DashboardBookingsPerDayInner call({DateTime date, int total, int completed});
+  DashboardBookingsPerDayInner call({String date, int total, int completed});
 }
 
 /// Callable proxy for `copyWith` functionality.
@@ -33,7 +33,7 @@ class _$DashboardBookingsPerDayInnerCWProxyImpl
   final DashboardBookingsPerDayInner _value;
 
   @override
-  DashboardBookingsPerDayInner date(DateTime date) => call(date: date);
+  DashboardBookingsPerDayInner date(String date) => call(date: date);
 
   @override
   DashboardBookingsPerDayInner total(int total) => call(total: total);
@@ -60,7 +60,7 @@ class _$DashboardBookingsPerDayInnerCWProxyImpl
       date: date == const $CopyWithPlaceholder() || date == null
           ? _value.date
           // ignore: cast_nullable_to_non_nullable
-          : date as DateTime,
+          : date as String,
       total: total == const $CopyWithPlaceholder() || total == null
           ? _value.total
           // ignore: cast_nullable_to_non_nullable
@@ -91,7 +91,7 @@ DashboardBookingsPerDayInner _$DashboardBookingsPerDayInnerFromJson(
 ) => $checkedCreate('DashboardBookingsPerDayInner', json, ($checkedConvert) {
   $checkKeys(json, requiredKeys: const ['date', 'total', 'completed']);
   final val = DashboardBookingsPerDayInner(
-    date: $checkedConvert('date', (v) => DateTime.parse(v as String)),
+    date: $checkedConvert('date', (v) => v as String),
     total: $checkedConvert('total', (v) => (v as num).toInt()),
     completed: $checkedConvert('completed', (v) => (v as num).toInt()),
   );
@@ -101,7 +101,7 @@ DashboardBookingsPerDayInner _$DashboardBookingsPerDayInnerFromJson(
 Map<String, dynamic> _$DashboardBookingsPerDayInnerToJson(
   DashboardBookingsPerDayInner instance,
 ) => <String, dynamic>{
-  'date': instance.date.toIso8601String(),
+  'date': instance.date,
   'total': instance.total,
   'completed': instance.completed,
 };

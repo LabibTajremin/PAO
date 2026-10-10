@@ -27,7 +27,7 @@ class DashboardBookingsPerDayInner {
   });
 
   @JsonKey(name: r'date', required: true, includeIfNull: false)
-  final DateTime date;
+  final String date;
 
   @JsonKey(name: r'total', required: true, includeIfNull: false)
   final int total;

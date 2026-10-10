@@ -38,10 +38,10 @@ class EarningsSummary {
   final EarningsPeriod period;
 
   @JsonKey(name: r'from', required: true, includeIfNull: false)
-  final DateTime from;
+  final String from;
 
   @JsonKey(name: r'to', required: true, includeIfNull: false)
-  final DateTime to;
+  final String to;
 
   /// Amount in paisa (1 BDT = 100 paisa). Never a float (04-decisions.md E9).
   @JsonKey(name: r'total', required: true, includeIfNull: false)

@@ -120,8 +120,8 @@ class AdminBookingsApi {
   Future<Response<BookingList>> listAdminBookings({
     String? status,
     String? serviceId,
-    DateTime? from,
-    DateTime? to,
+    String? from,
+    String? to,
     String? area,
     String? cursor,
     int? limit = 20,

@@ -27,7 +27,7 @@ class EarningsSummaryBucketsInner {
   });
 
   @JsonKey(name: r'date', required: true, includeIfNull: false)
-  final DateTime date;
+  final String date;
 
   /// Amount in paisa (1 BDT = 100 paisa). Never a float (04-decisions.md E9).
   @JsonKey(name: r'total', required: true, includeIfNull: false)

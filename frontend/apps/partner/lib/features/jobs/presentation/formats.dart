@@ -15,9 +15,10 @@ extension ApiFormats on BuildContext {
   String when(DateTime at, [String pattern = 'd MMM y, h:mm a']) =>
       formatDhaka(at, pattern: pattern, locale: lang);
 
-  /// A calendar date from the API; it has no time, so no zone shift applies.
-  String day(DateTime date, [String pattern = 'd MMM y']) =>
-      DateFormat(pattern, lang).format(date);
+  /// A calendar date from the API (`yyyy-MM-dd`); it has no time, so no zone
+  /// shift applies.
+  String day(String date, [String pattern = 'd MMM y']) =>
+      DateFormat(pattern, lang).format(DateTime.parse(date));
 
   /// A count in the current language's digits.
   String count(int value) => formatCount(value, locale: lang);

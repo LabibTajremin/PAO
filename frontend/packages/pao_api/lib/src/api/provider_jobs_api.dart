@@ -318,7 +318,7 @@ class ProviderJobsApi {
   /// Throws [DioException] if API call or serialization fails
   Future<Response<EarningsSummary>> getEarningsSummary({
     required String period,
-    DateTime? date,
+    String? date,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -727,8 +727,8 @@ class ProviderJobsApi {
   /// Returns a [Future] containing a [Response] with a [EarningsJobList] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<EarningsJobList>> listEarningsJobs({
-    DateTime? from,
-    DateTime? to,
+    String? from,
+    String? to,
     String? cursor,
     int? limit = 20,
     CancelToken? cancelToken,

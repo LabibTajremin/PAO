@@ -9,7 +9,7 @@ part of 'personal_info_input.dart';
 abstract class _$PersonalInfoInputCWProxy {
   PersonalInfoInput fullName(String fullName);
 
-  PersonalInfoInput dateOfBirth(DateTime dateOfBirth);
+  PersonalInfoInput dateOfBirth(String dateOfBirth);
 
   PersonalInfoInput gender(Gender gender);
 
@@ -29,7 +29,7 @@ abstract class _$PersonalInfoInputCWProxy {
   /// ```
   PersonalInfoInput call({
     String fullName,
-    DateTime dateOfBirth,
+    String dateOfBirth,
     Gender gender,
     String presentAddress,
     String permanentAddress,
@@ -48,7 +48,7 @@ class _$PersonalInfoInputCWProxyImpl implements _$PersonalInfoInputCWProxy {
   PersonalInfoInput fullName(String fullName) => call(fullName: fullName);
 
   @override
-  PersonalInfoInput dateOfBirth(DateTime dateOfBirth) =>
+  PersonalInfoInput dateOfBirth(String dateOfBirth) =>
       call(dateOfBirth: dateOfBirth);
 
   @override
@@ -91,7 +91,7 @@ class _$PersonalInfoInputCWProxyImpl implements _$PersonalInfoInputCWProxy {
           dateOfBirth == const $CopyWithPlaceholder() || dateOfBirth == null
           ? _value.dateOfBirth
           // ignore: cast_nullable_to_non_nullable
-          : dateOfBirth as DateTime,
+          : dateOfBirth as String,
       gender: gender == const $CopyWithPlaceholder() || gender == null
           ? _value.gender
           // ignore: cast_nullable_to_non_nullable
@@ -143,10 +143,7 @@ PersonalInfoInput _$PersonalInfoInputFromJson(
   );
   final val = PersonalInfoInput(
     fullName: $checkedConvert('fullName', (v) => v as String),
-    dateOfBirth: $checkedConvert(
-      'dateOfBirth',
-      (v) => DateTime.parse(v as String),
-    ),
+    dateOfBirth: $checkedConvert('dateOfBirth', (v) => v as String),
     gender: $checkedConvert('gender', (v) => $enumDecode(_$GenderEnumMap, v)),
     presentAddress: $checkedConvert('presentAddress', (v) => v as String),
     permanentAddress: $checkedConvert('permanentAddress', (v) => v as String),
@@ -158,7 +155,7 @@ PersonalInfoInput _$PersonalInfoInputFromJson(
 Map<String, dynamic> _$PersonalInfoInputToJson(PersonalInfoInput instance) =>
     <String, dynamic>{
       'fullName': instance.fullName,
-      'dateOfBirth': instance.dateOfBirth.toIso8601String(),
+      'dateOfBirth': instance.dateOfBirth,
       'gender': _$GenderEnumMap[instance.gender]!,
       'presentAddress': instance.presentAddress,
       'permanentAddress': instance.permanentAddress,
