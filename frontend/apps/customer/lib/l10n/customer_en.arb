@@ -1,0 +1,125 @@
+{
+  "@@locale": "en",
+  "appTitle": "PAO",
+  "@appTitle": {
+    "description": "App name on the splash"
+  },
+  "authPhoneTitle": "What is your phone number?",
+  "@authPhoneTitle": {
+    "description": "C03 heading"
+  },
+  "authPhoneBody": "We will text you a code to sign in.",
+  "@authPhoneBody": {
+    "description": "C03 explanation"
+  },
+  "authPhoneLabel": "Mobile number",
+  "@authPhoneLabel": {
+    "description": "Phone field label"
+  },
+  "authPhoneInvalid": "Enter an 11-digit Bangladeshi mobile number.",
+  "@authPhoneInvalid": {
+    "description": "Invalid phone number"
+  },
+  "authSendCode": "Send code",
+  "@authSendCode": {
+    "description": "C03 button"
+  },
+  "authTermsNote": "By continuing you agree to PAO's terms and privacy policy.",
+  "@authTermsNote": {
+    "description": "C03 consent note"
+  },
+  "authTermsLink": "Read the terms and privacy policy",
+  "@authTermsLink": {
+    "description": "C03 link to C28"
+  },
+  "authOtpTitle": "Enter the 6-digit code",
+  "@authOtpTitle": {
+    "description": "C04 heading"
+  },
+  "authOtpSentTo": "We sent it to {phone}.",
+  "@authOtpSentTo": {
+    "description": "C04 explanation",
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "authResendIn": "Resend code in {seconds}s",
+  "@authResendIn": {
+    "description": "Resend countdown",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authResend": "Resend code",
+  "@authResend": {
+    "description": "Resend button"
+  },
+  "authProfileTitle": "Set up your profile",
+  "@authProfileTitle": {
+    "description": "C05 heading"
+  },
+  "authProfileBody": "Tell providers what to call you. A photo is optional.",
+  "@authProfileBody": {
+    "description": "C05 explanation"
+  },
+  "authProfileName": "Your name",
+  "@authProfileName": {
+    "description": "C05 name field"
+  },
+  "authProfileNameInvalid": "Enter a name of 2 to 80 characters.",
+  "@authProfileNameInvalid": {
+    "description": "C05 invalid name"
+  },
+  "authProfileAddPhoto": "Add a photo",
+  "@authProfileAddPhoto": {
+    "description": "C05 photo button"
+  },
+  "onbTagline": "Trusted help at home",
+  "@onbTagline": {
+    "description": "Splash tagline"
+  },
+  "onbLanguage": "Language",
+  "@onbLanguage": {
+    "description": "Language switch label"
+  },
+  "onbSkip": "Skip",
+  "@onbSkip": {
+    "description": "Skip onboarding"
+  },
+  "onbNext": "Next",
+  "@onbNext": {
+    "description": "Next slide"
+  },
+  "onbStart": "Get started",
+  "@onbStart": {
+    "description": "Finish onboarding"
+  },
+  "onbSlide1Title": "Find help nearby",
+  "@onbSlide1Title": {
+    "description": "C02 title"
+  },
+  "onbSlide1Body": "Electricians, plumbers, cleaners and more, close to your home.",
+  "@onbSlide1Body": {
+    "description": "C02 body"
+  },
+  "onbSlide2Title": "Verified providers",
+  "@onbSlide2Title": {
+    "description": "C31 title"
+  },
+  "onbSlide2Body": "Every provider's NID, police clearance and skills are checked before they work.",
+  "@onbSlide2Body": {
+    "description": "C31 body"
+  },
+  "onbSlide3Title": "Fixed prices, pay in cash",
+  "@onbSlide3Title": {
+    "description": "C32 title"
+  },
+  "onbSlide3Body": "See the price before you book. Pay the provider in cash when the job is done.",
+  "@onbSlide3Body": {
+    "description": "C32 body"
+  }
+}
