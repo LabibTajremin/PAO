@@ -82,6 +82,9 @@ abstract final class Routes {
   /// An account sub-page such as `addresses`.
   static String accountPage(String page) => '/account/$page';
 
+  /// C62, shown once the account is deleted and the session is gone.
+  static const accountDeleted = '/account/deleted';
+
   /// Screen ID per route, checked against the account's screens.
   static const Map<String, String> screens = {
     home: 'C07',
@@ -124,6 +127,7 @@ abstract final class Routes {
     otp,
     welcomeBack,
     legal,
+    accountDeleted,
   };
 
   /// Open to a signed-in account that has no profile yet.

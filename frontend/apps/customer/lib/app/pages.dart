@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pao_customer/app/routes.dart';
 import 'package:pao_customer/app/services.dart';
+import 'package:pao_customer/features/account/presentation/account_routes.dart';
 import 'package:pao_customer/features/auth/presentation/otp_page.dart';
 import 'package:pao_customer/features/auth/presentation/phone_page.dart';
 import 'package:pao_customer/features/auth/presentation/profile_setup_page.dart';
+import 'package:pao_customer/features/bookings/presentation/booking_detail_page.dart';
+import 'package:pao_customer/features/bookings/presentation/bookings_page.dart';
+import 'package:pao_customer/features/bookings/presentation/receipt_page.dart';
+import 'package:pao_customer/features/notifications/presentation/notifications_page.dart';
 import 'package:pao_customer/features/onboarding/presentation/onboarding_page.dart';
 import 'package:pao_customer/features/onboarding/presentation/splash_page.dart';
+import 'package:pao_customer/features/report/presentation/report_page.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 GoRoute _page(String path, Widget Function(GoRouterState state) build) =>
@@ -30,6 +36,7 @@ List<RouteBase> entryRoutes(AppServices s) => [
     ),
   ),
   _page(Routes.denied, (_) => const Scaffold(body: PaoAccessDeniedView())),
+  ...publicAccountRoutes(),
   _page(Routes.addressNew, (_) => const PlaceholderPage(title: 'C25')),
   _page('/account/addresses/:id', (_) => const PlaceholderPage(title: 'C25')),
   _page(Routes.services, (_) => const PlaceholderPage(title: 'C37')),
@@ -52,8 +59,8 @@ List<RouteBase> bookingRoutes(AppServices s) {
     booking('cancel', (_) => const PlaceholderPage(title: 'C52')),
     booking('completed', (_) => const PlaceholderPage(title: 'C16')),
     booking('rate', (_) => const PlaceholderPage(title: 'C17')),
-    booking('receipt', (_) => const PlaceholderPage(title: 'C64')),
-    booking('report', (_) => const PlaceholderPage(title: 'C20')),
+    booking('receipt', (id) => ReceiptPage(services: s, bookingId: id)),
+    booking('report', (id) => ReportPage(services: s, bookingId: id)),
   ];
 }
 
@@ -69,12 +76,15 @@ List<StatefulShellBranch> shellBranches(
     routes: [
       GoRoute(
         path: Routes.bookings,
-        builder: (_, _) => const PlaceholderPage(title: 'C18'),
+        builder: (_, _) => BookingsPage(services: s),
         routes: [
           GoRoute(
             path: ':id',
             parentNavigatorKey: root,
-            builder: (_, _) => const PlaceholderPage(title: 'C19'),
+            builder: (_, st) => BookingDetailPage(
+              services: s,
+              bookingId: st.pathParameters['id']!,
+            ),
           ),
         ],
       ),
@@ -82,20 +92,8 @@ List<StatefulShellBranch> shellBranches(
   ),
   StatefulShellBranch(
     routes: [
-      _page(Routes.notifications, (_) => const PlaceholderPage(title: 'C21')),
+      _page(Routes.notifications, (_) => NotificationsPage(services: s)),
     ],
   ),
-  StatefulShellBranch(routes: [_accountRoute(root)]),
+  StatefulShellBranch(routes: [accountRoute(s, root)]),
 ];
-
-GoRoute _accountRoute(GlobalKey<NavigatorState> root) => GoRoute(
-  path: Routes.account,
-  builder: (_, _) => const PlaceholderPage(title: 'C22'),
-  routes: [
-    GoRoute(
-      path: ':page',
-      parentNavigatorKey: root,
-      builder: (_, st) => PlaceholderPage(title: st.pathParameters['page']!),
-    ),
-  ],
-);

@@ -88,15 +88,19 @@ void main() {
     });
   });
 
-  test('launcher opens directions and the dialler', () async {
+  test('launcher opens directions, the dialler and mail', () async {
     final urls = _Urls();
     UrlLauncherPlatform.instance = urls;
     final l = Launcher();
     expect(await l.directions(23.7, 90.4), isTrue);
     expect(await l.call('+8801712345678'), isTrue);
+    expect(await l.email('help@pao.bd'), isTrue);
+    expect(await l.email('help@pao.bd', subject: 'Need help'), isTrue);
     expect(urls.opened, [
       'https://www.google.com/maps/dir/?api=1&destination=23.7%2C90.4',
       'tel:+8801712345678',
+      'mailto:help@pao.bd',
+      'mailto:help@pao.bd?subject=Need%20help',
     ]);
   });
 

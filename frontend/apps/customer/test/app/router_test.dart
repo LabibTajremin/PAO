@@ -1,9 +1,21 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pao_customer/app/routes.dart';
+import 'package:pao_customer/features/account/presentation/account_page.dart';
+import 'package:pao_customer/features/account/presentation/addresses_page.dart';
+import 'package:pao_customer/features/account/presentation/delete_account_page.dart';
+import 'package:pao_customer/features/account/presentation/edit_profile_page.dart';
+import 'package:pao_customer/features/account/presentation/help_page.dart';
+import 'package:pao_customer/features/account/presentation/language_page.dart';
+import 'package:pao_customer/features/account/presentation/legal_page.dart';
 import 'package:pao_customer/features/auth/presentation/otp_page.dart';
 import 'package:pao_customer/features/auth/presentation/phone_page.dart';
 import 'package:pao_customer/features/auth/presentation/profile_setup_page.dart';
+import 'package:pao_customer/features/bookings/presentation/booking_detail_page.dart';
+import 'package:pao_customer/features/bookings/presentation/bookings_page.dart';
+import 'package:pao_customer/features/bookings/presentation/receipt_page.dart';
+import 'package:pao_customer/features/notifications/presentation/notifications_page.dart';
 import 'package:pao_customer/features/onboarding/presentation/onboarding_page.dart';
+import 'package:pao_customer/features/report/presentation/report_page.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 import '../support/harness.dart';
@@ -31,7 +43,6 @@ void main() {
       Routes.providerOf('p1'): PlaceholderPage,
       Routes.book: PlaceholderPage,
       for (final part in [
-        '',
         'waiting',
         'confirmed',
         'live',
@@ -39,14 +50,20 @@ void main() {
         'cancel',
         'completed',
         'rate',
-        'receipt',
-        'report',
       ])
         Routes.booking('b1', part): PlaceholderPage,
-      Routes.bookings: PlaceholderPage,
-      Routes.notifications: PlaceholderPage,
-      Routes.account: PlaceholderPage,
-      Routes.accountPage('addresses'): PlaceholderPage,
+      Routes.booking('b1'): BookingDetailPage,
+      Routes.booking('b1', 'receipt'): ReceiptPage,
+      Routes.booking('b1', 'report'): ReportPage,
+      Routes.bookings: BookingsPage,
+      Routes.notifications: NotificationsPage,
+      Routes.account: AccountPage,
+      Routes.accountPage('profile'): EditProfilePage,
+      Routes.accountPage('addresses'): AddressesPage,
+      Routes.accountPage('language'): LanguagePage,
+      Routes.accountPage('help'): HelpPage,
+      Routes.accountPage('delete'): DeleteAccountPage,
+      Routes.legal: LegalPage,
       Routes.addressNew: PlaceholderPage,
       Routes.addressEdit('a1'): PlaceholderPage,
     };
