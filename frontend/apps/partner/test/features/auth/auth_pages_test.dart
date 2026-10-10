@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pao_partner/app/routes.dart';
+import 'package:pao_partner/features/verification/presentation/verification_page.dart';
 
 import '../../support/harness.dart';
 
@@ -97,7 +98,7 @@ void main() {
       'code': '123456',
       'app': 'partner',
     });
-    expect(find.text('VerificationPage'), findsOneWidget);
+    expect(find.byType(VerificationPage), findsOneWidget);
   });
 
   testWidgets('resend becomes available after the countdown', (tester) async {

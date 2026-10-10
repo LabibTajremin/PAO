@@ -626,5 +626,707 @@
         "type": "String"
       }
     }
+  },
+  "jobsTitle": "Jobs",
+  "@jobsTitle": {
+    "description": "M23 title."
+  },
+  "jobsUpcoming": "Upcoming",
+  "@jobsUpcoming": {
+    "description": "M23 tab: jobs not yet finished."
+  },
+  "jobsPast": "Past",
+  "@jobsPast": {
+    "description": "M23 tab: finished jobs."
+  },
+  "jobsEmptyUpcoming": "No upcoming jobs",
+  "@jobsEmptyUpcoming": {
+    "description": "M23 empty upcoming tab."
+  },
+  "jobsEmptyPast": "No past jobs yet",
+  "@jobsEmptyPast": {
+    "description": "M23 empty past tab."
+  },
+  "jobsEmptyBody": "Go online on Home to receive job requests.",
+  "@jobsEmptyBody": {
+    "description": "M23 empty state hint."
+  },
+  "jobsLoadMore": "Load more",
+  "@jobsLoadMore": {
+    "description": "Button that loads the next page of a list."
+  },
+  "jobsStatusRequested": "Requested",
+  "@jobsStatusRequested": {
+    "description": "Booking status."
+  },
+  "jobsStatusAccepted": "Accepted",
+  "@jobsStatusAccepted": {
+    "description": "Booking status."
+  },
+  "jobsStatusOnTheWay": "On the way",
+  "@jobsStatusOnTheWay": {
+    "description": "Booking status."
+  },
+  "jobsStatusArrived": "Arrived",
+  "@jobsStatusArrived": {
+    "description": "Booking status."
+  },
+  "jobsStatusInProgress": "In progress",
+  "@jobsStatusInProgress": {
+    "description": "Booking status."
+  },
+  "jobsStatusCompleted": "Completed",
+  "@jobsStatusCompleted": {
+    "description": "Booking status."
+  },
+  "jobsStatusRejected": "Rejected",
+  "@jobsStatusRejected": {
+    "description": "Booking status."
+  },
+  "jobsStatusTimedOut": "Expired",
+  "@jobsStatusTimedOut": {
+    "description": "Booking status: request not answered in time."
+  },
+  "jobsStatusCancelled": "Cancelled",
+  "@jobsStatusCancelled": {
+    "description": "Booking status."
+  },
+  "jobsDetailTitle": "Job details",
+  "@jobsDetailTitle": {
+    "description": "M24 title."
+  },
+  "jobsCustomer": "Customer: {name}",
+  "@jobsCustomer": {
+    "description": "Customer first name on M24.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "jobsArea": "Area: {area}",
+  "@jobsArea": {
+    "description": "Service area on M24.",
+    "placeholders": {
+      "area": {
+        "type": "String"
+      }
+    }
+  },
+  "jobsItems": "Items",
+  "@jobsItems": {
+    "description": "M24 section heading."
+  },
+  "jobsExtra": "Added during the job",
+  "@jobsExtra": {
+    "description": "Marks an extra item approved by the customer."
+  },
+  "jobsTotal": "Total",
+  "@jobsTotal": {
+    "description": "Total row."
+  },
+  "jobsTimeline": "Timeline",
+  "@jobsTimeline": {
+    "description": "M24 section heading."
+  },
+  "jobsOpenLive": "Continue job",
+  "@jobsOpenLive": {
+    "description": "M24 button to the active job screen."
+  },
+  "jobsReceipt": "View receipt",
+  "@jobsReceipt": {
+    "description": "M24 button for a completed job."
+  },
+  "jobsReceiptTitle": "Receipt",
+  "@jobsReceiptTitle": {
+    "description": "Receipt sheet title."
+  },
+  "jobsPaidCash": "Paid in cash",
+  "@jobsPaidCash": {
+    "description": "Receipt payment method."
+  },
+  "jobsReport": "Report a problem",
+  "@jobsReport": {
+    "description": "M24 button to M25."
+  },
+  "jobsReportTitle": "Report a problem",
+  "@jobsReportTitle": {
+    "description": "M25 title."
+  },
+  "jobsReportReason": "What went wrong?",
+  "@jobsReportReason": {
+    "description": "M25 reason heading."
+  },
+  "jobsReasonCustomerUnavailable": "Customer not available",
+  "@jobsReasonCustomerUnavailable": {
+    "description": "Report reason."
+  },
+  "jobsReasonPayment": "Payment problem",
+  "@jobsReasonPayment": {
+    "description": "Report reason."
+  },
+  "jobsReasonBehaviour": "Customer behaviour",
+  "@jobsReasonBehaviour": {
+    "description": "Report reason."
+  },
+  "jobsReasonSafety": "Safety concern",
+  "@jobsReasonSafety": {
+    "description": "Report reason."
+  },
+  "jobsReasonDamage": "Damage",
+  "@jobsReasonDamage": {
+    "description": "Report reason."
+  },
+  "jobsReasonOther": "Something else",
+  "@jobsReasonOther": {
+    "description": "Report reason."
+  },
+  "jobsReportNeedReason": "Choose a reason.",
+  "@jobsReportNeedReason": {
+    "description": "M25 validation."
+  },
+  "jobsReportDescription": "Describe the problem",
+  "@jobsReportDescription": {
+    "description": "M25 description label."
+  },
+  "jobsReportDescriptionHint": "What happened, and when?",
+  "@jobsReportDescriptionHint": {
+    "description": "M25 description hint."
+  },
+  "jobsReportDescriptionInvalid": "Write between 10 and 1000 characters.",
+  "@jobsReportDescriptionInvalid": {
+    "description": "M25 validation."
+  },
+  "jobsReportPhotos": "Photos ({count} of {max})",
+  "@jobsReportPhotos": {
+    "description": "M25 photo heading with the count and the limit.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "jobsReportAddPhoto": "Add photo",
+  "@jobsReportAddPhoto": {
+    "description": "M25 camera button."
+  },
+  "jobsReportRemovePhoto": "Remove photo",
+  "@jobsReportRemovePhoto": {
+    "description": "Tooltip on a photo remove button."
+  },
+  "jobsReportSubmit": "Send report",
+  "@jobsReportSubmit": {
+    "description": "M25 submit button."
+  },
+  "jobsReportSent": "Report sent",
+  "@jobsReportSent": {
+    "description": "M25 success title."
+  },
+  "jobsReportTicket": "Your ticket number is {ticket}. Our team will contact you.",
+  "@jobsReportTicket": {
+    "description": "M25 success message.",
+    "placeholders": {
+      "ticket": {
+        "type": "String"
+      }
+    }
+  },
+  "jobsBackToJob": "Back to job",
+  "@jobsBackToJob": {
+    "description": "M25 success button."
+  },
+  "earnTitle": "Earnings",
+  "@earnTitle": {
+    "description": "M26 title."
+  },
+  "earnDay": "Today",
+  "@earnDay": {
+    "description": "M26 period: today."
+  },
+  "earnWeek": "This week",
+  "@earnWeek": {
+    "description": "M26 period: this week."
+  },
+  "earnMonth": "This month",
+  "@earnMonth": {
+    "description": "M26 period: this month."
+  },
+  "earnJobs": "{count, plural, =1{{formatted} job} other{{formatted} jobs}}",
+  "@earnJobs": {
+    "description": "Number of completed jobs; formatted is the count in local digits.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "formatted": {
+        "type": "String"
+      }
+    }
+  },
+  "earnByJob": "By job",
+  "@earnByJob": {
+    "description": "M27 heading."
+  },
+  "earnEmptyTitle": "No earnings yet",
+  "@earnEmptyTitle": {
+    "description": "M27 empty state."
+  },
+  "earnEmptyBody": "Completed jobs and what you earned appear here.",
+  "@earnEmptyBody": {
+    "description": "M27 empty state body."
+  },
+  "profTitle": "Profile",
+  "@profTitle": {
+    "description": "M28 title."
+  },
+  "profChangePhoto": "Change photo",
+  "@profChangePhoto": {
+    "description": "M28 button."
+  },
+  "profLevelOf": "Level {level}: {name}",
+  "@profLevelOf": {
+    "description": "Verification level with its name.",
+    "placeholders": {
+      "level": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "profRatingCount": "{count, plural, =0{No ratings yet} =1{{formatted} rating} other{{formatted} ratings}}",
+  "@profRatingCount": {
+    "description": "Number of ratings; formatted is the count in local digits.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "formatted": {
+        "type": "String"
+      }
+    }
+  },
+  "profNoBio": "Tell customers about your work.",
+  "@profNoBio": {
+    "description": "Shown when the bio is empty."
+  },
+  "profEditBio": "Edit bio",
+  "@profEditBio": {
+    "description": "M28 button and sheet title."
+  },
+  "profBioLabel": "About you",
+  "@profBioLabel": {
+    "description": "Bio field label."
+  },
+  "profBioHint": "Your skills and experience",
+  "@profBioHint": {
+    "description": "Bio field hint."
+  },
+  "profBioTooLong": "Keep it under 500 characters.",
+  "@profBioTooLong": {
+    "description": "Bio validation."
+  },
+  "profBadgeNone": "No badge yet",
+  "@profBadgeNone": {
+    "description": "Badge for level 0."
+  },
+  "profBadgeVerified": "Verified",
+  "@profBadgeVerified": {
+    "description": "Badge for level 1."
+  },
+  "profBadgeVerifiedPro": "PAO Verified Pro",
+  "@profBadgeVerifiedPro": {
+    "description": "Badge for level 2."
+  },
+  "profLevel0": "Registered",
+  "@profLevel0": {
+    "description": "Level 0 name."
+  },
+  "profLevel1": "Document verified",
+  "@profLevel1": {
+    "description": "Level 1 name."
+  },
+  "profLevel2": "Skill verified",
+  "@profLevel2": {
+    "description": "Level 2 name."
+  },
+  "profLevel0How": "Signed up and verified your phone. You cannot receive bookings yet.",
+  "@profLevel0How": {
+    "description": "How level 0 is earned."
+  },
+  "profLevel1How": "All documents approved by PAO. Customers see \"Verified\" and you receive bookings.",
+  "@profLevel1How": {
+    "description": "How level 1 is earned."
+  },
+  "profLevel2How": "PAO checked your work in person. Customers see \"PAO Verified Pro\" and you rank higher.",
+  "@profLevel2How": {
+    "description": "How level 2 is earned."
+  },
+  "profLevel2Title": "Level 2 skill check",
+  "@profLevel2Title": {
+    "description": "M32 heading."
+  },
+  "profLevel2Done": "You are a PAO Verified Pro.",
+  "@profLevel2Done": {
+    "description": "Level 2 reached."
+  },
+  "profLevel2Session": "Your skill check is on {when} at {place}.",
+  "@profLevel2Session": {
+    "description": "Scheduled level 2 session.",
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "profLevel2Retry": "You can try the skill check again after {date}.",
+  "@profLevel2Retry": {
+    "description": "Cooling-off after a failed level 2 session.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "profLevel2Eligible": "You can book a skill check. Call PAO support to arrange one.",
+  "@profLevel2Eligible": {
+    "description": "Level 2 available."
+  },
+  "profLevel2NotYet": "Reach Level 1 first; then PAO can check your work in person.",
+  "@profLevel2NotYet": {
+    "description": "Level 2 not available yet."
+  },
+  "profPublicTitle": "Public profile",
+  "@profPublicTitle": {
+    "description": "M29 title and menu row."
+  },
+  "profPublicHint": "This is how customers see you. They never see your documents or phone number.",
+  "@profPublicHint": {
+    "description": "M29 explanation."
+  },
+  "profExperience": "{count, plural, =0{New to the trade} =1{{formatted} year of experience} other{{formatted} years of experience}}",
+  "@profExperience": {
+    "description": "Years of experience; formatted is the count in local digits.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "formatted": {
+        "type": "String"
+      }
+    }
+  },
+  "profReviewsTitle": "Reviews",
+  "@profReviewsTitle": {
+    "description": "M30 title and menu row."
+  },
+  "profReviewsEmpty": "No reviews yet",
+  "@profReviewsEmpty": {
+    "description": "M30 empty state."
+  },
+  "profReviewsEmptyBody": "Customers can review you after each completed job.",
+  "@profReviewsEmptyBody": {
+    "description": "M30 empty state body."
+  },
+  "profTagOnTime": "On time",
+  "@profTagOnTime": {
+    "description": "Review tag."
+  },
+  "profTagProfessional": "Professional",
+  "@profTagProfessional": {
+    "description": "Review tag."
+  },
+  "profTagQualityWork": "Quality work",
+  "@profTagQualityWork": {
+    "description": "Review tag."
+  },
+  "profTagClean": "Clean",
+  "@profTagClean": {
+    "description": "Review tag."
+  },
+  "profTagFriendly": "Friendly",
+  "@profTagFriendly": {
+    "description": "Review tag."
+  },
+  "profTagFairPrice": "Fair price",
+  "@profTagFairPrice": {
+    "description": "Review tag."
+  },
+  "profTagLate": "Late",
+  "@profTagLate": {
+    "description": "Review tag."
+  },
+  "profTagRude": "Rude",
+  "@profTagRude": {
+    "description": "Review tag."
+  },
+  "profTagPoorQuality": "Poor quality",
+  "@profTagPoorQuality": {
+    "description": "Review tag."
+  },
+  "profTagMessy": "Messy",
+  "@profTagMessy": {
+    "description": "Review tag."
+  },
+  "profTagPolite": "Polite",
+  "@profTagPolite": {
+    "description": "Review tag."
+  },
+  "profTagClearInstructions": "Clear instructions",
+  "@profTagClearInstructions": {
+    "description": "Review tag."
+  },
+  "profTagPaidPromptly": "Paid promptly",
+  "@profTagPaidPromptly": {
+    "description": "Review tag."
+  },
+  "profTagSafePlace": "Safe place",
+  "@profTagSafePlace": {
+    "description": "Review tag."
+  },
+  "profTagUnclearInstructions": "Unclear instructions",
+  "@profTagUnclearInstructions": {
+    "description": "Review tag."
+  },
+  "profTagUnsafePlace": "Unsafe place",
+  "@profTagUnsafePlace": {
+    "description": "Review tag."
+  },
+  "profDocumentsTitle": "Documents",
+  "@profDocumentsTitle": {
+    "description": "M31 title and menu row."
+  },
+  "profDocumentsEmpty": "No documents yet",
+  "@profDocumentsEmpty": {
+    "description": "M31 empty state."
+  },
+  "profDocumentsUpdate": "Update documents",
+  "@profDocumentsUpdate": {
+    "description": "M31 button to the verification screen."
+  },
+  "profItemNid": "National ID",
+  "@profItemNid": {
+    "description": "Verification item."
+  },
+  "profItemSelfie": "Live selfie",
+  "@profItemSelfie": {
+    "description": "Verification item."
+  },
+  "profItemPoliceClearance": "Police clearance",
+  "@profItemPoliceClearance": {
+    "description": "Verification item."
+  },
+  "profItemAddress": "Address",
+  "@profItemAddress": {
+    "description": "Verification item."
+  },
+  "profItemEmergencyContact": "Emergency contact",
+  "@profItemEmergencyContact": {
+    "description": "Verification item."
+  },
+  "profItemSkillProof": "Skill proof",
+  "@profItemSkillProof": {
+    "description": "Verification item."
+  },
+  "profItemServiceArea": "Services and area",
+  "@profItemServiceArea": {
+    "description": "Verification item."
+  },
+  "profItemCodeOfConduct": "Code of conduct",
+  "@profItemCodeOfConduct": {
+    "description": "Verification item."
+  },
+  "profStatusMissing": "Missing",
+  "@profStatusMissing": {
+    "description": "Document status."
+  },
+  "profStatusPending": "In review",
+  "@profStatusPending": {
+    "description": "Document status."
+  },
+  "profStatusApproved": "Approved",
+  "@profStatusApproved": {
+    "description": "Document status."
+  },
+  "profStatusRejected": "Rejected",
+  "@profStatusRejected": {
+    "description": "Document status."
+  },
+  "profStatusExpired": "Expired",
+  "@profStatusExpired": {
+    "description": "Document status."
+  },
+  "profValidUntil": "Valid until {date}",
+  "@profValidUntil": {
+    "description": "Document expiry.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "profExpiresSoon": "Expires on {date}. Renew it soon to keep receiving bookings.",
+  "@profExpiresSoon": {
+    "description": "Document expiring within 30 days.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "profExpired": "Expired on {date}. Bookings are paused until you renew it.",
+  "@profExpired": {
+    "description": "Expired document.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "profLevelTitle": "Badge and level",
+  "@profLevelTitle": {
+    "description": "M32 title and menu row."
+  },
+  "profServicesTitle": "Services and area",
+  "@profServicesTitle": {
+    "description": "M33 title and menu row."
+  },
+  "profServicesPick": "Services you offer (up to {max})",
+  "@profServicesPick": {
+    "description": "M33 heading.",
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "profExperienceLabel": "Years of experience",
+  "@profExperienceLabel": {
+    "description": "M33 field."
+  },
+  "profRadius": "How far you travel",
+  "@profRadius": {
+    "description": "M33 radius heading."
+  },
+  "profRadiusKm": "{km} km",
+  "@profRadiusKm": {
+    "description": "Working radius option.",
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "profHomeBase": "Home base",
+  "@profHomeBase": {
+    "description": "M33 row."
+  },
+  "profHomeBaseSet": "Set",
+  "@profHomeBaseSet": {
+    "description": "Home base is saved."
+  },
+  "profHomeBaseMissing": "Not set",
+  "@profHomeBaseMissing": {
+    "description": "Home base is missing."
+  },
+  "profUseLocation": "Use my location",
+  "@profUseLocation": {
+    "description": "M33 button."
+  },
+  "profLocationOff": "Turn on location and try again.",
+  "@profLocationOff": {
+    "description": "Location unavailable."
+  },
+  "profSaved": "Saved",
+  "@profSaved": {
+    "description": "Confirmation after saving."
+  },
+  "profLanguageTitle": "Language",
+  "@profLanguageTitle": {
+    "description": "M34 title and menu row."
+  },
+  "profLanguageBody": "Choose the language for the app, notifications and messages from PAO.",
+  "@profLanguageBody": {
+    "description": "M34 explanation."
+  },
+  "profLanguageNotSynced": "Saved on this phone, but not on your profile: {reason}",
+  "@profLanguageNotSynced": {
+    "description": "M34 profile update failed.",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "profHelpTitle": "Help",
+  "@profHelpTitle": {
+    "description": "M35 title and menu row."
+  },
+  "profHelpJobsQ": "How do I get jobs?",
+  "@profHelpJobsQ": {
+    "description": "Help topic."
+  },
+  "profHelpJobsA": "Go online on Home. Requests from nearby customers appear with a countdown; accept them before it ends.",
+  "@profHelpJobsA": {
+    "description": "Help answer."
+  },
+  "profHelpCodeQ": "What is the start code?",
+  "@profHelpCodeQ": {
+    "description": "Help topic."
+  },
+  "profHelpCodeA": "When you arrive, ask the customer for their 4-digit code. The job starts only after you enter it.",
+  "@profHelpCodeA": {
+    "description": "Help answer."
+  },
+  "profHelpCashQ": "How am I paid?",
+  "@profHelpCashQ": {
+    "description": "Help topic."
+  },
+  "profHelpCashA": "Customers pay you in cash when the job is done. Confirm the cash in the app to complete the job.",
+  "@profHelpCashA": {
+    "description": "Help answer."
+  },
+  "profHelpDocumentsQ": "Why did my bookings stop?",
+  "@profHelpDocumentsQ": {
+    "description": "Help topic."
+  },
+  "profHelpDocumentsA": "An expired document, such as the police clearance, pauses bookings. Upload a new one in Documents.",
+  "@profHelpDocumentsA": {
+    "description": "Help answer."
+  },
+  "profHelpLevelQ": "How do I become a PAO Verified Pro?",
+  "@profHelpLevelQ": {
+    "description": "Help topic."
+  },
+  "profHelpLevelA": "After Level 1, PAO can check your work in person. Passing gives you Level 2 and more bookings.",
+  "@profHelpLevelA": {
+    "description": "Help answer."
+  },
+  "profHelpStillStuck": "Still need help? Our team can help you by phone.",
+  "@profHelpStillStuck": {
+    "description": "M35 call prompt."
+  },
+  "profHelpCall": "Call PAO support",
+  "@profHelpCall": {
+    "description": "M35 button."
+  },
+  "profLogOut": "Log out",
+  "@profLogOut": {
+    "description": "M36 menu row and confirm button."
+  },
+  "profLogOutTitle": "Log out?",
+  "@profLogOutTitle": {
+    "description": "M36 sheet title."
+  },
+  "profLogOutBody": "You will stop receiving job requests on this phone until you sign in again.",
+  "@profLogOutBody": {
+    "description": "M36 sheet body."
   }
 }
