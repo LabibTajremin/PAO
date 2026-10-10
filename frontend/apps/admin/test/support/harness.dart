@@ -17,6 +17,26 @@ final List<String> allScreens = [
   for (var i = 1; i <= 12; i++) 'A${'$i'.padLeft(2, '0')}',
 ];
 
+/// Every admin permission (docs/build/02-architecture.md §6).
+const List<String> superAdminPermissions = [
+  'verification:review',
+  'verification:docs:view',
+  'provider:read',
+  'provider:manage',
+  'level2:manage',
+  'catalog:manage',
+  'settings:read',
+  'dashboard:read',
+  'settings:manage',
+  'complaint:manage',
+  'booking:read:any',
+  'customer:read',
+  'customer:manage',
+  'admin_user:manage',
+  'audit:read',
+  'role:manage',
+];
+
 /// An API error body.
 Map<String, Object?> apiError(String code) => {
   'error': {'code': code, 'message': 'x'},
@@ -79,20 +99,28 @@ class Harness {
     return data is String ? jsonDecode(data) : data;
   }
 
-  /// Replies to the permissions call with [screens].
-  void permits(List<String> screens, {List<String> roles = const []}) =>
+  /// Replies to the permissions call with [screens] and [permissions].
+  void permits(List<String> screens, {List<String> permissions = const []}) =>
       http.onGet(
         '/v1/me/permissions',
         (s) => s.reply(200, {
-          'roles': roles,
-          'permissions': <String>[],
+          'roles': <String>[],
+          'permissions': permissions,
           'screens': screens,
         }),
       );
 
-  /// Signs in with [screens], loading permissions in real async.
-  Future<void> signIn(WidgetTester tester, {List<String>? screens}) async {
-    permits(screens ?? allScreens, roles: ['super_admin']);
+  /// Signs in with [screens] and [permissions] (all of a super admin's by
+  /// default), loading them in real async.
+  Future<void> signIn(
+    WidgetTester tester, {
+    List<String>? screens,
+    List<String>? permissions,
+  }) async {
+    permits(
+      screens ?? allScreens,
+      permissions: permissions ?? superAdminPermissions,
+    );
     await services.sessions.signIn(const Session(accessToken: 'a'));
     await tester.runAsync(services.permissions.load);
   }
