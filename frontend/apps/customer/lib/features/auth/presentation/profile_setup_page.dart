@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -54,20 +56,11 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
         children: [
           Text(context.t.authProfileBody),
           const SizedBox(height: PaoSpace.xxl),
-          Center(
-            child: PaoAvatar(
-              name: _name.text,
-              image: photo == null ? null : MemoryImage(photo),
-              size: 96,
-            ),
-          ),
-          Center(
-            child: TextButton.icon(
-              icon: const Icon(Icons.photo_camera_outlined),
-              label: Text(context.t.authProfileAddPhoto),
-              onPressed: () async =>
-                  cubit.photo(await widget.services.photos.pick()),
-            ),
+          _PhotoPicker(
+            name: _name.text,
+            photo: photo,
+            onPick: () async =>
+                cubit.photo(await widget.services.photos.pick()),
           ),
           const SizedBox(height: PaoSpace.lg),
           PaoTextField(
@@ -88,6 +81,37 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _PhotoPicker extends StatelessWidget {
+  const _PhotoPicker({
+    required this.name,
+    required this.photo,
+    required this.onPick,
+  });
+
+  final String name;
+  final Uint8List? photo;
+  final VoidCallback onPick;
+
+  @override
+  Widget build(BuildContext context) {
+    final bytes = photo;
+    return Column(
+      children: [
+        PaoAvatar(
+          name: name,
+          image: bytes == null ? null : MemoryImage(bytes),
+          size: 96,
+        ),
+        TextButton.icon(
+          icon: const Icon(Icons.photo_camera_outlined),
+          label: Text(context.t.authProfileAddPhoto),
+          onPressed: onPick,
+        ),
+      ],
     );
   }
 }

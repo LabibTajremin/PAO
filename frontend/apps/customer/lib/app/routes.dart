@@ -73,6 +73,12 @@ abstract final class Routes {
   static String booking(String id, [String part = '']) =>
       part.isEmpty ? '/bookings/$id' : '/bookings/$id/$part';
 
+  /// C25, adding an address.
+  static const addressNew = '/account/addresses/new';
+
+  /// C25, editing a saved address.
+  static String addressEdit(String id) => '/account/addresses/$id';
+
   /// An account sub-page such as `addresses`.
   static String accountPage(String page) => '/account/$page';
 
@@ -100,6 +106,8 @@ abstract final class Routes {
     account: 'C22',
     '/account/profile': 'C23',
     '/account/addresses': 'C24',
+    addressNew: 'C25',
+    '/account/addresses/:id': 'C25',
     '/account/language': 'C26',
     '/account/help': 'C27',
     '/account/legal': 'C28',

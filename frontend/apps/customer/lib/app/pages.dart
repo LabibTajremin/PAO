@@ -30,6 +30,8 @@ List<RouteBase> entryRoutes(AppServices s) => [
     ),
   ),
   _page(Routes.denied, (_) => const Scaffold(body: PaoAccessDeniedView())),
+  _page(Routes.addressNew, (_) => const PlaceholderPage(title: 'C25')),
+  _page('/account/addresses/:id', (_) => const PlaceholderPage(title: 'C25')),
   _page(Routes.services, (_) => const PlaceholderPage(title: 'C37')),
   _page(Routes.search, (_) => const PlaceholderPage(title: 'C08')),
   _page(Routes.service, (_) => const PlaceholderPage(title: 'C09')),
@@ -83,20 +85,17 @@ List<StatefulShellBranch> shellBranches(
       _page(Routes.notifications, (_) => const PlaceholderPage(title: 'C21')),
     ],
   ),
-  StatefulShellBranch(
-    routes: [
-      GoRoute(
-        path: Routes.account,
-        builder: (_, _) => const PlaceholderPage(title: 'C22'),
-        routes: [
-          GoRoute(
-            path: ':page',
-            parentNavigatorKey: root,
-            builder: (_, st) =>
-                PlaceholderPage(title: st.pathParameters['page']!),
-          ),
-        ],
-      ),
-    ],
-  ),
+  StatefulShellBranch(routes: [_accountRoute(root)]),
 ];
+
+GoRoute _accountRoute(GlobalKey<NavigatorState> root) => GoRoute(
+  path: Routes.account,
+  builder: (_, _) => const PlaceholderPage(title: 'C22'),
+  routes: [
+    GoRoute(
+      path: ':page',
+      parentNavigatorKey: root,
+      builder: (_, st) => PlaceholderPage(title: st.pathParameters['page']!),
+    ),
+  ],
+);

@@ -47,6 +47,8 @@ void main() {
       Routes.notifications: PlaceholderPage,
       Routes.account: PlaceholderPage,
       Routes.accountPage('addresses'): PlaceholderPage,
+      Routes.addressNew: PlaceholderPage,
+      Routes.addressEdit('a1'): PlaceholderPage,
     };
     for (final MapEntry(key: path, value: type) in pages.entries) {
       await h.go(tester, path);
