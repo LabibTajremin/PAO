@@ -11,7 +11,7 @@ lib/
     domain/       repository interface and small value types (no Flutter, no Dio)
     data/         the repository on `pao_api` (generated client) + `AppServices.api`
     presentation/ cubits (flutter_bloc) and pages
-  shared/       app-wide helpers (l10n access, uploads)
+  shared/       app-wide helpers (l10n access, uploads, paging, formats, job text)
   l10n/         partner strings (partner_en.arb / partner_bn.arb → PartnerL10n)
 ```
 

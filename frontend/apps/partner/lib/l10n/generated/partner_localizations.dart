@@ -1825,6 +1825,564 @@ abstract class PartnerL10n {
   /// In en, this message translates to:
   /// **'You will stop receiving job requests on this phone until you sign in again.'**
   String get profLogOutBody;
+
+  /// M15 switch title while online.
+  ///
+  /// In en, this message translates to:
+  /// **'You are online'**
+  String get homeOnline;
+
+  /// M15 switch title while offline.
+  ///
+  /// In en, this message translates to:
+  /// **'You are offline'**
+  String get homeOffline;
+
+  /// M15 switch subtitle while online.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers nearby can send you requests.'**
+  String get homeOnlineBody;
+
+  /// M15 switch subtitle while offline.
+  ///
+  /// In en, this message translates to:
+  /// **'Go online to receive requests.'**
+  String get homeOfflineBody;
+
+  /// Shown when going online fails because location is off (PRD §11).
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on location to go online. It is shared only while you are online.'**
+  String get homeLocationOff;
+
+  /// M15b title.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests paused'**
+  String get homePausedTitle;
+
+  /// M15b body.
+  ///
+  /// In en, this message translates to:
+  /// **'A document has expired. Renew it to receive requests again.'**
+  String get homePausedBody;
+
+  /// M15b button to the documents screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Renew document'**
+  String get homeRenew;
+
+  /// Expiry banner on M15 (P-11).
+  ///
+  /// In en, this message translates to:
+  /// **'A document expires on {date}. Renew it to keep receiving requests.'**
+  String homeExpiring(String date);
+
+  /// Earnings card title.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s earnings'**
+  String get homeToday;
+
+  /// Completed jobs today.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 job today} other{{count} jobs today}}'**
+  String homeJobsToday(int count);
+
+  /// Active job card heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Active job'**
+  String get homeActiveJob;
+
+  /// Pending requests heading.
+  ///
+  /// In en, this message translates to:
+  /// **'New requests'**
+  String get homeRequests;
+
+  /// Empty requests title.
+  ///
+  /// In en, this message translates to:
+  /// **'No requests right now'**
+  String get homeNoRequests;
+
+  /// Empty requests body.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay online to receive requests nearby.'**
+  String get homeNoRequestsBody;
+
+  /// M16 title.
+  ///
+  /// In en, this message translates to:
+  /// **'New request'**
+  String get reqTitle;
+
+  /// M16 countdown, time as m:ss.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} left to answer'**
+  String reqTimeLeft(String time);
+
+  /// ASAP timing.
+  ///
+  /// In en, this message translates to:
+  /// **'As soon as possible'**
+  String get reqAsap;
+
+  /// Scheduled timing.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled for {time}'**
+  String reqScheduled(String time);
+
+  /// Distance to the customer area.
+  ///
+  /// In en, this message translates to:
+  /// **'{km} km away'**
+  String reqDistance(String km);
+
+  /// Booking note label.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer note'**
+  String get reqNote;
+
+  /// Accept button.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get reqAccept;
+
+  /// Reject button.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get reqReject;
+
+  /// Reject sheet title.
+  ///
+  /// In en, this message translates to:
+  /// **'Why are you rejecting?'**
+  String get reqRejectTitle;
+
+  /// Reject reason busy.
+  ///
+  /// In en, this message translates to:
+  /// **'I am busy'**
+  String get reqReasonBusy;
+
+  /// Reject reason too_far.
+  ///
+  /// In en, this message translates to:
+  /// **'Too far away'**
+  String get reqReasonTooFar;
+
+  /// Reject reason not_my_service.
+  ///
+  /// In en, this message translates to:
+  /// **'Not my service'**
+  String get reqReasonNotMyService;
+
+  /// Reject reason other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other reason'**
+  String get reqReasonOther;
+
+  /// Expired request title.
+  ///
+  /// In en, this message translates to:
+  /// **'This request is no longer open'**
+  String get reqExpiredTitle;
+
+  /// Expired request body.
+  ///
+  /// In en, this message translates to:
+  /// **'The time to answer passed or it was already answered.'**
+  String get reqExpiredBody;
+
+  /// M17 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Active job'**
+  String get jobLiveTitle;
+
+  /// Status requested.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for your answer'**
+  String get jobStatusRequested;
+
+  /// Status accepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get jobStepAccepted;
+
+  /// Status on_the_way.
+  ///
+  /// In en, this message translates to:
+  /// **'On the way'**
+  String get jobStepOnTheWay;
+
+  /// Status arrived.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrived'**
+  String get jobStepArrived;
+
+  /// Status in_progress.
+  ///
+  /// In en, this message translates to:
+  /// **'Job started'**
+  String get jobStepStarted;
+
+  /// Status completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get jobStepCompleted;
+
+  /// Status cancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get jobStatusCancelled;
+
+  /// Status rejected or timed out.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get jobStatusClosed;
+
+  /// Customer fallback name.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer'**
+  String get jobCustomer;
+
+  /// Opens Google Maps (P-07).
+  ///
+  /// In en, this message translates to:
+  /// **'Directions'**
+  String get jobActionNavigate;
+
+  /// Calls the customer.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get jobActionCall;
+
+  /// Marks on the way.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m on the way'**
+  String get jobActionOnTheWay;
+
+  /// Marks arrived.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'ve arrived'**
+  String get jobActionArrived;
+
+  /// Opens M18.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter start code'**
+  String get jobActionStart;
+
+  /// Opens M19.
+  ///
+  /// In en, this message translates to:
+  /// **'Add extra items'**
+  String get jobActionExtras;
+
+  /// Opens M20 and confirms there.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete job'**
+  String get jobActionComplete;
+
+  /// Opens M21.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate customer'**
+  String get jobActionRate;
+
+  /// Opens M16 for a job still requested.
+  ///
+  /// In en, this message translates to:
+  /// **'Open request'**
+  String get jobActionOpenRequest;
+
+  /// Cancel button.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel job'**
+  String get jobActionCancel;
+
+  /// Returns to M15.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to home'**
+  String get jobBackHome;
+
+  /// Returns to M17.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to job'**
+  String get jobBackToJob;
+
+  /// Bill total label.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get jobTotal;
+
+  /// Booked line quantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity {count}'**
+  String jobQuantity(int count);
+
+  /// Extra line quantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra · quantity {count}'**
+  String jobExtraQuantity(int count);
+
+  /// Cancel sheet title.
+  ///
+  /// In en, this message translates to:
+  /// **'Why are you cancelling?'**
+  String get jobCancelTitle;
+
+  /// Cancel consequence (PRD §5).
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelling after accepting lowers your ranking.'**
+  String get jobCancelWarning;
+
+  /// Cancel reason emergency.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency'**
+  String get jobCancelEmergency;
+
+  /// Cancel reason customer_unreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer not reachable'**
+  String get jobCancelUnreachable;
+
+  /// Cancel reason unsafe_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsafe location'**
+  String get jobCancelUnsafe;
+
+  /// Cancel reason other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other reason'**
+  String get jobCancelOther;
+
+  /// Reason note field.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get jobNoteLabel;
+
+  /// Cancelled job title.
+  ///
+  /// In en, this message translates to:
+  /// **'This job was cancelled'**
+  String get jobCancelledTitle;
+
+  /// Cancelled by the customer.
+  ///
+  /// In en, this message translates to:
+  /// **'The customer cancelled this job.'**
+  String get jobCancelledByCustomer;
+
+  /// Cancelled by someone else.
+  ///
+  /// In en, this message translates to:
+  /// **'It can no longer be worked on.'**
+  String get jobCancelledOther;
+
+  /// Rejected or timed-out job title.
+  ///
+  /// In en, this message translates to:
+  /// **'This job is no longer active'**
+  String get jobClosedTitle;
+
+  /// M18 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter start code'**
+  String get jobStartTitle;
+
+  /// M18 body.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the customer for the 4-digit code in their app.'**
+  String get jobStartBody;
+
+  /// M19 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Add extra items'**
+  String get jobExtrasTitle;
+
+  /// M19 empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no extra items for this service.'**
+  String get jobExtrasEmpty;
+
+  /// M19 submit with the added total.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to customer · {amount}'**
+  String jobExtrasSend(String amount);
+
+  /// M19 pending title.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the customer'**
+  String get jobExtrasWaitingTitle;
+
+  /// Pending extras note.
+  ///
+  /// In en, this message translates to:
+  /// **'The customer is asked to approve {amount} of extra items.'**
+  String jobExtrasWaiting(String amount);
+
+  /// Last proposal approved.
+  ///
+  /// In en, this message translates to:
+  /// **'The customer approved the last extra items.'**
+  String get jobExtrasApproved;
+
+  /// Last proposal declined.
+  ///
+  /// In en, this message translates to:
+  /// **'The customer declined the last extra items.'**
+  String get jobExtrasDeclined;
+
+  /// M20 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete job'**
+  String get jobCompleteTitle;
+
+  /// M20 cash confirmation (D4).
+  ///
+  /// In en, this message translates to:
+  /// **'I received {amount} in cash'**
+  String jobCashReceived(String amount);
+
+  /// M21 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate the customer'**
+  String get jobRateTitle;
+
+  /// M21 question.
+  ///
+  /// In en, this message translates to:
+  /// **'How was this customer?'**
+  String get jobRateQuestion;
+
+  /// Star input label.
+  ///
+  /// In en, this message translates to:
+  /// **'{stars} out of 5 stars'**
+  String jobRateStars(int stars);
+
+  /// Comment field.
+  ///
+  /// In en, this message translates to:
+  /// **'Comment (optional)'**
+  String get jobRateComment;
+
+  /// M21 submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit rating'**
+  String get jobRateSubmit;
+
+  /// M21 skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get jobRateSkip;
+
+  /// Tag polite.
+  ///
+  /// In en, this message translates to:
+  /// **'Polite'**
+  String get jobTagPolite;
+
+  /// Tag clear_instructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear instructions'**
+  String get jobTagClearInstructions;
+
+  /// Tag paid_promptly.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid promptly'**
+  String get jobTagPaidPromptly;
+
+  /// Tag safe_place.
+  ///
+  /// In en, this message translates to:
+  /// **'Safe place'**
+  String get jobTagSafePlace;
+
+  /// Tag rude.
+  ///
+  /// In en, this message translates to:
+  /// **'Rude'**
+  String get jobTagRude;
+
+  /// Tag unclear_instructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Unclear instructions'**
+  String get jobTagUnclearInstructions;
+
+  /// Tag unsafe_place.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsafe place'**
+  String get jobTagUnsafePlace;
+
+  /// Inbox action.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all read'**
+  String get notifReadAll;
+
+  /// Inbox empty title.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications yet'**
+  String get notifEmpty;
+
+  /// Inbox empty body.
+  ///
+  /// In en, this message translates to:
+  /// **'Updates about requests, jobs and documents appear here.'**
+  String get notifEmptyBody;
 }
 
 class _PartnerL10nDelegate extends LocalizationsDelegate<PartnerL10n> {

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pao_core/pao_core.dart';
 import 'package:pao_partner/app/services.dart';
-import 'package:pao_partner/features/jobs/presentation/load_on_create.dart';
 import 'package:pao_partner/features/profile/data/api_profile_repository.dart';
 import 'package:pao_partner/features/profile/domain/profile_repository.dart';
 import 'package:pao_partner/features/profile/presentation/profile_cubit.dart';
 import 'package:pao_partner/features/profile/presentation/profile_header.dart';
 import 'package:pao_partner/features/profile/presentation/profile_menu.dart';
 import 'package:pao_partner/shared/l10n.dart';
+import 'package:pao_partner/shared/load_on_create.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 /// The profile tab: photo, name, badge, rating, bio and every sub-page (M28).

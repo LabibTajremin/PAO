@@ -148,7 +148,10 @@ void main() {
     await h.go(tester, Routes.profile);
     h.services.locale.select(const Locale('bn'));
     await h.settle(tester);
-    expect(h.sent.where((o) => o.method == 'PUT'), hasLength(2));
+    final profilePuts = h.sent.where(
+      (o) => o.method == 'PUT' && o.path == '/v1/provider/profile',
+    );
+    expect(profilePuts, hasLength(2));
   });
 
   testWidgets('help expands topics and calls support', (tester) async {

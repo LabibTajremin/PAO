@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +8,8 @@ import 'package:pao_l10n/pao_l10n.dart';
 import 'package:pao_partner/app/router.dart';
 import 'package:pao_partner/app/routes.dart';
 import 'package:pao_partner/app/services.dart';
+import 'package:pao_partner/features/notifications/data/api_notifications_repository.dart';
+import 'package:pao_partner/features/notifications/data/push_registrar.dart';
 import 'package:pao_partner/l10n/generated/partner_localizations.dart';
 import 'package:pao_ui/pao_ui.dart';
 
@@ -43,8 +47,22 @@ class _PaoAppState extends State<PaoApp> {
     initial: widget.initial,
   );
 
+  late final PushRegistrar _push = PushRegistrar(
+    sessions: widget.services.sessions,
+    push: widget.services.push,
+    repo: ApiNotificationsRepository(widget.services.api),
+    open: (location) => unawaited(_router.push<void>(location)),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _push.start();
+  }
+
   @override
   void dispose() {
+    unawaited(_push.stop());
     _router.dispose();
     super.dispose();
   }

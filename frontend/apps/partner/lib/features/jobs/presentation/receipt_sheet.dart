@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pao_api/pao_api.dart';
 import 'package:pao_core/pao_core.dart';
 import 'package:pao_partner/features/jobs/domain/jobs_repository.dart';
-import 'package:pao_partner/features/jobs/presentation/formats.dart';
 import 'package:pao_partner/features/jobs/presentation/item_rows.dart';
-import 'package:pao_partner/features/jobs/presentation/load_on_create.dart';
+import 'package:pao_partner/shared/formats.dart';
 import 'package:pao_partner/shared/l10n.dart';
+import 'package:pao_partner/shared/load_on_create.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 /// Shows the receipt of the completed job [bookingId] in a sheet.

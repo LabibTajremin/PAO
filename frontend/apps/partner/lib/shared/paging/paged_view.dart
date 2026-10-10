@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pao_partner/features/jobs/presentation/paged_cubit.dart';
 import 'package:pao_partner/shared/l10n.dart';
+import 'package:pao_partner/shared/paging/paged_cubit.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 /// A scrolling list over the nearest [PagedCubit]: skeletons, a retryable

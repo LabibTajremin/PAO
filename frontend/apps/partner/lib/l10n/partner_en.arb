@@ -1328,5 +1328,436 @@
   "profLogOutBody": "You will stop receiving job requests on this phone until you sign in again.",
   "@profLogOutBody": {
     "description": "M36 sheet body."
+  },
+  "homeOnline": "You are online",
+  "@homeOnline": {
+    "description": "M15 switch title while online."
+  },
+  "homeOffline": "You are offline",
+  "@homeOffline": {
+    "description": "M15 switch title while offline."
+  },
+  "homeOnlineBody": "Customers nearby can send you requests.",
+  "@homeOnlineBody": {
+    "description": "M15 switch subtitle while online."
+  },
+  "homeOfflineBody": "Go online to receive requests.",
+  "@homeOfflineBody": {
+    "description": "M15 switch subtitle while offline."
+  },
+  "homeLocationOff": "Turn on location to go online. It is shared only while you are online.",
+  "@homeLocationOff": {
+    "description": "Shown when going online fails because location is off (PRD §11)."
+  },
+  "homePausedTitle": "Requests paused",
+  "@homePausedTitle": {
+    "description": "M15b title."
+  },
+  "homePausedBody": "A document has expired. Renew it to receive requests again.",
+  "@homePausedBody": {
+    "description": "M15b body."
+  },
+  "homeRenew": "Renew document",
+  "@homeRenew": {
+    "description": "M15b button to the documents screen."
+  },
+  "homeExpiring": "A document expires on {date}. Renew it to keep receiving requests.",
+  "@homeExpiring": {
+    "description": "Expiry banner on M15 (P-11).",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeToday": "Today's earnings",
+  "@homeToday": {
+    "description": "Earnings card title."
+  },
+  "homeJobsToday": "{count, plural, =1{1 job today} other{{count} jobs today}}",
+  "@homeJobsToday": {
+    "description": "Completed jobs today.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "homeActiveJob": "Active job",
+  "@homeActiveJob": {
+    "description": "Active job card heading."
+  },
+  "homeRequests": "New requests",
+  "@homeRequests": {
+    "description": "Pending requests heading."
+  },
+  "homeNoRequests": "No requests right now",
+  "@homeNoRequests": {
+    "description": "Empty requests title."
+  },
+  "homeNoRequestsBody": "Stay online to receive requests nearby.",
+  "@homeNoRequestsBody": {
+    "description": "Empty requests body."
+  },
+  "reqTitle": "New request",
+  "@reqTitle": {
+    "description": "M16 title."
+  },
+  "reqTimeLeft": "{time} left to answer",
+  "@reqTimeLeft": {
+    "description": "M16 countdown, time as m:ss.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "reqAsap": "As soon as possible",
+  "@reqAsap": {
+    "description": "ASAP timing."
+  },
+  "reqScheduled": "Scheduled for {time}",
+  "@reqScheduled": {
+    "description": "Scheduled timing.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "reqDistance": "{km} km away",
+  "@reqDistance": {
+    "description": "Distance to the customer area.",
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "reqNote": "Customer note",
+  "@reqNote": {
+    "description": "Booking note label."
+  },
+  "reqAccept": "Accept",
+  "@reqAccept": {
+    "description": "Accept button."
+  },
+  "reqReject": "Reject",
+  "@reqReject": {
+    "description": "Reject button."
+  },
+  "reqRejectTitle": "Why are you rejecting?",
+  "@reqRejectTitle": {
+    "description": "Reject sheet title."
+  },
+  "reqReasonBusy": "I am busy",
+  "@reqReasonBusy": {
+    "description": "Reject reason busy."
+  },
+  "reqReasonTooFar": "Too far away",
+  "@reqReasonTooFar": {
+    "description": "Reject reason too_far."
+  },
+  "reqReasonNotMyService": "Not my service",
+  "@reqReasonNotMyService": {
+    "description": "Reject reason not_my_service."
+  },
+  "reqReasonOther": "Other reason",
+  "@reqReasonOther": {
+    "description": "Reject reason other."
+  },
+  "reqExpiredTitle": "This request is no longer open",
+  "@reqExpiredTitle": {
+    "description": "Expired request title."
+  },
+  "reqExpiredBody": "The time to answer passed or it was already answered.",
+  "@reqExpiredBody": {
+    "description": "Expired request body."
+  },
+  "jobLiveTitle": "Active job",
+  "@jobLiveTitle": {
+    "description": "M17 title."
+  },
+  "jobStatusRequested": "Waiting for your answer",
+  "@jobStatusRequested": {
+    "description": "Status requested."
+  },
+  "jobStepAccepted": "Accepted",
+  "@jobStepAccepted": {
+    "description": "Status accepted."
+  },
+  "jobStepOnTheWay": "On the way",
+  "@jobStepOnTheWay": {
+    "description": "Status on_the_way."
+  },
+  "jobStepArrived": "Arrived",
+  "@jobStepArrived": {
+    "description": "Status arrived."
+  },
+  "jobStepStarted": "Job started",
+  "@jobStepStarted": {
+    "description": "Status in_progress."
+  },
+  "jobStepCompleted": "Completed",
+  "@jobStepCompleted": {
+    "description": "Status completed."
+  },
+  "jobStatusCancelled": "Cancelled",
+  "@jobStatusCancelled": {
+    "description": "Status cancelled."
+  },
+  "jobStatusClosed": "Closed",
+  "@jobStatusClosed": {
+    "description": "Status rejected or timed out."
+  },
+  "jobCustomer": "Customer",
+  "@jobCustomer": {
+    "description": "Customer fallback name."
+  },
+  "jobActionNavigate": "Directions",
+  "@jobActionNavigate": {
+    "description": "Opens Google Maps (P-07)."
+  },
+  "jobActionCall": "Call",
+  "@jobActionCall": {
+    "description": "Calls the customer."
+  },
+  "jobActionOnTheWay": "I'm on the way",
+  "@jobActionOnTheWay": {
+    "description": "Marks on the way."
+  },
+  "jobActionArrived": "I've arrived",
+  "@jobActionArrived": {
+    "description": "Marks arrived."
+  },
+  "jobActionStart": "Enter start code",
+  "@jobActionStart": {
+    "description": "Opens M18."
+  },
+  "jobActionExtras": "Add extra items",
+  "@jobActionExtras": {
+    "description": "Opens M19."
+  },
+  "jobActionComplete": "Complete job",
+  "@jobActionComplete": {
+    "description": "Opens M20 and confirms there."
+  },
+  "jobActionRate": "Rate customer",
+  "@jobActionRate": {
+    "description": "Opens M21."
+  },
+  "jobActionOpenRequest": "Open request",
+  "@jobActionOpenRequest": {
+    "description": "Opens M16 for a job still requested."
+  },
+  "jobActionCancel": "Cancel job",
+  "@jobActionCancel": {
+    "description": "Cancel button."
+  },
+  "jobBackHome": "Back to home",
+  "@jobBackHome": {
+    "description": "Returns to M15."
+  },
+  "jobBackToJob": "Back to job",
+  "@jobBackToJob": {
+    "description": "Returns to M17."
+  },
+  "jobTotal": "Total",
+  "@jobTotal": {
+    "description": "Bill total label."
+  },
+  "jobQuantity": "Quantity {count}",
+  "@jobQuantity": {
+    "description": "Booked line quantity.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "jobExtraQuantity": "Extra · quantity {count}",
+  "@jobExtraQuantity": {
+    "description": "Extra line quantity.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "jobCancelTitle": "Why are you cancelling?",
+  "@jobCancelTitle": {
+    "description": "Cancel sheet title."
+  },
+  "jobCancelWarning": "Cancelling after accepting lowers your ranking.",
+  "@jobCancelWarning": {
+    "description": "Cancel consequence (PRD §5)."
+  },
+  "jobCancelEmergency": "Emergency",
+  "@jobCancelEmergency": {
+    "description": "Cancel reason emergency."
+  },
+  "jobCancelUnreachable": "Customer not reachable",
+  "@jobCancelUnreachable": {
+    "description": "Cancel reason customer_unreachable."
+  },
+  "jobCancelUnsafe": "Unsafe location",
+  "@jobCancelUnsafe": {
+    "description": "Cancel reason unsafe_location."
+  },
+  "jobCancelOther": "Other reason",
+  "@jobCancelOther": {
+    "description": "Cancel reason other."
+  },
+  "jobNoteLabel": "Note (optional)",
+  "@jobNoteLabel": {
+    "description": "Reason note field."
+  },
+  "jobCancelledTitle": "This job was cancelled",
+  "@jobCancelledTitle": {
+    "description": "Cancelled job title."
+  },
+  "jobCancelledByCustomer": "The customer cancelled this job.",
+  "@jobCancelledByCustomer": {
+    "description": "Cancelled by the customer."
+  },
+  "jobCancelledOther": "It can no longer be worked on.",
+  "@jobCancelledOther": {
+    "description": "Cancelled by someone else."
+  },
+  "jobClosedTitle": "This job is no longer active",
+  "@jobClosedTitle": {
+    "description": "Rejected or timed-out job title."
+  },
+  "jobStartTitle": "Enter start code",
+  "@jobStartTitle": {
+    "description": "M18 title."
+  },
+  "jobStartBody": "Ask the customer for the 4-digit code in their app.",
+  "@jobStartBody": {
+    "description": "M18 body."
+  },
+  "jobExtrasTitle": "Add extra items",
+  "@jobExtrasTitle": {
+    "description": "M19 title."
+  },
+  "jobExtrasEmpty": "There are no extra items for this service.",
+  "@jobExtrasEmpty": {
+    "description": "M19 empty state."
+  },
+  "jobExtrasSend": "Send to customer · {amount}",
+  "@jobExtrasSend": {
+    "description": "M19 submit with the added total.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "jobExtrasWaitingTitle": "Waiting for the customer",
+  "@jobExtrasWaitingTitle": {
+    "description": "M19 pending title."
+  },
+  "jobExtrasWaiting": "The customer is asked to approve {amount} of extra items.",
+  "@jobExtrasWaiting": {
+    "description": "Pending extras note.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "jobExtrasApproved": "The customer approved the last extra items.",
+  "@jobExtrasApproved": {
+    "description": "Last proposal approved."
+  },
+  "jobExtrasDeclined": "The customer declined the last extra items.",
+  "@jobExtrasDeclined": {
+    "description": "Last proposal declined."
+  },
+  "jobCompleteTitle": "Complete job",
+  "@jobCompleteTitle": {
+    "description": "M20 title."
+  },
+  "jobCashReceived": "I received {amount} in cash",
+  "@jobCashReceived": {
+    "description": "M20 cash confirmation (D4).",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "jobRateTitle": "Rate the customer",
+  "@jobRateTitle": {
+    "description": "M21 title."
+  },
+  "jobRateQuestion": "How was this customer?",
+  "@jobRateQuestion": {
+    "description": "M21 question."
+  },
+  "jobRateStars": "{stars} out of 5 stars",
+  "@jobRateStars": {
+    "description": "Star input label.",
+    "placeholders": {
+      "stars": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "jobRateComment": "Comment (optional)",
+  "@jobRateComment": {
+    "description": "Comment field."
+  },
+  "jobRateSubmit": "Submit rating",
+  "@jobRateSubmit": {
+    "description": "M21 submit."
+  },
+  "jobRateSkip": "Skip",
+  "@jobRateSkip": {
+    "description": "M21 skip."
+  },
+  "jobTagPolite": "Polite",
+  "@jobTagPolite": {
+    "description": "Tag polite."
+  },
+  "jobTagClearInstructions": "Clear instructions",
+  "@jobTagClearInstructions": {
+    "description": "Tag clear_instructions."
+  },
+  "jobTagPaidPromptly": "Paid promptly",
+  "@jobTagPaidPromptly": {
+    "description": "Tag paid_promptly."
+  },
+  "jobTagSafePlace": "Safe place",
+  "@jobTagSafePlace": {
+    "description": "Tag safe_place."
+  },
+  "jobTagRude": "Rude",
+  "@jobTagRude": {
+    "description": "Tag rude."
+  },
+  "jobTagUnclearInstructions": "Unclear instructions",
+  "@jobTagUnclearInstructions": {
+    "description": "Tag unclear_instructions."
+  },
+  "jobTagUnsafePlace": "Unsafe place",
+  "@jobTagUnsafePlace": {
+    "description": "Tag unsafe_place."
+  },
+  "notifReadAll": "Mark all read",
+  "@notifReadAll": {
+    "description": "Inbox action."
+  },
+  "notifEmpty": "No notifications yet",
+  "@notifEmpty": {
+    "description": "Inbox empty title."
+  },
+  "notifEmptyBody": "Updates about requests, jobs and documents appear here.",
+  "@notifEmptyBody": {
+    "description": "Inbox empty body."
   }
 }

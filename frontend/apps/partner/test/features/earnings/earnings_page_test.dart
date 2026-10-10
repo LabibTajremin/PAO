@@ -93,7 +93,28 @@ void main() {
     expect(find.byType(JobDetailPage), findsOneWidget);
   });
 
-  testWidgets('no earnings yet, and failures with retry', (tester) async {
+  testWidgets('no earnings yet', (tester) async {
+    final h = await start(tester);
+    h.http
+      ..onGet(
+        '/v1/provider/earnings/summary',
+        (s) => s.reply(200, _summary('week')),
+      )
+      ..onGet(
+        '/v1/provider/earnings/jobs',
+        (s) => s.reply(200, {'items': <Object?>[]}),
+      );
+    await h.pumpApp(tester, Routes.earnings);
+    expect(find.text('No earnings yet'), findsOneWidget);
+    final sent = h.sent.lastWhere(
+      (o) => o.path == '/v1/provider/earnings/jobs',
+    );
+    expect(sent.queryParameters, containsPair('from', isA<String>()));
+  });
+
+  testWidgets('a failed summary fails the period list too; retry', (
+    tester,
+  ) async {
     final h = await start(tester);
     h.http
       ..onGet(
@@ -105,13 +126,15 @@ void main() {
         (s) => s.reply(200, {'items': <Object?>[]}),
       );
     await h.pumpApp(tester, Routes.earnings);
-    expect(find.text('No earnings yet'), findsOneWidget);
-    expect(find.text('Our service had a problem. Please try again.'), findsOne);
+    expect(
+      find.text('Our service had a problem. Please try again.'),
+      findsWidgets,
+    );
     h.http.onGet(
       '/v1/provider/earnings/summary',
       (s) => s.reply(200, _summary('week')),
     );
-    await tester.tap(find.text('Try again'));
+    await tester.tap(find.text('Try again').first);
     await h.settle(tester);
     expect(find.text('৳2,260'), findsOneWidget);
   });

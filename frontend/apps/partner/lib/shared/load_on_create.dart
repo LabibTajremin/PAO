@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:pao_core/pao_core.dart';
-import 'package:pao_partner/features/jobs/presentation/paged_cubit.dart';
+import 'package:pao_partner/shared/paging/paged_cubit.dart';
 
 /// Starts the first load as a [LoadCubit] is created in `BlocProvider.create`.
 extension LoadOnCreate<C extends LoadCubit<Object?>> on C {

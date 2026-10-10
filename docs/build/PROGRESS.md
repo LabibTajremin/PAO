@@ -18,8 +18,8 @@ it first and continues from **Current task**.
 | P08 Rating, notification, complaints | done | — | |
 | P09 Admin API | done | — | ADR-0026 |
 | P10 Flutter foundation | done | — | ADR-0027 |
-| P11 Partner app | in_progress | — | |
-| P12 Customer app | todo | — | |
+| P11 Partner app | done | — | ADR-0028 |
+| P12 Customer app | in_progress | — | |
 | P13 Admin web | todo | — | |
 | P14 End-to-end | todo | — | |
 | P15 Hardening & handover | todo | — | |
@@ -28,8 +28,8 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P11 / task 1 — read `docs/build/phases/P11-*.md`; the Figma file only has the theme
-page, so screens follow `05-screens.md` and the `pao_ui` components.
+P12 / task 1 — read `docs/build/phases/P12-*.md`; follow the partner app's layout
+(`frontend/apps/partner/README.md`) and reuse `pao_core`/`pao_ui`.
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
@@ -65,6 +65,10 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-10-10 P11 partner app: sign-in, onboarding, resumable enrolment wizard with
+  uploads, verification gate, home with presence heartbeat, requests with countdown,
+  job flow (start code, extras, cash, rating), jobs, earnings, profile and push
+  routing; 144 tests at 100%; dates generated as strings; journeys move to P14.
 - 2026-10-09 P10 Flutter foundation: pao_core (Dio client, AppFailure, sessions with
   single-flight refresh, permissions, route guard + verification gate, connectivity,
   photo compression), pao_ui (10 accents, tokens, bundled fonts, 25 components, gallery,

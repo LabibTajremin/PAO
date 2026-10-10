@@ -7,11 +7,11 @@ import 'package:pao_partner/app/routes.dart';
 import 'package:pao_partner/app/services.dart';
 import 'package:pao_partner/features/earnings/data/api_earnings_repository.dart';
 import 'package:pao_partner/features/earnings/presentation/earnings_summary_card.dart';
-import 'package:pao_partner/features/jobs/presentation/formats.dart';
-import 'package:pao_partner/features/jobs/presentation/load_on_create.dart';
-import 'package:pao_partner/features/jobs/presentation/paged_cubit.dart';
-import 'package:pao_partner/features/jobs/presentation/paged_view.dart';
+import 'package:pao_partner/shared/formats.dart';
 import 'package:pao_partner/shared/l10n.dart';
+import 'package:pao_partner/shared/load_on_create.dart';
+import 'package:pao_partner/shared/paging/paged_cubit.dart';
+import 'package:pao_partner/shared/paging/paged_view.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 /// Earnings by day, week or month, and by job (M26, M27).
@@ -37,9 +37,9 @@ class _EarningsPageState extends State<EarningsPage> {
     final period = _period;
     final t = context.t;
     return BlocProvider(
-      create: (_) =>
-          PagedCubit<EarningsJob>((cursor) => _repo.jobs(cursor: cursor))
-              .loading(),
+      create: (_) => PagedCubit<EarningsJob>(
+        (cursor) => _repo.jobs(period, cursor: cursor),
+      ).loading(),
       child: BlocProvider(
         key: ValueKey(period),
         create: (_) =>

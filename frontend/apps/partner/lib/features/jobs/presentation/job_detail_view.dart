@@ -3,10 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:pao_api/pao_api.dart';
 import 'package:pao_partner/app/routes.dart';
 import 'package:pao_partner/features/jobs/domain/jobs_repository.dart';
-import 'package:pao_partner/features/jobs/presentation/formats.dart';
 import 'package:pao_partner/features/jobs/presentation/item_rows.dart';
 import 'package:pao_partner/features/jobs/presentation/receipt_sheet.dart';
 import 'package:pao_partner/features/jobs/presentation/status_labels.dart';
+import 'package:pao_partner/shared/formats.dart';
 import 'package:pao_partner/shared/l10n.dart';
 import 'package:pao_ui/pao_ui.dart';
 

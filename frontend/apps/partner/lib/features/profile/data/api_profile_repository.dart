@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:pao_api/pao_api.dart';
 import 'package:pao_core/pao_core.dart';
-import 'package:pao_partner/features/jobs/domain/paged.dart';
 import 'package:pao_partner/features/profile/domain/profile_repository.dart';
+import 'package:pao_partner/shared/paging/paged.dart';
 import 'package:pao_partner/shared/uploads.dart';
 
 /// [ProfileRepository] on the PAO API.

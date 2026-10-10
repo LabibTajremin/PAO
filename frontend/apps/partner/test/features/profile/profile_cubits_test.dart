@@ -4,13 +4,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pao_api/pao_api.dart';
 import 'package:pao_core/pao_core.dart';
-import 'package:pao_partner/features/jobs/domain/paged.dart';
 import 'package:pao_partner/features/profile/domain/profile_repository.dart';
 import 'package:pao_partner/features/profile/domain/service_area_repository.dart';
 import 'package:pao_partner/features/profile/presentation/language_cubit.dart';
 import 'package:pao_partner/features/profile/presentation/profile_cubit.dart';
 import 'package:pao_partner/features/profile/presentation/profile_labels.dart';
 import 'package:pao_partner/features/profile/presentation/services_cubit.dart';
+import 'package:pao_partner/shared/paging/paged.dart';
 
 import '../jobs/fixtures.dart';
 import 'fixtures.dart';

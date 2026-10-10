@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:pao_api/pao_api.dart';
-import 'package:pao_partner/features/jobs/domain/paged.dart';
+import 'package:pao_partner/shared/paging/paged.dart';
 
 /// The provider's profile and rating together (M28, M29).
 class ProfileOverview {
