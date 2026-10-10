@@ -44,6 +44,14 @@ void main() {
     expect(typed, '17');
     expect(find.text('Wrong number'), findsOneWidget);
     expect(find.text('+880 '), findsOneWidget);
+    await pumpPao(
+      tester,
+      const PaoTextField(label: 'Password', obscureText: true),
+    );
+    expect(
+      tester.widget<TextField>(find.byType(TextField)).obscureText,
+      isTrue,
+    );
     await pumpPao(tester, const PaoTextField(label: 'Name'));
     expect(find.text('Name'), findsOneWidget);
   });

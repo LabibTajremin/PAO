@@ -12,9 +12,13 @@ dependencies:
   dio: ^5.11.1
   flutter:
     sdk: flutter
+  flutter_bloc: ^9.1.1
   flutter_localizations:
     sdk: flutter
   go_router: ^18.0.2
+  intl: ^0.20.3
+  pao_api:
+    path: ../../packages/pao_api
   pao_core:
     path: ../../packages/pao_core
   pao_l10n:
@@ -27,10 +31,13 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   http_mock_adapter: ^0.6.1
+  mocktail: ^1.0.5
   very_good_analysis: ^11.0.0
 
 flutter:
+  generate: true
   uses-material-design: true
 
 coverage_exclude:
   - 'lib/main\.dart$'
+  - 'lib/l10n/generated/'

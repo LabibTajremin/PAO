@@ -15,6 +15,7 @@ class PaoTextField extends StatelessWidget {
     this.inputFormatters,
     this.onChanged,
     this.maxLines = 1,
+    this.obscureText = false,
     super.key,
   });
 
@@ -45,6 +46,9 @@ class PaoTextField extends StatelessWidget {
   /// Number of visible lines.
   final int maxLines;
 
+  /// Hides the text, for passwords.
+  final bool obscureText;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -58,7 +62,8 @@ class PaoTextField extends StatelessWidget {
           keyboardType: keyboardType,
           inputFormatters: inputFormatters,
           onChanged: onChanged,
-          maxLines: maxLines,
+          maxLines: obscureText ? 1 : maxLines,
+          obscureText: obscureText,
           decoration: InputDecoration(
             hintText: hint,
             errorText: error,

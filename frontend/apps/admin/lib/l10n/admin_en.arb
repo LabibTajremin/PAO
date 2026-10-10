@@ -1,0 +1,112 @@
+{
+  "@@locale": "en",
+  "appTitle": "PAO Admin",
+  "@appTitle": {
+    "description": "Panel name"
+  },
+  "navDashboard": "Dashboard",
+  "@navDashboard": {
+    "description": "Menu: A02"
+  },
+  "navVerification": "Verification",
+  "@navVerification": {
+    "description": "Menu: A05"
+  },
+  "navLevel2": "Level 2 sessions",
+  "@navLevel2": {
+    "description": "Menu: A07"
+  },
+  "navCatalog": "Catalog",
+  "@navCatalog": {
+    "description": "Menu: A03"
+  },
+  "navProviders": "Providers",
+  "@navProviders": {
+    "description": "Menu: A08"
+  },
+  "navCustomers": "Customers",
+  "@navCustomers": {
+    "description": "Menu: A09"
+  },
+  "navBookings": "Bookings",
+  "@navBookings": {
+    "description": "Menu: A10"
+  },
+  "navComplaints": "Complaints",
+  "@navComplaints": {
+    "description": "Menu: A11"
+  },
+  "navSettings": "Settings",
+  "@navSettings": {
+    "description": "Menu: A12"
+  },
+  "loginTitle": "Sign in to PAO Admin",
+  "@loginTitle": {
+    "description": "A01 heading"
+  },
+  "loginEmail": "Work email",
+  "@loginEmail": {
+    "description": "A01 email field"
+  },
+  "loginPassword": "Password",
+  "@loginPassword": {
+    "description": "A01 password field"
+  },
+  "loginSubmit": "Sign in",
+  "@loginSubmit": {
+    "description": "A01 button"
+  },
+  "loginEnrolBody": "First sign-in: add this key to your authenticator app.",
+  "@loginEnrolBody": {
+    "description": "A01 TOTP enrolment"
+  },
+  "loginCodeBody": "Enter the 6-digit code from your authenticator app.",
+  "@loginCodeBody": {
+    "description": "A01 code step"
+  },
+  "loginBack": "Use another account",
+  "@loginBack": {
+    "description": "A01 back to the password step"
+  },
+  "passwordTitle": "Choose a new password",
+  "@passwordTitle": {
+    "description": "Password change heading"
+  },
+  "passwordBody": "Replace the temporary password from your invitation before you continue.",
+  "@passwordBody": {
+    "description": "Password change explanation"
+  },
+  "passwordCurrent": "Current password",
+  "@passwordCurrent": {
+    "description": "Password field"
+  },
+  "passwordNew": "New password (at least 12 characters)",
+  "@passwordNew": {
+    "description": "Password field"
+  },
+  "passwordRepeat": "Repeat the new password",
+  "@passwordRepeat": {
+    "description": "Password field"
+  },
+  "passwordTooShort": "The new password needs at least 12 characters.",
+  "@passwordTooShort": {
+    "description": "Password too short"
+  },
+  "passwordMismatch": "The two new passwords are not the same.",
+  "@passwordMismatch": {
+    "description": "Password mismatch"
+  },
+  "reasonLabel": "Reason",
+  "@reasonLabel": {
+    "description": "Confirm-with-reason field"
+  },
+  "reasonTooShort": "Write at least {count} characters.",
+  "@reasonTooShort": {
+    "description": "Reason too short",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
