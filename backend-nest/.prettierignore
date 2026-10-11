@@ -4,3 +4,5 @@ node_modules
 package-lock.json
 **/sqlc/**
 *.gen.ts
+# Verbatim copies of backend/seed until the Go backend is deleted (ADR-0032).
+seed/catalog.yaml
