@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { startTestApi, type TestApi } from '../../../../../test/kit/api';
 import { seedCatalog } from '../../../../../test/kit/catalog';
+import { adminSession, signIn } from '../../../../../test/kit/identity';
 import { standIn } from '../../../../../test/kit/stand-in';
 import { AUDIT_SERVICE } from '../../../audit/contract';
 import { DATABASE, type Database } from '../../../../platform/db/database';
@@ -23,8 +24,8 @@ describe('catalog API', () => {
     const audit = { record: () => Promise.resolve(), listForSubject: () => Promise.resolve([]) };
     api = await startTestApi({ imports: [standIn(new Map([[AUDIT_SERVICE, audit]]))] });
     await seedCatalog(api);
-    customer = await api.token(uuidv4(), ['customer']);
-    admin = await api.token(uuidv4(), ['catalog_manager']);
+    customer = (await signIn(api, '01712345678', 'customer')).accessToken;
+    admin = (await adminSession(api, ['catalog_manager'])).accessToken;
     contract = api.app.get(CATALOG_SERVICE, { strict: false });
   });
 
@@ -72,7 +73,7 @@ describe('catalog API', () => {
       token: customer,
     });
     expect(unknown).toMatchObject({ status: 404, code: 'NOT_FOUND' });
-    const provider = await api.token(uuidv4(), ['provider']);
+    const provider = (await signIn(api, '01812345678', 'partner')).accessToken;
     expect(
       (await api.do('GET', '/v1/provider/catalog', undefined, { token: provider })).status,
     ).toBe(200);

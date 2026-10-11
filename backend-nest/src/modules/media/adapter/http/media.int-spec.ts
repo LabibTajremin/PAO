@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { startTestApi, type TestApi } from '../../../../../test/kit/api';
 import { putFile, upload } from '../../../../../test/kit/media';
+import { adminSession, signIn } from '../../../../../test/kit/identity';
 import { standIn } from '../../../../../test/kit/stand-in';
 import { DATABASE, type Database } from '../../../../platform/db/database';
 import { HEALTH_ROUTES } from '../../../../platform/health/health';
@@ -56,7 +57,7 @@ describe('media API', () => {
   });
 
   it('uploads, confirms and shows a provider document with an audit entry', async () => {
-    const provider = await api.token(uuidv4(), ['provider']);
+    const provider = (await signIn(api, '01712345601', 'partner')).accessToken;
     const ticket = await ticketFor(provider, 'provider', jpegOf('nid_front'));
     const confirm = `/v1/provider/uploads/${ticket.mediaId}/confirm`;
     expect((await api.do('POST', confirm, undefined, { token: provider })).code).toBe(
@@ -67,10 +68,10 @@ describe('media API', () => {
       const r = await api.do('POST', confirm, undefined, { token: provider });
       expect(r).toMatchObject({ status: 200, body: { status: 'confirmed' } });
     }
-    const other = await api.token(uuidv4(), ['provider']);
+    const other = (await signIn(api, '01712345602', 'partner')).accessToken;
     expect((await api.do('POST', confirm, undefined, { token: other })).status).toBe(404);
-    const verifierId = uuidv4();
-    const verifier = await api.token(verifierId, ['verifier']);
+    const session = await adminSession(api, ['verifier']);
+    const [verifierId, verifier] = [session.id, session.accessToken];
     const view = await api.do('GET', `/v1/admin/documents/${ticket.mediaId}/view-url`, undefined, {
       token: verifier,
     });
@@ -93,7 +94,7 @@ describe('media API', () => {
   });
 
   it('enforces the upload rules of each app', async () => {
-    const customer = await api.token(uuidv4(), ['customer']);
+    const customer = (await signIn(api, '01712345603', 'customer')).accessToken;
     const ticket = await ticketFor(customer, 'customer', jpegOf('avatar'));
     expect(await put(ticket, jpeg.slice(0, 10))).toBe(403);
     const refused = [
