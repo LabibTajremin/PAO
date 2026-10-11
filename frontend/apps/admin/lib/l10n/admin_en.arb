@@ -108,5 +108,534 @@
         "type": "int"
       }
     }
+  },
+  "verifyQueueTitle": "Verification queue",
+  "@verifyQueueTitle": {
+    "description": "A05 heading"
+  },
+  "verifyQueueEmpty": "No providers are waiting for review.",
+  "@verifyQueueEmpty": {
+    "description": "A05 empty state"
+  },
+  "verifyFilterItem": "Pending item",
+  "@verifyFilterItem": {
+    "description": "A05 filter label"
+  },
+  "verifyFilterAll": "All items",
+  "@verifyFilterAll": {
+    "description": "A05 filter: no item filter"
+  },
+  "verifyColProvider": "Provider",
+  "@verifyColProvider": {
+    "description": "A05 column"
+  },
+  "verifyColServices": "Services",
+  "@verifyColServices": {
+    "description": "A05 column"
+  },
+  "verifyColPending": "Waiting for review",
+  "@verifyColPending": {
+    "description": "A05 column: pending items"
+  },
+  "verifyColWaiting": "Waiting for",
+  "@verifyColWaiting": {
+    "description": "A05 column: age of the submission"
+  },
+  "verifyAgeHours": "{count, plural, =1{1 hour} other{{count} hours}}",
+  "@verifyAgeHours": {
+    "description": "A05 wait in hours",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "verifyAgeDays": "{count, plural, =1{1 day} other{{count} days}}",
+  "@verifyAgeDays": {
+    "description": "A05 wait in days",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "verifyItemNid": "National ID",
+  "@verifyItemNid": {
+    "description": "Verification item"
+  },
+  "verifyItemSelfie": "Live selfie",
+  "@verifyItemSelfie": {
+    "description": "Verification item"
+  },
+  "verifyItemPolice": "Police clearance",
+  "@verifyItemPolice": {
+    "description": "Verification item"
+  },
+  "verifyItemAddress": "Address",
+  "@verifyItemAddress": {
+    "description": "Verification item"
+  },
+  "verifyItemEmergency": "Emergency contact",
+  "@verifyItemEmergency": {
+    "description": "Verification item"
+  },
+  "verifyItemSkill": "Skill proof",
+  "@verifyItemSkill": {
+    "description": "Verification item"
+  },
+  "verifyItemServiceArea": "Service area",
+  "@verifyItemServiceArea": {
+    "description": "Verification item"
+  },
+  "verifyItemConduct": "Code of conduct",
+  "@verifyItemConduct": {
+    "description": "Verification item"
+  },
+  "verifyStatusMissing": "Missing",
+  "@verifyStatusMissing": {
+    "description": "Item status"
+  },
+  "verifyStatusPending": "Pending",
+  "@verifyStatusPending": {
+    "description": "Item status"
+  },
+  "verifyStatusApproved": "Approved",
+  "@verifyStatusApproved": {
+    "description": "Item status"
+  },
+  "verifyStatusRejected": "Rejected",
+  "@verifyStatusRejected": {
+    "description": "Item status"
+  },
+  "verifyStatusExpired": "Expired",
+  "@verifyStatusExpired": {
+    "description": "Item status"
+  },
+  "verifyRequired": "Required",
+  "@verifyRequired": {
+    "description": "Item is required for Level 1"
+  },
+  "verifyOptional": "Optional",
+  "@verifyOptional": {
+    "description": "Item is optional for Level 1"
+  },
+  "verifyLevel0": "Level 0 · Registered",
+  "@verifyLevel0": {
+    "description": "Verification level"
+  },
+  "verifyLevel1": "Level 1 · Verified",
+  "@verifyLevel1": {
+    "description": "Verification level"
+  },
+  "verifyLevel2": "Level 2 · PAO Verified Pro",
+  "@verifyLevel2": {
+    "description": "Verification level"
+  },
+  "verifyFaceTitle": "Face match",
+  "@verifyFaceTitle": {
+    "description": "A06 face check heading"
+  },
+  "verifyFaceNotRun": "Not checked yet",
+  "@verifyFaceNotRun": {
+    "description": "Face check result"
+  },
+  "verifyFaceMatch": "Face matches",
+  "@verifyFaceMatch": {
+    "description": "Face check result"
+  },
+  "verifyFaceNoMatch": "Face does not match",
+  "@verifyFaceNoMatch": {
+    "description": "Face check result"
+  },
+  "verifyFaceManual": "Compare the selfie with the NID photo",
+  "@verifyFaceManual": {
+    "description": "Face check left to the verifier"
+  },
+  "verifyGenderFemale": "Female",
+  "@verifyGenderFemale": {
+    "description": "Gender"
+  },
+  "verifyGenderMale": "Male",
+  "@verifyGenderMale": {
+    "description": "Gender"
+  },
+  "verifyGenderOther": "Other",
+  "@verifyGenderOther": {
+    "description": "Gender"
+  },
+  "verifyDocNidFront": "NID front",
+  "@verifyDocNidFront": {
+    "description": "Document kind"
+  },
+  "verifyDocNidBack": "NID back",
+  "@verifyDocNidBack": {
+    "description": "Document kind"
+  },
+  "verifyFieldIssueDate": "Issue date",
+  "@verifyFieldIssueDate": {
+    "description": "Submitted value"
+  },
+  "verifyFieldRadius": "Working radius (m)",
+  "@verifyFieldRadius": {
+    "description": "Submitted value"
+  },
+  "verifyFieldServices": "Services chosen",
+  "@verifyFieldServices": {
+    "description": "Submitted value: number of services"
+  },
+  "verifyFieldHomeLat": "Home latitude",
+  "@verifyFieldHomeLat": {
+    "description": "Submitted value"
+  },
+  "verifyFieldHomeLng": "Home longitude",
+  "@verifyFieldHomeLng": {
+    "description": "Submitted value"
+  },
+  "verifyFieldName": "Name",
+  "@verifyFieldName": {
+    "description": "Submitted value: emergency contact"
+  },
+  "verifyFieldRelation": "Relation",
+  "@verifyFieldRelation": {
+    "description": "Submitted value: emergency contact"
+  },
+  "verifyProfileTitle": "NID and profile",
+  "@verifyProfileTitle": {
+    "description": "A06 panel heading"
+  },
+  "verifyNidNumber": "NID number",
+  "@verifyNidNumber": {
+    "description": "A06 profile"
+  },
+  "verifyFullName": "Full name",
+  "@verifyFullName": {
+    "description": "A06 profile"
+  },
+  "verifyDob": "Date of birth",
+  "@verifyDob": {
+    "description": "A06 profile"
+  },
+  "verifyGender": "Gender",
+  "@verifyGender": {
+    "description": "A06 profile"
+  },
+  "verifyPhone": "Phone",
+  "@verifyPhone": {
+    "description": "A06 profile"
+  },
+  "verifyPresentAddress": "Present address",
+  "@verifyPresentAddress": {
+    "description": "A06 profile"
+  },
+  "verifyPermanentAddress": "Permanent address",
+  "@verifyPermanentAddress": {
+    "description": "A06 profile"
+  },
+  "verifyNotGiven": "Not given",
+  "@verifyNotGiven": {
+    "description": "A06 profile: empty value"
+  },
+  "verifyReasonBlurry": "The photo is blurry. Retake it in good light.",
+  "@verifyReasonBlurry": {
+    "description": "Reject reason template"
+  },
+  "verifyReasonName": "The name does not match the profile.",
+  "@verifyReasonName": {
+    "description": "Reject reason template"
+  },
+  "verifyReasonExpired": "The document has expired.",
+  "@verifyReasonExpired": {
+    "description": "Reject reason template"
+  },
+  "verifyReasonFace": "The selfie does not match the NID photo.",
+  "@verifyReasonFace": {
+    "description": "Reject reason template"
+  },
+  "verifyReasonCropped": "Part of the document is cut off.",
+  "@verifyReasonCropped": {
+    "description": "Reject reason template"
+  },
+  "verifyRejectedBecause": "Rejected: {reason}",
+  "@verifyRejectedBecause": {
+    "description": "Item rejection reason",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "verifyExpires": "Expires {date}",
+  "@verifyExpires": {
+    "description": "Item expiry",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "verifyDecidedAt": "Decided {date}",
+  "@verifyDecidedAt": {
+    "description": "When the item was decided",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "verifyOpenDocs": "Open documents",
+  "@verifyOpenDocs": {
+    "description": "A06 button"
+  },
+  "verifyDocsLocked": "You may not open documents",
+  "@verifyDocsLocked": {
+    "description": "A06: no verification:docs:view"
+  },
+  "verifyApprove": "Approve",
+  "@verifyApprove": {
+    "description": "A06 button"
+  },
+  "verifyReject": "Reject",
+  "@verifyReject": {
+    "description": "A06 button"
+  },
+  "verifyRejectTitle": "Reject {item}",
+  "@verifyRejectTitle": {
+    "description": "A06 reject dialog title",
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "verifyReviewTitle": "Verification review",
+  "@verifyReviewTitle": {
+    "description": "A06 heading before the name loads"
+  },
+  "verifyBackToQueue": "Back to the queue",
+  "@verifyBackToQueue": {
+    "description": "A06 back button"
+  },
+  "verifyNext": "Next provider",
+  "@verifyNext": {
+    "description": "A06 button"
+  },
+  "verifyShortcuts": "Keys: A approve · R reject · N next · ↑↓ move",
+  "@verifyShortcuts": {
+    "description": "A06 keyboard hint"
+  },
+  "verifyNoPending": "Nothing is waiting for a decision.",
+  "@verifyNoPending": {
+    "description": "A06: no pending items"
+  },
+  "verifyDecided": "Saved. The provider is now at {level}.",
+  "@verifyDecided": {
+    "description": "A06 after a decision",
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "verifyQueueDone": "No other providers are waiting.",
+  "@verifyQueueDone": {
+    "description": "A06: queue empty on next"
+  },
+  "verifyViewerBroken": "This document could not be shown.",
+  "@verifyViewerBroken": {
+    "description": "Document viewer: image failed"
+  },
+  "verifyViewerZoomIn": "Zoom in",
+  "@verifyViewerZoomIn": {
+    "description": "Document viewer"
+  },
+  "verifyViewerZoomOut": "Zoom out",
+  "@verifyViewerZoomOut": {
+    "description": "Document viewer"
+  },
+  "verifyViewerRotateLeft": "Rotate left",
+  "@verifyViewerRotateLeft": {
+    "description": "Document viewer"
+  },
+  "verifyViewerRotateRight": "Rotate right",
+  "@verifyViewerRotateRight": {
+    "description": "Document viewer"
+  },
+  "level2Title": "Level 2 sessions",
+  "@level2Title": {
+    "description": "A07 heading"
+  },
+  "level2Schedule": "Schedule session",
+  "@level2Schedule": {
+    "description": "A07 button"
+  },
+  "level2Empty": "No sessions match.",
+  "@level2Empty": {
+    "description": "A07 empty state"
+  },
+  "level2ColWhen": "When",
+  "@level2ColWhen": {
+    "description": "A07 column"
+  },
+  "level2ColProvider": "Provider",
+  "@level2ColProvider": {
+    "description": "A07 column"
+  },
+  "level2ColService": "Service",
+  "@level2ColService": {
+    "description": "A07 column"
+  },
+  "level2ColStatus": "Status",
+  "@level2ColStatus": {
+    "description": "A07 column"
+  },
+  "level2StatusScheduled": "Scheduled",
+  "@level2StatusScheduled": {
+    "description": "Session status"
+  },
+  "level2StatusCompleted": "Completed",
+  "@level2StatusCompleted": {
+    "description": "Session status"
+  },
+  "level2StatusCancelled": "Cancelled",
+  "@level2StatusCancelled": {
+    "description": "Session status"
+  },
+  "level2ResultPass": "Pass",
+  "@level2ResultPass": {
+    "description": "Session result"
+  },
+  "level2ResultFail": "Fail",
+  "@level2ResultFail": {
+    "description": "Session result"
+  },
+  "level2ResultRetest": "Retest",
+  "@level2ResultRetest": {
+    "description": "Session result"
+  },
+  "level2FilterStatus": "Status",
+  "@level2FilterStatus": {
+    "description": "A07 filter"
+  },
+  "level2AllStatuses": "All statuses",
+  "@level2AllStatuses": {
+    "description": "A07 filter: no status filter"
+  },
+  "level2FilterProvider": "Provider",
+  "@level2FilterProvider": {
+    "description": "A07 filter"
+  },
+  "level2AnyProvider": "Any",
+  "@level2AnyProvider": {
+    "description": "A07 filter: no provider filter"
+  },
+  "level2FindProvider": "Find a provider",
+  "@level2FindProvider": {
+    "description": "Provider search label"
+  },
+  "level2FindHint": "Name or phone, then Enter",
+  "@level2FindHint": {
+    "description": "Provider search hint"
+  },
+  "level2NoProviders": "No provider matches.",
+  "@level2NoProviders": {
+    "description": "Provider search: no results"
+  },
+  "level2ScheduleTitle": "Schedule a Level 2 session",
+  "@level2ScheduleTitle": {
+    "description": "Schedule dialog title"
+  },
+  "level2ChangeProvider": "Change",
+  "@level2ChangeProvider": {
+    "description": "Schedule dialog: pick another provider"
+  },
+  "level2NoServices": "This provider has not chosen any service.",
+  "@level2NoServices": {
+    "description": "Schedule dialog"
+  },
+  "level2Service": "Service",
+  "@level2Service": {
+    "description": "Schedule dialog field"
+  },
+  "level2Date": "Date",
+  "@level2Date": {
+    "description": "Schedule dialog field"
+  },
+  "level2Time": "Time (Dhaka)",
+  "@level2Time": {
+    "description": "Schedule dialog field"
+  },
+  "level2Location": "Location",
+  "@level2Location": {
+    "description": "Session location"
+  },
+  "level2LocationHint": "PAO office, Gulshan 1",
+  "@level2LocationHint": {
+    "description": "Schedule dialog location hint"
+  },
+  "level2ScheduleSubmit": "Schedule",
+  "@level2ScheduleSubmit": {
+    "description": "Schedule dialog button"
+  },
+  "level2ScheduleMissing": "Choose a provider, a service and a location.",
+  "@level2ScheduleMissing": {
+    "description": "Schedule dialog validation"
+  },
+  "level2PastTime": "Choose a time in the future.",
+  "@level2PastTime": {
+    "description": "Schedule dialog validation"
+  },
+  "level2Booked": "Session scheduled. The provider will be notified.",
+  "@level2Booked": {
+    "description": "A07 after scheduling"
+  },
+  "level2NotEligible": "Only Level 1 providers can take a Level 2 session.",
+  "@level2NotEligible": {
+    "description": "API error LEVEL2_NOT_ELIGIBLE, admin wording"
+  },
+  "level2CoolingOff": "This provider failed recently and must wait before retrying.",
+  "@level2CoolingOff": {
+    "description": "API error LEVEL2_COOLING_OFF, admin wording"
+  },
+  "level2SessionTitle": "Level 2 session",
+  "@level2SessionTitle": {
+    "description": "Session drawer title"
+  },
+  "level2Checklist": "Checklist",
+  "@level2Checklist": {
+    "description": "Result form heading"
+  },
+  "level2ItemPassed": "Passed",
+  "@level2ItemPassed": {
+    "description": "Checklist item passed"
+  },
+  "level2ItemFailed": "Not passed",
+  "@level2ItemFailed": {
+    "description": "Checklist item not passed"
+  },
+  "level2AddItem": "Add a checklist item",
+  "@level2AddItem": {
+    "description": "Result form"
+  },
+  "level2Outcome": "Result",
+  "@level2Outcome": {
+    "description": "Result form heading"
+  },
+  "level2Notes": "Notes",
+  "@level2Notes": {
+    "description": "Result form field"
+  },
+  "level2Record": "Record result",
+  "@level2Record": {
+    "description": "Result form button"
+  },
+  "level2NeedChecklist": "Add at least one checklist item.",
+  "@level2NeedChecklist": {
+    "description": "Result form validation"
+  },
+  "level2NeedResult": "Choose pass, fail or retest.",
+  "@level2NeedResult": {
+    "description": "Result form validation"
   }
 }

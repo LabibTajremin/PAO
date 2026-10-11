@@ -23,8 +23,8 @@ void main() {
     await h.pumpApp(tester);
     expect(find.text('A02'), findsOneWidget);
     for (final (menu, screen) in [
-      ('Verification', 'A05'),
-      ('Level 2 sessions', 'A07'),
+      ('Verification', 'Verification queue'),
+      ('Level 2 sessions', 'Schedule session'),
       ('Catalog', 'A03'),
       ('Providers', 'A08'),
       ('Customers', 'A09'),
@@ -38,7 +38,7 @@ void main() {
     }
     for (final (path, screen) in [
       (Routes.serviceOf('s1'), 'A04'),
-      (Routes.reviewOf('p1'), 'A06'),
+      (Routes.reviewOf('p1'), 'Verification review'),
       (Routes.detail(Routes.providers, 'p1'), 'A08'),
       (Routes.detail(Routes.customers, 'c1'), 'A09'),
       (Routes.detail(Routes.bookings, 'b1'), 'A10'),
