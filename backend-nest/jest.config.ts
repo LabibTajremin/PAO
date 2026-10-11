@@ -31,6 +31,7 @@ const config: Config = {
       displayName: 'integration',
       testMatch: ['<rootDir>/src/**/*.int-spec.ts', '<rootDir>/test/**/*.int-spec.ts'],
       slowTestThreshold: 30,
+      setupFilesAfterEnv: ['<rootDir>/test/kit/jest-setup.ts'],
     },
   ],
   collectCoverageFrom: [

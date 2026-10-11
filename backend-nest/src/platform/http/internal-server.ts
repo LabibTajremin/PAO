@@ -20,7 +20,7 @@ export function writeText(res: ServerResponse, status: number, text: string): vo
 
 /** Returns the request path and query of `req`. */
 export function requestUrl(req: IncomingMessage): URL {
-  return new URL(req.url ?? '/', 'http://internal');
+  return new URL(String(req.url), 'http://internal');
 }
 
 /** Serves the metrics registry on GET /metrics. */
