@@ -1,5 +1,6 @@
 import { type DomainEvent } from '../../../platform/events/domain-event';
 import { type Setting } from '../domain/settings';
+import { type CachedValue } from './console';
 
 /** Stores the platform settings. */
 export interface SettingsRepository {
@@ -13,16 +14,8 @@ export interface SettingsRepository {
 /** Injection token for the {@link SettingsRepository}. */
 export const SETTINGS_REPOSITORY = Symbol('SettingsRepository');
 
-/**
- * Keeps setting values by key. It never fails: a cache outage is logged and reads as
- * a miss, because settings must never block a booking.
- */
-export interface SettingsCache {
-  read(): Promise<Record<string, string> | undefined>;
-  write(values: Record<string, string>): Promise<void>;
-  /** Drops the values so readers see an edit at once. */
-  invalidate(): Promise<void>;
-}
+/** Setting values by key, kept between reads. */
+export type SettingsCache = CachedValue<Record<string, string>>;
 
 /** Injection token for the {@link SettingsCache}. */
 export const SETTINGS_CACHE = Symbol('SettingsCache');

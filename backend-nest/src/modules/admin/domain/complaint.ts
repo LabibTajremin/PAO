@@ -12,10 +12,10 @@ export type ComplaintStatus = (typeof ComplaintStatus)[keyof typeof ComplaintSta
 export type ReporterRole = 'customer' | 'provider';
 
 /** Bounds the evidence a reporter attaches (C-14). */
-export const MAX_COMPLAINT_PHOTOS = 5;
+const MAX_COMPLAINT_PHOTOS = 5;
 
 /** Reasons a booking can be reported for. */
-export const COMPLAINT_REASONS: readonly string[] = [
+const COMPLAINT_REASONS: readonly string[] = [
   'no_show',
   'late',
   'poor_quality',
