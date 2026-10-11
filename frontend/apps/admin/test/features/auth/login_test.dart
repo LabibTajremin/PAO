@@ -4,6 +4,7 @@ import 'package:pao_admin/app/routes.dart';
 import 'package:pao_admin/features/auth/data/session_restore.dart';
 import 'package:pao_admin/features/auth/presentation/login_page.dart';
 import 'package:pao_admin/features/auth/presentation/password_page.dart';
+import 'package:pao_admin/features/dashboard/presentation/dashboard_page.dart';
 
 import '../../support/harness.dart';
 
@@ -76,7 +77,7 @@ void main() {
       'challengeId': _challenge,
       'code': '123456',
     });
-    expect(find.text('A02'), findsOneWidget);
+    expect(find.byType(DashboardPage), findsOneWidget);
   });
 
   testWidgets('another account goes back to the password step', (tester) async {
@@ -153,5 +154,5 @@ Future<void> _change(WidgetTester tester, Harness h) async {
     'currentPassword': 'temporary-pass',
     'newPassword': 'a-long-passphrase',
   });
-  expect(find.text('A02'), findsOneWidget);
+  expect(find.byType(DashboardPage), findsOneWidget);
 }

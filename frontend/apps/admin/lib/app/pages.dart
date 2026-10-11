@@ -4,6 +4,10 @@ import 'package:pao_admin/app/routes.dart';
 import 'package:pao_admin/app/services.dart';
 import 'package:pao_admin/features/auth/presentation/login_page.dart';
 import 'package:pao_admin/features/auth/presentation/password_page.dart';
+import 'package:pao_admin/features/catalog/presentation/catalog_page.dart';
+import 'package:pao_admin/features/catalog/presentation/service_editor_page.dart';
+import 'package:pao_admin/features/dashboard/presentation/dashboard_page.dart';
+import 'package:pao_admin/features/settings/presentation/settings_page.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 GoRoute _page(String path, Widget Function(GoRouterState state) build) =>
@@ -24,9 +28,16 @@ List<RouteBase> entryRoutes(AppServices s) => [
 
 /// Screens shown inside the console shell.
 List<RouteBase> consoleRoutes(AppServices s) => [
-  _page(Routes.dashboard, (_) => const PlaceholderPage(title: 'A02')),
-  _page(Routes.catalog, (_) => const PlaceholderPage(title: 'A03')),
-  _page(Routes.service, (_) => const PlaceholderPage(title: 'A04')),
+  _page(Routes.dashboard, (_) => DashboardPage(services: s)),
+  _page(Routes.catalog, (_) => CatalogPage(services: s)),
+  _page(
+    Routes.service,
+    (state) => ServiceEditorPage(
+      services: s,
+      id: state.pathParameters['id']!,
+      categoryId: state.uri.queryParameters['category'],
+    ),
+  ),
   _page(Routes.verification, (_) => const PlaceholderPage(title: 'A05')),
   _page(Routes.review, (_) => const PlaceholderPage(title: 'A06')),
   _page(Routes.level2, (_) => const PlaceholderPage(title: 'A07')),
@@ -38,6 +49,9 @@ List<RouteBase> consoleRoutes(AppServices s) => [
   _page('/bookings/:id', (_) => const PlaceholderPage(title: 'A10')),
   _page(Routes.complaints, (_) => const PlaceholderPage(title: 'A11')),
   _page('/complaints/:id', (_) => const PlaceholderPage(title: 'A11')),
-  _page(Routes.settings, (_) => const PlaceholderPage(title: 'A12')),
-  _page('/settings/:tab', (_) => const PlaceholderPage(title: 'A12')),
+  _page(Routes.settings, (_) => SettingsPage(services: s)),
+  _page(
+    '/settings/:tab',
+    (state) => SettingsPage(services: s, tab: state.pathParameters['tab']!),
+  ),
 ];

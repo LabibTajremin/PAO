@@ -108,5 +108,789 @@
         "type": "int"
       }
     }
+  },
+  "formRequired": "Fill this in.",
+  "@formRequired": {
+    "description": "Form: a required field is empty"
+  },
+  "formTooLong": "Keep it to {max} characters or fewer.",
+  "@formTooLong": {
+    "description": "Form: text too long",
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "formWhole": "Enter a whole number.",
+  "@formWhole": {
+    "description": "Form: not an integer"
+  },
+  "formNumber": "Enter a number.",
+  "@formNumber": {
+    "description": "Form: not a number"
+  },
+  "formAtLeast": "Enter {min} or more.",
+  "@formAtLeast": {
+    "description": "Form: number below the minimum",
+    "placeholders": {
+      "min": {
+        "type": "String"
+      }
+    }
+  },
+  "formRange": "Enter a number from {min} to {max}.",
+  "@formRange": {
+    "description": "Form: number out of range",
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "formMoney": "Enter an amount in taka, such as 500 or 499.50.",
+  "@formMoney": {
+    "description": "Form: not a taka amount"
+  },
+  "formEmail": "Enter a valid email address.",
+  "@formEmail": {
+    "description": "Form: not an email"
+  },
+  "formSaved": "Saved.",
+  "@formSaved": {
+    "description": "Snackbar after a save"
+  },
+  "dashTitle": "Dashboard",
+  "@dashTitle": {
+    "description": "A02 heading"
+  },
+  "dashUpdated": "Updated {time}",
+  "@dashUpdated": {
+    "description": "A02 when the figures were generated",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dashRefresh": "Refresh",
+  "@dashRefresh": {
+    "description": "A02 reload button tooltip"
+  },
+  "dashPendingVerifications": "Pending verifications",
+  "@dashPendingVerifications": {
+    "description": "A02 count of providers waiting for review"
+  },
+  "dashOpenComplaints": "Open complaints",
+  "@dashOpenComplaints": {
+    "description": "A02 count of unresolved complaints"
+  },
+  "dashCompletionRate": "Completion rate",
+  "@dashCompletionRate": {
+    "description": "A02 share of bookings completed"
+  },
+  "dashBookings": "Bookings in this period",
+  "@dashBookings": {
+    "description": "A02 bookings summed over the chart days"
+  },
+  "dashActiveProviders": "Active providers",
+  "@dashActiveProviders": {
+    "description": "A02 count of active providers"
+  },
+  "dashBookingsPerDay": "Bookings per day",
+  "@dashBookingsPerDay": {
+    "description": "A02 chart heading"
+  },
+  "dashLegendTotal": "All bookings",
+  "@dashLegendTotal": {
+    "description": "A02 chart legend, full bar"
+  },
+  "dashLegendCompleted": "Completed",
+  "@dashLegendCompleted": {
+    "description": "A02 chart legend, dark part of the bar"
+  },
+  "dashDayTip": "{day}: {total} bookings, {completed} completed",
+  "@dashDayTip": {
+    "description": "A02 bar tooltip",
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "completed": {
+        "type": "String"
+      }
+    }
+  },
+  "dashNoBookings": "No bookings in this period yet.",
+  "@dashNoBookings": {
+    "description": "A02 chart without days"
+  },
+  "dashProvidersByStatus": "Providers by status",
+  "@dashProvidersByStatus": {
+    "description": "A02 breakdown heading"
+  },
+  "dashProvidersByLevel": "Providers by level",
+  "@dashProvidersByLevel": {
+    "description": "A02 breakdown heading"
+  },
+  "dashNoProviders": "No providers yet.",
+  "@dashNoProviders": {
+    "description": "A02 empty breakdown"
+  },
+  "dashStatusPending": "Pending",
+  "@dashStatusPending": {
+    "description": "Provider status"
+  },
+  "dashStatusActive": "Active",
+  "@dashStatusActive": {
+    "description": "Provider status"
+  },
+  "dashStatusSuspended": "Suspended",
+  "@dashStatusSuspended": {
+    "description": "Provider status"
+  },
+  "dashStatusBanned": "Banned",
+  "@dashStatusBanned": {
+    "description": "Provider status"
+  },
+  "dashLevel0": "Level 0 · Registered",
+  "@dashLevel0": {
+    "description": "Verification level 0"
+  },
+  "dashLevel1": "Level 1 · Verified",
+  "@dashLevel1": {
+    "description": "Verification level 1"
+  },
+  "dashLevel2": "Level 2 · PAO Verified Pro",
+  "@dashLevel2": {
+    "description": "Verification level 2"
+  },
+  "catalogTitle": "Catalog",
+  "@catalogTitle": {
+    "description": "A03 heading"
+  },
+  "catalogVersion": "Version {version}",
+  "@catalogVersion": {
+    "description": "A03 catalog version under the heading",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "catalogEmptyTitle": "No categories yet",
+  "@catalogEmptyTitle": {
+    "description": "A03 empty catalog"
+  },
+  "catalogEmptyBody": "Add a category, then the services customers can book in it.",
+  "@catalogEmptyBody": {
+    "description": "A03 empty catalog explanation"
+  },
+  "catalogNewCategory": "New category",
+  "@catalogNewCategory": {
+    "description": "A03 button and dialog title"
+  },
+  "catalogEditCategory": "Edit category",
+  "@catalogEditCategory": {
+    "description": "A03 dialog title and tooltip"
+  },
+  "catalogCategoryLine": "{other} · order {order} · {count} services",
+  "@catalogCategoryLine": {
+    "description": "A03 category subtitle: name in the other language, sort order, number of services",
+    "placeholders": {
+      "other": {
+        "type": "String"
+      },
+      "order": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "catalogNewService": "New service",
+  "@catalogNewService": {
+    "description": "A03 add-service button, A04 title"
+  },
+  "catalogServiceTitle": "Service",
+  "@catalogServiceTitle": {
+    "description": "A04 title before the service loads"
+  },
+  "catalogBack": "Back to catalog",
+  "@catalogBack": {
+    "description": "A04 back button tooltip"
+  },
+  "catalogPublished": "Published",
+  "@catalogPublished": {
+    "description": "Badge: customers can see it"
+  },
+  "catalogHidden": "Hidden",
+  "@catalogHidden": {
+    "description": "Badge: customers cannot see it"
+  },
+  "catalogPublishedSwitch": "Published",
+  "@catalogPublishedSwitch": {
+    "description": "Switch title"
+  },
+  "catalogPublishedHint": "Customers see it in the apps.",
+  "@catalogPublishedHint": {
+    "description": "Switch explanation"
+  },
+  "catalogName": "Name",
+  "@catalogName": {
+    "description": "Field label"
+  },
+  "catalogDescription": "Description",
+  "@catalogDescription": {
+    "description": "Field label"
+  },
+  "catalogInEnglish": "{label} (English)",
+  "@catalogInEnglish": {
+    "description": "Label of the English half of a two-language field",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "catalogInBangla": "{label} (Bangla)",
+  "@catalogInBangla": {
+    "description": "Label of the Bangla half of a two-language field",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "catalogIconKey": "Icon key",
+  "@catalogIconKey": {
+    "description": "Field label"
+  },
+  "catalogPickIcon": "Pick a known icon",
+  "@catalogPickIcon": {
+    "description": "Icon menu tooltip"
+  },
+  "catalogSortOrder": "Sort order",
+  "@catalogSortOrder": {
+    "description": "Field label; smaller shows first"
+  },
+  "catalogAddRow": "Add",
+  "@catalogAddRow": {
+    "description": "Adds a row to a list field"
+  },
+  "catalogRemoveRow": "Remove",
+  "@catalogRemoveRow": {
+    "description": "Removes a row from a list field"
+  },
+  "catalogServiceDetails": "Service details",
+  "@catalogServiceDetails": {
+    "description": "A04 form heading"
+  },
+  "catalogCategory": "Category",
+  "@catalogCategory": {
+    "description": "A04 dropdown label"
+  },
+  "catalogModel": "Service model",
+  "@catalogModel": {
+    "description": "A04 dropdown label"
+  },
+  "catalogLevel": "Required level",
+  "@catalogLevel": {
+    "description": "A04 dropdown label"
+  },
+  "catalogRadius": "Search radius (metres)",
+  "@catalogRadius": {
+    "description": "A04 field label"
+  },
+  "catalogRadiusHint": "From 500 to 50000",
+  "@catalogRadiusHint": {
+    "description": "A04 radius hint"
+  },
+  "catalogWomenOnly": "Women providers only",
+  "@catalogWomenOnly": {
+    "description": "A04 switch"
+  },
+  "catalogWomenOnlyHint": "Requests go only to women providers.",
+  "@catalogWomenOnlyHint": {
+    "description": "A04 switch explanation"
+  },
+  "catalogRequiresLevel2": "Requires Level 2",
+  "@catalogRequiresLevel2": {
+    "description": "A04 switch"
+  },
+  "catalogRequiresLevel2Hint": "Providers pass an in-person skill check first.",
+  "@catalogRequiresLevel2Hint": {
+    "description": "A04 switch explanation"
+  },
+  "catalogChecklistItem": "Checklist item",
+  "@catalogChecklistItem": {
+    "description": "A04 Level 2 checklist row label"
+  },
+  "catalogModelOnDemand": "On-demand visit",
+  "@catalogModelOnDemand": {
+    "description": "Service model"
+  },
+  "catalogModelDuration": "Duration hire",
+  "@catalogModelDuration": {
+    "description": "Service model"
+  },
+  "catalogModelListing": "Listing",
+  "@catalogModelListing": {
+    "description": "Service model"
+  },
+  "catalogModelPartner": "Partner referral",
+  "@catalogModelPartner": {
+    "description": "Service model"
+  },
+  "catalogUnitJob": "per job",
+  "@catalogUnitJob": {
+    "description": "Price unit"
+  },
+  "catalogUnitUnit": "per unit",
+  "@catalogUnitUnit": {
+    "description": "Price unit"
+  },
+  "catalogUnitHour": "per hour",
+  "@catalogUnitHour": {
+    "description": "Price unit"
+  },
+  "catalogUnitDay": "per day",
+  "@catalogUnitDay": {
+    "description": "Price unit"
+  },
+  "catalogSubServices": "Sub-services",
+  "@catalogSubServices": {
+    "description": "A04 section heading"
+  },
+  "catalogNoSubServices": "No sub-services yet. Add one so customers can book this service.",
+  "@catalogNoSubServices": {
+    "description": "A04 empty sub-service list"
+  },
+  "catalogNewSubService": "New sub-service",
+  "@catalogNewSubService": {
+    "description": "A04 button and dialog title"
+  },
+  "catalogEditSub": "Edit sub-service",
+  "@catalogEditSub": {
+    "description": "A04 dialog title and tooltip"
+  },
+  "catalogMaxLine": "up to {count}",
+  "@catalogMaxLine": {
+    "description": "A04 sub-service maximum quantity",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "catalogInclusion": "Included",
+  "@catalogInclusion": {
+    "description": "Sub-service inclusions list"
+  },
+  "catalogExclusion": "Not included",
+  "@catalogExclusion": {
+    "description": "Sub-service exclusions list"
+  },
+  "catalogUnit": "Priced",
+  "@catalogUnit": {
+    "description": "Sub-service unit dropdown label"
+  },
+  "catalogMaxQuantity": "Most per booking",
+  "@catalogMaxQuantity": {
+    "description": "Sub-service maximum quantity label"
+  },
+  "catalogMaxQuantityHint": "Leave empty for no limit",
+  "@catalogMaxQuantityHint": {
+    "description": "Sub-service maximum quantity hint"
+  },
+  "catalogFirstPrice": "Price",
+  "@catalogFirstPrice": {
+    "description": "New sub-service first price"
+  },
+  "catalogPrices": "Prices",
+  "@catalogPrices": {
+    "description": "Tooltip of the prices button"
+  },
+  "catalogPricesOf": "Prices of {name}",
+  "@catalogPricesOf": {
+    "description": "Price drawer title",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "catalogPriceNote": "A new price applies to bookings made from now on. Earlier bookings keep the price they were made at.",
+  "@catalogPriceNote": {
+    "description": "Price drawer explanation"
+  },
+  "catalogNewPrice": "New price ({unit})",
+  "@catalogNewPrice": {
+    "description": "Price drawer field",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "catalogSetPrice": "Set new price",
+  "@catalogSetPrice": {
+    "description": "Price drawer button"
+  },
+  "catalogPriceChanged": "Price updated.",
+  "@catalogPriceChanged": {
+    "description": "Price drawer success"
+  },
+  "catalogPriceHistory": "Price history",
+  "@catalogPriceHistory": {
+    "description": "Price drawer section"
+  },
+  "catalogNoPrices": "No prices recorded yet.",
+  "@catalogNoPrices": {
+    "description": "Price drawer empty history"
+  },
+  "catalogPriceSince": "From {when} · by {admin}",
+  "@catalogPriceSince": {
+    "description": "Price version line: since when, which admin",
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "admin": {
+        "type": "String"
+      }
+    }
+  },
+  "catalogCurrentPrice": "Current",
+  "@catalogCurrentPrice": {
+    "description": "Badge on the price in force"
+  },
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "A12 heading"
+  },
+  "settingsTabSettings": "Platform settings",
+  "@settingsTabSettings": {
+    "description": "A12 tab"
+  },
+  "settingsTabAdmins": "Admin users",
+  "@settingsTabAdmins": {
+    "description": "A12 tab"
+  },
+  "settingsTabRoles": "Roles",
+  "@settingsTabRoles": {
+    "description": "A12 tab"
+  },
+  "settingsTabAudit": "Audit log",
+  "@settingsTabAudit": {
+    "description": "A12 tab"
+  },
+  "settingsEmpty": "No settings yet",
+  "@settingsEmpty": {
+    "description": "A12 empty settings list"
+  },
+  "settingsSearch": "Search settings",
+  "@settingsSearch": {
+    "description": "A12 settings search hint"
+  },
+  "settingsUpdatedAt": "Changed {when}",
+  "@settingsUpdatedAt": {
+    "description": "A12 when a setting last changed",
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsEdit": "Change setting",
+  "@settingsEdit": {
+    "description": "A12 edit tooltip"
+  },
+  "settingsValue": "Value",
+  "@settingsValue": {
+    "description": "A12 setting value field"
+  },
+  "settingsOn": "On",
+  "@settingsOn": {
+    "description": "Boolean setting on"
+  },
+  "settingsOff": "Off",
+  "@settingsOff": {
+    "description": "Boolean setting off"
+  },
+  "settingsShape": "Map shape",
+  "@settingsShape": {
+    "description": "GeoJSON setting value"
+  },
+  "settingsBadShape": "Paste a GeoJSON object with a \"type\".",
+  "@settingsBadShape": {
+    "description": "GeoJSON setting is not valid"
+  },
+  "settingsApplyNow": "The change applies right away and is recorded in the audit log.",
+  "@settingsApplyNow": {
+    "description": "Setting dialog note"
+  },
+  "settingsRoleCustomer": "Customer",
+  "@settingsRoleCustomer": {
+    "description": "Role"
+  },
+  "settingsRoleProvider": "Provider",
+  "@settingsRoleProvider": {
+    "description": "Role"
+  },
+  "settingsRoleVerifier": "Verifier",
+  "@settingsRoleVerifier": {
+    "description": "Role"
+  },
+  "settingsRoleCatalogManager": "Catalog manager",
+  "@settingsRoleCatalogManager": {
+    "description": "Role"
+  },
+  "settingsRoleSupportAgent": "Support agent",
+  "@settingsRoleSupportAgent": {
+    "description": "Role"
+  },
+  "settingsRoleSuperAdmin": "Super admin",
+  "@settingsRoleSuperAdmin": {
+    "description": "Role"
+  },
+  "adminsInvite": "Invite admin",
+  "@adminsInvite": {
+    "description": "Admin users button and dialog title"
+  },
+  "adminsSendInvite": "Send invite",
+  "@adminsSendInvite": {
+    "description": "Invite dialog button"
+  },
+  "adminsEmpty": "No admin users yet",
+  "@adminsEmpty": {
+    "description": "Empty admin list"
+  },
+  "adminsEmail": "Work email",
+  "@adminsEmail": {
+    "description": "Invite field"
+  },
+  "adminsName": "Full name",
+  "@adminsName": {
+    "description": "Invite field"
+  },
+  "adminsNameShort": "Write at least 2 characters.",
+  "@adminsNameShort": {
+    "description": "Invite name too short"
+  },
+  "adminsRoles": "Roles",
+  "@adminsRoles": {
+    "description": "Role chips heading"
+  },
+  "adminsPickRole": "Pick at least one role.",
+  "@adminsPickRole": {
+    "description": "No role picked"
+  },
+  "adminsInvitedTitle": "Invitation created",
+  "@adminsInvitedTitle": {
+    "description": "Temporary password dialog title"
+  },
+  "adminsInvitedBody": "Give this temporary password to {name} privately. It is shown only once; they replace it and set up 2FA when they first sign in.",
+  "@adminsInvitedBody": {
+    "description": "Temporary password explanation",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminsCopy": "Copy password",
+  "@adminsCopy": {
+    "description": "Copy button tooltip"
+  },
+  "adminsCopied": "Copied.",
+  "@adminsCopied": {
+    "description": "Snackbar after copying"
+  },
+  "adminsDone": "Done",
+  "@adminsDone": {
+    "description": "Close the temporary password dialog"
+  },
+  "adminsNeverSignedIn": "Has not signed in yet",
+  "@adminsNeverSignedIn": {
+    "description": "Admin never signed in"
+  },
+  "adminsLastSignIn": "Last signed in {when}",
+  "@adminsLastSignIn": {
+    "description": "Admin last sign-in",
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "adminsActive": "Active",
+  "@adminsActive": {
+    "description": "Admin status badge"
+  },
+  "adminsInactive": "Deactivated",
+  "@adminsInactive": {
+    "description": "Admin status badge"
+  },
+  "adminsTotpOn": "2FA set up",
+  "@adminsTotpOn": {
+    "description": "Admin enrolled an authenticator"
+  },
+  "adminsTotpOff": "2FA pending",
+  "@adminsTotpOff": {
+    "description": "Admin has not enrolled an authenticator"
+  },
+  "adminsEdit": "Change roles or access",
+  "@adminsEdit": {
+    "description": "Admin edit tooltip"
+  },
+  "adminsActiveSwitch": "Can sign in",
+  "@adminsActiveSwitch": {
+    "description": "Admin active switch"
+  },
+  "adminsActiveHint": "Turning this off ends their sessions at once.",
+  "@adminsActiveHint": {
+    "description": "Admin active switch explanation"
+  },
+  "adminsDeactivateTitle": "Deactivate {name}?",
+  "@adminsDeactivateTitle": {
+    "description": "Deactivate confirmation title",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminsDeactivateBody": "They are signed out everywhere now and cannot sign in until reactivated.",
+  "@adminsDeactivateBody": {
+    "description": "Deactivate confirmation body"
+  },
+  "adminsDeactivate": "Deactivate",
+  "@adminsDeactivate": {
+    "description": "Deactivate confirmation button"
+  },
+  "rolesEmpty": "No roles found",
+  "@rolesEmpty": {
+    "description": "Empty roles list"
+  },
+  "rolesApplyNow": "Role changes apply immediately to everyone who holds the role.",
+  "@rolesApplyNow": {
+    "description": "Roles warning"
+  },
+  "rolesCounts": "{permissions} permissions · {screens} screens",
+  "@rolesCounts": {
+    "description": "Role summary",
+    "placeholders": {
+      "permissions": {
+        "type": "String"
+      },
+      "screens": {
+        "type": "String"
+      }
+    }
+  },
+  "rolesEdit": "Edit role",
+  "@rolesEdit": {
+    "description": "Role edit tooltip"
+  },
+  "rolesPermissions": "Permissions",
+  "@rolesPermissions": {
+    "description": "Role dialog section"
+  },
+  "rolesScreens": "Screens",
+  "@rolesScreens": {
+    "description": "Role dialog section"
+  },
+  "rolesConfirmTitle": "Apply the changes to {role}?",
+  "@rolesConfirmTitle": {
+    "description": "Role save confirmation title",
+    "placeholders": {
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "rolesApply": "Apply now",
+  "@rolesApply": {
+    "description": "Role save confirmation button"
+  },
+  "rolesSaved": "Role updated.",
+  "@rolesSaved": {
+    "description": "Snackbar after a role change"
+  },
+  "auditWhen": "When",
+  "@auditWhen": {
+    "description": "Audit column"
+  },
+  "auditActor": "Who",
+  "@auditActor": {
+    "description": "Audit column"
+  },
+  "auditRole": "Role",
+  "@auditRole": {
+    "description": "Audit detail line"
+  },
+  "auditAction": "Action",
+  "@auditAction": {
+    "description": "Audit column"
+  },
+  "auditSubject": "Subject",
+  "@auditSubject": {
+    "description": "Audit column"
+  },
+  "auditReason": "Reason",
+  "@auditReason": {
+    "description": "Audit detail line"
+  },
+  "auditBefore": "Before",
+  "@auditBefore": {
+    "description": "Audit detail line"
+  },
+  "auditAfter": "After",
+  "@auditAfter": {
+    "description": "Audit detail line"
+  },
+  "auditSystem": "System",
+  "@auditSystem": {
+    "description": "Audit entry without an actor"
+  },
+  "auditEmpty": "No audit entries match",
+  "@auditEmpty": {
+    "description": "Empty audit list"
+  },
+  "auditActorId": "Actor ID",
+  "@auditActorId": {
+    "description": "Audit filter"
+  },
+  "auditActorInvalid": "Paste a full account ID.",
+  "@auditActorInvalid": {
+    "description": "Audit actor filter is not an ID"
+  },
+  "auditActionHint": "Action, e.g. catalog.price_changed",
+  "@auditActionHint": {
+    "description": "Audit filter"
+  },
+  "auditSubjectId": "Subject ID",
+  "@auditSubjectId": {
+    "description": "Audit filter"
+  },
+  "auditAnyDate": "Any date",
+  "@auditAnyDate": {
+    "description": "Audit date filter without a range"
+  },
+  "auditApply": "Apply",
+  "@auditApply": {
+    "description": "Audit filter button"
+  },
+  "auditClear": "Clear",
+  "@auditClear": {
+    "description": "Audit filter reset"
   }
 }
