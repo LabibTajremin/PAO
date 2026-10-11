@@ -4,6 +4,10 @@
 import type { Config } from 'jest';
 
 const transform: Config['transform'] = {
+  '/node_modules/(@scure|@noble)/.+\\.js$': [
+    '@swc/jest',
+    { jsc: { target: 'es2023' }, module: { type: 'commonjs' } },
+  ],
   '^.+\\.ts$': [
     '@swc/jest',
     {
@@ -20,6 +24,9 @@ const shared: Config = {
   rootDir: '.',
   testEnvironment: 'node',
   transform,
+  // otplib's crypto and base32 plugins ship ES modules only; Node loads them natively,
+  // Jest needs them compiled to CommonJS.
+  transformIgnorePatterns: ['/node_modules/(?!(@scure|@noble)/)'],
   moduleFileExtensions: ['ts', 'js', 'json'],
 };
 
@@ -31,6 +38,7 @@ const config: Config = {
       displayName: 'integration',
       testMatch: ['<rootDir>/src/**/*.int-spec.ts', '<rootDir>/test/**/*.int-spec.ts'],
       slowTestThreshold: 30,
+      setupFilesAfterEnv: ['<rootDir>/test/kit/jest-setup.ts'],
     },
   ],
   collectCoverageFrom: [
