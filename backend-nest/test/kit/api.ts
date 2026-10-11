@@ -4,7 +4,12 @@
 import { generateKeyPairSync, randomBytes } from 'node:crypto';
 import { type Server } from 'node:http';
 import { type AddressInfo } from 'node:net';
-import { type INestApplication, type Provider, type Type } from '@nestjs/common';
+import {
+  type INestApplication,
+  type ModuleMetadata,
+  type Provider,
+  type Type,
+} from '@nestjs/common';
 import { Test, type TestingModuleBuilder } from '@nestjs/testing';
 import { API_APP_OPTIONS, configureApiApp } from '../../src/app/api-app';
 import { AppModule } from '../../src/app/app.module';
@@ -47,6 +52,8 @@ export interface RequestOptions {
 export interface TestApiOptions {
   /** Controllers registered ahead of the catch-all, e.g. fixtures of an edge spec. */
   readonly controllers?: Type[];
+  /** Extra modules, e.g. a global stand-in for a contract whose module is not ported yet. */
+  readonly imports?: ModuleMetadata['imports'];
   /** Extra providers on the root module, e.g. stand-ins for module seams. */
   readonly providers?: Provider[];
   /** Replaces the contract, e.g. with a fixture document. */
@@ -165,7 +172,7 @@ export async function startTestApi(opts: TestApiOptions = {}): Promise<TestApi> 
   // PAO_TEST_LOG=1 shows server logs, e.g. the cause behind a 500.
   const log = process.env.PAO_TEST_LOG ? createLogger('debug') : discardLogger();
   let builder = Test.createTestingModule({
-    imports: [AppModule.forRoot(config)],
+    imports: [AppModule.forRoot(config), ...(opts.imports ?? [])],
     controllers: opts.controllers ?? [],
     providers: opts.providers ?? [],
   })

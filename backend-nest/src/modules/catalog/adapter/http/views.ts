@@ -51,7 +51,8 @@ export function subServiceView(s: SubService): Schemas['SubService'] {
     id: s.id,
     serviceId: s.serviceId,
     name: s.name,
-    description: s.description,
+    // Seeded sub-services have no description; the contract forbids empty texts.
+    description: s.description.en === '' ? undefined : s.description,
     inclusions: [...s.inclusions],
     exclusions: [...s.exclusions],
     unit: s.unit as Schemas['PriceUnit'],
