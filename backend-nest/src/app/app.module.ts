@@ -4,8 +4,7 @@ import { HEALTH_ROUTES } from '../platform/health/health';
 import { HealthModule } from '../platform/health/health.module';
 import { HttpEdgeModule } from '../platform/http/http-edge.module';
 import { UnimplementedModule } from '../platform/http/unimplemented.module';
-import { BUSINESS_MODULES } from './business-modules';
-import { platformModules } from './platform';
+import { BackendModule } from './backend.module';
 
 /**
  * The API composition root: shared infrastructure, the HTTP edge, every business module
@@ -17,10 +16,9 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [
-        ...platformModules(config),
+        BackendModule.forRoot(config),
         HttpEdgeModule.forRoot({ nonSpecRoutes: HEALTH_ROUTES }),
         HealthModule,
-        ...BUSINESS_MODULES,
         UnimplementedModule,
       ],
     };
