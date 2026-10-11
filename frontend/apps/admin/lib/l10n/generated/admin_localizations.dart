@@ -1326,6 +1326,744 @@ abstract class AdminL10n {
   /// In en, this message translates to:
   /// **'Resolution'**
   String get complaintsResolutionTitle;
+
+  /// A05 heading
+  ///
+  /// In en, this message translates to:
+  /// **'Verification queue'**
+  String get verifyQueueTitle;
+
+  /// A05 empty state
+  ///
+  /// In en, this message translates to:
+  /// **'No providers are waiting for review.'**
+  String get verifyQueueEmpty;
+
+  /// A05 filter label
+  ///
+  /// In en, this message translates to:
+  /// **'Pending item'**
+  String get verifyFilterItem;
+
+  /// A05 filter: no item filter
+  ///
+  /// In en, this message translates to:
+  /// **'All items'**
+  String get verifyFilterAll;
+
+  /// A05 column
+  ///
+  /// In en, this message translates to:
+  /// **'Provider'**
+  String get verifyColProvider;
+
+  /// A05 column
+  ///
+  /// In en, this message translates to:
+  /// **'Services'**
+  String get verifyColServices;
+
+  /// A05 column: pending items
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for review'**
+  String get verifyColPending;
+
+  /// A05 column: age of the submission
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for'**
+  String get verifyColWaiting;
+
+  /// A05 wait in hours
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 hour} other{{count} hours}}'**
+  String verifyAgeHours(int count);
+
+  /// A05 wait in days
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 day} other{{count} days}}'**
+  String verifyAgeDays(int count);
+
+  /// Verification item
+  ///
+  /// In en, this message translates to:
+  /// **'National ID'**
+  String get verifyItemNid;
+
+  /// Verification item
+  ///
+  /// In en, this message translates to:
+  /// **'Live selfie'**
+  String get verifyItemSelfie;
+
+  /// Verification item
+  ///
+  /// In en, this message translates to:
+  /// **'Police clearance'**
+  String get verifyItemPolice;
+
+  /// Verification item
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get verifyItemAddress;
+
+  /// Verification item
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency contact'**
+  String get verifyItemEmergency;
+
+  /// Verification item
+  ///
+  /// In en, this message translates to:
+  /// **'Skill proof'**
+  String get verifyItemSkill;
+
+  /// Verification item
+  ///
+  /// In en, this message translates to:
+  /// **'Service area'**
+  String get verifyItemServiceArea;
+
+  /// Verification item
+  ///
+  /// In en, this message translates to:
+  /// **'Code of conduct'**
+  String get verifyItemConduct;
+
+  /// Item status
+  ///
+  /// In en, this message translates to:
+  /// **'Missing'**
+  String get verifyStatusMissing;
+
+  /// Item status
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get verifyStatusPending;
+
+  /// Item status
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get verifyStatusApproved;
+
+  /// Item status
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get verifyStatusRejected;
+
+  /// Item status
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get verifyStatusExpired;
+
+  /// Item is required for Level 1
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get verifyRequired;
+
+  /// Item is optional for Level 1
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get verifyOptional;
+
+  /// Verification level
+  ///
+  /// In en, this message translates to:
+  /// **'Level 0 · Registered'**
+  String get verifyLevel0;
+
+  /// Verification level
+  ///
+  /// In en, this message translates to:
+  /// **'Level 1 · Verified'**
+  String get verifyLevel1;
+
+  /// Verification level
+  ///
+  /// In en, this message translates to:
+  /// **'Level 2 · PAO Verified Pro'**
+  String get verifyLevel2;
+
+  /// A06 face check heading
+  ///
+  /// In en, this message translates to:
+  /// **'Face match'**
+  String get verifyFaceTitle;
+
+  /// Face check result
+  ///
+  /// In en, this message translates to:
+  /// **'Not checked yet'**
+  String get verifyFaceNotRun;
+
+  /// Face check result
+  ///
+  /// In en, this message translates to:
+  /// **'Face matches'**
+  String get verifyFaceMatch;
+
+  /// Face check result
+  ///
+  /// In en, this message translates to:
+  /// **'Face does not match'**
+  String get verifyFaceNoMatch;
+
+  /// Face check left to the verifier
+  ///
+  /// In en, this message translates to:
+  /// **'Compare the selfie with the NID photo'**
+  String get verifyFaceManual;
+
+  /// Gender
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get verifyGenderFemale;
+
+  /// Gender
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get verifyGenderMale;
+
+  /// Gender
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get verifyGenderOther;
+
+  /// Document kind
+  ///
+  /// In en, this message translates to:
+  /// **'NID front'**
+  String get verifyDocNidFront;
+
+  /// Document kind
+  ///
+  /// In en, this message translates to:
+  /// **'NID back'**
+  String get verifyDocNidBack;
+
+  /// Submitted value
+  ///
+  /// In en, this message translates to:
+  /// **'Issue date'**
+  String get verifyFieldIssueDate;
+
+  /// Submitted value
+  ///
+  /// In en, this message translates to:
+  /// **'Working radius (m)'**
+  String get verifyFieldRadius;
+
+  /// Submitted value: number of services
+  ///
+  /// In en, this message translates to:
+  /// **'Services chosen'**
+  String get verifyFieldServices;
+
+  /// Submitted value
+  ///
+  /// In en, this message translates to:
+  /// **'Home latitude'**
+  String get verifyFieldHomeLat;
+
+  /// Submitted value
+  ///
+  /// In en, this message translates to:
+  /// **'Home longitude'**
+  String get verifyFieldHomeLng;
+
+  /// Submitted value: emergency contact
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get verifyFieldName;
+
+  /// Submitted value: emergency contact
+  ///
+  /// In en, this message translates to:
+  /// **'Relation'**
+  String get verifyFieldRelation;
+
+  /// A06 panel heading
+  ///
+  /// In en, this message translates to:
+  /// **'NID and profile'**
+  String get verifyProfileTitle;
+
+  /// A06 profile
+  ///
+  /// In en, this message translates to:
+  /// **'NID number'**
+  String get verifyNidNumber;
+
+  /// A06 profile
+  ///
+  /// In en, this message translates to:
+  /// **'Full name'**
+  String get verifyFullName;
+
+  /// A06 profile
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth'**
+  String get verifyDob;
+
+  /// A06 profile
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get verifyGender;
+
+  /// A06 profile
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get verifyPhone;
+
+  /// A06 profile
+  ///
+  /// In en, this message translates to:
+  /// **'Present address'**
+  String get verifyPresentAddress;
+
+  /// A06 profile
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent address'**
+  String get verifyPermanentAddress;
+
+  /// A06 profile: empty value
+  ///
+  /// In en, this message translates to:
+  /// **'Not given'**
+  String get verifyNotGiven;
+
+  /// Reject reason template
+  ///
+  /// In en, this message translates to:
+  /// **'The photo is blurry. Retake it in good light.'**
+  String get verifyReasonBlurry;
+
+  /// Reject reason template
+  ///
+  /// In en, this message translates to:
+  /// **'The name does not match the profile.'**
+  String get verifyReasonName;
+
+  /// Reject reason template
+  ///
+  /// In en, this message translates to:
+  /// **'The document has expired.'**
+  String get verifyReasonExpired;
+
+  /// Reject reason template
+  ///
+  /// In en, this message translates to:
+  /// **'The selfie does not match the NID photo.'**
+  String get verifyReasonFace;
+
+  /// Reject reason template
+  ///
+  /// In en, this message translates to:
+  /// **'Part of the document is cut off.'**
+  String get verifyReasonCropped;
+
+  /// Item rejection reason
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected: {reason}'**
+  String verifyRejectedBecause(String reason);
+
+  /// Item expiry
+  ///
+  /// In en, this message translates to:
+  /// **'Expires {date}'**
+  String verifyExpires(String date);
+
+  /// When the item was decided
+  ///
+  /// In en, this message translates to:
+  /// **'Decided {date}'**
+  String verifyDecidedAt(String date);
+
+  /// A06 button
+  ///
+  /// In en, this message translates to:
+  /// **'Open documents'**
+  String get verifyOpenDocs;
+
+  /// A06: no verification:docs:view
+  ///
+  /// In en, this message translates to:
+  /// **'You may not open documents'**
+  String get verifyDocsLocked;
+
+  /// A06 button
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get verifyApprove;
+
+  /// A06 button
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get verifyReject;
+
+  /// A06 reject dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Reject {item}'**
+  String verifyRejectTitle(String item);
+
+  /// A06 heading before the name loads
+  ///
+  /// In en, this message translates to:
+  /// **'Verification review'**
+  String get verifyReviewTitle;
+
+  /// A06 back button
+  ///
+  /// In en, this message translates to:
+  /// **'Back to the queue'**
+  String get verifyBackToQueue;
+
+  /// A06 button
+  ///
+  /// In en, this message translates to:
+  /// **'Next provider'**
+  String get verifyNext;
+
+  /// A06 keyboard hint
+  ///
+  /// In en, this message translates to:
+  /// **'Keys: A approve · R reject · N next · ↑↓ move'**
+  String get verifyShortcuts;
+
+  /// A06: no pending items
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is waiting for a decision.'**
+  String get verifyNoPending;
+
+  /// A06 after a decision
+  ///
+  /// In en, this message translates to:
+  /// **'Saved. The provider is now at {level}.'**
+  String verifyDecided(String level);
+
+  /// A06: queue empty on next
+  ///
+  /// In en, this message translates to:
+  /// **'No other providers are waiting.'**
+  String get verifyQueueDone;
+
+  /// Document viewer: image failed
+  ///
+  /// In en, this message translates to:
+  /// **'This document could not be shown.'**
+  String get verifyViewerBroken;
+
+  /// Document viewer
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom in'**
+  String get verifyViewerZoomIn;
+
+  /// Document viewer
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom out'**
+  String get verifyViewerZoomOut;
+
+  /// Document viewer
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate left'**
+  String get verifyViewerRotateLeft;
+
+  /// Document viewer
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate right'**
+  String get verifyViewerRotateRight;
+
+  /// A07 heading
+  ///
+  /// In en, this message translates to:
+  /// **'Level 2 sessions'**
+  String get level2Title;
+
+  /// A07 button
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule session'**
+  String get level2Schedule;
+
+  /// A07 empty state
+  ///
+  /// In en, this message translates to:
+  /// **'No sessions match.'**
+  String get level2Empty;
+
+  /// A07 column
+  ///
+  /// In en, this message translates to:
+  /// **'When'**
+  String get level2ColWhen;
+
+  /// A07 column
+  ///
+  /// In en, this message translates to:
+  /// **'Provider'**
+  String get level2ColProvider;
+
+  /// A07 column
+  ///
+  /// In en, this message translates to:
+  /// **'Service'**
+  String get level2ColService;
+
+  /// A07 column
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get level2ColStatus;
+
+  /// Session status
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled'**
+  String get level2StatusScheduled;
+
+  /// Session status
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get level2StatusCompleted;
+
+  /// Session status
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get level2StatusCancelled;
+
+  /// Session result
+  ///
+  /// In en, this message translates to:
+  /// **'Pass'**
+  String get level2ResultPass;
+
+  /// Session result
+  ///
+  /// In en, this message translates to:
+  /// **'Fail'**
+  String get level2ResultFail;
+
+  /// Session result
+  ///
+  /// In en, this message translates to:
+  /// **'Retest'**
+  String get level2ResultRetest;
+
+  /// A07 filter
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get level2FilterStatus;
+
+  /// A07 filter: no status filter
+  ///
+  /// In en, this message translates to:
+  /// **'All statuses'**
+  String get level2AllStatuses;
+
+  /// A07 filter
+  ///
+  /// In en, this message translates to:
+  /// **'Provider'**
+  String get level2FilterProvider;
+
+  /// A07 filter: no provider filter
+  ///
+  /// In en, this message translates to:
+  /// **'Any'**
+  String get level2AnyProvider;
+
+  /// Provider search label
+  ///
+  /// In en, this message translates to:
+  /// **'Find a provider'**
+  String get level2FindProvider;
+
+  /// Provider search hint
+  ///
+  /// In en, this message translates to:
+  /// **'Name or phone, then Enter'**
+  String get level2FindHint;
+
+  /// Provider search: no results
+  ///
+  /// In en, this message translates to:
+  /// **'No provider matches.'**
+  String get level2NoProviders;
+
+  /// Schedule dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule a Level 2 session'**
+  String get level2ScheduleTitle;
+
+  /// Schedule dialog: pick another provider
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get level2ChangeProvider;
+
+  /// Schedule dialog
+  ///
+  /// In en, this message translates to:
+  /// **'This provider has not chosen any service.'**
+  String get level2NoServices;
+
+  /// Schedule dialog field
+  ///
+  /// In en, this message translates to:
+  /// **'Service'**
+  String get level2Service;
+
+  /// Schedule dialog field
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get level2Date;
+
+  /// Schedule dialog field
+  ///
+  /// In en, this message translates to:
+  /// **'Time (Dhaka)'**
+  String get level2Time;
+
+  /// Session location
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get level2Location;
+
+  /// Schedule dialog location hint
+  ///
+  /// In en, this message translates to:
+  /// **'PAO office, Gulshan 1'**
+  String get level2LocationHint;
+
+  /// Schedule dialog button
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule'**
+  String get level2ScheduleSubmit;
+
+  /// Schedule dialog validation
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a provider, a service and a location.'**
+  String get level2ScheduleMissing;
+
+  /// Schedule dialog validation
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a time in the future.'**
+  String get level2PastTime;
+
+  /// A07 after scheduling
+  ///
+  /// In en, this message translates to:
+  /// **'Session scheduled. The provider will be notified.'**
+  String get level2Booked;
+
+  /// API error LEVEL2_NOT_ELIGIBLE, admin wording
+  ///
+  /// In en, this message translates to:
+  /// **'Only Level 1 providers can take a Level 2 session.'**
+  String get level2NotEligible;
+
+  /// API error LEVEL2_COOLING_OFF, admin wording
+  ///
+  /// In en, this message translates to:
+  /// **'This provider failed recently and must wait before retrying.'**
+  String get level2CoolingOff;
+
+  /// Session drawer title
+  ///
+  /// In en, this message translates to:
+  /// **'Level 2 session'**
+  String get level2SessionTitle;
+
+  /// Result form heading
+  ///
+  /// In en, this message translates to:
+  /// **'Checklist'**
+  String get level2Checklist;
+
+  /// Checklist item passed
+  ///
+  /// In en, this message translates to:
+  /// **'Passed'**
+  String get level2ItemPassed;
+
+  /// Checklist item not passed
+  ///
+  /// In en, this message translates to:
+  /// **'Not passed'**
+  String get level2ItemFailed;
+
+  /// Result form
+  ///
+  /// In en, this message translates to:
+  /// **'Add a checklist item'**
+  String get level2AddItem;
+
+  /// Result form heading
+  ///
+  /// In en, this message translates to:
+  /// **'Result'**
+  String get level2Outcome;
+
+  /// Result form field
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get level2Notes;
+
+  /// Result form button
+  ///
+  /// In en, this message translates to:
+  /// **'Record result'**
+  String get level2Record;
+
+  /// Result form validation
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one checklist item.'**
+  String get level2NeedChecklist;
+
+  /// Result form validation
+  ///
+  /// In en, this message translates to:
+  /// **'Choose pass, fail or retest.'**
+  String get level2NeedResult;
 }
 
 class _AdminL10nDelegate extends LocalizationsDelegate<AdminL10n> {
