@@ -20,7 +20,12 @@ const day = 24 * time.Hour
 // ExpireDocuments expires approved items past their date; the level drops and the
 // provider module takes them offline (PRD §6.4).
 func (s *Service) ExpireDocuments(ctx context.Context) error {
-	now := s.d.Clock.Now()
+	return s.ExpireDocumentsAt(ctx, s.d.Clock.Now())
+}
+
+// ExpireDocumentsAt runs the expiry sweep as of now, so end-to-end tests can reach a
+// document's expiry without waiting for it.
+func (s *Service) ExpireDocumentsAt(ctx context.Context, now time.Time) error {
 	ids, err := s.d.Repo.ExpiredBy(ctx, now)
 	for _, id := range ids {
 		if err == nil {

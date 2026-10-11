@@ -57,6 +57,7 @@ func run() error {
 	if err != nil {
 		return err
 	}
+	handler = app.WithTestHooks(handler, infra, modules)
 	go serveMetrics(ctx, infra)
 	ln, err := net.Listen("tcp", cfg.HTTPAddr)
 	if err != nil {

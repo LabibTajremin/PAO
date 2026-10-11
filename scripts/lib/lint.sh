@@ -34,7 +34,17 @@ lint_go() {
   "$PAO_ROOT/scripts/gen-arch-lint.sh" "$BACKEND/.go-arch-lint.yml"
   (cd "$BACKEND" && golangci-lint run ./... && go-arch-lint check --output-color=false >/dev/null) ||
     die "Go lint failed"
+  lint_e2e
   ok "Go lint and architecture rules"
+}
+
+# lint_e2e holds the black-box journeys (their own module) to the backend's rules.
+lint_e2e() {
+  local e2e="$PAO_ROOT/test/e2e" unformatted
+  [[ -f "$e2e/go.mod" ]] || return 0
+  unformatted=$(cd "$e2e" && gofmt -l .)
+  [[ -z "$unformatted" ]] || die "gofmt needed: $unformatted"
+  (cd "$e2e" && golangci-lint run --config "$BACKEND/.golangci.yml" ./...) || die "e2e lint failed"
 }
 
 lint_dart() {

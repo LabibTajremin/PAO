@@ -70,7 +70,9 @@ func run() error {
 		return err
 	}
 	log.Info("worker started")
-	err = httpx.Runner{Server: httpx.NewServer("", mux), Drain: time.Second, Log: log}.Run(ctx, ln)
+	// In APP_ENV=test the worker also serves the pushes its capture adapter recorded.
+	handler := app.WithTestHooks(mux, infra, modules)
+	err = httpx.Runner{Server: httpx.NewServer("", handler), Drain: time.Second, Log: log}.Run(ctx, ln)
 	_ = client.Stop(context.Background())
 	return err
 }

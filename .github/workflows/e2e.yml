@@ -21,12 +21,8 @@ jobs:
         with:
           go-version-file: backend/go.mod
           cache-dependency-path: backend/go.sum
-      - name: Stack healthy
-        run: |
-          ./pao up
-          curl -fsS http://localhost:8080/healthz
-      - name: API journeys
+      - name: Journeys
         run: ./pao test e2e
       - name: Stack logs
         if: failure()
-        run: docker compose logs --no-color | tail -200
+        run: docker compose -p pao-e2e logs --no-color | tail -200

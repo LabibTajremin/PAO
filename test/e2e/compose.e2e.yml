@@ -1,0 +1,16 @@
+# End-to-end stack: a separate compose project on its own ports, so it can run beside
+# the development stack and start from an empty database every time (admin 2FA
+# enrolment happens on first sign-in, so a reused database would hold unknown secrets).
+name: pao-e2e
+
+services:
+  postgres:
+    ports: !reset []
+  redis:
+    ports: !reset []
+  minio:
+    ports: !override ["9100:9000"]
+  api:
+    ports: !override ["8180:8080"]
+  worker:
+    ports: ["9191:9090"]
