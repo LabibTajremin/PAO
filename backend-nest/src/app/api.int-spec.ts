@@ -31,8 +31,8 @@ describe('API without business modules', () => {
   });
 
   it('answers 501 for operations no module serves, after authentication', async () => {
-    expect((await api.do('GET', '/v1/customer/catalog')).code).toBe('UNAUTHENTICATED');
-    const r = await api.do('GET', '/v1/customer/catalog', undefined, { token: customer });
+    expect((await api.do('GET', '/v1/customer/bookings')).code).toBe('UNAUTHENTICATED');
+    const r = await api.do('GET', '/v1/customer/bookings', undefined, { token: customer });
     expect(r).toMatchObject({ status: 501, code: 'NOT_IMPLEMENTED' });
     const forbidden = await api.do('GET', '/v1/admin/dashboard', undefined, { token: customer });
     expect(forbidden).toMatchObject({ status: 403, code: 'FORBIDDEN' });
