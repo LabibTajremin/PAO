@@ -12,6 +12,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint . --max-warnings 0 && prettier --check . && depcruise src --config .dependency-cruiser.cjs",
     "format": "prettier --write .",
+    "gen": "bash scripts/gen.sh",
     "test:unit": "jest --selectProjects unit",
     "test:integration": "jest --selectProjects integration --runInBand",
     "test:cover": "jest --coverage --runInBand"
