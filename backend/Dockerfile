@@ -9,7 +9,9 @@ COPY go.mod go.sum* ./
 RUN --mount=type=secret,id=extra_ca,required=false --mount=type=cache,target=/go/pkg/mod \
     if [ -s /run/secrets/extra_ca ]; then export SSL_CERT_FILE=/run/secrets/extra_ca; fi; go mod download
 COPY . .
-RUN --mount=type=cache,target=/go/pkg/mod --mount=type=cache,target=/root/.cache/go-build \
+RUN --mount=type=secret,id=extra_ca,required=false --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    if [ -s /run/secrets/extra_ca ]; then export SSL_CERT_FILE=/run/secrets/extra_ca; fi; \
     CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/ ./cmd/api ./cmd/worker ./cmd/migrate
 
 FROM gcr.io/distroless/static-debian12:nonroot
