@@ -6,14 +6,18 @@ import 'package:pao_admin/features/auth/presentation/login_page.dart';
 import 'package:pao_admin/features/auth/presentation/password_page.dart';
 import 'package:pao_admin/features/bookings/presentation/booking_detail_page.dart';
 import 'package:pao_admin/features/bookings/presentation/bookings_page.dart';
+import 'package:pao_admin/features/catalog/presentation/catalog_page.dart';
+import 'package:pao_admin/features/catalog/presentation/service_editor_page.dart';
 import 'package:pao_admin/features/complaints/presentation/complaint_detail_page.dart';
 import 'package:pao_admin/features/complaints/presentation/complaints_page.dart';
 import 'package:pao_admin/features/customers/presentation/customer_detail_page.dart';
 import 'package:pao_admin/features/customers/presentation/customers_page.dart';
+import 'package:pao_admin/features/dashboard/presentation/dashboard_page.dart';
 import 'package:pao_admin/features/level2/data/api_level2_repository.dart';
 import 'package:pao_admin/features/level2/presentation/level2_page.dart';
 import 'package:pao_admin/features/providers/presentation/provider_detail_page.dart';
 import 'package:pao_admin/features/providers/presentation/providers_page.dart';
+import 'package:pao_admin/features/settings/presentation/settings_page.dart';
 import 'package:pao_admin/features/verification/data/api_verification_repository.dart';
 import 'package:pao_admin/features/verification/presentation/queue_page.dart';
 import 'package:pao_admin/features/verification/presentation/review_page.dart';
@@ -39,9 +43,16 @@ List<RouteBase> entryRoutes(AppServices s) => [
 
 /// Screens shown inside the console shell.
 List<RouteBase> consoleRoutes(AppServices s) => [
-  _page(Routes.dashboard, (_) => const PlaceholderPage(title: 'A02')),
-  _page(Routes.catalog, (_) => const PlaceholderPage(title: 'A03')),
-  _page(Routes.service, (_) => const PlaceholderPage(title: 'A04')),
+  _page(Routes.dashboard, (_) => DashboardPage(services: s)),
+  _page(Routes.catalog, (_) => CatalogPage(services: s)),
+  _page(
+    Routes.service,
+    (state) => ServiceEditorPage(
+      services: s,
+      id: state.pathParameters['id']!,
+      categoryId: state.uri.queryParameters['category'],
+    ),
+  ),
   _page(
     Routes.verification,
     (_) => QueuePage(repo: ApiVerificationRepository(s.api)),
@@ -63,6 +74,16 @@ List<RouteBase> consoleRoutes(AppServices s) => [
       now: s.now,
     ),
   ),
+  ...peopleRoutes(s),
+  _page(Routes.settings, (_) => SettingsPage(services: s)),
+  _page(
+    '/settings/:tab',
+    (state) => SettingsPage(services: s, tab: state.pathParameters['tab']!),
+  ),
+];
+
+/// Providers, customers, bookings and complaints, each a list and a detail.
+List<RouteBase> peopleRoutes(AppServices s) => [
   _page(Routes.providers, (_) => ProvidersPage(services: s)),
   _page('/providers/:id', (st) => ProviderDetailPage(services: s, id: _id(st))),
   _page(Routes.customers, (_) => CustomersPage(services: s)),
@@ -74,6 +95,4 @@ List<RouteBase> consoleRoutes(AppServices s) => [
     '/complaints/:id',
     (st) => ComplaintDetailPage(services: s, id: _id(st)),
   ),
-  _page(Routes.settings, (_) => const PlaceholderPage(title: 'A12')),
-  _page('/settings/:tab', (_) => const PlaceholderPage(title: 'A12')),
 ];

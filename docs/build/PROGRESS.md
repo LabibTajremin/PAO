@@ -20,17 +20,17 @@ it first and continues from **Current task**.
 | P10 Flutter foundation | done | — | ADR-0027 |
 | P11 Partner app | done | — | ADR-0028 |
 | P12 Customer app | done | — | ADR-0029 |
-| P13 Admin web | in_progress | — | |
-| P14 End-to-end | todo | — | |
+| P13 Admin web | done | — | ADR-0030 |
+| P14 End-to-end | in_progress | — | |
 | P15 Hardening & handover | todo | — | |
 
 Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (merged).
 
 ## Current task
 
-P13 / task 1 — read `docs/build/phases/P13-admin-web.md`; build the admin shell (login +
-2FA, responsive sidebar, permission-driven navigation) in `apps/admin`, reusing the
-partner/customer app layout and `pao_core`/`pao_ui`.
+P14 / task 1 — read `docs/build/phases/P14-*.md`; build the stack fixture (test-only OTP
+endpoint) first, then API journeys, then the Patrol app journeys for P11–P13 deferred by
+ADR-0028/0029/0030.
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed

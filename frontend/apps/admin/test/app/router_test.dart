@@ -2,9 +2,22 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pao_admin/app/router.dart';
 import 'package:pao_admin/app/routes.dart';
 import 'package:pao_admin/features/auth/presentation/login_page.dart';
+import 'package:pao_admin/features/catalog/presentation/catalog_page.dart';
+import 'package:pao_admin/features/catalog/presentation/service_editor_page.dart';
+import 'package:pao_admin/features/dashboard/presentation/dashboard_page.dart';
+import 'package:pao_admin/features/settings/presentation/settings_page.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 import '../support/harness.dart';
+
+/// The page that renders screen [id]; screens still being built show their ID.
+Finder _screen(String id) => switch (id) {
+  'A02' => find.byType(DashboardPage),
+  'A03' => find.byType(CatalogPage),
+  'A04' => find.byType(ServiceEditorPage),
+  'A12' => find.byType(SettingsPage),
+  _ => find.text(id),
+};
 
 void main() {
   testWidgets('signed-out admins land on login', (tester) async {
@@ -21,7 +34,7 @@ void main() {
     final h = Harness.create();
     await h.signIn(tester);
     await h.pumpApp(tester);
-    expect(find.text('A02'), findsOneWidget);
+    expect(_screen('A02'), findsOneWidget);
     for (final (menu, screen) in [
       ('Verification', 'Verification queue'),
       ('Level 2 sessions', 'Schedule session'),
@@ -34,7 +47,7 @@ void main() {
     ]) {
       await tester.tap(find.text(menu));
       await h.settle(tester);
-      expect(find.text(screen), findsOneWidget, reason: menu);
+      expect(_screen(screen), findsOneWidget, reason: menu);
     }
     for (final (path, screen) in [
       (Routes.serviceOf('s1'), 'A04'),
@@ -47,7 +60,7 @@ void main() {
       (Routes.settingsTab(''), 'A12'),
     ]) {
       await h.go(tester, path);
-      expect(find.text(screen), findsOneWidget, reason: path);
+      expect(_screen(screen), findsOneWidget, reason: path);
     }
   });
 

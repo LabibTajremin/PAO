@@ -16,8 +16,8 @@ lib/
   l10n/         admin strings (admin_en.arb / admin_bn.arb → AdminL10n)
 ```
 
-`features/auth` is the reference feature. Screens still being built show
-`PlaceholderPage`; replace the entry in `app/pages.dart` when one lands.
+`features/auth` is the reference feature. Choices and API gaps found while building
+the console are in ADR-0030.
 
 ## Rules
 
