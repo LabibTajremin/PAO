@@ -1,6 +1,7 @@
 import type Redis from 'ioredis';
 import { v7 as uuid } from 'uuid';
 import { startTestApi, type TestApi } from '../../../../../test/kit/api';
+import { adminSession } from '../../../../../test/kit/identity';
 import { DATABASE, type Database } from '../../../../platform/db/database';
 import { REDIS } from '../../../../platform/redis/redis-client';
 import { ADMIN_SERVICE, type AdminService } from '../../contract';
@@ -19,9 +20,10 @@ describe('admin settings', () => {
     api = await startTestApi();
     admin = api.app.get(ADMIN_SERVICE);
     db = api.app.get(DATABASE);
-    superId = uuid();
-    superAdmin = await api.token(superId, ['super_admin']);
-    catalog = await api.token(uuid(), ['catalog_manager']);
+    const root = await adminSession(api, ['super_admin']);
+    superId = root.id;
+    superAdmin = root.accessToken;
+    catalog = (await adminSession(api, ['catalog_manager'])).accessToken;
   });
 
   it('applies an update at once and records it for the audit trail', async () => {

@@ -13,12 +13,12 @@ import {
  * time zone, which keeps the calendar day whatever that zone is.
  */
 export function sqlDate(day: string): Date {
-  const [y, m, d] = day.split('-').map(Number);
-  return new Date(y ?? 0, (m ?? 1) - 1, d ?? 1);
+  // A date-time without an offset is read in local time.
+  return new Date(`${day}T00:00:00`);
 }
 
 /** The calendar day (YYYY-MM-DD) of a `date` column value. */
-export function dayOf(d: Date): string {
+function dayOf(d: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0');
   return `${String(d.getFullYear())}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
