@@ -6,11 +6,12 @@ import { check } from 'k6';
 const fixture = JSON.parse(open(__ENV.FIXTURE));
 const base = __ENV.BASE_URL || 'http://localhost:8080';
 
-// 40 searches a second spread over 50 customers stays under each customer's rate limit
-// (120 per minute), so the run measures search, not throttling.
+// 50 searches a second (P14) spread over 50 customers is one per customer per second,
+// under each customer's rate limit (120 per minute), so the run measures search, not
+// throttling.
 export const options = {
   scenarios: {
-    search: { executor: 'constant-arrival-rate', rate: 40, timeUnit: '1s', duration: '30s', preAllocatedVUs: 20 },
+    search: { executor: 'constant-arrival-rate', rate: 50, timeUnit: '1s', duration: '30s', preAllocatedVUs: 25 },
   },
   thresholds: {
     http_req_duration: ['p(95)<300'],
