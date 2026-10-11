@@ -245,13 +245,14 @@ describe('HTTP edge over a fixture contract', () => {
   });
 
   it('lets a route-to-contract check find drift', () => {
+    // Business modules' routes are undocumented in the fixture contract; look only at
+    // the fixture's own paths and the health routes.
+    const ours = (route: string) => /\/v1\/(things|undecorated)|\/(healthz|readyz)$/.test(route);
     const report = checkRoutesAgainstSpec(api.app, FIXTURE, HEALTH_ROUTES);
-    expect(report).toEqual({
-      mismatched: ['GET /v1/undecorated: decorator undefined, spec public'],
-      undocumented: [],
-      unserved: ['GET /v1/things listThings'],
-    });
-    expect(checkRoutesAgainstSpec(api.app, FIXTURE).undocumented).toEqual([
+    expect(report.mismatched).toEqual(['GET /v1/undecorated: decorator undefined, spec public']);
+    expect(report.undocumented.filter(ours)).toEqual([]);
+    expect(report.unserved).toEqual(['GET /v1/things listThings']);
+    expect(checkRoutesAgainstSpec(api.app, FIXTURE).undocumented.filter(ours)).toEqual([
       'GET /healthz',
       'GET /readyz',
     ]);

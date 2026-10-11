@@ -4,7 +4,7 @@ import { HEALTH_ROUTES } from '../platform/health/health';
 import { HealthModule } from '../platform/health/health.module';
 import { HttpEdgeModule } from '../platform/http/http-edge.module';
 import { UnimplementedModule } from '../platform/http/unimplemented.module';
-import { BackendModule } from './backend.module';
+import { backendImports } from './backend.module';
 
 /**
  * The API composition root: shared infrastructure, the HTTP edge, every business module
@@ -16,7 +16,9 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [
-        BackendModule.forRoot(config),
+        // Flat, not nested in BackendModule: Nest registers routes in module discovery
+        // order, and a nested module's controllers would land after the catch-all.
+        ...(backendImports(config) ?? []),
         HttpEdgeModule.forRoot({ nonSpecRoutes: HEALTH_ROUTES }),
         HealthModule,
         UnimplementedModule,
