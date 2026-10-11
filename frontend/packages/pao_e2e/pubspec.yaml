@@ -1,0 +1,29 @@
+name: pao_e2e
+description: "Test support for the app journeys: the e2e stack's HTTP side and UI helpers."
+publish_to: none
+version: 0.1.0+1
+resolution: workspace
+
+environment:
+  sdk: ^3.13.0
+  flutter: ">=3.47.0"
+
+dependencies:
+  crypto: ^3.0.7
+  dio: ^5.11.1
+  flutter:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+  pao_core:
+    path: ../pao_core
+  pao_ui:
+    path: ../pao_ui
+
+dev_dependencies:
+  dart_code_linter: ^4.4.2
+  http_mock_adapter: ^0.6.1
+  very_good_analysis: ^11.0.0
+
+flutter:
+  uses-material-design: true

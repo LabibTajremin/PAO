@@ -21,16 +21,16 @@ it first and continues from **Current task**.
 | P11 Partner app | done | — | ADR-0028 |
 | P12 Customer app | done | — | ADR-0029 |
 | P13 Admin web | done | — | ADR-0030 |
-| P14 End-to-end | in_progress | — | |
-| P15 Hardening & handover | todo | — | |
+| P14 End-to-end | done | — | ADR-0031 |
+| P15 Hardening & handover | in_progress | — | |
 
 Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (merged).
 
 ## Current task
 
-P14 / task 1 — read `docs/build/phases/P14-*.md`; build the stack fixture (test-only OTP
-endpoint) first, then API journeys, then the Patrol app journeys for P11–P13 deferred by
-ADR-0028/0029/0030.
+P15 / task 1 — read `docs/build/phases/P15-*.md`; the backlog from ADR-0028 to 0031
+(Android foreground service for the heartbeat, API gaps found by the admin console,
+Bangla receipts, a native map, an Android emulator journey) is input to its plan.
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
@@ -57,6 +57,9 @@ with `./pao ci` green and a `chore(progress): complete <id>` commit is pushed.
 - Flutter tests that await real I/O (http_mock_adapter) inside `testWidgets` must use
   `tester.runAsync`, or they hang in fake async.
 - `testkit.VerifiedProvider` enrols and approves a provider end to end for later phases.
+- E2E: `test/e2e/stack.sh` (separate compose project), `./pao test e2e` runs API and app
+  journeys. Locally the admin web journey needs `CHROMEDRIVER`/`CHROME_EXECUTABLE`
+  matching the installed Chromium (chromedriver 141 for Playwright's Chromium 141).
 
 ## Blockers
 

@@ -57,7 +57,9 @@ class RouteGuard {
   String? redirect(String location) {
     final path = Uri.parse(location).path;
     if (sessions.signedIn && (path == paths.signIn || path == paths.expired)) {
-      return paths.home;
+      // Just signed in: wait for the account's screens, or home would be
+      // judged against none and the user left on "denied".
+      return permissions.loaded ? paths.home : null;
     }
     if (public.any((p) => routeMatches(p, path))) return null;
     if (!sessions.signedIn) {

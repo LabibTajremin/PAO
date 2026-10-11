@@ -46,6 +46,22 @@ void main() {
     expect(find.byType(EnrolmentPage), findsOneWidget);
   });
 
+  testWidgets(
+    'below Level 1 the screens the server allows send home to the gate',
+    (tester) async {
+      final h = await Harness.create();
+      await h.signIn(
+        tester,
+        cleared: false,
+        screens: allScreens.take(14).toList(),
+      );
+      await h.pumpApp(tester);
+      expect(find.byType(VerificationPage), findsOneWidget);
+      await h.go(tester, Routes.phone);
+      expect(find.byType(VerificationPage), findsOneWidget);
+    },
+  );
+
   testWidgets('a cleared provider reaches every screen', (tester) async {
     final h = await Harness.create();
     await h.signIn(tester);
