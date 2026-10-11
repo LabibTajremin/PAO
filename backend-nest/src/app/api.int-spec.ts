@@ -65,8 +65,8 @@ describe('API without business modules', () => {
   it('limits anonymous calls per IP with Retry-After', async () => {
     const path = '/v1/auth/admin/login';
     const body = { email: 'a@pao.bd', password: 'correct horse battery' };
-    expect((await api.do('POST', path, body, { unchecked: true })).status).toBe(501);
-    expect((await api.do('POST', path, body, { unchecked: true })).status).toBe(501);
+    expect((await api.do('POST', path, body)).code).toBe('INVALID_CREDENTIALS');
+    expect((await api.do('POST', path, body)).code).toBe('INVALID_CREDENTIALS');
     const limited = await api.do('POST', path, body);
     expect(limited).toMatchObject({ status: 429, code: 'RATE_LIMITED' });
     expect(limited.headers.get('retry-after')).toBe('60');
@@ -107,15 +107,14 @@ describe('API test hooks with module seams', () => {
   it('read the captures and run the expiry sweep', async () => {
     const expired: Date[] = [];
     const api = await startTestApi({
+      // Identity provides the real capture; this stand-in replaces it.
+      override: (b) =>
+        b.overrideProvider(SMS_CAPTURE).useValue({
+          normalizePhone: (raw: string) => (raw.length === 11 ? `+88${raw}` : undefined),
+          last: (phone: string) =>
+            phone === '+8801712345601' ? 'Your PAO code is 123456' : undefined,
+        }),
       providers: [
-        {
-          provide: SMS_CAPTURE,
-          useValue: {
-            normalizePhone: (raw: string) => (raw.length === 11 ? `+88${raw}` : undefined),
-            last: (phone: string) =>
-              phone === '+8801712345601' ? 'Your PAO code is 123456' : undefined,
-          },
-        },
         {
           provide: PUSH_CAPTURE,
           useValue: { sentTo: () => [{ title: 'New request', body: '', data: { type: 'x' } }] },
