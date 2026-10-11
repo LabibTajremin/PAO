@@ -30,7 +30,7 @@ func (h *Handler) ListProviderJobs(ctx context.Context, req api.ListProviderJobs
 
 // GetProviderJob implements GET /v1/provider/jobs/{bookingId}.
 func (h *Handler) GetProviderJob(ctx context.Context, req api.GetProviderJobRequestObject) (api.GetProviderJobResponseObject, error) {
-	b, err := job(h.mine(ctx, req.BookingId, true))
+	b, err := h.detail(ctx, req.BookingId, true)
 	if err != nil {
 		return nil, err
 	}

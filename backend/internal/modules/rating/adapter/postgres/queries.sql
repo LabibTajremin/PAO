@@ -26,6 +26,9 @@ RETURNING subject_id, review_count, star_sum, stars_1, stars_2, stars_3, stars_4
 SELECT subject_id, review_count, star_sum, stars_1, stars_2, stars_3, stars_4, stars_5
 FROM rating.aggregates WHERE subject_role = sqlc.arg(subject_role) AND subject_id = ANY(sqlc.arg(ids)::uuid[]);
 
+-- name: HasReviewed :one
+SELECT EXISTS (SELECT 1 FROM rating.reviews WHERE booking_id = $1 AND author_id = $2);
+
 -- name: Reviews :many
 SELECT id, booking_id, author_id, author_role, author_name, subject_id, stars, tags, comment, service_name_en, service_name_bn, created_at
 FROM rating.reviews

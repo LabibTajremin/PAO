@@ -39,6 +39,11 @@ func (s *Service) GetProviderRatings(ctx context.Context, ids []uuid.UUID) (map[
 	return out, err
 }
 
+// HasReviewed implements contract.RatingService.
+func (s *Service) HasReviewed(ctx context.Context, bookingID, authorID uuid.UUID) (bool, error) {
+	return s.svc.HasReviewed(ctx, bookingID, authorID)
+}
+
 // GetCustomerRating implements contract.RatingService.
 func (s *Service) GetCustomerRating(ctx context.Context, id uuid.UUID) (contract.Summary, error) {
 	a, err := s.svc.Summary(ctx, domain.Customer, id)

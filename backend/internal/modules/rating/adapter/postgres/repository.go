@@ -74,6 +74,11 @@ func (r *Repository) Submit(ctx context.Context, rv domain.Review, event func(do
 	return agg, err
 }
 
+// HasReviewed implements port.Repository.
+func (r *Repository) HasReviewed(ctx context.Context, bookingID, authorID uuid.UUID) (bool, error) {
+	return r.q.HasReviewed(ctx, sqlcdb.HasReviewedParams{BookingID: bookingID, AuthorID: authorID})
+}
+
 // Aggregates implements port.Repository.
 func (r *Repository) Aggregates(ctx context.Context, role string, ids []uuid.UUID) (map[uuid.UUID]domain.Aggregate, error) {
 	rows, err := r.q.Aggregates(ctx, sqlcdb.AggregatesParams{SubjectRole: role, Ids: ids})

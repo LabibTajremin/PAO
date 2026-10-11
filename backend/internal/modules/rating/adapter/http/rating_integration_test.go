@@ -59,3 +59,35 @@ func TestRating_BothSidesOnceAfterCompletion(t *testing.T) {
 		t.Fatal("unrated provider")
 	}
 }
+
+func TestRating_BookingViewsShowWhoReviewed(t *testing.T) {
+	a := testkit.NewAPI(t)
+	open := a.RequestedJob(t, "01712345621", "01812345621")
+	j := a.CompletedJob(t, "01712345622", "01812345622")
+	reviewed := func(path string, who testkit.Request) any {
+		t.Helper()
+		r := a.Do(t, "GET", path, nil, who)
+		if r.Status != 200 {
+			t.Fatalf("%s: %d %s", path, r.Status, r.Body)
+		}
+		return r.JSON(t)["reviewedByMe"]
+	}
+	customerView, providerView := "/v1/customer/bookings/"+j.ID, "/v1/provider/jobs/"+j.ID
+	if reviewed("/v1/customer/bookings/"+open.ID, open.Customer.Auth()) != false || reviewed(customerView, j.Customer.Auth()) != false {
+		t.Fatal("reviewed before any review")
+	}
+	a.Do(t, "POST", "/v1/customer/bookings/"+j.ID+"/review", map[string]any{"stars": 5}, j.Customer.Auth())
+	if reviewed(customerView, j.Customer.Auth()) != true || reviewed(providerView, j.Provider.Auth()) != false {
+		t.Fatal("customer review not reflected on both views")
+	}
+	a.Do(t, "POST", "/v1/provider/jobs/"+j.ID+"/review", map[string]any{"stars": 4}, j.Provider.Auth())
+	if reviewed(providerView, j.Provider.Auth()) != true {
+		t.Fatal("provider review not reflected")
+	}
+	if _, err := a.Infra.Pool.Exec(context.Background(), "ALTER TABLE rating.reviews RENAME TO reviews_gone"); err != nil {
+		t.Fatal(err)
+	}
+	if r := a.Do(t, "GET", customerView, nil, j.Customer.Auth()); r.Status != 500 {
+		t.Fatalf("view without the reviews table: %d", r.Status)
+	}
+}

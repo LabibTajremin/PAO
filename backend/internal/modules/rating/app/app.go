@@ -49,6 +49,11 @@ func (s *Service) Review(ctx context.Context, author uuid.UUID, role string, boo
 	return r, err
 }
 
+// HasReviewed reports whether the author already reviewed the booking.
+func (s *Service) HasReviewed(ctx context.Context, bookingID, authorID uuid.UUID) (bool, error) {
+	return s.repo.HasReviewed(ctx, bookingID, authorID)
+}
+
 // Summaries returns aggregates for subjects of a role; unrated subjects are zero.
 func (s *Service) Summaries(ctx context.Context, role string, ids []uuid.UUID) (map[uuid.UUID]domain.Aggregate, error) {
 	return s.repo.Aggregates(ctx, role, ids)

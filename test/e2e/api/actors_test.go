@@ -3,6 +3,7 @@ package api
 import (
 	"bytes"
 	"fmt"
+	"hash/fnv"
 	"net/http"
 	"net/url"
 	"os"
@@ -25,23 +26,47 @@ func lastCode(t *testing.T, phone string) string {
 	return codePattern.FindString(r.JSON(t)["message"].(string))
 }
 
+// deviceOf is the address phone's device connects from, stable per phone.
+func deviceOf(phone string) session {
+	h := fnv.New32a()
+	_, _ = h.Write([]byte(phone))
+	n := h.Sum32()
+	return session{IP: fmt.Sprintf("198.18.%d.%d", n>>8&0xff, n&0xff)}
+}
+
+// requestCode asks for a login code from phone's device.
+func requestCode(t *testing.T, phone string) response {
+	t.Helper()
+	return do(t, "POST", "/v1/auth/otp/request", map[string]string{"phone": phone, "purpose": "login"}, deviceOf(phone))
+}
+
 // signIn requests and enters a one-time code; app is "customer" or "partner".
 func signIn(t *testing.T, phone, app string) session {
 	t.Helper()
-	must(t, 202, "POST", "/v1/auth/otp/request", map[string]string{"phone": phone, "purpose": "login"}, session{})
+	if r := requestCode(t, phone); r.Status != http.StatusAccepted {
+		t.Fatalf("code for %s: %d %s", phone, r.Status, r.Body)
+	}
+	dev := deviceOf(phone)
 	tp := must(t, 200, "POST", "/v1/auth/otp/verify",
-		map[string]string{"phone": phone, "code": lastCode(t, phone), "app": app}, session{})
-	return session{ID: tp["account"].(map[string]any)["id"].(string), Token: tp["accessToken"].(string)}
+		map[string]string{"phone": phone, "code": lastCode(t, phone), "app": app}, dev)
+	return session{ID: tp["account"].(map[string]any)["id"].(string), Token: tp["accessToken"].(string), IP: dev.IP}
 }
 
 // customer signs a new customer up with a profile and a default address in Banani.
 func customer(t *testing.T, phone string) session {
 	t.Helper()
+	c, _ := customerAt(t, phone)
+	return c
+}
+
+// customerAt is customer that also returns the saved address's ID, for bookings.
+func customerAt(t *testing.T, phone string) (session, string) {
+	t.Helper()
 	c := signIn(t, phone, "customer")
 	must(t, 200, "PUT", "/v1/customer/profile", map[string]string{"name": "Nusrat Jahan", "language": "en"}, c)
-	must(t, 201, "POST", "/v1/customer/addresses", map[string]any{"label": "home", "line1": "House 12, Road 5, Banani",
+	a := must(t, 201, "POST", "/v1/customer/addresses", map[string]any{"label": "home", "line1": "House 12, Road 5, Banani",
 		"location": map[string]float64{"lat": 23.7940, "lng": 90.4070}, "isDefault": true}, c)
-	return c
+	return c, a["id"].(string)
 }
 
 // upload stores a small confirmed image through the signed URL, as an app would;

@@ -16,6 +16,15 @@ func (s *Service) Booking(ctx context.Context, party, id uuid.UUID) (domain.Book
 	return s.owned(ctx, id, party)
 }
 
+// ReviewedBy reports whether the party already reviewed the booking. Only completed
+// bookings can be reviewed, so other states answer without asking the rating module.
+func (s *Service) ReviewedBy(ctx context.Context, b domain.Booking, party uuid.UUID) (bool, error) {
+	if b.Status != domain.Completed {
+		return false, nil
+	}
+	return s.d.Reviews.HasReviewed(ctx, b.ID, party)
+}
+
 // StartCode returns the code the customer reads to the provider; it exists from
 // acceptance until the job starts.
 func (s *Service) StartCode(ctx context.Context, customer, id uuid.UUID) (string, error) {

@@ -17,6 +17,7 @@ import (
 	identity "github.com/LabibTajremin/PAO/backend/internal/modules/identity/contract"
 	media "github.com/LabibTajremin/PAO/backend/internal/modules/media/contract"
 	provider "github.com/LabibTajremin/PAO/backend/internal/modules/provider/contract"
+	rating "github.com/LabibTajremin/PAO/backend/internal/modules/rating/contract"
 	verification "github.com/LabibTajremin/PAO/backend/internal/modules/verification/contract"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/auth"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/clock"
@@ -37,6 +38,7 @@ type Deps struct {
 	Verification verification.VerificationService
 	Media        media.MediaService
 	Admin        admin.AdminService
+	Rating       rating.RatingService
 }
 
 // Module is the wired booking module.
@@ -51,7 +53,7 @@ func New(d Deps) *Module {
 	providers := peers.Providers{Svc: d.Provider, Verification: d.Verification}
 	svc := app.New(app.Deps{Repo: postgres.New(d.Pool, outbox.NewWriter("booking", d.IDs, d.Clock), d.Clock),
 		Catalog: peers.Catalog{Svc: d.Catalog}, Customers: peers.Customers{Svc: d.Customer, Identity: d.Identity},
-		Providers: providers, Finder: providers, Media: peers.Media{Svc: d.Media}, Settings: peers.Settings{Svc: d.Admin},
+		Providers: providers, Finder: providers, Media: peers.Media{Svc: d.Media}, Settings: peers.Settings{Svc: d.Admin}, Reviews: d.Rating,
 		Clock: d.Clock, IDs: d.IDs, Code: func() string { return auth.RandomDigits(4) }, Dhaka: clock.Dhaka})
 	return &Module{Service: svc, HTTP: http.NewHandler(svc), Contract: inproc.New(svc)}
 }

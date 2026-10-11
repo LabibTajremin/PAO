@@ -83,6 +83,19 @@ func TestSendCode_Refusals(t *testing.T) {
 	}
 }
 
+func TestSendCode_ServerSideSendsSkipTheIPWindow(t *testing.T) {
+	h := newHarness()
+	h.limiter.blockKey = "pao:t:rl:otp:ip:"
+	if _, err := h.svc.SendCode(ctx, SendCodeInput{Phone: phone, Purpose: PurposeEmergencyContact}); err != nil {
+		t.Fatalf("an exhausted shared window throttled an emergency-contact code: %v", err)
+	}
+	h.clock.Advance(domain.ResendAfter)
+	h.limiter.blockKey = "pao:t:rl:otp:phone:+8801712345678"
+	if _, err := h.svc.SendCode(ctx, SendCodeInput{Phone: phone, Purpose: PurposeEmergencyContact}); !errors.Is(err, domain.ErrRateLimited) {
+		t.Fatalf("per-phone window skipped: %v", err)
+	}
+}
+
 func TestSendCode_DependencyFailures(t *testing.T) {
 	for _, tc := range []struct {
 		name string
