@@ -26,3 +26,18 @@ jobs:
       - name: Stack logs
         if: failure()
         run: docker compose -p pao-e2e logs --no-color | tail -200
+
+  perf:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+        with:
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
+      - name: Install k6
+        run: |
+          curl -fsSL https://github.com/grafana/k6/releases/download/v1.3.0/k6-v1.3.0-linux-amd64.tar.gz | tar -xz
+          sudo install k6-v1.3.0-linux-amd64/k6 /usr/local/bin/k6
+      - name: Performance thresholds
+        run: ./pao perf
