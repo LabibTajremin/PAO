@@ -4,3 +4,6 @@ node_modules
 package-lock.json
 **/sqlc/**
 *.gen.ts
+*.gen.yaml
+migrations
+seed
