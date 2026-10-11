@@ -22,15 +22,17 @@ it first and continues from **Current task**.
 | P12 Customer app | done | — | ADR-0029 |
 | P13 Admin web | done | — | ADR-0030 |
 | P14 End-to-end | done | — | ADR-0031 |
-| P15 Hardening & handover | in_progress | — | |
+| P15 NestJS backend | in_progress | — | ADR-0032 |
+| P16 Hardening & handover | todo | — | |
 
 Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (merged).
 
 ## Current task
 
-P15 / task 1 — read `docs/build/phases/P15-*.md`; the backlog from ADR-0028 to 0031
-(Android foreground service for the heartbeat, API gaps found by the admin console,
-Bangla receipts, a native map, an Android emulator journey) is input to its plan.
+P15 / task 1 — NestJS foundation in `backend-nest/` (ADR-0032). The Go backend stays the
+reference until task 7. P16's backlog (ADR-0028 to 0031: Android foreground service
+for the heartbeat, admin-console API gaps, Bangla receipts, a native map, an Android
+emulator journey) waits for P16.
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed

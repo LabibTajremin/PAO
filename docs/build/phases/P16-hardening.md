@@ -1,4 +1,4 @@
-# P15 — Hardening & handover
+# P16 — Hardening & handover
 
 **Goal:** the product is safe to launch and easy for the human team to take over.
 

@@ -53,6 +53,38 @@ When a file approaches its limit, split by responsibility (e.g. `booking_accept.
 - Formatting: `gofmt`, `goimports`. Linting: `golangci-lint` with the committed
   `.golangci.yml`.
 
+## 4a. TypeScript / NestJS specifics (ADR-0032)
+
+The backend is being rebuilt in `backend-nest/` (P15). Until the Go code is deleted, §4
+applies to `backend/` and this section to `backend-nest/`.
+
+- Node.js 22, TypeScript `strict` (+ `noUncheckedIndexedAccess`), NestJS 11 on Express.
+  Approved libraries only (ADR-0032); anything else needs an ADR.
+- Files `kebab-case.ts`, one use case per file in `app/` (`accept-booking.ts`), classes
+  `PascalCase`, functions and variables `camelCase`, constants and injection tokens
+  `UPPER_SNAKE_CASE`. Unit specs `*.spec.ts` and integration specs `*.int-spec.ts` sit
+  beside the code they test.
+- Limits as in §1 (Go column): 250-line files (400 for specs), 40-line functions,
+  complexity 10, depth 3, 4 parameters (else an options object).
+- Exported classes, functions, interfaces, types and enums carry a JSDoc comment; the
+  same comment rules as §3 apply.
+- Dependencies come through constructors (Nest DI). Cross-module dependencies are
+  injection tokens from the other module's `contract/`; ports are interfaces in `port/`
+  with a token beside them. No module-level mutable state.
+- Errors: domain and use cases throw `DomainError` with a module-scoped `reason`
+  (`booking.already_accepted`); only `adapter/http` maps reasons to API errors. Wrap
+  infrastructure failures with `new Error('accept booking ' + id, { cause })`.
+- `async`/`await` only; no floating promises. Time from the injected `Clock`, ids from
+  the injected `IdGenerator`.
+- Money is integer paisa in a `number` (always `Number.isSafeInteger`); Postgres `bigint`
+  arrives as a string from sqlc and is converted in `adapter/postgres`.
+- Ids are UUID strings; times are `Date` inside the app and ISO-8601 strings in JSON and
+  event payloads.
+- SQL only in `adapter/postgres`, through sqlc-generated functions from the module's
+  `queries.sql`; parameters only, never string-built SQL.
+- Formatting: Prettier. Linting: `npm run lint` (ESLint `strictTypeChecked`, Prettier
+  check, dependency-cruiser module rules).
+
 ## 5. Dart / Flutter specifics
 
 - Dart 3, Flutter stable. Null-safety, `final` by default, no `dynamic`.
