@@ -21,7 +21,7 @@ class AppServices {
     required this.push,
     DateTime Function()? clock,
   }) : now = clock ?? DateTime.now,
-       gate = ProviderGate(api);
+       gate = ProviderGate(api, permissions);
 
   /// The signed-in session.
   final SessionManager sessions;

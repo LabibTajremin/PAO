@@ -60,6 +60,14 @@ void main() {
     );
   });
 
+  test('a fresh sign-in waits on sign-in until the screens load', () async {
+    permissions.clear();
+    await sessions.signIn(const Session(accessToken: 'a'));
+    expect(guard.redirect('/auth'), isNull);
+    await permissions.load();
+    expect(guard.redirect('/auth'), '/home');
+  });
+
   test('route patterns', () {
     expect(routeMatches('/a/:id', '/a/1'), isTrue);
     expect(routeMatches('/a/:id', '/b/1'), isFalse);

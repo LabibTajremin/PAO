@@ -51,6 +51,7 @@ class _StartCodeCardState extends State<StartCodeCard> {
               child: ExcludeSemantics(
                 child: Text(
                   code,
+                  key: const Key('C14.startCode'),
                   style: text.displaySmall!.copyWith(letterSpacing: 12),
                 ),
               ),

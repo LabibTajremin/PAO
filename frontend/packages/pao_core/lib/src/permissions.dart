@@ -11,6 +11,10 @@ class PermissionService extends ChangeNotifier {
   Set<String> _permissions = const {};
   Set<String> _screens = const {};
   Set<String> _roles = const {};
+  bool _loaded = false;
+
+  /// Whether the lists have been loaded for the signed-in account.
+  bool get loaded => _loaded;
 
   /// Roles of the account, e.g. `customer` or `verifier`.
   Set<String> get roles => _roles;
@@ -24,12 +28,14 @@ class PermissionService extends ChangeNotifier {
     _roles = read('roles');
     _permissions = read('permissions');
     _screens = read('screens');
+    _loaded = true;
     notifyListeners();
   }
 
   /// Forgets everything, e.g. on sign-out.
   void clear() {
     _roles = _permissions = _screens = const {};
+    _loaded = false;
     notifyListeners();
   }
 

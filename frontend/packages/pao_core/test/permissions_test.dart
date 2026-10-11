@@ -22,9 +22,18 @@ void main() {
       [p.can('booking:create'), p.canSee('C07'), p.canSee('A01')],
       [true, true, false],
     );
-    expect(p.roles, {'customer'});
+    expect(
+      [p.roles, p.loaded],
+      [
+        {'customer'},
+        true,
+      ],
+    );
     p.clear();
-    expect([p.can('booking:create'), p.roles.isEmpty], [false, true]);
+    expect(
+      [p.can('booking:create'), p.roles.isEmpty, p.loaded],
+      [false, true, false],
+    );
     expect(notified, 2);
   });
 }
