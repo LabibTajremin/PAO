@@ -8,6 +8,7 @@ import (
 
 	"github.com/LabibTajremin/PAO/backend/internal/modules/provider/contract"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/provider/domain"
+	"github.com/LabibTajremin/PAO/backend/internal/platform/clock"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/eventbus"
 )
 
@@ -39,7 +40,8 @@ func (s *Service) update(ctx context.Context, id uuid.UUID, step string, change 
 
 // SavePersonal saves the M05 step.
 func (s *Service) SavePersonal(ctx context.Context, id uuid.UUID, in domain.Personal) (Progress, error) {
-	if err := in.Validate(s.d.Clock.Now()); err != nil {
+	// Birthdays are Dhaka calendar dates (04-decisions E8), so today is one too.
+	if err := in.Validate(clock.DhakaDate(s.d.Clock.Now())); err != nil {
 		return Progress{}, err
 	}
 	return s.update(ctx, id, "personal", func(p *domain.Provider) error {

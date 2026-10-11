@@ -8,6 +8,7 @@ import (
 
 	provider "github.com/LabibTajremin/PAO/backend/internal/modules/provider/contract"
 	"github.com/LabibTajremin/PAO/backend/internal/modules/verification/domain"
+	"github.com/LabibTajremin/PAO/backend/internal/platform/clock"
 	"github.com/LabibTajremin/PAO/backend/internal/platform/eventbus"
 )
 
@@ -77,7 +78,9 @@ func (s *Service) SavePoliceClearance(ctx context.Context, id, media uuid.UUID, 
 	if err != nil {
 		return provider.EnrolmentStatus{}, err
 	}
-	expires, err := domain.ClearanceExpiry(issued, s.d.Clock.Now(), rules.PoliceClearanceValidity)
+	// The issue date is a Dhaka calendar date, so "today" must be one too; UTC would
+	// reject a certificate issued today for the six hours after 18:00 UTC.
+	expires, err := domain.ClearanceExpiry(issued, clock.DhakaDate(s.d.Clock.Now()), rules.PoliceClearanceValidity)
 	if err != nil {
 		return provider.EnrolmentStatus{}, err
 	}
