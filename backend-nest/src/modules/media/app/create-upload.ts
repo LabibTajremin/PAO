@@ -6,7 +6,6 @@ import { objectKey, type Uploader, uploadRefusal } from '../domain/media';
 import {
   FILE_STORE,
   type FileStore,
-  MEDIA_BUCKET,
   MEDIA_REPOSITORY,
   type MediaRepository,
 } from '../port/media-ports';
@@ -35,7 +34,6 @@ export class CreateUpload {
   constructor(
     @Inject(MEDIA_REPOSITORY) private readonly repo: MediaRepository,
     @Inject(FILE_STORE) private readonly files: FileStore,
-    @Inject(MEDIA_BUCKET) private readonly bucket: string,
     @Inject(CLOCK) private readonly clock: Clock,
     @Inject(ID_GENERATOR) private readonly ids: IdGenerator,
   ) {}
@@ -51,7 +49,7 @@ export class CreateUpload {
       ...file,
       id,
       ownerId,
-      bucket: this.bucket,
+      bucket: this.files.uploadBucket,
       key: objectKey(file.purpose, ownerId, id),
       confirmed: false,
       attached: false,

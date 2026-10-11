@@ -17,8 +17,9 @@ export interface MediaRepository {
 /** Injection token for the {@link MediaRepository}. */
 export const MEDIA_REPOSITORY = Symbol('MediaRepository');
 
-/** The object store (platform `ObjectStore`). */
+/** The object store (platform `ObjectStore`) with the private bucket uploads go to. */
 export interface FileStore {
+  readonly uploadBucket: string;
   presignPut(req: {
     bucket: string;
     key: string;
@@ -34,6 +35,3 @@ export interface FileStore {
 
 /** Injection token for the {@link FileStore}. */
 export const FILE_STORE = Symbol('MediaFileStore');
-
-/** Injection token for the private bucket uploads go to. */
-export const MEDIA_BUCKET = Symbol('MediaBucket');
