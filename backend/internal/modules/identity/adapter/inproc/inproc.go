@@ -70,7 +70,9 @@ func (s *Service) SetAccountStatus(ctx context.Context, in contract.SetAccountSt
 
 // SendPhoneCode implements contract.IdentityService.
 func (s *Service) SendPhoneCode(ctx context.Context, phone string, purpose contract.CodePurpose) error {
-	_, err := s.svc.SendCode(ctx, app.SendCodeInput{Phone: phone, Purpose: string(purpose), ClientIP: "internal"})
+	// No client IP: the provider's request already passed the per-user limits, and the
+	// per-phone windows still apply to the contact's number.
+	_, err := s.svc.SendCode(ctx, app.SendCodeInput{Phone: phone, Purpose: string(purpose)})
 	return translate(err)
 }
 

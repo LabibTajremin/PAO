@@ -26,6 +26,7 @@ type Deps struct {
 	Finder    port.Finder
 	Media     port.Media
 	Settings  port.Settings
+	Reviews   port.Reviews
 	Clock     clock.Clock
 	IDs       idgen.Generator
 	// Code returns a fresh 4-digit start code from a CSPRNG.

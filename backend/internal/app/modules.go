@@ -133,7 +133,7 @@ func BuildModules(i *Infra) (*Modules, error) {
 		Provider: m.Provider.Contract, Media: m.Media.Contract, Catalog: m.Catalog.Contract, Admin: m.Admin.Contract})
 	m.Booking = booking.New(booking.Deps{Pool: i.Pool, Clock: i.Clock, IDs: i.IDs, Catalog: m.Catalog.Contract, Customer: m.Customer.Contract,
 		Identity: m.Identity.Contract, Provider: m.Provider.Contract, Verification: m.Verification.Contract, Media: m.Media.Contract,
-		Admin: m.Admin.Contract})
+		Admin: m.Admin.Contract, Rating: m.Rating.Contract})
 	pusher, err := pushAdapter(i, m)
 	if err != nil {
 		return nil, err

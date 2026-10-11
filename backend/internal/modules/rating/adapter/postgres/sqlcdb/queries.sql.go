@@ -137,6 +137,22 @@ func (q *Queries) Aggregates(ctx context.Context, arg AggregatesParams) ([]Aggre
 	return items, nil
 }
 
+const hasReviewed = `-- name: HasReviewed :one
+SELECT EXISTS (SELECT 1 FROM rating.reviews WHERE booking_id = $1 AND author_id = $2)
+`
+
+type HasReviewedParams struct {
+	BookingID uuid.UUID
+	AuthorID  uuid.UUID
+}
+
+func (q *Queries) HasReviewed(ctx context.Context, arg HasReviewedParams) (bool, error) {
+	row := q.db.QueryRow(ctx, hasReviewed, arg.BookingID, arg.AuthorID)
+	var exists bool
+	err := row.Scan(&exists)
+	return exists, err
+}
+
 const insertReview = `-- name: InsertReview :exec
 INSERT INTO rating.reviews (id, booking_id, author_id, author_role, author_name, subject_id, stars, tags, comment,
     service_name_en, service_name_bn, created_at)

@@ -2,6 +2,8 @@ package api
 
 import (
 	"fmt"
+	"net/http"
+	"net/url"
 	"testing"
 	"time"
 )
@@ -12,21 +14,45 @@ var banani = map[string]float64{"lat": 23.7937, "lng": 90.4066}
 // items are the Level 1 verification items a verifier approves.
 var items = []string{"nid", "selfie", "police_clearance", "address", "emergency_contact", "service_area", "code_of_conduct"}
 
-// service finds a seeded service by English name and its first sub-service.
-func service(t *testing.T, s session, name string) (serviceID, subServiceID string) {
+// offer is a seeded service with its sub-services in catalog order.
+type offer struct {
+	ID   string
+	Subs []sub
+}
+
+// sub is a sub-service with its current price in paisa.
+type sub struct {
+	ID    string
+	Price int64
+}
+
+// catalogService finds a seeded service by English name in the customer catalog.
+func catalogService(t *testing.T, s session, name string) offer {
 	t.Helper()
 	tree := must(t, 200, "GET", "/v1/customer/catalog", nil, s)
 	for _, c := range tree["categories"].([]any) {
 		for _, sv := range c.(map[string]any)["services"].([]any) {
 			svc := sv.(map[string]any)
-			if svc["name"].(map[string]any)["en"] == name {
-				sub := svc["subServices"].([]any)[0].(map[string]any)
-				return svc["id"].(string), sub["id"].(string)
+			if svc["name"].(map[string]any)["en"] != name {
+				continue
 			}
+			o := offer{ID: svc["id"].(string)}
+			for _, it := range svc["subServices"].([]any) {
+				ss := it.(map[string]any)
+				o.Subs = append(o.Subs, sub{ID: ss["id"].(string), Price: int64(ss["price"].(float64))})
+			}
+			return o
 		}
 	}
 	t.Fatalf("no service %q", name)
-	return "", ""
+	return offer{}
+}
+
+// service finds a seeded service by English name and its first sub-service.
+func service(t *testing.T, s session, name string) (serviceID, subServiceID string) {
+	t.Helper()
+	o := catalogService(t, s, name)
+	return o.ID, o.Subs[0].ID
 }
 
 // enrolledProvider signs a partner-app user in, completes every enrolment step with
@@ -78,7 +104,16 @@ func approve(t *testing.T, p session, which ...string) {
 		return true
 	})
 	for _, item := range which {
-		must(t, 200, "POST", fmt.Sprintf("/v1/admin/verifications/%s/items/%s/approve", p.ID, item), nil, v)
+		path := fmt.Sprintf("/v1/admin/verifications/%s/items/%s/approve", p.ID, item)
+		// One verifier approves every provider of the suite; back-to-back runs can pass
+		// the per-user limit of 120 calls a minute, so wait for the window to slide.
+		eventually(t, 70*time.Second, "approval within the rate limit", func() bool {
+			r := do(t, "POST", path, nil, v)
+			if r.Status != http.StatusOK && r.Status != http.StatusTooManyRequests {
+				t.Fatalf("POST %s: %d %s", path, r.Status, r.Body)
+			}
+			return r.Status == http.StatusOK
+		})
 	}
 }
 
@@ -91,15 +126,23 @@ func goOnline(t *testing.T, p session) {
 	})
 }
 
-// nearby reports whether customer c finds provider p for the sub-service.
+// nearby reports whether customer c finds provider p for the sub-service, reading
+// every page: providers of earlier runs may still be online at the same spot.
 func nearby(t *testing.T, c session, serviceID, subServiceID, providerID string) bool {
 	t.Helper()
 	q := fmt.Sprintf("/v1/customer/providers/nearby?serviceId=%s&subServiceId=%s&quantity=1&lat=%v&lng=%v",
 		serviceID, subServiceID, banani["lat"], banani["lng"])
-	for _, it := range must(t, 200, "GET", q, nil, c)["items"].([]any) {
-		if it.(map[string]any)["id"] == providerID {
-			return true
+	for page := q; ; {
+		res := must(t, 200, "GET", page, nil, c)
+		for _, it := range res["items"].([]any) {
+			if it.(map[string]any)["id"] == providerID {
+				return true
+			}
 		}
+		next, _ := res["nextCursor"].(string)
+		if next == "" {
+			return false
+		}
+		page = q + "&cursor=" + url.QueryEscape(next)
 	}
-	return false
 }

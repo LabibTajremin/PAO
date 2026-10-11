@@ -14,6 +14,13 @@ End-to-end journeys against the full Docker stack (P14, `docs/build/03-testing.m
 - `api/` is a Go module of black-box journeys: plain HTTP, no backend packages. Admins
   sign in with the seeded password and a TOTP code; their enrolment secrets are kept in
   `.admins.env` for later runs against the same stack.
+  Each actor sends `X-Forwarded-For` with its own address (the API trusts it from the
+  private Docker network), so per-IP limits such as 10 login codes an hour see separate
+  devices rather than one test runner.
+- Journeys: onboarding, booking (happy path with extras, ratings, receipt, earnings and
+  the request push), reject / timeout / cancel exits, document expiry and renewal, bans,
+  RBAC per admin role, request → push latency (PRD §11) and a start-up smoke test of
+  the `cmd/` composition roots.
 - `mobile/` drives the Flutter apps' journeys against the same stack.
 
 Run everything with `./pao test e2e`, or `test/e2e/stack.sh` once and then

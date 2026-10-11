@@ -15,4 +15,7 @@ type RatingService interface {
 	GetProviderRatings(ctx context.Context, providerIDs []uuid.UUID) (map[uuid.UUID]Summary, error)
 	// GetCustomerRating returns the aggregate providers gave a customer (M16).
 	GetCustomerRating(ctx context.Context, customerID uuid.UUID) (Summary, error)
+	// HasReviewed reports whether the author already reviewed the booking, so booking
+	// views can stop offering a second review.
+	HasReviewed(ctx context.Context, bookingID, authorID uuid.UUID) (bool, error)
 }

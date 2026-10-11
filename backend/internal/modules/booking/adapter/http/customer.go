@@ -100,11 +100,27 @@ func (h *Handler) mine(ctx context.Context, id uuid.UUID, asProvider bool) (doma
 
 // GetCustomerBooking implements GET /v1/customer/bookings/{bookingId}.
 func (h *Handler) GetCustomerBooking(ctx context.Context, req api.GetCustomerBookingRequestObject) (api.GetCustomerBookingResponseObject, error) {
-	b, err := h.mine(ctx, req.BookingId, false)
+	b, err := h.detail(ctx, req.BookingId, false)
 	if err != nil {
 		return nil, err
 	}
-	return api.GetCustomerBooking200JSONResponse(booking(b, false)), nil
+	return api.GetCustomerBooking200JSONResponse(b), nil
+}
+
+// detail is a booking for one side with whether the caller already reviewed it, so the
+// apps stop offering the review (C-11, P-09) once it is given.
+func (h *Handler) detail(ctx context.Context, id uuid.UUID, asProvider bool) (api.Booking, error) {
+	b, err := h.mine(ctx, id, asProvider)
+	if err != nil {
+		return api.Booking{}, err
+	}
+	reviewed, err := h.svc.ReviewedBy(ctx, b, principal(ctx).AccountID)
+	if err != nil {
+		return api.Booking{}, errorMap.Map(err)
+	}
+	out := booking(b, asProvider)
+	out.ReviewedByMe = &reviewed
+	return out, nil
 }
 
 // GetStartCode implements GET /v1/customer/bookings/{bookingId}/start-code.

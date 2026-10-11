@@ -7,6 +7,7 @@ Two-way reviews after completed bookings and incrementally updated aggregates.
 - `GetProviderRating`
 - `GetProviderRatings`
 - `GetCustomerRating`
+- `HasReviewed` (booking views show `reviewedByMe`)
 
 ## Events published
 

@@ -171,3 +171,8 @@ type Rules struct {
 type Settings interface {
 	Rules(ctx context.Context) (Rules, error)
 }
+
+// Reviews tells whether a party already reviewed a completed booking.
+type Reviews interface {
+	HasReviewed(ctx context.Context, bookingID, authorID uuid.UUID) (bool, error)
+}

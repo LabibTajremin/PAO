@@ -27,4 +27,5 @@ type Repository interface {
 	Submit(ctx context.Context, r domain.Review, event func(domain.Aggregate) eventbus.Event) (domain.Aggregate, error)
 	Aggregates(ctx context.Context, role string, ids []uuid.UUID) (map[uuid.UUID]domain.Aggregate, error)
 	Reviews(ctx context.Context, subject uuid.UUID, authorRole string, p Page) ([]domain.Review, error)
+	HasReviewed(ctx context.Context, bookingID, authorID uuid.UUID) (bool, error)
 }

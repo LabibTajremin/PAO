@@ -25,7 +25,9 @@ func (e *RateLimitError) Error() string { return "rate limited for " + e.RetryAf
 // Unwrap lets callers match domain.ErrRateLimited.
 func (e *RateLimitError) Unwrap() error { return domain.ErrRateLimited }
 
-// SendCodeInput asks for a one-time code by SMS.
+// SendCodeInput asks for a one-time code by SMS. ClientIP is empty when the server
+// sends a code on behalf of a signed-in user (an emergency contact's code): those
+// share no address, so a per-IP window would throttle every provider at once.
 type SendCodeInput struct {
 	Phone    string
 	Purpose  string
@@ -70,16 +72,21 @@ func (s *Service) refuseBlocked(ctx context.Context, phone domain.Phone) error {
 	return nil
 }
 
+// sendWindow is one rate limit on sending codes.
+type sendWindow struct {
+	key    string
+	limit  int
+	window time.Duration
+}
+
 // throttleSends applies the resend timer and the per-phone and per-IP windows.
 func (s *Service) throttleSends(ctx context.Context, phone domain.Phone, ip string) error {
-	limits := []struct {
-		key    string
-		limit  int
-		window time.Duration
-	}{
+	limits := []sendWindow{
 		{s.d.Keys.Key("rl", "otp", "resend", string(phone)), 1, domain.ResendAfter},
 		{s.d.Keys.Key("rl", "otp", "phone", string(phone)), domain.SendsPerPhone, domain.SendWindowPhone},
-		{s.d.Keys.Key("rl", "otp", "ip", ip), domain.SendsPerIP, domain.SendWindowIP},
+	}
+	if ip != "" {
+		limits = append(limits, sendWindow{s.d.Keys.Key("rl", "otp", "ip", ip), domain.SendsPerIP, domain.SendWindowIP})
 	}
 	for _, l := range limits {
 		d, err := s.d.Limiter.Allow(ctx, l.key, l.limit, l.window)
