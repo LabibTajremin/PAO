@@ -2,7 +2,7 @@
 // a `faults` map that makes a named method fail.
 import { generateKeyPairSync } from 'node:crypto';
 import { TokenSigner } from '../../src/platform/auth/access-token';
-import { FakeClock } from '../../src/platform/clock/fake-clock';
+import { type FakeClock } from '../../src/platform/clock/fake-clock';
 import { DomainError } from '../../src/platform/errors/domain-error';
 import { UuidV7Generator } from '../../src/platform/ids/id-generator';
 import { type Grants } from '../../src/platform/rbac/rbac';
@@ -12,7 +12,10 @@ import { type Admin, type Challenge } from '../../src/modules/identity/domain/ad
 import { type StoredCode } from '../../src/modules/identity/domain/code';
 import { IdentityReasons } from '../../src/modules/identity/domain/reasons';
 import { type Family } from '../../src/modules/identity/domain/session';
-import { type IdentityRepository, type IdentityWriter } from '../../src/modules/identity/port/identity-repository';
+import {
+  type IdentityRepository,
+  type IdentityWriter,
+} from '../../src/modules/identity/port/identity-repository';
 
 export const boom = new Error('boom');
 

@@ -18,7 +18,7 @@ describe('sessions', () => {
     expect(next.refreshToken).not.toBe(s.refreshToken);
     expect(next.accessToken).not.toBe('');
     expect(await reasonOf(h.sessions.refresh(s.refreshToken))).toBe(IdentityReasons.RefreshReused);
-    expect(h.sessions.families.size).toBe(0);
+    expect(h.families.families.size).toBe(0);
     expect(h.deny.denied).toHaveLength(1);
     expect(await reasonOf(h.sessions.refresh(next.refreshToken))).toBe(
       IdentityReasons.RefreshInvalid,
@@ -36,7 +36,7 @@ describe('sessions', () => {
     expect(await reasonOf(h.sessions.refresh(s.refreshToken))).toBe(
       IdentityReasons.AccountSuspended,
     );
-    expect(h.sessions.families.size).toBe(0);
+    expect(h.families.families.size).toBe(0);
   });
 
   it('logs out one device or all of them', async () => {
@@ -46,18 +46,18 @@ describe('sessions', () => {
     h.nextWindow();
     await h.login('customer');
     await h.sessions.logout(caller, false);
-    expect(h.sessions.families.size).toBe(1);
+    expect(h.families.families.size).toBe(1);
     await h.sessions.logout({ ...caller, sessionId: randomUUID() }, false);
-    const other = [...h.sessions.families.values()][0]!;
+    const other = [...h.families.families.values()][0]!;
     await h.sessions.logout({ ...caller, sessionId: other.id }, true);
-    expect(h.sessions.families.size).toBe(0);
+    expect(h.families.families.size).toBe(0);
   });
 
   it.each([
     ['deny', 'deny', 'deny'],
-    ['get', 'sessions', 'get'],
-    ['list', 'sessions', 'listForAccount'],
-    ['delete', 'sessions', 'delete'],
+    ['get', 'families', 'get'],
+    ['list', 'families', 'listForAccount'],
+    ['delete', 'families', 'delete'],
   ] as const)('reports a failing %s on logout', async (_name, fake, method) => {
     const h = harness();
     const caller = h.callerOf(await h.login('customer'));

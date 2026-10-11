@@ -39,7 +39,7 @@ export function harness() {
     repo,
     codes: new FakeCodes(),
     throttle: new FakeThrottle(),
-    sessions: new FakeSessions(),
+    families: new FakeSessions(),
     challenges: new FakeChallenges(),
     sms: new FakeSms(),
     deny: new FakeDenylist(),
@@ -49,7 +49,7 @@ export function harness() {
   };
   const phoneCodes = new PhoneCodes(repo, f.codes, f.throttle, f.sms);
   const tokens = new AccessTokens(f.signer, f.rbac, f.deny, clock);
-  const sessions = new Sessions(repo, f.sessions, tokens, ids);
+  const sessions = new Sessions(repo, f.families, tokens, ids);
   const app = {
     phoneCodes,
     sessions,
@@ -62,11 +62,11 @@ export function harness() {
     status: new AccountStatusChanger(repo, sessions),
     roles: new RoleEditor(repo, f.rbac),
   };
-  return { ...f, ...app, ...helpers(f, app) };
+  return { ...f, ...app, ...sessionShortcuts(f, app) };
 }
 
-function helpers(
-  f: { sms: FakeSms; clock: FakeClock; sessions: FakeSessions },
+function sessionShortcuts(
+  f: { sms: FakeSms; clock: FakeClock; families: FakeSessions },
   app: { phoneCodes: PhoneCodes; signIn: PhoneSignIn; adminUsers: AdminUsers },
 ) {
   const sentCode = (phone = E164): string => {
@@ -82,9 +82,11 @@ function helpers(
       await app.phoneCodes.send({ phone: PHONE, purpose: 'login', clientIp: '1.2.3.4' });
       return app.signIn.verify({ phone: PHONE, code: sentCode(), app: appName });
     },
-    nextWindow: () => f.clock.advance(RESEND_AFTER_MS),
+    nextWindow: () => {
+      f.clock.advance(RESEND_AFTER_MS);
+    },
     callerOf(s: Session): Caller {
-      const family = [...f.sessions.families.values()].find((x) => x.accountId === s.account.id);
+      const family = [...f.families.families.values()].find((x) => x.accountId === s.account.id);
       if (!family) {
         throw new Error('no session');
       }

@@ -34,7 +34,10 @@ describe('phone sign-in', () => {
 
   it('locks a code out after five wrong guesses', async () => {
     const h = harness();
-    await rejectsWith(h.signIn.verify({ phone: 'x', code: '', app: '' }), IdentityReasons.InvalidPhone);
+    await rejectsWith(
+      h.signIn.verify({ phone: 'x', code: '', app: '' }),
+      IdentityReasons.InvalidPhone,
+    );
     await rejectsWith(
       h.signIn.verify({ phone: PHONE, code: '000000', app: 'customer' }),
       IdentityReasons.CodeExpired,
@@ -54,13 +57,16 @@ describe('phone sign-in', () => {
     ['increment', (h: ReturnType<typeof harness>) => h.codes.faults.set('incrementAttempts', boom)],
     [
       'malformed hash',
-      (h: ReturnType<typeof harness>) => h.codes.codes.set(`login:${E164}`, { hash: 'bad', attempts: 0 }),
+      (h: ReturnType<typeof harness>) =>
+        h.codes.codes.set(`login:${E164}`, { hash: 'bad', attempts: 0 }),
     ],
   ])('fails when the code store fails: %s', async (_name, set) => {
     const h = harness();
     await h.phoneCodes.send({ phone: PHONE, purpose: 'login' });
     set(h);
-    await expect(h.signIn.verify({ phone: PHONE, code: '000000x', app: 'customer' })).rejects.toThrow();
+    await expect(
+      h.signIn.verify({ phone: PHONE, code: '000000x', app: 'customer' }),
+    ).rejects.toThrow();
   });
 
   it.each([
@@ -70,7 +76,7 @@ describe('phone sign-in', () => {
     ['publish', 'repo', 'publish'],
     ['version', 'rbac', 'version'],
     ['sign', 'signer', 'sign'],
-    ['session', 'sessions', 'save'],
+    ['session', 'families', 'save'],
     ['delete code', 'codes', 'delete'],
   ] as const)('reports a failing %s', async (_name, fake, method) => {
     const h = harness();
@@ -108,10 +114,18 @@ describe('phone sign-in', () => {
 describe('sending codes', () => {
   it('refuses bad and blocked phones but sends other codes to blocked ones', async () => {
     const h = harness();
-    await rejectsWith(h.phoneCodes.send({ phone: '123', purpose: 'login' }), IdentityReasons.InvalidPhone);
+    await rejectsWith(
+      h.phoneCodes.send({ phone: '123', purpose: 'login' }),
+      IdentityReasons.InvalidPhone,
+    );
     h.repo.blocked.add(E164);
-    await rejectsWith(h.phoneCodes.send({ phone: PHONE, purpose: 'login' }), IdentityReasons.AccountBanned);
-    await expect(h.phoneCodes.send({ phone: PHONE, purpose: 'delete_account' })).resolves.toBe(E164);
+    await rejectsWith(
+      h.phoneCodes.send({ phone: PHONE, purpose: 'login' }),
+      IdentityReasons.AccountBanned,
+    );
+    await expect(h.phoneCodes.send({ phone: PHONE, purpose: 'delete_account' })).resolves.toBe(
+      E164,
+    );
     h.repo.faults.set('isPhoneBlocked', boom);
     await expect(h.phoneCodes.send({ phone: PHONE, purpose: 'login' })).rejects.toBe(boom);
   });
@@ -139,7 +153,10 @@ describe('sending codes', () => {
 
   it('checks codes typed for other purposes', async () => {
     const h = harness();
-    await rejectsWith(h.phoneCodes.checkTyped('bad', 'emergency_contact', '1'), IdentityReasons.InvalidPhone);
+    await rejectsWith(
+      h.phoneCodes.checkTyped('bad', 'emergency_contact', '1'),
+      IdentityReasons.InvalidPhone,
+    );
     await h.phoneCodes.send({ phone: PHONE, purpose: 'emergency_contact' });
     await expect(
       h.phoneCodes.checkTyped(PHONE, 'emergency_contact', h.sentCode()),
