@@ -50,3 +50,10 @@ func (f *Fake) Set(t time.Time) {
 
 // Dhaka is Asia/Dhaka (UTC+6, no DST), used for calendar boundaries (04-decisions E8).
 var Dhaka = time.FixedZone("Asia/Dhaka", 6*60*60)
+
+// DhakaDate returns the calendar date in Dhaka at t, as midnight UTC, so it compares
+// directly with dates parsed from "YYYY-MM-DD" (04-decisions E8).
+func DhakaDate(t time.Time) time.Time {
+	local := t.In(Dhaka)
+	return time.Date(local.Year(), local.Month(), local.Day(), 0, 0, 0, 0, time.UTC)
+}

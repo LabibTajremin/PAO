@@ -183,3 +183,12 @@ func TestFlow_StoreFailures(t *testing.T) {
 		t.Fatalf("queue: %+v %v", rows, err)
 	}
 }
+
+func TestSavePoliceClearance_AcceptsTodayInDhakaAfterSixPMUTC(t *testing.T) {
+	f := newFixture()
+	f.clock.Set(time.Date(2026, 10, 11, 20, 0, 0, 0, time.UTC))
+	issued := time.Date(2026, 10, 12, 0, 0, 0, 0, time.UTC)
+	if _, err := f.svc.SavePoliceClearance(context.Background(), f.id, uuid.New(), issued); err != nil {
+		t.Fatal(err)
+	}
+}

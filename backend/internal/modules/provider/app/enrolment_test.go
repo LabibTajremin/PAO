@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
 
@@ -156,6 +157,16 @@ func TestEnrolment_StoreFailures(t *testing.T) {
 	}
 	f.repo.err, f.presence.err = nil, errBoom
 	if _, err := f.svc.SaveServices(ctx, id, []uuid.UUID{f.electric}, 1); !errors.Is(err, errBoom) {
+		t.Fatal(err)
+	}
+}
+
+func TestSavePersonal_AcceptsEighteenthBirthdayInDhakaAfterSixPMUTC(t *testing.T) {
+	f := newFixture()
+	f.clock.Set(time.Date(2026, 10, 11, 20, 0, 0, 0, time.UTC))
+	adult := personal(f)
+	adult.DateOfBirth = time.Date(2008, 10, 12, 0, 0, 0, 0, time.UTC)
+	if _, err := f.svc.SavePersonal(context.Background(), uuid.New(), adult); err != nil {
 		t.Fatal(err)
 	}
 }
