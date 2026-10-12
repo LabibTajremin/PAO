@@ -7,6 +7,11 @@ the service interface and its injection token, DTOs, `DomainError` reasons and e
 types with their outbox names (`contract/index.ts`). Queries live in
 `adapter/postgres/queries.sql`; `npm run gen` regenerates `adapter/postgres/sqlc/`.
 
+`AuditLog` (`app/audit-log.ts`) appends and lists entries; `app/event-entries.ts` maps
+each audited event to its entry, and `adapter/worker/audit-subscribers.ts` records them
+in the worker with the event id, so a redelivered event adds nothing. The table rejects
+UPDATE, DELETE and TRUNCATE.
+
 ## Contract (`contract/audit-service.ts`, `AuditService`, token `AUDIT_SERVICE`)
 
 - `record`
@@ -25,7 +30,8 @@ None.
 - `catalog.PriceChanged`
 - `admin.SettingChanged`
 - `admin.ComplaintResolved`
-- `booking.BookingCancelled`
+- `verification.Level2ResultRecorded`
+- `verification.DocumentExpired`
 
 ## Tables (schema `audit`)
 

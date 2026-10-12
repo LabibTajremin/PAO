@@ -11,6 +11,18 @@ the service interface and its injection token, DTOs, `DomainError` reasons and e
 types with their outbox names (`contract/index.ts`). Queries live in
 `adapter/postgres/queries.sql`; `npm run gen` regenerates `adapter/postgres/sqlc/`.
 
+Use cases live in `app/`: `PhoneCodes` (send and check one-time codes), `PhoneSignIn`,
+`Sessions` with `AccessTokens` (refresh families, reuse detection, logout), `AdminSignIn`
+and `AdminTotp` (password + TOTP, 15-minute lockout), `AdminUsers`, `MyAccount`,
+`AccountDeletion`, `AccountStatusChanger` and `RoleEditor`. Domain rules return reasons
+(`domain/reasons.ts`); use cases throw them as `DomainError`, and `adapter/http` maps
+them to the Go API's error codes. TOTP secrets are encrypted by the Postgres adapter.
+
+The provider gate reads levels from verification through a lazy contract
+(`adapter/inproc/verification-levels.ts`). SMS goes through the console, SSL Wireless or,
+with APP_ENV=test, the capture behind the platform's `SMS_CAPTURE`. `ADMIN_SEEDER` creates
+the seed file's demo admins for `migrate seed`.
+
 ## Contract (`contract/identity-service.ts`, `IdentityService`, token `IDENTITY_SERVICE`)
 
 - `getAccount`

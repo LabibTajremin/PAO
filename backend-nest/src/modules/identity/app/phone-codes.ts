@@ -93,7 +93,7 @@ export class PhoneCodes {
   }
 
   /** Checks a code for a phone someone typed, e.g. an emergency contact's (PRD §6.2). */
-  checkTyped(rawPhone: string, purpose: string, code: string): Promise<void> {
-    return this.check(purpose, phoneOrFail(rawPhone), code);
+  async checkTyped(rawPhone: string, purpose: string, code: string): Promise<void> {
+    await this.check(purpose, phoneOrFail(rawPhone), code);
   }
 }
