@@ -24,11 +24,9 @@ types with their outbox names (`contract/index.ts`). Queries live in
 
 ## Events consumed
 
-- `identity.RoleGranted`
 - `identity.AccountStatusChanged`
 - `identity.AccountDeleted`
-- `verification.ProviderLevelChanged`
-- `verification.DocumentExpired`
+- `verification.ProviderLevelChanged` (a drop below Level 1 takes the provider offline)
 - `rating.ReviewSubmitted`
 - `booking.BookingCompleted`
 - `booking.BookingCancelled`
@@ -38,6 +36,7 @@ types with their outbox names (`contract/index.ts`). Queries live in
 
 - `providers`
 - `provider_services`
+- `cancellations`
 - `outbox`
 - `processed_events`
 
@@ -47,6 +46,18 @@ types with their outbox names (`contract/index.ts`). Queries live in
 - `/v1/provider/enrolment (personal, services, area, emergency contact, code of conduct)`
 - `/v1/provider/presence/*`
 - `/v1/customer/providers/{id}`
-- `/v1/admin/providers*`
+
+## Presence (Redis)
+
+- `presence:svc:{serviceId}` GEO set, `presence:hb:{providerId}` heartbeat (90 s TTL),
+  `presence:online` set. Positions exist only while online (PRD §11).
+- Job `provider.reap_lost_presence`, every minute: providers whose heartbeat lapsed go
+  offline with `ProviderWentOffline{reason: heartbeat_lost}`.
+
+## Notes
+
+- The 18th-birthday check compares against the Dhaka calendar date.
+- The admin provider list and record (`/v1/admin/providers*`) are served by admin through
+  `searchProviders`.
 
 Migrations: `backend-nest/migrations/provider/`.

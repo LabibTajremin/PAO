@@ -5,6 +5,8 @@ import { CatalogModule } from '../modules/catalog/catalog.module';
 import { CustomerModule } from '../modules/customer/customer.module';
 import { IdentityModule } from '../modules/identity/identity.module';
 import { MediaModule } from '../modules/media/media.module';
+import { ProviderModule } from '../modules/provider/provider.module';
+import { VerificationModule } from '../modules/verification/verification.module';
 
 /**
  * Every business module, in the order of `migrations/modules.json`. Module agents add
@@ -13,6 +15,8 @@ import { MediaModule } from '../modules/media/media.module';
 export const BUSINESS_MODULES: Type[] = [
   IdentityModule,
   CustomerModule,
+  ProviderModule,
+  VerificationModule,
   CatalogModule,
   MediaModule,
   AdminModule,
