@@ -14,7 +14,12 @@ import { readModuleLists } from '../platform/db/migration-files';
 import { EventBus } from '../platform/events/event-bus';
 import { JobScheduler } from '../platform/jobs/scheduler';
 import { LOGGER, type Logger } from '../platform/logging/logger';
-import { OUTBOX_RETENTION_MS, purgePublishedEvents } from '../platform/outbox/outbox';
+import { type Metrics, METRICS } from '../platform/metrics/metrics';
+import {
+  OUTBOX_RETENTION_MS,
+  purgePublishedEvents,
+  readOutboxBacklog,
+} from '../platform/outbox/outbox';
 import { OutboxRelay } from '../platform/outbox/outbox-relay';
 import { findWorkerHooks } from '../platform/worker/worker-hooks';
 import { BackendModule } from './backend.module';
@@ -30,16 +35,19 @@ export class WorkerRuntime implements OnApplicationBootstrap, OnApplicationShutd
   readonly bus = new EventBus();
   readonly scheduler: JobScheduler;
   readonly relay: OutboxRelay;
+  @Inject(ModulesContainer) private readonly modules!: ModulesContainer;
 
   constructor(
     @Inject(DATABASE) db: Database,
     @Inject(CLOCK) clock: Clock,
     @Inject(LOGGER) log: Logger,
-    @Inject(ModulesContainer) private readonly modules: ModulesContainer,
+    @Inject(METRICS) metrics: Metrics,
   ) {
-    this.scheduler = new JobScheduler(db, clock, log);
+    const observer = metrics.worker;
+    this.scheduler = new JobScheduler(db, clock, log, observer);
     const outboxModules = readModuleLists().outboxModules;
-    this.relay = new OutboxRelay(db, this.bus, outboxModules, { clock, log });
+    this.relay = new OutboxRelay(db, this.bus, outboxModules, { clock, log, observer });
+    observer.trackBacklog(() => readOutboxBacklog(db, outboxModules, clock.now()));
     this.scheduler.dailyAt(3, 0, 'outbox.purge_published', () =>
       purgePublishedEvents(
         db,

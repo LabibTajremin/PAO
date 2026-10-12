@@ -5,7 +5,7 @@ import { type DomainEvent } from '../events/domain-event';
 import { EventBus } from '../events/event-bus';
 import { UuidV7Generator } from '../ids/id-generator';
 import { discardLogger } from '../logging/logger';
-import { idempotentHandler, OutboxWriter, purgePublishedEvents } from './outbox';
+import { idempotentHandler, OutboxWriter, purgePublishedEvents, readOutboxBacklog } from './outbox';
 import { MAX_ATTEMPTS, OutboxRelay } from './outbox-relay';
 
 interface Ping extends DomainEvent<'test.Ping'> {
@@ -144,6 +144,57 @@ describe('outbox', () => {
     expect(rows).toEqual([{ aggregate_id: 'b2' }]);
     await expect(purgePublishedEvents(db, ['nosuchmodule'], clock.now())).rejects.toThrow(
       'purge "nosuchmodule"."outbox"',
+    );
+  });
+
+  it('tells its observer about deliveries, failures and dead letters', async () => {
+    const seen: string[] = [];
+    const observer = {
+      eventDelivered: (m: string, e: string) => seen.push(`ok ${m} ${e}`),
+      eventFailed: (m: string, e: string, dead: boolean) => seen.push(`fail ${m} ${e} ${dead}`),
+    };
+    const bus = new EventBus();
+    let fail = true;
+    bus.subscribe('test.Ping', 'flaky', () =>
+      fail ? Promise.reject(new Error('down')) : Promise.resolve(),
+    );
+    await write('b1', 1);
+    await db.query('UPDATE booking.outbox SET attempts = $1', [MAX_ATTEMPTS - 2]);
+    const r = new OutboxRelay(db, bus, ['booking'], { clock, log: discardLogger(), observer });
+    await r.runOnce();
+    clock.advance(10 * 60_000);
+    await write('b2', 2);
+    fail = false;
+    await r.runOnce();
+    expect(seen).toEqual([
+      'fail booking test.Ping false',
+      'ok booking test.Ping',
+      'ok booking test.Ping',
+    ]);
+    await db.query('UPDATE booking.outbox SET published_at = NULL, attempts = $1', [
+      MAX_ATTEMPTS - 1,
+    ]);
+    fail = true;
+    seen.length = 0;
+    await r.runOnce();
+    expect(seen).toEqual(['fail booking test.Ping true', 'fail booking test.Ping true']);
+  });
+
+  it('reads the backlog of undelivered and dead events', async () => {
+    expect(await readOutboxBacklog(db, ['booking'], clock.now())).toEqual([
+      { module: 'booking', pending: 0, dead: 0, oldestSeconds: 0 },
+    ]);
+    await write('b1', 1);
+    clock.advance(5000);
+    await write('b2', 2);
+    await write('b3', 3);
+    await db.query("UPDATE booking.outbox SET dead = true WHERE aggregate_id = 'b3'");
+    clock.advance(1000);
+    expect(await readOutboxBacklog(db, ['booking'], clock.now())).toEqual([
+      { module: 'booking', pending: 2, dead: 1, oldestSeconds: 6 },
+    ]);
+    await expect(readOutboxBacklog(db, ['nosuchmodule'], clock.now())).rejects.toThrow(
+      'read backlog of "nosuchmodule"."outbox"',
     );
   });
 });

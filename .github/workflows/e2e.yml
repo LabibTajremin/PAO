@@ -27,6 +27,9 @@ jobs:
         env:
           PAO_E2E_APPS: none
         run: ./pao test e2e
+      - name: Backup restore drill
+        # The journeys leave a populated database behind: dump it, restore, compare.
+        run: ./pao ops restore-test e2e
       - name: Stack logs
         if: failure()
         run: docker compose -p pao-e2e logs --no-color | tail -200
@@ -66,7 +69,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends clang cmake ninja-build \
-            pkg-config libgtk-3-dev libsecret-1-dev xvfb dbus gnome-keyring
+            pkg-config libgtk-3-dev libsecret-1-dev libcurl4-openssl-dev xvfb dbus gnome-keyring
       - name: Stack
         run: test/e2e/stack.sh
       - name: Journeys

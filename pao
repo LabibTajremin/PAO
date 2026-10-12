@@ -5,7 +5,7 @@ set -euo pipefail
 
 PAO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export PAO_ROOT
-for lib in common lint test cover stack gen security phase; do
+for lib in common lint test cover stack gen security ops phase; do
   # shellcheck source=/dev/null
   . "$PAO_ROOT/scripts/lib/$lib.sh"
 done
@@ -22,7 +22,9 @@ usage: pao <command>
   test unit|integration|e2e|all (or backend|dart for one stack's unit tests)
   cover [backend|dart]  enforce 100% coverage, write coverage/summary.md
   security              gitleaks, npm audit, osv-scanner, trivy
-  ci                    lint → gen check → test all → cover → security
+  ops check             validate alert rules (promtool) and Grafana dashboards
+  ops restore-test [e2e]  dump the stack's database, restore it, compare counts
+  ci                    lint → ops check → gen check → test all → cover → security
   phase finish <id>     ci, push the branch, open the PR
   perf [e2e]            k6 performance scripts against the local (or a fresh e2e) stack
 USAGE
@@ -63,6 +65,7 @@ create_env() {
 
 cmd_ci() {
   cmd_lint
+  cmd_ops check
   cmd_gen --check
   cmd_test all
   cmd_cover
@@ -105,7 +108,7 @@ main() {
   local cmd="${1:-}"
   [[ $# -gt 0 ]] && shift
   case "$cmd" in
-    setup | up | down | seed | gen | lint | test | cover | security | ci | phase | perf)
+    setup | up | down | seed | gen | lint | test | cover | security | ops | ci | phase | perf)
       "cmd_$cmd" "$@"
       ;;
     -h | --help | help) usage ;;

@@ -11,6 +11,7 @@ import 'package:pao_l10n/pao_l10n.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await startErrorReporting();
   final sessions = SessionManager(SecureSessionStore());
   late final PermissionService permissions;
   final api = createApiClient(
