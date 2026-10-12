@@ -29,10 +29,9 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P15 / task 5 — parity: run the Go black-box journeys (`test/e2e/api`) and the app
-journeys against a stack built from `backend-nest/`, plus a start-up smoke of the three
-entry points. Tasks 1–4 are done: every module is ported (740 Jest tests, 100%
-statements/lines/functions). The Go backend stays the reference until task 7.
+P15 / task 6 — tooling switch: the TypeScript port of the API journeys (`test/e2e/api`) is
+in progress; then `./pao`, hooks, CI and docs move to NestJS. Task 7 (cut-over) deletes
+Go and renames `backend-nest/` to `backend/`.
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
@@ -71,6 +70,9 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-10-12 P15.5 parity: all 13 Go API journeys, partner/customer/admin app journeys
+  and k6 nearby search (p95 125 ms at 50 rps) pass against the NestJS stack; fixed
+  production route ordering and the perf seeder (20e33cd).
 - 2026-10-12 P15.1–4 NestJS backend in `backend-nest/` (ADR-0032): platform (config, pino,
   metrics, pg + goose-compatible migrator, Redis keys/limiter/locks/idempotency, EdDSA
   JWT, argon2id, TOTP, AES-GCM, RBAC cache, spec-driven HTTP edge with RBAC decorators,
