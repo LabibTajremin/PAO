@@ -29,10 +29,10 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P15 / task 1 — NestJS foundation in `backend-nest/` (ADR-0032). The Go backend stays the
-reference until task 7. P16's backlog (ADR-0028 to 0031: Android foreground service
-for the heartbeat, admin-console API gaps, Bangla receipts, a native map, an Android
-emulator journey) waits for P16.
+P15 / task 5 — parity: run the Go black-box journeys (`test/e2e/api`) and the app
+journeys against a stack built from `backend-nest/`, plus a start-up smoke of the three
+entry points. Tasks 1–4 are done: every module is ported (740 Jest tests, 100%
+statements/lines/functions). The Go backend stays the reference until task 7.
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
@@ -70,6 +70,13 @@ None.
 ## Log
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
+
+- 2026-10-12 P15.1–4 NestJS backend in `backend-nest/` (ADR-0032): platform (config, pino,
+  metrics, pg + goose-compatible migrator, Redis keys/limiter/locks/idempotency, EdDSA
+  JWT, argon2id, TOTP, AES-GCM, RBAC cache, spec-driven HTTP edge with RBAC decorators,
+  outbox relay, advisory-lock scheduler, S3, health), sqlc TypeScript queries, all eleven
+  modules with every Go test ported; 740 Jest tests at 100%. Go fixes on the way:
+  Dhaka calendar dates for clearance issue date and 18th birthday, CA for the Go build.
 
 - 2026-10-10 P11 partner app: sign-in, onboarding, resumable enrolment wizard with
   uploads, verification gate, home with presence heartbeat, requests with countdown,
