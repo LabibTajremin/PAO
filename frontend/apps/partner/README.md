@@ -34,3 +34,20 @@ lib/
 - 100% line coverage of `lib/` (generated l10n and `main.dart` excluded), files ≤ 200
   lines, functions ≤ 40 lines, `dart analyze --fatal-infos` and `dart_code_linter`
   metrics clean.
+
+## Builds
+
+Flavours `dev`, `staging` and `prod` each have their own application ID suffix, app
+name and `config/<flavour>.json` (non-secret `--dart-define` values). `flutter run`
+uses `dev`; release builds go through `scripts/build-release.sh partner <flavour>
+[appbundle|apk|ipa|linux]`. Signing, versioning and the store checklist are in
+[`docs/release.md`](../../../docs/release.md).
+
+## Background presence
+
+While online, `ServiceHeartbeat` (`features/home/data/`) wraps the timer heartbeat and
+starts `PresenceService.kt`, an Android foreground service of type `location` with an
+ongoing notification, over the `pao/presence_service` method channel. The service only
+keeps the process in the foreground; beats are still sent from Dart. If Android refuses
+the service, or on iOS, the timer beats while the app is open and the server's 90 s
+presence expiry takes a backgrounded provider offline (ADR-0028).

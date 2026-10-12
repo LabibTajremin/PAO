@@ -33,3 +33,11 @@ the console are in ADR-0030.
 - Tests: cubits with fakes; pages through `Harness` (`test/support/harness.dart`),
   `desktop(tester)` or `narrow(tester)` first. 100% line coverage of `lib/` (generated
   l10n and `main.dart` excluded), files ≤ 200 lines, functions ≤ 40 lines.
+
+## Builds
+
+`scripts/build-release.sh admin <dev|staging|prod>` builds `build/web` with
+`config/<flavour>.json`, `--csp` (no eval-style code), CanvasKit served from the site
+instead of a CDN, no source maps and `--base-href` from `PAO_WEB_BASE_HREF` (default
+`/`). Hosting headers, including the Content-Security-Policy, are in
+[`docs/release.md`](../../../docs/release.md).
