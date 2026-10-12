@@ -39,12 +39,16 @@ export function period(kind: string, day: Date): { from: Date; to: Date } | unde
       const from = addDays(day, -((day.getUTCDay() + 1) % 7));
       return { from, to: addDays(from, 6) };
     }
-    case 'month': {
-      const [y, m] = [day.getUTCFullYear(), day.getUTCMonth()];
-      return { from: new Date(Date.UTC(y, m, 1)), to: new Date(Date.UTC(y, m + 1, 0)) };
-    }
+    case 'month':
+      return month(day);
   }
   return undefined;
+}
+
+/** The first and last calendar day of the month containing `day`. */
+export function month(day: Date): { from: Date; to: Date } {
+  const [y, m] = [day.getUTCFullYear(), day.getUTCMonth()];
+  return { from: new Date(Date.UTC(y, m, 1)), to: new Date(Date.UTC(y, m + 1, 0)) };
 }
 
 /** Every date from `from` to `to` inclusive. */
