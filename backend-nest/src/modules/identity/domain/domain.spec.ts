@@ -1,6 +1,7 @@
 import { IdentityErrors } from '../contract';
 import {
   type Account,
+  ADMIN_ROLES,
   canChangeStatus,
   isAdminRoleSet,
   roleForApp,
@@ -11,19 +12,31 @@ import {
   ADMIN_MAX_FAILURES,
   type Admin,
   adminLoginRefusal,
+  CHALLENGE_ATTEMPTS,
+  CHALLENGE_TTL_MS,
+  MIN_PASSWORD_LENGTH,
   isStrongPassword,
   recordFailure,
   recordSuccess,
 } from './admin';
-import { checkAttempt } from './code';
+import {
+  checkAttempt,
+  CODE_LENGTH,
+  CODE_MAX_ATTEMPTS,
+  CODE_TTL_MS,
+  RESEND_AFTER_MS,
+  SEND_LIMITS,
+} from './code';
 import { maskPhone, normalizePhone } from './phone';
 import { IdentityReasons } from './reasons';
 import {
+  ACCESS_TTL_MS,
   familyMatches,
   type Family,
   formatRefreshToken,
   parseRefreshToken,
   PROVIDER_GATE_SCREENS,
+  REFRESH_TTL_MS,
 } from './session';
 
 const account = (over: Partial<Account> = {}): Account => ({
@@ -96,6 +109,21 @@ describe('accounts', () => {
     expect(IdentityReasons.CodeLocked).toBe(IdentityErrors.CodeLocked);
     expect(IdentityReasons.RateLimited).toBe(IdentityErrors.RateLimited);
     expect(IdentityReasons.StatusChange).toBe(IdentityErrors.StatusInvalid);
+  });
+});
+
+describe('rule values', () => {
+  it('match the Go backend', () => {
+    expect([CODE_LENGTH, CODE_TTL_MS, CODE_MAX_ATTEMPTS, RESEND_AFTER_MS]).toEqual([
+      6, 300_000, 5, 60_000,
+    ]);
+    expect(SEND_LIMITS).toEqual({
+      perPhone: { limit: 3, windowMs: 900_000 },
+      perIp: { limit: 10, windowMs: 3_600_000 },
+    });
+    expect([CHALLENGE_TTL_MS, CHALLENGE_ATTEMPTS, MIN_PASSWORD_LENGTH]).toEqual([300_000, 5, 12]);
+    expect([ACCESS_TTL_MS, REFRESH_TTL_MS]).toEqual([900_000, 2_592_000_000]);
+    expect(ADMIN_ROLES).toEqual(['verifier', 'catalog_manager', 'support_agent', 'super_admin']);
   });
 });
 

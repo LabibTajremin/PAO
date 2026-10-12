@@ -34,11 +34,28 @@ describe('admin dashboard read model', () => {
     }
     await deliver(api, event('identity.AccountCreated', { accountId: uuid(), role: 'customer' }));
     for (const id of [active, suspended]) {
-      await deliver(api, event('verification.ProviderLevelChanged', { providerId: id, to: 1 }));
+      await deliver(
+        api,
+        event('verification.ProviderLevelChanged', { providerId: id, from: 0, to: 1, reason: '' }),
+      );
     }
-    const suspend = { accountId: suspended, to: 'suspended', roles: ['provider'] };
+    const suspend = {
+      accountId: suspended,
+      from: 'active',
+      to: 'suspended',
+      reason: 'test',
+      actorId: null,
+      roles: ['provider'],
+    };
     await deliver(api, event('identity.AccountStatusChanged', suspend));
-    const customerOnly = { accountId: uuid(), to: 'banned', roles: ['customer'] };
+    const customerOnly = {
+      accountId: uuid(),
+      from: 'active',
+      to: 'banned',
+      reason: 'test',
+      actorId: null,
+      roles: ['customer'],
+    };
     await deliver(api, event('identity.AccountStatusChanged', customerOnly));
     await deliver(api, event('identity.AccountDeleted', { accountId: gone }));
     const bus = subscribedBus(api);
