@@ -4,11 +4,13 @@ import {
   isValidPrice,
   isValidService,
   isValidSubService,
+  MODELS,
   publishedOnly,
   type Service,
   type ServiceFields,
   servicesOf,
   type SubService,
+  UNITS,
 } from './catalog';
 
 const name = { en: 'Electrician', bn: 'ইলেকট্রিশিয়ান' };
@@ -77,5 +79,12 @@ describe('catalog rules', () => {
     expect(got[0]?.services[0]?.subServices).toHaveLength(1);
     expect(tree[1]?.services[1]?.subServices).toHaveLength(2);
     expect(servicesOf(got)).toHaveLength(1);
+  });
+});
+
+describe('catalog vocabularies', () => {
+  it('lists the service models and quantity units of PRD §4', () => {
+    expect(MODELS).toEqual(['on_demand', 'duration_hire', 'listing', 'partner_referral']);
+    expect(UNITS).toEqual(['job', 'unit', 'hour', 'day']);
   });
 });

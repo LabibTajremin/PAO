@@ -7,6 +7,17 @@ export interface Name {
   readonly bn: string;
 }
 
+/** Service models (PRD §4). */
+export const MODELS = [
+  'on_demand',
+  'duration_hire',
+  'listing',
+  'partner_referral',
+] as readonly string[];
+
+/** What one quantity of a sub-service can mean. */
+export const UNITS = ['job', 'unit', 'hour', 'day'] as readonly string[];
+
 /** The bookable item with its current price. */
 export interface SubService {
   readonly id: string;

@@ -2,6 +2,7 @@ import { type Type } from '@nestjs/common';
 import { AdminModule } from '../modules/admin/admin.module';
 import { AuditModule } from '../modules/audit/audit.module';
 import { CatalogModule } from '../modules/catalog/catalog.module';
+import { CustomerModule } from '../modules/customer/customer.module';
 import { IdentityModule } from '../modules/identity/identity.module';
 import { MediaModule } from '../modules/media/media.module';
 
@@ -11,6 +12,7 @@ import { MediaModule } from '../modules/media/media.module';
  */
 export const BUSINESS_MODULES: Type[] = [
   IdentityModule,
+  CustomerModule,
   CatalogModule,
   MediaModule,
   AdminModule,
