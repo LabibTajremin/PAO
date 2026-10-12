@@ -267,3 +267,36 @@ export async function reviews(client: Client, args: ReviewsArgs): Promise<Review
     });
 }
 
+export const eraseAuthorQuery = `-- name: EraseAuthor :exec
+UPDATE rating.reviews SET author_name = '', comment = '' WHERE author_id = $1`;
+
+export interface EraseAuthorArgs {
+    authorId: string;
+}
+
+export async function eraseAuthor(client: Client, args: EraseAuthorArgs): Promise<void> {
+    await client.query({
+        text: eraseAuthorQuery,
+        values: [args.authorId],
+        rowMode: "array"
+    });
+}
+
+export const eraseReviewableNamesQuery = `-- name: EraseReviewableNames :exec
+UPDATE rating.reviewable_bookings
+SET customer_name = CASE WHEN customer_id = $1 THEN '' ELSE customer_name END,
+    provider_name = CASE WHEN provider_id = $1 THEN '' ELSE provider_name END
+WHERE customer_id = $1 OR provider_id = $1`;
+
+export interface EraseReviewableNamesArgs {
+    customerId: string;
+}
+
+export async function eraseReviewableNames(client: Client, args: EraseReviewableNamesArgs): Promise<void> {
+    await client.query({
+        text: eraseReviewableNamesQuery,
+        values: [args.customerId],
+        rowMode: "array"
+    });
+}
+

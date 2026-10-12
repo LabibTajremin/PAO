@@ -101,3 +101,14 @@ WHERE (sqlc.narg(status)::text IS NULL OR status = sqlc.narg(status)::text)
   AND (sqlc.arg(area)::text = '' OR lower(address_area) = lower(sqlc.arg(area)::text))
   AND (sqlc.narg(before_at)::timestamptz IS NULL OR (created_at, id) < (sqlc.narg(before_at)::timestamptz, sqlc.arg(before_id)::uuid))
 ORDER BY created_at DESC, id DESC LIMIT sqlc.arg(max_rows);
+
+-- Erasure keeps the booking for both sides' history and the money trail, but drops
+-- the deleted customer's name, phone, exact address and note (PRD §11).
+-- name: EraseCustomerSnapshots :exec
+UPDATE booking.bookings
+SET customer_name = '', customer_phone = '', address_line1 = '', address_line2 = '', note = '',
+    address_location = ST_SnapToGrid(address_location::geometry, 0.01)::geography
+WHERE customer_id = $1;
+
+-- name: EraseProviderSnapshots :exec
+UPDATE booking.bookings SET provider_name = '', provider_phone = '' WHERE provider_id = $1;

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pao_customer/features/live/data/secure_screen.dart';
+import 'package:pao_core/pao_core.dart';
 import 'package:pao_customer/features/live/presentation/start_code_cubit.dart';
 import 'package:pao_customer/shared/l10n.dart';
 import 'package:pao_ui/pao_ui.dart';

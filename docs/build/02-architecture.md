@@ -205,8 +205,8 @@ document returns the provider to this gate.
 | Privacy | Exact customer address only after acceptance; provider location only while online or on a job (PRD §11) |
 | Audit | `audit.entries` is append-only (DB trigger rejects UPDATE/DELETE) |
 | Secrets | Env vars only; `.env.example` documents them; `gitleaks` in CI |
-| Dependencies | `npm audit` (runtime dependencies), `osv-scanner` for Dart, `trivy` image scan in CI |
-| Mobile | Certificate pinning on release builds; no secrets in the app binary; screenshots blocked on start-code and document screens |
+| Dependencies | `npm audit` (runtime dependencies), `osv-scanner` over the Dart and npm lockfiles, `trivy` source and image scan; accepted findings in `osv-scanner.toml` / `.trivyignore` |
+| Mobile | Certificate pinning on release builds (SPKI SHA-256, `--dart-define=PAO_PIN_SHA256`); no secrets in the app binary; screenshots blocked on start-code and document screens |
 
 ## 8. Events (published through the outbox)
 
@@ -232,6 +232,7 @@ advisory lock named after the job, so with several workers exactly one runs it.
 | `verification.expiry_reminders` | daily 09:00 | push 30/7/1 days before expiry (P-11) |
 | `provider.reap_lost_presence` | every minute | removes stale providers from GEO sets |
 | `media.purge_orphans` | daily 03:30 | deletes uploads never attached to a record |
+| `verification.purge_closed` | daily 03:45 | deletes the documents and verification records of accounts closed longer than `documents.retention_days` (ADR-0023) |
 | `outbox.purge_published` | daily 03:00 | drops delivered outbox rows |
 
 The outbox relay runs continuously beside the scheduler and delivers outbox rows to

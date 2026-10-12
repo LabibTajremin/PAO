@@ -26,6 +26,8 @@ export interface MediaService {
   getViewUrl(request: ViewRequest): Promise<ViewUrl>;
   /** Removes the object from storage and its record. */
   delete(mediaId: string): Promise<void>;
+  /** Removes every file the account uploaded, documents included (retention purge). */
+  deleteOwnerFiles(ownerId: string): Promise<void>;
 }
 
 /** Injection token for the {@link MediaService}. */

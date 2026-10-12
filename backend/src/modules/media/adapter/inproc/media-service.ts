@@ -77,4 +77,8 @@ export class InprocMediaService implements MediaService {
   delete(mediaId: string): Promise<void> {
     return translated(this.objects.delete(mediaId));
   }
+
+  async deleteOwnerFiles(ownerId: string): Promise<void> {
+    await this.objects.deleteOwned(ownerId, true);
+  }
 }

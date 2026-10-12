@@ -730,3 +730,36 @@ export async function adminListBookings(client: Client, args: AdminListBookingsA
     });
 }
 
+export const eraseCustomerSnapshotsQuery = `-- name: EraseCustomerSnapshots :exec
+UPDATE booking.bookings
+SET customer_name = '', customer_phone = '', address_line1 = '', address_line2 = '', note = '',
+    address_location = ST_SnapToGrid(address_location::geometry, 0.01)::geography
+WHERE customer_id = $1`;
+
+export interface EraseCustomerSnapshotsArgs {
+    customerId: string;
+}
+
+export async function eraseCustomerSnapshots(client: Client, args: EraseCustomerSnapshotsArgs): Promise<void> {
+    await client.query({
+        text: eraseCustomerSnapshotsQuery,
+        values: [args.customerId],
+        rowMode: "array"
+    });
+}
+
+export const eraseProviderSnapshotsQuery = `-- name: EraseProviderSnapshots :exec
+UPDATE booking.bookings SET provider_name = '', provider_phone = '' WHERE provider_id = $1`;
+
+export interface EraseProviderSnapshotsArgs {
+    providerId: string;
+}
+
+export async function eraseProviderSnapshots(client: Client, args: EraseProviderSnapshotsArgs): Promise<void> {
+    await client.query({
+        text: eraseProviderSnapshotsQuery,
+        values: [args.providerId],
+        rowMode: "array"
+    });
+}
+

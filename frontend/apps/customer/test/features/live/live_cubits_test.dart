@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pao_api/pao_api.dart';
 import 'package:pao_core/pao_core.dart';
 import 'package:pao_customer/features/connectivity/data/start_code_cache.dart';
-import 'package:pao_customer/features/live/data/secure_screen.dart';
 import 'package:pao_customer/features/live/domain/live_repository.dart';
 import 'package:pao_customer/features/live/presentation/extras_cubit.dart';
 import 'package:pao_customer/features/live/presentation/start_code_cubit.dart';

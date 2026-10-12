@@ -153,3 +153,46 @@ export async function orphans(client: Client, args: OrphansArgs): Promise<Orphan
     });
 }
 
+export const objectsByOwnerQuery = `-- name: ObjectsByOwner :many
+SELECT id, owner_id, purpose, content_type, size_bytes, bucket, object_key, status, attached, created_at
+FROM media.objects WHERE owner_id = $1 ORDER BY created_at`;
+
+export interface ObjectsByOwnerArgs {
+    ownerId: string;
+}
+
+export interface ObjectsByOwnerRow {
+    id: string;
+    ownerId: string;
+    purpose: string;
+    contentType: string;
+    sizeBytes: string;
+    bucket: string;
+    objectKey: string;
+    status: string;
+    attached: boolean;
+    createdAt: Date;
+}
+
+export async function objectsByOwner(client: Client, args: ObjectsByOwnerArgs): Promise<ObjectsByOwnerRow[]> {
+    const result = await client.query({
+        text: objectsByOwnerQuery,
+        values: [args.ownerId],
+        rowMode: "array"
+    });
+    return result.rows.map(row => {
+        return {
+            id: row[0],
+            ownerId: row[1],
+            purpose: row[2],
+            contentType: row[3],
+            sizeBytes: row[4],
+            bucket: row[5],
+            objectKey: row[6],
+            status: row[7],
+            attached: row[8],
+            createdAt: row[9]
+        };
+    });
+}
+

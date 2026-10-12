@@ -10,6 +10,7 @@ import { Ratings } from './app/ratings';
 import { SubmitReview } from './app/submit-review';
 import { RATING_SERVICE } from './contract/rating-service';
 import { RATING_REPOSITORY } from './port/repository';
+import { RatingErasure } from './adapter/postgres/erasure';
 
 /** Two-way reviews after completed bookings and their aggregates (C-11, P-09). */
 @Global()
@@ -20,6 +21,7 @@ import { RATING_REPOSITORY } from './port/repository';
     SubmitReview,
     Ratings,
     RatingWorker,
+    RatingErasure,
     { provide: RATING_SERVICE, useClass: RatingContract },
   ],
   exports: [RATING_SERVICE],

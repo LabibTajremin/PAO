@@ -65,6 +65,10 @@ export class PostgresMediaRepository implements MediaRepository {
     return sql.deleteObject(this.db.pool, { id });
   }
 
+  async byOwner(ownerId: string): Promise<MediaObject[]> {
+    return (await sql.objectsByOwner(this.db.pool, { ownerId })).map(toObject);
+  }
+
   async orphans(createdBefore: Date): Promise<MediaObject[]> {
     return (await sql.orphans(this.db.pool, { createdAt: createdBefore })).map(toObject);
   }

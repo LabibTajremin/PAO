@@ -59,7 +59,7 @@ prints a one-line summary, so humans, git hooks and CI use the same entry point.
 | `./pao test e2e` | fresh e2e stack, `test/e2e/api` journeys, then the app journeys |
 | `./pao test all` | unit → integration → e2e |
 | `./pao cover` | enforces 100% (backend and every Flutter package), writes `coverage/summary.md` |
-| `./pao security` | gitleaks, `npm audit --omit=dev --audit-level=high` (backend, e2e), osv-scanner (Dart), trivy when `PAO_SCAN_IMAGE` is set |
+| `./pao security` | gitleaks, `npm audit --omit=dev --audit-level=high` (backend, e2e), osv-scanner over the Dart and npm lockfiles (`osv-scanner.toml`), trivy 0.64.1 (pinned image) over the source tree and, when `PAO_SCAN_IMAGE` is set, the backend image (`.trivyignore`) |
 | `./pao ci` | lint → gen check → test all → cover → security (what CI runs) |
 | `./pao phase finish <id>` | `ci`, push branch with retry, open PR via `gh`, print the PR URL |
 | `./pao perf [e2e]` | k6 scripts against the local stack, or a fresh e2e stack |
@@ -82,7 +82,8 @@ Workflows in `.github/workflows/`, all required for merging into `main`:
 
 - `backend.yml`: Node 22 with npm cache; shellcheck, file sizes, lint, types and module
   rules; CLI tests; unit + integration specs against Postgres+PostGIS, Redis and RustFS
-  service containers; the 100% coverage gate; gitleaks and `npm audit`.
+  service containers; the 100% coverage gate; `./pao security` (gitleaks, `npm audit`,
+  osv-scanner, trivy on the source tree and the built backend image).
 - `frontend.yml`: format, analyze, unit/widget tests with coverage per package, web build
   of admin, Android debug build of both apps.
 - `e2e.yml`: Docker stack + TypeScript API journeys; k6 performance thresholds on a fresh

@@ -25,7 +25,8 @@ if ((${#backend[@]})); then
     mapfile -t sources < <(printf '%s\n' "${backend[@]}" | grep -E '\.(ts|js|cjs|mjs)$' || true)
     npx prettier --check "${backend[@]}" >/dev/null
     if ((${#sources[@]})); then
-      npx eslint --max-warnings 0 "${sources[@]}"
+      # Generated sqlc files are eslint-ignored; without the flag their warning fails.
+      npx eslint --max-warnings 0 --no-warn-ignored "${sources[@]}"
       npm run -s typecheck
       npx jest --selectProjects unit --silent --passWithNoTests --findRelatedTests "${sources[@]}"
     fi
@@ -33,6 +34,11 @@ if ((${#backend[@]})); then
 fi
 if ((e2e)); then (cd "$root/test/e2e/api" && npm run -s lint); fi
 if ((dart)); then
-  "$root/pao" lint dart
-  "$root/pao" test dart
+  # Flutter reads its own version with git; the commit's GIT_* variables would point
+  # it at this repository instead and break version solving.
+  (
+    unset GIT_DIR GIT_INDEX_FILE GIT_WORK_TREE GIT_PREFIX
+    "$root/pao" lint dart
+    "$root/pao" test dart
+  )
 fi

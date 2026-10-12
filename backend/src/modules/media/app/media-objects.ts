@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CLOCK, type Clock } from '../../../platform/clock/clock';
-import { type MediaObject } from '../domain/media';
+import { type MediaObject, ruleFor } from '../domain/media';
 import {
   FILE_STORE,
   type FileStore,
@@ -35,6 +35,19 @@ export class MediaObjects {
     const object = await this.repo.get(id);
     await this.files.delete(object.bucket, object.key);
     await this.repo.delete(id);
+  }
+
+  /**
+   * Deletes an account's files. Verification documents outlive the account by the
+   * retention period (ADR-0023), so they go only when `documents` is set.
+   */
+  async deleteOwned(ownerId: string, documents: boolean): Promise<number> {
+    const owned = await this.repo.byOwner(ownerId);
+    const doomed = owned.filter((o) => documents || ruleFor(o.purpose)?.sensitive !== true);
+    for (const o of doomed) {
+      await this.delete(o.id);
+    }
+    return doomed.length;
   }
 
   /** Deletes uploads never attached within a day; returns how many went. */

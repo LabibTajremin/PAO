@@ -59,6 +59,11 @@ class FakeMediaRepository implements MediaRepository {
     return this.settle('delete');
   }
 
+  async byOwner(ownerId: string): Promise<MediaObject[]> {
+    await this.settle('byOwner');
+    return [...this.objects.values()].filter((o) => o.ownerId === ownerId);
+  }
+
   async orphans(createdBefore: Date): Promise<MediaObject[]> {
     await this.settle('orphans');
     return [...this.objects.values()].filter((o) => !o.attached && o.createdAt < createdBefore);

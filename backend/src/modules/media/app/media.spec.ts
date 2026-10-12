@@ -117,4 +117,18 @@ describe('media use cases', () => {
     m.repo.faults.set('orphans', boom);
     await expect(m.objects.purgeOrphans()).rejects.toBe(boom);
   });
+
+  it("deletes an account's own files and keeps its documents until asked", async () => {
+    const m = fakeMedia();
+    const owner = uuidv4();
+    const nid = await uploaded(m, owner, 'nid_front');
+    await uploaded(m, owner, 'avatar');
+    await uploaded(m, uuidv4(), 'avatar');
+    expect(await m.objects.deleteOwned(owner, false)).toBe(1);
+    expect((await m.objects.get(nid.mediaId)).purpose).toBe('nid_front');
+    expect(await m.objects.deleteOwned(owner, true)).toBe(1);
+    expect(m.repo.objects.size).toBe(1);
+    m.repo.faults.set('byOwner', boom);
+    await expect(m.objects.deleteOwned(owner, true)).rejects.toBe(boom);
+  });
 });

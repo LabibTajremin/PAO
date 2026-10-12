@@ -116,6 +116,7 @@ export class AdminRules implements Settings {
     return {
       policeClearanceValidityMs: s.policeClearanceValidityMs,
       level2CoolingOffMs: s.level2CoolingOffMs,
+      documentRetentionMs: s.documentRetentionMs,
     };
   }
 }

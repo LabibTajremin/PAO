@@ -12,6 +12,8 @@ export interface MediaRepository {
   delete(id: string): Promise<void>;
   /** Objects never attached and created before `createdBefore`, oldest first. */
   orphans(createdBefore: Date): Promise<MediaObject[]>;
+  /** Every object the account uploaded, oldest first. */
+  byOwner(ownerId: string): Promise<MediaObject[]>;
 }
 
 /** Injection token for the {@link MediaRepository}. */

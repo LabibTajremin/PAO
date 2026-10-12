@@ -35,3 +35,13 @@ FROM rating.reviews
 WHERE subject_id = sqlc.arg(subject_id) AND author_role = sqlc.arg(author_role)
   AND (sqlc.narg(before_at)::timestamptz IS NULL OR (created_at, id) < (sqlc.narg(before_at), sqlc.arg(before_id)::uuid))
 ORDER BY created_at DESC, id DESC LIMIT sqlc.arg(max_rows);
+
+-- Stars stay in the aggregates; the deleted author's name and words go (PRD §11).
+-- name: EraseAuthor :exec
+UPDATE rating.reviews SET author_name = '', comment = '' WHERE author_id = $1;
+
+-- name: EraseReviewableNames :exec
+UPDATE rating.reviewable_bookings
+SET customer_name = CASE WHEN customer_id = $1 THEN '' ELSE customer_name END,
+    provider_name = CASE WHEN provider_id = $1 THEN '' ELSE provider_name END
+WHERE customer_id = $1 OR provider_id = $1;

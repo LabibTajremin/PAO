@@ -18,3 +18,7 @@ DELETE FROM media.objects WHERE id = $1;
 -- name: Orphans :many
 SELECT id, owner_id, purpose, content_type, size_bytes, bucket, object_key, status, attached, created_at
 FROM media.objects WHERE NOT attached AND created_at < $1 ORDER BY created_at LIMIT 500;
+
+-- name: ObjectsByOwner :many
+SELECT id, owner_id, purpose, content_type, size_bytes, bucket, object_key, status, attached, created_at
+FROM media.objects WHERE owner_id = $1 ORDER BY created_at;

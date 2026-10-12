@@ -38,6 +38,7 @@ import {
   START_CODES,
 } from './port/peers';
 import { BOOKING_REPOSITORY } from './port/repository';
+import { BookingErasure } from './adapter/postgres/erasure';
 
 /** The booking lifecycle, earnings and discovery (PRD §5). */
 @Global()
@@ -71,6 +72,7 @@ import { BOOKING_REPOSITORY } from './port/repository';
     ProviderEarnings,
     FindNearby,
     BookingWorker,
+    BookingErasure,
     { provide: BOOKING_SERVICE, useClass: BookingContract },
   ],
   exports: [BOOKING_SERVICE],

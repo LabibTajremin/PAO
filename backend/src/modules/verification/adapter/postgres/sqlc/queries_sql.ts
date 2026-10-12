@@ -706,3 +706,175 @@ export async function countPendingReviews(client: Client): Promise<CountPendingR
     };
 }
 
+export const recordClosureQuery = `-- name: RecordClosure :exec
+INSERT INTO verification.closed_accounts (provider_id, closed_at) VALUES ($1, $2)
+ON CONFLICT (provider_id) DO NOTHING`;
+
+export interface RecordClosureArgs {
+    providerId: string;
+    closedAt: Date;
+}
+
+export async function recordClosure(client: Client, args: RecordClosureArgs): Promise<void> {
+    await client.query({
+        text: recordClosureQuery,
+        values: [args.providerId, args.closedAt],
+        rowMode: "array"
+    });
+}
+
+export const closedBeforeQuery = `-- name: ClosedBefore :many
+SELECT provider_id FROM verification.closed_accounts WHERE closed_at < $1
+ORDER BY closed_at LIMIT 500`;
+
+export interface ClosedBeforeArgs {
+    closedAt: Date;
+}
+
+export interface ClosedBeforeRow {
+    providerId: string;
+}
+
+export async function closedBefore(client: Client, args: ClosedBeforeArgs): Promise<ClosedBeforeRow[]> {
+    const result = await client.query({
+        text: closedBeforeQuery,
+        values: [args.closedAt],
+        rowMode: "array"
+    });
+    return result.rows.map(row => {
+        return {
+            providerId: row[0]
+        };
+    });
+}
+
+export const level2PhotosQuery = `-- name: Level2Photos :many
+SELECT unnest(photo_media_ids)::uuid AS media_id FROM verification.level2_sessions
+WHERE provider_id = $1`;
+
+export interface Level2PhotosArgs {
+    providerId: string;
+}
+
+export interface Level2PhotosRow {
+    mediaId: string;
+}
+
+export async function level2Photos(client: Client, args: Level2PhotosArgs): Promise<Level2PhotosRow[]> {
+    const result = await client.query({
+        text: level2PhotosQuery,
+        values: [args.providerId],
+        rowMode: "array"
+    });
+    return result.rows.map(row => {
+        return {
+            mediaId: row[0]
+        };
+    });
+}
+
+export const purgeItemsQuery = `-- name: PurgeItems :exec
+DELETE FROM verification.items WHERE provider_id = $1`;
+
+export interface PurgeItemsArgs {
+    providerId: string;
+}
+
+export async function purgeItems(client: Client, args: PurgeItemsArgs): Promise<void> {
+    await client.query({
+        text: purgeItemsQuery,
+        values: [args.providerId],
+        rowMode: "array"
+    });
+}
+
+export const purgeDocumentsQuery = `-- name: PurgeDocuments :exec
+DELETE FROM verification.documents WHERE provider_id = $1`;
+
+export interface PurgeDocumentsArgs {
+    providerId: string;
+}
+
+export async function purgeDocuments(client: Client, args: PurgeDocumentsArgs): Promise<void> {
+    await client.query({
+        text: purgeDocumentsQuery,
+        values: [args.providerId],
+        rowMode: "array"
+    });
+}
+
+export const purgeNidQuery = `-- name: PurgeNid :exec
+DELETE FROM verification.nid_records WHERE provider_id = $1`;
+
+export interface PurgeNidArgs {
+    providerId: string;
+}
+
+export async function purgeNid(client: Client, args: PurgeNidArgs): Promise<void> {
+    await client.query({
+        text: purgeNidQuery,
+        values: [args.providerId],
+        rowMode: "array"
+    });
+}
+
+export const purgeLevelQuery = `-- name: PurgeLevel :exec
+DELETE FROM verification.levels WHERE provider_id = $1`;
+
+export interface PurgeLevelArgs {
+    providerId: string;
+}
+
+export async function purgeLevel(client: Client, args: PurgeLevelArgs): Promise<void> {
+    await client.query({
+        text: purgeLevelQuery,
+        values: [args.providerId],
+        rowMode: "array"
+    });
+}
+
+export const purgeLevel2SessionsQuery = `-- name: PurgeLevel2Sessions :exec
+DELETE FROM verification.level2_sessions WHERE provider_id = $1`;
+
+export interface PurgeLevel2SessionsArgs {
+    providerId: string;
+}
+
+export async function purgeLevel2Sessions(client: Client, args: PurgeLevel2SessionsArgs): Promise<void> {
+    await client.query({
+        text: purgeLevel2SessionsQuery,
+        values: [args.providerId],
+        rowMode: "array"
+    });
+}
+
+export const purgeRemindersQuery = `-- name: PurgeReminders :exec
+DELETE FROM verification.reminders_sent WHERE provider_id = $1`;
+
+export interface PurgeRemindersArgs {
+    providerId: string;
+}
+
+export async function purgeReminders(client: Client, args: PurgeRemindersArgs): Promise<void> {
+    await client.query({
+        text: purgeRemindersQuery,
+        values: [args.providerId],
+        rowMode: "array"
+    });
+}
+
+export const purgeClosureQuery = `-- name: PurgeClosure :exec
+DELETE FROM verification.closed_accounts WHERE provider_id = $1`;
+
+export interface PurgeClosureArgs {
+    providerId: string;
+}
+
+export async function purgeClosure(client: Client, args: PurgeClosureArgs): Promise<void> {
+    await client.query({
+        text: purgeClosureQuery,
+        values: [args.providerId],
+        rowMode: "array"
+    });
+}
+

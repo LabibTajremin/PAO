@@ -8,8 +8,9 @@
 
 1. **Security review** — walk OWASP ASVS L2 and OWASP MASVS-L1; record each item as
    pass / fixed / accepted-risk in `docs/security-checklist.md`. Must pass: no secrets in
-   repo or binaries (gitleaks, `strings` on APK), no high/critical findings from
-   govulncheck, gosec, osv-scanner, trivy; rate limits verified; IDOR tests on every
+   repo or binaries (gitleaks, `strings` on the release web/Linux bundles and the APK),
+   no high/critical findings from `npm audit`, osv-scanner (npm and Dart lockfiles) and
+   trivy (source tree and backend image); rate limits verified; IDOR tests on every
    `:id` route; certificate pinning on release builds.
 2. **Privacy** — verify PRD §6.6 and §11 rules with tests: documents never on customer
    APIs, every document view audited, address hidden before acceptance, location only

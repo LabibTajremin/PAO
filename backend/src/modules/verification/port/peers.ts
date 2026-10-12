@@ -36,6 +36,8 @@ export interface Catalog {
 export interface Rules {
   readonly policeClearanceValidityMs: number;
   readonly level2CoolingOffMs: number;
+  /** How long a closed account's documents are kept (ADR-0023). */
+  readonly documentRetentionMs: number;
 }
 
 /** Reads the rules. */

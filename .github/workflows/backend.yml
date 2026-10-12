@@ -63,11 +63,18 @@ jobs:
         run: ./pao test integration
       - name: Coverage (100%)
         run: ./pao cover backend
-      - name: Security
+      - name: Security tools
         run: |
-          gitleaks git --no-banner --redact .
-          (cd backend && npm audit --omit=dev --audit-level=high)
-          (cd test/e2e/api && npm audit --omit=dev --audit-level=high)
+          sudo curl -fsSL -o /usr/local/bin/osv-scanner \
+            https://github.com/google/osv-scanner/releases/download/v2.2.3/osv-scanner_linux_amd64
+          sudo chmod +x /usr/local/bin/osv-scanner
+          docker pull -q mirror.gcr.io/aquasec/trivy:0.64.1
+      - name: Backend image for the scan
+        run: docker build -q -t pao-backend:ci backend
+      - name: Security (gitleaks, npm audit, osv-scanner, trivy source + image)
+        env:
+          PAO_SCAN_IMAGE: pao-backend:ci
+        run: ./pao security
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: always()
         with: { name: backend-coverage, path: coverage/ }

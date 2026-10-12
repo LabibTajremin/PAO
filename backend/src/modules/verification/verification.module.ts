@@ -12,17 +12,21 @@ import {
   MediaDocuments,
   ProviderProfiles,
 } from './adapter/peers/peers';
+import { MediaFiles } from './adapter/peers/files';
+import { PostgresClosures } from './adapter/postgres/closures';
 import { verificationOutboxProvider } from './adapter/postgres/outbox';
 import { PostgresVerificationRepository } from './adapter/postgres/verification-repository';
 import { SaveDocuments } from './app/documents';
 import { ExpireDocuments } from './app/expiry';
 import { Level2Sessions } from './app/level2';
 import { ProfileChanges } from './app/profile-changes';
+import { DocumentRetention } from './app/retention';
 import { ReviewItems } from './app/review';
 import { States } from './app/states';
 import { ProviderStatus } from './app/status';
 import { Submissions } from './app/submissions';
 import { VERIFICATION_SERVICE } from './contract/verification-service';
+import { CLOSURES, FILES } from './port/closures';
 import { CATALOG, CIPHER, MEDIA, PROVIDERS, SETTINGS } from './port/peers';
 import { VERIFICATION_REPOSITORY } from './port/repository';
 
@@ -38,6 +42,9 @@ import { VERIFICATION_REPOSITORY } from './port/repository';
     { provide: CATALOG, useClass: CatalogServices },
     { provide: SETTINGS, useClass: AdminRules },
     { provide: CIPHER, useExisting: DataCipher },
+    { provide: CLOSURES, useClass: PostgresClosures },
+    { provide: FILES, useClass: MediaFiles },
+    DocumentRetention,
     States,
     Submissions,
     SaveDocuments,

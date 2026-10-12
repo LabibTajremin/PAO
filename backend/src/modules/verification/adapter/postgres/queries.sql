@@ -106,3 +106,36 @@ ON CONFLICT DO NOTHING;
 SELECT count(DISTINCT l.provider_id) FROM verification.levels l
 JOIN verification.items i ON i.provider_id = l.provider_id AND i.status = 'pending'
 WHERE l.submitted_at IS NOT NULL;
+
+-- name: RecordClosure :exec
+INSERT INTO verification.closed_accounts (provider_id, closed_at) VALUES ($1, $2)
+ON CONFLICT (provider_id) DO NOTHING;
+
+-- name: ClosedBefore :many
+SELECT provider_id FROM verification.closed_accounts WHERE closed_at < $1
+ORDER BY closed_at LIMIT 500;
+
+-- name: Level2Photos :many
+SELECT unnest(photo_media_ids)::uuid AS media_id FROM verification.level2_sessions
+WHERE provider_id = $1;
+
+-- name: PurgeItems :exec
+DELETE FROM verification.items WHERE provider_id = $1;
+
+-- name: PurgeDocuments :exec
+DELETE FROM verification.documents WHERE provider_id = $1;
+
+-- name: PurgeNid :exec
+DELETE FROM verification.nid_records WHERE provider_id = $1;
+
+-- name: PurgeLevel :exec
+DELETE FROM verification.levels WHERE provider_id = $1;
+
+-- name: PurgeLevel2Sessions :exec
+DELETE FROM verification.level2_sessions WHERE provider_id = $1;
+
+-- name: PurgeReminders :exec
+DELETE FROM verification.reminders_sent WHERE provider_id = $1;
+
+-- name: PurgeClosure :exec
+DELETE FROM verification.closed_accounts WHERE provider_id = $1;

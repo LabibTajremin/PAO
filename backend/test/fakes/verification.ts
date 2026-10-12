@@ -172,7 +172,11 @@ export class FakeVerificationPeers implements Providers, Media, Catalog, Setting
   }
 
   rules(): Promise<Rules> {
-    const r = { policeClearanceValidityMs: 365 * DAY_MS, level2CoolingOffMs: 14 * DAY_MS };
+    const r = {
+      policeClearanceValidityMs: 365 * DAY_MS,
+      level2CoolingOffMs: 14 * DAY_MS,
+      documentRetentionMs: 365 * DAY_MS,
+    };
     return this.err ? Promise.reject(this.err) : Promise.resolve(r);
   }
 }

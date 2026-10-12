@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pao_core/pao_core.dart';
 import 'package:pao_partner/features/enrolment/domain/enrolment.dart';
 import 'package:pao_partner/features/enrolment/presentation/uploads_cubit.dart';
 import 'package:pao_partner/shared/l10n.dart';
@@ -36,9 +37,12 @@ class PhotoSlotView extends StatelessWidget {
           Text(label, style: Theme.of(context).textTheme.titleSmall),
           if (s?.bytes != null) ...[
             const SizedBox(height: PaoSpace.sm),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(PaoRadius.md),
-              child: Image.memory(s!.bytes!, height: 140, fit: BoxFit.cover),
+            // Document photos must not leak through screenshots (PRD §6.6).
+            SecureArea(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(PaoRadius.md),
+                child: Image.memory(s!.bytes!, height: 140, fit: BoxFit.cover),
+              ),
             ),
           ],
           if (s != null) _SlotStatus(slot: slot, value: s),
