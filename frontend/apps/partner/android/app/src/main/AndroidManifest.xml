@@ -3,8 +3,16 @@
          only while the provider is online (PRD §11). -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!-- Release builds talk to the API; only the debug and profile manifests had it. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- PresenceService keeps the heartbeat alive in the background while online
+         (ADR-0028); its notification needs the Android 13 notification permission,
+         which the push set-up already asks for. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
-        android:label="pao_partner"
+        android:label="@string/app_name"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -29,6 +37,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <service
+            android:name=".PresenceService"
+            android:exported="false"
+            android:foregroundServiceType="location"/>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

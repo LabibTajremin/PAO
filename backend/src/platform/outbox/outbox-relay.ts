@@ -13,6 +13,17 @@ export const MAX_ATTEMPTS = 10;
 const BATCH = 100;
 const MAX_BACKOFF_MS = 5 * 60 * 1000;
 
+/** Told about every delivery attempt; the worker's metrics implement it. */
+export interface RelayObserver {
+  eventDelivered(module: string, event: string): void;
+  eventFailed(module: string, event: string, dead: boolean): void;
+}
+
+const ignoreDeliveries: RelayObserver = {
+  eventDelivered: () => undefined,
+  eventFailed: () => undefined,
+};
+
 interface PendingRow {
   readonly env: Envelope;
   readonly attempts: number;
@@ -41,8 +52,16 @@ export class OutboxRelay {
     private readonly db: Database,
     private readonly bus: Dispatcher,
     private readonly modules: readonly string[],
-    private readonly deps: { readonly clock: Clock; readonly log: Logger },
+    private readonly deps: {
+      readonly clock: Clock;
+      readonly log: Logger;
+      readonly observer?: RelayObserver;
+    },
   ) {}
+
+  private get observer(): RelayObserver {
+    return this.deps.observer ?? ignoreDeliveries;
+  }
 
   /** Relays one batch from each module and returns how many events it delivered. */
   async runOnce(): Promise<number> {
@@ -93,11 +112,13 @@ export class OutboxRelay {
         () => undefined,
         (err: unknown) => (err instanceof Error ? err : new Error(String(err))),
       );
-      await this.record(tx, table, row, failure);
+      const dead = await this.record(tx, table, row, failure);
       if (failure) {
         blocked.add(row.env.aggregateId);
+        this.observer.eventFailed(module, row.env.name, dead);
       } else {
         delivered++;
+        this.observer.eventDelivered(module, row.env.name);
       }
     }
     return delivered;
@@ -123,8 +144,13 @@ export class OutboxRelay {
     }));
   }
 
-  /** Marks a delivered event published, or schedules its retry. */
-  private async record(tx: PoolClient, table: string, row: PendingRow, failure?: Error) {
+  /** Marks a delivered event published, or schedules its retry; true when it died. */
+  private async record(
+    tx: PoolClient,
+    table: string,
+    row: PendingRow,
+    failure?: Error,
+  ): Promise<boolean> {
     const now = this.deps.clock.now();
     try {
       if (!failure) {
@@ -132,9 +158,10 @@ export class OutboxRelay {
           `UPDATE ${table} SET published_at = $2, attempts = attempts + 1 WHERE id = $1`,
           [row.env.id, now],
         );
-        return;
+        return false;
       }
       const attempts = row.attempts + 1;
+      const dead = attempts >= MAX_ATTEMPTS;
       const backoff = Math.min(2 ** Math.min(attempts, 9) * 1000, MAX_BACKOFF_MS);
       this.deps.log.warn(
         { event: row.env.name, id: row.env.id, attempt: attempts, err: failure },
@@ -142,14 +169,9 @@ export class OutboxRelay {
       );
       await tx.query(
         `UPDATE ${table} SET attempts = $2, next_attempt_at = $3, last_error = $4, dead = $5 WHERE id = $1`,
-        [
-          row.env.id,
-          attempts,
-          new Date(now.getTime() + backoff),
-          failure.message,
-          attempts >= MAX_ATTEMPTS,
-        ],
+        [row.env.id, attempts, new Date(now.getTime() + backoff), failure.message, dead],
       );
+      return dead;
     } catch (cause) {
       throw new Error(`record delivery of ${row.env.id}`, { cause });
     }

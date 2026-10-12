@@ -1,0 +1,8 @@
+# The Prometheus that scrapes PAO; the dashboards pick it through their datasource variable.
+apiVersion: 1
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: ${PAO_PROMETHEUS_URL}
+    isDefault: true

@@ -6,6 +6,16 @@ import { Ticker } from './ticker';
 /** A periodic job; it must be idempotent, as sweeps are. */
 export type Job = () => Promise<void>;
 
+/** How a run ended; `skipped` means another worker held the job's lock. */
+export type JobOutcome = 'ok' | 'failed' | 'skipped';
+
+/** Told about every run, so failing jobs can alert (ops/prometheus). */
+export interface JobObserver {
+  jobFinished(job: string, outcome: JobOutcome, seconds: number): void;
+}
+
+const ignoreRuns: JobObserver = { jobFinished: () => undefined };
+
 // The advisory-lock namespace of scheduled jobs; the second key is hashtext(job name).
 const JOB_LOCK_CLASS = 7041;
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -35,6 +45,7 @@ export class JobScheduler {
     private readonly db: Database,
     private readonly clock: Clock,
     private readonly log: Logger,
+    private readonly observer: JobObserver = ignoreRuns,
   ) {}
 
   /** Runs `job` every `intervalMs`, the first time one interval after start. */
@@ -72,7 +83,9 @@ export class JobScheduler {
       throw new Error(`unknown job ${name}`);
     }
     const client = await this.db.checkout();
+    const started = performance.now();
     let locked = false;
+    let outcome: JobOutcome = 'skipped';
     try {
       const { rows } = await client.query<{ locked: boolean }>(
         'SELECT pg_try_advisory_lock($1, hashtext($2)) AS locked',
@@ -80,13 +93,17 @@ export class JobScheduler {
       );
       locked = rows[0]?.locked === true;
       if (locked) {
+        outcome = 'failed';
         await entry.job();
+        outcome = 'ok';
       }
     } catch (err) {
+      outcome = 'failed';
       this.log.error({ err, job: name }, 'job failed');
     } finally {
       await this.unlock(client, name, locked);
     }
+    this.observer.jobFinished(name, outcome, (performance.now() - started) / 1000);
     return locked;
   }
 

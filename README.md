@@ -33,16 +33,18 @@ Run the whole quality gate (what CI runs) with `./pao ci`. `./pao help` lists ev
 |---|---|
 | `api/openapi.yaml` | REST contract shared by backend and apps |
 | `backend/` | NestJS modular monolith: `src/main.ts`, `src/worker.ts`, `src/migrate.ts`, `src/platform/`, `src/modules/<module>/`, `migrations/`, `seed/` |
-| `frontend/` | Flutter workspace: `apps/` (customer, partner, admin) and `packages/` (pao_core, pao_api, pao_ui, pao_l10n) |
+| `frontend/` | Flutter workspace: `apps/` (customer, partner, admin) and `packages/` (pao_core, pao_api, pao_ui, pao_l10n, pao_e2e); per-app `config/<flavour>.json` |
 | `test/` | Cross-system tests: e2e journeys, fixtures, performance scripts, CLI tests |
 | `docs/` | PRD, build kit, ADRs, architecture, glossary, runbooks |
-| `scripts/` | `pao` CLI helpers and git hooks |
+| `scripts/` | `pao` CLI helpers, git hooks and `build-release.sh` |
 | `.github/workflows/` | CI: backend, frontend, contract, e2e |
 
 ## Documentation
 
 - Product requirements: [`docs/prd/PAO-PRD.pdf`](docs/prd/PAO-PRD.pdf)
+- Handover (start here when taking over): [`HANDOVER.md`](HANDOVER.md)
 - Architecture: [`docs/architecture.md`](docs/architecture.md)
+- Release builds and signing: [`docs/release.md`](docs/release.md)
 - Domain glossary: [`docs/domain-glossary.md`](docs/domain-glossary.md)
 - Decisions: [`docs/adr/`](docs/adr/)
 - Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md)

@@ -997,6 +997,10 @@ class PartnerL10nEn extends PartnerL10n {
   String get homeOnlineBody => 'Customers nearby can send you requests.';
 
   @override
+  String get homeServiceBody =>
+      'PAO Partner is sharing your location so customers nearby can send you requests. Go offline in the app to stop.';
+
+  @override
   String get homeOfflineBody => 'Go online to receive requests.';
 
   @override

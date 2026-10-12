@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pao_partner/app/routes.dart';
 import 'package:pao_partner/features/home/data/prefs_online_memory.dart';
+import 'package:pao_partner/features/home/data/service_heartbeat.dart';
 import 'package:pao_partner/features/notifications/presentation/notifications_page.dart';
 import 'package:pao_partner/features/profile/presentation/documents_page.dart';
 import 'package:pao_partner/features/requests/presentation/request_page.dart';
@@ -95,12 +97,29 @@ void main() {
   testWidgets('going online sends the position and heartbeats until offline', (
     tester,
   ) async {
+    final service = <MethodCall>[];
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      presenceChannel,
+      (call) async => service.add(call),
+    );
+    addTearDown(
+      () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        presenceChannel,
+        null,
+      ),
+    );
     final h = await _home(tester);
     expect(find.text('No requests right now'), findsOneWidget);
     expect(find.text('You are offline'), findsOneWidget);
     await tester.tap(find.byType(Switch));
     await h.settle(tester);
     expect(find.text('You are online'), findsOneWidget);
+    expect(service.single.arguments, {
+      'title': 'You are online',
+      'body':
+          'PAO Partner is sharing your location so customers nearby can send '
+          'you requests. Go offline in the app to stop.',
+    });
     expect(h.bodyOf('/v1/provider/presence/online'), {
       'location': {'lat': 23.794, 'lng': 90.407},
     });
@@ -112,6 +131,7 @@ void main() {
     expect(find.text('You are offline'), findsOneWidget);
     expect(_count(h, '/v1/provider/presence/offline'), 1);
     expect(h.services.prefs.flag(PrefsOnlineMemory.key), isFalse);
+    expect(service.map((c) => c.method), ['start', 'stop']);
   });
 
   testWidgets('location off keeps the provider offline', (tester) async {

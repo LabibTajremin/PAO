@@ -990,6 +990,10 @@ class PartnerL10nBn extends PartnerL10n {
   String get homeOnlineBody => 'কাছের গ্রাহকরা আপনাকে অনুরোধ পাঠাতে পারবেন।';
 
   @override
+  String get homeServiceBody =>
+      'কাছের গ্রাহকরা যেন অনুরোধ পাঠাতে পারেন, তাই PAO Partner আপনার লোকেশন শেয়ার করছে। বন্ধ করতে অ্যাপে অফলাইন হোন।';
+
+  @override
   String get homeOfflineBody => 'অনুরোধ পেতে অনলাইনে যান।';
 
   @override

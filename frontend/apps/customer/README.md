@@ -35,3 +35,11 @@ lib/
 - 100% line coverage of `lib/` (generated l10n and `main.dart` excluded), files ≤ 200
   lines, functions ≤ 40 lines, `dart analyze --fatal-infos` and `dart_code_linter`
   metrics clean.
+
+## Builds
+
+Flavours `dev`, `staging` and `prod` each have their own application ID suffix, app
+name and `config/<flavour>.json` (non-secret `--dart-define` values). `flutter run`
+uses `dev`; release builds go through `scripts/build-release.sh customer <flavour>
+[appbundle|apk|ipa|linux]`. Signing, versioning and the store checklist are in
+[`docs/release.md`](../../../docs/release.md).

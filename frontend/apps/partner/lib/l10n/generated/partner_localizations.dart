@@ -1838,6 +1838,12 @@ abstract class PartnerL10n {
   /// **'Customers nearby can send you requests.'**
   String get homeOnlineBody;
 
+  /// Android notification body while the online service runs in the background.
+  ///
+  /// In en, this message translates to:
+  /// **'PAO Partner is sharing your location so customers nearby can send you requests. Go offline in the app to stop.'**
+  String get homeServiceBody;
+
   /// M15 switch subtitle while offline.
   ///
   /// In en, this message translates to:

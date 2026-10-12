@@ -1,0 +1,22 @@
+# Scrape configuration for PAO. The API and the worker serve /metrics on METRICS_ADDR
+# (:9090), which is never exposed publicly. Replace the targets with the production
+# hosts or a service-discovery block; the job names must stay, the alert rules use them.
+global:
+  scrape_interval: 15s
+  evaluation_interval: 30s
+
+rule_files:
+  - rules/*.yml
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ["alertmanager:9093"]
+
+scrape_configs:
+  - job_name: pao-api
+    static_configs:
+      - targets: ["api:9090"]
+  - job_name: pao-worker
+    static_configs:
+      - targets: ["worker:9090"]

@@ -1,5 +1,6 @@
 import { type IncomingMessage, type ServerResponse } from 'node:http';
 import { collectDefaultMetrics, Counter, Histogram, Registry } from 'prom-client';
+import { WorkerMetrics } from './worker-metrics';
 
 /** Returns the route template a request matched (e.g. `/v1/bookings/{id}`), if any. */
 export type RouteResolver = (req: IncomingMessage) => string | undefined;
@@ -13,6 +14,8 @@ export const METRICS = Symbol('Metrics');
  */
 export class Metrics {
   readonly registry = new Registry();
+  /** Job and outbox metrics; only the worker records them. */
+  readonly worker = new WorkerMetrics(this.registry);
   private readonly requests: Counter<'route' | 'method' | 'status'>;
   private readonly latency: Histogram<'route' | 'method'>;
 

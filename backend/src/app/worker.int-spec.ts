@@ -95,7 +95,13 @@ describe('worker', () => {
       status: 200,
       text: '{"status":"ok"}\n',
     });
-    expect((await get(workerServer(app), '/metrics')).text).toContain('process_cpu');
+    const metrics = (await get(workerServer(app), '/metrics')).text;
+    expect(metrics).toContain('process_cpu');
+    expect(metrics).toContain('pao_outbox_pending_events{module="booking"}');
+    expect(metrics).toContain('pao_job_runs_total{name="fixture.job",outcome="ok"} 1');
+    expect(metrics).toContain(
+      'pao_outbox_events_delivered_total{module="booking",event="test.Ping"}',
+    );
     expect(await get(workerServer(app), '/__test/pushes?token=x')).toEqual({
       status: 200,
       text: '{"pushes":[]}\n',
