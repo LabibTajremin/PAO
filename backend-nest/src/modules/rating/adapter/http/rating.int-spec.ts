@@ -1,10 +1,14 @@
 import { v7 as uuid } from 'uuid';
 import { startTestApi, type TestApi } from '../../../../../test/kit/api';
 import { deliver, relayEvents } from '../../../../../test/kit/events';
+import { standIn } from '../../../../../test/kit/stand-in';
 import { DATABASE, type Database } from '../../../../platform/db/database';
+import { DomainError } from '../../../../platform/errors/domain-error';
 import { HEALTH_ROUTES } from '../../../../platform/health/health';
 import { checkRoutesAgainstSpec } from '../../../../platform/http/route-spec-check';
 import { OPENAPI_DOCUMENT } from '../../../../platform/http/spec-routes';
+import { BOOKING_SERVICE } from '../../../booking/contract/booking-service';
+import { BookingErrors } from '../../../booking/contract/errors';
 import { BookingEvents, type BookingCompleted } from '../../../booking/contract/events';
 import { RATING_SERVICE, type RatingService } from '../../contract';
 
@@ -43,7 +47,9 @@ describe('rating', () => {
   };
 
   beforeAll(async () => {
-    api = await startTestApi();
+    // Until booking is ported, notification finds none of these bookings and skips them.
+    const bookings = { getBooking: () => Promise.reject(new DomainError(BookingErrors.NotFound)) };
+    api = await startTestApi({ imports: [standIn(new Map([[BOOKING_SERVICE, bookings]]))] });
     ratings = api.app.get(RATING_SERVICE, { strict: false });
   });
 
