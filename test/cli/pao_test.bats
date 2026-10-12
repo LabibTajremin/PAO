@@ -51,6 +51,12 @@ setup() {
   [[ "$output" == *"usage: pao phase finish <id>"* ]]
 }
 
+@test "ops without a known action fails with usage" {
+  run "$PAO" ops backup
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"usage: pao ops check|restore-test [e2e]"* ]]
+}
+
 @test "perf with no scripts has nothing to run" {
   PAO_ROOT="$BATS_TEST_TMPDIR" run bash -c ". '$ROOT/scripts/lib/common.sh'; nothing_to_run perf"
   [ "$status" -eq 0 ]

@@ -27,6 +27,9 @@ jobs:
         env:
           PAO_E2E_APPS: none
         run: ./pao test e2e
+      - name: Backup restore drill
+        # The journeys leave a populated database behind: dump it, restore, compare.
+        run: ./pao ops restore-test e2e
       - name: Stack logs
         if: failure()
         run: docker compose -p pao-e2e logs --no-color | tail -200

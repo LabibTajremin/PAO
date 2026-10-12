@@ -1,0 +1,319 @@
+{
+  "uid": "pao-bookings",
+  "title": "PAO booking funnel",
+  "description": "Booking events as the outbox delivers them: requested → accepted → started → completed, and where bookings drop out.",
+  "tags": [
+    "pao",
+    "bookings"
+  ],
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "timezone": "Asia/Dhaka",
+  "refresh": "30s",
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "label": "Prometheus",
+        "type": "datasource",
+        "query": "prometheus",
+        "current": {},
+        "hide": 0
+      }
+    ]
+  },
+  "annotations": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "bargauge",
+      "title": "Funnel over the selected range",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 9
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingRequested\"}[$__range]))",
+          "legendFormat": "requested"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingAccepted\"}[$__range]))",
+          "legendFormat": "accepted"
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingStarted\"}[$__range]))",
+          "legendFormat": "started"
+        },
+        {
+          "refId": "D",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingCompleted\"}[$__range]))",
+          "legendFormat": "completed"
+        }
+      ],
+      "description": "Each event is counted once, when its outbox row is marked delivered.",
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "gradient",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "bargauge",
+      "title": "Drop-outs over the selected range",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 9
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingRejected\"}[$__range]))",
+          "legendFormat": "rejected"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingTimedOut\"}[$__range]))",
+          "legendFormat": "timed out"
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingCancelled\"}[$__range]))",
+          "legendFormat": "cancelled"
+        }
+      ],
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "gradient",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Acceptance rate",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 9,
+        "w": 8,
+        "h": 5
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingAccepted\"}[$__range])) / clamp_min(sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingRequested\"}[$__range])), 1)",
+          "legendFormat": "accepted / requested"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Completion rate",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 8,
+        "y": 9,
+        "w": 8,
+        "h": 5
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingCompleted\"}[$__range])) / clamp_min(sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingAccepted\"}[$__range])), 1)",
+          "legendFormat": "completed / accepted"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Timed out",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 9,
+        "w": 8,
+        "h": 5
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingTimedOut\"}[$__range])) / clamp_min(sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingRequested\"}[$__range])), 1)",
+          "legendFormat": "timed out / requested"
+        }
+      ],
+      "description": "Requests no provider answered in time: a sign of too few online providers."
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Bookings per hour",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 14,
+        "w": 24,
+        "h": 9
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingRequested\"}[1h]))",
+          "legendFormat": "requested"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingAccepted\"}[1h]))",
+          "legendFormat": "accepted"
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingCompleted\"}[1h]))",
+          "legendFormat": "completed"
+        },
+        {
+          "refId": "D",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(increase(pao_outbox_events_delivered_total{event=\"booking.BookingCancelled\"}[1h]))",
+          "legendFormat": "cancelled"
+        }
+      ]
+    }
+  ]
+}
