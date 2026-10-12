@@ -20,8 +20,7 @@ types with their outbox names (`contract/index.ts`). Queries live in
 
 ## Events consumed
 
-- `booking.BookingCompleted`
-- `identity.AccountDeleted`
+- `booking.BookingCompleted` (opens the booking for review; redelivery is a no-op)
 
 ## Tables (schema `rating`)
 
@@ -38,5 +37,13 @@ types with their outbox names (`contract/index.ts`). Queries live in
 - `/v1/customer/providers/{id}/reviews`
 - `/v1/provider/reviews`
 - `/v1/provider/rating`
+
+## Layout
+
+- `domain/` — eligibility and content rules (`newReview`), aggregates and averages.
+- `app/` — `SubmitReview` (open a booking, review it once per side), `Ratings` (reads).
+- `adapter/postgres/` — reviews, the aggregate upsert and the outbox in one transaction.
+- `adapter/http/` — the five routes, views and the error map.
+- `adapter/inproc/` — the contract and the BookingCompleted subscriber.
 
 Migrations: `backend-nest/migrations/rating/`.
