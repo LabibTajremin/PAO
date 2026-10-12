@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>PAO uses the camera to take the photos you choose to upload.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>PAO opens your photos so you can choose one to upload.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>PAO uses your location once to set your address and show providers nearby.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
@@ -9,7 +13,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Pao Customer</string>
+	<string>$(APP_DISPLAY_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

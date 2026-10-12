@@ -1337,6 +1337,10 @@
   "@homeOnlineBody": {
     "description": "M15 switch subtitle while online."
   },
+  "homeServiceBody": "PAO Partner is sharing your location so customers nearby can send you requests. Go offline in the app to stop.",
+  "@homeServiceBody": {
+    "description": "Android notification body while the online service runs in the background."
+  },
   "homeOfflineBody": "Go online to receive requests.",
   "@homeOfflineBody": {
     "description": "M15 switch subtitle while offline."

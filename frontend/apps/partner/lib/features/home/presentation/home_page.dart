@@ -7,6 +7,7 @@ import 'package:pao_partner/app/routes.dart';
 import 'package:pao_partner/app/services.dart';
 import 'package:pao_partner/features/home/data/api_home_repository.dart';
 import 'package:pao_partner/features/home/data/prefs_online_memory.dart';
+import 'package:pao_partner/features/home/data/service_heartbeat.dart';
 import 'package:pao_partner/features/home/domain/documents.dart';
 import 'package:pao_partner/features/home/domain/heartbeat.dart';
 import 'package:pao_partner/features/home/domain/home_repository.dart';
@@ -29,6 +30,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final repo = ApiHomeRepository(services.api);
+    final notice = (
+      title: context.t.homeOnline,
+      body: context.t.homeServiceBody,
+    );
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -38,7 +43,7 @@ class HomePage extends StatelessWidget {
           create: (_) => PresenceCubit(
             repo,
             services.location,
-            TimerHeartbeat(),
+            ServiceHeartbeat(TimerHeartbeat(), notice),
             PrefsOnlineMemory(services.prefs),
           )..resume().ignore(),
         ),
