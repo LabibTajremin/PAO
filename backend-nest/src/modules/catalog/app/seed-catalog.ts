@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { NIL as NIL_UUID, v5 as uuidv5 } from 'uuid';
+import { NIL as NIL_UUID } from 'uuid';
+import { seedId } from '../contract/seed-ids';
 import { CLOCK, type Clock } from '../../../platform/clock/clock';
 import { isDomainError } from '../../../platform/errors/domain-error';
 import { ID_GENERATOR, type IdGenerator } from '../../../platform/ids/id-generator';
@@ -19,14 +20,7 @@ import {
 import { check } from './check';
 import { recordChange } from './record-change';
 
-// Stable ids derived from seed keys make reseeding update rows instead of duplicating
-// them; the namespace is the Go backend's, so both derive the same ids.
-const SEED_NAMESPACE = '6b1f3c7e-2f4a-5d8e-9a0b-1c2d3e4f5a6b';
-
-/** The stable id of a seed item, e.g. `seedId('service', 'electrician')`. */
-export function seedId(kind: 'category' | 'service' | 'sub-service', key: string): string {
-  return uuidv5(`${kind}/${key}`, SEED_NAMESPACE);
-}
+export { seedId } from '../contract/seed-ids';
 
 /**
  * Loads the MVP catalog idempotently (P04 task 3), every item published in file order.

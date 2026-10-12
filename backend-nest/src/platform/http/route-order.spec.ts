@@ -1,4 +1,27 @@
-import { preferLiteralRoutes } from './route-order';
+import { Controller, Get, Module, Param } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { type Server } from 'node:http';
+import { type AddressInfo } from 'node:net';
+import { initWithOrderedRoutes, preferLiteralRoutes } from './route-order';
+
+@Controller('v1/customer/providers')
+class ProfileController {
+  @Get(':providerId')
+  profile(@Param('providerId') id: string): string {
+    return `profile ${id}`;
+  }
+}
+
+@Controller('v1/customer/providers')
+class NearbyController {
+  @Get('nearby')
+  nearby(): string {
+    return 'nearby';
+  }
+}
+
+@Module({ controllers: [ProfileController, NearbyController] })
+class ShadowingModule {}
 
 function layer(path?: string) {
   const pattern =
@@ -27,5 +50,16 @@ describe('preferLiteralRoutes', () => {
       '/v1/other',
       '/v1/other',
     ]);
+  });
+
+  it('routes a literal path to its own handler in an app from NestFactory', async () => {
+    const app = await NestFactory.create(ShadowingModule, { logger: false });
+    await initWithOrderedRoutes(app);
+    await app.listen(0, '127.0.0.1');
+    const { port } = (app.getHttpServer() as Server).address() as AddressInfo;
+    const get = (path: string) => fetch(`http://127.0.0.1:${port}${path}`).then((r) => r.text());
+    expect(await get('/v1/customer/providers/nearby')).toBe('nearby');
+    expect(await get('/v1/customer/providers/p1')).toBe('profile p1');
+    await app.close();
   });
 });

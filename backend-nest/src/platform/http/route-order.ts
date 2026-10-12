@@ -32,13 +32,13 @@ export function preferLiteralRoutes(stack: Layer[]): void {
   }
 }
 
-/** Applies {@link preferLiteralRoutes} once Nest has registered every route. */
-export function orderRoutesOnInit(app: INestApplication): void {
-  const init = app.init.bind(app);
-  app.init = async () => {
-    await init();
-    const express = app.getHttpAdapter().getInstance() as { router: { stack: Layer[] } };
-    preferLiteralRoutes(express.router.stack);
-    return app;
-  };
+/**
+ * Initialises the app, which registers every route, then applies
+ * {@link preferLiteralRoutes}. It is a plain call rather than a wrapped `app.init`
+ * because the app NestFactory returns is a proxy that ignores property writes.
+ */
+export async function initWithOrderedRoutes(app: INestApplication): Promise<void> {
+  await app.init();
+  const express = app.getHttpAdapter().getInstance() as { router: { stack: Layer[] } };
+  preferLiteralRoutes(express.router.stack);
 }

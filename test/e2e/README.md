@@ -4,7 +4,8 @@ End-to-end journeys against the full Docker stack (P14, `docs/build/03-testing.m
 
 - `stack.sh` starts a fresh stack as the separate compose project `pao-e2e`
   (`compose.e2e.yml`): API on `:8180`, S3 on `:9100`, worker hooks on `:9191` (move them
-  with `PAO_E2E_PROJECT` and `PAO_E2E_PORT` to run several stacks), an empty
+  with `PAO_E2E_PROJECT` and `PAO_E2E_PORT` to run several stacks; `PAO_BACKEND_DIR=backend-nest`
+  builds the NestJS backend instead of `backend`), an empty
   database, `APP_ENV=test`. It seeds the catalog and the demo admins with a random
   password and writes the endpoints to `.stack.env`.
 - With `APP_ENV=test` the API and worker mount test-only hooks

@@ -187,7 +187,7 @@ export async function startTestApi(opts: TestApiOptions = {}): Promise<TestApi> 
   }
   builder = opts.override ? opts.override(builder) : builder;
   const app = (await builder.compile()).createNestApplication(API_APP_OPTIONS);
-  configureApiApp(app);
+  await configureApiApp(app);
   await app.listen(0, '127.0.0.1');
   onCleanup(() => app.close());
   const { port } = (app.getHttpServer() as Server).address() as AddressInfo;

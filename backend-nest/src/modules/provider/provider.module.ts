@@ -14,6 +14,7 @@ import {
   MediaAvatars,
   ProviderRatings,
 } from './adapter/peers/peers';
+import { PostgresPerfSeeder } from './adapter/postgres/perf-seeder';
 import { providerOutboxProvider } from './adapter/postgres/outbox';
 import { PostgresProviderRepository } from './adapter/postgres/provider-repository';
 import { ReadModelHandlers } from './adapter/postgres/read-model';
@@ -24,6 +25,7 @@ import { FindProviders } from './app/find-nearby';
 import { ManagePresence } from './app/presence';
 import { ProviderProfiles, PublicProfiles } from './app/profile';
 import { Profiles } from './app/profiles';
+import { PERF_SEEDER } from '../../platform/seeding/seeders';
 import { PROVIDER_SERVICE } from './contract/provider-service';
 import { ACCOUNTS, CATALOG, MEDIA, RATINGS, SETTINGS } from './port/peers';
 import { PRESENCE } from './port/presence';
@@ -57,7 +59,8 @@ import { PROVIDER_REPOSITORY } from './port/repository';
     ReadModelHandlers,
     ProviderWorker,
     { provide: PROVIDER_SERVICE, useClass: ProviderContract },
+    { provide: PERF_SEEDER, useClass: PostgresPerfSeeder },
   ],
-  exports: [PROVIDER_SERVICE],
+  exports: [PROVIDER_SERVICE, PERF_SEEDER],
 })
 export class ProviderModule {}

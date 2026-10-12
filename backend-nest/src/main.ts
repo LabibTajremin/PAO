@@ -16,7 +16,7 @@ const DRAIN_MS = 10_000;
 async function serve(): Promise<void> {
   const config = loadConfig(process.env);
   const app = await NestFactory.create(AppModule.forRoot(config), API_APP_OPTIONS);
-  configureApiApp(app);
+  await configureApiApp(app);
   const log = app.get<Logger>(LOGGER);
   const metrics = apiMetricsServer(app);
   await listen(metrics, config.metricsAddr);
