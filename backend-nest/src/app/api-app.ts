@@ -2,6 +2,7 @@ import { type INestApplication, type NestApplicationOptions } from '@nestjs/comm
 import { type NextFunction, type Request, type Response } from 'express';
 import { APP_CONFIG, type AppConfig } from '../platform/config/app-config';
 import { LOGGER, type Logger, NestLoggerAdapter } from '../platform/logging/logger';
+import { orderRoutesOnInit } from '../platform/http/route-order';
 import { testHooks } from '../platform/testing/test-hooks';
 import { testHookSeams } from './platform';
 
@@ -18,6 +19,7 @@ export const API_APP_OPTIONS: NestApplicationOptions = { bodyParser: false, buff
 export function configureApiApp(app: INestApplication): void {
   const log = app.get<Logger>(LOGGER);
   app.useLogger(new NestLoggerAdapter(log));
+  orderRoutesOnInit(app);
   if (app.get<AppConfig>(APP_CONFIG).appEnv !== 'test') {
     return;
   }

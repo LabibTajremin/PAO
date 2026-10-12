@@ -5,8 +5,8 @@ import { DATABASE, type Database } from '../../../../platform/db/database';
 import { ticketNumber } from '../../domain/complaint';
 import { COMPLAINT_REPOSITORY, type ComplaintRepository } from '../../port/complaint-repository';
 
-// Reports need a booking and media, so these specs seed the queue directly; the report
-// journey (Go TestComplaints_ReportedByBothSidesAndResolved) waits for booking.
+// These specs seed the queue directly; reports.int-spec.ts files reports on real
+// bookings (Go TestComplaints_ReportedByBothSidesAndResolved).
 async function seedComplaint(db: Database, at: Date, reason: string): Promise<string> {
   const id = uuid();
   await db.query(

@@ -70,7 +70,9 @@ describe('provider read model and quality flags', () => {
         complaintId: uuid(),
         ticketNumber: 'TCK-000001',
         againstId: complained.id,
+        bookingId: uuid(),
         reporterId: uuid(),
+        reporterRole: 'customer',
         verified,
         actorId: null,
       });

@@ -30,10 +30,7 @@ describe('API without business modules', () => {
     expect((await api.do('DELETE', '/healthz')).status).toBe(405);
   });
 
-  it('answers 501 for operations no module serves, after authentication', async () => {
-    expect((await api.do('GET', '/v1/customer/notifications')).code).toBe('UNAUTHENTICATED');
-    const r = await api.do('GET', '/v1/customer/notifications', undefined, { token: customer });
-    expect(r).toMatchObject({ status: 501, code: 'NOT_IMPLEMENTED' });
+  it('denies an operation the caller has no permission for', async () => {
     const forbidden = await api.do('GET', '/v1/admin/dashboard', undefined, { token: customer });
     expect(forbidden).toMatchObject({ status: 403, code: 'FORBIDDEN' });
     expect(forbidden.body).toMatchObject({ error: { details: { permission: 'dashboard:read' } } });
@@ -108,7 +105,7 @@ describe('API test hooks with module seams', () => {
   it('read the captures and run the expiry sweep', async () => {
     const expired: Date[] = [];
     const api = await startTestApi({
-      // Identity and verification provide the real seams; these stand-ins replace them.
+      // Identity, notification and verification provide the real seams; these stand-ins replace them.
       override: (b) =>
         b
           .overrideProvider(SMS_CAPTURE)
@@ -117,6 +114,8 @@ describe('API test hooks with module seams', () => {
             last: (phone: string) =>
               phone === '+8801712345601' ? 'Your PAO code is 123456' : undefined,
           })
+          .overrideProvider(PUSH_CAPTURE)
+          .useValue({ sentTo: () => [{ title: 'New request', body: '', data: { type: 'x' } }] })
           .overrideProvider(DOCUMENT_EXPIRY)
           .useValue({
             expireDocumentsAt: (at: Date) => {
@@ -124,12 +123,6 @@ describe('API test hooks with module seams', () => {
               return expired.length > 1 ? Promise.reject(new Error('db down')) : Promise.resolve();
             },
           }),
-      providers: [
-        {
-          provide: PUSH_CAPTURE,
-          useValue: { sentTo: () => [{ title: 'New request', body: '', data: { type: 'x' } }] },
-        },
-      ],
     });
     expect((await api.do('GET', '/__test/sms?phone=01712345601')).body).toEqual({
       message: 'Your PAO code is 123456',
