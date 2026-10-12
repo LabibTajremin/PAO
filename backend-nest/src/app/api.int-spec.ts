@@ -146,6 +146,14 @@ describe('API test hooks with module seams', () => {
     expect(failed).toMatchObject({ status: 500, text: 'db down\n' });
   });
 
+  it('answer 501 for the expiry sweep when no module provides it', async () => {
+    const api = await startTestApi({
+      override: (b) => b.overrideProvider(DOCUMENT_EXPIRY).useValue(null),
+    });
+    const at = new Date().toISOString();
+    expect((await api.do('POST', `/__test/verification/expire?at=${at}`)).status).toBe(501);
+  });
+
   it('are absent outside APP_ENV=test', async () => {
     const api = await startTestApi({ config: { appEnv: 'dev' } });
     const r = await api.do('GET', '/__test/sms?phone=01712345601');

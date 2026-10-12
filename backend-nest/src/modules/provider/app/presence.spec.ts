@@ -4,7 +4,7 @@ import { ProviderReasons } from '../domain/reasons';
 import { type RadiusCandidate } from '../port/repository';
 
 const dhaka = { lat: 23.79, lng: 90.41 };
-const reason = (r: string) => expect.objectContaining({ reason: r });
+const reason = (r: string) => ({ reason: r });
 
 function verified(f: ReturnType<typeof providerFixture>, id = 'verified'): string {
   f.repo.rows.set(id, {
@@ -20,7 +20,9 @@ describe('presence', () => {
   it('goes online, beats, and is reaped when the heartbeat stops', async () => {
     const f = providerFixture();
     const id = verified(f);
-    await expect(f.manage.heartbeat(id, dhaka)).rejects.toEqual(reason(ProviderReasons.Offline));
+    await expect(f.manage.heartbeat(id, dhaka)).rejects.toMatchObject(
+      reason(ProviderReasons.Offline),
+    );
     await f.manage.goOnline(id, dhaka);
     await f.manage.heartbeat(id, { lat: 23.8, lng: 90.42 });
     expect(await f.manage.isAvailable(id)).toBe(true);
@@ -31,7 +33,7 @@ describe('presence', () => {
       { name: 'provider.ProviderWentOffline', providerId: id, reason: 'heartbeat_lost' },
     ]);
     f.repo.rows.set('unverified', emptyProvider('unverified'));
-    await expect(f.manage.goOnline('unverified', dhaka)).rejects.toEqual(
+    await expect(f.manage.goOnline('unverified', dhaka)).rejects.toMatchObject(
       reason(ProviderReasons.NotVerified),
     );
     for (const call of [
@@ -39,7 +41,7 @@ describe('presence', () => {
       () => f.manage.heartbeat('nobody', dhaka),
       () => f.manage.goOffline('nobody', 'x'),
     ]) {
-      await expect(call()).rejects.toEqual(reason(ProviderReasons.NotFound));
+      await expect(call()).rejects.toMatchObject(reason(ProviderReasons.NotFound));
     }
     f.presence.err = boom;
     await expect(f.manage.reapLost()).rejects.toBe(boom);
@@ -58,7 +60,7 @@ describe('profiles', () => {
     expect(p).toMatchObject({ photoUrl: 'https://media/ph', bio: 'Licensed electrician' });
     expect(p.services).toHaveLength(1);
     const fr = { bio: '', photoMediaId: null, language: 'fr' };
-    await expect(f.own.update(id, fr)).rejects.toEqual(reason(ProviderReasons.Invalid));
+    await expect(f.own.update(id, fr)).rejects.toMatchObject(reason(ProviderReasons.Invalid));
     f.peers.err = boom;
     await expect(f.own.update(id, { bio: '', photoMediaId: 'ph', language: 'en' })).rejects.toBe(
       boom,
@@ -80,10 +82,14 @@ describe('profiles', () => {
     const shown = await f.public.get('viewer', id);
     expect(shown).toMatchObject({ photoUrl: '', rating: { average: 4.5 } });
     f.repo.rows.set('new', emptyProvider('new'));
-    await expect(f.public.get('viewer', 'new')).rejects.toEqual(reason(ProviderReasons.NotFound));
+    await expect(f.public.get('viewer', 'new')).rejects.toMatchObject(
+      reason(ProviderReasons.NotFound),
+    );
     const banned = { ...emptyProvider('b'), level: 1, accountStatus: 'banned' };
     f.repo.rows.set('b', banned);
-    await expect(f.public.get('viewer', 'b')).rejects.toEqual(reason(ProviderReasons.NotFound));
+    await expect(f.public.get('viewer', 'b')).rejects.toMatchObject(
+      reason(ProviderReasons.NotFound),
+    );
   });
 });
 
@@ -127,7 +133,7 @@ describe('find nearby', () => {
     expect(await f.finder.nearby({ ...q, serviceId: f.electric, limit: 0 })).toHaveLength(3);
     f.presence.hits = [];
     expect(await f.finder.nearby({ ...q, serviceId: f.electric })).toEqual([]);
-    await expect(f.finder.nearby({ ...q, serviceId: 'unknown' })).rejects.toEqual(
+    await expect(f.finder.nearby({ ...q, serviceId: 'unknown' })).rejects.toMatchObject(
       reason(ProviderReasons.UnknownService),
     );
   });

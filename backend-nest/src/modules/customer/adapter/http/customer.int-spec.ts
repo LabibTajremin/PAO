@@ -96,7 +96,7 @@ describe('customer profile', () => {
       roles: ['provider'],
     } as never);
     await deliver(api, { name: 'booking.BookingRequested', customerId: id } as never);
-    await deliver(api, { name: 'booking.BookingRequested' } as never);
+    await deliver(api, { name: 'booking.BookingRequested' });
     const [row] = await customers.searchCustomers({
       id,
       text: ' NUSRAT ',

@@ -5,7 +5,7 @@ import { type ProviderByIDRow, type SaveProfileArgs } from './sqlc/queries_sql';
  * node-postgres reads a `date` column as local midnight; birthdays are calendar dates,
  * so they are kept as UTC midnight like the API's "YYYY-MM-DD".
  */
-export function calendarDate(d: Date | null): Date | null {
+function calendarDate(d: Date | null): Date | null {
   return d === null ? null : new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
 }
 

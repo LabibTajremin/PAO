@@ -5,7 +5,7 @@ import { ProviderReasons } from '../domain/reasons';
 
 const ID = '0192a000-0000-7000-8000-0000000000aa';
 const dhaka = { lat: 23.79, lng: 90.41 };
-const reason = (r: string) => expect.objectContaining({ reason: r });
+const reason = (r: string) => ({ reason: r });
 
 function personal(now: Date) {
   const dob = new Date(now);
@@ -34,7 +34,7 @@ describe('enrolment', () => {
     expect(f.peers.sent).toEqual(['+8801812345678']);
     await f.contact.verify(ID, '123456');
     await f.enrolment.acceptCodeOfConduct(ID, '2026-10', true);
-    await expect(f.enrolment.markSubmitted(ID)).rejects.toEqual(
+    await expect(f.enrolment.markSubmitted(ID)).rejects.toMatchObject(
       reason(ProviderReasons.EnrolmentIncomplete),
     );
     for (const s of ['nid', 'selfie', 'police_clearance']) {
@@ -51,7 +51,7 @@ describe('enrolment', () => {
     await f.contact.save(ID, { ...contact, phone: '01912345678' });
     expect((await f.enrolment.progress(ID)).complete).toBe(false);
     f.peers.codeErr = new DomainError(ProviderReasons.CodeRejected);
-    await expect(f.contact.verify(ID, '000000')).rejects.toEqual(
+    await expect(f.contact.verify(ID, '000000')).rejects.toMatchObject(
       reason(ProviderReasons.CodeRejected),
     );
   });
@@ -59,38 +59,38 @@ describe('enrolment', () => {
   it('rejects bad steps', async () => {
     const f = providerFixture();
     const young = { ...personal(f.clock.now()), dateOfBirth: new Date('2009-10-09T00:00:00Z') };
-    await expect(f.enrolment.savePersonal(ID, young)).rejects.toEqual(
+    await expect(f.enrolment.savePersonal(ID, young)).rejects.toMatchObject(
       reason(ProviderReasons.TooYoung),
     );
-    await expect(f.enrolment.saveServices(ID, [], 1)).rejects.toEqual(
+    await expect(f.enrolment.saveServices(ID, [], 1)).rejects.toMatchObject(
       reason(ProviderReasons.Invalid),
     );
-    await expect(f.enrolment.saveServices(ID, ['unknown'], 1)).rejects.toEqual(
+    await expect(f.enrolment.saveServices(ID, ['unknown'], 1)).rejects.toMatchObject(
       reason(ProviderReasons.UnknownService),
     );
     const hidden = { id: 'hidden', name: { en: '', bn: '' }, published: false, minLevel: 1 };
     f.peers.services.set('hidden', { ...hidden, womenProvidersOnly: false });
-    await expect(f.enrolment.saveServices(ID, ['hidden'], 1)).rejects.toEqual(
+    await expect(f.enrolment.saveServices(ID, ['hidden'], 1)).rejects.toMatchObject(
       reason(ProviderReasons.UnknownService),
     );
-    await expect(f.enrolment.saveArea(ID, dhaka, 10)).rejects.toEqual(
+    await expect(f.enrolment.saveArea(ID, dhaka, 10)).rejects.toMatchObject(
       reason(ProviderReasons.Invalid),
     );
     const bad = { name: 'K', relation: 'Brother', phone: 'x' };
-    await expect(f.contact.save(ID, bad)).rejects.toEqual(reason(ProviderReasons.Invalid));
+    await expect(f.contact.save(ID, bad)).rejects.toMatchObject(reason(ProviderReasons.Invalid));
     const self = { name: 'Karim', relation: 'Self', phone: '01712345678' };
-    await expect(f.contact.save(ID, self)).rejects.toEqual(reason(ProviderReasons.Invalid));
-    await expect(f.contact.verify(ID, '1')).rejects.toEqual(
+    await expect(f.contact.save(ID, self)).rejects.toMatchObject(reason(ProviderReasons.Invalid));
+    await expect(f.contact.verify(ID, '1')).rejects.toMatchObject(
       reason(ProviderReasons.ContactUnproven),
     );
-    await expect(f.enrolment.acceptCodeOfConduct(ID, '2026-10', false)).rejects.toEqual(
+    await expect(f.enrolment.acceptCodeOfConduct(ID, '2026-10', false)).rejects.toMatchObject(
       reason(ProviderReasons.Invalid),
     );
     f.peers.codeErr = boom;
     const other = { name: 'Karim', relation: 'Brother', phone: '01812345678' };
     await expect(f.contact.save(ID, other)).rejects.toBe(boom);
     // A failed send must not save the contact.
-    await expect(f.contact.verify(ID, '1')).rejects.toEqual(
+    await expect(f.contact.verify(ID, '1')).rejects.toMatchObject(
       reason(ProviderReasons.ContactUnproven),
     );
   });

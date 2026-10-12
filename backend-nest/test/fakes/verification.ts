@@ -16,6 +16,7 @@ import { ReviewItems } from '../../src/modules/verification/app/review';
 import { States } from '../../src/modules/verification/app/states';
 import { ProviderStatus } from '../../src/modules/verification/app/status';
 import { Submissions } from '../../src/modules/verification/app/submissions';
+import { ITEM_TYPES } from '../../src/modules/verification/domain/items';
 import { type Session } from '../../src/modules/verification/domain/level2';
 import { VerificationReasons } from '../../src/modules/verification/domain/reasons';
 import { newState, type State } from '../../src/modules/verification/domain/state';
@@ -212,7 +213,12 @@ export function providerOf(id: string): Provider {
     homeBase: { lat: 23.79, lng: 90.41 },
     workingRadiusM: 8000,
     language: 'bn',
-    emergencyContact: { name: 'Karim', relation: 'Brother', phone: '+8801812345678', verifiedAt: null },
+    emergencyContact: {
+      name: 'Karim',
+      relation: 'Brother',
+      phone: '+8801812345678',
+      verifiedAt: null,
+    },
     submittedAt: null,
   };
 }
@@ -241,4 +247,25 @@ export function verificationFixture() {
     expiry: new ExpireDocuments(states),
     changes: new ProfileChanges(states, peers),
   };
+}
+
+type Fixture = ReturnType<typeof verificationFixture>;
+const monthAgo = (f: Fixture) => new Date(f.clock.now().getTime() - 30 * 24 * 60 * 60 * 1000);
+
+/** Submits every Level 1 item for the fixture's provider. */
+export async function enrolled(f: Fixture): Promise<void> {
+  await f.documents.saveNid(f.id, '1234567890', 'front', 'back');
+  await f.documents.saveSelfie(f.id, 'selfie');
+  await f.documents.savePoliceClearance(f.id, 'clearance', monthAgo(f));
+  await f.documents.saveSkillProof(f.id, ['proof']);
+  for (const step of ['personal', 'area', 'emergency_contact', 'code_of_conduct', 'nid']) {
+    await f.changes.onStepSaved(f.id, step);
+  }
+}
+
+/** Approves every item. */
+export async function approveAll(f: Fixture, actor = 'verifier'): Promise<void> {
+  for (const item of ITEM_TYPES) {
+    await f.review.decide({ providerId: f.id, item, actor, approve: true, reason: '' });
+  }
 }

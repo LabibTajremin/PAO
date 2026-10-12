@@ -8,7 +8,7 @@ import { ProviderReasons } from '../../domain/reasons';
 import { type Hit, type Presence } from '../../port/presence';
 
 /** Three missed 30-second heartbeats. */
-export const HEARTBEAT_TTL_MS = 90_000;
+const HEARTBEAT_TTL_MS = 90_000;
 
 /** Fails when any command of a transaction failed. */
 async function run(tx: ChainableCommander): Promise<void> {
