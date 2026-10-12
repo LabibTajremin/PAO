@@ -37,7 +37,7 @@ test/e2e/mobile/run.sh customer -- integration_test/customer_journey_test.dart
 ```
 
 Needs Flutter, `xvfb-run`, `dbus-run-session`, `gnome-keyring` and the Linux desktop
-toolchain (clang, cmake, ninja, GTK 3, libsecret) for partner and customer; Chrome and
+toolchain (clang, cmake, ninja, GTK 3, libsecret, libcurl for Sentry's native SDK) for partner and customer; Chrome and
 a matching chromedriver (`CHROMEDRIVER`, `CHROME_EXECUTABLE`) for admin. The admin
 panel is served on `PAO_E2E_ADMIN_WEB_PORT` (default 5000), which must be the stack's
 `ADMIN_CORS_ORIGIN` port; start a stack for another port with
