@@ -89,4 +89,26 @@ describe('JobScheduler', () => {
     expect(await s.runNow('suicide')).toBe(true);
     await expect(db.ping()).resolves.toBeUndefined();
   });
+
+  it('tells its observer how each run ended', async () => {
+    const seen: string[] = [];
+    const s = new JobScheduler(db, clock, discardLogger(), {
+      jobFinished: (job, outcome, seconds) => {
+        expect(seconds).toBeGreaterThanOrEqual(0);
+        seen.push(`${job}:${outcome}`);
+      },
+    });
+    let release = (): void => undefined;
+    s.every(60_000, 'good', () => Promise.resolve());
+    s.every(60_000, 'bad', () => Promise.reject(new Error('broke')));
+    s.every(60_000, 'slow', () => new Promise<void>((r) => (release = r)));
+    await s.runNow('good');
+    await s.runNow('bad');
+    const first = s.runNow('slow');
+    await sleep(50);
+    await s.runNow('slow');
+    release();
+    await first;
+    expect(seen).toEqual(['good:ok', 'bad:failed', 'slow:skipped', 'slow:ok']);
+  });
 });

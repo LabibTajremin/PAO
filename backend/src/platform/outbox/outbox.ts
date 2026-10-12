@@ -97,3 +97,37 @@ export async function purgePublishedEvents(
     }
   }
 }
+
+/** One module's undelivered events, as the worker's metrics report them. */
+export interface OutboxBacklog {
+  readonly module: string;
+  readonly pending: number;
+  readonly dead: number;
+  /** Age of the oldest pending event; 0 when nothing waits. */
+  readonly oldestSeconds: number;
+}
+
+/** Reads each module's outbox backlog as of `now`. */
+export async function readOutboxBacklog(
+  db: Database,
+  modules: readonly string[],
+  now: Date,
+): Promise<OutboxBacklog[]> {
+  const backlog: OutboxBacklog[] = [];
+  for (const module of modules) {
+    const table = moduleTable(module, 'outbox');
+    try {
+      const { rows } = await db.query<{ pending: number; dead: number; oldest: Date | null }>(
+        `SELECT count(*) FILTER (WHERE NOT dead)::int AS pending, count(*) FILTER (WHERE dead)::int AS dead,
+                min(created_at) FILTER (WHERE NOT dead) AS oldest
+         FROM ${table} WHERE published_at IS NULL`,
+      );
+      const { pending = 0, dead = 0, oldest = null } = rows[0] ?? {};
+      const age = oldest ? Math.max(0, now.getTime() - oldest.getTime()) / 1000 : 0;
+      backlog.push({ module, pending, dead, oldestSeconds: age });
+    } catch (cause) {
+      throw new Error(`read backlog of ${table}`, { cause });
+    }
+  }
+  return backlog;
+}

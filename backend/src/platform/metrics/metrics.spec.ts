@@ -46,4 +46,37 @@ describe('Metrics', () => {
     const ref = await Test.createTestingModule({ imports: [MetricsModule] }).compile();
     expect(ref.get(METRICS)).toBeInstanceOf(Metrics);
   });
+
+  it('records job runs, deliveries and the outbox backlog for the worker', async () => {
+    const m = new Metrics();
+    m.worker.jobFinished('expiry', 'ok', 0.2);
+    m.worker.jobFinished('expiry', 'skipped', 0);
+    m.worker.eventDelivered('booking', 'booking.BookingRequested');
+    m.worker.eventFailed('booking', 'booking.BookingAccepted', true);
+    let reads = 0;
+    m.worker.trackBacklog(() => {
+      reads++;
+      return Promise.resolve([{ module: 'booking', pending: 3, dead: 1, oldestSeconds: 42 }]);
+    });
+    const body = (await m.render()).body;
+    expect(body).toContain('pao_job_runs_total{job="expiry",outcome="ok"} 1');
+    expect(body).toContain('pao_job_runs_total{job="expiry",outcome="skipped"} 1');
+    expect(body).toContain('pao_job_duration_seconds_count{job="expiry"} 1');
+    expect(body).toContain(
+      'pao_outbox_events_delivered_total{module="booking",event="booking.BookingRequested"} 1',
+    );
+    expect(body).toContain(
+      'pao_outbox_delivery_failures_total{module="booking",event="booking.BookingAccepted",dead="true"} 1',
+    );
+    expect(body).toContain('pao_outbox_pending_events{module="booking"} 3');
+    expect(body).toContain('pao_outbox_oldest_pending_seconds{module="booking"} 42');
+    expect(body).toContain('pao_outbox_dead_events{module="booking"} 1');
+    expect(reads).toBe(1);
+  });
+
+  it('reports no backlog until the worker tracks one', async () => {
+    const body = (await new Metrics().render()).body;
+    expect(body).toContain('# TYPE pao_outbox_pending_events gauge');
+    expect(body).not.toContain('pao_outbox_pending_events{');
+  });
 });
