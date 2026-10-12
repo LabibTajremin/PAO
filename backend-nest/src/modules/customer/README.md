@@ -7,6 +7,19 @@ the service interface and its injection token, DTOs, `DomainError` reasons and e
 types with their outbox names (`contract/index.ts`). Queries live in
 `adapter/postgres/queries.sql`; `npm run gen` regenerates `adapter/postgres/sqlc/`.
 
+## Layout
+
+- `domain/` — profile and address rules, the Bangladesh bounding box, the launch-area
+  polygon test (`area.ts`).
+- `app/` — `CustomerProfiles` (profile, admin search), `SavedAddresses` (up to 10, default
+  switching), `ServiceArea` (C35); reasons in `app/errors.ts`.
+- `port/` — the repository and the peers (photos, accounts, launch area).
+- `adapter/postgres/` — PostGIS repository; address writes hold the customer's row lock;
+  `subscribers.ts` erases deleted accounts and keeps the admin list copies.
+- `adapter/peers/` — media, identity and admin contracts, resolved on first use.
+- `adapter/http/` — profile, addresses and service-area controllers with the error map.
+- `adapter/inproc/` — the contract for other modules.
+
 ## Contract (`contract/customer-service.ts`, `CustomerService`, token `CUSTOMER_SERVICE`)
 
 - `getCustomer`
@@ -35,6 +48,6 @@ types with their outbox names (`contract/index.ts`). Queries live in
 - `/v1/customer/profile`
 - `/v1/customer/addresses*`
 - `/v1/customer/service-area`
-- `/v1/admin/customers*`
+- `/v1/admin/customers*` (served by admin through `searchCustomers`)
 
 Migrations: `backend-nest/migrations/customer/`.
