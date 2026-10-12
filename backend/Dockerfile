@@ -18,6 +18,11 @@ RUN npm run build && npm prune --omit=dev --no-audit --no-fund && npm cache clea
 
 FROM node:22-alpine
 ENV NODE_ENV=production
+# The runtime never installs packages; the bundled npm, npx, corepack and yarn only add attack
+# surface (and their own advisories to the image scan).
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
+      /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack \
+      /opt/yarn-v* /usr/local/bin/yarn /usr/local/bin/yarnpkg
 WORKDIR /app
 COPY --from=build /src/package.json ./package.json
 COPY --from=build /src/node_modules ./node_modules

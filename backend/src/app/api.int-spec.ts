@@ -69,6 +69,22 @@ describe('API without business modules', () => {
     expect(limited.headers.get('retry-after')).toBe('60');
   });
 
+  it('limits signed-in calls per user and operation, not per address', async () => {
+    const busy = await api.token(uuidv4(), ['customer']);
+    const me = () => api.do('GET', '/v1/me/permissions', undefined, { token: busy });
+    for (let i = 0; i < 3; i++) {
+      expect((await me()).status).not.toBe(429);
+    }
+    const limited = await me();
+    expect(limited).toMatchObject({ status: 429, code: 'RATE_LIMITED' });
+    expect(limited.headers.get('retry-after')).toBe('60');
+    const other = await api.token(uuidv4(), ['customer']);
+    const calm = await api.do('GET', '/v1/me/permissions', undefined, { token: other });
+    expect(calm.status).not.toBe(429);
+    const elsewhere = await api.do('GET', '/v1/me', undefined, { token: busy });
+    expect(elsewhere.status).not.toBe(429);
+  });
+
   it('sets security headers, a request id and CORS for the admin origin', async () => {
     const r = await api.do('GET', '/healthz', undefined, {
       headers: { Origin: 'http://admin', 'X-Request-ID': 'client-req-123' },
