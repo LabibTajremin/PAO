@@ -71,13 +71,14 @@ lint_shell() {
   ok "shellcheck"
 }
 
-# cmd_lint runs every check, or one scope (backend, dart, shell) for the CI jobs.
+# cmd_lint runs every check, or one scope for the CI jobs and the pre-commit hook.
 cmd_lint() {
   case "${1:-all}" in
     backend) check_file_sizes && lint_backend ;;
     dart) check_file_sizes && lint_dart ;;
     shell) lint_shell ;;
+    sizes) check_file_sizes ;;
     all) check_file_sizes && lint_shell && lint_backend && lint_dart ;;
-    *) die "usage: pao lint [backend|dart|shell|all]" ;;
+    *) die "usage: pao lint [backend|dart|shell|sizes|all]" ;;
   esac
 }

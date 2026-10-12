@@ -18,7 +18,7 @@ usage: pao <command>
   up | down             start or stop the Docker stack
   seed                  apply migrations and load seed data
   gen [--check]         run code generators (fail on drift with --check or CI=true)
-  lint [backend|dart|shell]  formatting, linters, architecture rules, file sizes
+  lint [backend|dart|shell|sizes]  formatting, linters, architecture rules, file sizes
   test unit|integration|e2e|all (or backend|dart for one stack's unit tests)
   cover [backend|dart]  enforce 100% coverage, write coverage/summary.md
   security              gitleaks, npm audit, osv-scanner, trivy

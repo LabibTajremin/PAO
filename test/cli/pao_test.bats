@@ -32,7 +32,7 @@ setup() {
 @test "lint, cover with an unknown scope fail with usage" {
   run "$PAO" lint go
   [ "$status" -eq 1 ]
-  [[ "$output" == *"usage: pao lint [backend|dart|shell|all]"* ]]
+  [[ "$output" == *"usage: pao lint [backend|dart|shell|sizes|all]"* ]]
   run "$PAO" cover go
   [ "$status" -eq 1 ]
   [[ "$output" == *"usage: pao cover [backend|dart|all]"* ]]
