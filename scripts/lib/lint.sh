@@ -4,7 +4,7 @@
 # size_limit prints the line limit of docs/build/01-conventions.md §1 for a file.
 size_limit() {
   case "$1" in
-    *.spec.ts | *.int-spec.ts) echo 400 ;;
+    *.spec.ts | *.int-spec.ts | */backend/test/*.ts) echo 400 ;;
     *.ts) echo 250 ;;
     */test/*.dart | */integration_test/*.dart) echo 300 ;;
     *.dart) echo 200 ;;

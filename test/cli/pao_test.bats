@@ -38,11 +38,11 @@ setup() {
   [[ "$output" == *"usage: pao cover [backend|dart|all]"* ]]
 }
 
-@test "file-size limits: specs 400, TypeScript 250, Dart 200, Dart tests 300" {
+@test "file-size limits: specs and test kit 400, TypeScript 250, Dart 200, Dart tests 300" {
   run bash -c ". '$ROOT/scripts/lib/lint.sh'; size_limit a/b.spec.ts; size_limit a/b.int-spec.ts;
-    size_limit a/b.ts; size_limit a/lib/b.dart; size_limit a/test/b_test.dart"
+    size_limit a/backend/test/kit/x.ts; size_limit a/b.ts; size_limit a/lib/b.dart; size_limit a/test/b_test.dart"
   [ "$status" -eq 0 ]
-  [ "$output" == "$(printf '400\n400\n250\n200\n300')" ]
+  [ "$output" == "$(printf '400\n400\n400\n250\n200\n300')" ]
 }
 
 @test "phase without finish <id> fails with usage" {

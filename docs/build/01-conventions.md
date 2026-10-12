@@ -9,7 +9,7 @@ violations.
 | Limit | TypeScript | Dart | Enforced by |
 |---|---|---|---|
 | Lines per source file | 250 | 200 | `./pao lint` (file-length check), ESLint `max-lines` |
-| Lines per test file | 400 | 300 | `./pao lint` |
+| Lines per test file (specs, `backend/test/` kit and fakes) | 400 | 300 | `./pao lint` |
 | Lines per function | 40 | 40 | ESLint `max-lines-per-function` / `dart_code_linter` |
 | Cyclomatic complexity | 10 | 10 | ESLint `complexity` / `dart_code_linter` |
 | Nesting depth | 3 | 3 | ESLint `max-depth` / review |
