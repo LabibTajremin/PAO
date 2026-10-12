@@ -9,8 +9,9 @@ import { type RelayObserver } from '../outbox/outbox-relay';
  * row is marked published.
  */
 export class WorkerMetrics implements JobObserver, RelayObserver {
-  private readonly jobRuns: Counter<'job' | 'outcome'>;
-  private readonly jobDuration: Histogram<'job'>;
+  // Job names are labelled "name": Prometheus reserves "job" for the scrape target.
+  private readonly jobRuns: Counter<'name' | 'outcome'>;
+  private readonly jobDuration: Histogram<'name'>;
   private readonly delivered: Counter<'module' | 'event'>;
   private readonly failed: Counter<'module' | 'event' | 'dead'>;
   private backlog: () => Promise<readonly OutboxBacklog[]> = () => Promise.resolve([]);
@@ -21,13 +22,13 @@ export class WorkerMetrics implements JobObserver, RelayObserver {
     this.jobRuns = new Counter({
       name: 'pao_job_runs_total',
       help: 'Scheduled job runs by outcome (ok, failed, skipped while another worker held the lock).',
-      labelNames: ['job', 'outcome'],
+      labelNames: ['name', 'outcome'],
       registers,
     });
     this.jobDuration = new Histogram({
       name: 'pao_job_duration_seconds',
       help: 'Duration of scheduled job runs that held the lock.',
-      labelNames: ['job'],
+      labelNames: ['name'],
       buckets: [0.05, 0.25, 1, 5, 15, 60, 300],
       registers,
     });
@@ -52,9 +53,9 @@ export class WorkerMetrics implements JobObserver, RelayObserver {
   }
 
   jobFinished(job: string, outcome: JobOutcome, seconds: number): void {
-    this.jobRuns.inc({ job, outcome });
+    this.jobRuns.inc({ name: job, outcome });
     if (outcome !== 'skipped') {
-      this.jobDuration.observe({ job }, seconds);
+      this.jobDuration.observe({ name: job }, seconds);
     }
   }
 

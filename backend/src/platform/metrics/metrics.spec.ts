@@ -59,9 +59,9 @@ describe('Metrics', () => {
       return Promise.resolve([{ module: 'booking', pending: 3, dead: 1, oldestSeconds: 42 }]);
     });
     const body = (await m.render()).body;
-    expect(body).toContain('pao_job_runs_total{job="expiry",outcome="ok"} 1');
-    expect(body).toContain('pao_job_runs_total{job="expiry",outcome="skipped"} 1');
-    expect(body).toContain('pao_job_duration_seconds_count{job="expiry"} 1');
+    expect(body).toContain('pao_job_runs_total{name="expiry",outcome="ok"} 1');
+    expect(body).toContain('pao_job_runs_total{name="expiry",outcome="skipped"} 1');
+    expect(body).toContain('pao_job_duration_seconds_count{name="expiry"} 1');
     expect(body).toContain(
       'pao_outbox_events_delivered_total{module="booking",event="booking.BookingRequested"} 1',
     );

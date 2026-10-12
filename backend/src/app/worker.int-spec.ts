@@ -98,7 +98,7 @@ describe('worker', () => {
     const metrics = (await get(workerServer(app), '/metrics')).text;
     expect(metrics).toContain('process_cpu');
     expect(metrics).toContain('pao_outbox_pending_events{module="booking"}');
-    expect(metrics).toContain('pao_job_runs_total{job="fixture.job",outcome="ok"} 1');
+    expect(metrics).toContain('pao_job_runs_total{name="fixture.job",outcome="ok"} 1');
     expect(metrics).toContain(
       'pao_outbox_events_delivered_total{module="booking",event="test.Ping"}',
     );
