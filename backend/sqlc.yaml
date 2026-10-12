@@ -1,101 +1,88 @@
-# sqlc: one entry per module. Queries live in adapter/postgres/queries.sql; generated
-# files end in .gen.go / .sql.go and are excluded from coverage.
-version: "2"
+# sqlc: one entry per module. Schemas are the goose migrations in migrations/<module>;
+# queries live in the module's adapter/postgres/queries.sql. The official TypeScript
+# plugin emits pg-driver functions into adapter/postgres/sqlc/, which is generated code
+# (excluded from lint and coverage). Regenerate with `npm run gen`.
+version: '2'
+plugins:
+  - name: ts
+    wasm:
+      url: https://downloads.sqlc.dev/plugin/sqlc-gen-typescript_0.1.3.wasm
+      sha256: 287df8f6cc06377d67ad5ba02c9e0f00c585509881434d15ea8bd9fc751a9368
 sql:
   - engine: postgresql
     schema: migrations/identity
-    queries: internal/modules/identity/adapter/postgres/queries.sql
-    gen:
-      go: &gogen
-        package: sqlcdb
-        out: internal/modules/identity/adapter/postgres/sqlcdb
-        sql_package: pgx/v5
-        output_db_file_name: db.gen.go
-        output_models_file_name: models.gen.go
-        emit_pointers_for_null_types: true
-        overrides:
-          - db_type: uuid
-            go_type: github.com/google/uuid.UUID
-          - db_type: uuid
-            nullable: true
-            go_type: { import: github.com/google/uuid, type: UUID, pointer: true }
-          - db_type: timestamptz
-            go_type: time.Time
-          - db_type: timestamptz
-            nullable: true
-            go_type: { import: time, type: Time, pointer: true }
-          - db_type: date
-            go_type: time.Time
-          - db_type: date
-            nullable: true
-            go_type: { import: time, type: Time, pointer: true }
-  - engine: postgresql
-    schema: migrations/catalog
-    queries: internal/modules/catalog/adapter/postgres/queries.sql
-    gen:
-      go:
-        <<: *gogen
-        out: internal/modules/catalog/adapter/postgres/sqlcdb
-  - engine: postgresql
-    schema: migrations/audit
-    queries: internal/modules/audit/adapter/postgres/queries.sql
-    gen:
-      go:
-        <<: *gogen
-        out: internal/modules/audit/adapter/postgres/sqlcdb
-  - engine: postgresql
-    schema: migrations/media
-    queries: internal/modules/media/adapter/postgres/queries.sql
-    gen:
-      go:
-        <<: *gogen
-        out: internal/modules/media/adapter/postgres/sqlcdb
-  - engine: postgresql
-    schema: migrations/admin
-    queries: internal/modules/admin/adapter/postgres/queries.sql
-    gen:
-      go:
-        <<: *gogen
-        out: internal/modules/admin/adapter/postgres/sqlcdb
+    queries: src/modules/identity/adapter/postgres/queries.sql
+    codegen:
+      - plugin: ts
+        out: src/modules/identity/adapter/postgres/sqlc
+        options: { runtime: node, driver: pg }
   - engine: postgresql
     schema: migrations/customer
-    queries: internal/modules/customer/adapter/postgres/queries.sql
-    gen:
-      go:
-        <<: *gogen
-        out: internal/modules/customer/adapter/postgres/sqlcdb
+    queries: src/modules/customer/adapter/postgres/queries.sql
+    codegen:
+      - plugin: ts
+        out: src/modules/customer/adapter/postgres/sqlc
+        options: { runtime: node, driver: pg }
   - engine: postgresql
     schema: migrations/provider
-    queries: internal/modules/provider/adapter/postgres/queries.sql
-    gen:
-      go:
-        <<: *gogen
-        out: internal/modules/provider/adapter/postgres/sqlcdb
+    queries: src/modules/provider/adapter/postgres/queries.sql
+    codegen:
+      - plugin: ts
+        out: src/modules/provider/adapter/postgres/sqlc
+        options: { runtime: node, driver: pg }
   - engine: postgresql
     schema: migrations/verification
-    queries: internal/modules/verification/adapter/postgres/queries.sql
-    gen:
-      go:
-        <<: *gogen
-        out: internal/modules/verification/adapter/postgres/sqlcdb
+    queries: src/modules/verification/adapter/postgres/queries.sql
+    codegen:
+      - plugin: ts
+        out: src/modules/verification/adapter/postgres/sqlc
+        options: { runtime: node, driver: pg }
+  - engine: postgresql
+    schema: migrations/catalog
+    queries: src/modules/catalog/adapter/postgres/queries.sql
+    codegen:
+      - plugin: ts
+        out: src/modules/catalog/adapter/postgres/sqlc
+        options: { runtime: node, driver: pg }
   - engine: postgresql
     schema: migrations/booking
-    queries: internal/modules/booking/adapter/postgres/queries.sql
-    gen:
-      go:
-        <<: *gogen
-        out: internal/modules/booking/adapter/postgres/sqlcdb
+    queries: src/modules/booking/adapter/postgres/queries.sql
+    codegen:
+      - plugin: ts
+        out: src/modules/booking/adapter/postgres/sqlc
+        options: { runtime: node, driver: pg }
   - engine: postgresql
     schema: migrations/rating
-    queries: internal/modules/rating/adapter/postgres/queries.sql
-    gen:
-      go:
-        <<: *gogen
-        out: internal/modules/rating/adapter/postgres/sqlcdb
+    queries: src/modules/rating/adapter/postgres/queries.sql
+    codegen:
+      - plugin: ts
+        out: src/modules/rating/adapter/postgres/sqlc
+        options: { runtime: node, driver: pg }
   - engine: postgresql
     schema: migrations/notification
-    queries: internal/modules/notification/adapter/postgres/queries.sql
-    gen:
-      go:
-        <<: *gogen
-        out: internal/modules/notification/adapter/postgres/sqlcdb
+    queries: src/modules/notification/adapter/postgres/queries.sql
+    codegen:
+      - plugin: ts
+        out: src/modules/notification/adapter/postgres/sqlc
+        options: { runtime: node, driver: pg }
+  - engine: postgresql
+    schema: migrations/media
+    queries: src/modules/media/adapter/postgres/queries.sql
+    codegen:
+      - plugin: ts
+        out: src/modules/media/adapter/postgres/sqlc
+        options: { runtime: node, driver: pg }
+  - engine: postgresql
+    schema: migrations/admin
+    queries: src/modules/admin/adapter/postgres/queries.sql
+    codegen:
+      - plugin: ts
+        out: src/modules/admin/adapter/postgres/sqlc
+        options: { runtime: node, driver: pg }
+  - engine: postgresql
+    schema: migrations/audit
+    queries: src/modules/audit/adapter/postgres/queries.sql
+    codegen:
+      - plugin: ts
+        out: src/modules/audit/adapter/postgres/sqlc
+        options: { runtime: node, driver: pg }

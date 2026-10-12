@@ -8,7 +8,7 @@ info:
     name: Proprietary — all rights reserved
     url: https://getpao.com/legal
   description: |
-    REST contract shared by the PAO Go backend and the Flutter apps.
+    REST contract shared by the PAO backend and the Flutter apps.
 
     - Versioned under `/v1`, with route groups `/v1/customer`, `/v1/provider` and `/v1/admin` (PRD §9.6).
     - Every error uses `ErrorResponse`; `code` is a stable `ErrorCode` the apps translate.

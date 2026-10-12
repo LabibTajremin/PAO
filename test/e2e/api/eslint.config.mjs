@@ -1,4 +1,4 @@
-// Same rules as backend-nest/eslint.config.mjs, minus the NestJS-only ones.
+// Same rules as backend/eslint.config.mjs, minus the NestJS-only ones.
 import js from '@eslint/js';
 import jsdoc from 'eslint-plugin-jsdoc';
 import tseslint from 'typescript-eslint';

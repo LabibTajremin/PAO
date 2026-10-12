@@ -3,10 +3,8 @@
 *.pem
 *.key
 
-# Go
-/backend/bin/
-*.test
-*.out
+# Node and coverage
+node_modules/
 /coverage/
 
 # Flutter / Dart

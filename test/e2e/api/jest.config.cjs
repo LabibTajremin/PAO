@@ -1,5 +1,5 @@
-// The journeys share one stack and its seeded admins, so files run one at a time, as
-// `go test` runs the Go journeys. Waits on the worker make single journeys slow.
+// The journeys share one stack and its seeded admins, so files run one at a time.
+// Waits on the worker make single journeys slow.
 module.exports = {
   testEnvironment: 'node',
   testMatch: ['<rootDir>/**/*.spec.ts'],

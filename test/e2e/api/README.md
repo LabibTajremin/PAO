@@ -1,3 +1,3 @@
 # test/e2e/api
 
-Black-box Go journeys against the running Docker stack.
+Black-box TypeScript journeys (Jest) against the running Docker stack.
