@@ -17,10 +17,11 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          go-version-file: backend/go.mod
-          cache-dependency-path: backend/go.sum
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: test/e2e/api/package-lock.json
       - name: Journeys
         # The app journeys run in the apps job, in parallel and with Flutter.
         env:
@@ -34,16 +35,15 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
-        with:
-          go-version-file: backend/go.mod
-          cache-dependency-path: backend/go.sum
       - name: Install k6
         run: |
           curl -fsSL https://github.com/grafana/k6/releases/download/v1.3.0/k6-v1.3.0-linux-amd64.tar.gz | tar -xz
           sudo install k6-v1.3.0-linux-amd64/k6 /usr/local/bin/k6
       - name: Performance thresholds
-        run: ./pao perf
+        run: ./pao perf e2e
+      - name: Stack logs
+        if: failure()
+        run: docker compose -p pao-e2e logs --no-color | tail -200
 
   # The Flutter journeys and start-up smoke tests (test/e2e/mobile/run.sh), each app
   # against its own stack: partner and customer on the Linux desktop under Xvfb,

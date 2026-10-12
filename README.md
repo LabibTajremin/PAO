@@ -5,7 +5,7 @@ service providers — electricians, plumbers, AC technicians, home salon and dri
 fixed, platform-set prices. Customers choose a provider nearby; the provider accepts,
 arrives, starts the job with the customer's 4-digit code and is paid in cash.
 
-Three clients share one Go API:
+Three clients share one NestJS (TypeScript) API:
 
 | App | Who | Where |
 |---|---|---|
@@ -15,10 +15,11 @@ Three clients share one Go API:
 
 ## Run it locally
 
-Requirements: Docker, Go 1.27+, Flutter 3.47+ (for the apps), bash.
+Requirements: Docker, Node.js 22.12+, sqlc 1.27+ (for `./pao gen`), Flutter 3.47+ (for the
+apps), bash.
 
 ```sh
-./pao setup   # checks tools, installs git hooks, creates .env from .env.example
+./pao setup   # checks tools, installs npm packages and git hooks, creates .env
 ./pao up      # PostgreSQL+PostGIS, Redis, S3 storage, API and worker — all healthy
 ./pao seed    # migrations + the 5 MVP services and demo users
 curl localhost:8080/healthz
@@ -31,7 +32,7 @@ Run the whole quality gate (what CI runs) with `./pao ci`. `./pao help` lists ev
 | Path | What it holds |
 |---|---|
 | `api/openapi.yaml` | REST contract shared by backend and apps |
-| `backend/` | Go modular monolith: `cmd/` (api, worker), `internal/platform/`, `internal/modules/<module>/`, `migrations/`, `seed/` |
+| `backend/` | NestJS modular monolith: `src/main.ts`, `src/worker.ts`, `src/migrate.ts`, `src/platform/`, `src/modules/<module>/`, `migrations/`, `seed/` |
 | `frontend/` | Flutter workspace: `apps/` (customer, partner, admin) and `packages/` (pao_core, pao_api, pao_ui, pao_l10n) |
 | `test/` | Cross-system tests: e2e journeys, fixtures, performance scripts, CLI tests |
 | `docs/` | PRD, build kit, ADRs, architecture, glossary, runbooks |

@@ -5,6 +5,7 @@ PAO_ROOT="${PAO_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
 export PAO_ROOT
 export BACKEND="$PAO_ROOT/backend"
 export FRONTEND="$PAO_ROOT/frontend"
+export E2E_API="$PAO_ROOT/test/e2e/api"
 export COVERAGE_DIR="$PAO_ROOT/coverage"
 
 log() { printf '\033[1;34m▸\033[0m %s\n' "$*" >&2; }
@@ -34,6 +35,15 @@ retry() {
     delay=$((delay * 2))
   done
   return 1
+}
+
+# npm_install installs a Node package's locked dependencies when they are missing or
+# older than its lockfile.
+npm_install() {
+  require_tool npm "https://nodejs.org (22.12+)"
+  [[ "$1/node_modules/.package-lock.json" -nt "$1/package-lock.json" ]] && return 0
+  (cd "$1" && npm ci --no-audit --no-fund --loglevel=error >/dev/null) ||
+    die "npm ci failed in ${1#"$PAO_ROOT"/}"
 }
 
 # dart_packages lists every Flutter package directory in the workspace.

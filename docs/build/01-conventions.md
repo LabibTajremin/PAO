@@ -6,52 +6,63 @@ violations.
 
 ## 1. Size and shape
 
-| Limit | Go | Dart | Enforced by |
+| Limit | TypeScript | Dart | Enforced by |
 |---|---|---|---|
-| Lines per source file | 250 | 200 | `./pao lint` (file-length check) |
-| Lines per test file | 400 | 300 | `./pao lint` |
-| Lines per function | 40 | 40 | `funlen` / `dart_code_linter` |
-| Cyclomatic complexity | 10 | 10 | `gocyclo` / `dart_code_linter` |
-| Nesting depth | 3 | 3 | `nestif` / review |
-| Parameters per function | 4 (else a struct) | 4 (else named params) | review |
+| Lines per source file | 250 | 200 | `./pao lint` (file-length check), ESLint `max-lines` |
+| Lines per test file (specs, `backend/test/` kit and fakes) | 400 | 300 | `./pao lint` |
+| Lines per function | 40 | 40 | ESLint `max-lines-per-function` / `dart_code_linter` |
+| Cyclomatic complexity | 10 | 10 | ESLint `complexity` / `dart_code_linter` |
+| Nesting depth | 3 | 3 | ESLint `max-depth` / review |
+| Parameters per function | 4 (else an options object) | 4 (else named params) | ESLint `max-params` / review |
 
-When a file approaches its limit, split by responsibility (e.g. `booking_accept.go`,
-`booking_cancel.go`), never by arbitrary halves.
+Generated code (`sqlc/`, `*.gen.*`, `pao_api`, l10n output) is exempt. When a file
+approaches its limit, split by responsibility (e.g. `accept-booking.ts`,
+`cancel-booking.ts`), never by arbitrary halves.
 
 ## 2. Naming
 
-- Names carry meaning: `AcceptBooking`, `providerID`, `ErrBookingAlreadyAccepted`.
+- Names carry meaning: `acceptBooking`, `providerId`, `booking.already_accepted`.
 - Banned names: `data`, `info`, `helper`, `utils`, `common`, `misc`, `manager`, `stuff`,
   `temp`, numbered variants (`utils2`).
-- Go: package names are short, lowercase, singular nouns (`booking`, `postgres`).
-  Errors are `ErrXxx` sentinels in `domain/errors.go`.
 - Dart: files `snake_case.dart`, classes `PascalCase`, one public widget per file.
 - Feature folders mirror product language from `docs/domain-glossary.md`.
 
 ## 3. Comments
 
-- Every exported Go identifier and public Dart API has a doc comment that states its
-  purpose or contract in one or two sentences.
+- Every exported TypeScript class, function, interface and type, and every public Dart
+  API, has a doc comment that states its purpose or contract in one or two sentences.
 - Inside functions, comment only *why*: a business rule (cite the PRD section, e.g.
   `// PRD §5: cancellation is allowed until the start code is entered.`), a non-obvious
   trade-off, or a workaround with an issue link.
 - Forbidden: restating code, banner comments, commented-out code, AI narration
   ("Here we…", "Now let's…", "Step 1"), and `TODO` without an issue reference.
 
-## 4. Go specifics
+## 4. TypeScript / NestJS specifics (ADR-0032)
 
-- Go 1.23+. Standard library first; approved libraries only (see `02-architecture.md` §3).
-- `context.Context` is the first parameter of anything that does I/O.
-- Errors: wrap with `fmt.Errorf("accept booking %s: %w", id, err)`. Map to API error
-  codes only in `adapter/http`. Never `panic` outside `main`.
-- No package-level mutable state. Dependencies are passed in through constructors.
-- Interfaces are declared by the consumer (in `port/`), kept small (1–4 methods).
-- SQL lives only in `adapter/postgres`, written as `sqlc` queries.
-- Time comes from an injected `Clock`; randomness from an injected source. Both are
-  faked in tests.
-- Money is `int64` paisa (1 BDT = 100 paisa). Never floats.
-- Formatting: `gofmt`, `goimports`. Linting: `golangci-lint` with the committed
-  `.golangci.yml`.
+- Node.js 22, TypeScript `strict` (+ `noUncheckedIndexedAccess`), NestJS 11 on Express.
+  Approved libraries only (ADR-0032); anything else needs an ADR.
+- Files `kebab-case.ts`, one use case per file in `app/` (`accept-booking.ts`), classes
+  `PascalCase`, functions and variables `camelCase`, constants and injection tokens
+  `UPPER_SNAKE_CASE`. Unit specs `*.spec.ts` and integration specs `*.int-spec.ts` sit
+  beside the code they test.
+- Exported classes, functions, interfaces, types and enums carry a JSDoc comment; the
+  same comment rules as §3 apply.
+- Dependencies come through constructors (Nest DI). Cross-module dependencies are
+  injection tokens from the other module's `contract/`; ports are interfaces in `port/`
+  with a token beside them. No module-level mutable state.
+- Errors: domain and use cases throw `DomainError` with a module-scoped `reason`
+  (`booking.already_accepted`); only `adapter/http` maps reasons to API errors. Wrap
+  infrastructure failures with `new Error('accept booking ' + id, { cause })`.
+- `async`/`await` only; no floating promises. Time from the injected `Clock`, ids from
+  the injected `IdGenerator`.
+- Money is integer paisa in a `number` (always `Number.isSafeInteger`); Postgres `bigint`
+  arrives as a string from sqlc and is converted in `adapter/postgres`.
+- Ids are UUID strings; times are `Date` inside the app and ISO-8601 strings in JSON and
+  event payloads.
+- SQL only in `adapter/postgres`, through sqlc-generated functions from the module's
+  `queries.sql`; parameters only, never string-built SQL.
+- Formatting: Prettier. Linting: `npm run lint` (ESLint `strictTypeChecked`, Prettier
+  check, dependency-cruiser module rules).
 
 ## 5. Dart / Flutter specifics
 
@@ -78,7 +89,7 @@ When a file approaches its limit, split by responsibility (e.g. `booking_accept.
 ## 7. Documentation that must stay current
 
 - `README.md` (root): what PAO is, one-command local run, folder map.
-- `backend/internal/modules/<module>/README.md`: responsibility, contract methods,
+- `backend/src/modules/<module>/README.md`: responsibility, contract methods,
   events published/consumed, tables owned. Updated in the same commit as the change.
 - `docs/adr/NNNN-title.md`: one per significant decision (template in P00).
 - `api/openapi.yaml`: updated before the handler that implements a change.

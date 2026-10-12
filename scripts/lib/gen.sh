@@ -1,28 +1,14 @@
 # shellcheck shell=bash
-# Code generation (sqlc, oapi-codegen, Dart API client, l10n) and the
-# "generated code is committed" check used by CI.
+# Code generation (backend sqlc functions and OpenAPI bundle/types, the Dart API
+# client, l10n) and the "generated code is committed" check used by CI.
 
-REDOCLY_CLI="@redocly/cli@1.34.3"
-SPEC_BUNDLE="backend/internal/platform/httpx/api/openapi.gen.yaml"
-
-# gen_spec bundles the split api/ files into the single document the generators and
-# the request validator read.
-gen_spec() {
-  [[ -f "$PAO_ROOT/api/openapi.yaml" ]] || return 0
-  require_tool npx "install Node.js 22"
-  (cd "$PAO_ROOT" && npx --yes "$REDOCLY_CLI" bundle api/openapi.yaml -o "$SPEC_BUNDLE" >/dev/null 2>&1) ||
-    die "OpenAPI bundle failed"
-}
-
-gen_go() {
-  [[ -f "$BACKEND/go.mod" ]] || return 0
-  if [[ -f "$BACKEND/sqlc.yaml" ]]; then
-    require_tool sqlc "go install github.com/sqlc-dev/sqlc/cmd/sqlc@v1.27.0"
-    (cd "$BACKEND" && sqlc generate) || die "sqlc generate failed"
-  fi
-  if grep -rqs --include='*.go' '^//go:generate' "$BACKEND"; then
-    (cd "$BACKEND" && go generate ./...) || die "go generate failed"
-  fi
+# gen_backend writes the sqlc query functions, the bundled OpenAPI document (which the
+# Dart client is generated from) and its TypeScript types.
+gen_backend() {
+  [[ -f "$BACKEND/package.json" ]] || return 0
+  require_tool sqlc "https://docs.sqlc.dev/en/latest/overview/install.html (1.27+)"
+  npm_install "$BACKEND"
+  (cd "$BACKEND" && npm run -s gen) || die "backend code generation failed"
 }
 
 gen_dart_client() {
@@ -50,8 +36,7 @@ tree_fingerprint() {
 cmd_gen() {
   local before
   before=$(tree_fingerprint)
-  gen_spec
-  gen_go
+  gen_backend
   gen_dart_client
   gen_l10n
   if [[ "${CI:-}" == "true" || "${1:-}" == "--check" ]]; then
