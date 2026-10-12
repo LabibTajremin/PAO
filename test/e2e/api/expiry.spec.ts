@@ -27,7 +27,10 @@ test('expiry: police clearance lapses, then a renewal restores the provider', as
   const svc = await service(c, 'Electrician');
   // Issued a day short of the validity period, so it lapses tomorrow; every other
   // journey's clearance is a month old and stays valid past the sweep below.
-  const p = await enrolledProvider(phoneFor('018', 32), svc.id, addDate(new Date(), 0, 0, -364));
+  // Counted from today in Dhaka, where the API dates certificates: after 18:00 UTC
+  // the UTC date is a day behind and the clearance would already be a year old.
+  const dhakaToday = new Date(Date.now() + 6 * 60 * 60 * 1000);
+  const p = await enrolledProvider(phoneFor('018', 32), svc.id, addDate(dhakaToday, 0, 0, -364));
   const found = () => nearby(c, svc.id, svc.sub, String(p.id));
   await approve(p, ...items);
   await goOnline(p);

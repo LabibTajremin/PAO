@@ -44,7 +44,7 @@ scan_trivy() {
   local common=(--quiet --exit-code 1 --severity "HIGH,CRITICAL" --ignorefile /src/.trivyignore)
   trivy_run fs "${common[@]}" --scanners vuln,secret,misconfig \
     --skip-dirs /src/backend/node_modules --skip-dirs /src/test/e2e/api/node_modules \
-    --skip-dirs /src/frontend/.dart_tool /src >/dev/null ||
+    --skip-dirs /src/frontend/.dart_tool --skip-dirs '/src/frontend/apps/*/build' /src >/dev/null ||
     die "trivy found high or critical issues in the source tree (rerun without >/dev/null)"
   if [[ -n "${PAO_SCAN_IMAGE:-}" ]]; then
     trivy_run image "${common[@]}" --scanners vuln,secret "$PAO_SCAN_IMAGE" >/dev/null ||

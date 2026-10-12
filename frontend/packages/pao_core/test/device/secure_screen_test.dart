@@ -19,7 +19,9 @@ void main() {
       calls.add('${call.method}:${call.arguments}');
       return null;
     });
-    await tester.pumpWidget(const SecureArea(child: SizedBox()));
+    // Built at run time, so the constructor itself is exercised.
+    final shown = SizedBox(width: calls.length.toDouble());
+    await tester.pumpWidget(SecureArea(child: shown));
     expect(calls, ['setSecure:true']);
     await tester.pumpWidget(const SizedBox());
     expect(calls, ['setSecure:true', 'setSecure:false']);
