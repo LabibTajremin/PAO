@@ -10,7 +10,9 @@ import { Inbox } from '../../app/inbox';
 import { App, type Notification, NotificationReasons } from '../../domain/notification';
 
 type Schemas = components['schemas'];
+type List = Schemas['NotificationList'];
 type PageQuery = NonNullable<operations['listCustomerNotifications']['parameters']['query']>;
+type DeviceInput = Schemas['DeviceTokenInput'];
 
 const notificationErrors = { [NotificationReasons.NotFound]: NOT_FOUND };
 
@@ -26,69 +28,98 @@ function view(n: Notification): Schemas['Notification'] {
   };
 }
 
-/**
- * The inbox, read state and device registration, served the same way to both apps; the
- * subclasses only fix the path and the app.
- */
-abstract class NotificationsController {
-  constructor(
-    private readonly inbox: Inbox,
-    private readonly app: App,
-  ) {}
+/** One page of an app's inbox, newest first, with the unread count. */
+async function list(inbox: Inbox, me: string, app: App, q: PageQuery): Promise<List> {
+  const cursor = decodeCursor(q.cursor);
+  const size = pageSize(q.limit);
+  const page = await inbox.page(me, app, {
+    before: cursor && { createdAt: new Date(cursor.createdAt), id: cursor.id },
+    limit: size + 1,
+  });
+  const items = page.items.slice(0, size);
+  const last = items.at(-1);
+  const out: List = { items: items.map(view), unreadCount: page.unread };
+  return page.items.length > size && last ? { ...out, nextCursor: encodeCursor(last) } : out;
+}
+
+// The two apps are served the same way; each controller only fixes its path and app.
+
+/** The customer app's inbox and device (C-13). */
+@Controller('v1/customer')
+@MapErrors(notificationErrors)
+export class CustomerNotificationsController {
+  constructor(private readonly inbox: Inbox) {}
 
   @Get('notifications')
   @RequirePermission('notification:read:own')
-  async list(@CurrentPrincipal() me: Principal, @Query() q: PageQuery) {
-    const cursor = decodeCursor(q.cursor);
-    const size = pageSize(q.limit);
-    const page = await this.inbox.page(me.accountId, this.app, {
-      before: cursor && { createdAt: new Date(cursor.createdAt), id: cursor.id },
-      limit: size + 1,
-    });
-    const items = page.items.slice(0, size);
-    const last = items.at(-1);
-    const more = page.items.length > size && last !== undefined;
-    const out: Schemas['NotificationList'] = { items: items.map(view), unreadCount: page.unread };
-    return more ? { ...out, nextCursor: encodeCursor(last) } : out;
+  list(@CurrentPrincipal() me: Principal, @Query() q: PageQuery): Promise<List> {
+    return list(this.inbox, me.accountId, App.Customer, q);
   }
 
   @Post('notifications/read-all')
   @RequirePermission('notification:read:own')
   @HttpCode(204)
-  async readAll(@CurrentPrincipal() me: Principal): Promise<void> {
-    await this.inbox.markAllRead(me.accountId, this.app);
+  readAll(@CurrentPrincipal() me: Principal): Promise<void> {
+    return this.inbox.markAllRead(me.accountId, App.Customer);
   }
 
   @Post('notifications/:notificationId/read')
   @RequirePermission('notification:read:own')
   @HttpCode(204)
-  async read(@CurrentPrincipal() me: Principal, @Param('notificationId') id: string) {
-    await this.inbox.markRead(me.accountId, this.app, id);
+  read(@CurrentPrincipal() me: Principal, @Param('notificationId') id: string): Promise<void> {
+    return this.inbox.markRead(me.accountId, App.Customer, id);
   }
 
   @Put('device-token')
   @RequirePermission('device:register')
   @HttpCode(204)
-  async device(@CurrentPrincipal() me: Principal, @Body() body: Schemas['DeviceTokenInput']) {
+  device(@CurrentPrincipal() me: Principal, @Body() body: DeviceInput): Promise<void> {
     const { token, platform } = body;
-    await this.inbox.registerDevice({ token, accountId: me.accountId, app: this.app, platform });
+    return this.inbox.registerDevice({
+      token,
+      platform,
+      accountId: me.accountId,
+      app: App.Customer,
+    });
   }
 }
 
-/** The customer app's inbox (C-13). */
-@Controller('v1/customer')
-@MapErrors(notificationErrors)
-export class CustomerNotificationsController extends NotificationsController {
-  constructor(inbox: Inbox) {
-    super(inbox, App.Customer);
-  }
-}
-
-/** The partner app's inbox (P-12). */
+/** The partner app's inbox and device (P-12). */
 @Controller('v1/provider')
 @MapErrors(notificationErrors)
-export class ProviderNotificationsController extends NotificationsController {
-  constructor(inbox: Inbox) {
-    super(inbox, App.Partner);
+export class ProviderNotificationsController {
+  constructor(private readonly inbox: Inbox) {}
+
+  @Get('notifications')
+  @RequirePermission('notification:read:own')
+  list(@CurrentPrincipal() me: Principal, @Query() q: PageQuery): Promise<List> {
+    return list(this.inbox, me.accountId, App.Partner, q);
+  }
+
+  @Post('notifications/read-all')
+  @RequirePermission('notification:read:own')
+  @HttpCode(204)
+  readAll(@CurrentPrincipal() me: Principal): Promise<void> {
+    return this.inbox.markAllRead(me.accountId, App.Partner);
+  }
+
+  @Post('notifications/:notificationId/read')
+  @RequirePermission('notification:read:own')
+  @HttpCode(204)
+  read(@CurrentPrincipal() me: Principal, @Param('notificationId') id: string): Promise<void> {
+    return this.inbox.markRead(me.accountId, App.Partner, id);
+  }
+
+  @Put('device-token')
+  @RequirePermission('device:register')
+  @HttpCode(204)
+  device(@CurrentPrincipal() me: Principal, @Body() body: DeviceInput): Promise<void> {
+    const { token, platform } = body;
+    return this.inbox.registerDevice({
+      token,
+      platform,
+      accountId: me.accountId,
+      app: App.Partner,
+    });
   }
 }
