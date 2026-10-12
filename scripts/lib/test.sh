@@ -1,10 +1,11 @@
 # shellcheck shell=bash
 # Test runners for every level in docs/build/03-testing.md §1.
 
-test_go_unit() {
-  [[ -f "$BACKEND/go.mod" ]] || return 0
-  (cd "$BACKEND" && go test -race -count=1 ./...) || die "Go unit tests failed"
-  ok "Go unit tests"
+test_backend_unit() {
+  [[ -f "$BACKEND/package.json" ]] || return 0
+  npm_install "$BACKEND"
+  (cd "$BACKEND" && npx jest --selectProjects unit --silent) || die "backend unit tests failed"
+  ok "backend unit tests"
 }
 
 test_cli() {
@@ -24,26 +25,32 @@ test_dart() {
   ok "Flutter unit and widget tests"
 }
 
-# test_go_integration runs unit and integration-tagged tests together so the profile
-# measures the combined coverage the 100% gate applies to.
-test_go_integration() {
-  [[ -f "$BACKEND/go.mod" ]] || {
-    nothing_to_run "Go integration"
+# test_backend_integration runs the unit and integration projects together so the
+# report measures the combined coverage the 100% gate (pao cover) applies to.
+test_backend_integration() {
+  [[ -f "$BACKEND/package.json" ]] || {
+    nothing_to_run "backend integration"
     return 0
   }
   ensure_test_services
+  npm_install "$BACKEND"
+  rm -rf "$COVERAGE_DIR/backend"
   mkdir -p "$COVERAGE_DIR"
-  (cd "$BACKEND" && go test -tags integration -race -count=1 -covermode=atomic \
-    -coverpkg=./internal/... -coverprofile="$COVERAGE_DIR/go.out" ./...) ||
-    die "Go integration tests failed"
-  ok "Go unit + integration tests"
+  (cd "$BACKEND" && npx jest --runInBand --silent --coverage --coverageThreshold '{}' \
+    --coverageReporters json-summary text-summary --coverageDirectory "$COVERAGE_DIR/backend") \
+    >"$COVERAGE_DIR/backend.txt" 2>&1 || {
+    tail -60 "$COVERAGE_DIR/backend.txt" >&2
+    die "backend unit + integration tests failed"
+  }
+  ok "backend unit + integration tests"
 }
 
 test_e2e() {
   local ran=0
-  if [[ -f "$PAO_ROOT/test/e2e/go.mod" ]]; then
+  if [[ -f "$E2E_API/package.json" ]]; then
     "$PAO_ROOT/test/e2e/stack.sh" || die "e2e stack failed"
-    (cd "$PAO_ROOT/test/e2e" && go test -count=1 ./...) || die "API e2e journeys failed"
+    npm_install "$E2E_API"
+    (cd "$E2E_API" && npm test --silent) || die "API e2e journeys failed"
     ran=1
   fi
   if [[ -x "$PAO_ROOT/test/e2e/mobile/run.sh" ]]; then
@@ -55,12 +62,12 @@ test_e2e() {
 
 cmd_test() {
   case "${1:-}" in
-    unit) test_cli && test_go_unit && test_dart ;;
-    go) test_go_unit ;;
+    unit) test_cli && test_backend_unit && test_dart ;;
+    backend) test_backend_unit ;;
     dart) test_dart ;;
-    integration) test_go_integration ;;
+    integration) test_backend_integration ;;
     e2e) test_e2e ;;
-    all) test_cli && test_go_unit && test_dart && test_go_integration && test_e2e ;;
-    *) die "usage: pao test unit|integration|e2e|all (or go|dart)" ;;
+    all) test_cli && test_backend_unit && test_dart && test_backend_integration && test_e2e ;;
+    *) die "usage: pao test unit|integration|e2e|all (or backend|dart)" ;;
   esac
 }

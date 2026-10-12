@@ -3,6 +3,12 @@
 
 compose() { docker compose -f "$PAO_ROOT/docker-compose.yml" "$@"; }
 
+# e2e_compose addresses the end-to-end stack that test/e2e/stack.sh started.
+e2e_compose() {
+  docker compose -p "${PAO_E2E_PROJECT:-pao-e2e}" -f "$PAO_ROOT/docker-compose.yml" \
+    -f "$PAO_ROOT/test/e2e/compose.e2e.yml" "$@"
+}
+
 cmd_up() {
   require_tool docker "https://docs.docker.com/engine/install/"
   [[ -f "$PAO_ROOT/.env" ]] || create_env
@@ -30,17 +36,12 @@ ensure_test_services() {
   fi
 }
 
+# cmd_seed applies the migrations and loads the seed data through the image's migrate
+# entry point, using the same settings as the running stack.
 cmd_seed() {
-  [[ -d "$BACKEND/cmd/migrate" ]] || {
-    nothing_to_run "seed"
-    return 0
-  }
-  if [[ -f "$PAO_ROOT/.env" ]]; then
-    set -a
-    # shellcheck source=/dev/null
-    . "$PAO_ROOT/.env"
-    set +a
-  fi
-  (cd "$BACKEND" && go run ./cmd/migrate up && go run ./cmd/migrate seed) || die "seed failed"
+  require_tool docker "https://docs.docker.com/engine/install/"
+  [[ -f "$PAO_ROOT/.env" ]] || create_env
+  compose run --rm -T --entrypoint /app/migrate migrate up >/dev/null || die "migrations failed"
+  compose run --rm -T --entrypoint /app/migrate migrate seed || die "seed failed"
   ok "migrations applied and seed data loaded"
 }

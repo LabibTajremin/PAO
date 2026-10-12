@@ -1,22 +1,22 @@
 # shellcheck shell=bash
-# The 100% coverage gate for Go and every Flutter package (docs/build/03-testing.md §2).
+# The 100% coverage gate for the backend and every Flutter package
+# (docs/build/03-testing.md §2).
 
-cover_go() {
-  [[ -f "$BACKEND/go.mod" ]] || return 0
-  require_tool go-test-coverage "go install github.com/vladopajic/go-test-coverage/v2@v2.11.4"
-  [[ -f "$COVERAGE_DIR/go.out" ]] || test_go_integration
-  local config="$COVERAGE_DIR/testcoverage.yml"
-  {
-    cat "$PAO_ROOT/.testcoverage.yml"
-    printf 'exclude:\n  paths:\n'
-    grep -v -e '^#' -e '^$' "$PAO_ROOT/.coverage-exclude" | sed "s/^/    - '/; s/\$/'/"
-  } >"$config"
-  (cd "$BACKEND" && go-test-coverage --config "$config" \
-    --profile "$COVERAGE_DIR/go.out") >"$COVERAGE_DIR/go.txt" 2>&1 || {
-    grep -v '100.0%' "$COVERAGE_DIR/go.txt" | tail -40 >&2
-    die "Go coverage below 100%"
-  }
-  printf '| Go backend | 100%% |\n' >>"$COVERAGE_DIR/summary.md"
+# cover_backend checks the combined unit + integration report of `pao test integration`
+# against the gate in backend/jest.config.ts: statements, lines and functions at 100%.
+cover_backend() {
+  [[ -f "$BACKEND/package.json" ]] || return 0
+  local report="$COVERAGE_DIR/backend/coverage-summary.json"
+  [[ -f "$report" ]] || test_backend_integration
+  # shellcheck disable=SC2016 # the ${...} below are JavaScript template literals
+  node -e '
+    const total = require(process.argv[1]).total;
+    const short = ["statements", "lines", "functions"].filter((k) => total[k].pct < 100);
+    for (const k of short) console.error(`  ${k}: ${total[k].covered}/${total[k].total}`);
+    console.log(total.statements.total);
+    process.exit(short.length ? 1 : 0);
+  ' "$report" >"$COVERAGE_DIR/backend.count" || die "backend coverage below 100% (see coverage/backend/)"
+  printf '| backend | 100%% (%s statements) |\n' "$(cat "$COVERAGE_DIR/backend.count")" >>"$COVERAGE_DIR/summary.md"
 }
 
 # dart_excludes prints the regexes listed under coverage_exclude in a pubspec.
@@ -44,15 +44,15 @@ cover_dart() {
   while IFS= read -r pkg; do cover_dart_package "$pkg"; done < <(dart_packages)
 }
 
-# cmd_cover checks every stack, or one scope (go, dart) for the per-stack CI jobs.
+# cmd_cover checks every stack, or one scope (backend, dart) for the per-stack CI jobs.
 cmd_cover() {
   mkdir -p "$COVERAGE_DIR"
   printf '# Coverage\n\n| Package | Statements |\n|---|---|\n' >"$COVERAGE_DIR/summary.md"
   case "${1:-all}" in
-    go) cover_go ;;
+    backend) cover_backend ;;
     dart) cover_dart ;;
-    all) cover_go && cover_dart ;;
-    *) die "usage: pao cover [go|dart|all]" ;;
+    all) cover_backend && cover_dart ;;
+    *) die "usage: pao cover [backend|dart|all]" ;;
   esac
   ok "coverage 100% — see coverage/summary.md"
 }
