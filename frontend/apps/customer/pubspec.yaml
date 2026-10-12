@@ -46,6 +46,8 @@ dev_dependencies:
   very_good_analysis: ^11.0.0
 
 flutter:
+  # flutter run without --flavor builds dev (docs/release.md).
+  default-flavor: dev
   generate: true
   uses-material-design: true
 
