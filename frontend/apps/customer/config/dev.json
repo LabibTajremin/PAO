@@ -1,0 +1,6 @@
+{
+  "PAO_FLAVOUR": "dev",
+  "PAO_API_BASE_URL": "http://10.0.2.2:8080",
+  "PAO_SUPPORT_PHONE": "09610000000",
+  "PAO_SUPPORT_EMAIL": "support@pao.com.bd"
+}

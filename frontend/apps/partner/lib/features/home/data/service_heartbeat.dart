@@ -19,10 +19,9 @@ class ServiceHeartbeat implements Heartbeat {
   ServiceHeartbeat(
     this._inner,
     this._notice, {
-    MethodChannel channel = presenceChannel,
+    this._channel = presenceChannel,
     bool? android,
-  }) : _channel = channel,
-       _android = android ?? defaultTargetPlatform == TargetPlatform.android;
+  }) : _android = android ?? defaultTargetPlatform == TargetPlatform.android;
 
   final Heartbeat _inner;
   final OnlineNotice _notice;

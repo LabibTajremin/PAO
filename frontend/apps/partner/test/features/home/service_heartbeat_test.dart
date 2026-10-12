@@ -15,7 +15,10 @@ class _Beat implements Heartbeat {
   void stop() => calls.add('stop');
 }
 
-const _notice = (title: 'You are online', body: 'Sharing your location');
+const OnlineNotice _notice = (
+  title: 'You are online',
+  body: 'Sharing your location',
+);
 const _every = Duration(seconds: 30);
 
 Future<void> _noBeat() async {}

@@ -28,18 +28,27 @@ jobs:
         run: ./pao test dart
       - name: Coverage (100% per package)
         run: ./pao cover dart
-      - name: Build admin web
-        working-directory: frontend/apps/admin
-        run: flutter build web --release
+      - name: Build admin web (prod)
+        run: scripts/build-release.sh admin prod web
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: always()
         with: { name: dart-coverage, path: "frontend/**/coverage/lcov.info" }
 
+  # One app bundle and APK per app and flavour (docs/release.md).
   android:
     runs-on: ubuntu-24.04
     strategy:
+      fail-fast: false
       matrix:
         app: [customer, partner]
+        flavour: [dev, staging, prod]
+    env:
+      PAO_BUILD_NUMBER: ${{ github.run_number }}
+      PAO_MAPS_API_KEY: ${{ secrets.PAO_MAPS_API_KEY }}
+      PAO_FCM_API_KEY: ${{ secrets.PAO_FCM_API_KEY }}
+      PAO_FCM_APP_ID: ${{ secrets[format('PAO_FCM_APP_ID_{0}', matrix.app)] }}
+      PAO_FCM_SENDER_ID: ${{ secrets.PAO_FCM_SENDER_ID }}
+      PAO_FCM_PROJECT_ID: ${{ secrets.PAO_FCM_PROJECT_ID }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
@@ -49,6 +58,84 @@ jobs:
           flutter-version: 3.47.7
           channel: stable
           cache: true
-      - name: Build debug APK
-        working-directory: frontend/apps/${{ matrix.app }}
-        run: flutter build apk --debug
+      # The upload key lives only in repository secrets. Without it the build is
+      # debug-signed (Play rejects it), and a push to main stops instead.
+      - name: Install the upload key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.PAO_ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [[ -z "$KEYSTORE_BASE64" ]]; then
+            [[ "$GITHUB_REF" != refs/heads/main ]] || { echo "upload key secret missing" >&2; exit 1; }
+            echo "no upload key: debug-signed build"
+            exit 0
+          fi
+          echo "$KEYSTORE_BASE64" | base64 -d >"$RUNNER_TEMP/upload.jks"
+          echo "PAO_ANDROID_KEYSTORE=$RUNNER_TEMP/upload.jks" >>"$GITHUB_ENV"
+      - name: Build app bundle and APK
+        env:
+          PAO_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.PAO_ANDROID_KEYSTORE_PASSWORD }}
+          PAO_ANDROID_KEY_ALIAS: ${{ secrets.PAO_ANDROID_KEY_ALIAS }}
+          PAO_ANDROID_KEY_PASSWORD: ${{ secrets.PAO_ANDROID_KEY_PASSWORD }}
+        run: |
+          scripts/build-release.sh "${{ matrix.app }}" "${{ matrix.flavour }}" appbundle
+          scripts/build-release.sh "${{ matrix.app }}" "${{ matrix.flavour }}" apk
+          rm -f "$RUNNER_TEMP/upload.jks"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ${{ matrix.app }}-${{ matrix.flavour }}-android
+          path: |
+            frontend/apps/${{ matrix.app }}/build/app/outputs/bundle/${{ matrix.flavour }}Release/*.aab
+            frontend/apps/${{ matrix.app }}/build/app/outputs/flutter-apk/*-${{ matrix.flavour }}-release.apk
+            frontend/apps/${{ matrix.app }}/build/symbols/${{ matrix.flavour }}
+
+  # The prod archive per app; signed when the distribution secrets are present.
+  ios:
+    runs-on: macos-15
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [customer, partner]
+    env:
+      PAO_BUILD_NUMBER: ${{ github.run_number }}
+      PAO_MAPS_API_KEY: ${{ secrets.PAO_MAPS_API_KEY }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: subosito/flutter-action@fd55f4c5af5b953cc57a2be44cb082c8f6635e8e # v2.21.0
+        with:
+          flutter-version: 3.47.7
+          channel: stable
+          cache: true
+      - name: Install signing material
+        env:
+          CERT_BASE64: ${{ secrets.PAO_IOS_CERT_P12_BASE64 }}
+          CERT_PASSWORD: ${{ secrets.PAO_IOS_CERT_PASSWORD }}
+          PROFILE_BASE64: ${{ secrets[format('PAO_IOS_PROFILE_BASE64_{0}', matrix.app)] }}
+          EXPORT_OPTIONS_BASE64: ${{ secrets[format('PAO_IOS_EXPORT_OPTIONS_BASE64_{0}', matrix.app)] }}
+        run: |
+          if [[ -z "$CERT_BASE64" ]]; then
+            echo "no iOS signing secrets: unsigned archive"
+            exit 0
+          fi
+          keychain="$RUNNER_TEMP/pao.keychain-db"
+          pass="$(uuidgen)"
+          security create-keychain -p "$pass" "$keychain"
+          security set-keychain-settings -lut 3600 "$keychain"
+          security unlock-keychain -p "$pass" "$keychain"
+          echo "$CERT_BASE64" | base64 -d >"$RUNNER_TEMP/cert.p12"
+          security import "$RUNNER_TEMP/cert.p12" -P "$CERT_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
+          security list-keychain -d user -s "$keychain"
+          rm -f "$RUNNER_TEMP/cert.p12"
+          profiles="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$profiles"
+          echo "$PROFILE_BASE64" | base64 -d >"$profiles/pao-${{ matrix.app }}.mobileprovision"
+          echo "$EXPORT_OPTIONS_BASE64" | base64 -d >"$RUNNER_TEMP/ExportOptions.plist"
+          echo "PAO_IOS_EXPORT_OPTIONS=$RUNNER_TEMP/ExportOptions.plist" >>"$GITHUB_ENV"
+      - name: Build prod archive
+        run: scripts/build-release.sh "${{ matrix.app }}" prod ipa
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ${{ matrix.app }}-prod-ios
+          path: |
+            frontend/apps/${{ matrix.app }}/build/ios/ipa/*.ipa
+            frontend/apps/${{ matrix.app }}/build/ios/archive
+            frontend/apps/${{ matrix.app }}/build/symbols/prod
