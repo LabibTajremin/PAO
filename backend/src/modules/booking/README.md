@@ -30,8 +30,8 @@ types with their outbox names (`contract/index.ts`). Queries live in
 
 ## Events consumed
 
-None. (The Go module listed `identity.AccountDeleted` but never subscribed; the port
-keeps that behaviour.)
+None. The module does not react to `identity.AccountDeleted`; bookings keep their
+snapshots of the people involved.
 
 ## Jobs
 

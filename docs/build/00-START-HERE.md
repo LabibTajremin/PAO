@@ -1,7 +1,7 @@
 # PAO build — start here
 
 This folder is a complete, phased instruction set for an AI coding agent to build PAO from
-an empty repository to a working, tested product: Go API, Flutter customer app, Flutter
+an empty repository to a working, tested product: NestJS API, Flutter customer app, Flutter
 partner (provider) app and Flutter Web admin panel.
 
 The agent works autonomously, one phase at a time. Each phase ends with a pull request

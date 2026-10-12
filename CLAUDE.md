@@ -1,6 +1,6 @@
 # PAO — agent rules
 
-You are building PAO, a home-services marketplace for Bangladesh: Go backend, Flutter apps.
+You are building PAO, a home-services marketplace for Bangladesh: NestJS backend, Flutter apps.
 These rules apply to every session. Read them fully; they are short on purpose.
 
 ## Where things are
@@ -27,7 +27,7 @@ These rules apply to every session. Read them fully; they are short on purpose.
 4. Never commit secrets. Configuration comes from environment variables only.
 5. Update `PROGRESS.md` after every completed task, then commit. It is how the next
    session resumes.
-6. Keep files small (Go ≤ 250 lines, Dart ≤ 200 lines, functions ≤ 40 lines). Split
+6. Keep files small (TypeScript ≤ 250 lines, Dart ≤ 200 lines, functions ≤ 40 lines). Split
    instead of growing.
 7. Comments explain *why*, never *what*. No AI narration ("Here we…", "Step 1").
 8. When the PRD and these docs disagree, the PRD wins for behaviour and these docs win
@@ -38,6 +38,6 @@ These rules apply to every session. Read them fully; they are short on purpose.
 - Read only what the current task needs: its phase file, the PRD section it cites and the
   module README. Do not re-read files you have already read in this session.
 - Search with `rg` or Grep before opening files; open line ranges, not whole files.
-- Prefer generators (`sqlc`, `oapi-codegen`, OpenAPI Dart client) over hand-written
+- Prefer generators (`sqlc`, `openapi-typescript`, OpenAPI Dart client) over hand-written
   boilerplate.
 - Do not paste long command output into your notes. Summarise failures in one line.

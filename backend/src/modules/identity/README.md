@@ -16,7 +16,7 @@ Use cases live in `app/`: `PhoneCodes` (send and check one-time codes), `PhoneSi
 and `AdminTotp` (password + TOTP, 15-minute lockout), `AdminUsers`, `MyAccount`,
 `AccountDeletion`, `AccountStatusChanger` and `RoleEditor`. Domain rules return reasons
 (`domain/reasons.ts`); use cases throw them as `DomainError`, and `adapter/http` maps
-them to the Go API's error codes. TOTP secrets are encrypted by the Postgres adapter.
+them to the API's error codes (`api/openapi.yaml`). TOTP secrets are encrypted by the Postgres adapter.
 
 The provider gate reads levels from verification through a lazy contract
 (`adapter/inproc/verification-levels.ts`). SMS goes through the console, SSL Wireless or,

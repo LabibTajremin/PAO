@@ -76,3 +76,9 @@ hexagonal modules, deny-by-default RBAC from the spec, 100% coverage, strict lin
   SQL) and covered by integration tests.
 - Revisit if per-request CPU becomes the cost driver (argon2 and JSON-heavy paths are
   the hot spots) — Fastify and worker threads are the first levers.
+
+## Cut-over
+
+Done in P15: the journeys run in TypeScript (`test/e2e/api`), the Go backend, the Go
+journeys and the Go tooling are deleted, and the NestJS backend lives in `backend/`.
+Every `pao` gate, git hook and CI workflow now runs on it.

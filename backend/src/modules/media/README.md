@@ -22,7 +22,7 @@ None.
 
 ## Events consumed
 
-None. (The Go README listed `identity.AccountDeleted`, but no media subscriber exists.)
+None; no media subscriber reacts to `identity.AccountDeleted`.
 
 ## Tables (schema `media`)
 
