@@ -89,7 +89,12 @@ describe('booking ownership, contract and failures (TestBooking_OwnershipContrac
   });
 
   it('answers 500 once the database is gone', async () => {
-    await api.app.get<Database>(DATABASE).close();
+    const db = api.app.get<Database>(DATABASE);
+    // The open request would make a second one a duplicate rather than a failure.
+    await w.asCustomer('POST', `/v1/customer/bookings/${id}/cancel`, { reason: 'other' });
+    await db.query('ALTER TABLE booking.booking_items RENAME TO items_gone');
+    expect((await w.request('booking-without-items')).status).toBe(500);
+    await db.close();
     expect((await w.asCustomer('GET', '/v1/customer/bookings?tab=upcoming')).status).toBe(500);
     for (const path of [
       '/v1/provider/jobs?tab=requests',

@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { v7 as uuid } from 'uuid';
+import { subService } from '../../../../../test/kit/catalog';
 import { startTestApi, type TestApi } from '../../../../../test/kit/api';
 import { completedJob, customer, requestedJob } from '../../../../../test/kit/booking';
 import { deliver, relayEvents } from '../../../../../test/kit/events';
@@ -9,7 +10,6 @@ import { DATABASE, type Database } from '../../../../platform/db/database';
 import { HEALTH_ROUTES } from '../../../../platform/health/health';
 import { checkRoutesAgainstSpec } from '../../../../platform/http/route-spec-check';
 import { OPENAPI_DOCUMENT } from '../../../../platform/http/spec-routes';
-import { seedId } from '../../../catalog/app/seed-catalog';
 import { BookingEvents } from '../../../booking/contract/events';
 import { RATING_SERVICE, type RatingService } from '../../contract';
 
@@ -25,7 +25,7 @@ async function completeFor(api: TestApi, provider: Party, client: Party, address
     serviceId: service('electrician'),
     timing: 'asap',
     addressId: address,
-    items: [{ subServiceId: seedId('sub-service', 'fan-install'), quantity: 1 }],
+    items: [{ subServiceId: subService('fan-install'), quantity: 1 }],
   };
   const headers = { 'Idempotency-Key': randomUUID() };
   const booked = await api.do('POST', '/v1/customer/bookings', body, {
@@ -180,7 +180,11 @@ describe('rating', () => {
       (await api.do('GET', `/v1/customer/providers/${pending.id}`, undefined, second)).status,
     ).toBe(404);
     expect((await api.do('GET', `${list}&cursor=%25`, undefined, second)).status).toBe(422);
-    await api.app.get<Database>(DATABASE).close();
+    const db = api.app.get<Database>(DATABASE);
+    await db.query('ALTER TABLE rating.aggregates RENAME TO aggregates_gone');
+    const lost = await api.do('POST', `/v1/provider/jobs/${j.id}/review`, { stars: 3 }, p);
+    expect(lost.status).toBe(500);
+    await db.close();
     const failing = [
       ['/v1/provider/rating', p],
       ['/v1/provider/reviews', p],

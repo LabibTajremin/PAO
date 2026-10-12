@@ -1,9 +1,9 @@
 import { v7 as uuid } from 'uuid';
+import { subService } from '../../../../../test/kit/catalog';
 import { startTestApi, type TestApi } from '../../../../../test/kit/api';
 import { fan, tap, World } from '../../../../../test/kit/booking-world';
 import { adminSession } from '../../../../../test/kit/identity';
 import { near, service, verifiedProvider } from '../../../../../test/kit/provider';
-import { seedId } from '../../../catalog/app/seed-catalog';
 import { CreateBooking, type CreateInput } from '../../app/create-booking';
 
 const TEN_MINUTES = 10 * 60_000;
@@ -86,7 +86,7 @@ async function durationHire(api: TestApi, w: World) {
     providerId: w.provider.id,
     serviceId: driver,
     addressId: w.addressId,
-    items: [{ subServiceId: seedId('sub-service', 'driver-day'), quantity: 1 }],
+    items: [{ subServiceId: subService('driver-day'), quantity: 1 }],
     scheduledAt: null,
     note: '',
     idempotencyKey: 'booking-app-driver',
