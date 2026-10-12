@@ -5,6 +5,7 @@ import { CatalogModule } from '../modules/catalog/catalog.module';
 import { CustomerModule } from '../modules/customer/customer.module';
 import { IdentityModule } from '../modules/identity/identity.module';
 import { MediaModule } from '../modules/media/media.module';
+import { NotificationModule } from '../modules/notification/notification.module';
 import { ProviderModule } from '../modules/provider/provider.module';
 import { RatingModule } from '../modules/rating/rating.module';
 import { VerificationModule } from '../modules/verification/verification.module';
@@ -20,6 +21,7 @@ export const BUSINESS_MODULES: Type[] = [
   VerificationModule,
   CatalogModule,
   RatingModule,
+  NotificationModule,
   MediaModule,
   AdminModule,
   AuditModule,
