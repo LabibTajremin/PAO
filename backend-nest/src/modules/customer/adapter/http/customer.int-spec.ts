@@ -27,7 +27,7 @@ describe('customer profile', () => {
     db = api.app.get(DATABASE);
   });
 
-  // TestCustomer_ProfileWithPhotoAndDeletion, without the photo steps (media pending).
+  // TestCustomer_ProfileWithPhotoAndDeletion; the photo steps are in photo.int-spec.ts.
   it('needs a profile first, saves it and erases it with the account', async () => {
     const tp = await signIn(api, PHONE, 'customer');
     const token = tp.accessToken;
@@ -96,7 +96,7 @@ describe('customer profile', () => {
       roles: ['provider'],
     } as never);
     await deliver(api, { name: 'booking.BookingRequested', customerId: id } as never);
-    await deliver(api, { name: 'booking.BookingRequested' } as never);
+    await deliver(api, { name: 'booking.BookingRequested' });
     const [row] = await customers.searchCustomers({
       id,
       text: ' NUSRAT ',
@@ -110,7 +110,7 @@ describe('customer profile', () => {
     expect(await customers.searchCustomers(literal)).toEqual([]);
   });
 
-  // TestCustomer_ContractAndPeerFailures, without the media steps.
+  // TestCustomer_ContractAndPeerFailures; the media steps are in photo.int-spec.ts.
   it('reports contract misses and fails cleanly when stores break', async () => {
     await expect(customers.getAddress(uuid(), uuid())).rejects.toMatchObject({
       reason: CustomerErrors.AddressNotFound,
