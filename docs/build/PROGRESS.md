@@ -23,15 +23,17 @@ it first and continues from **Current task**.
 | P13 Admin web | done | — | ADR-0030 |
 | P14 End-to-end | done | — | ADR-0031 |
 | P15 NestJS backend | done | — | ADR-0032 |
-| P16 Hardening & handover | in_progress | — | |
+| P16 Hardening & handover | done | — | ADR-0023, ADR-0032 |
 
 Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (merged).
 
 ## Current task
 
-P16 / task 1 — read `docs/build/phases/P16-hardening.md` and plan it for the NestJS backend
-(the backlog from ADR-0028 to 0031: Android foreground service for the heartbeat,
-admin-console API gaps, Bangla receipts, a native map, an Android emulator journey).
+None — every phase is done. P16 shipped security and privacy (`docs/security-checklist.md`,
+scans in `./pao security`, pinning, erasure and retention purge), ops (`ops/`, runbooks)
+and release/handover (`HANDOVER.md`, `docs/release.md`). Final audit: `./pao ci` and
+`./pao perf` green on a clean clone. Open owner decisions are in `HANDOVER.md` and the
+accepted risks in `docs/security-checklist.md`.
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
