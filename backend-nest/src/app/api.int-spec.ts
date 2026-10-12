@@ -94,12 +94,13 @@ describe('API without business modules', () => {
     expect(foreign.headers.get('x-request-id')).toHaveLength(36);
   });
 
-  it('serves the test hooks without module seams', async () => {
+  it('serves the test hooks with the modules wired so far', async () => {
     expect((await api.do('GET', '/__test/sms?phone=01712345601')).status).toBe(404);
     expect((await api.do('GET', '/__test/pushes?token=x')).body).toEqual({ pushes: [] });
     expect((await api.do('POST', '/__test/verification/expire?at=yesterday')).status).toBe(400);
     const at = new Date().toISOString();
-    expect((await api.do('POST', `/__test/verification/expire?at=${at}`)).status).toBe(501);
+    // Verification provides the expiry seam; nothing has expired in a fresh database.
+    expect((await api.do('POST', `/__test/verification/expire?at=${at}`)).status).toBe(204);
   });
 });
 
@@ -107,26 +108,26 @@ describe('API test hooks with module seams', () => {
   it('read the captures and run the expiry sweep', async () => {
     const expired: Date[] = [];
     const api = await startTestApi({
-      // Identity provides the real capture; this stand-in replaces it.
+      // Identity and verification provide the real seams; these stand-ins replace them.
       override: (b) =>
-        b.overrideProvider(SMS_CAPTURE).useValue({
-          normalizePhone: (raw: string) => (raw.length === 11 ? `+88${raw}` : undefined),
-          last: (phone: string) =>
-            phone === '+8801712345601' ? 'Your PAO code is 123456' : undefined,
-        }),
-      providers: [
-        {
-          provide: PUSH_CAPTURE,
-          useValue: { sentTo: () => [{ title: 'New request', body: '', data: { type: 'x' } }] },
-        },
-        {
-          provide: DOCUMENT_EXPIRY,
-          useValue: {
+        b
+          .overrideProvider(SMS_CAPTURE)
+          .useValue({
+            normalizePhone: (raw: string) => (raw.length === 11 ? `+88${raw}` : undefined),
+            last: (phone: string) =>
+              phone === '+8801712345601' ? 'Your PAO code is 123456' : undefined,
+          })
+          .overrideProvider(DOCUMENT_EXPIRY)
+          .useValue({
             expireDocumentsAt: (at: Date) => {
               expired.push(at);
               return expired.length > 1 ? Promise.reject(new Error('db down')) : Promise.resolve();
             },
-          },
+          }),
+      providers: [
+        {
+          provide: PUSH_CAPTURE,
+          useValue: { sentTo: () => [{ title: 'New request', body: '', data: { type: 'x' } }] },
         },
       ],
     });

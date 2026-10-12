@@ -1,9 +1,16 @@
 import { type Type } from '@nestjs/common';
 import { AdminModule } from '../modules/admin/admin.module';
 import { IdentityModule } from '../modules/identity/identity.module';
+import { ProviderModule } from '../modules/provider/provider.module';
+import { VerificationModule } from '../modules/verification/verification.module';
 
 /**
  * Every business module, in the order of `migrations/modules.json`. Module agents add
  * their `<Module>Module` here, one per line; the API and the worker import the same list.
  */
-export const BUSINESS_MODULES: Type[] = [IdentityModule, AdminModule];
+export const BUSINESS_MODULES: Type[] = [
+  IdentityModule,
+  ProviderModule,
+  VerificationModule,
+  AdminModule,
+];
