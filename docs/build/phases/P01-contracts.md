@@ -1,5 +1,7 @@
 # P01 — Contracts
 
+> **Historical (Go era).** This phase was built with the original Go backend. P15 (ADR-0032) ported it to NestJS and removed Go; tool and path names below (Go, pgx, River, oapi-codegen, `backend/internal/...`) map to their NestJS equivalents described in `02-architecture.md` and ADR-0032.
+
 **Goal:** every interface is written and reviewed before implementation: the REST API, each
 module's service-to-service contract, domain events, database schemas and the RBAC seed.
 Later phases implement these; changing them later requires updating this phase's

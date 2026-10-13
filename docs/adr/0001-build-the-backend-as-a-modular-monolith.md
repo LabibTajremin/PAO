@@ -1,6 +1,6 @@
 # ADR-0001: Build the backend as a modular monolith
 
-- Status: Accepted
+- Status: Accepted; library choices superseded by ADR-0032 (NestJS)
 - Date: 2026-10-09
 - Source: PRD §9, 04-decisions.md E1
 

@@ -1,6 +1,6 @@
 # ADR-0008: Run Go integration tests against provided service endpoints, beside the code
 
-- Status: Accepted
+- Status: Superseded by ADR-0032 (Jest integration specs against the same provided endpoints)
 - Date: 2026-10-09
 - Source: docs/build/03-testing.md §1
 

@@ -1,6 +1,6 @@
 # ADR-0006: Run background jobs with River on Postgres
 
-- Status: Accepted
+- Status: Superseded by ADR-0032 (in-process scheduler; River is Go-only)
 - Date: 2026-10-09
 - Source: 04-decisions.md E6
 

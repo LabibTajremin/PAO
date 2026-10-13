@@ -34,7 +34,7 @@ revise)`. Changing one later means a new ADR, not silent edits.
 | E3 | IDs | UUIDv7 everywhere (sortable, safe to expose). Booking display number is a separate sequence. |
 | E4 | State management (Flutter) | `flutter_bloc` (ADR-0004). |
 | E5 | Auth | JWT access + rotating refresh in Redis (ADR-0005), see `02-architecture.md` §5. |
-| E6 | Jobs | River on Postgres; one worker binary (ADR-0006). |
+| E6 | Jobs | In-process scheduler in the worker, one runner per job via a Postgres advisory lock; outbox relay for events (ADR-0032, superseding ADR-0006). |
 | E7 | Pagination | Cursor (opaque base64 of `(created_at, id)`), default 20, max 100. |
 | E8 | Time | Stored UTC (`timestamptz`); formatted Asia/Dhaka in apps. |
 | E9 | Money | `int64` paisa; formatted `৳1,130` in apps. |

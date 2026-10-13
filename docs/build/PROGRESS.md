@@ -8,7 +8,7 @@ it first and continues from **Current task**.
 | Phase | Status | PR | Notes |
 |---|---|---|---|
 | P00 Bootstrap | done | — | single-branch build, see ADR-0009 |
-| P01 Contracts | done | — | OpenAPI 3.1 (120 ops), contracts, migrations |
+| P01 Contracts | done | — | OpenAPI 3.1 (121 ops), contracts, migrations |
 | P02 Backend platform | done | — | |
 | P03 Identity & access | done | — | |
 | P04 Catalog, media, audit, settings | done | — | |
