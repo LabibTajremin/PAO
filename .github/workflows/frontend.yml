@@ -89,8 +89,9 @@ jobs:
             frontend/apps/${{ matrix.app }}/build/symbols/${{ matrix.flavour }}
 
   # The prod archive per app; signed when the distribution secrets are present.
+  # macos-26 because connectivity_plus 7.x needs the Xcode 26 SDK (NWPath.isUltraConstrained).
   ios:
-    runs-on: macos-15
+    runs-on: macos-26
     strategy:
       fail-fast: false
       matrix:
