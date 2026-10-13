@@ -20,7 +20,15 @@ test_dart() {
   local pkg
   while IFS= read -r pkg; do
     [[ -d "$pkg/test" ]] || continue
-    (cd "$pkg" && flutter test --coverage --no-pub >/dev/null) || die "Flutter tests failed in ${pkg#"$PAO_ROOT"/}"
+    local log
+    log="$(mktemp)"
+    # Output stays quiet on success, but a failure must name its test or it cannot be fixed.
+    if ! (cd "$pkg" && flutter test --coverage --no-pub >"$log" 2>&1); then
+      grep -E -B2 -A30 'EXCEPTION CAUGHT|\[E\]$|Test failed' "$log" | tail -n 120 >&2
+      rm -f "$log"
+      die "Flutter tests failed in ${pkg#"$PAO_ROOT"/}"
+    fi
+    rm -f "$log"
   done < <(dart_packages)
   ok "Flutter unit and widget tests"
 }
