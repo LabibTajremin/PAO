@@ -20,7 +20,8 @@ enum PaoTone {
   danger,
 }
 
-/// A small status pill such as "Verified" or "Cancelled".
+/// A small status pill such as "Verified" or "Cancelled", led by a dot (or
+/// [icon]) so the tone is not carried by colour alone.
 class PaoBadge extends StatelessWidget {
   /// Creates a badge.
   const PaoBadge({
@@ -41,19 +42,23 @@ class PaoBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = context.pao.accent;
+    final c = context.pao;
     final fg = switch (tone) {
-      PaoTone.neutral => PaoColors.textSecondary,
-      PaoTone.accent => accent.strong,
-      PaoTone.success => PaoColors.success,
-      PaoTone.warning => PaoColors.warning,
-      PaoTone.danger => PaoColors.danger,
+      PaoTone.neutral => c.inkMuted,
+      PaoTone.accent => c.selectedInk,
+      PaoTone.success => c.successInk,
+      PaoTone.warning => c.warningInk,
+      PaoTone.danger => c.dangerInk,
     };
-    final bg = tone == PaoTone.accent ? accent.soft : fg.withValues(alpha: 0.1);
+    final bg = tone == PaoTone.accent
+        ? c.selectedFill
+        : fg.withValues(alpha: 0.12);
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: PaoSpace.sm + 2,
-        vertical: PaoSpace.xs,
+      padding: const EdgeInsets.fromLTRB(
+        PaoSpace.sm + 2,
+        PaoSpace.xs,
+        PaoSpace.md,
+        PaoSpace.xs,
       ),
       decoration: BoxDecoration(
         color: bg,
@@ -62,10 +67,15 @@ class PaoBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (icon != null) ...[
-            Icon(icon, size: 14, color: fg),
-            const SizedBox(width: PaoSpace.xs),
-          ],
+          if (icon != null)
+            Icon(icon, size: 14, color: fg)
+          else
+            Container(
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(color: fg, shape: BoxShape.circle),
+            ),
+          const SizedBox(width: PaoSpace.xs + 2),
           Text(
             label,
             style: Theme.of(context).textTheme.labelSmall!.copyWith(color: fg),

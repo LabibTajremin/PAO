@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
 
 /// A labelled text field with an optional error below it.
@@ -55,7 +56,11 @@ class PaoTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(label, style: Theme.of(context).textTheme.labelMedium),
+        Text(
+          label,
+          style: Theme.of(context).textTheme.labelMedium!
+              .copyWith(color: context.pao.inkMuted),
+        ),
         const SizedBox(height: PaoSpace.sm),
         TextField(
           controller: controller,

@@ -61,7 +61,7 @@ class _List extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: PaoSpace.sm),
           child: Text(
             context.local(c.name),
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
         for (final s in c.services)

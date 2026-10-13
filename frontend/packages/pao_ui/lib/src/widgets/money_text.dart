@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pao_l10n/pao_l10n.dart';
 
 /// An amount in paisa shown as taka in the current language, e.g. `৳1,130`.
+/// Digits are tabular so amounts in a column line up.
 class PaoMoneyText extends StatelessWidget {
   /// Creates the text.
   const PaoMoneyText(this.paisa, {this.style, super.key});
@@ -15,6 +16,7 @@ class PaoMoneyText extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Text(
     formatMoney(paisa, locale: Localizations.localeOf(context).languageCode),
-    style: style,
+    style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()])
+        .merge(style),
   );
 }

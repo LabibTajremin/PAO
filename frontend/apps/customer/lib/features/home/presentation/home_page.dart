@@ -81,7 +81,7 @@ class _HomeBody extends StatelessWidget {
       padding: const EdgeInsets.all(PaoSpace.lg),
       children: [
         AddressHeader(address: data.current, onTap: () => _choose(context)),
-        const SizedBox(height: PaoSpace.lg),
+        const PaoStitchDivider(spacing: PaoSpace.sm),
         SearchBarButton(onTap: () => context.push(Routes.search)),
         if (active != null) ...[
           const SizedBox(height: PaoSpace.lg),
@@ -122,7 +122,7 @@ class _HomeBody extends StatelessWidget {
           Expanded(
             child: Text(
               context.t.homeCategories,
-              style: Theme.of(context).textTheme.titleMedium,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
           TextButton(

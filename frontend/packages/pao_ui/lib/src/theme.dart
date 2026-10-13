@@ -1,63 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:pao_ui/src/theme_parts.dart';
 import 'package:pao_ui/src/tokens/accent.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
-import 'package:pao_ui/src/tokens/metrics.dart';
 import 'package:pao_ui/src/tokens/typography.dart';
 
 /// Builds the Material theme every PAO app uses.
 abstract final class PaoTheme {
-  /// The light theme for [accent]; Midnight is the default (05-screens.md).
-  static ThemeData light({AccentPreset accent = AccentPreset.midnight}) {
-    final scheme = ColorScheme.fromSeed(
-      seedColor: accent.primary,
-      primary: accent.primary,
-      onPrimary: PaoColors.onPrimary,
-      primaryContainer: accent.soft,
-      onPrimaryContainer: accent.strong,
-      secondaryContainer: accent.soft,
-      onSecondaryContainer: accent.strong,
-      surface: PaoColors.surface,
-      onSurface: PaoColors.textPrimary,
-      onSurfaceVariant: PaoColors.textSecondary,
-      outline: PaoColors.border,
-      outlineVariant: PaoColors.border,
-      error: PaoColors.danger,
-    );
-    final text = paoTextTheme();
-    final field = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(PaoRadius.md),
-      borderSide: const BorderSide(color: PaoColors.border),
-    );
+  /// The light (paper) theme for [accent]; Midnight is the default
+  /// (05-screens.md).
+  static ThemeData light({AccentPreset accent = AccentPreset.midnight}) =>
+      _build(PaoColors(accent));
+
+  /// The dark (deep ink) theme for [accent].
+  static ThemeData dark({AccentPreset accent = AccentPreset.midnight}) =>
+      _build(PaoColors(accent, dark: true));
+
+  static ThemeData _build(PaoColors c) {
+    final text = paoTextTheme(dark: c.dark);
     return ThemeData(
       useMaterial3: true,
-      colorScheme: scheme,
-      scaffoldBackgroundColor: PaoColors.canvas,
+      colorScheme: paoColorScheme(c),
+      scaffoldBackgroundColor: c.paper,
+      canvasColor: c.paper,
       textTheme: text,
       fontFamily: PaoFonts.latin,
       fontFamilyFallback: const [PaoFonts.bangla],
       materialTapTargetSize: MaterialTapTargetSize.padded,
-      extensions: [PaoColors(accent)],
-      dividerTheme: const DividerThemeData(color: PaoColors.border, space: 1),
+      extensions: [c],
+      dividerTheme: DividerThemeData(color: c.hairline, space: 1),
       appBarTheme: AppBarTheme(
-        backgroundColor: PaoColors.canvas,
-        foregroundColor: PaoColors.textPrimary,
+        backgroundColor: c.paper,
+        foregroundColor: c.ink,
         elevation: 0,
         scrolledUnderElevation: 0,
         titleTextStyle: text.titleLarge,
       ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: PaoColors.surface,
-        border: field,
-        enabledBorder: field,
-        focusedBorder: field.copyWith(
-          borderSide: BorderSide(color: accent.primary, width: 1.5),
-        ),
-        errorBorder: field.copyWith(
-          borderSide: const BorderSide(color: PaoColors.danger),
-        ),
-        hintStyle: text.bodyMedium!.copyWith(color: PaoColors.textTertiary),
+      inputDecorationTheme: paoInputTheme(c, text),
+      cardTheme: paoCardTheme(c),
+      dialogTheme: paoDialogTheme(c),
+      snackBarTheme: paoSnackBarTheme(c, text),
+      bottomSheetTheme: BottomSheetThemeData(backgroundColor: c.card),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(foregroundColor: c.action),
       ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(color: c.action),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
+import 'package:pao_ui/src/tokens/shape.dart';
 
 /// Tabs in a pill, e.g. Upcoming / Past.
 class PaoSegmented<T> extends StatelessWidget {
@@ -22,7 +23,7 @@ class PaoSegmented<T> extends StatelessWidget {
   final ValueChanged<T> onChanged;
 
   Widget _segment(BuildContext context, T value, String label) {
-    final accent = context.pao.accent;
+    final c = context.pao;
     final on = value == selected;
     return Expanded(
       child: Semantics(
@@ -31,18 +32,19 @@ class PaoSegmented<T> extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(PaoRadius.pill),
           onTap: () => onChanged(value),
-          child: Container(
+          child: AnimatedContainer(
+            duration: PaoMotion.base,
+            curve: PaoMotion.curve,
             constraints: const BoxConstraints(minHeight: minTapTarget),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: on ? accent.soft : null,
+              color: on ? c.selectedFill : c.card.withValues(alpha: 0),
               borderRadius: BorderRadius.circular(PaoRadius.pill),
             ),
             child: Text(
               label,
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                color: on ? accent.strong : PaoColors.textSecondary,
-              ),
+              style: Theme.of(context).textTheme.labelMedium!
+                  .copyWith(color: on ? c.selectedInk : c.inkMuted),
             ),
           ),
         ),
@@ -54,9 +56,9 @@ class PaoSegmented<T> extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(PaoSpace.xs),
     decoration: BoxDecoration(
-      color: PaoColors.surface,
+      color: context.pao.card,
       borderRadius: BorderRadius.circular(PaoRadius.pill),
-      border: Border.all(color: PaoColors.border),
+      border: Border.all(color: context.pao.hairline),
     ),
     child: Row(
       children: [

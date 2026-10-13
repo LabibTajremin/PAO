@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
-import 'package:pao_ui/src/tokens/metrics.dart';
+import 'package:pao_ui/src/tokens/shape.dart';
 
 /// A framed area for a map, with a centred pin and [label] until the real map
 /// loads (or when maps are unavailable).
@@ -24,19 +24,19 @@ class PaoMapFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = context.pao.accent;
+    final c = context.pao;
     return ClipRRect(
-      borderRadius: BorderRadius.circular(PaoRadius.lg),
+      borderRadius: PaoShape.leaf,
       child: Container(
         height: height,
-        color: accent.tint,
+        color: c.tintFill,
         child:
             child ??
             Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.location_on, size: 40, color: accent.primary),
+                  Icon(Icons.location_on, size: 40, color: c.action),
                   Text(label, style: Theme.of(context).textTheme.labelMedium),
                 ],
               ),

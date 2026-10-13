@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
+import 'package:pao_ui/src/tokens/shape.dart';
+import 'package:pao_ui/src/tokens/typography.dart';
 import 'package:pao_ui/src/widgets/button.dart';
+import 'package:pao_ui/src/widgets/stitch.dart';
 
 /// A centred icon, title, message and optional action; base of empty and error
-/// screens.
+/// screens. The icon sits in a stitched leaf frame, the brand's quiet motif.
 class PaoMessageState extends StatelessWidget {
   /// Creates the state view.
   const PaoMessageState({
@@ -29,23 +32,41 @@ class PaoMessageState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.pao;
     final text = Theme.of(context).textTheme;
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(PaoSpace.xxl),
+        padding: const EdgeInsets.symmetric(
+          horizontal: PaoSpace.xxl,
+          vertical: PaoSpace.lg,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 56, color: context.pao.accent.primary),
+            PaoStitchFrame(
+              frame: PaoShape.leaf,
+              padding: PaoSpace.xs,
+              child: Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: c.tintFill,
+                  borderRadius: PaoShape.leafSmall,
+                ),
+                child: Icon(icon, size: 26, color: c.action),
+              ),
+            ),
             const SizedBox(height: PaoSpace.lg),
-            Text(title, style: text.titleLarge, textAlign: TextAlign.center),
+            Text(
+              title,
+              style: paoDisplayStyle(18, c.ink),
+              textAlign: TextAlign.center,
+            ),
             if (message != null) ...[
               const SizedBox(height: PaoSpace.sm),
               Text(
                 message!,
-                style: text.bodyMedium!.copyWith(
-                  color: PaoColors.textSecondary,
-                ),
+                style: text.bodyMedium!.copyWith(color: c.inkMuted),
                 textAlign: TextAlign.center,
               ),
             ],

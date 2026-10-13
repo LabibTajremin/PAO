@@ -27,13 +27,13 @@ class PaoStepper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = context.pao.accent;
+    final c = context.pao;
     Widget button(IconData icon, String label, int? next) => IconButton(
       tooltip: label,
       onPressed: next == null ? null : () => onChanged(next),
       icon: Icon(icon),
-      color: accent.primary,
-      disabledColor: PaoColors.textTertiary,
+      color: c.action,
+      disabledColor: c.inkFaint,
     );
     return Row(
       mainAxisSize: MainAxisSize.min,

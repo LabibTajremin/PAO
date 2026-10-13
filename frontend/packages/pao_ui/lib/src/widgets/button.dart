@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pao_ui/src/tokens/accent.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
+import 'package:pao_ui/src/tokens/shape.dart';
 
 /// Visual weight of a [PaoButton].
 enum PaoButtonVariant {
@@ -53,15 +53,15 @@ class PaoButton extends StatelessWidget {
   /// Fills the available width.
   final bool expand;
 
-  (Color, Color, BorderSide?) _colors(AccentPreset accent) => switch (variant) {
-    PaoButtonVariant.primary => (accent.primary, PaoColors.onPrimary, null),
-    PaoButtonVariant.soft => (accent.soft, accent.strong, null),
+  (Color, Color, BorderSide?) _colors(PaoColors c) => switch (variant) {
+    PaoButtonVariant.primary => (c.action, c.onAction, null),
+    PaoButtonVariant.soft => (c.selectedFill, c.selectedInk, null),
     PaoButtonVariant.outline => (
-      PaoColors.surface,
-      PaoColors.textPrimary,
-      const BorderSide(color: PaoColors.border),
+      c.card,
+      c.ink,
+      BorderSide(color: c.ink.withValues(alpha: 0.22)),
     ),
-    PaoButtonVariant.ghost => (Colors.transparent, accent.primary, null),
+    PaoButtonVariant.ghost => (Colors.transparent, c.action, null),
     PaoButtonVariant.danger => (PaoColors.danger, PaoColors.onPrimary, null),
   };
 
@@ -83,7 +83,7 @@ class PaoButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (bg, fg, side) = _colors(context.pao.accent);
+    final (bg, fg, side) = _colors(context.pao);
     return Semantics(
       button: true,
       label: loading ? label : null,
@@ -97,9 +97,9 @@ class PaoButton extends StatelessWidget {
           side: side,
           minimumSize: Size(expand ? double.infinity : minTapTarget, 52),
           padding: const EdgeInsets.symmetric(horizontal: PaoSpace.xl),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(PaoRadius.md),
-          ),
+          elevation: 0,
+          animationDuration: PaoMotion.fast,
+          shape: const RoundedRectangleBorder(borderRadius: PaoShape.leaf),
           textStyle: Theme.of(context).textTheme.labelLarge,
         ),
         child: _content(fg),

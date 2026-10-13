@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
 
-/// A grey placeholder block shown while content loads. It is static on purpose:
+/// A warm placeholder block shown while content loads. It is static on purpose:
 /// shimmer animations cost battery on low-end phones (PRD §11).
 class PaoSkeleton extends StatelessWidget {
   /// Creates a block of [height]; [width] defaults to the available width.
@@ -27,7 +27,7 @@ class PaoSkeleton extends StatelessWidget {
     height: height,
     width: width,
     decoration: BoxDecoration(
-      color: PaoColors.border,
+      color: context.pao.hairline,
       borderRadius: BorderRadius.circular(radius),
     ),
   );

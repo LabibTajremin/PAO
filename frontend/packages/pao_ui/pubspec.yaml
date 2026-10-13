@@ -28,6 +28,9 @@ flutter:
     - family: PlusJakartaSans
       fonts:
         - asset: fonts/PlusJakartaSans-Variable.ttf
+    - family: Fraunces
+      fonts:
+        - asset: fonts/Fraunces-Variable.ttf
     - family: HindSiliguri
       fonts:
         - asset: fonts/HindSiliguri-Regular.ttf

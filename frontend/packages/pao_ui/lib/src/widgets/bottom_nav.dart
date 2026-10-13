@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
+import 'package:pao_ui/src/widgets/stitch.dart';
 
 /// One destination of [PaoBottomNav].
 class PaoNavItem {
@@ -21,7 +22,8 @@ class PaoNavItem {
   final bool badge;
 }
 
-/// The bottom navigation bar; the active item sits in an accent pill.
+/// The bottom navigation bar; the active item is marked by the accent and a
+/// kantha stitch under its icon.
 class PaoBottomNav extends StatelessWidget {
   /// Creates the bar.
   const PaoBottomNav({
@@ -42,31 +44,50 @@ class PaoBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = context.pao.accent;
+    final c = context.pao;
     return NavigationBarTheme(
       data: NavigationBarThemeData(
-        backgroundColor: PaoColors.surface,
-        indicatorColor: accent.soft,
+        backgroundColor: c.card,
+        surfaceTintColor: Colors.transparent,
+        indicatorColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: WidgetStateProperty.resolveWith(
+          (s) => IconThemeData(
+            color: s.contains(WidgetState.selected) ? c.action : c.inkFaint,
+          ),
+        ),
         labelTextStyle: WidgetStateProperty.resolveWith(
           (s) => Theme.of(context).textTheme.labelSmall!.copyWith(
-            color: s.contains(WidgetState.selected)
-                ? accent.strong
-                : PaoColors.textTertiary,
+            color: s.contains(WidgetState.selected) ? c.action : c.inkFaint,
           ),
         ),
       ),
-      child: NavigationBar(
-        selectedIndex: index,
-        onDestinationSelected: onSelected,
-        height: 64 + PaoSpace.sm,
-        destinations: [
-          for (final item in items)
-            NavigationDestination(
-              icon: Badge(isLabelVisible: item.badge, child: Icon(item.icon)),
-              label: item.label,
-            ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: c.hairline)),
+        ),
+        child: NavigationBar(
+          selectedIndex: index,
+          onDestinationSelected: onSelected,
+          height: 64 + PaoSpace.sm,
+          destinations: [for (final item in items) _destination(item)],
+        ),
+      ),
+    );
+  }
+
+  NavigationDestination _destination(PaoNavItem item) {
+    final icon = Badge(isLabelVisible: item.badge, child: Icon(item.icon));
+    return NavigationDestination(
+      icon: icon,
+      selectedIcon: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          icon,
+          const Positioned(left: 2, right: 2, bottom: -7, child: PaoStitch()),
         ],
       ),
+      label: item.label,
     );
   }
 }

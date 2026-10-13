@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
+import 'package:pao_ui/src/tokens/shape.dart';
 
 /// One-time code entry as a row of boxes over a single hidden field, so paste
 /// and SMS autofill work (C04).
@@ -46,16 +47,19 @@ class _PaoOtpInputState extends State<PaoOtpInput> {
   }
 
   Widget _box(BuildContext context, int i) {
+    final c = context.pao;
     final code = _controller.text;
     final color = widget.hasError
-        ? PaoColors.danger
-        : (i == code.length ? context.pao.accent.primary : PaoColors.border);
-    return Container(
+        ? c.dangerInk
+        : (i == code.length ? c.action : c.well);
+    return AnimatedContainer(
+      duration: PaoMotion.base,
+      curve: PaoMotion.curve,
       width: minTapTarget,
       height: 56,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: PaoColors.surface,
+        color: c.well,
         borderRadius: BorderRadius.circular(PaoRadius.md),
         border: Border.all(color: color, width: 1.5),
       ),

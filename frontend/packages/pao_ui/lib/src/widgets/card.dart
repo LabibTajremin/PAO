@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
+import 'package:pao_ui/src/tokens/shape.dart';
 
-/// A white rounded surface; [highlighted] uses the accent tint.
+/// A leaf-shaped surface with a hairline edge; [highlighted] uses the accent
+/// tint.
 class PaoCard extends StatelessWidget {
   /// Creates a card.
   const PaoCard({
     required this.child,
     this.onTap,
     this.highlighted = false,
-    this.padding = const EdgeInsets.all(PaoSpace.lg),
+    this.padding = const EdgeInsets.all(PaoSpace.xl),
     super.key,
   });
 
@@ -19,7 +21,7 @@ class PaoCard extends StatelessWidget {
   /// Makes the whole card tappable.
   final VoidCallback? onTap;
 
-  /// Uses the accent tint instead of white.
+  /// Uses the accent tint instead of the card colour.
   final bool highlighted;
 
   /// Inner spacing.
@@ -27,13 +29,12 @@ class PaoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = context.pao.accent;
-    final radius = BorderRadius.circular(PaoRadius.lg);
+    final c = context.pao;
     return Material(
-      color: highlighted ? accent.tint : PaoColors.surface,
+      color: highlighted ? c.tintFill : c.card,
       shape: RoundedRectangleBorder(
-        borderRadius: radius,
-        side: BorderSide(color: highlighted ? accent.soft : PaoColors.border),
+        borderRadius: PaoShape.leaf,
+        side: BorderSide(color: highlighted ? c.selectedFill : c.hairline),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(

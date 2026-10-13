@@ -36,7 +36,7 @@ class PaoListRow extends StatelessWidget {
         trailing ??
         (onTap == null
             ? null
-            : const Icon(Icons.chevron_right, color: PaoColors.textTertiary));
+            : Icon(Icons.chevron_right, color: context.pao.inkFaint));
     return InkWell(
       onTap: onTap,
       child: ConstrainedBox(
@@ -44,7 +44,7 @@ class PaoListRow extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: PaoSpace.lg,
-            vertical: PaoSpace.md,
+            vertical: PaoSpace.md + 2,
           ),
           child: Row(
             children: [

@@ -46,7 +46,8 @@ class CategoryGrid extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.labelMedium,
+                style: Theme.of(context).textTheme.labelLarge!
+                    .copyWith(fontWeight: FontWeight.w700),
               ),
             ],
           ),

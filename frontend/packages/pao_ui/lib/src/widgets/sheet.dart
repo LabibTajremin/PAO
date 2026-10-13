@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
+import 'package:pao_ui/src/tokens/shape.dart';
 
-/// Shows [child] in a rounded bottom sheet with a drag handle and [title].
+/// Shows [child] in a leaf-topped bottom sheet with a drag handle and [title].
 Future<T?> showPaoSheet<T>(
   BuildContext context, {
   required String title,
@@ -10,10 +11,8 @@ Future<T?> showPaoSheet<T>(
 }) => showModalBottomSheet<T>(
   context: context,
   isScrollControlled: true,
-  backgroundColor: PaoColors.surface,
-  shape: const RoundedRectangleBorder(
-    borderRadius: BorderRadius.vertical(top: Radius.circular(PaoRadius.xl)),
-  ),
+  backgroundColor: context.pao.card,
+  shape: const RoundedRectangleBorder(borderRadius: PaoShape.sheet),
   builder: (context) => PaoSheet(title: title, child: child),
 );
 
@@ -33,10 +32,10 @@ class PaoSheet extends StatelessWidget {
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.fromLTRB(
-          PaoSpace.xl,
+          PaoSpace.xxl,
           PaoSpace.md,
-          PaoSpace.xl,
-          PaoSpace.xl + MediaQuery.viewInsetsOf(context).bottom,
+          PaoSpace.xxl,
+          PaoSpace.xxl + MediaQuery.viewInsetsOf(context).bottom,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -47,12 +46,12 @@ class PaoSheet extends StatelessWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: PaoColors.border,
+                  color: context.pao.hairline,
                   borderRadius: BorderRadius.circular(PaoRadius.pill),
                 ),
               ),
             ),
-            const SizedBox(height: PaoSpace.lg),
+            const SizedBox(height: PaoSpace.xl),
             Semantics(
               header: true,
               child: Text(title, style: Theme.of(context).textTheme.titleLarge),

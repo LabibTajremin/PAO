@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
+import 'package:pao_ui/src/tokens/shape.dart';
 
-/// A selectable pill, e.g. a filter or review tag.
+/// A selectable pill, e.g. a filter or review tag; once selected it takes the
+/// leaf shape so the choice reads at a glance.
 class PaoChip extends StatelessWidget {
   /// Creates a chip.
   const PaoChip({
@@ -23,29 +25,31 @@ class PaoChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = context.pao.accent;
+    final c = context.pao;
+    final shape = selected
+        ? PaoShape.leaf
+        : BorderRadius.circular(PaoRadius.pill);
     return Semantics(
       selected: selected,
       button: onTap != null,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(PaoRadius.pill),
-        child: Container(
+        borderRadius: shape,
+        child: AnimatedContainer(
+          duration: PaoMotion.fast,
+          curve: PaoMotion.curve,
           constraints: const BoxConstraints(minHeight: minTapTarget),
-          padding: const EdgeInsets.symmetric(horizontal: PaoSpace.lg),
+          padding: const EdgeInsets.symmetric(horizontal: PaoSpace.lg + 2),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: selected ? accent.soft : PaoColors.surface,
-            borderRadius: BorderRadius.circular(PaoRadius.pill),
-            border: Border.all(
-              color: selected ? accent.primary : PaoColors.border,
-            ),
+            color: selected ? c.selectedFill : c.card,
+            borderRadius: shape,
+            border: Border.all(color: selected ? c.action : c.hairline),
           ),
           child: Text(
             label,
-            style: Theme.of(context).textTheme.labelMedium!.copyWith(
-              color: selected ? accent.strong : PaoColors.textSecondary,
-            ),
+            style: Theme.of(context).textTheme.labelMedium!
+                .copyWith(color: selected ? c.selectedInk : c.inkMuted),
           ),
         ),
       ),
