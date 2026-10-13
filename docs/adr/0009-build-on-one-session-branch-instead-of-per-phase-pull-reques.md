@@ -10,7 +10,7 @@ The build kit asks for one branch and one squash-merged PR per phase. The automa
 
 ## Decision
 
-All phases are committed in order on the assigned branch with one Conventional Commit per task. Phase boundaries are marked in `PROGRESS.md` and by `chore(progress): complete <id>` commits. `./pao ci` is still the gate for every commit, and the CI workflows also run on `claude/**` branches.
+All phases are committed in order on the assigned branch with one Conventional Commit per task. Phase boundaries are marked in `PROGRESS.md` and by `chore(progress): complete <id>` commits. `./pao ci` is still the gate for every commit, and the CI workflows run on the branch through its pull request (push runs are limited to `main`, so each check runs once).
 
 ## Consequences
 

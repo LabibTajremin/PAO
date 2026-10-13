@@ -1,9 +1,11 @@
 name: frontend
 
+# Branches are checked through their pull request; a push trigger on them too would
+# run every job twice and starve the small macOS runner pool.
 on:
   pull_request:
   push:
-    branches: [main, "phase/**", "claude/**"]
+    branches: [main]
 
 permissions:
   contents: read
