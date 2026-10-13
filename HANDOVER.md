@@ -48,6 +48,8 @@ storage (S3). Production refuses the fake SMS and push adapters.
   checklist: [`docs/release.md`](docs/release.md).
 - Conventions (file and function limits, comments, naming):
   [`docs/build/01-conventions.md`](docs/build/01-conventions.md).
+- Deployment guide (admin web on Vercel, backend hosting, env vars, mobile config):
+  [`docs/deployment.md`](docs/deployment.md).
 - Operations — forthcoming from the P16 operations work: runbooks in `docs/runbooks/`
   (deploy, rollback, JWT key rotation, database restore, incidents), the verification
   process in `docs/verification.md`, Grafana dashboards and alert rules as code, and

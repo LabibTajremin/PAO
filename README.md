@@ -45,6 +45,7 @@ Run the whole quality gate (what CI runs) with `./pao ci`. `./pao help` lists ev
 - Handover (start here when taking over): [`HANDOVER.md`](HANDOVER.md)
 - Architecture: [`docs/architecture.md`](docs/architecture.md)
 - Release builds and signing: [`docs/release.md`](docs/release.md)
+- Deployment (Vercel admin web, backend services, mobile builds): [`docs/deployment.md`](docs/deployment.md)
 - Domain glossary: [`docs/domain-glossary.md`](docs/domain-glossary.md)
 - Decisions: [`docs/adr/`](docs/adr/)
 - Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md)
