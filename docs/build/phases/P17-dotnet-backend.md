@@ -52,7 +52,10 @@ README, contract, app and specs).
 8. **Cut-over** — port the journeys to C# (`Backend/Test/PAO.E2ETests`) and the k6
    scripts to `Backend/Test/Load`. Then:
    - delete the NestJS backend and its tooling;
-   - move `backend-dotnet/` to `Backend/` and `frontend/` to `Frontend/`;
+   - move `backend-dotnet/` to `Backend/` and `frontend/` to `Frontend/`, then apply the
+     full layout in ADR-0034 ("Repository layout after cut-over"): `api/` → `Backend/Api`,
+     `test/` split by owner, `docker/`, `ops/` and the security configs → `infra/`,
+     `scripts/` → `tools/`, root docs → `docs/`;
    - switch `./pao`, hooks, CI workflows, `.env.example`, docs and the PRD;
    - get `./pao ci` green on a clean clone.
 
