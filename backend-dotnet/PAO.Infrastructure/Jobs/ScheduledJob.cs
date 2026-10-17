@@ -5,8 +5,11 @@ namespace PAO.Infrastructure.Jobs;
 /// <summary>How a run ended; `Skipped` means another worker held the job's lock.</summary>
 public enum JobOutcome
 {
+    /// <summary>Ok.</summary>
     Ok,
+    /// <summary>Failed.</summary>
     Failed,
+    /// <summary>Skipped.</summary>
     Skipped,
 }
 

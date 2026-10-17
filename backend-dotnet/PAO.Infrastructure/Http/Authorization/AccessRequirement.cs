@@ -10,9 +10,13 @@ public enum AccessKind
 {
     /// <summary>The action declares nothing: denied (deny by default).</summary>
     Undeclared,
+    /// <summary>Public.</summary>
     Public,
+    /// <summary>Authenticated.</summary>
     Authenticated,
+    /// <summary>Permission.</summary>
     Permission,
+    /// <summary>Any admin role.</summary>
     AnyAdminRole,
 }
 

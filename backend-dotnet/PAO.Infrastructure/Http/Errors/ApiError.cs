@@ -17,8 +17,11 @@ public sealed class ApiError : Exception
         RetryAfter = retryAfter;
     }
 
+    /// <summary>The status.</summary>
     public int Status { get; }
+    /// <summary>The code.</summary>
     public string Code { get; }
+    /// <summary>The details.</summary>
     public IReadOnlyDictionary<string, object?>? Details { get; }
 
     /// <summary>For 429: how long the client should wait; sent as Retry-After in seconds.</summary>
@@ -77,6 +80,8 @@ public static class ApiErrors
 /// <summary>A stored answer to send again unchanged (idempotent replays).</summary>
 public sealed class StoredResponseException(int status, byte[] body) : Exception("replay stored response")
 {
+    /// <summary>The status.</summary>
     public int Status { get; } = status;
+    /// <summary>The body.</summary>
     public byte[] Body { get; } = body;
 }

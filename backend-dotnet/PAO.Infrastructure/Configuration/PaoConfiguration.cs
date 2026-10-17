@@ -55,16 +55,27 @@ public static class PaoConfiguration
 /// <summary>Every configuration section, bound.</summary>
 public sealed record PaoSettings
 {
+    /// <summary>The app.</summary>
     public required AppOptions App { get; init; }
+    /// <summary>The database.</summary>
     public required DatabaseOptions Database { get; init; }
+    /// <summary>The redis.</summary>
     public required RedisOptions Redis { get; init; }
+    /// <summary>The jwt.</summary>
     public required JwtOptions Jwt { get; init; }
+    /// <summary>The logging.</summary>
     public required LoggingOptions Logging { get; init; }
+    /// <summary>The smtp.</summary>
     public required SmtpOptions Smtp { get; init; }
+    /// <summary>The storage.</summary>
     public required StorageOptions Storage { get; init; }
+    /// <summary>The sms.</summary>
     public required SmsOptions Sms { get; init; }
+    /// <summary>The push.</summary>
     public required PushOptions Push { get; init; }
+    /// <summary>The jobs.</summary>
     public required JobsOptions Jobs { get; init; }
+    /// <summary>The http.</summary>
     public required HttpOptions Http { get; init; }
 
     /// <summary>The fields safe to log at start; secrets never appear.</summary>

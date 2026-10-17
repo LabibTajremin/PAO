@@ -9,15 +9,22 @@ namespace PAO.Infrastructure.Http.OpenApi;
 /// <summary>The parts of a request the contract constrains.</summary>
 public sealed record RequestParts
 {
+    /// <summary>The path.</summary>
     public required IReadOnlyDictionary<string, string> Path { get; init; }
+    /// <summary>The query.</summary>
     public required IReadOnlyDictionary<string, string[]> Query { get; init; }
 
     /// <summary>Header names in lower case.</summary>
     public required IReadOnlyDictionary<string, string[]> Headers { get; init; }
+    /// <summary>The cookies.</summary>
     public required IReadOnlyDictionary<string, string[]> Cookies { get; init; }
+    /// <summary>The content type.</summary>
     public string? ContentType { get; init; }
+    /// <summary>The raw body.</summary>
     public byte[]? RawBody { get; init; }
+    /// <summary>The body error.</summary>
     public string? BodyError { get; init; }
+    /// <summary>The body.</summary>
     public JsonNode? Body { get; init; }
 }
 

@@ -5,7 +5,9 @@ using Microsoft.Extensions.Options;
 using Npgsql;
 using PAO.Infrastructure.Configuration;
 using PAO.Infrastructure.Data;
+using PAO.Infrastructure.Data.Migrations;
 using PAO.Infrastructure.Events;
+using PAO.Infrastructure.Hosting;
 using PAO.Infrastructure.Jobs;
 using PAO.Infrastructure.Metrics;
 using PAO.Infrastructure.Outbox;
@@ -60,9 +62,10 @@ public sealed class WorkerLoop(JobScheduler scheduler, OutboxRelay relay, IOptio
 /// <summary>Registers what the worker runs: the bus with every area's subscribers, the relay and the jobs.</summary>
 public static class WorkerServices
 {
-    /// <summary>Adds the scheduler, the relay over the outbox modules and the platform jobs.</summary>
-    public static IServiceCollection AddBackgroundJobs(this IServiceCollection services, IReadOnlyList<string> outboxModules)
+    /// <summary>Adds the scheduler, the relay over the outbox modules listed in "DB Changes/modules.json" and the platform jobs.</summary>
+    public static IServiceCollection AddBackgroundJobs(this IServiceCollection services, PaoPaths paths)
     {
+        var outboxModules = new MigrationFiles(paths.Migrations).ReadModuleLists().OutboxModules;
         services.AddSingleton(sp =>
         {
             var bus = new EventBus();

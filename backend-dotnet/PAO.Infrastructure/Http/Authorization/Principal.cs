@@ -9,7 +9,9 @@ namespace PAO.Infrastructure.Http.Authorization;
 /// <summary>The authenticated caller, read from a verified access token.</summary>
 public sealed record Principal
 {
+    /// <summary>The account id.</summary>
     public required Guid AccountId { get; init; }
+    /// <summary>The roles.</summary>
     public required IReadOnlyList<string> Roles { get; init; }
 
     /// <summary>The access token id (`jti`), for logout and revocation.</summary>
@@ -17,6 +19,7 @@ public sealed record Principal
 
     /// <summary>The refresh-token family (device) the token belongs to.</summary>
     public required string SessionId { get; init; }
+    /// <summary>The expires at.</summary>
     public required DateTimeOffset ExpiresAt { get; init; }
 
     /// <summary>Reports whether the principal holds `role`.</summary>

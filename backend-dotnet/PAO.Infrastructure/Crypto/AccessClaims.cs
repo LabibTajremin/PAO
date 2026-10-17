@@ -5,7 +5,9 @@ namespace PAO.Infrastructure.Crypto;
 /// <summary>The claims of an access token (02-architecture §5).</summary>
 public sealed record AccessClaims
 {
+    /// <summary>The subject.</summary>
     public required string Subject { get; init; }
+    /// <summary>The roles.</summary>
     public required IReadOnlyList<string> Roles { get; init; }
 
     /// <summary>The token id (`jti`), used by the denylist.</summary>
@@ -16,6 +18,7 @@ public sealed record AccessClaims
 
     /// <summary>The RBAC version the roles were read at (`ver`).</summary>
     public required long Version { get; init; }
+    /// <summary>The expires at.</summary>
     public required DateTimeOffset ExpiresAt { get; init; }
 }
 

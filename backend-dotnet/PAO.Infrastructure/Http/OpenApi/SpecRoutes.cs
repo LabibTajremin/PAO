@@ -9,8 +9,11 @@ public sealed record SpecParameter(string Name, string In, bool Required, JsonNo
 /// <summary>One operation of the contract with everything needed to match and check requests.</summary>
 public sealed record OperationInfo
 {
+    /// <summary>The id.</summary>
     public required string Id { get; init; }
+    /// <summary>The method.</summary>
     public required string Method { get; init; }
+    /// <summary>The path template.</summary>
     public required string PathTemplate { get; init; }
 
     /// <summary>The `x-permission`; null means the spec forgot it and requests are denied.</summary>
@@ -21,7 +24,9 @@ public sealed record OperationInfo
 
     /// <summary>True when the operation takes an `Idempotency-Key` header.</summary>
     public required bool Idempotent { get; init; }
+    /// <summary>The parameters.</summary>
     public required IReadOnlyList<SpecParameter> Parameters { get; init; }
+    /// <summary>The request body.</summary>
     public JsonObject? RequestBody { get; init; }
 }
 
@@ -31,7 +36,9 @@ public sealed record MatchedOperation(OperationInfo Operation, IReadOnlyDictiona
 /// <summary>Why a request matched no operation.</summary>
 public enum RouteMiss
 {
+    /// <summary>Not found.</summary>
     NotFound,
+    /// <summary>Method not allowed.</summary>
     MethodNotAllowed,
 }
 

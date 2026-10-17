@@ -35,14 +35,15 @@ dotnet_diagnostic.IDE0052.severity = warning
 dotnet_diagnostic.IDE0161.severity = warning
 dotnet_diagnostic.IDE0011.severity = warning
 
-# Public members of models are self-describing; doc comments are required on types and
-# operations by review (01-conventions §3), not on every property.
-dotnet_diagnostic.CS1591.severity = none
+# Every public type and member carries XML documentation of its contract (ADR-0034).
+dotnet_diagnostic.CS1591.severity = error
 
 # ASP.NET Core has no synchronisation context, so ConfigureAwait(false) adds nothing.
 dotnet_diagnostic.CA2007.severity = none
 
 [Test/**.cs]
+# Test classes and methods describe themselves through their names.
+dotnet_diagnostic.CS1591.severity = none
 # Test names describe behaviour in sentences with underscores.
 dotnet_diagnostic.CA1707.severity = none
 # Tests are short and run under a per-test timeout; passing the test token everywhere adds noise.

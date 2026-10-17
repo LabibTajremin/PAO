@@ -3,9 +3,13 @@ namespace PAO.Infrastructure.Http.Authorization;
 /// <summary>Who an operation is for; the spec test checks it against each `x-permission`.</summary>
 public enum Audience
 {
+    /// <summary>Admin.</summary>
     Admin,
+    /// <summary>Customer.</summary>
     Customer,
+    /// <summary>Merchant.</summary>
     Merchant,
+    /// <summary>All user types.</summary>
     AllUserTypes,
 }
 

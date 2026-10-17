@@ -3,11 +3,16 @@ namespace PAO.Infrastructure.Http.Filters;
 /// <summary>A write-only stream that writes to `inner` and keeps a copy in `copy`.</summary>
 public sealed class TeeStream(Stream inner, Stream copy) : Stream
 {
+    /// <summary>Whether can read.</summary>
     public override bool CanRead => false;
+    /// <summary>Whether can seek.</summary>
     public override bool CanSeek => false;
+    /// <summary>Whether can write.</summary>
     public override bool CanWrite => true;
+    /// <summary>The length.</summary>
     public override long Length => throw new NotSupportedException();
 
+    /// <summary>The position.</summary>
     public override long Position
     {
         get => throw new NotSupportedException();

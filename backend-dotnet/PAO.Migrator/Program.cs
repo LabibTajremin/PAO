@@ -1,11 +1,11 @@
-// The migration tool (`migrate up`). Composition root (excluded from coverage; the
+// The migration tool (`migrate up`). Composition root: one named call (excluded from coverage; the
 // start-up smoke tests run it).
 using PAO.Infrastructure.Hosting;
 using PAO.Migrator;
 
 try
 {
-    return await MigratorCommand.Run(args, Environment.GetEnvironmentVariables(), PaoPaths.Current().Migrations, Console.Out);
+    return await args.RunMigrator(Environment.GetEnvironmentVariables(), PaoPaths.Current().Migrations, Console.Out);
 }
 catch (Exception error)
 {

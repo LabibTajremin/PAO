@@ -180,7 +180,13 @@ public sealed class AccessTests
 
     private static MatchedOperation Op(string? permission) => new(new OperationInfo
     {
-        Id = "op", Method = "get", PathTemplate = "/x", Permission = permission, Public = false, Idempotent = false, Parameters = [],
+        Id = "op",
+        Method = "get",
+        PathTemplate = "/x",
+        Permission = permission,
+        Public = false,
+        Idempotent = false,
+        Parameters = [],
     }, new Dictionary<string, string>());
 
     [Fact]
@@ -207,7 +213,12 @@ public sealed class AccessTests
         var id = Guid.NewGuid();
         var principal = Principal.From(new AccessClaims
         {
-            Subject = id.ToString(), Roles = ["customer"], TokenId = "j", SessionId = UuidText.Nil, Version = 1, ExpiresAt = DateTimeOffset.UnixEpoch,
+            Subject = id.ToString(),
+            Roles = ["customer"],
+            TokenId = "j",
+            SessionId = UuidText.Nil,
+            Version = 1,
+            ExpiresAt = DateTimeOffset.UnixEpoch,
         });
         Assert.True(principal.HasRole("customer"));
         Assert.Equal(id.ToString(), principal.ToClaimsPrincipal().FindFirst("sub")!.Value);

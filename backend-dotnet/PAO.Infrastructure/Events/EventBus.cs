@@ -5,15 +5,19 @@ namespace PAO.Infrastructure.Events;
 /// <summary>A stored event as subscribers receive it.</summary>
 public sealed record Envelope
 {
+    /// <summary>The id.</summary>
     public required Guid Id { get; init; }
 
     /// <summary>The area schema whose outbox held the event.</summary>
     public required string Module { get; init; }
+    /// <summary>The name.</summary>
     public required string Name { get; init; }
+    /// <summary>The aggregate id.</summary>
     public required string AggregateId { get; init; }
 
     /// <summary>The payload as stored (JSON); read it with <see cref="EventPayload"/>.</summary>
     public required JsonElement Payload { get; init; }
+    /// <summary>The occurred at.</summary>
     public required DateTimeOffset OccurredAt { get; init; }
 }
 

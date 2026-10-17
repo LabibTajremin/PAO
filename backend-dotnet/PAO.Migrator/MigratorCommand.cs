@@ -17,7 +17,7 @@ public static class MigratorCommand
     public const string Usage = "usage: migrate up";
 
     /// <summary>Runs `args` and returns the process exit code; messages go to `output`.</summary>
-    public static async Task<int> Run(string[] args, IDictionary environment, string migrationsDirectory, TextWriter output)
+    public static async Task<int> RunMigrator(this string[] args, IDictionary environment, string migrationsDirectory, TextWriter output)
     {
         if (args is not ["up"])
         {
