@@ -1,6 +1,6 @@
 # ADR-0032: Rebuild the backend on NestJS
 
-- Status: Accepted
+- Status: Accepted; framework and layout superseded by ADR-0034 (.NET)
 - Date: 2026-10-11
 - Source: owner decision (deployment cost); docs/build/phases/P15-nestjs-backend.md
 - Supersedes: the Go library choices in ADR-0001, ADR-0006 and ADR-0008, and the Go

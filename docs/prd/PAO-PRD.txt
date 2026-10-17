@@ -1052,10 +1052,14 @@
 
 PAO — Product Requirements Document
 
-       Revenue model. Commission per job (what %), provider subscription, customer
-       service fee, or a mix? This decides whether the Finance module is in the MVP.
-       Payment. Cash only for the MVP, with bKash/Nagad in Phase 2? If a commission is
-       taken from cash jobs, how do providers pay it to PAO?
+       Revenue model. Decided (ADR-0035): PAO takes a commission per completed job,
+       10% of the final price by default and set by admin. It becomes the merchant's due.
+       Payment. Decided (ADR-0035): cash on delivery only in the first release; bKash/Nagad
+       in Phase 2. A merchant cannot accept new jobs while their unpaid due is above an
+       admin-set amount (default ৳500), but still sees every job and notification. The
+       merchant submits each payment (amount, method, reference) in the partner app, and an
+       admin confirms or rejects it in the console. Every step is audited.
+       Services. Catering and Monthly Bazar are added as categories (ADR-0035).
        Launch area. One city first (Dhaka?), and which areas? This sets the search radius and
        how many providers must be recruited.
        Provider recruitment. Self-enrolment only, or will PAO also onboard providers in the

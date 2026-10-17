@@ -24,16 +24,17 @@ it first and continues from **Current task**.
 | P14 End-to-end | done | — | ADR-0031 |
 | P15 NestJS backend | done | — | ADR-0032 |
 | P16 Hardening & handover | done | — | ADR-0023, ADR-0032 |
+| P17 .NET backend, COD & merchant dues | in_progress | — | ADR-0034, ADR-0035 |
 
 Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (merged).
 
 ## Current task
 
-None — every phase is done. P16 shipped security and privacy (`docs/security-checklist.md`,
-scans in `./pao security`, pinning, erasure and retention purge), ops (`ops/`, runbooks)
-and release/handover (`HANDOVER.md`, `docs/release.md`). Final audit: `./pao ci` and
-`./pao perf` green on a clean clone. Open owner decisions are in `HANDOVER.md` and the
-accepted risks in `docs/security-checklist.md`.
+P17 / task 1 — .NET foundation in `backend-dotnet/` (see `docs/build/phases/P17-dotnet-backend.md`).
+The owner's handwritten conversion rules are summarised in ADR-0034; the billing rules
+(cash on delivery, 10% commission, ৳500 due limit, merchant-submitted payments confirmed
+by an admin, Catering and Monthly Bazar) are in ADR-0035. .NET 10 SDK installs to
+`/root/.dotnet` with `dotnet-install.sh --channel 10.0`.
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
