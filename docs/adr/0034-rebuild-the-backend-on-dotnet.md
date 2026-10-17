@@ -103,6 +103,40 @@ engineering bar: modular monolith, deny-by-default RBAC, 100% coverage, strict l
   journeys to C#, delete the NestJS backend, move `backend-dotnet/` to `Backend/` and
   `frontend/` to `Frontend/`, and switch every gate, hook and workflow.
 
+## Repository layout after cut-over (owner request, 2026-10-17)
+
+The top level shrinks to the places people navigate to, and everything that belongs to a
+side lives inside it:
+
+```
+.github/            CI workflows
+Backend/            the .NET solution (above), plus:
+  Api/              the OpenAPI contract (moved from api/). The backend owns and serves
+                    the contract. The Flutter client generator and the e2e tests read it
+                    from here.
+  Test/E2E, Test/Load   black-box journeys (from test/e2e/api) and k6 scripts (from test/perf)
+  docker/           backend image files
+Frontend/           Flutter apps and packages, plus test/e2e (the app journeys)
+docs/               product and project docs: prd/, adr/, build/, guides/ (release,
+                    deployment, verification, security checklist, architecture,
+                    glossary, booking states), runbooks/, HANDOVER.md, CONTRIBUTING.md
+infra/              docker-compose.yml, ops/ (Prometheus, Grafana), security/
+                    (gitleaks, trivy and osv-scanner configs)
+tools/              the pao CLI internals (from scripts/), git hooks, CLI tests and
+                    fixtures (from test/cli, test/fixtures)
+pao                 one-line wrapper that runs tools/pao
+README.md  LICENSE  CLAUDE.md  .editorconfig  .gitignore  .env.example
+```
+
+Files that stay at the root are only those that tools or GitHub look for there: README,
+LICENSE, CLAUDE.md (agent entry point), .editorconfig, .gitignore and .env.example (Docker
+Compose and the hooks read it). Generated folders (`coverage/`, `.perf-fixture.json`) move
+under the ignored `out/`.
+
+`api/` was separate because, in the earlier builds, the spec was a neutral contract
+written before any backend existed (P01) and shared by the backend, the generated Dart
+client and the journeys. With one backend that owns it, it lives in `Backend/Api`.
+
 ## Consequences
 
 - The apps, the database and the API contract carry over unchanged, apart from the
