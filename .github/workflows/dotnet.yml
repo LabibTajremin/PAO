@@ -1,0 +1,49 @@
+name: dotnet
+
+# Branches are checked through their pull request; a push trigger on them too would
+# run every job twice and starve the small macOS runner pool.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dotnet-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dotnet:
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env: { POSTGRES_USER: pao, POSTGRES_PASSWORD: pao, POSTGRES_DB: pao }
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U pao -d pao" --health-interval 5s --health-retries 20
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+        options: --health-cmd "redis-cli ping" --health-interval 5s --health-retries 20
+      storage:
+        image: rustfs/rustfs:1.0.1
+        env: { RUSTFS_ACCESS_KEY: pao-ci, RUSTFS_SECRET_KEY: pao-ci-secret, RUSTFS_SSE_S3_MASTER_KEY: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" }
+        ports: ["9000:9000"]
+        options: >-
+          --health-cmd "curl -fsS http://localhost:9000/health" --health-interval 5s --health-retries 20
+    env:
+      PAO_TEST_DATABASE_URL: postgres://pao:pao@localhost:5432/pao?sslmode=disable
+      PAO_TEST_REDIS_URL: redis://localhost:6379/15
+      PAO_TEST_S3_ENDPOINT: http://localhost:9000
+      PAO_TEST_S3_ACCESS_KEY: pao-ci
+      PAO_TEST_S3_SECRET_KEY: pao-ci-secret
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
+        with:
+          global-json-file: backend-dotnet/global.json
+      - name: .NET gates (build, format, spec, architecture, size, docs, tests, 100% coverage)
+        run: backend-dotnet/scripts/ci.sh all
