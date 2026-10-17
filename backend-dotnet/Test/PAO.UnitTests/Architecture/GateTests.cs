@@ -38,8 +38,8 @@ public sealed class SizeCheckerTests
     [Fact]
     public void Flags_long_methods_constructors_and_local_functions()
     {
-        Assert.Empty(SizeChecker.CheckFile("A.cs", Method(36)));
-        Assert.Contains("M has 41 lines", Assert.Single(SizeChecker.CheckFile("A.cs", Method(37))), StringComparison.Ordinal);
+        Assert.Empty(SizeChecker.CheckFile("A.cs", Method(37)));
+        Assert.Contains("M has 41 lines", Assert.Single(SizeChecker.CheckFile("A.cs", Method(38))), StringComparison.Ordinal);
         var ctor = "class C\n{\n    C()\n    {\n" + Lines(40) + "    }\n}\n";
         Assert.Contains("C has 43 lines", Assert.Single(SizeChecker.CheckFile("A.cs", ctor)), StringComparison.Ordinal);
         var local = "class C\n{\n    void M()\n    {\n        void L()\n        {\n" + Lines(40) + "        }\n    }\n}\n";
