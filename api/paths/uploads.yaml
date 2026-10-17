@@ -1,0 +1,105 @@
+# Generated from the operation table during P01; edit by hand from now on.
+customerUploads:
+  post:
+    operationId: createCustomerUpload
+    tags:
+    - Customer
+    summary: Get a signed URL to upload a file directly to storage
+    x-permission: media:upload
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/media.yaml#/UploadRequest
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/media.yaml#/UploadTicket
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+customerUploadConfirm:
+  post:
+    operationId: confirmCustomerUpload
+    tags:
+    - Customer
+    summary: Confirm the file arrived and matches the request
+    x-permission: media:upload
+    parameters:
+    - $ref: ../components/parameters.yaml#/MediaId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/media.yaml#/MediaObject
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+providerUploads:
+  post:
+    operationId: createProviderUpload
+    tags:
+    - Provider
+    summary: Get a signed URL to upload a file directly to storage
+    x-permission: media:upload
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/media.yaml#/UploadRequest
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/media.yaml#/UploadTicket
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+providerUploadConfirm:
+  post:
+    operationId: confirmProviderUpload
+    tags:
+    - Provider
+    summary: Confirm the file arrived and matches the request
+    x-permission: media:upload
+    parameters:
+    - $ref: ../components/parameters.yaml#/MediaId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/media.yaml#/MediaObject
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

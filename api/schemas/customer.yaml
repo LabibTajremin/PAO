@@ -1,0 +1,49 @@
+# Customer profile and saved addresses (C-01, C-02).
+CustomerProfile:
+  type: object
+  required: [id, name, language]
+  properties:
+    id: { type: string, format: uuid }
+    name: { type: string, example: Nusrat Jahan }
+    phone: { type: string, example: "+8801712345678" }
+    photoUrl: { type: string, description: Short-lived signed URL of the profile photo. }
+    language: { $ref: "./common.yaml#/Language" }
+CustomerProfileUpdate:
+  type: object
+  required: [name, language]
+  properties:
+    name: { type: string, minLength: 2, maxLength: 80, example: Nusrat Jahan }
+    photoMediaId: { type: string, format: uuid, description: A confirmed upload with purpose `avatar`. }
+    language: { $ref: "./common.yaml#/Language" }
+AddressLabel:
+  type: string
+  enum: [home, office, other]
+  example: home
+AddressInput:
+  type: object
+  required: [label, line1, location]
+  properties:
+    label: { $ref: "#/AddressLabel" }
+    line1: { type: string, minLength: 3, maxLength: 200, example: "House 12, Road 5, Block C" }
+    line2: { type: string, maxLength: 200, example: Banani }
+    area: { type: string, maxLength: 80, example: Banani }
+    location: { $ref: "./common.yaml#/Point" }
+    isDefault: { type: boolean, example: true }
+Address:
+  allOf:
+    - $ref: "#/AddressInput"
+    - type: object
+      required: [id, isDefault]
+      properties:
+        id: { type: string, format: uuid }
+AddressList:
+  type: object
+  required: [items]
+  properties:
+    items: { type: array, maxItems: 10, items: { $ref: "#/Address" } }
+ServiceAreaCheck:
+  type: object
+  required: [covered]
+  properties:
+    covered: { type: boolean, example: true }
+    areaName: { type: string, example: Dhaka }

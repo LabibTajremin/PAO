@@ -1,0 +1,230 @@
+# Generated from the operation table during P01; edit by hand from now on.
+settings:
+  get:
+    operationId: listSettings
+    tags:
+    - Admin settings
+    summary: Platform settings (A-10)
+    x-permission: settings:read
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/SettingList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+setting:
+  put:
+    operationId: updateSetting
+    tags:
+    - Admin settings
+    summary: Change one setting (audited)
+    x-permission: settings:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/SettingKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/admin.yaml#/SettingUpdate
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/Setting
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+audit:
+  get:
+    operationId: listAuditEntries
+    tags:
+    - Admin settings
+    summary: Audit log with filters (A-08)
+    x-permission: audit:read
+    parameters:
+    - name: actorId
+      in: query
+      description: Who acted.
+      required: false
+      schema:
+        type: string
+        format: uuid
+    - name: action
+      in: query
+      description: Action name, e.g. verification.item_approved.
+      required: false
+      schema:
+        type: string
+    - name: subjectId
+      in: query
+      description: Subject ID.
+      required: false
+      schema:
+        type: string
+    - name: from
+      in: query
+      description: On or after.
+      required: false
+      schema:
+        type: string
+        format: date-time
+    - name: to
+      in: query
+      description: On or before.
+      required: false
+      schema:
+        type: string
+        format: date-time
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/AuditList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+adminUsers:
+  get:
+    operationId: listAdminUsers
+    tags:
+    - Admin settings
+    summary: Admin users (A-01)
+    x-permission: admin_user:manage
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/AdminUserList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+  post:
+    operationId: inviteAdminUser
+    tags:
+    - Admin settings
+    summary: Invite an admin with a temporary password and forced TOTP enrolment
+    x-permission: admin_user:manage
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/admin.yaml#/AdminUserInvite
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/AdminUserInvited
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+adminUser:
+  patch:
+    operationId: updateAdminUser
+    tags:
+    - Admin settings
+    summary: Change roles or deactivate (revokes sessions)
+    x-permission: admin_user:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/AdminUserId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/admin.yaml#/AdminUserUpdate
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/AdminUser
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+roles:
+  get:
+    operationId: listRoles
+    tags:
+    - Admin settings
+    summary: Roles with their permissions and screens
+    x-permission: role:manage
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/RoleList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+role:
+  put:
+    operationId: updateRole
+    tags:
+    - Admin settings
+    summary: Replace a role's permissions and screens (bumps rbac:version)
+    x-permission: role:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/RolePath
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/admin.yaml#/RoleUpdate
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/RoleDefinition
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

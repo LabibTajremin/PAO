@@ -12,7 +12,7 @@ adds the concrete choices the PRD left open.
 ├── pao                       developer CLI (bash) — tests, lint, coverage, phases
 ├── docker-compose.yml        postgres+postgis, redis, minio, api (local + CI)
 ├── api/openapi.yaml          REST contract shared by backend and frontend
-├── backend/                  Go modular monolith
+├── backend/                  NestJS (TypeScript) modular monolith
 ├── frontend/                 Flutter melos workspace (customer, partner, admin web)
 ├── test/                     cross-system tests and shared test infrastructure
 ├── docs/                     prd/, build/, adr/, architecture.md, glossary, runbooks
@@ -23,31 +23,38 @@ adds the concrete choices the PRD left open.
 
 ```
 backend/
-├── cmd/api/main.go           composition root only: config → infra → modules → server
-├── cmd/worker/main.go        background jobs + outbox relay (same binary image)
-├── internal/platform/        shared infrastructure, no business rules
-│   ├── config/  db/  redisx/  httpx/  auth/  rbac/  eventbus/  outbox/
-│   ├── jobs/  storage/  clock/  idgen/  logx/  metrics/  validate/
-└── internal/modules/<module>/
-    ├── contract/             PUBLIC: service.go (interface), dto.go, events.go
-    ├── domain/               entities, value objects, rules, errors — no I/O imports
+├── src/main.ts               API entry point: config → infra → modules → HTTP server
+├── src/worker.ts             outbox relay + periodic jobs (same image)
+├── src/migrate.ts            migrations, seed data, perf fixture (up | seed | perf-seed N)
+├── src/app/                  composition roots: the api and worker Nest modules
+├── src/platform/             shared infrastructure, no business rules, never imports modules
+│   ├── config/  db/  redis/  http/  auth/  rbac/  events/  outbox/  jobs/  storage/
+│   ├── clock/  ids/  logging/  metrics/  health/  di/  errors/  geo/  i18n/  seeding/
+└── src/modules/<module>/
+    ├── contract/             PUBLIC: service interfaces + injection tokens, DTOs, events,
+    │                         error reasons
+    ├── domain/               entities, value objects, rules — no I/O imports
     ├── app/                  use cases, one file per use case
-    ├── port/                 repository + gateway interfaces used by app/
-    ├── adapter/postgres/     sqlc queries + repository implementations
-    ├── adapter/http/         handlers, request validation, error mapping
+    ├── port/                 repository + gateway interfaces (and tokens) used by app/
+    ├── adapter/postgres/     queries.sql, generated sqlc/ functions, repositories
+    ├── adapter/http/         controllers, error map, view mapping
     ├── adapter/inproc/       implements contract/ for other modules
-    ├── module.go             wiring: routes, subscribers, jobs
+    ├── <module>.module.ts    @Global() Nest module exporting only its contract tokens
     └── README.md
-backend/migrations/<module>/  goose SQL migrations, one Postgres schema per module
+backend/migrations/<module>/  goose-format SQL migrations, one Postgres schema per module
+backend/seed/                 catalog, prices and demo admins (migrate seed)
+backend/test/                 integration test kit and unit-test fakes
 ```
 
 Modules (PRD §9.2): `identity`, `customer`, `provider`, `verification`, `catalog`,
 `booking`, `rating`, `notification`, `media`, `admin` (admin users, settings, complaints),
 `audit`.
 
-Boundary rules (PRD §9.3) are enforced by `go-arch-lint` in CI:
-`modules/A/**` may import only `modules/B/contract` and `platform/**`. `domain/` imports
-only the standard library and its own module's `domain/`.
+Boundary rules (PRD §9.3) are enforced by dependency-cruiser in `./pao lint`
+(`backend/.dependency-cruiser.cjs`): `modules/A/**` may import only `modules/B/contract`
+and `platform/**`; `domain/` imports only Node built-ins and its own module's `domain/`;
+`platform/` never imports a module. Cycles between modules are broken with a lazy contract
+resolved through `ModuleRef` on first use (`platform/di/lazy-contract.ts`).
 
 ### frontend/
 
@@ -73,44 +80,46 @@ bootstrap). Unit and widget tests in each package's `test/`; app journeys in
 
 ```
 test/
-├── backend/integration/      Go: repositories + HTTP API against real Postgres/Redis
-│                             (testcontainers), run with -coverpkg over backend/internal
-├── e2e/api/                  Go: black-box journeys against the running Docker stack
-├── e2e/mobile/               Patrol/integration_test orchestration scripts + fixtures
-├── fixtures/                 seed data, sample documents, deterministic clocks
-└── perf/                     k6 scripts (nearby search p95, booking dispatch)
+├── cli/                      bats tests for the pao CLI and git hooks
+├── e2e/stack.sh              a fresh Docker stack for the journeys (APP_ENV=test)
+├── e2e/api/                  TypeScript (Jest): black-box journeys over plain HTTP
+├── e2e/mobile/               Flutter app journeys against the same stack
+├── fixtures/                 sample documents and shared test data
+└── perf/                     k6 scripts (nearby search p95)
 ```
 
-Go unit tests stay beside the code (`_test.go`) because Go tooling requires it.
+Backend unit specs (`*.spec.ts`) and integration specs (`*.int-spec.ts`) sit beside the
+code they test; integration specs run against real Postgres, Redis and S3 (ADR-0008).
 
 ## 2. Runtime view
 
-- One API binary, stateless, horizontally scalable (PRD §11).
-- One worker process (same image, `cmd/worker`) runs the outbox relay and scheduled jobs.
+- One API process, stateless, horizontally scalable (PRD §11).
+- One worker process (same image, `/app/worker`) runs the outbox relay and periodic jobs.
 - PostgreSQL 16 + PostGIS 3: system of record. One schema per module.
 - Redis 7: sessions, tokens, permission caches, rate limits, locks, presence (§4).
-- MinIO locally / any S3 in production: private buckets, signed URLs only.
+- RustFS locally (S3-compatible, ADR-0007) / any S3 in production: private buckets, signed URLs only.
 - FCM for push, SMS gateway and maps behind ports with fake adapters for dev/test.
 
 ## 3. Approved libraries
 
 Adding anything else requires an ADR.
 
-| Concern | Go | Flutter |
+| Concern | Backend (TypeScript, ADR-0032) | Flutter |
 |---|---|---|
-| HTTP | `go-chi/chi/v5`, `oapi-codegen` (strict server types) | `dio`, generated `pao_api` |
-| DB | `jackc/pgx/v5`, `sqlc`, `pressly/goose/v3` | — |
-| Redis | `redis/go-redis/v9` | — |
-| Jobs | `riverqueue/river` (Postgres-backed) | — |
-| Auth | `golang-jwt/jwt/v5` (EdDSA), `pquerna/otp` (TOTP), `x/crypto/argon2` | `flutter_secure_storage` |
-| Validation | `go-playground/validator/v10` | `formz` |
-| Logging/metrics | `log/slog` (JSON), `prometheus/client_golang` | `sentry_flutter` (behind interface) |
-| Storage | `aws-sdk-go-v2/service/s3` | `image_picker`, `flutter_image_compress` |
-| Push | `firebase.google.com/go/v4/messaging` | `firebase_messaging` |
+| HTTP | NestJS 11 on Express, `openapi-typescript` (types from the spec) | `dio`, generated `pao_api` |
+| DB | `pg`, `sqlc` + `sqlc-gen-typescript`, goose-format migrations (own migrator) | — |
+| Redis | `ioredis` | — |
+| Jobs | in-process scheduler with a Postgres advisory lock per job | — |
+| Auth | `jose` (EdDSA JWT), `otplib` (TOTP), `@node-rs/argon2`, `node:crypto` AES-256-GCM | `flutter_secure_storage` |
+| Validation | `ajv` + `ajv-formats` against the bundled spec, `zod` (config) | `formz` |
+| Logging/metrics | `pino` (JSON), `prom-client` | `sentry_flutter` (behind interface) |
+| Storage | `@aws-sdk/client-s3`, `@aws-sdk/s3-request-presigner` | `image_picker`, `flutter_image_compress` |
+| Push | `google-auth-library` (FCM HTTP v1) | `firebase_messaging` |
+| Ids, YAML | `uuid` (v7), `yaml` | — |
 | State/routing | — | `flutter_bloc`, `go_router`, `get_it` |
 | Maps | — | `google_maps_flutter` behind `MapView` port |
-| Testing | `testing`, `stretchr/testify`, `testcontainers-go`, `go.uber.org/mock` | `flutter_test`, `bloc_test`, `mocktail`, `patrol` |
-| Quality | `golangci-lint`, `go-arch-lint`, `gosec`, `govulncheck`, `go-test-coverage` | `very_good_analysis`, `dart_code_linter`, `very_good_cli` |
+| Testing | `jest` (+ `@swc/jest`), `@nestjs/testing`, `supertest`, real services (ADR-0008) | `flutter_test`, `bloc_test`, `mocktail`, `patrol` |
+| Quality | `typescript-eslint` (strict type-checked), `prettier`, `dependency-cruiser`, `npm audit` | `very_good_analysis`, `dart_code_linter`, `very_good_cli` |
 
 ## 4. Redis design
 
@@ -169,7 +178,8 @@ from the admin panel, which bumps `rbac:version`.
 
 Enforcement happens at two layers:
 
-1. **API (authoritative):** `rbac.Require("booking:cancel:own")` middleware on every route,
+1. **API (authoritative):** every operation's `x-permission` in the OpenAPI spec, checked
+   by a global guard before the controller runs,
    plus ownership checks in use cases (`:own` permissions compare `sub` to the resource
    owner). Missing permission → `403 FORBIDDEN`.
 2. **Screens (UX):** `GET /v1/me/permissions` returns `{roles, permissions, screens}`.
@@ -187,7 +197,7 @@ document returns the provider to this gate.
 |---|---|
 | Transport | HTTPS only in deployed envs; HSTS; TLS terminates at the load balancer |
 | Headers | `X-Content-Type-Options`, `X-Frame-Options: DENY`, strict CSP on admin web |
-| Input | All request bodies validated against the OpenAPI schema and `validator` tags; max body 1 MB (uploads go direct to storage) |
+| Input | All requests validated against the OpenAPI schema (Ajv); max body 1 MB (uploads go direct to storage) |
 | SQL | Only parameterised `sqlc` queries; no string-built SQL |
 | AuthZ | Deny by default; every route has an explicit permission |
 | Rate limits | OTP per phone/IP; API per user and per IP; login per account |
@@ -195,8 +205,8 @@ document returns the provider to this gate.
 | Privacy | Exact customer address only after acceptance; provider location only while online or on a job (PRD §11) |
 | Audit | `audit.entries` is append-only (DB trigger rejects UPDATE/DELETE) |
 | Secrets | Env vars only; `.env.example` documents them; `gitleaks` in CI |
-| Dependencies | `govulncheck`, `gosec`, `osv-scanner` for Dart, `trivy` image scan in CI |
-| Mobile | Certificate pinning on release builds; no secrets in the app binary; screenshots blocked on start-code and document screens |
+| Dependencies | `npm audit` (runtime dependencies), `osv-scanner` over the Dart and npm lockfiles, `trivy` source and image scan; accepted findings in `osv-scanner.toml` / `.trivyignore` |
+| Mobile | Certificate pinning on release builds (SPKI SHA-256, `--dart-define=PAO_PIN_SHA256`); no secrets in the app binary; screenshots blocked on start-code and document screens |
 
 ## 8. Events (published through the outbox)
 
@@ -209,13 +219,21 @@ document returns the provider to this gate.
 `notification` subscribes to all booking and verification events. `audit` subscribes to
 every event that changes a person's status or money.
 
-## 9. Background jobs (River)
+## 9. Background jobs (scheduler)
 
-| Job | Trigger | Effect |
+Only periodic jobs. The worker runs an in-process scheduler (`platform/jobs/scheduler.ts`)
+with `every(ms)` and `dailyAt(hour, minute)` (Asia/Dhaka); each run takes a Postgres
+advisory lock named after the job, so with several workers exactly one runs it.
+
+| Job | Schedule | Effect |
 |---|---|---|
-| `booking.expire_request` | scheduled at request time + accept limit (PRD §5) | `Requested → TimedOut` |
-| `verification.expire_documents` | daily 02:00 Asia/Dhaka | marks expired documents, drops level, publishes `DocumentExpired` |
-| `verification.expiry_reminders` | daily | push 30/7/1 days before expiry (P-11) |
-| `provider.prune_presence` | every minute | removes stale providers from GEO sets |
-| `outbox.relay` | continuous | delivers outbox rows to subscribers, at-least-once |
-| `media.purge_orphans` | daily | deletes uploads never attached to a record |
+| `booking.expire_requests` | every 15 s | requests past the accept limit (PRD §5): `Requested → TimedOut` |
+| `verification.expire_documents` | daily 02:00 | marks expired documents, drops level, publishes `DocumentExpired` |
+| `verification.expiry_reminders` | daily 09:00 | push 30/7/1 days before expiry (P-11) |
+| `provider.reap_lost_presence` | every minute | removes stale providers from GEO sets |
+| `media.purge_orphans` | daily 03:30 | deletes uploads never attached to a record |
+| `verification.purge_closed` | daily 03:45 | deletes the documents and verification records of accounts closed longer than `documents.retention_days` (ADR-0023) |
+| `outbox.purge_published` | daily 03:00 | drops delivered outbox rows |
+
+The outbox relay runs continuously beside the scheduler and delivers outbox rows to
+subscribers, at least once.

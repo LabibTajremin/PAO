@@ -1,0 +1,204 @@
+# Sign-in, tokens and admin 2FA.
+otpRequest:
+  post:
+    operationId: requestOtp
+    tags:
+    - Auth
+    summary: Send a 6-digit sign-in code by SMS
+    x-permission: public
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/auth.yaml#/OtpRequest
+    responses:
+      '202':
+        description: Accepted
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/auth.yaml#/OtpRequestAccepted
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+      '429':
+        $ref: ../components/responses.yaml#/TooManyRequests
+otpVerify:
+  post:
+    operationId: verifyOtp
+    tags:
+    - Auth
+    summary: Verify the code and sign in (creates the account on first use)
+    x-permission: public
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/auth.yaml#/OtpVerifyRequest
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/auth.yaml#/TokenPair
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+      '429':
+        $ref: ../components/responses.yaml#/TooManyRequests
+refresh:
+  post:
+    operationId: refreshToken
+    tags:
+    - Auth
+    summary: Rotate the refresh token and issue a new access token
+    x-permission: public
+    security: []
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/auth.yaml#/RefreshRequest
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/auth.yaml#/TokenPair
+        headers: &id002
+          Set-Cookie:
+            description: 'Admin web only: the rotated refresh token as an HttpOnly, Secure, SameSite=Strict
+              cookie.'
+            schema:
+              type: string
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+    parameters:
+    - &id001
+      name: pao_refresh
+      in: cookie
+      required: false
+      description: Admin web refresh token (HttpOnly cookie).
+      schema:
+        type: string
+logout:
+  post:
+    operationId: logout
+    tags:
+    - Auth
+    summary: Sign out this device, or every device
+    x-permission: authenticated
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/auth.yaml#/LogoutRequest
+    responses:
+      '204':
+        description: No content
+        headers:
+          Set-Cookie:
+            description: Clears the admin refresh cookie.
+            schema:
+              type: string
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+    parameters:
+    - *id001
+adminLogin:
+  post:
+    operationId: adminLogin
+    tags:
+    - Auth
+    summary: 'Admin step 1: email and password; returns a TOTP challenge'
+    x-permission: public
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/auth.yaml#/AdminLoginRequest
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/auth.yaml#/AdminLoginChallenge
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+      '429':
+        $ref: ../components/responses.yaml#/TooManyRequests
+adminTotp:
+  post:
+    operationId: adminVerifyTotp
+    tags:
+    - Auth
+    summary: 'Admin step 2: TOTP code; sets the refresh cookie'
+    x-permission: public
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/auth.yaml#/AdminTotpRequest
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/auth.yaml#/TokenPair
+        headers: *id002
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+      '429':
+        $ref: ../components/responses.yaml#/TooManyRequests
+adminPassword:
+  post:
+    operationId: changeAdminPassword
+    tags:
+    - Auth
+    summary: 'Admin: replace the temporary or current password'
+    x-permission: authenticated
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/auth.yaml#/AdminPasswordChange
+    responses:
+      '204':
+        description: No content
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

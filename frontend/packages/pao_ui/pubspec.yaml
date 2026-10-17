@@ -1,0 +1,42 @@
+name: pao_ui
+description: "PAO design system: tokens, accent themes and shared widgets."
+publish_to: none
+version: 0.1.0+1
+resolution: workspace
+
+environment:
+  sdk: ^3.13.0
+  flutter: ">=3.47.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  pao_l10n:
+    path: ../pao_l10n
+
+dev_dependencies:
+  dart_code_linter: ^4.4.2
+  flutter_localizations:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^11.0.0
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: PlusJakartaSans
+      fonts:
+        - asset: fonts/PlusJakartaSans-Variable.ttf
+    - family: Fraunces
+      fonts:
+        - asset: fonts/Fraunces-Variable.ttf
+    - family: HindSiliguri
+      fonts:
+        - asset: fonts/HindSiliguri-Regular.ttf
+        - asset: fonts/HindSiliguri-Medium.ttf
+          weight: 500
+        - asset: fonts/HindSiliguri-SemiBold.ttf
+          weight: 600
+        - asset: fonts/HindSiliguri-Bold.ttf
+          weight: 700

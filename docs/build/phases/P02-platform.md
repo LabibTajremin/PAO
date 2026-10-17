@@ -1,5 +1,7 @@
 # P02 — Backend platform
 
+> **Historical (Go era).** This phase was built with the original Go backend. P15 (ADR-0032) ported it to NestJS and removed Go; tool and path names below (Go, pgx, River, oapi-codegen, `backend/internal/...`) map to their NestJS equivalents described in `02-architecture.md` and ADR-0032.
+
 **Goal:** shared infrastructure in `backend/internal/platform/` that every module uses.
 No business rules here.
 

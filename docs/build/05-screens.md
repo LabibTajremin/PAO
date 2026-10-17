@@ -7,8 +7,13 @@ use `get_design_context` on the frame; otherwise follow the layout described her
 `pao_ui` components.
 
 Theme: colours come from the Figma variable collections `Accent` (10 modes, tokens
-`tint, soft, primary, strong, deep, on-primary`) and `Base` (neutrals and status). Font:
-Plus Jakarta Sans, with Hind Siliguri for Bangla and ৳. Implement these as `pao_ui`
+`tint, soft, primary, strong, deep, on-primary`) and `Base` (neutrals and status). Since
+ADR-0033 ("Nakshi") the neutrals are warm paper (`#FAF6EF` page, `#FFFDF8` card,
+`#F2ECE2` input) with deep ink text (`#1F1B16`, `#655C52`), plus a matching dark ink
+palette. Fonts: Fraunces for headings, Plus Jakarta Sans for body and UI, with Hind
+Siliguri as the fallback for Bangla and ৳. Cards, primary buttons, sheets and selected
+chips use the leaf corner (`PaoShape.leaf`); the kantha stitch (`PaoStitch`) marks
+dividers, the active tab, the status timeline and empty states. Implement these as `pao_ui`
 tokens in P10. `on-primary` is `#FFFFFF` in every mode. **Midnight is the default.**
 
 | Mode | tint | soft | primary | strong | deep |

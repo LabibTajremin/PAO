@@ -1,0 +1,30 @@
+# Environment and secrets
+.env
+*.pem
+*.key
+
+# Node and coverage
+node_modules/
+/coverage/
+
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub-cache/
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+**/coverage/
+*.iml
+.idea/
+pubspec_overrides.yaml
+
+# OS / editors
+.DS_Store
+.vscode/
+*.swp
+# An empty CA bundle the compose build uses when PAO_EXTRA_CA_FILE is unset.
+!docker/no-extra-ca.pem
+.perf-fixture.json
+test/e2e/.stack.env
+test/e2e/.admins.env

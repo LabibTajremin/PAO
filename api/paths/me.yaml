@@ -1,0 +1,60 @@
+# Generated from the operation table during P01; edit by hand from now on.
+me:
+  get:
+    operationId: getMe
+    tags:
+    - Me
+    summary: The signed-in account
+    x-permission: authenticated
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/auth.yaml#/Account
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+  delete:
+    operationId: deleteMe
+    tags:
+    - Me
+    summary: Delete the account after re-confirming with an OTP (PRD §11)
+    x-permission: authenticated
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/auth.yaml#/DeleteAccountRequest
+    responses:
+      '204':
+        description: No content
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+permissions:
+  get:
+    operationId: getMyPermissions
+    tags:
+    - Me
+    summary: Roles, permissions and screen IDs for route guards
+    x-permission: authenticated
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/auth.yaml#/MyPermissions
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden

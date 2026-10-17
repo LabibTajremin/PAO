@@ -7,28 +7,65 @@ it first and continues from **Current task**.
 
 | Phase | Status | PR | Notes |
 |---|---|---|---|
-| P00 Bootstrap | in_progress | — | |
-| P01 Contracts | todo | — | |
-| P02 Backend platform | todo | — | |
-| P03 Identity & access | todo | — | |
-| P04 Catalog, media, audit, settings | todo | — | |
-| P05 Customer | todo | — | |
-| P06 Provider & verification | todo | — | |
-| P07 Discovery & booking | todo | — | |
-| P08 Rating, notification, complaints | todo | — | |
-| P09 Admin API | todo | — | |
-| P10 Flutter foundation | todo | — | |
-| P11 Partner app | todo | — | |
-| P12 Customer app | todo | — | |
-| P13 Admin web | todo | — | |
-| P14 End-to-end | todo | — | |
-| P15 Hardening & handover | todo | — | |
+| P00 Bootstrap | done | — | single-branch build, see ADR-0009 |
+| P01 Contracts | done | — | OpenAPI 3.1 (121 ops), contracts, migrations |
+| P02 Backend platform | done | — | |
+| P03 Identity & access | done | — | |
+| P04 Catalog, media, audit, settings | done | — | |
+| P05 Customer | done | — | |
+| P06 Provider & verification | done | — | |
+| P07 Discovery & booking | done | — | |
+| P08 Rating, notification, complaints | done | — | |
+| P09 Admin API | done | — | ADR-0026 |
+| P10 Flutter foundation | done | — | ADR-0027 |
+| P11 Partner app | done | — | ADR-0028 |
+| P12 Customer app | done | — | ADR-0029 |
+| P13 Admin web | done | — | ADR-0030 |
+| P14 End-to-end | done | — | ADR-0031 |
+| P15 NestJS backend | done | — | ADR-0032 |
+| P16 Hardening & handover | done | — | ADR-0023, ADR-0032 |
+| P17 .NET backend, COD & merchant dues | in_progress | — | ADR-0034, ADR-0035 |
 
 Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (merged).
 
 ## Current task
 
-P00 / task 1 — create the folder skeleton. Branch: `phase/P00-bootstrap` (not created yet).
+P17 / task 1 — .NET foundation in `backend-dotnet/` (see `docs/build/phases/P17-dotnet-backend.md`).
+The owner's handwritten conversion rules are summarised in ADR-0034; the billing rules
+(cash on delivery, 10% commission, ৳500 due limit, merchant-submitted payments confirmed
+by an admin, Catering and Monthly Bazar) are in ADR-0035. .NET 10 SDK installs to
+`/root/.dotnet` with `dotnet-install.sh --channel 10.0`.
+
+Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
+build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
+with `./pao ci` green and a `chore(progress): complete <id>` commit is pushed.
+
+## Environment notes
+
+- Node.js 22, NestJS 11, TypeScript 5.9, sqlc 1.27 (TypeScript plugin), Flutter 3.47.7.
+- Local S3 is RustFS (ADR-0007); MinIO images are no longer published.
+- Docker Hub rate-limits pulls here; `mirror.gcr.io/library/<image>` works as a mirror.
+- Docker builds behind the sandbox proxy need `PAO_EXTRA_CA_FILE=/root/.ccr/ca-bundle.crt`
+  in `.env` (build secret `extra_ca`).
+- No Android SDK in the build container: APK builds run only in CI (`frontend.yml`).
+- Backend integration specs (`*.int-spec.ts`) sit beside the code and need the compose
+  Postgres/Redis/RustFS (ADR-0008); each spec file gets a private database and key prefix.
+- `./pao gen` bundles the spec with redocly (npx) and builds `pao_api` with the
+  `openapitools/openapi-generator-cli:v7.16.0` Docker image (Maven Central rate-limits).
+- Every route carries `@RequirePermission`/`@Public`/`@Authenticated` matching the spec's
+  `x-permission`; `src/app/contract.int-spec.ts` fails on any drift or unserved operation.
+- Cross-module cycles (identity → verification levels, admin → most modules) resolve
+  through `LazyContract` on first use.
+- Request timeouts run as a 15 s periodic sweep (`booking.expire_requests`) rather than a
+  job per booking, so a missed run catches up on the next one.
+- k6 v1.3.0 is installed in this container from the GitHub release tarball.
+- Flutter tests that await real I/O (http_mock_adapter) inside `testWidgets` must use
+  `tester.runAsync`, or they hang in fake async.
+- `backend/test/kit/` has `signIn`, `adminSession`, `verifiedProvider`, `completedJob` …
+  for full-API specs.
+- E2E: `test/e2e/stack.sh` (separate compose project), `./pao test e2e` runs API and app
+  journeys. Locally the admin web journey needs `CHROMEDRIVER`/`CHROME_EXECUTABLE`
+  matching the installed Chromium (chromedriver 141 for Playwright's Chromium 141).
 
 ## Blockers
 
@@ -37,3 +74,73 @@ None.
 ## Log
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
+
+- 2026-10-12 P15.6–7 cut-over: `./pao`, hooks and CI run the NestJS gates; API journeys
+  ported to TypeScript (13/13); Go backend and Go tooling deleted, `backend/` is NestJS;
+  CLAUDE.md, build docs and PRD describe NestJS; `./pao ci` green (5f2bcee).
+- 2026-10-12 P15.5 parity: all 13 Go API journeys, partner/customer/admin app journeys
+  and k6 nearby search (p95 125 ms at 50 rps) pass against the NestJS stack; fixed
+  production route ordering and the perf seeder (20e33cd).
+- 2026-10-12 P15.1–4 NestJS backend in `backend-nest/` (ADR-0032): platform (config, pino,
+  metrics, pg + goose-compatible migrator, Redis keys/limiter/locks/idempotency, EdDSA
+  JWT, argon2id, TOTP, AES-GCM, RBAC cache, spec-driven HTTP edge with RBAC decorators,
+  outbox relay, advisory-lock scheduler, S3, health), sqlc TypeScript queries, all eleven
+  modules with every Go test ported; 740 Jest tests at 100%. Go fixes on the way:
+  Dhaka calendar dates for clearance issue date and 18th birthday, CA for the Go build.
+
+- 2026-10-10 P11 partner app: sign-in, onboarding, resumable enrolment wizard with
+  uploads, verification gate, home with presence heartbeat, requests with countdown,
+  job flow (start code, extras, cash, rating), jobs, earnings, profile and push
+  routing; 144 tests at 100%; dates generated as strings; journeys move to P14.
+- 2026-10-09 P10 Flutter foundation: pao_core (Dio client, AppFailure, sessions with
+  single-flight refresh, permissions, route guard + verification gate, connectivity,
+  photo compression), pao_ui (10 accents, tokens, bundled fonts, 25 components, gallery,
+  a11y tests), pao_l10n (en/bn ARB, every API error code, money/count/Dhaka-date
+  formatters); the three apps boot with theme, language switch and a guarded route.
+- 2026-10-09 P09 admin API: dashboard read model from events (cached 60 s), provider
+  and customer search/detail/status via owners' contracts (ADR-0026), bookings monitor
+  with filters, per-role RBAC table test over every protected route.
+- 2026-10-09 P08.3 complaints: either party reports a booking (reason, description,
+  ≤ 5 confirmed photos), TCK ticket numbers, admin queue with filters and cursor,
+  assign/comment/resolve; `ComplaintResolved` notifies the reporter, is audited and a
+  verified one flags the provider.
+- 2026-10-09 P08.2 notification: bilingual templates for booking and verification
+  events, inbox with read state, device tokens, FCM HTTP v1 push (capture adapter in
+  dev/test), invalid tokens dropped, deduped per event; events for unknown bookings skip.
+- 2026-10-09 P08.1 rating: reviews of completed bookings once per side with tags,
+  incremental aggregates with distribution, public review lists, provider public
+  profile; `testkit.CompletedJob` and `PAO_TEST_LOG=1` for server logs in tests.
+- 2026-10-09 P07 perf: `./pao perf` seeds 2,000 online providers (`migrate perf-seed`)
+  and runs `test/perf/nearby.js`; nearby search p95 14 ms locally (limit 300 ms).
+- 2026-10-09 P07.1–9 booking: state machine per booking-states.md, idempotent create with
+  price/name snapshots, accept under provider + row locks (one active ASAP job), reject,
+  timeout sweep, start code with lockout, catalog-only extras, cancel rules, lists,
+  receipts, Dhaka earnings, nearby search with price summary, address/phone privacy;
+  backend error codes now checked against the spec's ErrorCode enum.
+- 2026-10-09 P06.3–6 verification: document steps with encrypted NID and block list,
+  per-item review with reasons, levels recomputed under a row lock, Level 2 sessions
+  with cooling-off, expiry and 30/7/1-day reminder jobs, audit of every decision,
+  customer-schema privacy test; identity's provider gate now reads real levels.
+- 2026-10-09 P06.1/2/7/8/9 provider: resumable enrolment wizard (profile steps, emergency
+  contact OTP), profile with avatar, Redis GEO presence with heartbeat reaper,
+  FindNearby (Level 2 first, women-only, working radius), read-model and quality flags.
+- 2026-10-09 P05 customer: profile with verified avatar, up to 10 addresses with PostGIS
+  pins inside Bangladesh, default switching and promotion on delete, launch-area check
+  from the service_area setting, erase on AccountDeleted.
+- 2026-10-09 P04 catalog, media, audit, settings: versioned prices with cached published
+  tree and BN/EN trigram search, idempotent YAML seed (`./pao seed`), presigned uploads
+  with per-purpose rules and audited 5-minute document views, orphan purge job,
+  append-only audit log fed by events, typed admin settings with cache invalidation.
+- 2026-10-09 P03 identity: phone OTP sign-in with rate limits and lockout, rotating
+  refresh families with reuse detection, admin password + TOTP with cookie refresh,
+  /v1/me*, account deletion, status changes with phone block, admin users and role
+  editor, RBAC source, spec-wide 403 table test; test kit for full-API tests.
+- 2026-10-09 P02 platform: config, logx, metrics, db (pool, tx, migrator), redisx (rate
+  limiter, lock, idempotency, denylist), httpx (errors, cursors, spec validation,
+  middleware chain, router, server), auth (EdDSA JWT, argon2id, TOTP), rbac cache,
+  eventbus + outbox relay, River jobs, S3 storage, health, internal/app wiring.
+- 2026-10-09 P01 contracts: OpenAPI spec + bundle, Go strict server and Dart client
+  generation, 11 module contracts and READMEs, per-module migrations with RBAC seed,
+  migration runner + test kit, booking state spec, catalog seed.
+- 2026-10-09 P00 bootstrap: skeleton, Go module + healthz, Flutter workspace, Docker
+  stack, `pao` CLI + bats tests, hooks, coverage gate, CI workflows, docs and ADRs.

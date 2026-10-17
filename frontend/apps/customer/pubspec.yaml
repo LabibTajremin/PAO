@@ -1,0 +1,56 @@
+name: pao_customer
+description: "PAO — the customer app."
+publish_to: none
+version: 0.1.0+1
+resolution: workspace
+
+environment:
+  sdk: ^3.13.0
+  flutter: ">=3.47.0"
+
+dependencies:
+  dio: ^5.11.1
+  firebase_core: ^4.15.0
+  firebase_messaging: ^16.7.0
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.1.1
+  flutter_localizations:
+    sdk: flutter
+  go_router: ^18.0.2
+  intl: ^0.20.3
+  pao_api:
+    path: ../../packages/pao_api
+  pao_core:
+    path: ../../packages/pao_core
+  pao_l10n:
+    path: ../../packages/pao_l10n
+  pao_ui:
+    path: ../../packages/pao_ui
+  pdf: ^3.13.1
+  share_plus: ^13.3.1
+
+dev_dependencies:
+  dart_code_linter: ^4.4.2
+  flutter_test:
+    sdk: flutter
+  http_mock_adapter: ^0.6.1
+  image_picker: ^1.2.4
+  integration_test:
+    sdk: flutter
+  mocktail: ^1.0.5
+  pao_e2e:
+    path: ../../packages/pao_e2e
+  plugin_platform_interface: ^2.1.8
+  shared_preferences: ^2.5.6
+  very_good_analysis: ^11.0.0
+
+flutter:
+  # flutter run without --flavor builds dev (docs/release.md).
+  default-flavor: dev
+  generate: true
+  uses-material-design: true
+
+coverage_exclude:
+  - 'lib/main\.dart$'
+  - 'lib/l10n/generated/'

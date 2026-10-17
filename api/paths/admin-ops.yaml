@@ -1,0 +1,267 @@
+# Generated from the operation table during P01; edit by hand from now on.
+dashboard:
+  get:
+    operationId: getDashboard
+    tags:
+    - Admin
+    summary: Key counts and bookings per day (A-09)
+    x-permission: dashboard:read
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/Dashboard
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+bookings:
+  get:
+    operationId: listAdminBookings
+    tags:
+    - Admin bookings
+    summary: Bookings monitor with filters (A-06)
+    x-permission: booking:read:any
+    parameters:
+    - name: status
+      in: query
+      description: Booking status.
+      required: false
+      schema:
+        type: string
+        enum:
+        - requested
+        - accepted
+        - on_the_way
+        - arrived
+        - in_progress
+        - completed
+        - rejected
+        - timed_out
+        - cancelled
+    - name: serviceId
+      in: query
+      description: Service.
+      required: false
+      schema:
+        type: string
+        format: uuid
+    - name: from
+      in: query
+      description: Created on or after (Asia/Dhaka).
+      required: false
+      schema:
+        type: string
+        format: date
+    - name: to
+      in: query
+      description: Created on or before (Asia/Dhaka).
+      required: false
+      schema:
+        type: string
+        format: date
+    - name: area
+      in: query
+      description: Area name.
+      required: false
+      schema:
+        type: string
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/BookingList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+booking:
+  get:
+    operationId: getAdminBooking
+    tags:
+    - Admin bookings
+    summary: Booking with both parties and the full timeline
+    x-permission: booking:read:any
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/Booking
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+complaints:
+  get:
+    operationId: listComplaints
+    tags:
+    - Admin complaints
+    summary: Complaints queue (A-07)
+    x-permission: complaint:manage
+    parameters:
+    - name: status
+      in: query
+      description: Complaint status.
+      required: false
+      schema:
+        type: string
+        enum:
+        - open
+        - assigned
+        - resolved
+    - name: assigneeId
+      in: query
+      description: Assigned admin.
+      required: false
+      schema:
+        type: string
+        format: uuid
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/ComplaintList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+complaint:
+  get:
+    operationId: getComplaint
+    tags:
+    - Admin complaints
+    summary: One complaint with comments
+    x-permission: complaint:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/ComplaintId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/Complaint
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+complaintAssign:
+  post:
+    operationId: assignComplaint
+    tags:
+    - Admin complaints
+    summary: Assign to an admin
+    x-permission: complaint:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/ComplaintId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/admin.yaml#/ComplaintAssignInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/Complaint
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+complaintComment:
+  post:
+    operationId: commentOnComplaint
+    tags:
+    - Admin complaints
+    summary: Add an internal comment
+    x-permission: complaint:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/ComplaintId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/admin.yaml#/ComplaintCommentInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/Complaint
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+complaintResolve:
+  post:
+    operationId: resolveComplaint
+    tags:
+    - Admin complaints
+    summary: Resolve with a note; verified complaints feed quality review
+    x-permission: complaint:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/ComplaintId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/admin.yaml#/ComplaintResolveInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/Complaint
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

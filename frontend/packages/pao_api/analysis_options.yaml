@@ -1,0 +1,6 @@
+# Generated code: analysed only for errors, not style.
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+  errors:
+    deprecated_member_use_from_same_package: ignore

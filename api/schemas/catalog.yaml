@@ -1,0 +1,117 @@
+# Catalog: Category → Service → Sub-service with versioned prices (PRD §4).
+ServiceModel:
+  type: string
+  enum: [on_demand, duration_hire, listing, partner_referral]
+  example: on_demand
+PriceUnit:
+  type: string
+  description: What one quantity means for a sub-service.
+  enum: [job, unit, hour, day]
+  example: unit
+SubService:
+  type: object
+  required: [id, serviceId, name, unit, price, priceVersionId, published]
+  properties:
+    id: { type: string, format: uuid }
+    serviceId: { type: string, format: uuid }
+    name: { $ref: "./common.yaml#/LocalizedText" }
+    description: { $ref: "./common.yaml#/LocalizedText" }
+    inclusions: { type: array, items: { $ref: "./common.yaml#/LocalizedText" } }
+    exclusions: { type: array, items: { $ref: "./common.yaml#/LocalizedText" } }
+    unit: { $ref: "#/PriceUnit" }
+    price: { $ref: "./common.yaml#/Money" }
+    priceVersionId: { type: string, format: uuid }
+    maxQuantity: { type: integer, minimum: 1, example: 10 }
+    published: { type: boolean }
+Service:
+  type: object
+  required: [id, categoryId, name, iconKey, serviceModel, requiredLevel, searchRadiusM, womenProvidersOnly, requiresLevel2, published]
+  properties:
+    id: { type: string, format: uuid }
+    categoryId: { type: string, format: uuid }
+    name: { $ref: "./common.yaml#/LocalizedText" }
+    iconKey: { type: string, example: bolt }
+    serviceModel: { $ref: "#/ServiceModel" }
+    requiredLevel: { $ref: "./common.yaml#/Level" }
+    searchRadiusM: { type: integer, minimum: 500, maximum: 50000, example: 5000 }
+    womenProvidersOnly: { type: boolean, example: false }
+    requiresLevel2: { type: boolean, example: false }
+    level2Checklist: { type: array, items: { $ref: "./common.yaml#/LocalizedText" } }
+    published: { type: boolean }
+    subServices: { type: array, items: { $ref: "#/SubService" } }
+Category:
+  type: object
+  required: [id, name, iconKey, sortOrder, published, services]
+  properties:
+    id: { type: string, format: uuid }
+    name: { $ref: "./common.yaml#/LocalizedText" }
+    iconKey: { type: string, example: plug }
+    sortOrder: { type: integer, example: 1 }
+    published: { type: boolean }
+    services: { type: array, items: { $ref: "#/Service" } }
+CatalogTree:
+  type: object
+  required: [version, categories]
+  properties:
+    version: { type: integer, format: int64, description: Bumped on every catalog change., example: 7 }
+    categories: { type: array, items: { $ref: "#/Category" } }
+CatalogSearchResults:
+  type: object
+  required: [services, subServices]
+  properties:
+    services: { type: array, items: { $ref: "#/Service" } }
+    subServices: { type: array, items: { $ref: "#/SubService" } }
+CategoryInput:
+  type: object
+  required: [name, iconKey]
+  properties:
+    name: { $ref: "./common.yaml#/LocalizedText" }
+    iconKey: { type: string, minLength: 1, maxLength: 40, example: plug }
+    sortOrder: { type: integer, example: 1 }
+    published: { type: boolean, example: true }
+ServiceInput:
+  type: object
+  required: [categoryId, name, iconKey, serviceModel, requiredLevel, searchRadiusM]
+  properties:
+    categoryId: { type: string, format: uuid }
+    name: { $ref: "./common.yaml#/LocalizedText" }
+    iconKey: { type: string, minLength: 1, maxLength: 40, example: bolt }
+    serviceModel: { $ref: "#/ServiceModel" }
+    requiredLevel: { $ref: "./common.yaml#/Level" }
+    searchRadiusM: { type: integer, minimum: 500, maximum: 50000, example: 5000 }
+    womenProvidersOnly: { type: boolean, example: false }
+    requiresLevel2: { type: boolean, example: false }
+    level2Checklist: { type: array, items: { $ref: "./common.yaml#/LocalizedText" } }
+    published: { type: boolean, example: true }
+SubServiceInput:
+  type: object
+  required: [serviceId, name, unit]
+  properties:
+    serviceId: { type: string, format: uuid }
+    name: { $ref: "./common.yaml#/LocalizedText" }
+    description: { $ref: "./common.yaml#/LocalizedText" }
+    inclusions: { type: array, items: { $ref: "./common.yaml#/LocalizedText" } }
+    exclusions: { type: array, items: { $ref: "./common.yaml#/LocalizedText" } }
+    unit: { $ref: "#/PriceUnit" }
+    maxQuantity: { type: integer, minimum: 1, example: 10 }
+    initialPrice: { $ref: "./common.yaml#/Money" }
+    published: { type: boolean, example: true }
+PriceInput:
+  type: object
+  required: [amount]
+  properties:
+    amount: { type: integer, format: int64, minimum: 0, example: 50000 }
+PriceVersion:
+  type: object
+  required: [id, subServiceId, amount, effectiveFrom, createdBy]
+  properties:
+    id: { type: string, format: uuid }
+    subServiceId: { type: string, format: uuid }
+    amount: { $ref: "./common.yaml#/Money" }
+    effectiveFrom: { type: string, format: date-time }
+    createdBy: { type: string, format: uuid }
+PriceHistory:
+  type: object
+  required: [items]
+  properties:
+    items: { type: array, items: { $ref: "#/PriceVersion" } }

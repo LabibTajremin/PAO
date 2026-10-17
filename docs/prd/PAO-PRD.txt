@@ -23,7 +23,8 @@
     Platforms                          Customer app and Provider app (Android + iOS,
                                        Flutter); Admin web panel
 
-    Backend                            Go, API-first, modular monolith built to split into
+    Backend                            NestJS (TypeScript), API-first, modular monolith
+                                       built to split into
                                        microservices later
 
     First release                      AI-built MVP with 4–5 services, then handed to
@@ -717,8 +718,8 @@
 PAO — Product Requirements Document
 
   9. Technical architecture
-  The backend is a Go modular monolith, deployed as one binary. It is built so that any
-  module can later become its own microservice by moving its folder and replacing in-
+  The backend is a NestJS (TypeScript) modular monolith, deployed as one Node image with
+  three entry points: api, worker and migrate. It is built so that any module can later become its own microservice by moving its folder and replacing in-
   process calls with network calls. The two Flutter apps talk to it only through a versioned
   REST API.
 
@@ -726,7 +727,7 @@
 
     Layer                        Choice                                Notes
 
-    Backend                      Go                                    REST/JSON API, OpenAPI 3 spec
+    Backend                      NestJS (TypeScript, Node.js 22)       REST/JSON API, OpenAPI 3 spec
     language                                                           written first
 
     Mobile apps                  Flutter (Android + iOS)               Two apps in one monorepo, sharing
@@ -793,11 +794,11 @@
 
   9.3 Module boundary rules (what makes the later split easy)
    1. One contract package per module. Each module has a contract/ folder. Its
-        service.go file holds the module's service-to-service interface, which is the only set
+        service file (e.g. booking-service.ts) holds the module's service-to-service interface, which is the only set
        of methods other modules may call. The same folder holds the request/response DTOs
        and event definitions (this is the separate service-to-service file you asked for).
    2. Import only contracts. Module A may import moduleB/contract and nothing else
-       from module B. This is enforced by a lint rule in CI (e.g. depguard or go-arch-lint).
+       from module B. This is enforced by a lint rule in CI (dependency-cruiser).
    3. Own your data. Each module has its own Postgres schema ( booking.* , catalog.*
        and so on). There are no joins or foreign keys across schemas, and one module never
        reads another module's tables.
@@ -818,33 +819,35 @@
 
   9.4 Inside a module (clean architecture + repository pattern)
 
-     pao-backend/
-        cmd/api/main.go                # composition root: wires modules together
-        internal/
+     backend/
+        src/main.ts                    # composition root: wires modules together
+        src/worker.ts, src/migrate.ts  # worker and migration entry points
+        src/
           platform/                    # shared infrastructure only: config, db,
      logger,
-                                       # http server, auth middleware, event bus,
+                                       # http server, auth guards, event bus,
      outbox
          modules/
                booking/
-                   contract/           # PUBLIC: the only package other modules
+                   contract/           # PUBLIC: the only folder other modules
      import
-                       service.go      # service-to-service interface
-     (BookingService)
-                       dto.go
-                     events.go
+                       booking-service.ts  # service-to-service interface
+     (BookingService) + injection token
+                       dto.ts
+                     events.ts
                    domain/             # entities, value objects, state machine,
      rules (no imports from outside)
-                   app/                # use cases: CreateBooking, AcceptBooking, ...
+                   app/                # use cases: create-booking.ts, accept-booking.ts, ...
                    port/               # repository and gateway interfaces used by
      app/
                    adapter/
                        postgres/       # repository implementations
-                       http/           # handlers, request validation, mapping to use
-     cases
+                       http/           # controllers, request validation, mapping to
+     use cases
                        inproc/         # implementation of contract/ for other
      modules
-                   module.go           # constructs the module and registers routes
+                   booking.module.ts   # Nest module: wires the module, exports its
+     contract
 
 PAO — Product Requirements Document
 
@@ -904,7 +907,7 @@
        no restating the code, no leftover AI notes such as "Here we…" or "// Step 1".
        Functions are small and do one thing. A deeply nested function is a sign it needs
        splitting.
-       Code follows the standard formatters and linters: gofmt , golangci-lint , dart
+       Code follows the standard formatters and linters: Prettier , ESLint , dart
        format , flutter analyze , with the lint config committed to the repository.
        No dead code, commented-out code, or TODOs without an issue reference.
 
@@ -1014,7 +1017,7 @@
    1. Design first. Produce wireframes and then UI designs for every screen in section 8,
        plus the design system (colours, type, components). Freeze the MVP screen list.
    2. Contracts. Write api/openapi.yaml , the module list, each module's
-        contract/service.go and events, and the database schema per module. Review all of
+        contract/ service interface and events, and the database schema per module. Review all of
        these before any implementation.
    3. Backend skeleton. Set up the platform layer, module scaffolding, CI (lint, architecture
       rules, tests), Docker setup and the root documentation.
@@ -1049,10 +1052,14 @@
 
 PAO — Product Requirements Document
 
-       Revenue model. Commission per job (what %), provider subscription, customer
-       service fee, or a mix? This decides whether the Finance module is in the MVP.
-       Payment. Cash only for the MVP, with bKash/Nagad in Phase 2? If a commission is
-       taken from cash jobs, how do providers pay it to PAO?
+       Revenue model. Decided (ADR-0035): PAO takes a commission per completed job,
+       10% of the final price by default and set by admin. It becomes the merchant's due.
+       Payment. Decided (ADR-0035): cash on delivery only in the first release; bKash/Nagad
+       in Phase 2. A merchant cannot accept new jobs while their unpaid due is above an
+       admin-set amount (default ৳500), but still sees every job and notification. The
+       merchant submits each payment (amount, method, reference) in the partner app, and an
+       admin confirms or rejects it in the console. Every step is audited.
+       Services. Catering and Monthly Bazar are added as categories (ADR-0035).
        Launch area. One city first (Dhaka?), and which areas? This sets the search radius and
        how many providers must be recruited.
        Provider recruitment. Self-enrolment only, or will PAO also onboard providers in the

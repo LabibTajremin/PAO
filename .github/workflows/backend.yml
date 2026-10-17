@@ -1,0 +1,86 @@
+name: backend
+
+# Branches are checked through their pull request; a push trigger on them too would
+# run every job twice and starve the small macOS runner pool.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env: { POSTGRES_USER: pao, POSTGRES_PASSWORD: pao, POSTGRES_DB: pao }
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U pao -d pao" --health-interval 5s --health-retries 20
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+        options: --health-cmd "redis-cli ping" --health-interval 5s --health-retries 20
+      storage:
+        image: rustfs/rustfs:1.0.1
+        env: { RUSTFS_ACCESS_KEY: pao-ci, RUSTFS_SECRET_KEY: pao-ci-secret, RUSTFS_SSE_S3_MASTER_KEY: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" }
+        ports: ["9000:9000"]
+        options: >-
+          --health-cmd "curl -fsS http://localhost:9000/health" --health-interval 5s --health-retries 20
+    env:
+      PAO_TEST_DATABASE_URL: postgres://pao:pao@localhost:5432/pao?sslmode=disable
+      PAO_TEST_REDIS_URL: redis://localhost:6379/15
+      PAO_TEST_S3_ENDPOINT: http://localhost:9000
+      PAO_TEST_S3_ACCESS_KEY: pao-ci
+      PAO_TEST_S3_SECRET_KEY: pao-ci-secret
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: |
+            backend/package-lock.json
+            test/e2e/api/package-lock.json
+      - name: Install tools
+        run: |
+          sudo apt-get install -y -q shellcheck bats
+          curl -fsSL https://github.com/gitleaks/gitleaks/releases/download/v8.21.2/gitleaks_8.21.2_linux_x64.tar.gz |
+            sudo tar -xz -C /usr/local/bin gitleaks
+          curl -fsSL https://github.com/prometheus/prometheus/releases/download/v3.5.0/prometheus-3.5.0.linux-amd64.tar.gz |
+            sudo tar -xz -C /usr/local/bin --strip-components=1 prometheus-3.5.0.linux-amd64/promtool
+      - name: Dependencies
+        run: npm ci --prefix backend && npm ci --prefix test/e2e/api
+      - name: Lint, types, module boundaries, file sizes, shell
+        run: ./pao lint shell && ./pao lint backend
+      - name: Alert rules and dashboards
+        run: ./pao ops check
+      - name: CLI tests
+        run: bats test/cli
+      - name: Unit + integration tests
+        run: ./pao test integration
+      - name: Coverage (100%)
+        run: ./pao cover backend
+      - name: Security tools
+        run: |
+          sudo curl -fsSL -o /usr/local/bin/osv-scanner \
+            https://github.com/google/osv-scanner/releases/download/v2.2.3/osv-scanner_linux_amd64
+          sudo chmod +x /usr/local/bin/osv-scanner
+          docker pull -q mirror.gcr.io/aquasec/trivy:0.64.1
+      - name: Backend image for the scan
+        run: docker build -q -t pao-backend:ci backend
+      - name: Security (gitleaks, npm audit, osv-scanner, trivy source + image)
+        env:
+          PAO_SCAN_IMAGE: pao-backend:ci
+        run: ./pao security
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with: { name: backend-coverage, path: coverage/ }

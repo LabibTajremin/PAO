@@ -1,0 +1,33 @@
+# Shared lint rules for every PAO Flutter package. Thresholds mirror
+# docs/build/01-conventions.md §1.
+include: package:very_good_analysis/analysis_options.yaml
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/l10n/generated/**"
+    - "packages/pao_api/**"
+  errors:
+    public_member_api_docs: warning
+
+linter:
+  rules:
+    public_member_api_docs: true
+    avoid_dynamic_calls: true
+    # Keep the classic `ClassName(...)` constructor form: it is what the human team
+    # taking over the code reads fluently (PRD §10).
+    unnecessary_type_name_in_constructor: false
+
+dart_code_linter:
+  metrics:
+    cyclomatic-complexity: 10
+    maximum-nesting-level: 3
+    number-of-parameters: 4
+    source-lines-of-code: 40
+  metrics-exclude:
+    - test/**
+  rules:
+    - avoid-dynamic
+    - no-boolean-literal-compare
+    - prefer-trailing-comma

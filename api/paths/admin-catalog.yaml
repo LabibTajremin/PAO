@@ -1,0 +1,246 @@
+# Generated from the operation table during P01; edit by hand from now on.
+catalog:
+  get:
+    operationId: getAdminCatalog
+    tags:
+    - Admin catalog
+    summary: Full catalog including unpublished items (A03)
+    x-permission: catalog:manage
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/CatalogTree
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+categoriesCreate:
+  post:
+    operationId: createCategory
+    tags:
+    - Admin catalog
+    summary: Create a category
+    x-permission: catalog:manage
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/CategoryInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/Category
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+categoriesUpdate:
+  put:
+    operationId: updateCategory
+    tags:
+    - Admin catalog
+    summary: Update a category (publish/unpublish with `published`)
+    x-permission: catalog:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/CategoryId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/CategoryInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/Category
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+servicesCreate:
+  post:
+    operationId: createService
+    tags:
+    - Admin catalog
+    summary: Create a service
+    x-permission: catalog:manage
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/ServiceInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/Service
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+servicesUpdate:
+  put:
+    operationId: updateService
+    tags:
+    - Admin catalog
+    summary: Update a service (publish/unpublish with `published`)
+    x-permission: catalog:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/ServiceId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/ServiceInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/Service
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+subservicesCreate:
+  post:
+    operationId: createSubService
+    tags:
+    - Admin catalog
+    summary: Create a subservice
+    x-permission: catalog:manage
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/SubServiceInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/SubService
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+subservicesUpdate:
+  put:
+    operationId: updateSubService
+    tags:
+    - Admin catalog
+    summary: Update a subservice (publish/unpublish with `published`)
+    x-permission: catalog:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubServiceId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/SubServiceInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/SubService
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+prices:
+  get:
+    operationId: listPriceHistory
+    tags:
+    - Admin catalog
+    summary: Price versions of a sub-service
+    x-permission: catalog:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubServiceId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/PriceHistory
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+  post:
+    operationId: changePrice
+    tags:
+    - Admin catalog
+    summary: Set a new price (inserts an immutable version)
+    x-permission: catalog:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubServiceId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/PriceInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/PriceVersion
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

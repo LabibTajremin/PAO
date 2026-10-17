@@ -1,0 +1,215 @@
+# Booking lifecycle (PRD §5, docs/booking-states.md), from both sides.
+BookingStatus:
+  type: string
+  enum: [requested, accepted, on_the_way, arrived, in_progress, completed, rejected, timed_out, cancelled]
+  example: accepted
+Timing:
+  type: string
+  enum: [asap, scheduled]
+  example: asap
+BookingItemInput:
+  type: object
+  required: [subServiceId, quantity]
+  properties:
+    subServiceId: { type: string, format: uuid }
+    quantity: { type: integer, minimum: 1, maximum: 50, example: 2 }
+BookingCreate:
+  type: object
+  required: [providerId, serviceId, items, timing, addressId]
+  properties:
+    providerId: { type: string, format: uuid }
+    serviceId: { type: string, format: uuid }
+    items: { type: array, minItems: 1, maxItems: 10, items: { $ref: "#/BookingItemInput" } }
+    timing: { $ref: "#/Timing" }
+    scheduledAt: { type: string, format: date-time, description: Required when timing is scheduled; for duration hire it is the start. }
+    addressId: { type: string, format: uuid }
+    note: { type: string, maxLength: 500, example: Gate code 1234; second floor. }
+BookingItem:
+  type: object
+  description: A line copied from the catalog at booking time (PRD §9.3 rule 4).
+  required: [subServiceId, priceVersionId, name, unit, quantity, unitPrice, total, extra]
+  properties:
+    subServiceId: { type: string, format: uuid }
+    priceVersionId: { type: string, format: uuid }
+    name: { $ref: "./common.yaml#/LocalizedText" }
+    unit: { $ref: "./catalog.yaml#/PriceUnit" }
+    quantity: { type: integer, example: 2 }
+    unitPrice: { $ref: "./common.yaml#/Money" }
+    total: { $ref: "./common.yaml#/Money" }
+    extra: { type: boolean, description: Added during the job and approved by the customer. }
+TimelineEntry:
+  type: object
+  required: [status, at, actor]
+  properties:
+    status: { $ref: "#/BookingStatus" }
+    at: { type: string, format: date-time }
+    actor: { type: string, enum: [customer, provider, system, admin] }
+    reason: { type: string }
+ExtrasProposal:
+  type: object
+  required: [id, items, addedTotal, newTotal, status, proposedAt]
+  properties:
+    id: { type: string, format: uuid }
+    items: { type: array, items: { $ref: "#/BookingItem" } }
+    addedTotal: { $ref: "./common.yaml#/Money" }
+    newTotal: { $ref: "./common.yaml#/Money" }
+    status: { type: string, enum: [pending, approved, declined] }
+    proposedAt: { type: string, format: date-time }
+BookingAddress:
+  type: object
+  description: The service address snapshot. Exact lines only after acceptance (PRD §11).
+  required: [area]
+  properties:
+    area: { type: string, example: Banani }
+    line1: { type: string }
+    line2: { type: string }
+    location: { $ref: "./common.yaml#/Point" }
+    distanceM: { type: integer, description: Provider view before acceptance. }
+BookingParty:
+  type: object
+  required: [id, name]
+  properties:
+    id: { type: string, format: uuid }
+    name: { type: string, example: Rahim Uddin }
+    photoUrl: { type: string }
+    phone: { type: string, description: Shown to the other side only after acceptance (PRD §5 step 6). }
+    badge: { $ref: "./provider.yaml#/Badge" }
+    rating: { type: number, format: double, example: 4.8 }
+    ratingCount: { type: integer, example: 132 }
+Booking:
+  type: object
+  required: [id, number, status, serviceId, serviceName, items, total, timing, address, createdAt, timeline, paymentMethod]
+  properties:
+    id: { type: string, format: uuid }
+    number: { type: string, example: PAO-104233 }
+    status: { $ref: "#/BookingStatus" }
+    serviceId: { type: string, format: uuid }
+    serviceName: { $ref: "./common.yaml#/LocalizedText" }
+    serviceModel: { $ref: "./catalog.yaml#/ServiceModel" }
+    provider: { $ref: "#/BookingParty" }
+    customer: { $ref: "#/BookingParty" }
+    items: { type: array, items: { $ref: "#/BookingItem" } }
+    total: { $ref: "./common.yaml#/Money" }
+    timing: { $ref: "#/Timing" }
+    scheduledAt: { type: string, format: date-time }
+    endsAt: { type: string, format: date-time, description: End of a duration hire. }
+    address: { $ref: "#/BookingAddress" }
+    note: { type: string }
+    acceptDeadline: { type: string, format: date-time }
+    pendingExtras: { $ref: "#/ExtrasProposal" }
+    cancellable: { type: boolean }
+    paymentMethod: { type: string, enum: [cash] }
+    cashReceived: { type: boolean }
+    reviewedByMe: { type: boolean }
+    createdAt: { type: string, format: date-time }
+    timeline: { type: array, items: { $ref: "#/TimelineEntry" } }
+BookingSummary:
+  type: object
+  required: [id, number, status, serviceName, total, createdAt]
+  properties:
+    id: { type: string, format: uuid }
+    number: { type: string, example: PAO-104233 }
+    status: { $ref: "#/BookingStatus" }
+    serviceName: { $ref: "./common.yaml#/LocalizedText" }
+    counterpartName: { type: string, example: Rahim Uddin }
+    timing: { $ref: "#/Timing" }
+    scheduledAt: { type: string, format: date-time }
+    total: { $ref: "./common.yaml#/Money" }
+    createdAt: { type: string, format: date-time }
+BookingList:
+  type: object
+  required: [items]
+  properties:
+    items: { type: array, items: { $ref: "#/BookingSummary" } }
+    nextCursor: { $ref: "./common.yaml#/PageCursor" }
+CustomerCancelInput:
+  type: object
+  required: [reason]
+  properties:
+    reason: { type: string, enum: [changed_mind, found_other_provider, provider_late, booked_by_mistake, other] }
+    note: { type: string, maxLength: 300 }
+ProviderCancelInput:
+  type: object
+  required: [reason]
+  properties:
+    reason: { type: string, enum: [emergency, customer_unreachable, unsafe_location, other] }
+    note: { type: string, maxLength: 300 }
+RejectInput:
+  type: object
+  required: [reason]
+  properties:
+    reason: { type: string, enum: [busy, too_far, not_my_service, other] }
+    note: { type: string, maxLength: 300 }
+StartCode:
+  type: object
+  required: [code]
+  properties:
+    code: { type: string, pattern: "^[0-9]{4}$", example: "4821" }
+ExtrasInput:
+  type: object
+  required: [items]
+  properties:
+    items: { type: array, minItems: 1, maxItems: 10, items: { $ref: "#/BookingItemInput" } }
+ExtrasDecisionInput:
+  type: object
+  required: [proposalId, approve]
+  properties:
+    proposalId: { type: string, format: uuid }
+    approve: { type: boolean }
+CompleteInput:
+  type: object
+  required: [cashReceived]
+  properties:
+    cashReceived: { type: boolean, description: Must be true — the provider confirms cash was received (D4). }
+Receipt:
+  type: object
+  required: [bookingId, number, completedAt, serviceName, providerName, customerName, items, total, paymentMethod]
+  properties:
+    bookingId: { type: string, format: uuid }
+    number: { type: string, example: PAO-104233 }
+    completedAt: { type: string, format: date-time }
+    serviceName: { $ref: "./common.yaml#/LocalizedText" }
+    providerName: { type: string }
+    customerName: { type: string }
+    area: { type: string }
+    items: { type: array, items: { $ref: "#/BookingItem" } }
+    total: { $ref: "./common.yaml#/Money" }
+    paymentMethod: { type: string, enum: [cash] }
+EarningsPeriod:
+  type: string
+  enum: [day, week, month]
+  example: week
+EarningsSummary:
+  type: object
+  description: Totals by Asia/Dhaka calendar period (P-08).
+  required: [period, from, to, total, jobs, buckets]
+  properties:
+    period: { $ref: "#/EarningsPeriod" }
+    from: { type: string, format: date }
+    to: { type: string, format: date }
+    total: { $ref: "./common.yaml#/Money" }
+    jobs: { type: integer }
+    buckets:
+      type: array
+      items:
+        type: object
+        required: [date, total, jobs]
+        properties:
+          date: { type: string, format: date }
+          total: { $ref: "./common.yaml#/Money" }
+          jobs: { type: integer }
+EarningsJob:
+  type: object
+  required: [bookingId, number, completedAt, serviceName, total]
+  properties:
+    bookingId: { type: string, format: uuid }
+    number: { type: string }
+    completedAt: { type: string, format: date-time }
+    serviceName: { $ref: "./common.yaml#/LocalizedText" }
+    total: { $ref: "./common.yaml#/Money" }
+EarningsJobList:
+  type: object
+  required: [items]
+  properties:
+    items: { type: array, items: { $ref: "#/EarningsJob" } }
+    nextCursor: { $ref: "./common.yaml#/PageCursor" }

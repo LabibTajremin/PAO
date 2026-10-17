@@ -1,0 +1,100 @@
+# promtool unit tests for rules/pao.yml (./pao ops check).
+rule_files: [../rules/pao.yml]
+evaluation_interval: 1m
+
+tests:
+  - name: error rate above 2% pages, below stays quiet
+    interval: 1m
+    input_series:
+      - series: 'pao_http_requests_total{route="/v1/x",method="GET",status="200"}'
+        values: "0+90x20"
+      - series: 'pao_http_requests_total{route="/v1/x",method="GET",status="500"}'
+        values: "0+10x20"
+      - series: 'pao_http_requests_total{route="/v1/y",method="GET",status="200"}'
+        values: "0+1000x20"
+    alert_rule_test:
+      - eval_time: 15m
+        alertname: PaoApiHighErrorRate
+        exp_alerts: []
+      - eval_time: 15m
+        alertname: PaoApiElevatedErrorRate
+        exp_alerts: []
+
+  - name: a broken API pages
+    interval: 1m
+    input_series:
+      - series: 'pao_http_requests_total{route="/v1/x",method="GET",status="200"}'
+        values: "0+90x20"
+      - series: 'pao_http_requests_total{route="/v1/x",method="GET",status="500"}'
+        values: "0+10x20"
+    alert_rule_test:
+      - eval_time: 15m
+        alertname: PaoApiHighErrorRate
+        exp_alerts:
+          - exp_labels: { severity: critical }
+            exp_annotations:
+              summary: "10% of API requests fail with 5xx"
+              runbook: docs/runbooks/incident-checklist.md
+
+  - name: a failed job warns for an hour
+    interval: 1m
+    input_series:
+      - series: 'pao_job_runs_total{name="verification.expiry",outcome="failed",instance="w1"}'
+        values: "0 0 0 1 1 1 1 1 1 1"
+      - series: 'pao_job_runs_total{name="verification.expiry",outcome="ok",instance="w1"}'
+        values: "0+1x9"
+    alert_rule_test:
+      - eval_time: 2m
+        alertname: PaoJobFailing
+        exp_alerts: []
+      - eval_time: 5m
+        alertname: PaoJobFailing
+        exp_alerts:
+          - exp_labels: { severity: warning, name: verification.expiry }
+            exp_annotations:
+              summary: "Scheduled job verification.expiry failed in the last hour"
+              description: The worker logs carry the error ("job failed", field job).
+              runbook: docs/runbooks/incident-checklist.md
+
+  - name: outbox lag and dead letters page
+    interval: 1m
+    input_series:
+      - series: 'pao_outbox_oldest_pending_seconds{module="booking",job="pao-worker"}'
+        values: "0 120+60x10"
+      - series: 'pao_outbox_delivery_failures_total{module="booking",event="booking.BookingAccepted",dead="true"}'
+        values: "0 0 1 1"
+    alert_rule_test:
+      - eval_time: 8m
+        alertname: PaoOutboxLagging
+        exp_alerts:
+          - exp_labels: { severity: critical, module: booking }
+            exp_annotations:
+              summary: "booking outbox has events waiting 9m 0s"
+              runbook: docs/runbooks/incident-checklist.md
+      - eval_time: 3m
+        alertname: PaoOutboxDeadLetters
+        exp_alerts:
+          - exp_labels: { severity: critical, module: booking, event: booking.BookingAccepted }
+            exp_annotations:
+              summary: "booking.BookingAccepted events from booking were dead-lettered"
+              description: A subscriber failed ten times; the event will not be retried on its own.
+              runbook: docs/runbooks/incident-checklist.md
+
+  - name: down targets page
+    interval: 1m
+    input_series:
+      - series: 'up{job="pao-api",instance="api:9090"}'
+        values: "0x5"
+      - series: 'up{job="pao-worker",instance="worker:9090"}'
+        values: "1x5"
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: PaoApiDown
+        exp_alerts:
+          - exp_labels: { severity: critical, job: pao-api, instance: "api:9090" }
+            exp_annotations:
+              summary: "API instance api:9090 is not answering scrapes"
+              runbook: docs/runbooks/incident-checklist.md
+      - eval_time: 3m
+        alertname: PaoWorkerDown
+        exp_alerts: []

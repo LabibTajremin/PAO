@@ -1,0 +1,258 @@
+# Generated from the operation table during P01; edit by hand from now on.
+bookings:
+  post:
+    operationId: createBooking
+    tags:
+    - Customer bookings
+    summary: Request a booking with one provider (idempotent)
+    x-permission: booking:create
+    parameters:
+    - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/booking.yaml#/BookingCreate
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/Booking
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+  get:
+    operationId: listCustomerBookings
+    tags:
+    - Customer bookings
+    summary: Upcoming or past bookings (C18)
+    x-permission: booking:read:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingTab
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/BookingList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+booking:
+  get:
+    operationId: getCustomerBooking
+    tags:
+    - Customer bookings
+    summary: Booking detail with timeline (C19)
+    x-permission: booking:read:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/Booking
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+startCode:
+  get:
+    operationId: getStartCode
+    tags:
+    - Customer bookings
+    summary: The 4-digit start code, shown only to the customer
+    x-permission: booking:read:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/StartCode
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+cancel:
+  post:
+    operationId: cancelCustomerBooking
+    tags:
+    - Customer bookings
+    summary: Cancel until the start code is entered (C-10)
+    x-permission: booking:cancel:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/booking.yaml#/CustomerCancelInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/Booking
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+extrasDecision:
+  post:
+    operationId: decideExtras
+    tags:
+    - Customer bookings
+    summary: Approve or decline proposed extra items (C15)
+    x-permission: booking:update:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/booking.yaml#/ExtrasDecisionInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/Booking
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+receipt:
+  get:
+    operationId: getCustomerReceipt
+    tags:
+    - Customer bookings
+    summary: Receipt of a completed booking (C64)
+    x-permission: booking:read:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/Receipt
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+review:
+  post:
+    operationId: reviewProvider
+    tags:
+    - Customer bookings
+    summary: Rate the provider after completion (C-11)
+    x-permission: review:create
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/rating.yaml#/ReviewInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/rating.yaml#/Review
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+report:
+  post:
+    operationId: reportCustomerProblem
+    tags:
+    - Customer bookings
+    summary: Report a problem on a booking (C-14)
+    x-permission: complaint:create
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/admin.yaml#/ComplaintInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/Complaint
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

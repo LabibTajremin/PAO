@@ -1,0 +1,26 @@
+{
+  "modules": [
+    "identity",
+    "customer",
+    "provider",
+    "verification",
+    "catalog",
+    "booking",
+    "rating",
+    "notification",
+    "media",
+    "admin",
+    "audit"
+  ],
+  "outboxModules": [
+    "identity",
+    "customer",
+    "provider",
+    "verification",
+    "catalog",
+    "booking",
+    "rating",
+    "media",
+    "admin"
+  ]
+}

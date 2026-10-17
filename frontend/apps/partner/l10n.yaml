@@ -1,0 +1,6 @@
+arb-dir: lib/l10n
+template-arb-file: partner_en.arb
+output-dir: lib/l10n/generated
+output-localization-file: partner_localizations.dart
+output-class: PartnerL10n
+nullable-getter: false

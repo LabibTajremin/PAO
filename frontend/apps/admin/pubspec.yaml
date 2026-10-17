@@ -1,0 +1,47 @@
+name: pao_admin
+description: "PAO Admin — the operations web panel."
+publish_to: none
+version: 0.1.0+1
+resolution: workspace
+
+environment:
+  sdk: ^3.13.0
+  flutter: ">=3.47.0"
+
+dependencies:
+  dio: ^5.11.1
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.1.1
+  flutter_localizations:
+    sdk: flutter
+  go_router: ^18.0.2
+  intl: ^0.20.3
+  pao_api:
+    path: ../../packages/pao_api
+  pao_core:
+    path: ../../packages/pao_core
+  pao_l10n:
+    path: ../../packages/pao_l10n
+  pao_ui:
+    path: ../../packages/pao_ui
+
+dev_dependencies:
+  dart_code_linter: ^4.4.2
+  flutter_test:
+    sdk: flutter
+  http_mock_adapter: ^0.6.1
+  integration_test:
+    sdk: flutter
+  mocktail: ^1.0.5
+  pao_e2e:
+    path: ../../packages/pao_e2e
+  very_good_analysis: ^11.0.0
+
+flutter:
+  generate: true
+  uses-material-design: true
+
+coverage_exclude:
+  - 'lib/main\.dart$'
+  - 'lib/l10n/generated/'

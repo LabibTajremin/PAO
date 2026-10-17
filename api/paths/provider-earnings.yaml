@@ -1,0 +1,93 @@
+# Generated from the operation table during P01; edit by hand from now on.
+receipt:
+  get:
+    operationId: getProviderReceipt
+    tags:
+    - Provider jobs
+    summary: Receipt of a completed job
+    x-permission: job:read:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/Receipt
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+earnings:
+  get:
+    operationId: getEarningsSummary
+    tags:
+    - Provider jobs
+    summary: Earnings by day, week or month in Asia/Dhaka (M26)
+    x-permission: earnings:read:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/PeriodParam
+    - name: date
+      in: query
+      description: Any date inside the period (Asia/Dhaka); defaults to today.
+      required: false
+      schema:
+        type: string
+        format: date
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/EarningsSummary
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+earningsJobs:
+  get:
+    operationId: listEarningsJobs
+    tags:
+    - Provider jobs
+    summary: Completed jobs with amounts (M27)
+    x-permission: earnings:read:own
+    parameters:
+    - name: from
+      in: query
+      description: First day (Asia/Dhaka).
+      required: false
+      schema:
+        type: string
+        format: date
+    - name: to
+      in: query
+      description: Last day (Asia/Dhaka).
+      required: false
+      schema:
+        type: string
+        format: date
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/EarningsJobList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

@@ -1,0 +1,41 @@
+# Reusable error responses. Every body is an ErrorResponse.
+Unauthenticated:
+  description: Missing, invalid or expired access token (UNAUTHENTICATED, TOKEN_EXPIRED) or a failed credential check.
+  content:
+    application/json:
+      schema: { $ref: "../schemas/common.yaml#/ErrorResponse" }
+      example: { error: { code: UNAUTHENTICATED, message: Sign in again. } }
+Forbidden:
+  description: The caller lacks the operation's x-permission, does not own the resource, or the account is banned or suspended.
+  content:
+    application/json:
+      schema: { $ref: "../schemas/common.yaml#/ErrorResponse" }
+      example: { error: { code: FORBIDDEN, message: Permission booking:cancel:own required. } }
+NotFound:
+  description: The resource does not exist or is not visible to the caller.
+  content:
+    application/json:
+      schema: { $ref: "../schemas/common.yaml#/ErrorResponse" }
+      example: { error: { code: NOT_FOUND, message: Booking not found. } }
+Conflict:
+  description: The request conflicts with the current state (e.g. BOOKING_INVALID_TRANSITION).
+  content:
+    application/json:
+      schema: { $ref: "../schemas/common.yaml#/ErrorResponse" }
+      example: { error: { code: BOOKING_INVALID_TRANSITION, message: The booking is no longer requested. } }
+ValidationFailed:
+  description: The request does not match the schema or a business validation rule.
+  content:
+    application/json:
+      schema: { $ref: "../schemas/common.yaml#/ErrorResponse" }
+      example: { error: { code: VALIDATION_FAILED, message: Invalid request., details: { field: phone } } }
+TooManyRequests:
+  description: Rate limit or attempt limit reached; retry after the given number of seconds.
+  headers:
+    Retry-After:
+      description: Seconds to wait before retrying.
+      schema: { type: integer }
+  content:
+    application/json:
+      schema: { $ref: "../schemas/common.yaml#/ErrorResponse" }
+      example: { error: { code: RATE_LIMITED, message: Too many requests. } }

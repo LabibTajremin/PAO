@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Rejects commit subjects that are not Conventional Commits (docs/build/01-conventions.md §6).
+set -euo pipefail
+subject=$(head -1 "$1")
+pattern='^(feat|fix|test|refactor|docs|chore|ci|build|perf)(\([a-z0-9_-]+\))?!?: .{1,}$'
+if [[ ! "$subject" =~ $pattern ]] || ((${#subject} > 72)); then
+  echo "commit-msg: use '<type>(<scope>): <subject>' (≤ 72 chars); got: $subject" >&2
+  exit 1
+fi

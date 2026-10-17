@@ -1,0 +1,351 @@
+# Generated from the operation table during P01; edit by hand from now on.
+jobs:
+  get:
+    operationId: listProviderJobs
+    tags:
+    - Provider jobs
+    summary: Requests, upcoming and past jobs (M23)
+    x-permission: job:read:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/JobTab
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/BookingList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+job:
+  get:
+    operationId: getProviderJob
+    tags:
+    - Provider jobs
+    summary: Job or request detail; exact address only after acceptance
+    x-permission: job:read:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/Booking
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+jobAcceptRequest:
+  post:
+    operationId: acceptRequest
+    tags:
+    - Provider jobs
+    summary: Accept a request (one active ASAP job at a time)
+    x-permission: job:respond
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/Booking
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+jobRejectRequest:
+  post:
+    operationId: rejectRequest
+    tags:
+    - Provider jobs
+    summary: Reject a request with a reason
+    x-permission: job:respond
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/booking.yaml#/RejectInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/Booking
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+jobMarkOnTheWay:
+  post:
+    operationId: markOnTheWay
+    tags:
+    - Provider jobs
+    summary: Mark "On the way"
+    x-permission: job:progress
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/Booking
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+jobMarkArrived:
+  post:
+    operationId: markArrived
+    tags:
+    - Provider jobs
+    summary: Mark "Arrived"
+    x-permission: job:progress
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/Booking
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+jobStartJob:
+  post:
+    operationId: startJob
+    tags:
+    - Provider jobs
+    summary: Start the job with the customer's 4-digit code
+    x-permission: job:progress
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/booking.yaml#/StartCode
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/Booking
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+      '429':
+        $ref: ../components/responses.yaml#/TooManyRequests
+jobProposeExtras:
+  post:
+    operationId: proposeExtras
+    tags:
+    - Provider jobs
+    summary: Propose extra catalog items for customer approval
+    x-permission: job:progress
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/booking.yaml#/ExtrasInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/Booking
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+jobCompleteJob:
+  post:
+    operationId: completeJob
+    tags:
+    - Provider jobs
+    summary: Complete the job and confirm cash received
+    x-permission: job:progress
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/booking.yaml#/CompleteInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/Booking
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+jobCancelProviderJob:
+  post:
+    operationId: cancelProviderJob
+    tags:
+    - Provider jobs
+    summary: Cancel after acceptance with a reason (counts for quality)
+    x-permission: job:respond
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/booking.yaml#/ProviderCancelInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/booking.yaml#/Booking
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+jobReview:
+  post:
+    operationId: reviewCustomer
+    tags:
+    - Provider jobs
+    summary: Rate the customer after completion (P-09)
+    x-permission: review:create
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/rating.yaml#/ReviewInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/rating.yaml#/Review
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+jobReport:
+  post:
+    operationId: reportProviderProblem
+    tags:
+    - Provider jobs
+    summary: Report a problem on a job
+    x-permission: complaint:create
+    parameters:
+    - $ref: ../components/parameters.yaml#/BookingId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/admin.yaml#/ComplaintInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/admin.yaml#/Complaint
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

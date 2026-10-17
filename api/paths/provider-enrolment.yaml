@@ -1,0 +1,271 @@
+# Generated from the operation table during P01; edit by hand from now on.
+enrolment:
+  get:
+    operationId: getEnrolment
+    tags:
+    - Provider enrolment
+    summary: Completion per wizard step (resumable)
+    x-permission: provider:manage:own
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/EnrolmentStatus
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+stepPersonal:
+  put:
+    operationId: savePersonalStep
+    tags:
+    - Provider enrolment
+    summary: 'M05: name as on NID, date of birth, gender, addresses'
+    x-permission: provider:manage:own
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/provider.yaml#/PersonalInfoInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/EnrolmentStatus
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+stepServices:
+  put:
+    operationId: saveServicesStep
+    tags:
+    - Provider enrolment
+    summary: 'M06: services offered and experience'
+    x-permission: provider:manage:own
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/provider.yaml#/ServicesInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/EnrolmentStatus
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+stepArea:
+  put:
+    operationId: saveAreaStep
+    tags:
+    - Provider enrolment
+    summary: 'M07: home base and working radius'
+    x-permission: provider:manage:own
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/provider.yaml#/ServiceAreaInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/EnrolmentStatus
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+stepNid:
+  put:
+    operationId: saveNidStep
+    tags:
+    - Provider enrolment
+    summary: 'M08: NID number and photos'
+    x-permission: provider:manage:own
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/provider.yaml#/NidInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/EnrolmentStatus
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+stepSelfie:
+  put:
+    operationId: saveSelfieStep
+    tags:
+    - Provider enrolment
+    summary: 'M09: live selfie'
+    x-permission: provider:manage:own
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/provider.yaml#/SelfieInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/EnrolmentStatus
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+stepPoliceClearance:
+  put:
+    operationId: savePoliceClearanceStep
+    tags:
+    - Provider enrolment
+    summary: 'M10: police clearance certificate'
+    x-permission: provider:manage:own
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/provider.yaml#/PoliceClearanceInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/EnrolmentStatus
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+stepSkillProof:
+  put:
+    operationId: saveSkillProofStep
+    tags:
+    - Provider enrolment
+    summary: 'M11: optional skill proof'
+    x-permission: provider:manage:own
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/provider.yaml#/SkillProofInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/EnrolmentStatus
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+stepEmergencyContact:
+  put:
+    operationId: saveEmergencyContactStep
+    tags:
+    - Provider enrolment
+    summary: 'M12: emergency contact; sends an OTP to their phone'
+    x-permission: provider:manage:own
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/provider.yaml#/EmergencyContactInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/EnrolmentStatus
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+stepCodeOfConduct:
+  put:
+    operationId: saveCodeOfConductStep
+    tags:
+    - Provider enrolment
+    summary: 'M13: accept the code of conduct'
+    x-permission: provider:manage:own
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/provider.yaml#/CodeOfConductInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/EnrolmentStatus
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

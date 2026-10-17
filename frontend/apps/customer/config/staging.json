@@ -1,0 +1,6 @@
+{
+  "PAO_FLAVOUR": "staging",
+  "PAO_API_BASE_URL": "https://api.staging.pao.com.bd",
+  "PAO_SUPPORT_PHONE": "09610000000",
+  "PAO_SUPPORT_EMAIL": "support@pao.com.bd"
+}

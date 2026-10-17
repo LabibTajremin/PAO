@@ -1,0 +1,6 @@
+# Files maintained by hand; the generator must not overwrite them.
+pubspec.yaml
+build.yaml
+analysis_options.yaml
+README.md
+.gitignore

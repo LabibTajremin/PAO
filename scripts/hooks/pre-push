@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# The full gate before every push, unless the CLI already ran it (pao phase finish).
+set -euo pipefail
+[[ "${PAO_SKIP_HOOK:-}" == "1" ]] && exit 0
+"$(git rev-parse --show-toplevel)/pao" ci

@@ -34,12 +34,14 @@ revise)`. Changing one later means a new ADR, not silent edits.
 | E3 | IDs | UUIDv7 everywhere (sortable, safe to expose). Booking display number is a separate sequence. |
 | E4 | State management (Flutter) | `flutter_bloc` (ADR-0004). |
 | E5 | Auth | JWT access + rotating refresh in Redis (ADR-0005), see `02-architecture.md` §5. |
-| E6 | Jobs | River on Postgres; one worker binary (ADR-0006). |
+| E6 | Jobs | In-process scheduler in the worker, one runner per job via a Postgres advisory lock; outbox relay for events (ADR-0032, superseding ADR-0006). |
 | E7 | Pagination | Cursor (opaque base64 of `(created_at, id)`), default 20, max 100. |
 | E8 | Time | Stored UTC (`timestamptz`); formatted Asia/Dhaka in apps. |
 | E9 | Money | `int64` paisa; formatted `৳1,130` in apps. |
 | E10 | API versioning | `/v1/...`; breaking changes need `/v2`. |
 | E11 | Error codes | `{ "error": { "code", "message", "details" } }`; codes are `UPPER_SNAKE` and listed in `api/openapi.yaml` `components/schemas/ErrorCode`. |
+| E13 | Backend runtime | .NET 10, ASP.NET Core areas, CQRS handlers, EF Core over the SQL scripts in `DB Changes` (ADR-0034, superseding ADR-0032's framework). |
+| E14 | Payment and revenue | Cash on delivery only; 10% commission becomes the merchant's due; accepting is blocked above ৳500 due; merchants submit payments, admins confirm (ADR-0035). |
 | E12 | Design | Figma file below is the visual source of truth; accent colours are a theme token with ten presets; Midnight is the default (`05-screens.md`). |
 
 Figma: <https://www.figma.com/design/ytbbSEIF1I6cZN0iWJVQsC>

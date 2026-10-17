@@ -1,0 +1,83 @@
+name: e2e
+
+# Branches are checked through their pull request; a push trigger on them too would
+# run every job twice and starve the small macOS runner pool.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: test/e2e/api/package-lock.json
+      - name: Journeys
+        # The app journeys run in the apps job, in parallel and with Flutter.
+        env:
+          PAO_E2E_APPS: none
+        run: ./pao test e2e
+      - name: Backup restore drill
+        # The journeys leave a populated database behind: dump it, restore, compare.
+        run: ./pao ops restore-test e2e
+      - name: Stack logs
+        if: failure()
+        run: docker compose -p pao-e2e logs --no-color | tail -200
+
+  perf:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Install k6
+        run: |
+          curl -fsSL https://github.com/grafana/k6/releases/download/v1.3.0/k6-v1.3.0-linux-amd64.tar.gz | tar -xz
+          sudo install k6-v1.3.0-linux-amd64/k6 /usr/local/bin/k6
+      - name: Performance thresholds
+        run: ./pao perf e2e
+      - name: Stack logs
+        if: failure()
+        run: docker compose -p pao-e2e logs --no-color | tail -200
+
+  # The Flutter journeys and start-up smoke tests (test/e2e/mobile/run.sh), each app
+  # against its own stack: partner and customer on the Linux desktop under Xvfb,
+  # the admin panel in the runner's Chrome through its matching chromedriver.
+  apps:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [partner, customer, admin]
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: subosito/flutter-action@fd55f4c5af5b953cc57a2be44cb082c8f6635e8e # v2.21.0
+        with:
+          flutter-version: 3.47.7
+          channel: stable
+          cache: true
+      - name: Linux desktop toolchain, virtual display and keyring
+        if: matrix.app != 'admin'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends clang cmake ninja-build \
+            pkg-config libgtk-3-dev libsecret-1-dev libcurl4-openssl-dev xvfb dbus gnome-keyring
+      - name: Stack
+        run: test/e2e/stack.sh
+      - name: Journeys
+        env:
+          CHROME_EXECUTABLE: /usr/bin/google-chrome
+        run: CHROMEDRIVER="$CHROMEWEBDRIVER/chromedriver" test/e2e/mobile/run.sh ${{ matrix.app }}
+      - name: Stack logs
+        if: failure()
+        run: docker compose -p pao-e2e logs --no-color | tail -200

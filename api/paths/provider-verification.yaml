@@ -1,0 +1,69 @@
+# Generated from the operation table during P01; edit by hand from now on.
+emergencyVerify:
+  post:
+    operationId: verifyEmergencyContact
+    tags:
+    - Provider enrolment
+    summary: Verify the emergency contact's phone with the OTP they received
+    x-permission: provider:manage:own
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/provider.yaml#/EmergencyContactVerifyInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/provider.yaml#/EnrolmentStatus
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+      '429':
+        $ref: ../components/responses.yaml#/TooManyRequests
+submit:
+  post:
+    operationId: submitEnrolment
+    tags:
+    - Provider enrolment
+    summary: Submit every completed step for verification
+    x-permission: verification:submit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/verification.yaml#/VerificationStatus
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+verification:
+  get:
+    operationId: getVerificationStatus
+    tags:
+    - Provider enrolment
+    summary: Per-item status, rejection reasons and level (M14)
+    x-permission: provider:manage:own
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/verification.yaml#/VerificationStatus
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
