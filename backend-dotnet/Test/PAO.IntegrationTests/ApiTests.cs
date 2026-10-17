@@ -26,7 +26,11 @@ public sealed class ApiTests(MigratedDatabase database) : IClassFixture<Migrated
 
     private static object Booking(string note) => new
     {
-        providerId = Guid.NewGuid(), serviceId = Guid.NewGuid(), addressId = Guid.NewGuid(), timing = "asap", note,
+        providerId = Guid.NewGuid(),
+        serviceId = Guid.NewGuid(),
+        addressId = Guid.NewGuid(),
+        timing = "asap",
+        note,
         items = new[] { new { subServiceId = Guid.NewGuid(), quantity = 1 } },
     };
 

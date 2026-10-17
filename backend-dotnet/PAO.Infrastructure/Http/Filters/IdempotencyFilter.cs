@@ -13,11 +13,8 @@ namespace PAO.Infrastructure.Http.Filters;
 /// header (PRD §9.6). Answers below 500, errors included, are stored for 24 hours; a server
 /// error or an aborted request frees the key so the client can retry.
 /// </summary>
-public sealed class IdempotencyFilter(IdempotencyStore store, RedisKeys keys) : IAsyncActionFilter, IOrderedFilter
+public sealed class IdempotencyFilter(IdempotencyStore store, RedisKeys keys) : IAsyncActionFilter
 {
-    /// <inheritdoc />
-    public int Order => FilterOrder.Idempotency;
-
     /// <summary>Fingerprints a request: method, path and body, so a reused key with another body is caught.</summary>
     public static string RequestHash(string method, string path, byte[] body) =>
         Convert.ToHexStringLower(SHA256.HashData([.. Encoding.UTF8.GetBytes($"{method} {path}\n"), .. body]));

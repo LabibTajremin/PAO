@@ -38,6 +38,7 @@ public static class HttpEdge
         return services
             .AddControllers(options =>
             {
+                // Global filters of one kind run in the order they are added.
                 options.Filters.AddService<AccessFilter>();
                 options.Filters.AddService<RateLimitFilter>();
                 options.Filters.AddService<RequestValidationFilter>();

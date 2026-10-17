@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using PAO.EF;
 using PAO.EF.Connection;
 using PAO.Infrastructure.Data;
@@ -5,7 +6,6 @@ using PAO.Infrastructure.Rbac;
 using PAO.Infrastructure.Redis;
 using PAO.TestKit;
 using StackExchange.Redis;
-using Microsoft.EntityFrameworkCore;
 
 namespace PAO.IntegrationTests;
 

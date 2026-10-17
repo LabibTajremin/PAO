@@ -11,11 +11,8 @@ namespace PAO.Infrastructure.Http.Filters;
 /// saying why, before the handler runs. It runs before idempotency, so an invalid request
 /// never claims an idempotency key, as in NestJS.
 /// </summary>
-public sealed class RequestValidationFilter(RequestValidator validator) : IAsyncActionFilter, IOrderedFilter
+public sealed class RequestValidationFilter(RequestValidator validator) : IAsyncActionFilter
 {
-    /// <inheritdoc />
-    public int Order => FilterOrder.Validation;
-
     /// <inheritdoc />
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {

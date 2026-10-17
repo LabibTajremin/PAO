@@ -11,11 +11,8 @@ namespace PAO.Infrastructure.Http.Filters;
 /// Applies the API rate limit to every spec operation, per signed-in user or per IP for
 /// anonymous calls (`rl:api:{subject}:{operationId}`); 120 and 60 calls a minute by default.
 /// </summary>
-public sealed class RateLimitFilter(RateLimiter limiter, RedisKeys keys, IOptions<HttpOptions> options) : IAsyncActionFilter, IOrderedFilter
+public sealed class RateLimitFilter(RateLimiter limiter, RedisKeys keys, IOptions<HttpOptions> options) : IAsyncActionFilter
 {
-    /// <inheritdoc />
-    public int Order => FilterOrder.RateLimit;
-
     /// <inheritdoc />
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {

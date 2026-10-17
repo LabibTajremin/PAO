@@ -51,7 +51,12 @@ public sealed class OutboxTests(MigratedDatabase database) : IClassFixture<Migra
         await using var tx = await db.Database.BeginTransactionAsync();
         await new OutboxWriter(new PAO.Infrastructure.Data.UuidV7Generator(), clock).Write(db, "booking", aggregate, new BookingAccepted
         {
-            BookingId = Guid.NewGuid(), Number = "B-1", CustomerId = Guid.NewGuid(), ProviderId = Guid.NewGuid(), ServiceId = Guid.NewGuid(), At = "2026-10-17T00:00:00Z",
+            BookingId = Guid.NewGuid(),
+            Number = "B-1",
+            CustomerId = Guid.NewGuid(),
+            ProviderId = Guid.NewGuid(),
+            ServiceId = Guid.NewGuid(),
+            At = "2026-10-17T00:00:00Z",
         }, CancellationToken.None);
         await tx.CommitAsync();
     }
@@ -116,8 +121,12 @@ public sealed class OutboxTests(MigratedDatabase database) : IClassFixture<Migra
         var handler = new IdempotentEventHandler(contexts).Wrap("rating", "rating.test", (_, _, _) => { applied++; return Task.CompletedTask; });
         var envelope = new Envelope
         {
-            Id = Guid.NewGuid(), Module = "booking", Name = "x", AggregateId = "a",
-            Payload = System.Text.Json.JsonDocument.Parse("{}").RootElement, OccurredAt = clock.Now,
+            Id = Guid.NewGuid(),
+            Module = "booking",
+            Name = "x",
+            AggregateId = "a",
+            Payload = System.Text.Json.JsonDocument.Parse("{}").RootElement,
+            OccurredAt = clock.Now,
         };
         await handler(envelope, CancellationToken.None);
         await handler(envelope, CancellationToken.None);

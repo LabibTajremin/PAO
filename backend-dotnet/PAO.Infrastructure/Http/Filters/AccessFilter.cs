@@ -16,11 +16,8 @@ namespace PAO.Infrastructure.Http.Filters;
 /// unrevoked bearer token unless the action is public, then the action's requirement
 /// against the caller's roles (02-architecture §6). An action without an attribute is denied.
 /// </summary>
-public sealed class AccessFilter(TokenVerifier verifier, Denylist denylist, RbacChecker rbac) : IAsyncActionFilter, IOrderedFilter
+public sealed class AccessFilter(TokenVerifier verifier, Denylist denylist, RbacChecker rbac) : IAsyncActionFilter
 {
-    /// <inheritdoc />
-    public int Order => FilterOrder.Access;
-
     /// <inheritdoc />
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
@@ -82,15 +79,3 @@ public sealed class AccessFilter(TokenVerifier verifier, Denylist denylist, Rbac
     }
 }
 
-/// <summary>The order of the edge filters; lower runs first.</summary>
-public static class FilterOrder
-{
-    /// <summary>The `-400` value.</summary>
-    public const int Access = -400;
-    /// <summary>The `-300` value.</summary>
-    public const int RateLimit = -300;
-    /// <summary>The `-200` value.</summary>
-    public const int Validation = -200;
-    /// <summary>The `-100` value.</summary>
-    public const int Idempotency = -100;
-}
