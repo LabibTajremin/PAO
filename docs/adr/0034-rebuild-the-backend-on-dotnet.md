@@ -68,6 +68,30 @@ engineering bar: modular monolith, deny-by-default RBAC, 100% coverage, strict l
   start. Files hold defaults and structure only; secrets come from environment variables
   (`Section__Key`), so nothing secret is committed.
 - **Logging.** Serilog, JSON to stdout and to `Backend/Logs/<yyyy-MM-dd>/pao-<host>.log`.
+- **Service registration.** `Program.cs` of each host only calls named extension methods,
+  one concern per method (owner rule, 2026-10-17):
+  - `AddBuiltInServices` for framework services: controllers, authentication,
+    authorisation, options, logging, health, OpenAPI, rate limiting;
+  - `AddCustomServices` for hand-made platform services: mediator, mapper, clock, ids,
+    crypto, Redis helpers, storage, SMS, push, outbox;
+  - `AddDatabase` for the DbContext, its factory and the connection;
+  - `AddRepositories` for the repository registrations;
+  - one `Add<Area>Area` per area (for example `AddBookingArea`) for its handlers,
+    validators, services and shared contract.
+
+  Each method lives in its own file under the project's `Registration/` folder.
+- **Documentation (100% coverage).** `Backend/Docs` is organised folder by folder:
+  `Areas/<Area>/` (overview, features, endpoints, data, events), `Architecture/`, `Config/`,
+  `Database/`, `Operations/`, `Testing/` and `Api/`.
+  - Every area, feature (command or query), controller, service, repository, job,
+    configuration file and database script has a documentation page or an entry in its
+    folder's index.
+  - Every public C# type and member carries XML documentation. `GenerateDocumentationFile`
+    is on, and CS1591 is an error. These comments describe the contract (what a caller can
+    rely on), while inline comments still explain only *why*.
+  - A docs coverage check in CI fails when any area, feature, controller, job, config
+    section or script lacks its page, or when a page links to something that no longer
+    exists.
 - **Quality gates.** `dotnet format` and analyzers (warnings as errors), architecture
   tests, file and method size checks (C# files ≤ 250 lines, methods ≤ 40 lines, tests
   ≤ 400), unit and integration tests merged at 100% line and branch-free statement

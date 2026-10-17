@@ -19,7 +19,7 @@ README, contract, app and specs).
   pattern, CQRS handlers in feature folders with Commands and Queries, separate request,
   view and db models, a hand-written mapper, FluentValidation, an authorisation attribute
   on every controller, no N+1 queries and no database calls in loops, config files per
-  concern, logs by date folder.
+  concern, logs by date folder, `Program.cs` that registers services through one method per concern and per area, and documentation in `Backend/Docs` covering 100% of areas, features, controllers, jobs, config and scripts, with XML docs on every public member.
 
 ## Tasks
 
