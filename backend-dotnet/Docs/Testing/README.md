@@ -20,4 +20,5 @@ key environment; nothing shared is dropped.
 4. Unit and integration tests with Microsoft code coverage, merged by
    `scripts/coverage.py`, gated at 100% line coverage. Only generated code and the three
    `Program.cs` files are excluded (`coverage.config`).
-5. E2E start-up smoke tests.
+5. The bundled spec is current (`scripts/gen-spec.sh --check`; the contract folder is the MSBuild property `PaoApiDir`).
+6. E2E start-up smoke tests.

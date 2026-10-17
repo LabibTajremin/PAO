@@ -17,4 +17,8 @@
     <!-- Needed for the unused-using rule (IDE0005) to run in the build. -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <!-- The OpenAPI contract's folder: the one place it is named (Backend/Api after cut-over). -->
+    <PaoApiDir>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)../api'))</PaoApiDir>
+  </PropertyGroup>
 </Project>

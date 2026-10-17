@@ -27,6 +27,7 @@ usage: pao <command>
   ci                    lint → ops check → gen check → test all → cover → security
   phase finish <id>     ci, push the branch, open the PR
   perf [e2e]            k6 performance scripts against the local (or a fresh e2e) stack
+  dotnet [ci|build|format|spec|gates|test|e2e]  .NET backend gates (backend-dotnet)
 USAGE
 }
 
@@ -104,11 +105,18 @@ cmd_perf() {
   ok "performance thresholds met"
 }
 
+# cmd_dotnet runs the .NET backend's gates beside the NestJS ones until cut-over (P17).
+cmd_dotnet() {
+  local stage="${1:-ci}"
+  [[ "$stage" == ci ]] && stage=all
+  "$PAO_ROOT/backend-dotnet/scripts/ci.sh" "$stage"
+}
+
 main() {
   local cmd="${1:-}"
   [[ $# -gt 0 ]] && shift
   case "$cmd" in
-    setup | up | down | seed | gen | lint | test | cover | security | ops | ci | phase | perf)
+    setup | up | down | seed | gen | lint | test | cover | security | ops | ci | phase | perf | dotnet)
       "cmd_$cmd" "$@"
       ;;
     -h | --help | help) usage ;;

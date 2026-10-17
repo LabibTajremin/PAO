@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # The .NET quality gates (ADR-0034): build (warnings as errors, XML docs), format,
 # architecture/size/docs gates, unit + integration tests with merged 100% line coverage,
-# and the start-up smoke tests. Usage: ci.sh [build|format|gates|test|e2e|all]
+# the bundled-spec check and the start-up smoke tests.
+# Usage: ci.sh [build|format|spec|gates|test|e2e|all]
 set -euo pipefail
 
 DOTNET_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -13,6 +14,11 @@ step() { printf '\033[1;34m▸\033[0m %s\n' "$*" >&2; }
 ci_build() {
   step "dotnet build (warnings as errors)"
   dotnet build PAO.sln -warnaserror -nologo -v quiet
+}
+
+ci_spec() {
+  step "bundled OpenAPI document is up to date"
+  scripts/gen-spec.sh --check
 }
 
 ci_format() {
@@ -46,12 +52,13 @@ ci_e2e() {
 case "${1:-all}" in
   build) ci_build ;;
   format) ci_format ;;
+  spec) ci_spec ;;
   gates) ci_build && ci_gates ;;
   test) ci_build && ci_test ;;
   e2e) ci_build && ci_e2e ;;
-  all) ci_build && ci_format && ci_gates && ci_test && ci_e2e ;;
+  all) ci_build && ci_format && ci_spec && ci_gates && ci_test && ci_e2e ;;
   *)
-    echo "usage: ci.sh [build|format|gates|test|e2e|all]" >&2
+    echo "usage: ci.sh [build|format|spec|gates|test|e2e|all]" >&2
     exit 2
     ;;
 esac

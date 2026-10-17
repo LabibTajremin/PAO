@@ -30,10 +30,11 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P17 / task 1 — .NET foundation in `backend-dotnet/` (see `docs/build/phases/P17-dotnet-backend.md`).
-The owner's handwritten conversion rules are summarised in ADR-0034; the billing rules
-(cash on delivery, 10% commission, ৳500 due limit, merchant-submitted payments confirmed
-by an admin, Catering and Monthly Bazar) are in ADR-0035. .NET 10 SDK installs to
+P17 / task 2 — port Identity, Audit, Media, Catalog and Notification to `backend-dotnet/`
+(see `docs/build/phases/P17-dotnet-backend.md`). Read `backend-dotnet/PAO.AI/README.md`
+and `backend-dotnet/Docs/` first. The foundation (task 1) is done: run the .NET gates with
+`./pao dotnet ci` (build, format, spec check, architecture/size/docs gates, unit +
+integration at 100% merged line coverage, start-up smoke). .NET 10 SDK installs to
 `/root/.dotnet` with `dotnet-install.sh --channel 10.0`.
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
@@ -75,6 +76,10 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-10-17 P17.1 .NET foundation in backend-dotnet/: solution and projects, area skeletons
+  and Shared contracts, config/Serilog/EF/migrator, mediator, mapper, auth, HTTP edge,
+  Redis, outbox, jobs, storage, SMS, push, metrics, registration layout, Docs + gates
+  (see git log for the sha).
 - 2026-10-12 P15.6–7 cut-over: `./pao`, hooks and CI run the NestJS gates; API journeys
   ported to TypeScript (13/13); Go backend and Go tooling deleted, `backend/` is NestJS;
   CLAUDE.md, build docs and PRD describe NestJS; `./pao ci` green (5f2bcee).

@@ -2,7 +2,7 @@
 
 ## Hosts and image
 
-One image (`backend-dotnet/Dockerfile`) with three entry points, like the NestJS image:
+One image (`backend-dotnet/docker/Dockerfile`, built from `backend-dotnet/`) with three entry points, like the NestJS image:
 
 | Entry point | Host | Health check |
 |---|---|---|

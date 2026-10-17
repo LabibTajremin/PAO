@@ -1,0 +1,3 @@
+#!/bin/sh
+# The API entry point; `/app/api healthcheck` is the container health check.
+exec dotnet /app/PAO.Core.dll "$@"

@@ -1,0 +1,3 @@
+#!/bin/sh
+# The migration entry point: `/app/migrate up`.
+exec dotnet /app/PAO.Migrator.dll "$@"
