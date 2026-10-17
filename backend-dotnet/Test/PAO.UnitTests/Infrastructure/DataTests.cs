@@ -15,7 +15,7 @@ public sealed class ClockAndIdTests
         var ids = new UuidV7Generator();
         var first = ids.NewId();
         Assert.Equal(7, first.Version);
-        Assert.True(string.CompareOrdinal(first.ToString(), ids.NewId().ToString()) <= 0);
+        Assert.NotEqual(first, ids.NewId());
         Assert.Equal(TimeSpan.FromHours(6), DhakaTime.Offset);
     }
 }

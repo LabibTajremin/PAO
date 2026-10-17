@@ -14,7 +14,10 @@ public static class ValidationSetup
     public static void Configure()
     {
         ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
-        ValidatorOptions.Global.PropertyNameResolver = (_, member, _) =>
-            member is null ? null : JsonNamingPolicy.CamelCase.ConvertName(member.Name);
+        ValidatorOptions.Global.PropertyNameResolver = (_, member, _) => JsonName(member);
+        ValidatorOptions.Global.DisplayNameResolver = (_, member, _) => JsonName(member);
     }
+
+    private static string? JsonName(System.Reflection.MemberInfo? member) =>
+        member is null ? null : JsonNamingPolicy.CamelCase.ConvertName(member.Name);
 }

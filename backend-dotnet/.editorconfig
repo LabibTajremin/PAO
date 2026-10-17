@@ -45,3 +45,5 @@ dotnet_diagnostic.CA2007.severity = none
 [Test/**.cs]
 # Test names describe behaviour in sentences with underscores.
 dotnet_diagnostic.CA1707.severity = none
+# Tests are short and run under a per-test timeout; passing the test token everywhere adds noise.
+dotnet_diagnostic.xUnit1051.severity = none

@@ -116,7 +116,7 @@ public sealed class ContractTests
     [Fact]
     public void Masks_all_but_the_last_three_digits()
     {
-        Assert.Equal("**********678", PhoneNumber.Mask("+8801712345678"));
+        Assert.Equal("***********678", PhoneNumber.Mask("+8801712345678"));
         Assert.Equal("***", PhoneNumber.Mask("12"));
     }
 
