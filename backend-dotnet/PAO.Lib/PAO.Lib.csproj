@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Request models, view models, DTOs, mapping and validation; reads only PAO.EF. -->
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PAO.EF\PAO.EF.csproj" />
+  </ItemGroup>
+</Project>

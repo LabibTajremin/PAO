@@ -1,0 +1,9 @@
+{
+  "Sms": {
+    "Adapter": "console",
+    "SslWirelessEndpoint": "https://smsplus.sslwireless.com/api/v3/send-sms",
+    "SslWirelessApiToken": "",
+    "SslWirelessSid": "",
+    "TimeoutSeconds": 10
+  }
+}

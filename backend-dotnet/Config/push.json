@@ -1,0 +1,6 @@
+{
+  "Push": {
+    "Adapter": "log",
+    "FcmCredentialsFile": ""
+  }
+}

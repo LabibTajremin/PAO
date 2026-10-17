@@ -1,0 +1,8 @@
+{
+  "Jwt": {
+    "KeyId": "k1",
+    "SigningKey": "",
+    "PreviousPublicKeys": "",
+    "AccessTokenTtlSeconds": 900
+  }
+}

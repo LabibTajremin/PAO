@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Platform code without business rules: config, logging, data, Redis, crypto, the
+       HTTP edge, events, storage, SMS, push, metrics and health. -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" />
+    <PackageReference Include="BouncyCastle.Cryptography" />
+    <PackageReference Include="Konscious.Security.Cryptography.Argon2" />
+    <PackageReference Include="Otp.NET" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="StackExchange.Redis" />
+    <PackageReference Include="YamlDotNet" />
+    <PackageReference Include="prometheus-net.AspNetCore" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PAO.Lib\PAO.Lib.csproj" />
+    <ProjectReference Include="..\PAO.EF\PAO.EF.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="PAO.UnitTests" />
+    <InternalsVisibleTo Include="PAO.IntegrationTests" />
+  </ItemGroup>
+</Project>

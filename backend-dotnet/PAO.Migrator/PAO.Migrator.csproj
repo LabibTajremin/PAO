@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Applies the goose-format scripts in "DB Changes" and records their versions. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PAO.Infrastructure\PAO.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
