@@ -8,7 +8,12 @@ Code: `PAO.Core/Areas/Media/`; contracts: `PAO.Lib/Areas/Media/`. Back to the [a
 
 | Service | Role |
 |---|---|
-| `IMediaSharedService` | The only way other areas reach Media (`Services/Shared/`). Implemented when the use cases are ported. |
+| `IMediaSharedService` | The only way other areas reach Media (`Services/Shared/`); implemented by `MediaSharedService` (uploads as the admin uploader; both refusals become `media.upload_invalid`). |
+| `MediaRules` | Purposes, types and sizes (documents JPEG/PNG/PDF up to 5 MB, avatars up to 2 MB) and which app may upload which purpose. |
+| `MediaFiles` | Upload tickets, confirmation, audited view URLs, deletes and the orphan purge; resolves `IAuditSharedService` on first use. |
+| `MediaEventSubscriptions` | `identity.AccountDeleted` runs `DeleteAccountMedia`. |
+
+Mapping: `MediaMappingProfile`. Job: `MediaOrphanPurgeJob` ([jobs](../../Operations/jobs.md)).
 
 ## Shared contract
 

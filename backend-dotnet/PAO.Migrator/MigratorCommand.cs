@@ -9,16 +9,22 @@ namespace PAO.Migrator;
 /// <summary>
 /// The migration tool: `migrate up` applies every pending script in "DB Changes" and
 /// records versions in the `goose_&lt;module&gt;` tables, exactly as the NestJS migrator did.
-/// `seed` and `perf-seed N` return with the areas that own the seed data (P17 tasks 2–4).
+/// `seed` loads the seed data through <see cref="SeedCommand"/>; `perf-seed N` returns with the
+/// Merchant area, which owns the online providers it writes (P17 task 3).
 /// </summary>
 public static class MigratorCommand
 {
     /// <summary>The usage line printed for anything else.</summary>
-    public const string Usage = "usage: migrate up";
+    public const string Usage = "usage: migrate up|seed";
 
-    /// <summary>Runs `args` and returns the process exit code; messages go to `output`.</summary>
-    public static async Task<int> RunMigrator(this string[] args, IDictionary environment, string migrationsDirectory, TextWriter output)
+    /// <summary>Runs `args` and returns the process exit code; messages go to `output`; `seed` runs `migrate seed`.</summary>
+    public static async Task<int> RunMigrator(
+        this string[] args, IDictionary environment, string migrationsDirectory, TextWriter output, Func<Task<int>>? seed = null)
     {
+        if (args is ["seed"] && seed is not null)
+        {
+            return await seed();
+        }
         if (args is not ["up"])
         {
             await output.WriteLineAsync(Usage);

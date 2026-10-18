@@ -81,6 +81,7 @@ public static class WorkerServices
             sp.GetRequiredService<NpgsqlDataSource>(), sp.GetRequiredService<EventBus>(), outboxModules,
             sp.GetRequiredService<IClock>(), sp.GetRequiredService<WorkerMetrics>(), sp.GetRequiredService<ILogger<OutboxRelay>>()));
         services.AddSingleton<IScheduledJob, OutboxPurgeJob>();
+        services.AddSingleton<IScheduledJob, MediaOrphanPurgeJob>();
         services.AddSingleton(sp => new JobScheduler(
             sp.GetRequiredService<NpgsqlDataSource>(), sp.GetServices<IScheduledJob>(), sp.GetRequiredService<IClock>(),
             sp.GetRequiredService<WorkerMetrics>(), sp.GetRequiredService<ILogger<JobScheduler>>()));

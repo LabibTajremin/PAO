@@ -29,6 +29,7 @@ WORKDIR /app
 COPY --from=build /out ./
 COPY Config ./Config
 COPY ["DB Changes", "./DB Changes"]
+COPY Seed ./Seed
 COPY --chmod=755 docker/api docker/worker docker/migrate ./
 RUN mkdir -p /app/Logs && chown app /app/Logs
 USER app
