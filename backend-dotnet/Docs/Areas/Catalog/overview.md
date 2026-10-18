@@ -8,7 +8,12 @@ Code: `PAO.Core/Areas/Catalog/`; contracts: `PAO.Lib/Areas/Catalog/`. Back to th
 
 | Service | Role |
 |---|---|
-| `ICatalogSharedService` | The only way other areas reach Catalog (`Services/Shared/`). Implemented when the use cases are ported. |
+| `ICatalogSharedService` | The only way other areas reach Catalog (`Services/Shared/`); implemented by `CatalogSharedService`, which turns `catalog.not_found` into the contract reasons. |
+| `CatalogRules` | The catalog rules (names, icon, model, level 0 to 2, radius 500 to 50 000 m, units, prices from 0) and the published-only filter. |
+| `CatalogTreeService` | The published tree from the Redis cache keyed by version; the admin tree from the database. |
+| `CatalogChanges` | Runs a write in the command's transaction, bumps the version and publishes `CatalogChanged`. |
+
+Mapping: `CatalogMappingProfile` (`PAO.Lib/Areas/Catalog/`).
 
 ## Shared contract
 

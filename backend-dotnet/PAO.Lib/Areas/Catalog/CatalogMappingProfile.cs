@@ -51,6 +51,7 @@ public sealed class CatalogMappingProfile : IMappingProfile
                 CreatedBy = p.CreatedBy,
             });
         Views(registry);
+        TreeViews(registry);
         Inputs(registry);
     }
 
@@ -83,7 +84,9 @@ public sealed class CatalogMappingProfile : IMappingProfile
             Level2Checklist = s.Level2Checklist,
             Published = s.Published,
             SubServices = m.MapAll<SubServiceNode, SubServiceView>(s.SubServices),
-        })
+        });
+
+    private static void TreeViews(MappingRegistry registry) => registry
         .Add<CategoryNode, CategoryView>((c, m) => new CategoryView
         {
             Id = c.Id,

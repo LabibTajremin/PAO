@@ -8,4 +8,4 @@ Uploads to private buckets through presigned URLs, upload confirmation, signed v
 - Layout: `Controllers/` (thin, mediator only), `Features/<Feature>/Commands|Queries/`
   (handler, request and validator together), `Services/` (logic shared by several
   handlers), `Repositories/` (EF Core data access).
-- Status: skeleton and contract (P17 task 1); the use cases are ported in later P17 tasks.
+- Status: ported from NestJS (P17 task 2); see `Docs/Areas/<area>/`.
