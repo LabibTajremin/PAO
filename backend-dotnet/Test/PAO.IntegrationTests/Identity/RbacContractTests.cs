@@ -25,8 +25,6 @@ public sealed partial class RbacContractTests(MigratedDatabase database) : IClas
     private IEnumerable<(string Method, string Path, string Permission)> Protected() =>
         app.Services.GetRequiredService<SpecRoutes>().Operations
             .Where(op => op.Permission is not (null or "public" or "authenticated"))
-            // The edge tests' stand-in controller serves createBooking with MVC body binding.
-            .Where(op => op.Id != "createBooking")
             .Select(op => (op.Method.ToUpperInvariant(), Fill(op.PathTemplate), op.Permission!));
 
     private static string Fill(string path) => Placeholder().Replace(

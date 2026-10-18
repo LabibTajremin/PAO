@@ -25,21 +25,20 @@ public sealed class AuthController(IMediator mediator) : ControllerBase
     /// <summary>requestOtp: sends a sign-in or deletion code.</summary>
     [HttpPost("otp/request")]
     [AllowAnonymous]
-    public async Task<IActionResult> RequestOtp() =>
-        StatusCode(202, await mediator.Send(new RequestOtpCommand(Body<OtpRequestBody>().Phone, Body<OtpRequestBody>().Purpose ?? CodePurpose.Login, HttpContext.Edge().ClientIp)));
+    public async Task<IActionResult> RequestOtp([FromBody] OtpRequestBody body) =>
+        StatusCode(202, await mediator.Send(new RequestOtpCommand(body.Phone, body.Purpose ?? CodePurpose.Login, HttpContext.Edge().ClientIp)));
 
     /// <summary>verifyOtp: signs in, creating the account on first use.</summary>
     [HttpPost("otp/verify")]
     [AllowAnonymous]
-    public Task<TokenPairView> VerifyOtp() =>
-        mediator.Send(new VerifyOtpCommand(Body<OtpVerifyBody>().Phone, Body<OtpVerifyBody>().Code, Body<OtpVerifyBody>().App));
+    public Task<TokenPairView> VerifyOtp([FromBody] OtpVerifyBody body) =>
+        mediator.Send(new VerifyOtpCommand(body.Phone, body.Code, body.App));
 
     /// <summary>refreshToken: the body's token, else the admin cookie, which is then rotated.</summary>
     [HttpPost("refresh")]
     [AllowAnonymous]
-    public async Task<TokenPairView> Refresh()
+    public async Task<TokenPairView> Refresh([FromBody] RefreshBody body)
     {
-        var body = Body<RefreshBody>();
         var cookie = body.RefreshToken is null ? Request.Cookies[RefreshCookie] : null;
         var session = await mediator.Send(new RefreshTokenCommand(body.RefreshToken ?? cookie ?? string.Empty, cookie is not null));
         if (cookie is not null)
@@ -52,11 +51,11 @@ public sealed class AuthController(IMediator mediator) : ControllerBase
     /// <summary>logout: this device, or every device; clears the admin cookie.</summary>
     [HttpPost("logout")]
     [AllUserType]
-    public async Task<IActionResult> Logout()
+    public async Task<IActionResult> Logout([FromBody] LogoutBody body)
     {
         var me = HttpContext.Caller();
         var caller = new Caller(me.AccountId, Guid.Parse(me.SessionId), me.TokenId, me.ExpiresAt);
-        await mediator.Send(new LogoutCommand(caller, Body<LogoutBody>().AllDevices == true));
+        await mediator.Send(new LogoutCommand(caller, body.AllDevices == true));
         if (Request.Cookies.ContainsKey(RefreshCookie))
         {
             Response.Headers.SetCookie = Cookie(string.Empty, TimeSpan.Zero);
@@ -67,7 +66,4 @@ public sealed class AuthController(IMediator mediator) : ControllerBase
     /// <summary>The admin refresh cookie; a zero `maxAge` clears it.</summary>
     public static string Cookie(string token, TimeSpan maxAge) =>
         $"{RefreshCookie}={token}; Path=/v1/auth; Max-Age={(long)maxAge.TotalSeconds}; HttpOnly; Secure; SameSite=Strict";
-
-    private T Body<T>()
-        where T : class, new() => RequestBody.Read<T>(HttpContext);
 }

@@ -44,6 +44,7 @@ public static class HttpEdge
                 options.Filters.AddService<RequestValidationFilter>();
                 options.Filters.AddService<IdempotencyFilter>();
                 options.Filters.AddService<ApiExceptionFilter>();
+                options.ModelBinderProviders.Insert(0, new EdgeBodyBinderProvider());
             })
             .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
     }

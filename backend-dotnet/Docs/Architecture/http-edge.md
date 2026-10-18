@@ -14,6 +14,25 @@ Every API request passes, in the NestJS order:
 7. The controller; `ApiExceptionFilter` maps domain errors with the area's `[ErrorMap]`
    and writes the envelope.
 
+## Request bodies: read after authorisation
+
+NestJS authenticated and authorised before it looked at the body, so a request without a
+token got 401, and one without the permission got 403, whatever its body. ASP.NET binds
+action parameters *before* action filters run, and its `[FromBody]` binder answers 415
+(wrong or missing content type) or 400 there, ahead of `AccessFilter`.
+
+The edge closes that gap once for every controller: `EdgeBodyBinderProvider`
+(`PAO.Infrastructure/Http/Edge/EdgeBodyBinder.cs`), registered first in `AddHttpEdge`,
+serves every `BindingSource.Body` parameter. `EdgeBodyBinder` reads the JSON that
+`EdgeMiddleware.ReadBody` already parsed into `EdgeState.Body` and never fails: a missing
+body, or one of the wrong shape, binds as the empty model. Nothing is reported at binding
+time, so the order is access (401/403) → rate limit → `RequestValidationFilter`, which
+answers 422 from the spec for a missing, malformed or invalid body → idempotency → action.
+The action never runs with that empty model.
+
+Controllers write plain `[FromBody] SomeInput body` parameters. Never read
+`Request.Body` or `EdgeState.Body` by hand in a controller.
+
 ## Validation choice
 
 Requests are validated against the OpenAPI spec (`RequestValidator` with the in-house

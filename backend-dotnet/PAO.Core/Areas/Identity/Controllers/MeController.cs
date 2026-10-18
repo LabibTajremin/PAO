@@ -29,12 +29,9 @@ public sealed class MeController(IMediator mediator) : ControllerBase
     /// <summary>deleteMe: erases the account after a fresh `delete_account` code.</summary>
     [HttpDelete]
     [AllUserType]
-    public async Task<IActionResult> Delete()
+    public async Task<IActionResult> Delete([FromBody] DeleteAccountBody body)
     {
-        await mediator.Send(new DeleteMeCommand(HttpContext.Caller().AccountId, Body<DeleteAccountBody>().Code));
+        await mediator.Send(new DeleteMeCommand(HttpContext.Caller().AccountId, body.Code));
         return NoContent();
     }
-
-    private T Body<T>()
-        where T : class, new() => RequestBody.Read<T>(HttpContext);
 }

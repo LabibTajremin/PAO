@@ -38,6 +38,10 @@ scripts/           ci.sh, coverage.py, gen-spec.sh
 - **Authorisation.** Every action has one of `[Admin(Permission=…)]`, `[Customer(…)]`,
   `[Merchant(…)]`, `[AllUserType]`, `[AllowAnonymous]`, matching the spec's `x-permission`
   (tests fail otherwise). "Merchant" = provider; API paths stay `/v1/provider/...`.
+- **Request bodies.** Take the body as a `[FromBody] T body` parameter. The edge binds it from
+  the already-parsed JSON without failing, so authorisation answers 401/403 before any
+  body error, and spec validation answers 422 after it (`Docs/Architecture/http-edge.md`).
+  Never read `Request.Body` or `HttpContext.Edge().Body` in a controller.
 - **Behaviour.** Port behaviour from NestJS (`backend/`): same use-case names, error codes,
   events, tables, Redis keys, env vars. The PRD wins on behaviour.
 - **Registration.** `Program.cs` only calls `AddPaoSettings`, `AddBuiltInServices`,
