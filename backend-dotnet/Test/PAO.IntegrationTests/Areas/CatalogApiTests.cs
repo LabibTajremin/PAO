@@ -2,8 +2,12 @@ using System.Net;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
+using PAO.Core.Areas.Catalog.Repositories;
+using PAO.Core.Areas.Catalog.Services;
 using PAO.Core.Areas.Catalog.Services.Shared;
 using PAO.EF;
+using PAO.Infrastructure.Redis;
 using PAO.Lib.Areas.Catalog;
 using PAO.Lib.Errors;
 using PAO.Migrator;
@@ -86,6 +90,11 @@ public sealed class CatalogApiTests(MigratedDatabase database) : IClassFixture<M
         Assert.Equal(120_000, after.AmountPaisa);
         Assert.NotEqual(before.PriceVersionId, after.PriceVersionId);
         Assert.Equal(2, (await api.Call(HttpMethod.Get, prices, admin)).Body.GetProperty("items").GetArrayLength());
+        await UpdatesKeepTheTree(categoryId!, serviceId!, subId, serviceBody, subBody);
+    }
+
+    private async Task UpdatesKeepTheTree(string categoryId, string serviceId, Guid subId, object serviceBody, object subBody)
+    {
         var updates = new (string Path, object Body)[]
         {
             ($"/v1/admin/catalog/categories/{categoryId}", new { name = Name, iconKey = "broom", published = false }),
@@ -145,5 +154,17 @@ public sealed class CatalogApiTests(MigratedDatabase database) : IClassFixture<M
         Assert.Equal(ServiceModel.OnDemand, salon.Model);
         Assert.Equal(2, salon.Level2Checklist.Count);
         Assert.Equal(5, (await Contract(scope).ListServices(CancellationToken.None)).Count);
+    }
+
+    [Fact]
+    public async Task A_redis_failure_only_costs_a_database_read()
+    {
+        var options = StackExchange.Redis.ConfigurationOptions.Parse("127.0.0.1:1,abortConnect=false,connectTimeout=100,syncTimeout=200,asyncTimeout=200,connectRetry=0");
+        using var broken = await StackExchange.Redis.ConnectionMultiplexer.ConnectAsync(options);
+        using var scope = api.Services.CreateScope();
+        var tree = new CatalogTreeService(
+            scope.ServiceProvider.GetRequiredService<CatalogRepository>(), new JsonCache(broken), scope.ServiceProvider.GetRequiredService<RedisKeys>(),
+            NullLogger<CatalogTreeService>.Instance);
+        Assert.Equal(5, (await tree.Published(CancellationToken.None)).Categories.Count);
     }
 }

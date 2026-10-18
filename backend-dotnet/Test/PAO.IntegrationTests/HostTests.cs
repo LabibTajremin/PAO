@@ -68,7 +68,8 @@ public sealed class HostTests(MigratedDatabase database) : IClassFixture<Migrate
         var app = builder.Build();
         PAO.Infrastructure.Http.HttpEdge.UseHttpEdge(app, settings);
         var running = app.RunApi(settings, web => web.UseTestServer());
-        await Task.Delay(500);
+        // Start-up checks can take longer than any fixed delay on a loaded machine.
+        await Task.Delay(Timeout.Infinite, app.Lifetime.ApplicationStarted).ContinueWith(_ => { }, TaskScheduler.Default);
         Assert.IsType<ConsoleSmsSender>(app.Services.GetRequiredService<ISmsSender>());
         await app.StopAsync();
         Assert.Equal(0, await running);
