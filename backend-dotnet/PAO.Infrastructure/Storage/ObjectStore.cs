@@ -32,10 +32,13 @@ public sealed class ObjectStore : IDisposable
         presigner = Build(options, string.IsNullOrEmpty(options.PublicEndpoint) ? options.Endpoint : options.PublicEndpoint);
     }
 
-    /// <summary>A URL accepting one PUT of `contentType` until `ttl` passes.</summary>
-    public async Task<PresignedUpload> PresignPut(string bucket, string key, string contentType, TimeSpan ttl)
+    /// <summary>
+    /// A URL accepting one PUT of `contentType` until `ttl` passes; with `size`, the length
+    /// is signed too, so storage refuses a file of any other size.
+    /// </summary>
+    public async Task<PresignedUpload> PresignPut(string bucket, string key, string contentType, TimeSpan ttl, long? size = null)
     {
-        var url = await presigner.GetPreSignedURLAsync(new GetPreSignedUrlRequest
+        var request = new GetPreSignedUrlRequest
         {
             BucketName = bucket,
             Key = key,
@@ -43,7 +46,12 @@ public sealed class ObjectStore : IDisposable
             ContentType = contentType,
             Expires = DateTime.UtcNow + ttl,
             Protocol = ProtocolOf(presigner),
-        });
+        };
+        if (size is { } length)
+        {
+            request.Headers.ContentLength = length;
+        }
+        var url = await presigner.GetPreSignedURLAsync(request);
         return new PresignedUpload(url, new Dictionary<string, string> { ["Content-Type"] = contentType });
     }
 

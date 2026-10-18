@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace PAO.EF.Conventions;
 
@@ -30,7 +31,7 @@ public static class SnakeCaseNames
     {
         foreach (var entity in modelBuilder.Model.GetEntityTypes())
         {
-            foreach (var property in entity.GetProperties())
+            foreach (var property in entity.GetProperties().Where(p => p.FindAnnotation(RelationalAnnotationNames.ColumnName) is null))
             {
                 property.SetColumnName(ToSnakeCase(property.Name));
             }
