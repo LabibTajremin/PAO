@@ -31,8 +31,9 @@ scripts/           ci.sh, coverage.py, gen-spec.sh
   take only `IMediator`. Logic shared by several handlers goes to the area's `Services/`;
   data access to `Repositories/` (EF Core).
 - **Models.** Request models in, view models out, db models in PAO.EF. Convert with
-  `IMapper` and an `IMappingProfile` per area in PAO.Lib. No AutoMapper, MediatR or other
-  paid library.
+  `IMapper` and an `IMappingProfile` per area in PAO.Lib. The mediator scan registers every
+  PAO.Lib profile; do not add one in `Add<Area>Area` (a gate checks it). No AutoMapper,
+  MediatR or other paid library.
 - **No N+1.** Never query in a loop: `BatchLoader.LoadMany`, `Include`/projection,
   `ReferenceDataCache` for small reference data.
 - **Authorisation.** Every action has one of `[Admin(Permission=…)]`, `[Customer(…)]`,

@@ -1,8 +1,6 @@
 using PAO.Core.Areas.Audit.Services;
 using PAO.Core.Areas.Audit.Services.Shared;
 using PAO.Infrastructure.Events;
-using PAO.Lib.Areas.Audit;
-using PAO.Lib.Mapping;
 
 namespace PAO.Core.Registration;
 
@@ -11,12 +9,11 @@ public static class AuditAreaRegistration
 {
     /// <summary>
     /// Adds the Audit area's log, its event subscriptions (used by the worker) and its
-    /// `IAuditSharedService`. Handlers and validators are found by the mediator's assembly
-    /// scan; the mapping profile lives in PAO.Lib, outside that scan, so it is added here.
+    /// `IAuditSharedService`. Handlers, validators and the mapping profile are found by the
+    /// mediator's scan.
     /// The repository comes from `AddRepositories`.
     /// </summary>
     public static IServiceCollection AddAuditArea(this IServiceCollection services) => services
-        .AddSingleton<IMappingProfile, AuditMappingProfile>()
         .AddScoped<AuditLog>()
         .AddSingleton<IEventSubscriptions, AuditSubscriptions>()
         .AddScoped<IAuditSharedService, AuditSharedService>();

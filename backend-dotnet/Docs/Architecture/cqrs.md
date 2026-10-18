@@ -12,6 +12,9 @@ Controller → `IMediator.Send` → pipeline → handler.
   (commands run in one database transaction; nested commands join it; queries never open one).
 - Models stay separate: request models in, view models out, db models in `PAO.EF`. The
   hand-written `Mapper` converts with maps registered by `IMappingProfile` classes; a
-  missing map throws instead of guessing.
+  missing map throws instead of guessing. Profiles live in `PAO.Lib/Areas/<Area>/` and
+  `AddMediator` always scans PAO.Lib for them, so an area never registers its profile by
+  hand; the `MappingProfileTests` gate fails if any PAO.Lib profile is not registered
+  exactly once.
 - No N+1: repositories load related rows with `BatchLoader.LoadMany` (one `ANY(@ids)`
   query) and small reference data through `ReferenceDataCache`.
