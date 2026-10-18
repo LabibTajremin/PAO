@@ -85,7 +85,9 @@ public sealed class HostTests(MigratedDatabase database) : IClassFixture<Migrate
             .AddDatabase(settings).AddRepositories().AddAreas().AddBackgroundJobs(Hosts.Paths);
         using var host = builder.Build();
         var running = host.RunWorker(settings, web => web.UseTestServer());
-        await Task.Delay(500);
+        // A fixed delay raced start-up on a loaded machine: stopping mid-start cancels it.
+        var started = host.Services.GetRequiredService<IHostApplicationLifetime>().ApplicationStarted;
+        await Task.Delay(Timeout.Infinite, started).ContinueWith(_ => { }, TaskScheduler.Default);
         Assert.NotNull(host.Services.GetRequiredService<ISmsCapture>());
         Assert.Equal(3, WorkerHost.Handlers(settings).Length);
         await host.StopAsync();

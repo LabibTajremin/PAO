@@ -120,19 +120,32 @@ public sealed class NotificationApiTests(MigratedDatabase database) : IClassFixt
         await Assert.ThrowsAsync<EventDeliveryException>(() => Deliver("booking.BookingRequested", new { bookingId = world.BrokenBooking, providerId = world.Provider }));
     }
 
+    // The full admin.ComplaintResolved contract: Audit records every delivery too.
+    private static object Complaint(Guid reporterId, string reporterRole, string ticketNumber) => new
+    {
+        complaintId = Guid.NewGuid(),
+        ticketNumber,
+        bookingId = Guid.NewGuid(),
+        reporterId,
+        reporterRole,
+        againstId = Guid.NewGuid(),
+        verified = false,
+        actorId = (Guid?)null,
+    };
+
     [Fact]
     public async Task Providers_hear_about_verification_and_reporters_about_complaints()
     {
         var events = new (string Name, object Payload)[]
         {
-            ("verification.ProviderLevelChanged", new { providerId = world.Provider, from = 0, to = 1 }),
-            ("verification.DocumentRejected", new { providerId = world.Provider, item = "selfie", reason = "Blurred" }),
+            ("verification.ProviderLevelChanged", new { providerId = world.Provider, from = 0, to = 1, reason = "documents approved" }),
+            ("verification.DocumentRejected", new { providerId = world.Provider, item = "selfie", reason = "Blurred", actorId = (Guid?)null }),
             ("verification.DocumentExpired", new { providerId = world.Provider, item = "police_clearance" }),
             ("verification.DocumentExpiring", new { providerId = world.Provider, item = "unknown_item", daysLeft = 7 }),
-            ("verification.Level2SessionScheduled", new { providerId = world.Provider, scheduledAt = "2026-10-12T10:00:00Z", location = "Gulshan" }),
-            ("verification.DocumentRejected", new { providerId = world.BanglaProvider, item = "selfie", reason = "x" }),
-            ("admin.ComplaintResolved", new { reporterId = world.Customer, reporterRole = "customer", ticketNumber = "T-1" }),
-            ("admin.ComplaintResolved", new { reporterId = world.Provider, reporterRole = "provider", ticketNumber = "T-2" }),
+            ("verification.Level2SessionScheduled", new { providerId = world.Provider, sessionId = Guid.NewGuid(), scheduledAt = "2026-10-12T10:00:00Z", location = "Gulshan" }),
+            ("verification.DocumentRejected", new { providerId = world.BanglaProvider, item = "selfie", reason = "x", actorId = (Guid?)null }),
+            ("admin.ComplaintResolved", Complaint(world.Customer, "customer", "T-1")),
+            ("admin.ComplaintResolved", Complaint(world.Provider, "provider", "T-2")),
         };
         foreach (var (name, payload) in events)
         {
@@ -146,7 +159,7 @@ public sealed class NotificationApiTests(MigratedDatabase database) : IClassFixt
         var bangla = await Inbox("provider", api.Token(world.BanglaProvider, "provider"));
         Assert.Equal("আপনার সেলফি অনুমোদিত হয়নি: x", bangla.GetProperty("items")[0].GetProperty("body").GetString());
         Assert.Equal("আপনার অভিযোগ T-1-এর সমাধান হয়েছে।", (await Inbox("customer", customer)).GetProperty("items")[0].GetProperty("body").GetString());
-        await Assert.ThrowsAsync<EventDeliveryException>(() => Deliver("admin.ComplaintResolved", new { reporterId = world.Customer, reporterRole = "admin" }));
+        await Assert.ThrowsAsync<EventDeliveryException>(() => Deliver("admin.ComplaintResolved", Complaint(world.Customer, "admin", "T-3")));
     }
 
     [Fact]
