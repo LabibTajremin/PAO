@@ -49,14 +49,23 @@ ci_e2e() {
   dotnet test --project Test/PAO.E2ETests --no-build
 }
 
+# Stages run as separate statements, never chained with && or ||: bash ignores set -e
+# inside any function called from such a list, which once let failing tests exit 0.
+run() {
+  local stage
+  for stage in "$@"; do
+    "ci_$stage"
+  done
+}
+
 case "${1:-all}" in
-  build) ci_build ;;
-  format) ci_format ;;
-  spec) ci_spec ;;
-  gates) ci_build && ci_gates ;;
-  test) ci_build && ci_test ;;
-  e2e) ci_build && ci_e2e ;;
-  all) ci_build && ci_format && ci_spec && ci_gates && ci_test && ci_e2e ;;
+  build) run build ;;
+  format) run format ;;
+  spec) run spec ;;
+  gates) run build gates ;;
+  test) run build test ;;
+  e2e) run build e2e ;;
+  all) run build format spec gates test e2e ;;
   *)
     echo "usage: ci.sh [build|format|spec|gates|test|e2e|all]" >&2
     exit 2
