@@ -3,6 +3,8 @@
 One entry per controller and its operations, with the authorisation attribute that matches
 each operation's `x-permission` (see [authorisation](../../Architecture/authorization.md)).
 
-No controllers yet: until the area is ported, its operations in `api/openapi.yaml` are
-answered by the catch-all `UnimplementedController` with 501 NOT_IMPLEMENTED after the full
-edge checks ([API index](../../Api/README.md)).
+| Controller | Operation | Route | Attribute |
+|---|---|---|---|
+| `AuditController` | listAuditEntries | `GET /v1/admin/audit` | `[Admin(Permission = "audit:read")]` |
+
+Empty actor role, reason and before/after states are left out of each entry.

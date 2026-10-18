@@ -1,12 +1,19 @@
+using PAO.Core.Areas.Audit.Services;
+using PAO.Core.Areas.Audit.Services.Shared;
+using PAO.Infrastructure.Events;
+
 namespace PAO.Core.Registration;
 
 /// <summary>The Audit area's handlers, validators, services and shared contract.</summary>
 public static class AuditAreaRegistration
 {
     /// <summary>
-    /// Adds the Audit area. Handlers, validators and mapping profiles are found by the mediator's
-    /// assembly scan; the area's services and its `IAuditSharedService` implementation are
-    /// registered here once its use cases are ported (P17 tasks 2–5).
+    /// Adds the Audit area's log, its event subscriptions (used by the worker) and its
+    /// `IAuditSharedService`. Handlers, validators and mapping profiles are found by the
+    /// mediator's assembly scan; the repository comes from `AddRepositories`.
     /// </summary>
-    public static IServiceCollection AddAuditArea(this IServiceCollection services) => services;
+    public static IServiceCollection AddAuditArea(this IServiceCollection services) => services
+        .AddScoped<AuditLog>()
+        .AddSingleton<IEventSubscriptions, AuditSubscriptions>()
+        .AddScoped<IAuditSharedService, AuditSharedService>();
 }

@@ -16,4 +16,15 @@ Schema `identity`, created by the scripts in `DB Changes/identity/` ([database i
 | `identity.outbox` | `DB Changes/identity/0001_init.sql` |
 | `identity.processed_events` | `DB Changes/identity/0001_init.sql` |
 
-Repositories: none yet; each repository gets an entry here when it is ported.
+EF models: `PAO.EF/Identity/` (`Account`, `AccountRole`, `AdminCredentials`, `BlockedPhone`
+and the RBAC tables).
+
+| Repository | Store |
+|---|---|
+| `IIdentityRepository` | The contract: reads, writes and `Publish` to `identity.outbox`. |
+| `IdentityRepository` | Reads with EF projections (roles in the same query, grants in one query per table). |
+| `IdentityRepository.Writes` | Writes as SQL joining the command's transaction; TOTP secrets encrypted with the data key. |
+| `RedisCodeStores` | `RedisCodeStore` (`otp:{purpose}:{phone}` hash) and `RedisSendThrottle` (`rl:otp:resend|phone|ip:*`). |
+| `RedisSessionStores` | `RedisSessionStore` (`rt:{familyId}` hash, `sess:{accountId}` set) and `RedisChallengeStore` (`mfa:{id}` JSON). |
+
+Redis layouts are the NestJS and Go ones, so sessions survive the cut-over.
