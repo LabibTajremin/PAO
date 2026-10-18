@@ -12,7 +12,6 @@ using PAO.Lib.Mediator;
 namespace PAO.Core.Areas.Identity.Controllers;
 
 /// <summary>Admin users (A-10).</summary>
-[ApiController]
 [Area("Identity")]
 [Route("v1/admin/admin-users")]
 [ErrorMap(typeof(IdentityErrorMap))]
@@ -26,18 +25,20 @@ public sealed class AdminUsersController(IMediator mediator) : ControllerBase
     /// <summary>inviteAdminUser.</summary>
     [HttpPost]
     [Admin(Permission = "admin_user:manage")]
-    public async Task<IActionResult> Invite([FromBody] AdminUserInviteBody body) =>
-        StatusCode(201, await mediator.Send(new InviteAdminUserCommand(body.Email, body.Name, body.Roles)));
+    public async Task<IActionResult> Invite() =>
+        StatusCode(201, await mediator.Send(new InviteAdminUserCommand(Body<AdminUserInviteBody>().Email, Body<AdminUserInviteBody>().Name, Body<AdminUserInviteBody>().Roles)));
 
     /// <summary>updateAdminUser: changes roles or deactivates, revoking sessions.</summary>
     [HttpPatch("{adminUserId}")]
     [Admin(Permission = "admin_user:manage")]
-    public Task<AdminUserView> Update(Guid adminUserId, [FromBody] AdminUserUpdateBody body) =>
-        mediator.Send(new UpdateAdminUserCommand(adminUserId, body.Roles, body.Active));
+    public Task<AdminUserView> Update(Guid adminUserId) =>
+        mediator.Send(new UpdateAdminUserCommand(adminUserId, Body<AdminUserUpdateBody>().Roles, Body<AdminUserUpdateBody>().Active));
+
+    private T Body<T>()
+        where T : class, new() => RequestBody.Read<T>(HttpContext);
 }
 
 /// <summary>The role editor (A-10).</summary>
-[ApiController]
 [Area("Identity")]
 [Route("v1/admin/roles")]
 [ErrorMap(typeof(IdentityErrorMap))]
@@ -51,6 +52,9 @@ public sealed class RolesController(IMediator mediator) : ControllerBase
     /// <summary>updateRole: replaces the grants and bumps the RBAC version.</summary>
     [HttpPut("{role}")]
     [Admin(Permission = "role:manage")]
-    public Task<RoleDefinitionView> Update(string role, [FromBody] RoleUpdateBody body) =>
-        mediator.Send(new UpdateRoleCommand(role, body.Permissions, body.Screens));
+    public Task<RoleDefinitionView> Update(string role) =>
+        mediator.Send(new UpdateRoleCommand(role, Body<RoleUpdateBody>().Permissions, Body<RoleUpdateBody>().Screens));
+
+    private T Body<T>()
+        where T : class, new() => RequestBody.Read<T>(HttpContext);
 }

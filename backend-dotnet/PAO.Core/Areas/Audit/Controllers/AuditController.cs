@@ -7,7 +7,6 @@ using PAO.Lib.Mediator;
 namespace PAO.Core.Areas.Audit.Controllers;
 
 /// <summary>The audit log viewer (A-08).</summary>
-[ApiController]
 [Area("Audit")]
 [Route("v1/admin/audit")]
 public sealed class AuditController(IMediator mediator) : ControllerBase

@@ -2,7 +2,9 @@
 
 One entry per controller and its operations, with the authorisation attribute that matches
 each operation's `x-permission` (see [authorisation](../../Architecture/authorization.md)).
-Every controller maps the area's reasons with `IdentityErrorMap`.
+Every controller maps the area's reasons with `IdentityErrorMap` and reads its body through
+`RequestBody`: the body the edge parsed and the spec validated. MVC's own body binding would
+answer 415 to a request without a body before authorisation, where NestJS answered 401/403.
 
 | Controller | Operation | Route | Attribute |
 |---|---|---|---|
