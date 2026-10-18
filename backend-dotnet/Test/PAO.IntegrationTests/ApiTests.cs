@@ -56,11 +56,12 @@ public sealed class ApiTests(MigratedDatabase database) : IClassFixture<Migrated
     [Fact]
     public async Task Unserved_operations_answer_501_after_validation()
     {
-        var invalid = await client.SendAsync(Hosts.Request(HttpMethod.Post, "/v1/auth/otp/request", body: new { }));
+        var customer = Hosts.Token(app.Services, ["customer"]);
+        var invalid = await client.SendAsync(Hosts.Request(HttpMethod.Put, "/v1/customer/profile", customer, new { }));
         Assert.Equal(HttpStatusCode.UnprocessableEntity, invalid.StatusCode);
         var reason = JsonDocument.Parse(await invalid.Content.ReadAsStringAsync()).RootElement.GetProperty("error").GetProperty("details").GetProperty("reason").GetString();
-        Assert.Equal("body must have required property 'phone'", reason);
-        var valid = await client.SendAsync(Hosts.Request(HttpMethod.Post, "/v1/auth/otp/request", body: new { phone = "01712345678" }));
+        Assert.Equal("body must have required property 'name'", reason);
+        var valid = await client.SendAsync(Hosts.Request(HttpMethod.Get, "/v1/customer/profile", customer));
         Assert.Equal(HttpStatusCode.NotImplemented, valid.StatusCode);
         Assert.Equal("NOT_IMPLEMENTED", await Hosts.ErrorCode(valid));
     }
@@ -75,14 +76,14 @@ public sealed class ApiTests(MigratedDatabase database) : IClassFixture<Migrated
         Assert.Equal(HttpStatusCode.Forbidden, forbidden.StatusCode);
         Assert.Contains("audit:read", await forbidden.Content.ReadAsStringAsync(), StringComparison.Ordinal);
         var admin = Hosts.Token(app.Services, ["super_admin"]);
-        Assert.Equal(HttpStatusCode.NotImplemented, (await client.SendAsync(Hosts.Request(HttpMethod.Get, "/v1/admin/audit", admin))).StatusCode);
-        Assert.Equal(HttpStatusCode.NotImplemented, (await client.SendAsync(Hosts.Request(HttpMethod.Get, "/v1/me/permissions", customer))).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await client.SendAsync(Hosts.Request(HttpMethod.Get, "/v1/admin/audit", admin))).StatusCode);
+        Assert.Equal(HttpStatusCode.NotImplemented, (await client.SendAsync(Hosts.Request(HttpMethod.Get, "/v1/customer/profile", customer))).StatusCode);
         var claims = app.Services.GetRequiredService<TokenVerifier>().Verify(admin);
         await app.Services.GetRequiredService<Denylist>().Deny(claims.TokenId, TimeSpan.FromMinutes(1));
         Assert.Equal("UNAUTHENTICATED", await Hosts.ErrorCode(await client.SendAsync(Hosts.Request(HttpMethod.Get, "/v1/admin/audit", admin))));
         var ring = app.Services.GetRequiredService<JwtKeyRing>();
         var expired = new TokenSigner(ring.Signing, new FakeClock(DateTimeOffset.UtcNow.AddHours(-1)), new SequenceIds()).Sign(new TokenRequest(Guid.NewGuid().ToString(), ["customer"])).Token;
-        Assert.Equal("TOKEN_EXPIRED", await Hosts.ErrorCode(await client.SendAsync(Hosts.Request(HttpMethod.Get, "/v1/me/permissions", expired))));
+        Assert.Equal("TOKEN_EXPIRED", await Hosts.ErrorCode(await client.SendAsync(Hosts.Request(HttpMethod.Get, "/v1/customer/profile", expired))));
     }
 
     [Fact]
