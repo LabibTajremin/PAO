@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using Microsoft.Extensions.DependencyInjection;
 using PAO.Lib.Mediator;
+using PAO.Lib.Validation;
 
 namespace PAO.Infrastructure.Mediation;
 
@@ -12,6 +13,11 @@ namespace PAO.Infrastructure.Mediation;
 public sealed class Mediator(IServiceProvider services) : IMediator
 {
     private static readonly ConcurrentDictionary<Type, object> Dispatchers = new();
+
+    // FluentValidation fixes a rule's property name when the validator is built, from the
+    // global resolvers. Validators are resolved after the mediator, so configuring them here
+    // keeps 422 field names in JSON case however the container was assembled.
+    static Mediator() => ValidationSetup.Configure();
 
     /// <inheritdoc />
     public Task<TResult> Send<TResult>(IRequest<TResult> request, CancellationToken cancellationToken = default)
