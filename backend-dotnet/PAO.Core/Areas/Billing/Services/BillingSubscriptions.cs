@@ -15,8 +15,15 @@ public sealed class BillingSubscriptions(IServiceScopeFactory scopes) : IEventSu
     /// <inheritdoc />
     public void Subscribe(EventBus bus) => bus.Subscribe(BookingEvents.BookingCompleted, "billing", async (envelope, cancellationToken) =>
     {
+        var job = Completed(envelope);
+        // Without a merchant there is no ledger to debit, and retrying cannot add one, so the
+        // event is dropped rather than blocking the outbox.
+        if (job.MerchantId == Guid.Empty)
+        {
+            return;
+        }
         await using var scope = scopes.CreateAsyncScope();
-        await scope.ServiceProvider.GetRequiredService<IBillingSharedService>().RecordCommission(Completed(envelope), cancellationToken);
+        await scope.ServiceProvider.GetRequiredService<IBillingSharedService>().RecordCommission(job, cancellationToken);
     });
 
     /// <summary>Reads a `booking.BookingCompleted` event; a number that does not parse is left out.</summary>
