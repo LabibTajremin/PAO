@@ -30,12 +30,11 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P17 / task 5 — Billing (ADR-0035) in `backend-dotnet/` (see
-`docs/build/phases/P17-dotnet-backend.md`). Tasks 1–4 are done: every one of the 121 spec
-operations is served (gates green, 100% line coverage, 453 unit / 113 integration tests).
-Billing seams already exist: `BookingPeers.EnsureCanAccept` throws `billing.due_limit` once an
-`IBillingSharedService` is registered (map it to `409 MERCHANT_DUE_LIMIT`), and
-`booking.BookingCompleted` carries `providerId` and `totalPaisa` for the commission.
+P17 / task 6 — app screens for ADR-0035 (see `docs/build/phases/P17-dotnet-backend.md`).
+Tasks 1–5 are done: all 129 spec operations are served by .NET, Billing included (gates
+green, 100% line coverage, 468 unit / 115 integration tests). The Dart client is regenerated
+with `ProviderBillingApi`, `AdminBillingApi` and `paymentMethod: cash_on_delivery`. NestJS
+answers the billing routes with 501 until the cut-over (task 8).
 Read `backend-dotnet/PAO.AI/README.md`,
 `Docs/Architecture/http-edge.md` and `cqrs.md` first. Run the full `./pao dotnet ci` in the
 background (about 20 minutes on this machine) and run one heavy agent at a time: two
