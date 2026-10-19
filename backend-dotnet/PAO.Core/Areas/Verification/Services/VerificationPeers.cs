@@ -23,7 +23,9 @@ public sealed record VerificationSettings(TimeSpan PoliceClearanceValidity, Time
 /// </summary>
 public sealed class VerificationPeers(IServiceProvider services)
 {
-    private IMerchantSharedService Merchants => services.GetRequiredService<IMerchantSharedService>();
+    // A host without the Merchant area (it is ported in parallel) knows no merchant.
+    private IMerchantSharedService Merchants =>
+        services.GetService<IMerchantSharedService>() ?? throw new DomainException(VerificationReasons.NotFound);
 
     private IMediaSharedService Media => services.GetRequiredService<IMediaSharedService>();
 
