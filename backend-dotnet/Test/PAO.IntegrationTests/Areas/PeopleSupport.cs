@@ -8,6 +8,7 @@ using PAO.Core.Areas.Merchant.Services;
 using PAO.Core.Areas.Rating.Services.Shared;
 using PAO.Infrastructure.Data;
 using PAO.Infrastructure.Events;
+using PAO.Infrastructure.Storage;
 using PAO.Infrastructure.Testing;
 using PAO.Lib.Areas.Admin;
 using PAO.Lib.Areas.Identity;
@@ -79,6 +80,13 @@ public sealed class PeopleApi : IAsyncDisposable
         if (seed)
         {
             Assert.Equal(0, await SeedCommand.Run(Hosts.Paths, Hosts.Environment(databaseUrl), new StringWriter()));
+        }
+        // A fresh object store (as in CI) has no buckets until a host starts, so the uploads need them here.
+        var storage = TestSettings.Create().Storage;
+        using (var store = new ObjectStore(storage))
+        {
+            await store.EnsureBucket(storage.BucketPrivate, CancellationToken.None);
+            await store.EnsureBucket(storage.BucketPublic, CancellationToken.None);
         }
         var clock = new FakeClock(DateTimeOffset.UtcNow);
         var api = await AreaApi.Start(databaseUrl, services =>
