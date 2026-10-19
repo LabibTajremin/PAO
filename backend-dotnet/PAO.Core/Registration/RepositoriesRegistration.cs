@@ -6,9 +6,9 @@ using PAO.Core.Areas.Customer.Repositories;
 using PAO.Core.Areas.Identity.Repositories;
 using PAO.Core.Areas.Identity.Services;
 using PAO.Core.Areas.Media.Repositories;
-using PAO.Core.Areas.Rating.Repositories;
 using PAO.Core.Areas.Merchant.Repositories;
 using PAO.Core.Areas.Notification.Repositories;
+using PAO.Core.Areas.Rating.Repositories;
 using PAO.Core.Areas.Verification.Repositories;
 
 namespace PAO.Core.Registration;

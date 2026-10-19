@@ -74,7 +74,11 @@ public sealed class CommentOnComplaintHandler(ComplaintRepository repository, IC
         await repository.Get(request.ComplaintId, cancellationToken);
         await repository.AddComment(new ComplaintCommentRecord
         {
-            Id = ids.NewId(), ComplaintId = request.ComplaintId, AuthorId = request.AuthorId, Body = request.Body, At = clock.Now,
+            Id = ids.NewId(),
+            ComplaintId = request.ComplaintId,
+            AuthorId = request.AuthorId,
+            Body = request.Body,
+            At = clock.Now,
         }, cancellationToken);
         return mapper.Map<Complaint, ComplaintView>(await repository.Get(request.ComplaintId, cancellationToken));
     }

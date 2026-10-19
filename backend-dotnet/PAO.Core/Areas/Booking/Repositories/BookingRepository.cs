@@ -133,27 +133,63 @@ public sealed class BookingRepository(PaoDbContext db, BookingQueries queries, O
     {
         db.AddRange(b.Proposals.Where(p => !stored.Contains(p.Id)).Select(p => new ExtrasProposalRecord
         {
-            Id = p.Id, BookingId = b.Id, Status = p.Status, AddedPaisa = p.AddedPaisa, ProposedAt = p.ProposedAt, DecidedAt = p.DecidedAt,
+            Id = p.Id,
+            BookingId = b.Id,
+            Status = p.Status,
+            AddedPaisa = p.AddedPaisa,
+            ProposedAt = p.ProposedAt,
+            DecidedAt = p.DecidedAt,
         }));
         var lines = b.Lines.Concat(b.Proposals.SelectMany(p => p.Lines)).DistinctBy(l => l.Id).Where(l => !stored.Contains(l.Id));
         db.AddRange(lines.Select(l => new BookingItemRecord
         {
-            Id = l.Id, BookingId = b.Id, ProposalId = l.ProposalId, SubServiceId = l.SubServiceId, PriceVersionId = l.PriceVersionId,
-            NameEn = l.Name.En, NameBn = l.Name.Bn, Unit = l.Unit, Quantity = l.Quantity, UnitPricePaisa = l.UnitPaisa,
-            TotalPaisa = l.TotalPaisa, Extra = l.Extra, Position = l.Position,
+            Id = l.Id,
+            BookingId = b.Id,
+            ProposalId = l.ProposalId,
+            SubServiceId = l.SubServiceId,
+            PriceVersionId = l.PriceVersionId,
+            NameEn = l.Name.En,
+            NameBn = l.Name.Bn,
+            Unit = l.Unit,
+            Quantity = l.Quantity,
+            UnitPricePaisa = l.UnitPaisa,
+            TotalPaisa = l.TotalPaisa,
+            Extra = l.Extra,
+            Position = l.Position,
         }));
         db.AddRange(b.NewEvents.Select(e => new TimelineRecord { Id = e.Id, BookingId = b.Id, Status = e.Status, Actor = e.Actor, Reason = e.Reason, At = e.At }));
     }
 
     private static BookingRecord NewRecord(StoredBooking b) => new()
     {
-        Id = b.Id, CustomerId = b.Customer.Id, ProviderId = b.Provider.Id, ServiceId = b.ServiceId,
-        ServiceNameEn = b.ServiceName.En, ServiceNameBn = b.ServiceName.Bn, ServiceModel = b.ServiceModel,
-        CustomerName = b.Customer.Name, CustomerPhone = b.Customer.Phone, ProviderName = b.Provider.Name, ProviderPhone = b.Provider.Phone,
-        AddressId = b.Address.Id, AddressArea = b.Address.Area, AddressLine1 = b.Address.Line1, AddressLine2 = b.Address.Line2,
+        Id = b.Id,
+        CustomerId = b.Customer.Id,
+        ProviderId = b.Provider.Id,
+        ServiceId = b.ServiceId,
+        ServiceNameEn = b.ServiceName.En,
+        ServiceNameBn = b.ServiceName.Bn,
+        ServiceModel = b.ServiceModel,
+        CustomerName = b.Customer.Name,
+        CustomerPhone = b.Customer.Phone,
+        ProviderName = b.Provider.Name,
+        ProviderPhone = b.Provider.Phone,
+        AddressId = b.Address.Id,
+        AddressArea = b.Address.Area,
+        AddressLine1 = b.Address.Line1,
+        AddressLine2 = b.Address.Line2,
         AddressLocation = new Point(b.Address.Location.Lng, b.Address.Location.Lat) { SRID = 4326 },
-        Note = b.Note, Status = b.Status, Timing = b.Scheduled ? "scheduled" : "asap", ScheduledAt = b.ScheduledAt, EndsAt = b.EndsAt,
-        AcceptDeadline = b.AcceptDeadline, TotalPaisa = b.TotalPaisa, StartCode = b.StartCode, IdempotencyKey = b.IdempotencyKey,
-        CancelReason = string.Empty, RejectReason = string.Empty, CreatedAt = b.CreatedAt, UpdatedAt = b.CreatedAt,
+        Note = b.Note,
+        Status = b.Status,
+        Timing = b.Scheduled ? "scheduled" : "asap",
+        ScheduledAt = b.ScheduledAt,
+        EndsAt = b.EndsAt,
+        AcceptDeadline = b.AcceptDeadline,
+        TotalPaisa = b.TotalPaisa,
+        StartCode = b.StartCode,
+        IdempotencyKey = b.IdempotencyKey,
+        CancelReason = string.Empty,
+        RejectReason = string.Empty,
+        CreatedAt = b.CreatedAt,
+        UpdatedAt = b.CreatedAt,
     };
 }

@@ -51,6 +51,11 @@ public sealed class BookingSupportTests : IAsyncLifetime
         Assert.Equal(BookingErrors.NotFound, missing.Reason);
         Assert.Single(await w.Contract<IBookingSharedService, IReadOnlyList<BookingSummary>>(s => s.ListRecentBookings(w.Provider.Id, 5, CancellationToken.None)));
         await w.AsCustomer(HttpMethod.Post, $"/v1/customer/bookings/{id}/cancel", new { reason = "other", note = "not needed" });
+        await PagesEarnings(w);
+    }
+
+    private async Task PagesEarnings(BookingWorld w)
+    {
         foreach (var key in new[] { "earn-1", "earn-2" })
         {
             await w.Completed(key);

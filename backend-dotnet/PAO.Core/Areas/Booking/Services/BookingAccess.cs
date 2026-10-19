@@ -42,14 +42,14 @@ public sealed class BookingAccess(BookingRepository repository, BookingQueries q
     /// <summary>Fills the fields every booking event carries (who it concerns and when).</summary>
     public T Event<T>(T e, StoredBooking b)
         where T : BookingEvent => e with
-    {
-        BookingId = b.Id,
-        Number = b.DisplayNumber,
-        CustomerId = b.Customer.Id,
-        ProviderId = b.Provider.Id,
-        ServiceId = b.ServiceId,
-        At = IsoTime.Format(clock.Now),
-    };
+        {
+            BookingId = b.Id,
+            Number = b.DisplayNumber,
+            CustomerId = b.Customer.Id,
+            ProviderId = b.Provider.Id,
+            ServiceId = b.ServiceId,
+            At = IsoTime.Format(clock.Now),
+        };
 
     /// <summary>A booking the party takes part in, on `side`.</summary>
     public async Task<StoredBooking> Owned(Guid id, Guid party, Side side, CancellationToken cancellationToken)

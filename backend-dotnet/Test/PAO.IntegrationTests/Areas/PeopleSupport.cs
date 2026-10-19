@@ -1,19 +1,19 @@
 using System.Net;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.EntityFrameworkCore;
 using PAO.Core.Areas.Admin.Features.Settings.Commands;
-using PAO.EF;
-using PAO.Infrastructure.Redis;
-using PAO.Lib.Mediator;
 using PAO.Core.Areas.Customer.Services;
 using PAO.Core.Areas.Merchant.Services;
+using PAO.EF;
 using PAO.Infrastructure.Data;
 using PAO.Infrastructure.Events;
+using PAO.Infrastructure.Redis;
 using PAO.Infrastructure.Storage;
 using PAO.Infrastructure.Testing;
 using PAO.Lib.Areas.Identity;
+using PAO.Lib.Mediator;
 using PAO.Migrator;
 using PAO.TestKit;
 

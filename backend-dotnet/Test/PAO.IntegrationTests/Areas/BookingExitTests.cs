@@ -118,6 +118,10 @@ public sealed class BookingExitTests : IAsyncLifetime
         Assert.Equal("EXTRAS_PENDING", Code(await w.Job(second, "extras", extras)));
         await Assert.ThrowsAsync<DomainException>(() => w.Send(new ProposeExtras(w.Provider.Id, second, new ExtrasInput())));
         await Assert.ThrowsAsync<DomainException>(() => w.Send(new CreateBooking(w.Customer.Id, string.Empty, new BookingCreateInput())));
+        var direct = new BookingCreateInput { ProviderId = w.Provider.Id, ServiceId = Electrician, AddressId = w.AddressId, Timing = "asap", Items = [new BookingItemInput { SubServiceId = Fan, Quantity = 1 }] };
+        var made = await w.Send(new CreateBooking(w.Customer.Id, "direct-key-1", direct));
+        Assert.Equal(made.Id, (await w.Send(new CreateBooking(w.Customer.Id, "direct-key-1", direct))).Id);
+        await w.Send(new CancelBooking(Side.Customer, w.Customer.Id, made.Id, new ReasonInput { Reason = "other" }));
         await Assert.ThrowsAnyAsync<Exception>(() => w.Send(new AdvanceJob(w.Provider.Id, second, BookingStatus.Completed)));
         await Assert.ThrowsAnyAsync<Exception>(() => w.Send(new CancelBooking(Side.Any, w.Customer.Id, second, new ReasonInput { Reason = "other" })));
         var when = api.Clock.Now.AddHours(2).ToString("O");

@@ -97,19 +97,10 @@ public sealed class VerificationPeers(IServiceProvider services)
     public Task<IReadOnlyList<CatalogService>> Services(CancellationToken cancellationToken) =>
         services.GetRequiredService<ICatalogSharedService>().ListServices(cancellationToken);
 
-    /// <summary>The defaults of `verification.police_clearance_validity_days`, `verification.level2_cooling_off_days` and `documents.retention_days`.</summary>
-    public static readonly VerificationSettings Defaults = new(TimeSpan.FromDays(365), TimeSpan.FromDays(14), TimeSpan.FromDays(365));
-
     /// <summary>The verification rules from the platform settings (A-10).</summary>
     public async Task<VerificationSettings> Settings(CancellationToken cancellationToken)
     {
-        // Until the Admin area is ported (P17), hosts without it use the defaults the admin
-        // settings table starts with: 365, 14 and 365 days.
-        if (services.GetService<IAdminSharedService>() is not { } admin)
-        {
-            return Defaults;
-        }
-        var s = await admin.GetSettings(cancellationToken);
+        var s = await services.GetRequiredService<IAdminSharedService>().GetSettings(cancellationToken);
         return new VerificationSettings(
             TimeSpan.FromMilliseconds(s.PoliceClearanceValidityMs), TimeSpan.FromMilliseconds(s.Level2CoolingOffMs), TimeSpan.FromMilliseconds(s.DocumentRetentionMs));
     }

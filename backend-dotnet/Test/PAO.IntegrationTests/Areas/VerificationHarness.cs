@@ -73,7 +73,7 @@ public abstract class VerificationHarness(MigratedDatabase database) : IAsyncLif
 
     protected Task StepSaved(Guid id, string step) => Deliver(MerchantEvents.EnrolmentStepSaved, new { providerId = id, step });
 
-    protected Task AccountStatus(Guid id, string to) => Deliver(IdentityEvents.AccountStatusChanged, new { accountId = id, to });
+    protected Task AccountStatus(Guid id, string to) => Deliver(IdentityEvents.AccountStatusChanged, new { accountId = id, to, roles = new[] { "provider" } });
 
     protected async Task<T> Sql<T>(Func<PaoDbContext, Task<T>> query)
     {

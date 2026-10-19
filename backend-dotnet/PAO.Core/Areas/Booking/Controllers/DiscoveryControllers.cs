@@ -48,7 +48,14 @@ public sealed class NearbyController(IMediator mediator) : ControllerBase
         [FromQuery] double? lat, [FromQuery] double? lng, [FromQuery] string? sort, [FromQuery] int? limit) =>
         mediator.Send(new FindNearbyProviders(HttpContext.Caller().AccountId, new NearbyInput
         {
-            ServiceId = serviceId, SubServiceId = subServiceId, Quantity = quantity, AddressId = addressId, Lat = lat, Lng = lng, Sort = sort, Limit = limit,
+            ServiceId = serviceId,
+            SubServiceId = subServiceId,
+            Quantity = quantity,
+            AddressId = addressId,
+            Lat = lat,
+            Lng = lng,
+            Sort = sort,
+            Limit = limit,
         }), HttpContext.RequestAborted);
 }
 
@@ -67,7 +74,13 @@ public sealed class AdminBookingsController(IMediator mediator) : ControllerBase
         [FromQuery] string? area, [FromQuery] string? cursor, [FromQuery] int? limit) =>
         mediator.Send(new MonitorBookings(new MonitorInput
         {
-            Status = status, ServiceId = serviceId, From = from, To = to, Area = area, Cursor = cursor, Limit = limit,
+            Status = status,
+            ServiceId = serviceId,
+            From = from,
+            To = to,
+            Area = area,
+            Cursor = cursor,
+            Limit = limit,
         }), HttpContext.RequestAborted);
 
     /// <summary>getAdminBooking.</summary>

@@ -38,8 +38,18 @@ public sealed class RatingRepository(PaoDbContext db, OutboxWriter outbox, IMapp
     {
         db.Add(new ReviewRecord
         {
-            Id = r.Id, BookingId = r.BookingId, AuthorId = r.AuthorId, AuthorRole = r.AuthorRole, AuthorName = r.AuthorName, SubjectId = r.SubjectId,
-            Stars = r.Stars, Tags = [.. r.Tags], Comment = r.Comment, ServiceNameEn = r.ServiceName.En, ServiceNameBn = r.ServiceName.Bn, CreatedAt = r.CreatedAt,
+            Id = r.Id,
+            BookingId = r.BookingId,
+            AuthorId = r.AuthorId,
+            AuthorRole = r.AuthorRole,
+            AuthorName = r.AuthorName,
+            SubjectId = r.SubjectId,
+            Stars = r.Stars,
+            Tags = [.. r.Tags],
+            Comment = r.Comment,
+            ServiceNameEn = r.ServiceName.En,
+            ServiceNameBn = r.ServiceName.Bn,
+            CreatedAt = r.CreatedAt,
         });
         try
         {
@@ -53,6 +63,13 @@ public sealed class RatingRepository(PaoDbContext db, OutboxWriter outbox, IMapp
         {
             db.ChangeTracker.Clear();
         }
+        var aggregate = await AddToAggregate(r, cancellationToken);
+        await outbox.Write(db, Schemas.Rating, r.SubjectId.ToString(), domainEvent(aggregate), cancellationToken);
+        return aggregate;
+    }
+
+    private async Task<Aggregate> AddToAggregate(Review r, CancellationToken cancellationToken)
+    {
         var role = ReviewRole.SubjectOf(r.AuthorRole);
         var row = (await db.Set<RatingAggregateRecord>().FromSql($"""
             INSERT INTO rating.aggregates (subject_id, subject_role, review_count, star_sum, stars_1, stars_2, stars_3, stars_4, stars_5)
@@ -63,9 +80,7 @@ public sealed class RatingRepository(PaoDbContext db, OutboxWriter outbox, IMapp
                 stars_4 = rating.aggregates.stars_4 + excluded.stars_4, stars_5 = rating.aggregates.stars_5 + excluded.stars_5
             RETURNING *
             """).AsNoTracking().ToListAsync(cancellationToken))[0];
-        var aggregate = mapper.Map<RatingAggregateRecord, Aggregate>(row);
-        await outbox.Write(db, Schemas.Rating, r.SubjectId.ToString(), domainEvent(aggregate), cancellationToken);
-        return aggregate;
+        return mapper.Map<RatingAggregateRecord, Aggregate>(row);
     }
 
     /// <summary>Aggregates of the subjects of a role among `ids`; unrated subjects are missing.</summary>

@@ -33,7 +33,12 @@ public sealed class UpdateSettingHandler(SettingsRepository repository, SettingV
         }
         var updated = new SettingRecord
         {
-            Key = current.Key, Value = request.Value, Type = current.Type, Description = current.Description, UpdatedAt = clock.Now, UpdatedBy = request.ActorId,
+            Key = current.Key,
+            Value = request.Value,
+            Type = current.Type,
+            Description = current.Description,
+            UpdatedAt = clock.Now,
+            UpdatedBy = request.ActorId,
         };
         await repository.Update(updated, new SettingChanged { Key = request.Key, Before = current.Value, After = request.Value, ActorId = request.ActorId }, cancellationToken);
         await values.Invalidate();

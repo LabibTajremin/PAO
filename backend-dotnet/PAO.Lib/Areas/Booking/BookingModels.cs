@@ -37,12 +37,6 @@ public static class BookingReasons
     /// <summary>The `"booking.profile_required"` value.</summary>
     public const string ProfileRequired = "booking.profile_required";
 
-    /// <summary>Every reason, for the error-map test.</summary>
-    public static readonly IReadOnlyList<string> All =
-    [
-        NotFound, Invalid, InvalidTransition, DeadlinePassed, ActiveJob, CodeWrong, CodeLocked, CashNotConfirmed,
-        ExtrasPending, NoProposal, NotBookable, DuplicateRequest, CancelNotAllowed, OutsideArea, ProfileRequired,
-    ];
 }
 
 /// <summary>Who moves a booking.</summary>

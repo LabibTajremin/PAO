@@ -75,10 +75,6 @@ public sealed class ComplaintRepository(PaoDbContext db, OutboxWriter outbox)
     public Task<int> CountAgainst(Guid againstId, CancellationToken cancellationToken) =>
         db.Set<ComplaintRecord>().CountAsync(c => c.AgainstId == againstId, cancellationToken);
 
-    /// <summary>Unresolved complaints.</summary>
-    public Task<int> CountOpen(CancellationToken cancellationToken) =>
-        db.Set<ComplaintRecord>().CountAsync(c => c.Status != "resolved", cancellationToken);
-
     /// <summary>The newest complaints a person reported or received.</summary>
     public async Task<IReadOnlyList<Complaint>> Involving(Guid id, int limit, CancellationToken cancellationToken)
     {

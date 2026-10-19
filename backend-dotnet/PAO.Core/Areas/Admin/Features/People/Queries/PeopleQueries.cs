@@ -46,7 +46,13 @@ public sealed class ListAdminProvidersHandler(AdminPeers peers, AdminConsole con
         var (at, id) = ComplaintSteps.After(q.Cursor);
         var rows = await peers.Merchants.SearchMerchants(new MerchantQuery
         {
-            Text = q.Text ?? string.Empty, Status = q.Status ?? string.Empty, Level = q.Level, Flagged = q.Flagged, AfterAt = at, AfterId = id, Limit = size + 1,
+            Text = q.Text ?? string.Empty,
+            Status = q.Status ?? string.Empty,
+            Level = q.Level,
+            Flagged = q.Flagged,
+            AfterAt = at,
+            AfterId = id,
+            Limit = size + 1,
         }, cancellationToken);
         var page = ComplaintSteps.Page(rows, size, r => (r.CreatedAt, r.Id), shown => shown);
         return new PageView<AdminProviderSummaryView> { Items = await console.ProviderRows(page.Items, cancellationToken), NextCursor = page.NextCursor };
@@ -64,7 +70,11 @@ public sealed class ListAdminCustomersHandler(AdminPeers peers, IMapper mapper) 
         var (at, id) = ComplaintSteps.After(q.Cursor);
         var rows = await peers.Customers.SearchCustomers(new CustomerQuery
         {
-            Text = q.Text ?? string.Empty, Status = q.Status ?? string.Empty, AfterAt = at, AfterId = id, Limit = size + 1,
+            Text = q.Text ?? string.Empty,
+            Status = q.Status ?? string.Empty,
+            AfterAt = at,
+            AfterId = id,
+            Limit = size + 1,
         }, cancellationToken);
         return ComplaintSteps.Page(rows, size, r => (r.CreatedAt, r.Id), mapper.MapAll<CustomerRecord, AdminCustomerSummaryView>);
     }

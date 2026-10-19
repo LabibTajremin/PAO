@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Net;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PAO.BackgroundJobs;
 using PAO.Core.Areas.Verification.Services.Shared;
@@ -117,6 +118,8 @@ public sealed class VerificationLifecycleTests(MigratedDatabase database) : Veri
         var r = await Put("nid", Api.Token(other, "provider"), nid);
         Assert.Equal((HttpStatusCode.Forbidden, "NID_BLOCKED"), (r.Status, Code(r)));
         await AccountStatus(Guid.NewGuid(), "banned");
+        // The other tests of this class enrol with the same NID.
+        await Sql(db => db.Database.ExecuteSqlRawAsync("DELETE FROM verification.blocked_nids"));
     }
 
     [Fact]

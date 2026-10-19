@@ -47,9 +47,18 @@ public sealed class ReportProblemHandler(ComplaintRepository repository, AdminPe
         var now = clock.Now;
         var row = new ComplaintRecord
         {
-            Id = ids.NewId(), BookingId = request.BookingId, ReporterId = request.ReporterId, ReporterRole = request.ReporterRole, AgainstId = other,
-            Reason = request.Input.Reason, Description = request.Input.Description, PhotoMediaIds = [.. photos], Status = "open", Resolution = string.Empty,
-            CreatedAt = now, UpdatedAt = now,
+            Id = ids.NewId(),
+            BookingId = request.BookingId,
+            ReporterId = request.ReporterId,
+            ReporterRole = request.ReporterRole,
+            AgainstId = other,
+            Reason = request.Input.Reason,
+            Description = request.Input.Description,
+            PhotoMediaIds = [.. photos],
+            Status = "open",
+            Resolution = string.Empty,
+            CreatedAt = now,
+            UpdatedAt = now,
         };
         var stored = await repository.Create(row, c => new ComplaintCreated
         {

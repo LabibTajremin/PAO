@@ -15,12 +15,17 @@ public sealed record MerchantWithServices(MerchantRecord Record, IReadOnlyList<S
 public sealed class AdminMappingProfile : IMappingProfile
 {
     /// <inheritdoc />
-    public void Configure(MappingRegistry registry) => People(Complaints(registry));
+    public void Configure(MappingRegistry registry) => Customers(People(Complaints(registry)));
 
     private static MappingRegistry Complaints(MappingRegistry registry) => registry
         .Add<SettingRecord, SettingView>((s, _) => new SettingView
         {
-            Key = s.Key, Value = s.Value, Type = s.Type, Description = s.Description, UpdatedAt = IsoTime.Format(s.UpdatedAt), UpdatedBy = s.UpdatedBy,
+            Key = s.Key,
+            Value = s.Value,
+            Type = s.Type,
+            Description = s.Description,
+            UpdatedAt = IsoTime.Format(s.UpdatedAt),
+            UpdatedBy = s.UpdatedBy,
         })
         .Add<Complaint, ComplaintView>((c, _) => new ComplaintView
         {
@@ -45,7 +50,12 @@ public sealed class AdminMappingProfile : IMappingProfile
     private static MappingRegistry People(MappingRegistry registry) => registry
         .Add<BookingSummary, RecentBookingView>((b, _) => new RecentBookingView
         {
-            Id = b.Id, Number = b.Number, Status = b.Status, ServiceName = b.ServiceName, Total = b.TotalPaisa, CreatedAt = IsoTime.Format(b.CreatedAt),
+            Id = b.Id,
+            Number = b.Number,
+            Status = b.Status,
+            ServiceName = b.ServiceName,
+            Total = b.TotalPaisa,
+            CreatedAt = IsoTime.Format(b.CreatedAt),
         })
         .Add<VerificationItem, VerificationItemView>((it, _) => new VerificationItemView
         {
@@ -69,9 +79,16 @@ public sealed class AdminMappingProfile : IMappingProfile
             FlaggedForReview = m.Record.Flagged,
             Online = m.Record.Online,
             CreatedAt = IsoTime.Format(m.Record.CreatedAt),
-        })
+        });
+
+    private static MappingRegistry Customers(MappingRegistry registry) => registry
         .Add<CustomerRecord, AdminCustomerSummaryView>((c, _) => new AdminCustomerSummaryView
         {
-            Id = c.Id, Name = c.Name, Phone = c.Phone, Status = c.Status, Bookings = c.Bookings, CreatedAt = IsoTime.Format(c.CreatedAt),
+            Id = c.Id,
+            Name = c.Name,
+            Phone = c.Phone,
+            Status = c.Status,
+            Bookings = c.Bookings,
+            CreatedAt = IsoTime.Format(c.CreatedAt),
         });
 }
