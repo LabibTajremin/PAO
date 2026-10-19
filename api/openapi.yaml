@@ -49,6 +49,10 @@ tags:
   description: Complaints queue.
 - name: Admin settings
   description: Settings, audit log, admin users and roles.
+- name: Provider billing
+  description: Merchant dues, ledger and payment submissions (ADR-0035).
+- name: Admin billing
+  description: Merchant payment review and ledgers (ADR-0035).
 security:
 - bearerAuth: []
 paths:
@@ -202,6 +206,12 @@ paths:
     $ref: ./paths/provider-earnings.yaml#/earnings
   /v1/provider/earnings/jobs:
     $ref: ./paths/provider-earnings.yaml#/earningsJobs
+  /v1/provider/billing/summary:
+    $ref: ./paths/provider-billing.yaml#/summary
+  /v1/provider/billing/ledger:
+    $ref: ./paths/provider-billing.yaml#/ledger
+  /v1/provider/billing/payments:
+    $ref: ./paths/provider-billing.yaml#/payments
   /v1/admin/dashboard:
     $ref: ./paths/admin-ops.yaml#/dashboard
   /v1/admin/catalog:
@@ -276,6 +286,14 @@ paths:
     $ref: ./paths/admin-settings.yaml#/roles
   /v1/admin/roles/{role}:
     $ref: ./paths/admin-settings.yaml#/role
+  /v1/admin/billing/payments:
+    $ref: ./paths/admin-billing.yaml#/payments
+  /v1/admin/billing/payments/{submissionId}/confirm:
+    $ref: ./paths/admin-billing.yaml#/paymentConfirm
+  /v1/admin/billing/payments/{submissionId}/reject:
+    $ref: ./paths/admin-billing.yaml#/paymentReject
+  /v1/admin/billing/merchants/{providerId}/ledger:
+    $ref: ./paths/admin-billing.yaml#/merchantLedger
 components:
   securitySchemes:
     bearerAuth:
@@ -345,6 +363,8 @@ components:
       $ref: ./components/parameters.yaml#/JobTab
     PeriodParam:
       $ref: ./components/parameters.yaml#/PeriodParam
+    SubmissionId:
+      $ref: ./components/parameters.yaml#/SubmissionId
   responses:
     Unauthenticated:
       $ref: ./components/responses.yaml#/Unauthenticated
@@ -671,3 +691,23 @@ components:
       $ref: ./schemas/admin.yaml#/AdminCustomerList
     AdminCustomerDetail:
       $ref: ./schemas/admin.yaml#/AdminCustomerDetail
+    PaymentMethodKind:
+      $ref: ./schemas/billing.yaml#/PaymentMethodKind
+    PaymentSubmissionStatus:
+      $ref: ./schemas/billing.yaml#/PaymentSubmissionStatus
+    DueSummary:
+      $ref: ./schemas/billing.yaml#/DueSummary
+    LedgerEntry:
+      $ref: ./schemas/billing.yaml#/LedgerEntry
+    LedgerEntryList:
+      $ref: ./schemas/billing.yaml#/LedgerEntryList
+    PaymentSubmissionInput:
+      $ref: ./schemas/billing.yaml#/PaymentSubmissionInput
+    PaymentSubmission:
+      $ref: ./schemas/billing.yaml#/PaymentSubmission
+    PaymentSubmissionList:
+      $ref: ./schemas/billing.yaml#/PaymentSubmissionList
+    PaymentRejectInput:
+      $ref: ./schemas/billing.yaml#/PaymentRejectInput
+    MerchantLedger:
+      $ref: ./schemas/billing.yaml#/MerchantLedger

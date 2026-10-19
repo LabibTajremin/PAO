@@ -1285,6 +1285,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/provider/billing/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** My due against the block limit (ADR-0035 §3) */
+        get: operations["getMyDue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/provider/billing/ledger": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** My ledger, newest first */
+        get: operations["listMyLedger"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/provider/billing/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** My payment submissions, newest first */
+        get: operations["listMyPayments"];
+        put?: never;
+        /** Report a payment of my due for admin review (ADR-0035 §4) */
+        post: operations["submitPayment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/admin/dashboard": {
         parameters: {
             query?: never;
@@ -1917,6 +1969,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/admin/billing/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Payment submissions queue, newest first */
+        get: operations["listPaymentSubmissions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/billing/payments/{submissionId}/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Confirm a payment; credits the merchant's ledger */
+        post: operations["confirmPayment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/billing/payments/{submissionId}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reject a payment with a reason */
+        post: operations["rejectPayment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/billing/merchants/{providerId}/ledger": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A merchant's due and ledger */
+        get: operations["getMerchantLedger"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1946,7 +2066,7 @@ export interface components {
          * @description Stable error codes the apps translate (04-decisions.md E11).
          * @enum {string}
          */
-        ErrorCode: "VALIDATION_FAILED" | "UNAUTHENTICATED" | "TOKEN_EXPIRED" | "FORBIDDEN" | "NOT_FOUND" | "CONFLICT" | "RATE_LIMITED" | "INTERNAL" | "NOT_IMPLEMENTED" | "OTP_INVALID" | "OTP_EXPIRED" | "OTP_LOCKED" | "ACCOUNT_BANNED" | "ACCOUNT_SUSPENDED" | "INVALID_CREDENTIALS" | "ACCOUNT_LOCKED" | "TOTP_INVALID" | "MFA_CHALLENGE_EXPIRED" | "REFRESH_TOKEN_INVALID" | "IDEMPOTENCY_KEY_REQUIRED" | "IDEMPOTENCY_KEY_REUSED" | "ADDRESS_LIMIT_REACHED" | "OUTSIDE_SERVICE_AREA" | "SERVICE_UNAVAILABLE" | "PROVIDER_UNAVAILABLE" | "DUPLICATE_BOOKING_REQUEST" | "BOOKING_INVALID_TRANSITION" | "BOOKING_ALREADY_RESPONDED" | "ACTIVE_JOB_EXISTS" | "START_CODE_INVALID" | "START_CODE_LOCKED" | "CANCELLATION_NOT_ALLOWED" | "EXTRA_ITEM_INVALID" | "EXTRAS_PENDING" | "CASH_CONFIRMATION_REQUIRED" | "REVIEW_NOT_ALLOWED" | "REVIEW_ALREADY_SUBMITTED" | "UPLOAD_INVALID" | "UPLOAD_NOT_FOUND" | "ENROLMENT_INCOMPLETE" | "NOT_VERIFIED" | "AGE_REQUIREMENT" | "LEVEL2_COOLING_OFF" | "COMPLAINT_INVALID_TRANSITION" | "SETTING_INVALID" | "ROLE_INVALID" | "PROFILE_NOT_FOUND" | "PROFILE_REQUIRED" | "EMERGENCY_CONTACT_MISSING" | "SERVICE_AREA_MISSING" | "OFFLINE" | "ITEM_NOT_PENDING" | "CLEARANCE_TOO_OLD" | "NID_BLOCKED" | "LEVEL2_NOT_ELIGIBLE" | "SESSION_CLOSED" | "ACCEPT_DEADLINE_PASSED" | "NO_PENDING_EXTRAS";
+        ErrorCode: "VALIDATION_FAILED" | "UNAUTHENTICATED" | "TOKEN_EXPIRED" | "FORBIDDEN" | "NOT_FOUND" | "CONFLICT" | "RATE_LIMITED" | "INTERNAL" | "NOT_IMPLEMENTED" | "OTP_INVALID" | "OTP_EXPIRED" | "OTP_LOCKED" | "ACCOUNT_BANNED" | "ACCOUNT_SUSPENDED" | "INVALID_CREDENTIALS" | "ACCOUNT_LOCKED" | "TOTP_INVALID" | "MFA_CHALLENGE_EXPIRED" | "REFRESH_TOKEN_INVALID" | "IDEMPOTENCY_KEY_REQUIRED" | "IDEMPOTENCY_KEY_REUSED" | "ADDRESS_LIMIT_REACHED" | "OUTSIDE_SERVICE_AREA" | "SERVICE_UNAVAILABLE" | "PROVIDER_UNAVAILABLE" | "DUPLICATE_BOOKING_REQUEST" | "BOOKING_INVALID_TRANSITION" | "BOOKING_ALREADY_RESPONDED" | "ACTIVE_JOB_EXISTS" | "START_CODE_INVALID" | "START_CODE_LOCKED" | "CANCELLATION_NOT_ALLOWED" | "EXTRA_ITEM_INVALID" | "EXTRAS_PENDING" | "CASH_CONFIRMATION_REQUIRED" | "REVIEW_NOT_ALLOWED" | "REVIEW_ALREADY_SUBMITTED" | "UPLOAD_INVALID" | "UPLOAD_NOT_FOUND" | "ENROLMENT_INCOMPLETE" | "NOT_VERIFIED" | "AGE_REQUIREMENT" | "LEVEL2_COOLING_OFF" | "COMPLAINT_INVALID_TRANSITION" | "SETTING_INVALID" | "ROLE_INVALID" | "PROFILE_NOT_FOUND" | "PROFILE_REQUIRED" | "EMERGENCY_CONTACT_MISSING" | "SERVICE_AREA_MISSING" | "OFFLINE" | "ITEM_NOT_PENDING" | "CLEARANCE_TOO_OLD" | "NID_BLOCKED" | "LEVEL2_NOT_ELIGIBLE" | "SESSION_CLOSED" | "ACCEPT_DEADLINE_PASSED" | "NO_PENDING_EXTRAS" | "MERCHANT_DUE_LIMIT" | "PAYMENT_NOT_PENDING";
         /**
          * Format: int64
          * @description Amount in paisa (1 BDT = 100 paisa). Never a float (04-decisions.md E9).
@@ -2823,8 +2943,11 @@ export interface components {
             acceptDeadline?: string;
             pendingExtras?: components["schemas"]["ExtrasProposal"];
             cancellable?: boolean;
-            /** @enum {string} */
-            paymentMethod: "cash";
+            /**
+             * @description Cash on delivery is the only method in the first release (ADR-0035); cash is its legacy name.
+             * @enum {string}
+             */
+            paymentMethod: "cash" | "cash_on_delivery";
             cashReceived?: boolean;
             reviewedByMe?: boolean;
             /** Format: date-time */
@@ -2895,8 +3018,11 @@ export interface components {
             area?: string;
             items: components["schemas"]["BookingItem"][];
             total: components["schemas"]["Money"];
-            /** @enum {string} */
-            paymentMethod: "cash";
+            /**
+             * @description Cash on delivery is the only method in the first release (ADR-0035); cash is its legacy name.
+             * @enum {string}
+             */
+            paymentMethod: "cash" | "cash_on_delivery";
         };
         /**
          * @example week
@@ -3294,6 +3420,85 @@ export interface components {
             complaints: components["schemas"]["Complaint"][];
             statusHistory: components["schemas"]["AuditEntry"][];
         };
+        /**
+         * @description How the merchant paid PAO.
+         * @enum {string}
+         */
+        PaymentMethodKind: "cash_to_agent" | "bkash" | "nagad" | "bank";
+        /** @enum {string} */
+        PaymentSubmissionStatus: "pending" | "confirmed" | "rejected";
+        /**
+         * @description The merchant's due (ADR-0035 §3): commission debits minus confirmed payment credits,
+         *     never below zero. Accepting a job is refused while `due` is above `blockAmount`.
+         */
+        DueSummary: {
+            due: components["schemas"]["Money"];
+            blockAmount: components["schemas"]["Money"];
+            blocked: boolean;
+            /** @example 1000 */
+            commissionRateBp: number;
+            pendingPayments: components["schemas"]["Money"];
+        };
+        LedgerEntry: {
+            /** Format: uuid */
+            id: string;
+            /**
+             * @description A commission is a debit; a confirmed payment is a credit.
+             * @enum {string}
+             */
+            kind: "commission" | "payment";
+            amount: components["schemas"]["Money"];
+            /** Format: uuid */
+            bookingId?: string;
+            /** @example PAO-104233 */
+            bookingNumber?: string;
+            jobTotal?: components["schemas"]["Money"];
+            /** Format: uuid */
+            submissionId?: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        LedgerEntryList: {
+            items: components["schemas"]["LedgerEntry"][];
+            nextCursor?: components["schemas"]["PageCursor"];
+        };
+        PaymentSubmissionInput: {
+            /** Format: int64 */
+            amountPaisa: number;
+            method: components["schemas"]["PaymentMethodKind"];
+            /** @description Transaction id, receipt number or agent name. */
+            reference: string;
+        };
+        PaymentSubmission: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            providerId: string;
+            amount: components["schemas"]["Money"];
+            method: components["schemas"]["PaymentMethodKind"];
+            reference: string;
+            status: components["schemas"]["PaymentSubmissionStatus"];
+            /** Format: uuid */
+            reviewerId?: string;
+            reason?: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            reviewedAt?: string;
+        };
+        PaymentSubmissionList: {
+            items: components["schemas"]["PaymentSubmission"][];
+            nextCursor?: components["schemas"]["PageCursor"];
+        };
+        PaymentRejectInput: {
+            reason: string;
+        };
+        MerchantLedger: {
+            /** Format: uuid */
+            providerId: string;
+            summary: components["schemas"]["DueSummary"];
+            entries: components["schemas"]["LedgerEntryList"];
+        };
     };
     responses: {
         /** @description Missing, invalid or expired access token (UNAUTHENTICATED, TOKEN_EXPIRED) or a failed credential check. */
@@ -3439,6 +3644,7 @@ export interface components {
         BookingTab: "upcoming" | "past";
         JobTab: "requests" | "upcoming" | "past";
         PeriodParam: "day" | "week" | "month";
+        SubmissionId: string;
     };
     requestBodies: never;
     headers: never;
@@ -5646,6 +5852,111 @@ export interface operations {
             422: components["responses"]["ValidationFailed"];
         };
     };
+    getMyDue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DueSummary"];
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    listMyLedger: {
+        parameters: {
+            query?: {
+                /** @description Cursor from the previous page's `nextCursor`. */
+                cursor?: components["parameters"]["Cursor"];
+                /** @description Page size (default 20, max 100). */
+                limit?: components["parameters"]["Limit"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LedgerEntryList"];
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["Forbidden"];
+            422: components["responses"]["ValidationFailed"];
+        };
+    };
+    listMyPayments: {
+        parameters: {
+            query?: {
+                /** @description Cursor from the previous page's `nextCursor`. */
+                cursor?: components["parameters"]["Cursor"];
+                /** @description Page size (default 20, max 100). */
+                limit?: components["parameters"]["Limit"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentSubmissionList"];
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["Forbidden"];
+            422: components["responses"]["ValidationFailed"];
+        };
+    };
+    submitPayment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PaymentSubmissionInput"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentSubmission"];
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["Forbidden"];
+            422: components["responses"]["ValidationFailed"];
+        };
+    };
     getDashboard: {
         parameters: {
             query?: never;
@@ -6798,6 +7109,124 @@ export interface operations {
             401: components["responses"]["Unauthenticated"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["NotFound"];
+            422: components["responses"]["ValidationFailed"];
+        };
+    };
+    listPaymentSubmissions: {
+        parameters: {
+            query?: {
+                /** @description Submission status. */
+                status?: components["schemas"]["PaymentSubmissionStatus"];
+                /** @description Cursor from the previous page's `nextCursor`. */
+                cursor?: components["parameters"]["Cursor"];
+                /** @description Page size (default 20, max 100). */
+                limit?: components["parameters"]["Limit"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentSubmissionList"];
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["Forbidden"];
+            422: components["responses"]["ValidationFailed"];
+        };
+    };
+    confirmPayment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                submissionId: components["parameters"]["SubmissionId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentSubmission"];
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+            409: components["responses"]["Conflict"];
+            422: components["responses"]["ValidationFailed"];
+        };
+    };
+    rejectPayment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                submissionId: components["parameters"]["SubmissionId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PaymentRejectInput"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentSubmission"];
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
+            409: components["responses"]["Conflict"];
+            422: components["responses"]["ValidationFailed"];
+        };
+    };
+    getMerchantLedger: {
+        parameters: {
+            query?: {
+                /** @description Cursor from the previous page's `nextCursor`. */
+                cursor?: components["parameters"]["Cursor"];
+                /** @description Page size (default 20, max 100). */
+                limit?: components["parameters"]["Limit"];
+            };
+            header?: never;
+            path: {
+                providerId: components["parameters"]["ProviderId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MerchantLedger"];
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["Forbidden"];
             422: components["responses"]["ValidationFailed"];
         };
     };

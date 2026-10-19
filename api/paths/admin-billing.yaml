@@ -1,0 +1,112 @@
+# Merchant payment review (ADR-0035 §4): the admin console's payment queue.
+payments:
+  get:
+    operationId: listPaymentSubmissions
+    tags:
+    - Admin billing
+    summary: Payment submissions queue, newest first
+    x-permission: billing:manage
+    parameters:
+    - name: status
+      in: query
+      description: Submission status.
+      required: false
+      schema:
+        $ref: ../schemas/billing.yaml#/PaymentSubmissionStatus
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/billing.yaml#/PaymentSubmissionList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+paymentConfirm:
+  post:
+    operationId: confirmPayment
+    tags:
+    - Admin billing
+    summary: Confirm a payment; credits the merchant's ledger
+    x-permission: billing:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubmissionId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/billing.yaml#/PaymentSubmission
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+paymentReject:
+  post:
+    operationId: rejectPayment
+    tags:
+    - Admin billing
+    summary: Reject a payment with a reason
+    x-permission: billing:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubmissionId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/billing.yaml#/PaymentRejectInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/billing.yaml#/PaymentSubmission
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+merchantLedger:
+  get:
+    operationId: getMerchantLedger
+    tags:
+    - Admin billing
+    summary: A merchant's due and ledger
+    x-permission: billing:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/ProviderId
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/billing.yaml#/MerchantLedger
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

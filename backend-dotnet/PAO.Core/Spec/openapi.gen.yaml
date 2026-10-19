@@ -49,6 +49,10 @@ tags:
     description: Complaints queue.
   - name: Admin settings
     description: Settings, audit log, admin users and roles.
+  - name: Provider billing
+    description: Merchant dues, ledger and payment submissions (ADR-0035).
+  - name: Admin billing
+    description: Merchant payment review and ledgers (ADR-0035).
 paths:
   /v1/auth/otp/request:
     post:
@@ -2149,6 +2153,95 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/billing/summary:
+    get:
+      operationId: getMyDue
+      tags:
+        - Provider billing
+      summary: My due against the block limit (ADR-0035 §3)
+      x-permission: provider:manage:own
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DueSummary'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/provider/billing/ledger:
+    get:
+      operationId: listMyLedger
+      tags:
+        - Provider billing
+      summary: My ledger, newest first
+      x-permission: provider:manage:own
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LedgerEntryList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/billing/payments:
+    get:
+      operationId: listMyPayments
+      tags:
+        - Provider billing
+      summary: My payment submissions, newest first
+      x-permission: provider:manage:own
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentSubmissionList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+    post:
+      operationId: submitPayment
+      tags:
+        - Provider billing
+      summary: Report a payment of my due for admin review (ADR-0035 §4)
+      x-permission: provider:manage:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentSubmissionInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentSubmission'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
   /v1/admin/dashboard:
     get:
       operationId: getDashboard
@@ -3371,6 +3464,117 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/billing/payments:
+    get:
+      operationId: listPaymentSubmissions
+      tags:
+        - Admin billing
+      summary: Payment submissions queue, newest first
+      x-permission: billing:manage
+      parameters:
+        - name: status
+          in: query
+          description: Submission status.
+          required: false
+          schema:
+            $ref: '#/components/schemas/PaymentSubmissionStatus'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentSubmissionList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/billing/payments/{submissionId}/confirm:
+    post:
+      operationId: confirmPayment
+      tags:
+        - Admin billing
+      summary: Confirm a payment; credits the merchant's ledger
+      x-permission: billing:manage
+      parameters:
+        - $ref: '#/components/parameters/SubmissionId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentSubmission'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/billing/payments/{submissionId}/reject:
+    post:
+      operationId: rejectPayment
+      tags:
+        - Admin billing
+      summary: Reject a payment with a reason
+      x-permission: billing:manage
+      parameters:
+        - $ref: '#/components/parameters/SubmissionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRejectInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentSubmission'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/billing/merchants/{providerId}/ledger:
+    get:
+      operationId: getMerchantLedger
+      tags:
+        - Admin billing
+      summary: A merchant's due and ledger
+      x-permission: billing:manage
+      parameters:
+        - $ref: '#/components/parameters/ProviderId'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MerchantLedger'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
 components:
   securitySchemes:
     bearerAuth:
@@ -3617,6 +3821,13 @@ components:
           - day
           - week
           - month
+    SubmissionId:
+      name: submissionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
   responses:
     Unauthenticated:
       description: Missing, invalid or expired access token (UNAUTHENTICATED, TOKEN_EXPIRED) or a failed credential check.
@@ -3775,6 +3986,8 @@ components:
         - SESSION_CLOSED
         - ACCEPT_DEADLINE_PASSED
         - NO_PENDING_EXTRAS
+        - MERCHANT_DUE_LIMIT
+        - PAYMENT_NOT_PENDING
     Money:
       type: integer
       format: int64
@@ -5534,6 +5747,8 @@ components:
           type: string
           enum:
             - cash
+            - cash_on_delivery
+          description: Cash on delivery is the only method in the first release (ADR-0035); cash is its legacy name.
         cashReceived:
           type: boolean
         reviewedByMe:
@@ -5714,6 +5929,8 @@ components:
           type: string
           enum:
             - cash
+            - cash_on_delivery
+          description: Cash on delivery is the only method in the first release (ADR-0035); cash is its legacy name.
     EarningsPeriod:
       type: string
       enum:
@@ -6616,3 +6833,175 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AuditEntry'
+    PaymentMethodKind:
+      type: string
+      description: How the merchant paid PAO.
+      enum:
+        - cash_to_agent
+        - bkash
+        - nagad
+        - bank
+    PaymentSubmissionStatus:
+      type: string
+      enum:
+        - pending
+        - confirmed
+        - rejected
+    DueSummary:
+      type: object
+      description: |
+        The merchant's due (ADR-0035 §3): commission debits minus confirmed payment credits,
+        never below zero. Accepting a job is refused while `due` is above `blockAmount`.
+      required:
+        - due
+        - blockAmount
+        - blocked
+        - commissionRateBp
+        - pendingPayments
+      properties:
+        due:
+          $ref: '#/components/schemas/Money'
+        blockAmount:
+          $ref: '#/components/schemas/Money'
+        blocked:
+          type: boolean
+        commissionRateBp:
+          type: integer
+          minimum: 0
+          maximum: 10000
+          example: 1000
+        pendingPayments:
+          $ref: '#/components/schemas/Money'
+    LedgerEntry:
+      type: object
+      required:
+        - id
+        - kind
+        - amount
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        kind:
+          type: string
+          enum:
+            - commission
+            - payment
+          description: A commission is a debit; a confirmed payment is a credit.
+        amount:
+          $ref: '#/components/schemas/Money'
+        bookingId:
+          type: string
+          format: uuid
+        bookingNumber:
+          type: string
+          example: PAO-104233
+        jobTotal:
+          $ref: '#/components/schemas/Money'
+        submissionId:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+    LedgerEntryList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LedgerEntry'
+        nextCursor:
+          $ref: '#/components/schemas/PageCursor'
+    PaymentSubmissionInput:
+      type: object
+      required:
+        - amountPaisa
+        - method
+        - reference
+      properties:
+        amountPaisa:
+          type: integer
+          format: int64
+          minimum: 1
+          maximum: 100000000
+        method:
+          $ref: '#/components/schemas/PaymentMethodKind'
+        reference:
+          type: string
+          minLength: 1
+          maxLength: 120
+          description: Transaction id, receipt number or agent name.
+    PaymentSubmission:
+      type: object
+      required:
+        - id
+        - providerId
+        - amount
+        - method
+        - reference
+        - status
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        providerId:
+          type: string
+          format: uuid
+        amount:
+          $ref: '#/components/schemas/Money'
+        method:
+          $ref: '#/components/schemas/PaymentMethodKind'
+        reference:
+          type: string
+        status:
+          $ref: '#/components/schemas/PaymentSubmissionStatus'
+        reviewerId:
+          type: string
+          format: uuid
+        reason:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        reviewedAt:
+          type: string
+          format: date-time
+    PaymentSubmissionList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentSubmission'
+        nextCursor:
+          $ref: '#/components/schemas/PageCursor'
+    PaymentRejectInput:
+      type: object
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          minLength: 3
+          maxLength: 500
+    MerchantLedger:
+      type: object
+      required:
+        - providerId
+        - summary
+        - entries
+      properties:
+        providerId:
+          type: string
+          format: uuid
+        summary:
+          $ref: '#/components/schemas/DueSummary'
+        entries:
+          $ref: '#/components/schemas/LedgerEntryList'

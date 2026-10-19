@@ -60,3 +60,4 @@ PeriodParam:
   in: query
   required: true
   schema: { type: string, enum: [day, week, month] }
+SubmissionId: { name: submissionId, in: path, required: true, schema: { type: string, format: uuid } }

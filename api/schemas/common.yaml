@@ -85,6 +85,8 @@ ErrorCode:
     - SESSION_CLOSED
     - ACCEPT_DEADLINE_PASSED
     - NO_PENDING_EXTRAS
+    - MERCHANT_DUE_LIMIT
+    - PAYMENT_NOT_PENDING
 Money:
   type: integer
   format: int64

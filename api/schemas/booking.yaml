@@ -98,7 +98,7 @@ Booking:
     acceptDeadline: { type: string, format: date-time }
     pendingExtras: { $ref: "#/ExtrasProposal" }
     cancellable: { type: boolean }
-    paymentMethod: { type: string, enum: [cash] }
+    paymentMethod: { type: string, enum: [cash, cash_on_delivery], description: "Cash on delivery is the only method in the first release (ADR-0035); cash is its legacy name." }
     cashReceived: { type: boolean }
     reviewedByMe: { type: boolean }
     createdAt: { type: string, format: date-time }
@@ -174,7 +174,7 @@ Receipt:
     area: { type: string }
     items: { type: array, items: { $ref: "#/BookingItem" } }
     total: { $ref: "./common.yaml#/Money" }
-    paymentMethod: { type: string, enum: [cash] }
+    paymentMethod: { type: string, enum: [cash, cash_on_delivery], description: "Cash on delivery is the only method in the first release (ADR-0035); cash is its legacy name." }
 EarningsPeriod:
   type: string
   enum: [day, week, month]
