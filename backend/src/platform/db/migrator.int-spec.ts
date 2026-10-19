@@ -39,7 +39,7 @@ describe('Migrator over the real migrations', () => {
     const { rows } = await db.query<{ version_id: string }>(
       'SELECT version_id FROM goose_identity ORDER BY id',
     );
-    expect(rows.map((r) => r.version_id)).toEqual(['0', '1', '2']);
+    expect(rows.map((r) => r.version_id)).toEqual(['0', '1', '2', '3']);
     await m.down();
     expect(await schemaCount(db, modules)).toBe(0);
     await m.up();
