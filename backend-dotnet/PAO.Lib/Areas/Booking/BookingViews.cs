@@ -125,8 +125,8 @@ public sealed record BookingView
     public ExtrasProposalView? PendingExtras { get; init; }
     /// <summary>Whether the caller may still cancel.</summary>
     public required bool Cancellable { get; init; }
-    /// <summary>Always `cash`.</summary>
-    public string PaymentMethod { get; init; } = "cash";
+    /// <summary>`cash_on_delivery`, the only method of the first release (ADR-0035 §1).</summary>
+    public required string PaymentMethod { get; init; }
     /// <summary>Whether the cash was confirmed.</summary>
     public required bool CashReceived { get; init; }
     /// <summary>When requested.</summary>
@@ -159,8 +159,8 @@ public sealed record ReceiptView
     public required IReadOnlyList<BookingItemView> Items { get; init; }
     /// <summary>The bill.</summary>
     public required long Total { get; init; }
-    /// <summary>Always `cash`.</summary>
-    public string PaymentMethod { get; init; } = "cash";
+    /// <summary>`cash_on_delivery`, the only method of the first release (ADR-0035 §1).</summary>
+    public required string PaymentMethod { get; init; }
 }
 
 /// <summary>The spec's `BookingSummary` as a list row.</summary>

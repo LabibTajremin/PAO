@@ -43,6 +43,8 @@ public sealed class StoredBooking
     public DateTimeOffset? CodeLockedUntil { get; set; }
     /// <summary>Whether the provider confirmed the cash.</summary>
     public bool CashReceived { get; set; }
+    /// <summary>How the customer pays (ADR-0035 §1).</summary>
+    public string PaymentMethod { get; init; } = "cash_on_delivery";
     /// <summary>The creating request's key.</summary>
     public required string IdempotencyKey { get; init; }
     /// <summary>Why it was cancelled.</summary>

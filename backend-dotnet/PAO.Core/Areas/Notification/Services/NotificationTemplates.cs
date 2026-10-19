@@ -28,6 +28,11 @@ public static partial class NotificationTemplates
         ["document_expired"] = (new("Document expired", "Your {{item}} has expired. Renew it to receive bookings again."), new("নথির মেয়াদ শেষ", "আপনার {{item}}-এর মেয়াদ শেষ। আবার বুকিং পেতে নবায়ন করুন।")),
         ["document_expiring"] = (new("Document expiring soon", "Your {{item}} expires in {{days}} days."), new("নথির মেয়াদ শেষ হতে চলেছে", "আপনার {{item}}-এর মেয়াদ {{days}} দিনের মধ্যে শেষ হবে।")),
         ["level2_scheduled"] = (new("Skill check scheduled", "Your Level 2 session is at {{location}} on {{when}}."), new("দক্ষতা যাচাই নির্ধারিত", "আপনার লেভেল ২ সেশন {{when}} তারিখে {{location}}-এ।")),
+        ["commission_charged"] = (new("Commission added", "PAO commission of ৳{{amount}} was added. Your due is ৳{{due}}."), new("কমিশন যোগ হয়েছে", "৳{{amount}} পাও কমিশন যোগ হয়েছে। আপনার বকেয়া ৳{{due}}।")),
+        ["due_limit_reached"] = (new("Pay your due to take jobs", "Your due is ৳{{due}}, above the limit. Pay it from Billing to accept new jobs."), new("কাজ নিতে বকেয়া পরিশোধ করুন", "আপনার বকেয়া ৳{{due}}, সীমার বেশি। নতুন কাজ নিতে বিলিং থেকে পরিশোধ করুন।")),
+        ["payment_submitted"] = (new("Payment received for review", "We received your payment of ৳{{amount}} and will check it soon."), new("পেমেন্ট যাচাইয়ের জন্য গৃহীত", "আপনার ৳{{amount}} পেমেন্ট পেয়েছি, শীঘ্রই যাচাই করা হবে।")),
+        ["payment_confirmed"] = (new("Payment confirmed", "Your payment of ৳{{amount}} was confirmed. Your due is ৳{{due}}."), new("পেমেন্ট নিশ্চিত", "আপনার ৳{{amount}} পেমেন্ট নিশ্চিত হয়েছে। আপনার বকেয়া ৳{{due}}।")),
+        ["payment_rejected"] = (new("Payment not accepted", "Your payment of ৳{{amount}} was not accepted: {{reason}}"), new("পেমেন্ট গৃহীত হয়নি", "আপনার ৳{{amount}} পেমেন্ট গৃহীত হয়নি: {{reason}}")),
         ["complaint_resolved"] = (new("Report resolved", "Your report {{ticket}} has been resolved."), new("অভিযোগের সমাধান", "আপনার অভিযোগ {{ticket}}-এর সমাধান হয়েছে।")),
     };
 

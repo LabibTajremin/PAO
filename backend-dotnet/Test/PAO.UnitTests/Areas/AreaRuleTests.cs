@@ -92,7 +92,7 @@ public sealed class CatalogRuleTests
     public void The_seed_file_reads_prices_as_paisa_and_refuses_malformed_yaml()
     {
         var (categories, admins) = SeedFile.Parse(File.ReadAllText(SeedCommand.CatalogFile(PAO.Infrastructure.Hosting.PaoPaths.Resolve(AppContext.BaseDirectory, null))));
-        Assert.Equal(5, categories.Count);
+        Assert.Equal(7, categories.Count);
         Assert.Equal(50_000, categories[0].Services[0].SubServices[0].PricePaisa);
         Assert.True(categories[3].Services[0].WomenProvidersOnly);
         Assert.Equal(4, admins.Count);

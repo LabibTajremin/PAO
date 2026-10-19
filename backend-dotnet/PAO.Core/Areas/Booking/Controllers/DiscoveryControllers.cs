@@ -4,6 +4,7 @@ using PAO.Core.Areas.Booking.Features.Earnings.Queries;
 using PAO.Core.Areas.Booking.Features.Monitor.Queries;
 using PAO.Infrastructure.Http.Authorization;
 using PAO.Infrastructure.Http.Errors;
+using PAO.Lib.Areas.Billing;
 using PAO.Lib.Areas.Booking;
 using PAO.Lib.Mediator;
 
@@ -30,6 +31,7 @@ public sealed class BookingErrorMap : IErrorMap
         [BookingReasons.CancelNotAllowed] = new(409, "CANCELLATION_NOT_ALLOWED", "The job has started; report a problem instead."),
         [BookingReasons.OutsideArea] = new(422, "OUTSIDE_SERVICE_AREA", "This address is outside our service area."),
         [BookingReasons.ProfileRequired] = new(409, "PROFILE_REQUIRED", "Set up your profile first."),
+        [BillingErrors.DueLimit] = new(409, "MERCHANT_DUE_LIMIT", "Your due to PAO is above the limit. Pay it to accept new jobs."),
     };
 }
 

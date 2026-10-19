@@ -153,7 +153,7 @@ public sealed class CatalogApiTests(MigratedDatabase database) : IClassFixture<M
         Assert.True(salon.WomenProvidersOnly);
         Assert.Equal(ServiceModel.OnDemand, salon.Model);
         Assert.Equal(2, salon.Level2Checklist.Count);
-        Assert.Equal(5, (await Contract(scope).ListServices(CancellationToken.None)).Count);
+        Assert.Equal(7, (await Contract(scope).ListServices(CancellationToken.None)).Count);
     }
 
     [Fact]
@@ -165,6 +165,6 @@ public sealed class CatalogApiTests(MigratedDatabase database) : IClassFixture<M
         var tree = new CatalogTreeService(
             scope.ServiceProvider.GetRequiredService<CatalogRepository>(), new JsonCache(broken), scope.ServiceProvider.GetRequiredService<RedisKeys>(),
             NullLogger<CatalogTreeService>.Instance);
-        Assert.Equal(5, (await tree.Published(CancellationToken.None)).Categories.Count);
+        Assert.Equal(7, (await tree.Published(CancellationToken.None)).Categories.Count);
     }
 }

@@ -3,6 +3,7 @@ using PAO.Infrastructure.Crypto;
 using PAO.Infrastructure.Events;
 using PAO.Lib.Areas.Admin;
 using PAO.Lib.Areas.Audit;
+using PAO.Lib.Areas.Billing;
 using PAO.Lib.Areas.Catalog;
 using PAO.Lib.Areas.Identity;
 using PAO.Lib.Areas.Verification;
@@ -37,12 +38,26 @@ public static class EventEntries
             before: new JsonObject { ["level"] = p.Number("from") }, after: new JsonObject { ["level"] = p.Number("to") }),
         [VerificationEvents.Level2ResultRecorded] = p => Entry(p, "verification.level2_result", "provider", Subject(p, "providerId"), Verifier,
             after: new JsonObject { ["session"] = p.Id("sessionId"), ["result"] = p.Text("result") }),
+        [BillingEvents.CommissionCharged] = p => Entry(p, "billing.commission_charged", "provider", Subject(p, "providerId"),
+            after: new JsonObject { ["bookingId"] = p.Id("bookingId"), ["amountPaisa"] = p.Number("amountPaisa"), ["duePaisa"] = p.Number("duePaisa") }),
+        [BillingEvents.PaymentSubmitted] = p => Payment(p, "billing.payment_submitted", "provider"),
+        [BillingEvents.PaymentConfirmed] = p => Payment(p, "billing.payment_confirmed", "admin"),
+        [BillingEvents.PaymentRejected] = p => Payment(p, "billing.payment_rejected", "admin"),
         [VerificationEvents.DocumentExpired] = p => Entry(p, "verification.item_expired", "provider", Subject(p, "providerId"),
             after: new JsonObject { ["item"] = p.Text("item"), ["status"] = "expired" }),
     };
 
     // A missing id reads as the nil UUID; as a subject it counts as absent.
     private static string Subject(EventPayload p, string name) => p.Id(name) is var id && id == UuidText.Nil ? string.Empty : id;
+
+    private static AuditEntry Payment(EventPayload p, string action, string actorRole) =>
+        Entry(p, action, "payment_submission", Subject(p, "submissionId"), actorRole, p.Text("reason"), after: new JsonObject
+        {
+            ["providerId"] = p.Id("providerId"),
+            ["amountPaisa"] = p.Number("amountPaisa"),
+            ["method"] = p.Text("method"),
+            ["duePaisa"] = p.Number("duePaisa"),
+        });
 
     private static AuditEntry Entry(
         EventPayload p, string action, string subjectType, string subjectId, string actorRole = "", string reason = "",

@@ -66,6 +66,8 @@ public sealed class BookingRecord
     public DateTimeOffset? StartCodeLockedUntil { get; set; }
     /// <summary>Whether the provider confirmed the cash.</summary>
     public bool CashReceived { get; set; }
+    /// <summary>How the customer pays; only `cash_on_delivery` in the first release (ADR-0035 §1).</summary>
+    public string PaymentMethod { get; set; } = "cash_on_delivery";
     /// <summary>The creating request's Idempotency-Key.</summary>
     public required string IdempotencyKey { get; set; }
     /// <summary>Why it was cancelled.</summary>

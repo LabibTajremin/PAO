@@ -28,4 +28,6 @@ public static class Schemas
     public const string Admin = "admin";
     /// <summary>The `"audit"` value.</summary>
     public const string Audit = "audit";
+    /// <summary>The `"billing"` value.</summary>
+    public const string Billing = "billing";
 }

@@ -1,4 +1,4 @@
-# MVP catalog (D2): five services with BN/EN names and fixed prices in BDT.
+# MVP catalog (D2, ADR-0035 §5): seven services with BN/EN names and fixed prices in BDT.
 # Loaded idempotently by `migrate seed` (`./pao seed`); `key` values derive stable IDs, so editing a price
 # here and reseeding inserts a new price version instead of changing history.
 # Prices are placeholders for the owner to confirm before launch.
@@ -98,6 +98,43 @@ categories:
           - { en: Road test, bn: রোড টেস্ট }
         sub_services:
           - { key: driver-day, name: { en: Driver for 1 day (8 hours), bn: ১ দিনের জন্য ড্রাইভার (৮ ঘণ্টা) }, unit: day, price: 1500, max_quantity: 1 }
+  # ADR-0035 §5: two categories added on the owner's request; prices are fixed per unit.
+  - key: catering
+    name: { en: Catering, bn: ক্যাটারিং }
+    icon: utensils
+    services:
+      - key: home-catering
+        name: { en: Home catering, bn: হোম ক্যাটারিং }
+        icon: chef-hat
+        model: on_demand
+        required_level: 1
+        search_radius_m: 10000
+        level2_checklist:
+          - { en: Food hygiene, bn: খাদ্য পরিচ্ছন্নতা }
+          - { en: Safe food handling, bn: নিরাপদ খাবার ব্যবস্থাপনা }
+        sub_services:
+          - { key: catering-plain-meal, name: { en: Plain meal (per person), bn: সাধারণ খাবার (জনপ্রতি) }, unit: unit, price: 250, max_quantity: 200 }
+          - { key: catering-biryani, name: { en: Kacchi biryani (per person), bn: কাচ্চি বিরিয়ানি (জনপ্রতি) }, unit: unit, price: 450, max_quantity: 200 }
+          - { key: catering-snacks, name: { en: Snacks box (per person), bn: নাস্তার বক্স (জনপ্রতি) }, unit: unit, price: 150, max_quantity: 200 }
+          - { key: catering-cook-day, name: { en: Cook for a day, bn: এক দিনের জন্য রাঁধুনি }, unit: day, price: 2000, max_quantity: 3 }
+  - key: monthly-bazar
+    name: { en: Monthly Bazar, bn: মাসিক বাজার }
+    icon: shopping-basket
+    services:
+      - key: bazar-delivery
+        name: { en: Monthly bazar delivery, bn: মাসিক বাজার ডেলিভারি }
+        icon: shopping-bag
+        model: on_demand
+        required_level: 1
+        search_radius_m: 8000
+        level2_checklist:
+          - { en: Fair pricing, bn: ন্যায্য মূল্য }
+          - { en: Fresh goods, bn: তাজা পণ্য }
+        sub_services:
+          - { key: bazar-small, name: { en: Small family pack (2–3 people), bn: ছোট পরিবার প্যাক (২–৩ জন) }, unit: job, price: 6000, max_quantity: 1 }
+          - { key: bazar-medium, name: { en: Medium family pack (4–5 people), bn: মাঝারি পরিবার প্যাক (৪–৫ জন) }, unit: job, price: 9500, max_quantity: 1 }
+          - { key: bazar-large, name: { en: Large family pack (6+ people), bn: বড় পরিবার প্যাক (৬+ জন) }, unit: job, price: 14000, max_quantity: 1 }
+          - { key: bazar-shopping-service, name: { en: Shopping and delivery service, bn: কেনাকাটা ও ডেলিভারি সেবা }, unit: job, price: 300, max_quantity: 1 }
 
 # Demo admin users (dev and staging only). Passwords come from SEED_ADMIN_PASSWORD.
 admins:

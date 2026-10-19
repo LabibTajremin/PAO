@@ -99,7 +99,7 @@ public sealed class MigrationFilesTests : IDisposable
     {
         var files = new MigrationFiles(TestDatabases.MigrationsDirectory);
         var lists = files.ReadModuleLists();
-        Assert.Equal(11, lists.Modules.Count);
+        Assert.Equal(12, lists.Modules.Count);
         Assert.All(lists.Modules, m => Assert.NotEmpty(files.Load(m)));
     }
 }

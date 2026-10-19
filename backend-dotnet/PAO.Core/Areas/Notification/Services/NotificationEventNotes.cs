@@ -35,7 +35,7 @@ public sealed class NotificationEventNotes(NotificationSender sender, Notificati
 
     /// <summary>Every event name that notifies someone.</summary>
     public static IEnumerable<string> EventNames =>
-        [AdminEvents.ComplaintResolved, .. VerificationNotes.Keys, .. BookingNotes.Recipients.Keys];
+        [AdminEvents.ComplaintResolved, .. VerificationNotes.Keys, .. BillingNotes.Notes.Keys, .. BookingNotes.Recipients.Keys];
 
     /// <summary>Notifies whoever `envelope` concerns.</summary>
     public Task Handle(Envelope envelope, CancellationToken cancellationToken)
@@ -48,6 +48,11 @@ public sealed class NotificationEventNotes(NotificationSender sender, Notificati
         if (VerificationNotes.TryGetValue(envelope.Name, out var note))
         {
             return ToProvider(envelope, p, note.Template, note.Data, cancellationToken);
+        }
+        if (BillingNotes.Notes.TryGetValue(envelope.Name, out var billing))
+        {
+            var (template, data) = billing(p);
+            return ToProvider(envelope, p, template, (_, _) => data, cancellationToken);
         }
         return OnBooking(envelope, p, BookingNotes.Recipients[envelope.Name](p), cancellationToken);
     }

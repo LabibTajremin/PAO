@@ -62,6 +62,23 @@ public sealed class AuditTests
         Assert.Single(await new AuditSharedService(log).ListForSubject("y", "z", 10, CancellationToken.None));
     }
 
+    private static Dictionary<string, object> Payloads(Guid actor) => new()
+    {
+        ["identity.AccountStatusChanged"] = new { accountId = Guid.NewGuid(), from = "active", to = "banned", reason = "x", actorId = actor },
+        ["catalog.PriceChanged"] = new { subServiceId = Guid.NewGuid(), priceVersionId = Guid.NewGuid(), amountPaisa = 100, actorId = (Guid?)null },
+        ["verification.DocumentApproved"] = new { providerId = Guid.NewGuid(), item = "nid", actorId = actor },
+        ["verification.DocumentRejected"] = new { providerId = Guid.NewGuid(), item = "nid", reason = "blurred", actorId = actor },
+        ["verification.ProviderLevelChanged"] = new { providerId = Guid.NewGuid(), from = 0, to = 1, reason = string.Empty },
+        ["verification.Level2ResultRecorded"] = new { providerId = Guid.NewGuid(), sessionId = Guid.NewGuid(), result = "pass", actorId = actor },
+        ["verification.DocumentExpired"] = new { providerId = Guid.NewGuid(), item = "police_clearance" },
+        ["admin.SettingChanged"] = new { key = "search.default_radius_m", before = "5000", after = "6000", actorId = actor },
+        ["admin.ComplaintResolved"] = new { complaintId = Guid.NewGuid(), ticketNumber = "TCK-000001", verified = true, againstId = Guid.NewGuid(), actorId = actor },
+        ["billing.CommissionCharged"] = new { providerId = Guid.NewGuid(), bookingId = Guid.NewGuid(), amountPaisa = 113, duePaisa = 113 },
+        ["billing.PaymentSubmitted"] = new { submissionId = Guid.NewGuid(), providerId = Guid.NewGuid(), amountPaisa = 100, method = "bkash", duePaisa = 113, actorId = actor },
+        ["billing.PaymentConfirmed"] = new { submissionId = Guid.NewGuid(), providerId = Guid.NewGuid(), amountPaisa = 100, method = "bkash", duePaisa = 13, actorId = actor },
+        ["billing.PaymentRejected"] = new { submissionId = Guid.NewGuid(), providerId = Guid.NewGuid(), amountPaisa = 100, method = "bkash", duePaisa = 113, reason = "no such transaction", actorId = actor },
+    };
+
     [Fact]
     public async Task Audits_every_subscribed_event_once_per_delivery_and_rejects_broken_payloads()
     {
@@ -75,18 +92,7 @@ public sealed class AuditTests
         var bus = new EventBus();
         new AuditSubscriptions(services.GetRequiredService<IServiceScopeFactory>()).Subscribe(bus);
         var actor = Guid.NewGuid();
-        var payloads = new Dictionary<string, object>
-        {
-            ["identity.AccountStatusChanged"] = new { accountId = Guid.NewGuid(), from = "active", to = "banned", reason = "x", actorId = actor },
-            ["catalog.PriceChanged"] = new { subServiceId = Guid.NewGuid(), priceVersionId = Guid.NewGuid(), amountPaisa = 100, actorId = (Guid?)null },
-            ["verification.DocumentApproved"] = new { providerId = Guid.NewGuid(), item = "nid", actorId = actor },
-            ["verification.DocumentRejected"] = new { providerId = Guid.NewGuid(), item = "nid", reason = "blurred", actorId = actor },
-            ["verification.ProviderLevelChanged"] = new { providerId = Guid.NewGuid(), from = 0, to = 1, reason = string.Empty },
-            ["verification.Level2ResultRecorded"] = new { providerId = Guid.NewGuid(), sessionId = Guid.NewGuid(), result = "pass", actorId = actor },
-            ["verification.DocumentExpired"] = new { providerId = Guid.NewGuid(), item = "police_clearance" },
-            ["admin.SettingChanged"] = new { key = "search.default_radius_m", before = "5000", after = "6000", actorId = actor },
-            ["admin.ComplaintResolved"] = new { complaintId = Guid.NewGuid(), ticketNumber = "TCK-000001", verified = true, againstId = Guid.NewGuid(), actorId = actor },
-        };
+        var payloads = Payloads(actor);
         Assert.Equal(payloads.Keys.Order(), EventEntries.Maps.Keys.Order());
         foreach (var (name, payload) in payloads)
         {
@@ -94,7 +100,7 @@ public sealed class AuditTests
             await bus.Dispatch(Of(payload), CancellationToken.None);
             await Assert.ThrowsAsync<EventDeliveryException>(() => bus.Dispatch(Of(new { name }), CancellationToken.None));
         }
-        Assert.Equal(9, repo.Entries.Count);
+        Assert.Equal(13, repo.Entries.Count);
         var first = repo.Entries[0].Entry;
         Assert.Equal(("account.status_changed", (Guid?)actor, "active", "banned"), (first.Action, first.ActorId, (string?)first.Before!["status"], (string?)first.After!["status"]));
         Assert.All(repo.Entries, e => Assert.Equal((Now, true), (e.Entry.At, e.EventId is not null)));

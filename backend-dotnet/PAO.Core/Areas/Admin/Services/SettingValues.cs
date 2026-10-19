@@ -27,6 +27,8 @@ public sealed class SettingValues(SettingsRepository repository, JsonCache cache
         ["verification.police_clearance_validity_days"] = "365",
         ["verification.level2_cooling_off_days"] = "14",
         ["documents.retention_days"] = "365",
+        ["billing.commission_rate_bp"] = "1000",
+        ["billing.due_block_amount"] = "50000",
     };
 
     private string Key => keys.Key("cache", "settings");
@@ -90,6 +92,8 @@ public sealed class SettingValues(SettingsRepository repository, JsonCache cache
             Level2CoolingOffMs = Int(v, "verification.level2_cooling_off_days") * day,
             DocumentRetentionMs = Int(v, "documents.retention_days") * day,
             ServiceAreaGeoJson = v.GetValueOrDefault("service_area.geojson", string.Empty),
+            CommissionRateBp = (int)Math.Clamp(Int(v, "billing.commission_rate_bp"), 0, 10_000),
+            DueBlockAmountPaisa = Math.Max(0, Int(v, "billing.due_block_amount")),
         };
     }
 

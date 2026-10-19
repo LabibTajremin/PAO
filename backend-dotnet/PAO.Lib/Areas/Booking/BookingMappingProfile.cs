@@ -42,6 +42,7 @@ public sealed class BookingMappingProfile : IMappingProfile
             Area = b.Address.Area,
             Items = m.MapAll<BookingLine, BookingItemView>(b.Lines),
             Total = b.TotalPaisa,
+            PaymentMethod = b.PaymentMethod,
         })
         .Add<StoredBooking, BookingDetails>((b, _) => new BookingDetails
         {
@@ -120,6 +121,7 @@ public sealed class BookingMappingProfile : IMappingProfile
             PendingExtras = b.Pending is { } p ? Proposal(b, p, m) : null,
             Cancellable = s.Cancellable,
             CashReceived = b.CashReceived,
+            PaymentMethod = b.PaymentMethod,
             CreatedAt = IsoTime.Format(b.CreatedAt),
             Timeline = [.. b.Timeline.Select(e => new TimelineEntryView
             {

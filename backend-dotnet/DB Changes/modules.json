@@ -10,7 +10,8 @@
     "notification",
     "media",
     "admin",
-    "audit"
+    "audit",
+    "billing"
   ],
   "outboxModules": [
     "identity",
@@ -21,6 +22,7 @@
     "booking",
     "rating",
     "media",
-    "admin"
+    "admin",
+    "billing"
   ]
 }

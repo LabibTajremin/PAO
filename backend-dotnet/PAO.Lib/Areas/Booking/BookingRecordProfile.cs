@@ -80,6 +80,7 @@ public sealed class BookingRecordProfile : IMappingProfile
         CodeAttempts = r.StartCodeAttempts,
         CodeLockedUntil = r.StartCodeLockedUntil,
         CashReceived = r.CashReceived,
+        PaymentMethod = r.PaymentMethod,
         IdempotencyKey = r.IdempotencyKey,
         CancelReason = r.CancelReason,
         CancelledBy = r.CancelledBy ?? string.Empty,

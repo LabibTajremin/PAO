@@ -137,7 +137,7 @@ public sealed class OpenApiTests
     public void The_bundled_contract_loads_with_every_operation_permissioned()
     {
         var routes = new SpecRoutes(SpecDocument.Load(PaoPaths.Resolve(AppContext.BaseDirectory, null).Spec));
-        Assert.Equal(121, routes.Operations.Count());
+        Assert.Equal(129, routes.Operations.Count());
         Assert.All(routes.Operations, op => Assert.NotNull(op.Permission));
     }
 

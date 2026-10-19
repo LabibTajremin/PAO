@@ -29,6 +29,10 @@ public sealed record PlatformSettings
     public required long DocumentRetentionMs { get; init; }
     /// <summary>The service area geo json.</summary>
     public required string ServiceAreaGeoJson { get; init; }
+    /// <summary>PAO commission on a completed job in basis points (ADR-0035 §2).</summary>
+    public int CommissionRateBp { get; init; } = 1000;
+    /// <summary>The due in paisa above which a merchant cannot accept (ADR-0035 §3).</summary>
+    public long DueBlockAmountPaisa { get; init; } = 50_000;
 }
 
 /// <summary>Names of the events the Admin area publishes.</summary>

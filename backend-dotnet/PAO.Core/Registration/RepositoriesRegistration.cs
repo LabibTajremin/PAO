@@ -1,5 +1,6 @@
 using PAO.Core.Areas.Admin.Repositories;
 using PAO.Core.Areas.Audit.Repositories;
+using PAO.Core.Areas.Billing.Repositories;
 using PAO.Core.Areas.Booking.Repositories;
 using PAO.Core.Areas.Catalog.Repositories;
 using PAO.Core.Areas.Customer.Repositories;
@@ -21,6 +22,7 @@ public static class RepositoriesRegistration
         .AddScoped<BookingRepository>()
         .AddScoped<BookingQueries>()
         .AddScoped<RatingRepository>()
+        .AddScoped<BillingRepository>()
         .AddScoped<SettingsRepository>()
         .AddScoped<ComplaintRepository>()
         .AddScoped<DashboardRepository>()

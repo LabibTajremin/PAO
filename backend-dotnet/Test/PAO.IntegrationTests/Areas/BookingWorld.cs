@@ -158,7 +158,7 @@ public sealed class BookingWorld
         return await call(scope.ServiceProvider.GetRequiredService<TService>());
     }
 
-    private static readonly string[] OutboxModules = ["identity", "customer", "provider", "verification", "catalog", "booking", "rating", "media", "admin"];
+    private static readonly string[] OutboxModules = ["identity", "customer", "provider", "verification", "catalog", "booking", "rating", "media", "admin", "billing"];
 
     private async Task<(HttpStatusCode Status, JsonElement Body)> Send(HttpMethod method, string path, string token, object body, string key)
     {
