@@ -56,7 +56,7 @@ public sealed class VerificationStateRepository(PaoDbContext db, IMapper mapper,
             $"INSERT INTO verification.levels (provider_id) SELECT unnest({keys}) ON CONFLICT DO NOTHING", cancellationToken);
         var levels = await db.Set<VerificationLevelRecord>()
             .FromSql($"SELECT * FROM verification.levels WHERE provider_id = ANY({keys}) ORDER BY provider_id FOR UPDATE")
-            .ToListAsync(cancellationToken);
+            .AsTracking().ToListAsync(cancellationToken);
         return await Read(levels, true, cancellationToken);
     }
 
@@ -98,7 +98,7 @@ public sealed class VerificationStateRepository(PaoDbContext db, IMapper mapper,
     {
         var keys = levels.Select(l => l.ProviderId).ToArray();
         IQueryable<T> Rows<T>()
-            where T : class => track ? db.Set<T>() : db.Set<T>().AsNoTracking();
+            where T : class => track ? db.Set<T>().AsTracking() : db.Set<T>().AsNoTracking();
         var items = await Rows<VerificationItemRecord>().Where(i => keys.Contains(i.ProviderId)).ToListAsync(cancellationToken);
         var sessions = await Rows<Level2SessionRecord>().Where(s => keys.Contains(s.ProviderId))
             .OrderBy(s => s.CreatedAt).ThenBy(s => s.Id).ToListAsync(cancellationToken);
