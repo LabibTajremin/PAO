@@ -8,4 +8,4 @@ Verification items and documents, NID records, levels, Level 2 sessions, expiry 
 - Layout: `Controllers/` (thin, mediator only), `Features/<Feature>/Commands|Queries/`
   (handler, request and validator together), `Services/` (logic shared by several
   handlers), `Repositories/` (EF Core data access).
-- Status: skeleton and contract (P17 task 1); the use cases are ported in later P17 tasks.
+- Status: ported (P17); see `Docs/Areas/Verification/`.

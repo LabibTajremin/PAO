@@ -1,3 +1,4 @@
+using PAO.Core.Areas.Merchant.Repositories;
 using PAO.Lib.Areas.Merchant;
 using PAO.Lib.Mapping;
 
@@ -5,11 +6,15 @@ namespace PAO.Core.Areas.Merchant.Services.Shared;
 
 /// <summary>The Merchant contract for the other areas.</summary>
 public sealed class MerchantSharedService(
-    MerchantProfiles profiles, MerchantEnrolment enrolment, MerchantPresence presence, MerchantFinder finder, IMapper mapper) : IMerchantSharedService
+    MerchantProfiles profiles, MerchantRepository repository, MerchantEnrolment enrolment, MerchantPresence presence, MerchantFinder finder, IMapper mapper) : IMerchantSharedService
 {
     /// <inheritdoc />
     public async Task<MerchantProfile> GetMerchant(Guid merchantId, CancellationToken cancellationToken) =>
         mapper.Map<StoredMerchant, MerchantProfile>(await profiles.Get(merchantId, cancellationToken));
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyDictionary<Guid, MerchantProfile>> GetMerchants(IReadOnlyCollection<Guid> merchantIds, CancellationToken cancellationToken) =>
+        (await repository.GetMany(merchantIds, cancellationToken)).ToDictionary(m => m.Id, mapper.Map<StoredMerchant, MerchantProfile>);
 
     /// <inheritdoc />
     public Task<bool> IsAvailable(Guid merchantId, CancellationToken cancellationToken) => presence.IsAvailable(merchantId);

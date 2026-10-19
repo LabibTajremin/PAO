@@ -6,6 +6,7 @@ using PAO.Core.Areas.Identity.Services;
 using PAO.Core.Areas.Media.Repositories;
 using PAO.Core.Areas.Merchant.Repositories;
 using PAO.Core.Areas.Notification.Repositories;
+using PAO.Core.Areas.Verification.Repositories;
 
 namespace PAO.Core.Registration;
 
@@ -27,5 +28,8 @@ public static class RepositoriesRegistration
         .AddSingleton<ISendThrottle, RedisSendThrottle>()
         .AddSingleton<ISessionStore, RedisSessionStore>()
         .AddSingleton<IChallengeStore, RedisChallengeStore>()
-        .AddScoped<IAuditRepository, AuditRepository>();
+        .AddScoped<IAuditRepository, AuditRepository>()
+        .AddScoped<VerificationStateRepository>()
+        .AddScoped<VerificationRepository>()
+        .AddScoped<ClosedAccountRepository>();
 }

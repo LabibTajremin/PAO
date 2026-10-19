@@ -29,6 +29,7 @@ Verification's level reaches Merchant only through `verification.ProviderLevelCh
 | Method | Contract |
 |---|---|
 | `GetMerchant` | Returns a merchant's profile, or throws `provider.not_found`. |
+| `GetMerchants` | Returns the existing profiles of many merchants, keyed by id, in one round of queries. |
 | `IsAvailable` | Reports whether the merchant is online right now. |
 | `FindNearby` | Returns verified, online merchants registered for the service within its radius: Level 2 first, then by the requested sort (PRD §5, D11). |
 | `Enrolment` | Returns the wizard progress; a merchant who has saved nothing yet has every step open. |

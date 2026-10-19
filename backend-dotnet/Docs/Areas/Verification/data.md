@@ -15,4 +15,12 @@ Schema `verification`, created by the scripts in `DB Changes/verification/` ([da
 | `verification.processed_events` | `DB Changes/verification/0001_init.sql` |
 | `verification.closed_accounts` | `DB Changes/verification/0002_closures.sql` |
 
-Repositories: none yet; each repository gets an entry here when it is ported.
+## Repositories
+
+| Repository | Role |
+|---|---|
+| `VerificationStateRepository` | Loads whole merchant states (one query per table for any number of merchants), locks `levels` rows `FOR UPDATE`, saves with one `SaveChanges` and writes events to `verification.outbox` with one `unnest` insert. |
+| `VerificationRepository` | Levels, pending count, the review queue, sessions, expiry queries, reminders (one insert per threshold), the NID block list and blocking. |
+| `ClosedAccountRepository` | `closed_accounts`, Level 2 photos of closed accounts and the batch purge of every verification table. |
+
+NID numbers are `nonce ‖ ciphertext ‖ tag` (AES-GCM, `DataCipher`), the layout NestJS and Go wrote.

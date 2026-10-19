@@ -1,4 +1,5 @@
 using PAO.Lib.Areas.Merchant;
+using PAO.Lib.Areas.Verification;
 using PAO.Lib.Common;
 
 namespace PAO.Core.Areas.Merchant.Services;
@@ -36,9 +37,6 @@ public static class EnrolmentRules
     /// <summary>Removes a step from the done list.</summary>
     public static IReadOnlyList<string> WithoutStep(IReadOnlyList<string> done, string step) => [.. done.Where(s => s != step)];
 
-    /// <summary>The calendar date in Dhaka at `now`, which birthdays compare against (04-decisions E8).</summary>
-    public static DateOnly DhakaDate(DateTimeOffset now) => DateOnly.FromDateTime(now.ToOffset(TimeSpan.FromHours(6)).DateTime);
-
     /// <summary>Checks the personal step; the merchant must be 18 on `today`. Null when fine.</summary>
     public static string? PersonalProblem(PersonalInfoInput p, DateOnly today)
     {
@@ -48,7 +46,7 @@ public static class EnrolmentRules
         {
             return MerchantReasons.Invalid;
         }
-        return p.DateOfBirth.AddYears(18) > today ? MerchantReasons.TooYoung : null;
+        return DhakaDates.EighteenthBirthday(p.DateOfBirth) > today ? MerchantReasons.TooYoung : null;
     }
 
     /// <summary>The services step: one to five services and plausible experience.</summary>

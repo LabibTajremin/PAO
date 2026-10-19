@@ -32,6 +32,14 @@ public sealed class MerchantRepository(PaoDbContext db, OutboxWriter outbox, ICl
         return mapper.Map<MerchantRow, StoredMerchant>(new MerchantRow(row, services.GetValueOrDefault(id, [])));
     }
 
+    /// <summary>The profiles of `ids` that exist, with their services, in two queries.</summary>
+    public async Task<IReadOnlyList<StoredMerchant>> GetMany(IReadOnlyCollection<Guid> ids, CancellationToken cancellationToken)
+    {
+        var rows = await db.Set<MerchantProfileRecord>().Where(m => ids.Contains(m.Id)).ToListAsync(cancellationToken);
+        var services = await ServicesOf([.. rows.Select(r => r.Id)], cancellationToken);
+        return mapper.MapAll<MerchantRow, StoredMerchant>(rows.Select(r => new MerchantRow(r, services.GetValueOrDefault(r.Id, []))));
+    }
+
     /// <summary>Writes the profile fields and services (never the read-model copies), then `domainEvent` if any.</summary>
     public async Task Save(StoredMerchant m, IDomainEvent? domainEvent, CancellationToken cancellationToken)
     {

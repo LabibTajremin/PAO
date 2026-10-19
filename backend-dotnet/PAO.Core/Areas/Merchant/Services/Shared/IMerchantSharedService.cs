@@ -11,6 +11,9 @@ public interface IMerchantSharedService
     /// <summary>Returns a merchant's profile, or throws `provider.not_found`.</summary>
     Task<MerchantProfile> GetMerchant(Guid merchantId, CancellationToken cancellationToken);
 
+    /// <summary>Returns the profiles of `merchantIds` that exist, keyed by id, in one round of queries (no N+1).</summary>
+    Task<IReadOnlyDictionary<Guid, MerchantProfile>> GetMerchants(IReadOnlyCollection<Guid> merchantIds, CancellationToken cancellationToken);
+
     /// <summary>Reports whether the merchant is online right now.</summary>
     Task<bool> IsAvailable(Guid merchantId, CancellationToken cancellationToken);
 

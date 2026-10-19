@@ -1,8 +1,10 @@
 using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using PAO.Core.Areas.Verification.Services;
 using PAO.EF;
 using PAO.Lib.Areas.Merchant;
+using PAO.Lib.Areas.Verification;
 using PAO.Lib.Errors;
 using static PAO.IntegrationTests.Areas.MerchantSteps;
 
@@ -53,6 +55,22 @@ public sealed class MerchantEnrolmentTests(MigratedDatabase database) : IClassFi
         var after = query with { Text = string.Empty, AfterAt = DateTimeOffset.UtcNow.AddDays(1), AfterId = Guid.NewGuid() };
         Assert.Single(await api.Merchants(m => m.SearchMerchants(after, CancellationToken.None)));
         Assert.Single(await api.Merchants(m => m.SearchMerchants(new MerchantQuery { Id = id, Text = string.Empty, Status = string.Empty, Limit = 5 }, CancellationToken.None)));
+    }
+
+    [Fact]
+    public async Task Serves_verification_through_the_real_merchant_contract()
+    {
+        var (id, _) = await api.Enrol("01712345690", "female", Electrician);
+        var batch = await api.Merchants(m => m.GetMerchants([id, Guid.NewGuid()], CancellationToken.None));
+        Assert.Equal([id], batch.Keys);
+        using var scope = api.Services.CreateScope();
+        var peers = scope.ServiceProvider.GetRequiredService<VerificationPeers>();
+        Assert.Equal("Rahim Uddin", (await peers.Merchant(id, CancellationToken.None)).FullName);
+        Assert.Equal([id], (await peers.MerchantsById([id], CancellationToken.None)).Keys);
+        var missing = await Assert.ThrowsAsync<DomainException>(() => peers.Merchant(Guid.NewGuid(), CancellationToken.None));
+        Assert.Equal(VerificationReasons.NotFound, missing.Reason);
+        // Translated from Merchant's own answer, so the lazy "no Merchant area" fallback did not fire.
+        Assert.Equal(MerchantErrors.NotFound, Assert.IsType<DomainException>(missing.InnerException).Reason);
     }
 
     [Fact]

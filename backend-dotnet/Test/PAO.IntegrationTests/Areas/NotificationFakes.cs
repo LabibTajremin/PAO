@@ -53,6 +53,8 @@ public sealed class FakeMerchants(NotificationWorld world) : IMerchantSharedServ
         })
         : throw new DomainException(MerchantErrors.NotFound);
 
+    public Task<IReadOnlyDictionary<Guid, MerchantProfile>> GetMerchants(IReadOnlyCollection<Guid> merchantIds, CancellationToken cancellationToken) => throw new NotSupportedException();
+
     public Task<bool> IsAvailable(Guid merchantId, CancellationToken cancellationToken) => throw new NotSupportedException();
 
     public Task<IReadOnlyList<NearbyMerchant>> FindNearby(NearbyQuery query, CancellationToken cancellationToken) => throw new NotSupportedException();

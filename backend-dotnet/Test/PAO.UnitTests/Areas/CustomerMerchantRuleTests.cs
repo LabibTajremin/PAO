@@ -5,6 +5,7 @@ using PAO.Infrastructure.Data;
 using PAO.Infrastructure.Events;
 using PAO.Lib.Areas.Customer;
 using PAO.Lib.Areas.Merchant;
+using PAO.Lib.Areas.Verification;
 using PAO.Lib.Common;
 using PAO.Lib.Errors;
 using PAO.Migrator;
@@ -125,8 +126,8 @@ public sealed class MerchantRuleTests
         Assert.Equal(MerchantReasons.TooYoung, EnrolmentRules.PersonalProblem(Personal() with { DateOfBirth = new DateOnly(2008, 10, 10) }, Today));
         Assert.Equal(MerchantReasons.Invalid, EnrolmentRules.PersonalProblem(Personal() with { Gender = "x" }, Today));
         Assert.Equal(MerchantReasons.Invalid, EnrolmentRules.PersonalProblem(Personal() with { Bio = new string('b', 501) }, Today));
-        Assert.Equal(new DateOnly(2026, 10, 12), EnrolmentRules.DhakaDate(new DateTimeOffset(2026, 10, 11, 18, 30, 0, TimeSpan.Zero)));
-        Assert.Equal(new DateOnly(2026, 10, 11), EnrolmentRules.DhakaDate(new DateTimeOffset(2026, 10, 11, 17, 59, 0, TimeSpan.Zero)));
+        Assert.Equal(new DateOnly(2026, 10, 12), DhakaDates.Today(new DateTimeOffset(2026, 10, 11, 18, 30, 0, TimeSpan.Zero)));
+        Assert.Equal(new DateOnly(2026, 10, 11), DhakaDates.Today(new DateTimeOffset(2026, 10, 11, 17, 59, 0, TimeSpan.Zero)));
     }
 
     [Fact]

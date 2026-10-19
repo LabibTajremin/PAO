@@ -3,15 +3,6 @@ using PAO.Lib.Common;
 
 namespace PAO.Lib.Areas.Merchant;
 
-/// <summary>A `ServiceRef`: a service's id and name.</summary>
-public sealed record ServiceRefView
-{
-    /// <summary>The id.</summary>
-    public required Guid Id { get; init; }
-    /// <summary>The name in both languages.</summary>
-    public required Text Name { get; init; }
-}
-
 /// <summary>The `ProviderProfile` the partner app shows (M28).</summary>
 public sealed record MerchantProfileView
 {

@@ -19,6 +19,12 @@ public static class ItemType
     public const string ServiceArea = "service_area";
     /// <summary>The `"code_of_conduct"` value.</summary>
     public const string CodeOfConduct = "code_of_conduct";
+
+    /// <summary>Every item in display order (PRD §6.2).</summary>
+    public static IReadOnlyList<string> All { get; } = [Nid, Selfie, PoliceClearance, Address, EmergencyContact, SkillProof, ServiceArea, CodeOfConduct];
+
+    /// <summary>Whether Level 1 needs the item approved; skill proof is optional (PRD §6.2).</summary>
+    public static bool IsRequired(string itemType) => itemType != SkillProof;
 }
 
 /// <summary>One verification item and its review state.</summary>

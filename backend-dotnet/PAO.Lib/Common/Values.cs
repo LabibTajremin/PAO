@@ -26,3 +26,12 @@ public static class Language
     /// <summary>The `"bn"` value.</summary>
     public const string Bangla = "bn";
 }
+
+/// <summary>A `ServiceRef`: a service's id and name, as merchant and verification views show it.</summary>
+public sealed record ServiceRefView
+{
+    /// <summary>The id.</summary>
+    public required Guid Id { get; init; }
+    /// <summary>The name in both languages.</summary>
+    public required Text Name { get; init; }
+}

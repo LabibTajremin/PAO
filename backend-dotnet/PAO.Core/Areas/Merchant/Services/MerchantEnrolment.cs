@@ -1,6 +1,7 @@
 using PAO.Core.Areas.Merchant.Repositories;
 using PAO.Lib.Areas.Identity;
 using PAO.Lib.Areas.Merchant;
+using PAO.Lib.Areas.Verification;
 using PAO.Lib.Errors;
 
 namespace PAO.Core.Areas.Merchant.Services;
@@ -24,7 +25,7 @@ public sealed class MerchantEnrolment(MerchantProfiles profiles, MerchantReposit
     /// <summary>Saves the personal step; birthdays are Dhaka calendar dates (04-decisions E8), so today is one too.</summary>
     public Task<EnrolmentStatus> SavePersonal(Guid id, PersonalInfoInput input, CancellationToken cancellationToken)
     {
-        if (EnrolmentRules.PersonalProblem(input, EnrolmentRules.DhakaDate(profiles.Clock.Now)) is { } problem)
+        if (EnrolmentRules.PersonalProblem(input, DhakaDates.Today(profiles.Clock.Now)) is { } problem)
         {
             throw new DomainException(problem);
         }
