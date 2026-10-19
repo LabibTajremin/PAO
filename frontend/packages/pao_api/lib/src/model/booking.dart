@@ -131,6 +131,7 @@ class Booking {
   @JsonKey(name: r'cancellable', required: false, includeIfNull: false)
   final bool? cancellable;
 
+  /// Cash on delivery is the only method in the first release (ADR-0035); cash is its legacy name.
   @JsonKey(name: r'paymentMethod', required: true, includeIfNull: false)
   final BookingPaymentMethodEnum paymentMethod;
 
@@ -244,9 +245,15 @@ class Booking {
   }
 }
 
+/// Cash on delivery is the only method in the first release (ADR-0035); cash is its legacy name.
 enum BookingPaymentMethodEnum {
+  /// Cash on delivery is the only method in the first release (ADR-0035); cash is its legacy name.
   @JsonValue(r'cash')
-  cash(r'cash');
+  cash(r'cash'),
+
+  /// Cash on delivery is the only method in the first release (ADR-0035); cash is its legacy name.
+  @JsonValue(r'cash_on_delivery')
+  cashOnDelivery(r'cash_on_delivery');
 
   const BookingPaymentMethodEnum(this.value);
 

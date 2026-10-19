@@ -237,7 +237,15 @@ enum ErrorCode {
 
   /// Stable error codes the apps translate (04-decisions.md E11).
   @JsonValue(r'NO_PENDING_EXTRAS')
-  NO_PENDING_EXTRAS(r'NO_PENDING_EXTRAS');
+  NO_PENDING_EXTRAS(r'NO_PENDING_EXTRAS'),
+
+  /// Stable error codes the apps translate (04-decisions.md E11).
+  @JsonValue(r'MERCHANT_DUE_LIMIT')
+  MERCHANT_DUE_LIMIT(r'MERCHANT_DUE_LIMIT'),
+
+  /// Stable error codes the apps translate (04-decisions.md E11).
+  @JsonValue(r'PAYMENT_NOT_PENDING')
+  PAYMENT_NOT_PENDING(r'PAYMENT_NOT_PENDING');
 
   const ErrorCode(this.value);
 

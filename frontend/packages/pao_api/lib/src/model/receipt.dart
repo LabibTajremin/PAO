@@ -70,6 +70,7 @@ class Receipt {
   @JsonKey(name: r'total', required: true, includeIfNull: false)
   final int total;
 
+  /// Cash on delivery is the only method in the first release (ADR-0035); cash is its legacy name.
   @JsonKey(name: r'paymentMethod', required: true, includeIfNull: false)
   final ReceiptPaymentMethodEnum paymentMethod;
 
@@ -132,9 +133,15 @@ class Receipt {
   }
 }
 
+/// Cash on delivery is the only method in the first release (ADR-0035); cash is its legacy name.
 enum ReceiptPaymentMethodEnum {
+  /// Cash on delivery is the only method in the first release (ADR-0035); cash is its legacy name.
   @JsonValue(r'cash')
-  cash(r'cash');
+  cash(r'cash'),
+
+  /// Cash on delivery is the only method in the first release (ADR-0035); cash is its legacy name.
+  @JsonValue(r'cash_on_delivery')
+  cashOnDelivery(r'cash_on_delivery');
 
   const ReceiptPaymentMethodEnum(this.value);
 

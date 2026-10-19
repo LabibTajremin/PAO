@@ -8,6 +8,7 @@ import 'package:pao_api/src/auth/basic_auth.dart';
 import 'package:pao_api/src/auth/bearer_auth.dart';
 import 'package:pao_api/src/auth/oauth.dart';
 import 'package:pao_api/src/api/admin_api.dart';
+import 'package:pao_api/src/api/admin_billing_api.dart';
 import 'package:pao_api/src/api/admin_bookings_api.dart';
 import 'package:pao_api/src/api/admin_catalog_api.dart';
 import 'package:pao_api/src/api/admin_complaints_api.dart';
@@ -19,6 +20,7 @@ import 'package:pao_api/src/api/customer_api.dart';
 import 'package:pao_api/src/api/customer_bookings_api.dart';
 import 'package:pao_api/src/api/me_api.dart';
 import 'package:pao_api/src/api/provider_api.dart';
+import 'package:pao_api/src/api/provider_billing_api.dart';
 import 'package:pao_api/src/api/provider_enrolment_api.dart';
 import 'package:pao_api/src/api/provider_jobs_api.dart';
 
@@ -89,6 +91,12 @@ class PaoApi {
     return AdminApi(dio);
   }
 
+  /// Get AdminBillingApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  AdminBillingApi getAdminBillingApi() {
+    return AdminBillingApi(dio);
+  }
+
   /// Get AdminBookingsApi instance, base route and serializer can be overridden by a given but be careful,
   /// by doing that all interceptors will not be executed
   AdminBookingsApi getAdminBookingsApi() {
@@ -153,6 +161,12 @@ class PaoApi {
   /// by doing that all interceptors will not be executed
   ProviderApi getProviderApi() {
     return ProviderApi(dio);
+  }
+
+  /// Get ProviderBillingApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  ProviderBillingApi getProviderBillingApi() {
+    return ProviderBillingApi(dio);
   }
 
   /// Get ProviderEnrolmentApi instance, base route and serializer can be overridden by a given but be careful,

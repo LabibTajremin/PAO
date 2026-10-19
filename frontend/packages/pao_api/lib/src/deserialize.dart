@@ -48,6 +48,7 @@ import 'package:pao_api/src/model/dashboard.dart';
 import 'package:pao_api/src/model/dashboard_bookings_per_day_inner.dart';
 import 'package:pao_api/src/model/delete_account_request.dart';
 import 'package:pao_api/src/model/device_token_input.dart';
+import 'package:pao_api/src/model/due_summary.dart';
 import 'package:pao_api/src/model/earnings_job.dart';
 import 'package:pao_api/src/model/earnings_job_list.dart';
 import 'package:pao_api/src/model/earnings_summary.dart';
@@ -62,6 +63,8 @@ import 'package:pao_api/src/model/extras_decision_input.dart';
 import 'package:pao_api/src/model/extras_input.dart';
 import 'package:pao_api/src/model/extras_proposal.dart';
 import 'package:pao_api/src/model/heartbeat_input.dart';
+import 'package:pao_api/src/model/ledger_entry.dart';
+import 'package:pao_api/src/model/ledger_entry_list.dart';
 import 'package:pao_api/src/model/level2_info.dart';
 import 'package:pao_api/src/model/level2_result_input.dart';
 import 'package:pao_api/src/model/level2_result_input_checklist_inner.dart';
@@ -72,6 +75,7 @@ import 'package:pao_api/src/model/level2_session_list.dart';
 import 'package:pao_api/src/model/localized_text.dart';
 import 'package:pao_api/src/model/logout_request.dart';
 import 'package:pao_api/src/model/media_object.dart';
+import 'package:pao_api/src/model/merchant_ledger.dart';
 import 'package:pao_api/src/model/my_permissions.dart';
 import 'package:pao_api/src/model/nearby_providers.dart';
 import 'package:pao_api/src/model/nid_input.dart';
@@ -80,6 +84,10 @@ import 'package:pao_api/src/model/notification_list.dart';
 import 'package:pao_api/src/model/otp_request.dart';
 import 'package:pao_api/src/model/otp_request_accepted.dart';
 import 'package:pao_api/src/model/otp_verify_request.dart';
+import 'package:pao_api/src/model/payment_reject_input.dart';
+import 'package:pao_api/src/model/payment_submission.dart';
+import 'package:pao_api/src/model/payment_submission_input.dart';
+import 'package:pao_api/src/model/payment_submission_list.dart';
 import 'package:pao_api/src/model/personal_info_input.dart';
 import 'package:pao_api/src/model/point.dart';
 import 'package:pao_api/src/model/police_clearance_input.dart';
@@ -299,6 +307,8 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'DeviceTokenInput':
       return DeviceTokenInput.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'DueSummary':
+      return DueSummary.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'EarningsJob':
       return EarningsJob.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'EarningsJobList':
@@ -345,6 +355,11 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'ItemStatus':
     case 'ItemType':
     case 'Language':
+    case 'LedgerEntry':
+      return LedgerEntry.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'LedgerEntryList':
+      return LedgerEntryList.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
     case 'Level2Info':
       return Level2Info.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'Level2Result':
@@ -375,6 +390,9 @@ ReturnType deserialize<ReturnType, BaseType>(
           as ReturnType;
     case 'MediaObject':
       return MediaObject.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'MerchantLedger':
+      return MerchantLedger.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
     case 'MyPermissions':
       return MyPermissions.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -397,6 +415,20 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'OtpVerifyRequest':
       return OtpVerifyRequest.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'PaymentMethodKind':
+    case 'PaymentRejectInput':
+      return PaymentRejectInput.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PaymentSubmission':
+      return PaymentSubmission.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PaymentSubmissionInput':
+      return PaymentSubmissionInput.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PaymentSubmissionList':
+      return PaymentSubmissionList.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PaymentSubmissionStatus':
     case 'PersonalInfoInput':
       return PersonalInfoInput.fromJson(value as Map<String, dynamic>)
           as ReturnType;

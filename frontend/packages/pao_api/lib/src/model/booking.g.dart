@@ -456,4 +456,5 @@ const _$TimingEnumMap = {Timing.asap: 'asap', Timing.scheduled: 'scheduled'};
 
 const _$BookingPaymentMethodEnumEnumMap = {
   BookingPaymentMethodEnum.cash: 'cash',
+  BookingPaymentMethodEnum.cashOnDelivery: 'cash_on_delivery',
 };

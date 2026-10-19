@@ -1,6 +1,7 @@
 lib/pao_api.dart
 lib/src/api.dart
 lib/src/api/admin_api.dart
+lib/src/api/admin_billing_api.dart
 lib/src/api/admin_bookings_api.dart
 lib/src/api/admin_catalog_api.dart
 lib/src/api/admin_complaints_api.dart
@@ -12,6 +13,7 @@ lib/src/api/customer_api.dart
 lib/src/api/customer_bookings_api.dart
 lib/src/api/me_api.dart
 lib/src/api/provider_api.dart
+lib/src/api/provider_billing_api.dart
 lib/src/api/provider_enrolment_api.dart
 lib/src/api/provider_jobs_api.dart
 lib/src/auth/api_key_auth.dart
@@ -78,6 +80,7 @@ lib/src/model/dashboard.dart
 lib/src/model/dashboard_bookings_per_day_inner.dart
 lib/src/model/delete_account_request.dart
 lib/src/model/device_token_input.dart
+lib/src/model/due_summary.dart
 lib/src/model/earnings_job.dart
 lib/src/model/earnings_job_list.dart
 lib/src/model/earnings_period.dart
@@ -99,6 +102,8 @@ lib/src/model/heartbeat_input.dart
 lib/src/model/item_status.dart
 lib/src/model/item_type.dart
 lib/src/model/language.dart
+lib/src/model/ledger_entry.dart
+lib/src/model/ledger_entry_list.dart
 lib/src/model/level2_info.dart
 lib/src/model/level2_result.dart
 lib/src/model/level2_result_input.dart
@@ -110,6 +115,7 @@ lib/src/model/level2_session_list.dart
 lib/src/model/localized_text.dart
 lib/src/model/logout_request.dart
 lib/src/model/media_object.dart
+lib/src/model/merchant_ledger.dart
 lib/src/model/my_permissions.dart
 lib/src/model/nearby_providers.dart
 lib/src/model/nid_input.dart
@@ -119,6 +125,12 @@ lib/src/model/otp_purpose.dart
 lib/src/model/otp_request.dart
 lib/src/model/otp_request_accepted.dart
 lib/src/model/otp_verify_request.dart
+lib/src/model/payment_method_kind.dart
+lib/src/model/payment_reject_input.dart
+lib/src/model/payment_submission.dart
+lib/src/model/payment_submission_input.dart
+lib/src/model/payment_submission_list.dart
+lib/src/model/payment_submission_status.dart
 lib/src/model/personal_info_input.dart
 lib/src/model/platform.dart
 lib/src/model/point.dart
