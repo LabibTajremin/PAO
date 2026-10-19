@@ -39,6 +39,10 @@ public sealed class EventPayload
         _ => throw new FormatException($"decode {envelope.Name}: {name} is not a boolean"),
     };
 
+    /// <summary>The string items of an array field; empty when missing.</summary>
+    public IReadOnlyList<string> Texts(string name) =>
+        Read<IReadOnlyList<string>>(name, JsonValueKind.Array, [], v => [.. v.EnumerateArray().Where(i => i.ValueKind == JsonValueKind.String).Select(i => i.GetString()!)]);
+
     private JsonValueKind Kind(string name) =>
         envelope.Payload.TryGetProperty(name, out var value) ? value.ValueKind : JsonValueKind.Undefined;
 

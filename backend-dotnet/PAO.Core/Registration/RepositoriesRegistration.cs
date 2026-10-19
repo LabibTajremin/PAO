@@ -1,8 +1,10 @@
 using PAO.Core.Areas.Audit.Repositories;
 using PAO.Core.Areas.Catalog.Repositories;
+using PAO.Core.Areas.Customer.Repositories;
 using PAO.Core.Areas.Identity.Repositories;
 using PAO.Core.Areas.Identity.Services;
 using PAO.Core.Areas.Media.Repositories;
+using PAO.Core.Areas.Merchant.Repositories;
 using PAO.Core.Areas.Notification.Repositories;
 
 namespace PAO.Core.Registration;
@@ -14,6 +16,10 @@ public static class RepositoriesRegistration
     public static IServiceCollection AddRepositories(this IServiceCollection services) => services
         .AddScoped<CatalogRepository>()
         .AddScoped<CatalogWriteRepository>()
+        .AddScoped<CustomerRepository>()
+        .AddScoped<AddressRepository>()
+        .AddScoped<MerchantRepository>()
+        .AddSingleton<IPresence, RedisPresence>()
         .AddScoped<MediaRepository>()
         .AddScoped<NotificationRepository>()
         .AddScoped<IIdentityRepository, IdentityRepository>()

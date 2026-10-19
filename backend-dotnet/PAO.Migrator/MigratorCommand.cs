@@ -9,21 +9,29 @@ namespace PAO.Migrator;
 /// <summary>
 /// The migration tool: `migrate up` applies every pending script in "DB Changes" and
 /// records versions in the `goose_&lt;module&gt;` tables, exactly as the NestJS migrator did.
-/// `seed` loads the seed data through <see cref="SeedCommand"/>; `perf-seed N` returns with the
-/// Merchant area, which owns the online providers it writes (P17 task 3).
+/// `seed` loads the seed data through <see cref="SeedCommand"/>; `perf-seed N` puts N online
+/// merchants in place for the load test through <see cref="PerfSeedCommand"/>.
 /// </summary>
 public static class MigratorCommand
 {
     /// <summary>The usage line printed for anything else.</summary>
-    public const string Usage = "usage: migrate up|seed";
+    public const string Usage = "usage: migrate up|seed|perf-seed N";
 
-    /// <summary>Runs `args` and returns the process exit code; messages go to `output`; `seed` runs `migrate seed`.</summary>
+    /// <summary>
+    /// Runs `args` and returns the process exit code; messages go to `output`. `seed` runs
+    /// `migrate seed` and `perfSeed` runs `migrate perf-seed N` with N of at least one.
+    /// </summary>
     public static async Task<int> RunMigrator(
-        this string[] args, IDictionary environment, string migrationsDirectory, TextWriter output, Func<Task<int>>? seed = null)
+        this string[] args, IDictionary environment, string migrationsDirectory, TextWriter output,
+        Func<Task<int>>? seed = null, Func<int, Task<int>>? perfSeed = null)
     {
         if (args is ["seed"] && seed is not null)
         {
             return await seed();
+        }
+        if (args is ["perf-seed", var count] && perfSeed is not null && int.TryParse(count, out var n) && n >= 1)
+        {
+            return await perfSeed(n);
         }
         if (args is not ["up"])
         {
