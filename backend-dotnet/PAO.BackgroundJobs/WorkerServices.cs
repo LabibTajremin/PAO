@@ -83,6 +83,7 @@ public static class WorkerServices
         services.AddSingleton<IScheduledJob, OutboxPurgeJob>();
         services.AddSingleton<IScheduledJob, MediaOrphanPurgeJob>();
         services.AddSingleton<IScheduledJob, MerchantPresenceReapJob>();
+        services.AddSingleton<IScheduledJob, BookingExpiryJob>();
         services.AddSingleton<IScheduledJob, ExpireDocumentsJob>();
         services.AddSingleton<IScheduledJob, ExpiryRemindersJob>();
         services.AddSingleton<IScheduledJob, PurgeClosedAccountsJob>();

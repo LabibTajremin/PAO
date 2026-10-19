@@ -115,7 +115,7 @@ public sealed class BookingRepository(PaoDbContext db, BookingQueries queries, O
             .SetProperty(r => r.CompletedAt, b.CompletedAt).SetProperty(r => r.CancelledAt, b.CancelledAt)
             .SetProperty(r => r.UpdatedAt, now).SetProperty(r => r.StartCode, b.StartCode),
             cancellationToken);
-        var proposals = await db.Set<ExtrasProposalRecord>().Where(p => p.BookingId == b.Id).ToListAsync(cancellationToken);
+        var proposals = await db.Set<ExtrasProposalRecord>().AsTracking().Where(p => p.BookingId == b.Id).ToListAsync(cancellationToken);
         var known = await db.Set<BookingItemRecord>().Where(i => i.BookingId == b.Id).Select(i => i.Id).ToListAsync(cancellationToken);
         foreach (var p in proposals)
         {

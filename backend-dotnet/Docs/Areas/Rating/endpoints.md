@@ -2,7 +2,10 @@
 
 One entry per controller and its operations, with the authorisation attribute that matches
 each operation's `x-permission` (see [authorisation](../../Architecture/authorization.md)).
+Errors map through `RatingErrorMap`.
 
-No controllers yet: until the area is ported, its operations in `api/openapi.yaml` are
-answered by the catch-all `UnimplementedController` with 501 NOT_IMPLEMENTED after the full
-edge checks ([API index](../../Api/README.md)).
+| Controller | Operations | Attribute |
+|---|---|---|
+| `RatingControllers` | the file holding the error map and the two controllers below | |
+| `CustomerReviewsController` | `POST /v1/customer/bookings/{bookingId}/review` (201); `GET /v1/customer/providers/{providerId}/reviews` | `[AllUserType(Permission = "review:create")]`; `[Customer(Permission = "provider:browse")]` |
+| `ProviderReviewsController` | `POST /v1/provider/jobs/{bookingId}/review` (201); `GET /v1/provider/reviews`, `GET /v1/provider/rating` | `[AllUserType(Permission = "review:create")]`; `[Merchant(Permission = "provider:manage:own")]` |

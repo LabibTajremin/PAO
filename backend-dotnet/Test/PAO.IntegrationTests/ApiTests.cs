@@ -18,7 +18,7 @@ public sealed class ApiTests(MigratedDatabase database) : IClassFixture<Migrated
 
     public async ValueTask InitializeAsync()
     {
-        app = await Hosts.Api(database.Url);
+        app = await Hosts.Api(database.Url, configure: s => s.AddSingleton<EdgeTestRoutes>());
         client = app.GetTestClient();
     }
 
@@ -54,7 +54,7 @@ public sealed class ApiTests(MigratedDatabase database) : IClassFixture<Migrated
     }
 
     [Fact]
-    public async Task Unserved_operations_answer_501_after_validation()
+    public async Task Bodies_are_validated_against_the_spec_before_the_action()
     {
         var customer = Hosts.Token(app.Services, ["customer"]);
         var invalid = await client.SendAsync(Hosts.Request(HttpMethod.Post, $"/v1/customer/bookings/{Guid.NewGuid()}/review", customer, new { }));
@@ -62,8 +62,7 @@ public sealed class ApiTests(MigratedDatabase database) : IClassFixture<Migrated
         var reason = JsonDocument.Parse(await invalid.Content.ReadAsStringAsync()).RootElement.GetProperty("error").GetProperty("details").GetProperty("reason").GetString();
         Assert.Equal("body must have required property 'stars'", reason);
         var valid = await client.SendAsync(Hosts.Request(HttpMethod.Get, $"/v1/customer/providers/{Guid.NewGuid()}/reviews", customer));
-        Assert.Equal(HttpStatusCode.NotImplemented, valid.StatusCode);
-        Assert.Equal("NOT_IMPLEMENTED", await Hosts.ErrorCode(valid));
+        Assert.Equal(HttpStatusCode.OK, valid.StatusCode);
     }
 
     [Fact]
@@ -77,7 +76,7 @@ public sealed class ApiTests(MigratedDatabase database) : IClassFixture<Migrated
         Assert.Contains("audit:read", await forbidden.Content.ReadAsStringAsync(), StringComparison.Ordinal);
         var admin = Hosts.Token(app.Services, ["super_admin"]);
         Assert.Equal(HttpStatusCode.OK, (await client.SendAsync(Hosts.Request(HttpMethod.Get, "/v1/admin/audit", admin))).StatusCode);
-        Assert.Equal(HttpStatusCode.NotImplemented, (await client.SendAsync(Hosts.Request(HttpMethod.Get, $"/v1/customer/providers/{Guid.NewGuid()}/reviews", customer))).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await client.SendAsync(Hosts.Request(HttpMethod.Get, $"/v1/customer/providers/{Guid.NewGuid()}/reviews", customer))).StatusCode);
         var claims = app.Services.GetRequiredService<TokenVerifier>().Verify(admin);
         await app.Services.GetRequiredService<Denylist>().Deny(claims.TokenId, TimeSpan.FromMinutes(1));
         Assert.Equal("UNAUTHENTICATED", await Hosts.ErrorCode(await client.SendAsync(Hosts.Request(HttpMethod.Get, "/v1/admin/audit", admin))));

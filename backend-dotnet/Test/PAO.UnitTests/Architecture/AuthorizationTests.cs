@@ -41,6 +41,14 @@ public static partial class AuthorizationAudit
         }
     }
 
+    /// <summary>Spec operations no controller action serves, as `METHOD /path`; the 501 catch-all does not count.</summary>
+    public static IEnumerable<string> Unserved(IEnumerable<Type> controllers, SpecRoutes routes)
+    {
+        var served = Actions(controllers.Where(c => c != typeof(PAO.Core.Platform.UnimplementedController)))
+            .SelectMany(Routes).Select(r => routes.Match(r.Method, r.Path).Match?.Operation.Id).OfType<string>().ToHashSet();
+        return routes.Operations.Where(op => !served.Contains(op.Id)).Select(op => $"{op.Method} {op.PathTemplate}");
+    }
+
     /// <summary>Role → permissions from the RBAC seed script.</summary>
     public static IReadOnlyDictionary<string, HashSet<string>> Holders(string seedSql)
     {
@@ -122,6 +130,15 @@ public sealed class AuthorizationTests
     public void Every_attribute_matches_the_spec_permission_and_security()
     {
         Assert.Empty(AuthorizationAudit.Mismatched(ArchitectureTests.Controllers(typeof(ApiHost).Assembly), Routes, Holders));
+    }
+
+    [Fact]
+    public void Every_operation_is_served_leaving_nothing_to_the_501_catch_all()
+    {
+        Assert.Empty(AuthorizationAudit.Unserved(ArchitectureTests.Controllers(typeof(ApiHost).Assembly), Routes));
+        var sample = AuthorizationAudit.Unserved([typeof(SampleController)], Routes).ToList();
+        Assert.Contains("get /v1/admin/dashboard", sample);
+        Assert.DoesNotContain("post /v1/auth/otp/request", sample);
     }
 
     [Fact]

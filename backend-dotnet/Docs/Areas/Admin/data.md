@@ -1,6 +1,7 @@
 # Admin area — data
 
 Schema `admin`, created by the scripts in `DB Changes/admin/` ([database index](../../Database/README.md)).
+EF models: `PAO.EF/Admin/AdminRecords.cs`.
 
 | Table | Created by |
 |---|---|
@@ -12,4 +13,10 @@ Schema `admin`, created by the scripts in `DB Changes/admin/` ([database index](
 | `admin.outbox` | `DB Changes/admin/0001_init.sql` |
 | `admin.processed_events` | `DB Changes/admin/0001_init.sql` |
 
-Repositories: none yet; each repository gets an entry here when it is ported.
+| Repository | Role |
+|---|---|
+| `SettingsRepository` | list, get, update with `admin.SettingChanged` |
+| `ComplaintRepository` | complaints with ticket numbers and notes, the queue, locked updates with their events, counts |
+| `DashboardRepository` | the dashboard counts and the read-model writes the subscribers make |
+
+Redis: `cache:settings` (10 minutes), `cache:dashboard` (1 minute).

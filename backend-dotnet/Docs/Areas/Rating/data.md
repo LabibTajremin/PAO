@@ -1,6 +1,7 @@
 # Rating area — data
 
 Schema `rating`, created by the scripts in `DB Changes/rating/` ([database index](../../Database/README.md)).
+EF models: `PAO.EF/Rating/RatingRecords.cs`.
 
 | Table | Created by |
 |---|---|
@@ -10,4 +11,6 @@ Schema `rating`, created by the scripts in `DB Changes/rating/` ([database index
 | `rating.outbox` | `DB Changes/rating/0001_init.sql` |
 | `rating.processed_events` | `DB Changes/rating/0001_init.sql` |
 
-Repositories: none yet; each repository gets an entry here when it is ported.
+| Repository | Role |
+|---|---|
+| `RatingRepository` | reviewable bookings, a review with its aggregate upsert and event in one transaction, batched aggregates, keyset review pages, erasure |

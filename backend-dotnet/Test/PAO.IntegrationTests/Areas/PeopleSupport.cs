@@ -2,64 +2,24 @@ using System.Net;
 using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using PAO.Core.Areas.Admin.Services.Shared;
+using Microsoft.EntityFrameworkCore;
+using PAO.Core.Areas.Admin.Features.Settings.Commands;
+using PAO.EF;
+using PAO.Infrastructure.Redis;
+using PAO.Lib.Mediator;
 using PAO.Core.Areas.Customer.Services;
 using PAO.Core.Areas.Merchant.Services;
-using PAO.Core.Areas.Rating.Services.Shared;
 using PAO.Infrastructure.Data;
 using PAO.Infrastructure.Events;
 using PAO.Infrastructure.Storage;
 using PAO.Infrastructure.Testing;
-using PAO.Lib.Areas.Admin;
 using PAO.Lib.Areas.Identity;
-using PAO.Lib.Areas.Rating;
 using PAO.Migrator;
 using PAO.TestKit;
 
 namespace PAO.IntegrationTests.Areas;
 
-/// <summary>Stands in for Admin, which is not ported yet: settings the test can change, or a failure.</summary>
-public sealed class FakeAdmin : IAdminSharedService
-{
-    public PlatformSettings Settings { get; set; } = new()
-    {
-        AcceptTimeoutAsapMs = 0,
-        AcceptTimeoutScheduledMs = 0,
-        DefaultSearchRadiusM = 5000,
-        RatingFloor = 3.5,
-        RatingMinJobs = 10,
-        MaxProviderCancellations30d = 3,
-        StartCodeMaxAttempts = 3,
-        StartCodeLockoutMs = 0,
-        PoliceClearanceValidityMs = 0,
-        Level2CoolingOffMs = 0,
-        DocumentRetentionMs = 0,
-        ServiceAreaGeoJson = string.Empty,
-    };
-
-    public bool Down { get; set; }
-
-    public Task<PlatformSettings> GetSettings(CancellationToken cancellationToken) =>
-        Down ? throw new InvalidOperationException("admin down") : Task.FromResult(Settings);
-
-    public Task<int> CountVerifiedComplaints(Guid againstId, CancellationToken cancellationToken) => Task.FromResult(0);
-}
-
-/// <summary>Stands in for Rating, which is not ported yet.</summary>
-public sealed class FakeRatings : IRatingSharedService
-{
-    public Task<RatingSummary> GetMerchantRating(Guid merchantId, CancellationToken cancellationToken) =>
-        Task.FromResult(new RatingSummary { Average = 4.5, Count = 2, Distribution = [0, 0, 0, 1, 1] });
-
-    public Task<IReadOnlyDictionary<Guid, RatingSummary>> GetMerchantRatings(IReadOnlyCollection<Guid> merchantIds, CancellationToken cancellationToken) =>
-        throw new NotSupportedException();
-
-    public Task<RatingSummary> GetCustomerRating(Guid customerId, CancellationToken cancellationToken) => throw new NotSupportedException();
-
-    public Task<bool> HasReviewed(Guid bookingId, Guid authorId, CancellationToken cancellationToken) => throw new NotSupportedException();
-}
-
-/// <summary>An API with real Identity, Media and Catalog, seeded, for the Customer and Merchant tests.</summary>
+/// <summary>An API with every area real, the catalog seeded, for the Customer, Merchant, Booking, Rating and Admin tests.</summary>
 public sealed class PeopleApi : IAsyncDisposable
 {
     private static readonly byte[] Jpeg = [.. Enumerable.Repeat((byte)0xff, 1024)];
@@ -72,7 +32,6 @@ public sealed class PeopleApi : IAsyncDisposable
 
     public AreaApi Api { get; }
     public FakeClock Clock { get; }
-    public FakeAdmin Admin => Api.Services.GetRequiredService<FakeAdmin>();
     public IServiceProvider Services => Api.Services;
 
     public static async Task<PeopleApi> Start(string databaseUrl, bool seed = true)
@@ -92,14 +51,37 @@ public sealed class PeopleApi : IAsyncDisposable
         var api = await AreaApi.Start(databaseUrl, services =>
         {
             services.Replace(ServiceDescriptor.Singleton<IClock>(clock));
-            services.AddSingleton<FakeAdmin>();
-            services.AddSingleton<IAdminSharedService>(sp => sp.GetRequiredService<FakeAdmin>());
-            services.AddSingleton<IRatingSharedService, FakeRatings>();
         });
         return new PeopleApi(api, clock);
     }
 
     public ValueTask DisposeAsync() => Api.DisposeAsync();
+
+    /// <summary>Changes a platform setting through Admin's own use case, as a super admin would.</summary>
+    public async Task SetSetting(string key, string value)
+    {
+        using var scope = Services.CreateScope();
+        await scope.ServiceProvider.GetRequiredService<IMediator>().Send(new UpdateSetting(Guid.NewGuid(), key, value));
+    }
+
+    /// <summary>Takes the settings table away (`down`) or brings it back, emptying the settings cache either way.</summary>
+    public async Task SettingsDown(bool down)
+    {
+        using var scope = Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<PaoDbContext>();
+        await db.Database.ExecuteSqlRawAsync(down ? "ALTER TABLE admin.settings RENAME TO settings_gone" : "ALTER TABLE admin.settings_gone RENAME TO settings");
+        await ForgetSettings();
+    }
+
+    /// <summary>Empties the settings cache, so the next read comes from the database.</summary>
+    public Task ForgetSettings() => Services.GetRequiredService<JsonCache>().Delete(Services.GetRequiredService<RedisKeys>().Key("cache", "settings"));
+
+    /// <summary>Runs SQL on the test database.</summary>
+    public async Task Sql(string sql)
+    {
+        using var scope = Services.CreateScope();
+        await scope.ServiceProvider.GetRequiredService<PaoDbContext>().Database.ExecuteSqlRawAsync(sql);
+    }
 
     public Task<(HttpStatusCode Status, JsonElement Body)> Call(HttpMethod method, string path, string? token, object? body = null) =>
         Api.Call(method, path, token, body);
@@ -141,11 +123,11 @@ public sealed class PeopleApi : IAsyncDisposable
         return Guid.Parse(id);
     }
 
-    /// <summary>The bus with every area's subscribers, as the worker builds it.</summary>
-    public EventBus Bus()
+    /// <summary>The bus with Customer's and Merchant's subscribers, or with every area's (`all`) as the worker builds it.</summary>
+    public EventBus Bus(bool all = false)
     {
         var bus = new EventBus();
-        foreach (var s in Services.GetServices<IEventSubscriptions>().Where(s => s is CustomerSubscriptions or MerchantSubscriptions))
+        foreach (var s in Services.GetServices<IEventSubscriptions>().Where(s => all || s is CustomerSubscriptions or MerchantSubscriptions))
         {
             s.Subscribe(bus);
         }

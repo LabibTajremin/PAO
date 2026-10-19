@@ -7,6 +7,7 @@ Every `IScheduledJob`, its schedule and effect. Areas add theirs as they are por
 |---|---|---|---|
 | `MediaOrphanPurgeJob` | `media.purge_orphans` | daily 03:30 Asia/Dhaka | deletes uploads never attached to a record within 24 hours (500 per run) |
 | `MerchantPresenceReapJob` | `provider.reap_lost_presence` | every minute | merchants whose 90 s heartbeat lapsed go offline with `ProviderWentOffline{reason: heartbeat_lost}` |
+| `BookingExpiryJob` | `booking.expire_requests` | every 15 s | requests past their accept deadline time out with `booking.BookingTimedOut` (D12); a missed run catches up on the next |
 | `MediatorJob` | — | base class | runs one mediator request in a fresh scope; the three verification jobs below use it |
 | `ExpireDocumentsJob` | `verification.expire_documents` | daily 02:00 Asia/Dhaka | expires approved documents past their date; levels drop |
 | `ExpiryRemindersJob` | `verification.expiry_reminders` | daily 09:00 Asia/Dhaka | 30, 7 and 1 day reminders, each once |

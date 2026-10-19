@@ -139,12 +139,12 @@ public sealed class CustomerApiTests(MigratedDatabase database) : IClassFixture<
         var plain = await api.Call(HttpMethod.Post, "/v1/customer/addresses", token, new { label = "home", line1 = "Road 5", location = new { lat = 23.8, lng = 90.4 } });
         Assert.Equal((HttpStatusCode.Created, ""), (plain.Status, plain.Body.GetProperty("line2").GetString()));
         Assert.True((await api.Call(HttpMethod.Get, "/v1/customer/service-area?lat=23.8&lng=90.4", token)).Body.GetProperty("covered").GetBoolean());
-        api.Admin.Settings = api.Admin.Settings with { ServiceAreaGeoJson = """{"type":"Polygon","coordinates":[[[90.3,23.7],[90.5,23.7],[90.5,23.9],[90.3,23.9],[90.3,23.7]]]}""" };
+        await api.SetSetting("service_area.geojson", """{"type":"Polygon","coordinates":[[[90.3,23.7],[90.5,23.7],[90.5,23.9],[90.3,23.9],[90.3,23.7]]]}""");
         Assert.True((await api.Call(HttpMethod.Get, "/v1/customer/service-area?lat=23.8&lng=90.4", token)).Body.GetProperty("covered").GetBoolean());
         Assert.False(Contract(c => c.IsInServiceArea(new GeoPoint { Lat = 22.3, Lng = 91.8 }, CancellationToken.None)));
-        api.Admin.Down = true;
+        await api.SettingsDown(true);
         Assert.Equal(HttpStatusCode.InternalServerError, (await api.Call(HttpMethod.Get, "/v1/customer/service-area?lat=23.8&lng=90.4", token)).Status);
-        api.Admin.Down = false;
+        await api.SettingsDown(false);
     }
 
     [Fact]

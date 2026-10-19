@@ -97,6 +97,7 @@ public sealed class MerchantPresenceTests(MigratedDatabase database) : IClassFix
         var online = await api.Merchants(m => m.SearchMerchants(new MerchantQuery { Id = pro.Id, Text = string.Empty, Status = string.Empty, Limit = 5 }, CancellationToken.None));
         Assert.True(Assert.Single(online).Online);
         var (_, customer) = await api.SignIn("01812345601", "customer");
+        await api.Sql($"INSERT INTO rating.aggregates (subject_id, subject_role, review_count, star_sum, stars_4, stars_5) VALUES ('{pro.Id}', 'provider', 2, 9, 1, 1)");
         var shown = await api.Call(HttpMethod.Get, $"/v1/customer/providers/{pro.Id}", customer);
         Assert.Equal((HttpStatusCode.OK, "verified_pro", 1), (shown.Status, shown.Body.GetProperty("badge").GetString(), shown.Body.GetProperty("rating").GetProperty("distribution").GetProperty("5").GetInt32()));
         var unverified = await api.Enrol("01712345604", "male", Electrician);
@@ -148,10 +149,10 @@ public sealed class MerchantPresenceTests(MigratedDatabase database) : IClassFix
             await Assert.ThrowsAnyAsync<Exception>(() => bus.Dispatch(api.Envelope(name, "not json"), CancellationToken.None));
         }
         var p = await api.Online("01712345621", "male", 1, Electrician);
-        api.Admin.Down = true;
+        await api.SettingsDown(true);
         await Assert.ThrowsAnyAsync<Exception>(() => api.Deliver("rating.ReviewSubmitted", new { subjectId = p.Id, subjectRole = "provider", newAverage = 2, newCount = 20 }, bus));
         await Assert.ThrowsAnyAsync<Exception>(() => api.Deliver("booking.BookingCancelled", new { bookingId = Guid.NewGuid(), providerId = p.Id, by = "provider", afterAcceptance = true }, bus));
-        api.Admin.Down = false;
+        await api.SettingsDown(false);
         await api.Deliver("booking.BookingCancelled", new { bookingId = Guid.NewGuid(), providerId = p.Id, by = "provider", afterAcceptance = false }, bus);
     }
 

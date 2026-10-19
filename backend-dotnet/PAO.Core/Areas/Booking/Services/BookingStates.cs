@@ -16,11 +16,11 @@ public static class BookingStates
             [BookingStatus.Accepted] = [Provider],
             [BookingStatus.Rejected] = [Provider],
             [BookingStatus.TimedOut] = [BookingActor.System],
-            [BookingStatus.Cancelled] = [Customer],
+            [BookingStatus.Cancelled] = [BookingActor.Customer],
         },
-        [BookingStatus.Accepted] = new() { [BookingStatus.OnTheWay] = [Provider], [BookingStatus.Cancelled] = [Customer, Provider] },
-        [BookingStatus.OnTheWay] = new() { [BookingStatus.Arrived] = [Provider], [BookingStatus.Cancelled] = [Customer, Provider] },
-        [BookingStatus.Arrived] = new() { [BookingStatus.InProgress] = [Provider], [BookingStatus.Cancelled] = [Customer, Provider] },
+        [BookingStatus.Accepted] = new() { [BookingStatus.OnTheWay] = [Provider], [BookingStatus.Cancelled] = [BookingActor.Customer, Provider] },
+        [BookingStatus.OnTheWay] = new() { [BookingStatus.Arrived] = [Provider], [BookingStatus.Cancelled] = [BookingActor.Customer, Provider] },
+        [BookingStatus.Arrived] = new() { [BookingStatus.InProgress] = [Provider], [BookingStatus.Cancelled] = [BookingActor.Customer, Provider] },
         [BookingStatus.InProgress] = new() { [BookingStatus.Completed] = [Provider] },
     };
 

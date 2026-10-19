@@ -19,7 +19,7 @@ public sealed class GetEarningsSummaryValidator : AbstractValidator<GetEarningsS
     /// <summary>`day`, `week` or `month`, as `booking.invalid` otherwise.</summary>
     public GetEarningsSummaryValidator() => RuleFor(r => r.Period).Custom((period, _) =>
     {
-        if (EarningsCalendar.Period(period, DateOnly.MinValue) is null)
+        if (EarningsCalendar.Period(period, new DateOnly(2026, 1, 1)) is null)
         {
             throw new DomainException(BookingReasons.Invalid);
         }

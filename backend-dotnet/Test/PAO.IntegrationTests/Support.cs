@@ -125,12 +125,26 @@ public sealed class TestErrors : IErrorMap
     };
 }
 
-/// <summary>Serves createBooking for the edge tests: idempotency, error maps, the mediator.</summary>
+/// <summary>Present in hosts whose createBooking is the edge tests' stand-in.</summary>
+public sealed class EdgeTestRoutes;
+
+/// <summary>Lets an action match only in hosts that registered <see cref="EdgeTestRoutes"/>.</summary>
+[AttributeUsage(AttributeTargets.Method)]
+public sealed class EdgeTestRouteAttribute : Attribute, Microsoft.AspNetCore.Mvc.ActionConstraints.IActionConstraint
+{
+    public int Order => 0;
+
+    public bool Accept(Microsoft.AspNetCore.Mvc.ActionConstraints.ActionConstraintContext context) =>
+        context.RouteContext.HttpContext.RequestServices.GetService<EdgeTestRoutes>() is not null;
+}
+
+/// <summary>Serves createBooking for the edge tests (idempotency, error maps, the mediator) ahead of Booking's own route.</summary>
 [ApiController]
 [ErrorMap(typeof(TestErrors))]
 public sealed class TestBookingsController(IMediator mediator) : ControllerBase
 {
-    [HttpPost("/v1/customer/bookings")]
+    [HttpPost("/v1/customer/bookings", Order = -1)]
+    [EdgeTestRoute]
     [Customer(Permission = "booking:create")]
     public async Task<IActionResult> Create([FromBody] JsonElement body)
     {

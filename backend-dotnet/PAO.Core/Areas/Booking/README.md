@@ -8,4 +8,4 @@ Bookings and their state machine (PRD §5): requests, acceptance, start codes, e
 - Layout: `Controllers/` (thin, mediator only), `Features/<Feature>/Commands|Queries/`
   (handler, request and validator together), `Services/` (logic shared by several
   handlers), `Repositories/` (EF Core data access).
-- Status: skeleton and contract (P17 task 1); the use cases are ported in later P17 tasks.
+- Status: ported from NestJS in P17 task 4.

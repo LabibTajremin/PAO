@@ -16,7 +16,7 @@ public sealed record BookingRowForSide(BookingRow Row, string Counterpart);
 public sealed class BookingMappingProfile : IMappingProfile
 {
     /// <inheritdoc />
-    public void Configure(MappingRegistry registry) => registry
+    public void Configure(MappingRegistry registry) => Rows(Details(registry
         .Add<BookingLine, BookingItemView>((l, _) => new BookingItemView
         {
             SubServiceId = l.SubServiceId,
@@ -28,7 +28,9 @@ public sealed class BookingMappingProfile : IMappingProfile
             Total = l.TotalPaisa,
             Extra = l.Extra,
         })
-        .Add<BookingForSide, BookingView>(View)
+        .Add<BookingForSide, BookingView>(View)));
+
+    private static MappingRegistry Details(MappingRegistry registry) => registry
         .Add<StoredBooking, ReceiptView>((b, m) => new ReceiptView
         {
             BookingId = b.Id,
@@ -56,7 +58,9 @@ public sealed class BookingMappingProfile : IMappingProfile
             TotalPaisa = b.TotalPaisa,
             CreatedAt = b.CreatedAt,
             CompletedAt = b.CompletedAt,
-        })
+        });
+
+    private static MappingRegistry Rows(MappingRegistry registry) => registry
         .Add<BookingRowForSide, BookingListItemView>((r, _) => new BookingListItemView
         {
             Id = r.Row.Id,

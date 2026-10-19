@@ -1,6 +1,7 @@
 # Booking area — data
 
 Schema `booking`, created by the scripts in `DB Changes/booking/` ([database index](../../Database/README.md)).
+EF models: `PAO.EF/Booking/BookingRecords.cs`.
 
 | Table | Created by |
 |---|---|
@@ -11,4 +12,7 @@ Schema `booking`, created by the scripts in `DB Changes/booking/` ([database ind
 | `booking.outbox` | `DB Changes/booking/0001_init.sql` |
 | `booking.processed_events` | `DB Changes/booking/0001_init.sql` |
 
-Repositories: none yet; each repository gets an entry here when it is ported.
+| Repository | Role |
+|---|---|
+| `BookingRepository` | create (own transaction; the idempotency key and one-open-request-per-pair constraints), change under `FOR UPDATE` and the provider's advisory lock with its events, erasure |
+| `BookingQueries` | one booking in four queries, party lists, the monitor, due requests, earnings per Dhaka day and jobs, merchant stats |
