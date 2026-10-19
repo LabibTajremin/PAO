@@ -43,6 +43,14 @@ public sealed class CatalogRepository(PaoDbContext db, IMapper mapper)
         return rows.Count == 0 ? throw new DomainException(CatalogReasons.NotFound) : rows[0];
     }
 
+    /// <summary>The sub-services among `ids` that exist, with their current prices, in one query.</summary>
+    public Task<IReadOnlyList<SubServiceNode>> SubServicesOf(IReadOnlyCollection<Guid> ids, CancellationToken cancellationToken) =>
+        SubServices(cancellationToken, ids: ids);
+
+    /// <summary>The published services among `ids`.</summary>
+    public async Task<HashSet<Guid>> PublishedServices(IReadOnlyCollection<Guid> ids, CancellationToken cancellationToken) =>
+        [.. await db.Set<ServiceRecord>().Where(s => ids.Contains(s.Id) && s.Published).Select(s => s.Id).ToListAsync(cancellationToken)];
+
     /// <summary>Price versions, newest first.</summary>
     public async Task<IReadOnlyList<PriceVersionInfo>> PriceHistory(Guid subServiceId, CancellationToken cancellationToken)
     {
@@ -72,9 +80,14 @@ public sealed class CatalogRepository(PaoDbContext db, IMapper mapper)
     public Task<long> Version(CancellationToken cancellationToken) =>
         db.Set<CatalogVersionRecord>().Select(v => v.Version).FirstAsync(cancellationToken);
 
-    private async Task<IReadOnlyList<SubServiceNode>> SubServices(CancellationToken cancellationToken, Guid? serviceId = null, Guid? id = null)
+    private async Task<IReadOnlyList<SubServiceNode>> SubServices(
+        CancellationToken cancellationToken, Guid? serviceId = null, Guid? id = null, IReadOnlyCollection<Guid>? ids = null)
     {
         var rows = db.Set<SubServiceRecord>().AsQueryable();
+        if (ids is not null)
+        {
+            rows = rows.Where(s => ids.Contains(s.Id));
+        }
         if (serviceId is { } sid)
         {
             rows = rows.Where(s => s.ServiceId == sid);

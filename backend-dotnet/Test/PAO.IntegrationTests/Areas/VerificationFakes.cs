@@ -148,6 +148,8 @@ public sealed class VerificationCatalog : ICatalogSharedService
         Task.FromResult<IReadOnlyList<CatalogService>>([Service(Electrician, false)]);
 
     public Task<PriceSnapshot> GetPriceSnapshot(Guid subServiceId, CancellationToken cancellationToken) => throw new NotSupportedException();
+
+    public Task<IReadOnlyList<PriceSnapshot>> GetPriceSnapshots(IReadOnlyCollection<Guid> subServiceIds, CancellationToken cancellationToken) => throw new NotSupportedException();
 }
 
 /// <summary>The platform defaults: clearances last a year, Level 2 cools off for 14 days, documents stay a year.</summary>

@@ -21,4 +21,5 @@ Mapping: `CatalogMappingProfile` (`PAO.Lib/Areas/Catalog/`).
 |---|---|
 | `GetService` | Returns a service with its rules (radius, level, women-only), or throws `catalog.service_not_found`. |
 | `GetPriceSnapshot` | Returns the current price version of a sub-service so a booking can copy it (PRD §4), or throws `catalog.sub_service_not_found`. |
+| `GetPriceSnapshots` | Returns the current prices of many sub-services in one round of queries; unknown ids are absent. Booking prices a request's items with it. |
 | `ListServices` | Returns every published service, for enrolment and admin filters. |

@@ -14,6 +14,9 @@ public interface ICatalogSharedService
     /// <summary>Returns the current price version of a sub-service so a booking can copy it (PRD §4), or throws `catalog.sub_service_not_found`.</summary>
     Task<PriceSnapshot> GetPriceSnapshot(Guid subServiceId, CancellationToken cancellationToken);
 
+    /// <summary>Returns the current prices of the sub-services among `subServiceIds` that exist, in one round of queries; unknown ids are absent.</summary>
+    Task<IReadOnlyList<PriceSnapshot>> GetPriceSnapshots(IReadOnlyCollection<Guid> subServiceIds, CancellationToken cancellationToken);
+
     /// <summary>Returns every published service, for enrolment and admin filters.</summary>
     Task<IReadOnlyList<CatalogService>> ListServices(CancellationToken cancellationToken);
 }

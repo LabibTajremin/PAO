@@ -30,21 +30,24 @@ public static class BookingEvents
     public const string BookingCancelled = "booking.BookingCancelled";
 }
 
-/// <summary>The fields every booking event carries.</summary>
+/// <summary>
+/// The fields every booking event carries, so subscribers can route without calling back;
+/// Booking fills them from the booking when it publishes.
+/// </summary>
 public abstract record BookingEvent(string Name) : IDomainEvent
 {
     /// <summary>The booking id.</summary>
-    public required Guid BookingId { get; init; }
-    /// <summary>The number.</summary>
-    public required string Number { get; init; }
+    public Guid BookingId { get; init; }
+    /// <summary>The number, e.g. PAO-104233.</summary>
+    public string Number { get; init; } = string.Empty;
     /// <summary>The customer id.</summary>
-    public required Guid CustomerId { get; init; }
+    public Guid CustomerId { get; init; }
     /// <summary>The provider id.</summary>
-    public required Guid ProviderId { get; init; }
+    public Guid ProviderId { get; init; }
     /// <summary>The service id.</summary>
-    public required Guid ServiceId { get; init; }
-    /// <summary>The at.</summary>
-    public required string At { get; init; }
+    public Guid ServiceId { get; init; }
+    /// <summary>When the change happened (ISO 8601).</summary>
+    public string At { get; init; } = string.Empty;
 }
 
 /// <summary>A customer requested a booking.</summary>

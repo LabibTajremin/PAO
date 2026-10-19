@@ -16,17 +16,15 @@ public sealed class CatalogSharedService(CatalogRepository repository, CatalogTr
     {
         var sub = await NotFoundAs(CatalogErrors.SubServiceNotFound, () => repository.SubService(subServiceId, cancellationToken));
         var service = await repository.Service(sub.ServiceId, cancellationToken);
-        return new PriceSnapshot
-        {
-            SubServiceId = sub.Id,
-            ServiceId = sub.ServiceId,
-            PriceVersionId = sub.PriceVersionId,
-            Name = sub.Name,
-            Unit = sub.Unit,
-            AmountPaisa = sub.Price,
-            MaxQuantity = sub.MaxQuantity,
-            Published = sub.Published && service.Published,
-        };
+        return Snapshot(sub, service.Published);
+    }
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyList<PriceSnapshot>> GetPriceSnapshots(IReadOnlyCollection<Guid> subServiceIds, CancellationToken cancellationToken)
+    {
+        var subs = await repository.SubServicesOf(subServiceIds, cancellationToken);
+        var published = await repository.PublishedServices([.. subs.Select(s => s.ServiceId).Distinct()], cancellationToken);
+        return [.. subs.Select(s => Snapshot(s, published.Contains(s.ServiceId)))];
     }
 
     /// <inheritdoc />
@@ -44,6 +42,18 @@ public sealed class CatalogSharedService(CatalogRepository repository, CatalogTr
             throw new DomainException(reason, error);
         }
     }
+
+    private static PriceSnapshot Snapshot(SubServiceNode sub, bool servicePublished) => new()
+    {
+        SubServiceId = sub.Id,
+        ServiceId = sub.ServiceId,
+        PriceVersionId = sub.PriceVersionId,
+        Name = sub.Name,
+        Unit = sub.Unit,
+        AmountPaisa = sub.Price,
+        MaxQuantity = sub.MaxQuantity,
+        Published = sub.Published && servicePublished,
+    };
 
     private static CatalogService ToContract(ServiceNode s) => new()
     {
