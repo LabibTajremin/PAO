@@ -20,35 +20,8 @@ public sealed class VerificationMappingProfile : IMappingProfile
 
     /// <inheritdoc />
     public void Configure(MappingRegistry registry) => registry
-        .Add<VerificationItemRecord, ItemState>((r, _) => new ItemState
-        {
-            Type = r.ItemType,
-            Status = r.Status,
-            Reason = r.RejectionReason,
-            Fields = JsonSerializer.Deserialize<Dictionary<string, string>>(r.Fields, Json)!,
-            SubmittedAt = r.SubmittedAt,
-            DecidedAt = r.DecidedAt,
-            DecidedBy = r.DecidedBy,
-            ExpiresAt = r.ExpiresAt,
-        })
-        .Add<Level2SessionRecord, Level2SessionState>((r, _) => new Level2SessionState
-        {
-            Id = r.Id,
-            ProviderId = r.ProviderId,
-            ServiceId = r.ServiceId,
-            ScheduledAt = r.ScheduledAt,
-            Location = r.Location,
-            Status = r.Status,
-            Result = r.Result ?? string.Empty,
-            Checklist = JsonSerializer.Deserialize<List<CheckItem>>(r.Checklist, Json)!,
-            Notes = r.Notes,
-            VisitLat = r.VisitLat,
-            VisitLng = r.VisitLng,
-            Photos = r.PhotoMediaIds,
-            DecidedBy = r.DecidedBy,
-            DecidedAt = r.DecidedAt,
-            CreatedAt = r.CreatedAt,
-        })
+        .Add<VerificationItemRecord, ItemState>((r, _) => Item(r))
+        .Add<Level2SessionRecord, Level2SessionState>((r, _) => SessionState(r))
         .Add<VerificationDocumentRecord, VerificationDocument>((r, _) => new VerificationDocument
         {
             Id = r.Id,
@@ -91,4 +64,35 @@ public sealed class VerificationMappingProfile : IMappingProfile
             Checklist = done ? s.Checklist : null,
         };
     }
+
+    private static ItemState Item(VerificationItemRecord r) => new()
+    {
+        Type = r.ItemType,
+        Status = r.Status,
+        Reason = r.RejectionReason,
+        Fields = JsonSerializer.Deserialize<Dictionary<string, string>>(r.Fields, Json)!,
+        SubmittedAt = r.SubmittedAt,
+        DecidedAt = r.DecidedAt,
+        DecidedBy = r.DecidedBy,
+        ExpiresAt = r.ExpiresAt,
+    };
+
+    private static Level2SessionState SessionState(Level2SessionRecord r) => new()
+    {
+        Id = r.Id,
+        ProviderId = r.ProviderId,
+        ServiceId = r.ServiceId,
+        ScheduledAt = r.ScheduledAt,
+        Location = r.Location,
+        Status = r.Status,
+        Result = r.Result ?? string.Empty,
+        Checklist = JsonSerializer.Deserialize<List<CheckItem>>(r.Checklist, Json)!,
+        Notes = r.Notes,
+        VisitLat = r.VisitLat,
+        VisitLng = r.VisitLng,
+        Photos = r.PhotoMediaIds,
+        DecidedBy = r.DecidedBy,
+        DecidedAt = r.DecidedAt,
+        CreatedAt = r.CreatedAt,
+    };
 }

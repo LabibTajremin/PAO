@@ -51,22 +51,29 @@ public sealed class VerificationLifecycleTests(MigratedDatabase database) : Veri
         Assert.Equal(HttpStatusCode.OK, passed.Status);
         var level2 = await Api.Call(HttpMethod.Get, "/v1/provider/verification", Api.Token(p.Id, "provider"));
         Assert.Equal((2, "verified_pro"), (level2.Body.GetProperty("level").GetInt32(), level2.Body.GetProperty("badge").GetString()));
-        var list = $"{sessions}?limit=1&status=completed";
-        var page = await Api.Call(HttpMethod.Get, $"{list}&providerId={p.Id}", Verifier);
-        Assert.Equal(1, page.Body.GetProperty("items").GetArrayLength());
-        var rest = await Api.Call(HttpMethod.Get, $"{list}&providerId={p.Id}&cursor={page.Body.GetProperty("nextCursor").GetString()}", Verifier);
-        Assert.Equal(1, rest.Body.GetProperty("items").GetArrayLength());
-        Assert.False(rest.Body.TryGetProperty("nextCursor", out _));
-        Assert.Equal("Unsafe joints", (await Api.Call(HttpMethod.Get, $"{sessions}/{first}", Verifier)).Body.GetProperty("notes").GetString());
-        Assert.Equal(HttpStatusCode.NotFound, (await Api.Call(HttpMethod.Get, $"{sessions}/{Guid.NewGuid()}", Verifier)).Status);
-        Assert.Equal(HttpStatusCode.NotFound, (await Api.Call(HttpMethod.Post, $"{sessions}/{Guid.NewGuid()}/result", Verifier, pass)).Status);
-        Assert.Equal(HttpStatusCode.UnprocessableEntity, (await Api.Call(HttpMethod.Get, $"{sessions}?cursor=%25", Verifier)).Status);
+        await ListsAndLooksUp(p.Id, first);
         var stranger = body with { providerId = Guid.NewGuid(), location = "Office", scheduledAt = At(Clock.Now.AddHours(1)) };
         Assert.Equal("LEVEL2_NOT_ELIGIBLE", Code(await Api.Call(HttpMethod.Post, sessions, Verifier, stranger)));
         Assert.Equal(HttpStatusCode.UnprocessableEntity, (await Api.Call(HttpMethod.Post, sessions, Verifier, stranger with { serviceId = Guid.NewGuid() })).Status);
         Assert.Equal("VALIDATION_FAILED", Code(await Api.Call(HttpMethod.Post, sessions, Verifier, body with { scheduledAt = At(Clock.Now.AddHours(-1)) })));
         Assert.Equal("VALIDATION_FAILED", Code(await Api.Call(HttpMethod.Post, sessions, Verifier, body with { location = "  " })));
         Assert.Equal(1, await Count($"SELECT count(*)::int AS \"Value\" FROM verification.outbox WHERE aggregate_id = '{p.Id}' AND event_name = 'verification.Level2SessionScheduled' AND payload->>'scheduledAt' NOT LIKE '%.%' AND payload->>'sessionId' = '{first}'"));
+    }
+
+    private async Task ListsAndLooksUp(Guid id, string? first)
+    {
+        const string sessions = "/v1/admin/level2-sessions";
+        var pass = new { result = "pass", checklist = Array.Empty<object>() };
+        var list = $"{sessions}?limit=1&status=completed";
+        var page = await Api.Call(HttpMethod.Get, $"{list}&providerId={id}", Verifier);
+        Assert.Equal(1, page.Body.GetProperty("items").GetArrayLength());
+        var rest = await Api.Call(HttpMethod.Get, $"{list}&providerId={id}&cursor={page.Body.GetProperty("nextCursor").GetString()}", Verifier);
+        Assert.Equal(1, rest.Body.GetProperty("items").GetArrayLength());
+        Assert.False(rest.Body.TryGetProperty("nextCursor", out _));
+        Assert.Equal("Unsafe joints", (await Api.Call(HttpMethod.Get, $"{sessions}/{first}", Verifier)).Body.GetProperty("notes").GetString());
+        Assert.Equal(HttpStatusCode.NotFound, (await Api.Call(HttpMethod.Get, $"{sessions}/{Guid.NewGuid()}", Verifier)).Status);
+        Assert.Equal(HttpStatusCode.NotFound, (await Api.Call(HttpMethod.Post, $"{sessions}/{Guid.NewGuid()}/result", Verifier, pass)).Status);
+        Assert.Equal(HttpStatusCode.UnprocessableEntity, (await Api.Call(HttpMethod.Get, $"{sessions}?cursor=%25", Verifier)).Status);
     }
 
     [Fact]
