@@ -20,7 +20,12 @@ public sealed class CustomerApiTests(MigratedDatabase database) : IClassFixture<
 
     private static object Address(string label, bool isDefault) => new
     {
-        label, line1 = "House 12, Road 5", line2 = "Block C", area = "Banani", location = new { lat = 23.7937, lng = 90.4066 }, isDefault,
+        label,
+        line1 = "House 12, Road 5",
+        line2 = "Block C",
+        area = "Banani",
+        location = new { lat = 23.7937, lng = 90.4066 },
+        isDefault,
     };
 
     private async Task<string> Add(string token, object body)

@@ -5,6 +5,18 @@ namespace PAO.IntegrationTests.Areas;
 
 public sealed class SeedCommandTests(MigratedDatabase database) : IClassFixture<MigratedDatabase>
 {
+    // Production refuses the console SMS and log push adapters; the FCM file is read only on first push.
+    private System.Collections.Hashtable Prod()
+    {
+        var env = Hosts.Environment(database.Url, "prod");
+        env["SMS_ADAPTER"] = "sslwireless";
+        env["SSLWIRELESS_API_TOKEN"] = "token";
+        env["SSLWIRELESS_SID"] = "sid";
+        env["PUSH_ADAPTER"] = "fcm";
+        env["FCM_CREDENTIALS_FILE"] = "/nonexistent/fcm.json";
+        return env;
+    }
+
     [Fact]
     public async Task Seed_adds_the_demo_admins_outside_production_with_a_password()
     {
@@ -14,7 +26,7 @@ public sealed class SeedCommandTests(MigratedDatabase database) : IClassFixture<
         Assert.Equal(0, await new[] { "seed" }.RunMigrator(env, Hosts.Paths.Migrations, output, () => SeedCommand.Run(Hosts.Paths, env, output)));
         Assert.Equal(0, await SeedCommand.Run(Hosts.Paths, env, output));
         Assert.Contains("migrate seed: 4 admins", output.ToString(), StringComparison.Ordinal);
-        var prod = Hosts.Environment(database.Url, "prod");
+        var prod = Prod();
         prod["SEED_ADMIN_PASSWORD"] = "demo password 123";
         var quiet = new StringWriter();
         Assert.Equal(0, await SeedCommand.Run(Hosts.Paths, prod, quiet));
@@ -33,7 +45,7 @@ public sealed class SeedCommandTests(MigratedDatabase database) : IClassFixture<
         Assert.Equal(23.7937, fixture.GetProperty("lat").GetDouble());
         Assert.Equal(2, await new[] { "perf-seed", "0" }.RunMigrator(env, Hosts.Paths.Migrations, new StringWriter(), null, _ => Task.FromResult(0)));
         var refused = new StringWriter();
-        Assert.Equal(1, await PerfSeedCommand.Run(Hosts.Paths, Hosts.Environment(database.Url, "prod"), 1, refused));
+        Assert.Equal(1, await PerfSeedCommand.Run(Hosts.Paths, Prod(), 1, refused));
         Assert.Contains("refuses", refused.ToString(), StringComparison.Ordinal);
     }
 }

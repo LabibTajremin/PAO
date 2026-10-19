@@ -3,6 +3,8 @@ using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using PAO.Core.Areas.Admin.Services.Shared;
+using PAO.Core.Areas.Customer.Services;
+using PAO.Core.Areas.Merchant.Services;
 using PAO.Core.Areas.Rating.Services.Shared;
 using PAO.Infrastructure.Data;
 using PAO.Infrastructure.Events;
@@ -20,9 +22,18 @@ public sealed class FakeAdmin : IAdminSharedService
 {
     public PlatformSettings Settings { get; set; } = new()
     {
-        AcceptTimeoutAsapMs = 0, AcceptTimeoutScheduledMs = 0, DefaultSearchRadiusM = 5000, RatingFloor = 3.5, RatingMinJobs = 10,
-        MaxProviderCancellations30d = 3, StartCodeMaxAttempts = 3, StartCodeLockoutMs = 0, PoliceClearanceValidityMs = 0,
-        Level2CoolingOffMs = 0, DocumentRetentionMs = 0, ServiceAreaGeoJson = string.Empty,
+        AcceptTimeoutAsapMs = 0,
+        AcceptTimeoutScheduledMs = 0,
+        DefaultSearchRadiusM = 5000,
+        RatingFloor = 3.5,
+        RatingMinJobs = 10,
+        MaxProviderCancellations30d = 3,
+        StartCodeMaxAttempts = 3,
+        StartCodeLockoutMs = 0,
+        PoliceClearanceValidityMs = 0,
+        Level2CoolingOffMs = 0,
+        DocumentRetentionMs = 0,
+        ServiceAreaGeoJson = string.Empty,
     };
 
     public bool Down { get; set; }
@@ -126,7 +137,7 @@ public sealed class PeopleApi : IAsyncDisposable
     public EventBus Bus()
     {
         var bus = new EventBus();
-        foreach (var s in Services.GetServices<IEventSubscriptions>())
+        foreach (var s in Services.GetServices<IEventSubscriptions>().Where(s => s is CustomerSubscriptions or MerchantSubscriptions))
         {
             s.Subscribe(bus);
         }

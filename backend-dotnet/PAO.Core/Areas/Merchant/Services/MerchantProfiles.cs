@@ -1,5 +1,6 @@
 using PAO.Core.Areas.Merchant.Repositories;
 using PAO.Infrastructure.Data;
+using PAO.Lib.Areas.Identity;
 using PAO.Lib.Areas.Merchant;
 using PAO.Lib.Errors;
 
@@ -23,8 +24,21 @@ public sealed class MerchantProfiles(MerchantRepository repository, MerchantPeer
         }
         catch (DomainException error) when (error.Reason == MerchantErrors.NotFound)
         {
-            await repository.Ensure(id, await peers.Phone(id, cancellationToken), clock.Now, cancellationToken);
+            await repository.Ensure(id, await Phone(id, cancellationToken), clock.Now, cancellationToken);
             return await repository.Get(id, cancellationToken);
+        }
+    }
+
+    /// <summary>The account phone; a token whose account no longer exists has no merchant to create.</summary>
+    private async Task<string> Phone(Guid id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            return await peers.Phone(id, cancellationToken);
+        }
+        catch (DomainException error) when (error.Reason == IdentityErrors.AccountNotFound)
+        {
+            throw new DomainException(MerchantErrors.NotFound, error);
         }
     }
 

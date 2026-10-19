@@ -80,7 +80,11 @@ public sealed class CustomerRuleTests
     {
         var envelope = new Envelope
         {
-            Id = Guid.NewGuid(), Module = "m", Name = "n", AggregateId = "a", OccurredAt = DateTimeOffset.UtcNow,
+            Id = Guid.NewGuid(),
+            Module = "m",
+            Name = "n",
+            AggregateId = "a",
+            OccurredAt = DateTimeOffset.UtcNow,
             Payload = JsonDocument.Parse("""{"roles":["customer",1],"bad":"x"}""").RootElement,
         };
         var p = new EventPayload(envelope);
@@ -96,8 +100,11 @@ public sealed class MerchantRuleTests
 
     private static PersonalInfoInput Personal() => new()
     {
-        FullName = "Rahim Uddin", DateOfBirth = new DateOnly(2008, 10, 9), Gender = "male",
-        PresentAddress = "Banani 11", PermanentAddress = "Cumilla Sadar",
+        FullName = "Rahim Uddin",
+        DateOfBirth = new DateOnly(2008, 10, 9),
+        Gender = "male",
+        PresentAddress = "Banani 11",
+        PermanentAddress = "Cumilla Sadar",
     };
 
     [Fact]
@@ -160,8 +167,15 @@ public sealed class MerchantRuleTests
 
     private static MerchantCandidate C(string name, int level, double distance, double rating, string gender = "female") => new()
     {
-        Id = Guid.NewGuid(), Name = name, Gender = gender, Level = level, Rating = rating, RatingCount = 0,
-        CompletedJobs = 0, DistanceM = distance, WorkingRadiusM = 5000,
+        Id = Guid.NewGuid(),
+        Name = name,
+        Gender = gender,
+        Level = level,
+        Rating = rating,
+        RatingCount = 0,
+        CompletedJobs = 0,
+        DistanceM = distance,
+        WorkingRadiusM = 5000,
     };
 
     [Fact]

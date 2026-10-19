@@ -43,7 +43,10 @@ public sealed class VerificationPeers(IServiceProvider services)
 
     /// <summary>Marks the enrolment submitted; throws `verification.enrolment_pending` while required steps are open.</summary>
     public Task MarkSubmitted(Guid id, CancellationToken cancellationToken) =>
-        Translated(async () => { await Merchants.MarkSubmitted(id, cancellationToken); return true; }, MerchantErrors.EnrolmentIncomplete, VerificationReasons.EnrolmentPending);
+        Translated(
+            () => Translated(async () => { await Merchants.MarkSubmitted(id, cancellationToken); return true; }, MerchantErrors.EnrolmentIncomplete, VerificationReasons.EnrolmentPending),
+            MerchantErrors.NotFound,
+            VerificationReasons.NotFound);
 
     /// <summary>
     /// Checks the upload is the owner's confirmed file of an allowed purpose and spares it from

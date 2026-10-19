@@ -15,7 +15,11 @@ public static class MerchantSteps
 
     public static object Personal(string gender) => new
     {
-        fullName = "Rahim Uddin", dateOfBirth = "1990-04-12", gender, presentAddress = "Banani 11", permanentAddress = "Cumilla Sadar",
+        fullName = "Rahim Uddin",
+        dateOfBirth = "1990-04-12",
+        gender,
+        presentAddress = "Banani 11",
+        permanentAddress = "Cumilla Sadar",
     };
 
     /// <summary>Signs in on the partner app and saves the personal, services and area steps.</summary>

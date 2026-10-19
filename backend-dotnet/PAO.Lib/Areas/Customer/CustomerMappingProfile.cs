@@ -8,7 +8,9 @@ namespace PAO.Lib.Areas.Customer;
 public sealed class CustomerMappingProfile : IMappingProfile
 {
     /// <inheritdoc />
-    public void Configure(MappingRegistry registry) => registry
+    public void Configure(MappingRegistry registry) => Views(Rows(registry));
+
+    private static MappingRegistry Rows(MappingRegistry registry) => registry
         .Add<CustomerProfileRecord, CustomerProfile>((r, _) => new CustomerProfile
         {
             Id = r.Id,
@@ -28,6 +30,17 @@ public sealed class CustomerMappingProfile : IMappingProfile
             IsDefault = r.IsDefault,
             CreatedAt = r.CreatedAt,
         })
+        .Add<CustomerProfileRecord, CustomerRecord>((r, _) => new CustomerRecord
+        {
+            Id = r.Id,
+            Name = r.Name,
+            Phone = r.Phone,
+            Status = r.AccountStatus,
+            Bookings = r.Bookings,
+            CreatedAt = r.CreatedAt,
+        });
+
+    private static MappingRegistry Views(MappingRegistry registry) => registry
         .Add<SavedAddress, AddressView>((a, _) => new AddressView
         {
             Id = a.Id,
@@ -55,14 +68,5 @@ public sealed class CustomerMappingProfile : IMappingProfile
             Phone = d.Phone,
             PhotoUrl = d.PhotoUrl,
             Language = d.Profile.Language,
-        })
-        .Add<CustomerProfileRecord, CustomerRecord>((r, _) => new CustomerRecord
-        {
-            Id = r.Id,
-            Name = r.Name,
-            Phone = r.Phone,
-            Status = r.AccountStatus,
-            Bookings = r.Bookings,
-            CreatedAt = r.CreatedAt,
         });
 }

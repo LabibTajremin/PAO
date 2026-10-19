@@ -64,6 +64,11 @@ public sealed class MerchantPresenceTests(MigratedDatabase database) : IClassFix
             Assert.Equal(HttpStatusCode.NotFound, (await api.Call(HttpMethod.Post, path, stranger, Near)).Status);
         }
         Assert.Equal(HttpStatusCode.NotFound, (await api.Call(HttpMethod.Post, "/v1/provider/presence/offline", stranger)).Status);
+    }
+
+    [Fact]
+    public async Task Needs_services_and_an_area_to_go_online()
+    {
         var (_, noArea) = await api.SignIn("01712345699", "partner");
         await api.Call(HttpMethod.Put, "/v1/provider/enrolment/personal", noArea, Personal("male"));
         var noAreaId = (await api.Call(HttpMethod.Get, "/v1/provider/profile", noArea)).Body.GetProperty("id").GetGuid();

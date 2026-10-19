@@ -11,7 +11,7 @@ public sealed record MerchantRow(MerchantProfileRecord Record, IReadOnlyList<Gui
 public sealed class MerchantMappingProfile : IMappingProfile
 {
     /// <inheritdoc />
-    public void Configure(MappingRegistry registry) => registry
+    public void Configure(MappingRegistry registry) => Rows(registry
         .Add<MerchantRow, StoredMerchant>((row, _) => ToStored(row.Record, row.ServiceIds))
         .Add<StoredMerchant, MerchantProfile>((m, _) => new MerchantProfile
         {
@@ -30,7 +30,9 @@ public sealed class MerchantMappingProfile : IMappingProfile
             Language = m.Language,
             EmergencyContact = m.Emergency.Phone.Length == 0 ? null : m.Emergency,
             SubmittedAt = m.SubmittedAt,
-        })
+        }));
+
+    private static MappingRegistry Rows(MappingRegistry registry) => registry
         .Add<MerchantProfileRecord, MerchantCandidate>((r, _) => new MerchantCandidate
         {
             Id = r.Id,

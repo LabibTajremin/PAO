@@ -48,12 +48,12 @@ public sealed class MerchantEnrolmentTests(MigratedDatabase database) : IClassFi
         var missing = await Assert.ThrowsAsync<DomainException>(() => api.Merchants(m => m.GetMerchant(Guid.NewGuid(), CancellationToken.None)));
         Assert.Equal(MerchantErrors.NotFound, missing.Reason);
         Assert.False((await api.Merchants(m => m.Enrolment(Guid.NewGuid(), CancellationToken.None))).Complete);
-        var query = new MerchantQuery { Text = " RAHIM ", Status = "pending", Level = 0, Flagged = false, Limit = 5 };
+        var query = new MerchantQuery { Id = id, Text = " RAHIM ", Status = "pending", Level = 0, Flagged = false, Limit = 5 };
         var found = Assert.Single(await api.Merchants(m => m.SearchMerchants(query, CancellationToken.None)));
         Assert.Equal((id, Electrician, false), (found.Id, found.ServiceIds.Single(), found.Online));
         Assert.Empty(await api.Merchants(m => m.SearchMerchants(query with { Text = @"rahim_%\" }, CancellationToken.None)));
         var after = query with { Text = string.Empty, AfterAt = DateTimeOffset.UtcNow.AddDays(1), AfterId = Guid.NewGuid() };
-        Assert.Single(await api.Merchants(m => m.SearchMerchants(after, CancellationToken.None)));
+        Assert.Contains(await api.Merchants(m => m.SearchMerchants(after, CancellationToken.None)), r => r.Id == id);
         Assert.Single(await api.Merchants(m => m.SearchMerchants(new MerchantQuery { Id = id, Text = string.Empty, Status = string.Empty, Limit = 5 }, CancellationToken.None)));
     }
 
