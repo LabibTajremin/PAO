@@ -30,12 +30,14 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P17 / task 2 — port Identity, Audit, Media, Catalog and Notification to `backend-dotnet/`
-(see `docs/build/phases/P17-dotnet-backend.md`). Read `backend-dotnet/PAO.AI/README.md`
-and `backend-dotnet/Docs/` first. The foundation (task 1) is done: run the .NET gates with
-`./pao dotnet ci` (build, format, spec check, architecture/size/docs gates, unit +
-integration at 100% merged line coverage, start-up smoke). .NET 10 SDK installs to
-`/root/.dotnet` with `dotnet-install.sh --channel 10.0`.
+P17 / task 4 — port Booking, Rating and Admin to `backend-dotnet/` (see
+`docs/build/phases/P17-dotnet-backend.md`). Tasks 1–3 are done: foundation; Identity, Audit,
+Media, Catalog, Notification; Customer, Merchant, Verification (gates green, 100% line
+coverage, 418 unit / 98 integration tests). Read `backend-dotnet/PAO.AI/README.md`,
+`Docs/Architecture/http-edge.md` and `cqrs.md` first. Run the full `./pao dotnet ci` in the
+background (about 20 minutes on this machine) and run one heavy agent at a time: two
+parallel .NET builds overload the 4-CPU container. .NET 10 SDK installs to `/root/.dotnet`
+with `dotnet-install.sh --channel 10.0`.
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
