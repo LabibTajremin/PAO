@@ -182,8 +182,15 @@ public sealed class VerificationStateRepository(PaoDbContext db, IMapper mapper,
             {
                 row = new Level2SessionRecord
                 {
-                    Id = s.Id, ProviderId = s.ProviderId, ServiceId = s.ServiceId, ScheduledAt = s.ScheduledAt, Location = s.Location,
-                    Status = s.Status, Checklist = "[]", Notes = string.Empty, CreatedAt = s.CreatedAt,
+                    Id = s.Id,
+                    ProviderId = s.ProviderId,
+                    ServiceId = s.ServiceId,
+                    ScheduledAt = s.ScheduledAt,
+                    Location = s.Location,
+                    Status = s.Status,
+                    Checklist = "[]",
+                    Notes = string.Empty,
+                    CreatedAt = s.CreatedAt,
                 };
                 db.Add(row);
                 locked.Sessions[s.Id] = row;
@@ -211,7 +218,13 @@ public sealed class VerificationStateRepository(PaoDbContext db, IMapper mapper,
         {
             db.Add(new VerificationDocumentRecord
             {
-                Id = d.Id, ProviderId = st.ProviderId, ItemType = d.ItemType, Kind = d.Kind, MediaId = d.MediaId, Current = true, CreatedAt = d.CreatedAt,
+                Id = d.Id,
+                ProviderId = st.ProviderId,
+                ItemType = d.ItemType,
+                Kind = d.Kind,
+                MediaId = d.MediaId,
+                Current = true,
+                CreatedAt = d.CreatedAt,
             });
         }
     }

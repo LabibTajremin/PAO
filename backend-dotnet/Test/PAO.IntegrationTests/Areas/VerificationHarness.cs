@@ -61,8 +61,12 @@ public abstract class VerificationHarness(MigratedDatabase database) : IAsyncLif
         }
         var envelope = new Envelope
         {
-            Id = Guid.NewGuid(), Module = name.Split('.')[0], Name = name, AggregateId = "x",
-            Payload = JsonSerializer.SerializeToElement(payload), OccurredAt = Clock.Now,
+            Id = Guid.NewGuid(),
+            Module = name.Split('.')[0],
+            Name = name,
+            AggregateId = "x",
+            Payload = JsonSerializer.SerializeToElement(payload),
+            OccurredAt = Clock.Now,
         };
         await bus.Dispatch(envelope, CancellationToken.None);
     }

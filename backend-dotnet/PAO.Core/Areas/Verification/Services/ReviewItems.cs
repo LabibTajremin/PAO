@@ -1,6 +1,6 @@
-using PAO.Core.Areas.Verification.Repositories;
 using System.Globalization;
 using System.Text;
+using PAO.Core.Areas.Verification.Repositories;
 using PAO.Infrastructure.Crypto;
 using PAO.Lib.Areas.Merchant;
 using PAO.Lib.Areas.Verification;
@@ -64,8 +64,14 @@ public sealed class ReviewItems(VerificationStates states, VerificationPeers pee
             var documents = st.Documents.Where(d => d.ItemType == t).Select(d => new ReviewDocumentView { MediaId = d.MediaId, Kind = d.Kind }).ToList();
             return new ReviewItemView
             {
-                Type = view.Type, Status = view.Status, Required = view.Required, RejectionReason = view.RejectionReason,
-                DecidedAt = view.DecidedAt, ExpiresAt = view.ExpiresAt, Documents = documents, Fields = fields,
+                Type = view.Type,
+                Status = view.Status,
+                Required = view.Required,
+                RejectionReason = view.RejectionReason,
+                DecidedAt = view.DecidedAt,
+                ExpiresAt = view.ExpiresAt,
+                Documents = documents,
+                Fields = fields,
             };
         }).ToList();
         return new VerificationReviewView

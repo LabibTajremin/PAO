@@ -126,8 +126,16 @@ public sealed class VerificationCatalog : ICatalogSharedService
 
     private CatalogService Service(Guid id, bool level2) => new()
     {
-        Id = id, CategoryId = Guid.NewGuid(), Name = new Text { En = level2 ? "Gas" : "Electrician", Bn = "ইলেকট্রিশিয়ান" }, Model = "fixed",
-        RequiredLevel = 1, SearchRadiusM = 5000, WomenProvidersOnly = false, RequiresLevel2 = level2, Level2Checklist = [], Published = !level2,
+        Id = id,
+        CategoryId = Guid.NewGuid(),
+        Name = new Text { En = level2 ? "Gas" : "Electrician", Bn = "ইলেকট্রিশিয়ান" },
+        Model = "fixed",
+        RequiredLevel = 1,
+        SearchRadiusM = 5000,
+        WomenProvidersOnly = false,
+        RequiresLevel2 = level2,
+        Level2Checklist = [],
+        Published = !level2,
     };
 
     public Task<CatalogService> GetService(Guid serviceId, CancellationToken cancellationToken) =>
@@ -144,8 +152,15 @@ public sealed class VerificationSettingsFake : IAdminSharedService
 {
     public Task<PlatformSettings> GetSettings(CancellationToken cancellationToken) => Task.FromResult(new PlatformSettings
     {
-        AcceptTimeoutAsapMs = 1, AcceptTimeoutScheduledMs = 1, DefaultSearchRadiusM = 1, RatingFloor = 1, RatingMinJobs = 1,
-        MaxProviderCancellations30d = 1, StartCodeMaxAttempts = 1, StartCodeLockoutMs = 1, ServiceAreaGeoJson = "{}",
+        AcceptTimeoutAsapMs = 1,
+        AcceptTimeoutScheduledMs = 1,
+        DefaultSearchRadiusM = 1,
+        RatingFloor = 1,
+        RatingMinJobs = 1,
+        MaxProviderCancellations30d = 1,
+        StartCodeMaxAttempts = 1,
+        StartCodeLockoutMs = 1,
+        ServiceAreaGeoJson = "{}",
         PoliceClearanceValidityMs = (long)TimeSpan.FromDays(365).TotalMilliseconds,
         Level2CoolingOffMs = (long)TimeSpan.FromDays(14).TotalMilliseconds,
         DocumentRetentionMs = (long)TimeSpan.FromDays(365).TotalMilliseconds,
