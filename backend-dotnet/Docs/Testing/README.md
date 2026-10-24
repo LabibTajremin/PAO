@@ -22,3 +22,16 @@ key environment; nothing shared is dropped.
    `Program.cs` files are excluded (`coverage.config`).
 5. The bundled spec is current (`scripts/gen-spec.sh --check`; the contract folder is the MSBuild property `PaoApiDir`).
 6. E2E start-up smoke tests.
+
+## Black-box journeys and load (P17 task 7)
+
+`docker-compose.yml` builds the api, worker and migrate services from
+`backend-dotnet/docker/Dockerfile`, so `test/e2e/stack.sh` and every journey run against
+the .NET hosts: the API journeys (`test/e2e/api`), the app journeys
+(`test/e2e/mobile/run.sh`: partner, customer and admin) and the k6 thresholds
+(`./pao perf e2e`). With `APP_ENV=test` the hosts mount the hooks in
+`PAO.Infrastructure/Testing/TestHooks.cs` (`/__test/sms`, `/__test/pushes`,
+`/__test/verification/expire`); `migrate seed` and `migrate perf-seed N` replace the NestJS
+commands. `./pao ci` runs all of them plus `./pao dotnet ci`. The commission is charged from
+the booking-completed event, so journeys wait for the due to appear rather than reading it
+straight after completion.

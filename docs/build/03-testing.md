@@ -60,7 +60,7 @@ prints a one-line summary, so humans, git hooks and CI use the same entry point.
 | `./pao test all` | unit → integration → e2e |
 | `./pao cover` | enforces 100% (backend and every Flutter package), writes `coverage/summary.md` |
 | `./pao security` | gitleaks, `npm audit --omit=dev --audit-level=high` (backend, e2e), osv-scanner over the Dart and npm lockfiles (`osv-scanner.toml`), trivy 0.64.1 (pinned image) over the source tree and, when `PAO_SCAN_IMAGE` is set, the backend image (`.trivyignore`) |
-| `./pao ci` | lint → gen check → test all → cover → security (what CI runs) |
+| `./pao ci` | lint → gen check → test all (journeys against the .NET stack) → cover → `pao dotnet ci` → `pao perf e2e` → security (what CI runs) |
 | `./pao phase finish <id>` | `ci`, push branch with retry, open PR via `gh`, print the PR URL |
 | `./pao perf [e2e]` | k6 scripts against the local stack, or a fresh e2e stack |
 

@@ -41,6 +41,11 @@ void main() {
       await jobs.start(done, await customer.startCode(done));
       await jobs.complete(done);
       final next = await customer.book(merchant.id);
+      // The commission is charged from the completion event, a moment later.
+      await eventually(
+        'the commission was charged',
+        () async => await _due(stack, merchant) > 0,
+      );
       final due = await _due(stack, merchant);
 
       final services = await stackServices();

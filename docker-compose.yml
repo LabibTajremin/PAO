@@ -68,7 +68,8 @@ services:
 
   migrate:
     build:
-      context: ./backend
+      context: ./backend-dotnet
+      dockerfile: docker/Dockerfile
       secrets: [extra_ca]
     entrypoint: ["/app/migrate", "up"]
     environment: *backend-env
@@ -77,7 +78,8 @@ services:
 
   api:
     build:
-      context: ./backend
+      context: ./backend-dotnet
+      dockerfile: docker/Dockerfile
       secrets: [extra_ca]
     environment: *backend-env
     ports: ["8080:8080"]
@@ -93,7 +95,8 @@ services:
 
   worker:
     build:
-      context: ./backend
+      context: ./backend-dotnet
+      dockerfile: docker/Dockerfile
       secrets: [extra_ca]
     entrypoint: ["/app/worker"]
     environment: *backend-env

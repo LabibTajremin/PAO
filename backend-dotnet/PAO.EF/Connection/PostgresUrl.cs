@@ -28,6 +28,8 @@ public static partial class PostgresUrl
             MaxPoolSize = PositiveInt(query, "pool_max_conns") ?? Math.Max(4, Environment.ProcessorCount),
             ConnectionLifetime = Seconds(query, "pool_max_conn_lifetime") ?? 3600,
             ConnectionIdleLifetime = Seconds(query, "pool_max_conn_idle_time") ?? 1800,
+            // The runtime image has no Kerberos library; probing for it logs an error on every start.
+            GssEncryptionMode = GssEncryptionMode.Disable,
         };
         AddCredentials(builder, uri.UserInfo);
         if (PositiveInt(query, "connect_timeout") is { } timeout)

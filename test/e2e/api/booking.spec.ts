@@ -130,7 +130,7 @@ async function checkReceipts({ c, p, id }: Booked, total: number, ls: Line[]) {
     const rc = (await get(path, who)).expect(200);
     expect(rc).toMatchObject({
       total,
-      paymentMethod: 'cash',
+      paymentMethod: 'cash_on_delivery',
       providerName: 'Rahim Uddin',
       customerName: 'Nusrat Jahan',
     });

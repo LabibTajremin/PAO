@@ -77,6 +77,7 @@ public sealed class PostgresUrlTests
     {
         var cs = new NpgsqlConnectionStringBuilder(PostgresUrl.ToConnectionString("postgresql://localhost/pao"));
         Assert.Equal(5432, cs.Port);
+        Assert.Equal(GssEncryptionMode.Disable, cs.GssEncryptionMode);
         Assert.Null(cs.Username);
         Assert.Equal(Math.Max(4, Environment.ProcessorCount), cs.MaxPoolSize);
         Assert.Equal(3600, cs.ConnectionLifetime);

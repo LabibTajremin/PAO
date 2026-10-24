@@ -70,6 +70,10 @@ cmd_ci() {
   cmd_gen --check
   cmd_test all
   cmd_cover
+  # The journeys run against the .NET hosts (P17 task 7), so their gates and the
+  # performance thresholds belong to the same push gate.
+  cmd_dotnet ci
+  cmd_perf e2e
   cmd_security
   ok "ci passed"
 }

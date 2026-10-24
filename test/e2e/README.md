@@ -1,6 +1,8 @@
 # test/e2e
 
-End-to-end journeys against the full Docker stack (P14, `docs/build/03-testing.md` §1).
+End-to-end journeys against the full Docker stack (P14, `docs/build/03-testing.md` §1). Since
+P17 task 7 the api, worker and migrate services are the .NET hosts built from
+`backend-dotnet/docker/Dockerfile`; NestJS no longer backs the journeys.
 
 - `stack.sh` starts a fresh stack as the separate compose project `pao-e2e`
   (`compose.e2e.yml`): API on `:8180`, S3 on `:9100`, worker hooks on `:9191` (move them
@@ -8,7 +10,7 @@ End-to-end journeys against the full Docker stack (P14, `docs/build/03-testing.m
   `APP_ENV=test`. It seeds the catalog and the demo admins with a random password and
   writes the endpoints to `.stack.env`.
 - With `APP_ENV=test` the API and worker mount test-only hooks
-  (`backend/src/platform/testing/test-hooks.ts`): `GET /__test/sms?phone=` (the last
+  (`backend-dotnet/PAO.Infrastructure/Testing/TestHooks.cs`): `GET /__test/sms?phone=` (the last
   text, for one-time codes), `GET /__test/pushes?token=` (on the worker, pushes sent to a device
   token) and `POST /__test/verification/expire?at=` (the expiry sweep as of a time).
 - `api/` is a TypeScript package of black-box journeys (Jest): plain HTTP, no backend
@@ -26,3 +28,8 @@ End-to-end journeys against the full Docker stack (P14, `docs/build/03-testing.m
 
 Run everything with `./pao test e2e`, or `test/e2e/stack.sh` once and then
 `npm --prefix test/e2e/api test` (or `npx jest booking` there) while iterating.
+
+Behind a TLS-intercepting proxy, copy its CA bundle into the project (for example
+`docker/local-ca.pem`, which is ignored) and set `PAO_EXTRA_CA_FILE=./docker/local-ca.pem` so
+the image build can restore NuGet packages. The admin journey needs `CHROMEDRIVER` and
+`CHROME_EXECUTABLE` of the same major version.

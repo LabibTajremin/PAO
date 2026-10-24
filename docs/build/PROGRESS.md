@@ -30,14 +30,14 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P17 / task 7 — parity: journeys against the .NET stack (see `docs/build/phases/P17-dotnet-backend.md`).
-Task 6 is done: partner due banner, billing and pay screens; admin payments queue, merchant
-ledger and billing settings; customer "Cash on delivery"; new app journey
-`apps/partner/integration_test/billing_journey_test.dart` needs the .NET stack (NestJS answers
-billing with 501), so it is first run in task 7. Tasks 1–5 are done: all 129 spec operations are served by .NET, Billing included (gates
-green, 100% line coverage, 468 unit / 115 integration tests). The Dart client is regenerated
-with `ProviderBillingApi`, `AdminBillingApi` and `paymentMethod: cash_on_delivery`. NestJS
-answers the billing routes with 501 until the cut-over (task 8).
+P17 / task 8 — cut-over (see `docs/build/phases/P17-dotnet-backend.md`).
+Task 7 is done: `docker-compose.yml` builds api, worker and migrate from
+`backend-dotnet/docker/Dockerfile`, so the API journeys, all app journeys (partner incl.
+`billing_journey_test.dart`, customer incl. cash on delivery, admin) and the k6 thresholds
+pass against .NET; `./pao ci` now also runs `./pao dotnet ci` (start-up smoke of the three
+hosts included) and `./pao perf e2e`. The booking journey expects
+`paymentMethod: cash_on_delivery` (ADR-0035). NestJS still builds but backs nothing.
+Tasks 1-6 are done (all 129 spec operations served by .NET, billing app screens).
 Read `backend-dotnet/PAO.AI/README.md`,
 `Docs/Architecture/http-edge.md` and `cqrs.md` first. Run the full `./pao dotnet ci` in the
 background (about 20 minutes on this machine) and run one heavy agent at a time: two
