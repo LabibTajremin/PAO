@@ -68,6 +68,30 @@ engineering bar: modular monolith, deny-by-default RBAC, 100% coverage, strict l
   start. Files hold defaults and structure only; secrets come from environment variables
   (`Section__Key`), so nothing secret is committed.
 - **Logging.** Serilog, JSON to stdout and to `Backend/Logs/<yyyy-MM-dd>/pao-<host>.log`.
+- **Service registration.** `Program.cs` of each host only calls named extension methods,
+  one concern per method (owner rule, 2026-10-17):
+  - `AddBuiltInServices` for framework services: controllers, authentication,
+    authorisation, options, logging, health, OpenAPI, rate limiting;
+  - `AddCustomServices` for hand-made platform services: mediator, mapper, clock, ids,
+    crypto, Redis helpers, storage, SMS, push, outbox;
+  - `AddDatabase` for the DbContext, its factory and the connection;
+  - `AddRepositories` for the repository registrations;
+  - one `Add<Area>Area` per area (for example `AddBookingArea`) for its handlers,
+    validators, services and shared contract.
+
+  Each method lives in its own file under the project's `Registration/` folder.
+- **Documentation (100% coverage).** `Backend/Docs` is organised folder by folder:
+  `Areas/<Area>/` (overview, features, endpoints, data, events), `Architecture/`, `Config/`,
+  `Database/`, `Operations/`, `Testing/` and `Api/`.
+  - Every area, feature (command or query), controller, service, repository, job,
+    configuration file and database script has a documentation page or an entry in its
+    folder's index.
+  - Every public C# type and member carries XML documentation. `GenerateDocumentationFile`
+    is on, and CS1591 is an error. These comments describe the contract (what a caller can
+    rely on), while inline comments still explain only *why*.
+  - A docs coverage check in CI fails when any area, feature, controller, job, config
+    section or script lacks its page, or when a page links to something that no longer
+    exists.
 - **Quality gates.** `dotnet format` and analyzers (warnings as errors), architecture
   tests, file and method size checks (C# files ≤ 250 lines, methods ≤ 40 lines, tests
   ≤ 400), unit and integration tests merged at 100% line and branch-free statement
@@ -78,6 +102,71 @@ engineering bar: modular monolith, deny-by-default RBAC, 100% coverage, strict l
   suites pass at 100% and the existing journeys and app journeys pass against it, port the
   journeys to C#, delete the NestJS backend, move `backend-dotnet/` to `Backend/` and
   `frontend/` to `Frontend/`, and switch every gate, hook and workflow.
+
+## Repository layout after cut-over (owner request, 2026-10-17)
+
+The top level shrinks to the places people navigate to, and everything that belongs to a
+side lives inside it:
+
+```
+.github/            CI workflows
+Backend/            the .NET solution (above), plus:
+  Api/              the OpenAPI contract (moved from api/). The backend owns and serves
+                    the contract. The Flutter client generator and the e2e tests read it
+                    from here.
+  Test/E2E, Test/Load   black-box journeys (from test/e2e/api) and k6 scripts (from test/perf)
+  docker/           backend image files
+Frontend/           Flutter apps and packages, plus test/e2e (the app journeys)
+docs/               product and project docs: prd/, adr/, build/, guides/ (release,
+                    deployment, verification, security checklist, architecture,
+                    glossary, booking states), runbooks/, HANDOVER.md, CONTRIBUTING.md
+infra/              docker-compose.yml, ops/ (Prometheus, Grafana), security/
+                    (gitleaks, trivy and osv-scanner configs)
+tools/              the pao CLI internals (from scripts/), git hooks, CLI tests and
+                    fixtures (from test/cli, test/fixtures)
+pao                 one-line wrapper that runs tools/pao
+README.md  LICENSE  CLAUDE.md  .editorconfig  .gitignore  .env.example
+```
+
+Files that stay at the root are only those that tools or GitHub look for there: README,
+LICENSE, CLAUDE.md (agent entry point), .editorconfig, .gitignore and .env.example (Docker
+Compose and the hooks read it). Generated folders (`coverage/`, `.perf-fixture.json`) move
+under the ignored `out/`.
+
+`api/` was separate because, in the earlier builds, the spec was a neutral contract
+written before any backend existed (P01) and shared by the backend, the generated Dart
+client and the journeys. With one backend that owns it, it lives in `Backend/Api`.
+
+## Cut-over as done (P17 task 8, 2026-10-24)
+
+The layout above was applied with these choices where it left room:
+
+- **Journeys.** The black-box journeys are C# in `Backend/Test/PAO.E2ETests/Journeys`
+  (the project that already held the start-up smoke tests) rather than a separate
+  `Test/E2E` folder: 8 files and 13 tests, the same as the Jest suite they replace. They
+  carry the trait `Category=Journey`; `Backend/scripts/ci.sh e2e` filters them out (it runs
+  without a stack) and `./pao test e2e` runs them against a fresh stack. They use plain
+  HTTP and reference no backend project. The k6 scripts are in `Backend/Test/Load`.
+- **The e2e stack** (`stack.sh`, `compose.e2e.yml`) serves both the API and the app
+  journeys, so it lives in `infra/e2e/`. Its state (`.stack.env`, `.admins.env`) moved to
+  the ignored `out/e2e/` (`PAO_E2E_STATE` overrides it); the perf fixture is
+  `out/perf-fixture.json`, coverage `out/coverage/`.
+- **Compose** runs with the repository root as its project directory
+  (`--project-directory`), so build contexts, the `.env` file and `PAO_EXTRA_CA_FILE` stay
+  relative to the root as before. The empty default CA bundle is `infra/no-extra-ca.pem`.
+- **Security configs** are `infra/security/{gitleaks.toml,osv-scanner.toml,trivyignore}`,
+  passed explicitly by `./pao security`. NuGet lock files (`packages.lock.json`, enabled in
+  `Directory.Build.props`) give osv-scanner the .NET dependency graph that the npm
+  lockfiles used to provide.
+- **Gates.** `./pao ci` runs every stage of `Backend/scripts/ci.sh` exactly once: `lint`
+  (build, format, gates), `gen --check` (spec bundle), `test integration` (unit +
+  integration with the merged 100% coverage gate) and `test e2e` (start-up smoke, then the
+  journeys). `./pao dotnet <stage>` still runs one stage alone.
+- **CI.** `dotnet.yml` became `backend.yml` with two jobs: `dotnet` (`ci.sh all`) and
+  `tooling` (shellcheck, ops check, CLI tests, security with the image scan), which used
+  to run in the NestJS job.
+- **Root.** `./pao` is a two-line wrapper (shebang + `exec tools/pao`); `tools/fixtures`
+  stays as the CLI tests' fixture folder.
 
 ## Consequences
 

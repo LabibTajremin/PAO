@@ -1,0 +1,6 @@
+{
+  "Jobs": {
+    "OutboxRelayIntervalMs": 250,
+    "OutboxRetentionDays": 7
+  }
+}

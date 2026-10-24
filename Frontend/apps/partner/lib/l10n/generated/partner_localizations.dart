@@ -1,0 +1,2641 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart' as intl;
+
+import 'partner_localizations_bn.dart';
+import 'partner_localizations_en.dart';
+
+// ignore_for_file: type=lint
+
+/// Callers can lookup localized strings with an instance of PartnerL10n
+/// returned by `PartnerL10n.of(context)`.
+///
+/// Applications need to include `PartnerL10n.delegate()` in their app's
+/// `localizationDelegates` list, and the locales they support in the app's
+/// `supportedLocales` list. For example:
+///
+/// ```dart
+/// import 'generated/partner_localizations.dart';
+///
+/// return MaterialApp(
+///   localizationsDelegates: PartnerL10n.localizationsDelegates,
+///   supportedLocales: PartnerL10n.supportedLocales,
+///   home: MyApplicationHome(),
+/// );
+/// ```
+///
+/// ## Update pubspec.yaml
+///
+/// Please make sure to update your pubspec.yaml to include the following
+/// packages:
+///
+/// ```yaml
+/// dependencies:
+///   # Internationalization support.
+///   flutter_localizations:
+///     sdk: flutter
+///   intl: any # Use the pinned version from flutter_localizations
+///
+///   # Rest of dependencies
+/// ```
+///
+/// ## iOS Applications
+///
+/// iOS applications define key application metadata, including supported
+/// locales, in an Info.plist file that is built into the application bundle.
+/// To configure the locales supported by your app, you’ll need to edit this
+/// file.
+///
+/// First, open your project’s ios/Runner.xcworkspace Xcode workspace file.
+/// Then, in the Project Navigator, open the Info.plist file under the Runner
+/// project’s Runner folder.
+///
+/// Next, select the Information Property List item, select Add Item from the
+/// Editor menu, then select Localizations from the pop-up menu.
+///
+/// Select and expand the newly-created Localizations item then, for each
+/// locale your application supports, add a new item and select the locale
+/// you wish to add from the pop-up menu in the Value field. This list should
+/// be consistent with the languages listed in the PartnerL10n.supportedLocales
+/// property.
+abstract class PartnerL10n {
+  PartnerL10n(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+
+  final String localeName;
+
+  static PartnerL10n of(BuildContext context) {
+    return Localizations.of<PartnerL10n>(context, PartnerL10n)!;
+  }
+
+  static const LocalizationsDelegate<PartnerL10n> delegate =
+      _PartnerL10nDelegate();
+
+  /// A list of this localizations delegate along with the default localizations
+  /// delegates.
+  ///
+  /// Returns a list of localizations delegates containing this delegate along with
+  /// GlobalMaterialLocalizations.delegate, GlobalCupertinoLocalizations.delegate,
+  /// and GlobalWidgetsLocalizations.delegate.
+  ///
+  /// Additional delegates can be added by appending to this list in
+  /// MaterialApp. This list does not have to be used at all if a custom list
+  /// of delegates is preferred or required.
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
+
+  /// A list of this localizations delegate's supported locales.
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('bn'),
+    Locale('en'),
+  ];
+
+  /// App name.
+  ///
+  /// In en, this message translates to:
+  /// **'PAO Partner'**
+  String get partnerTitle;
+
+  /// M03 title.
+  ///
+  /// In en, this message translates to:
+  /// **'What is your phone number?'**
+  String get authPhoneTitle;
+
+  /// M03 body.
+  ///
+  /// In en, this message translates to:
+  /// **'We will text you a code to sign in.'**
+  String get authPhoneBody;
+
+  /// Phone field label.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number'**
+  String get authPhoneLabel;
+
+  /// Phone validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an 11-digit Bangladeshi mobile number.'**
+  String get authPhoneInvalid;
+
+  /// M03 button.
+  ///
+  /// In en, this message translates to:
+  /// **'Send code'**
+  String get authSendCode;
+
+  /// M04 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code'**
+  String get authOtpTitle;
+
+  /// M04 body.
+  ///
+  /// In en, this message translates to:
+  /// **'We sent it to {phone}.'**
+  String authOtpSentTo(String phone);
+
+  /// Resend countdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code in {seconds}s'**
+  String authResendIn(int seconds);
+
+  /// Resend button.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code'**
+  String get authResend;
+
+  /// M01 tagline under the app name.
+  ///
+  /// In en, this message translates to:
+  /// **'Work on your own terms'**
+  String get onbTagline;
+
+  /// M02 label of the language switch.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get onbLanguage;
+
+  /// M02 button that ends onboarding early.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onbSkip;
+
+  /// M02 button to the next slide.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onbNext;
+
+  /// M02 button on the last slide.
+  ///
+  /// In en, this message translates to:
+  /// **'Get started'**
+  String get onbStart;
+
+  /// M02 slide 1 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Get jobs near you'**
+  String get onbSlide1Title;
+
+  /// M02 slide 1 body.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers nearby book your services. Accept the jobs that suit you.'**
+  String get onbSlide1Body;
+
+  /// M02 slide 2 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed prices, cash in hand'**
+  String get onbSlide2Title;
+
+  /// M02 slide 2 body.
+  ///
+  /// In en, this message translates to:
+  /// **'PAO sets the prices, so there is no haggling. Customers pay you in cash when the job is done.'**
+  String get onbSlide2Body;
+
+  /// M02 slide 3 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified and trusted'**
+  String get onbSlide3Title;
+
+  /// M02 slide 3 body.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your documents once to earn the Verified badge and start getting requests.'**
+  String get onbSlide3Body;
+
+  /// Enrolment wizard title while loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Enrolment'**
+  String get enrolTitle;
+
+  /// Wizard progress.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {current} of {total}'**
+  String enrolStepOf(int current, int total);
+
+  /// M05 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal information'**
+  String get enrolStepPersonal;
+
+  /// M06 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Your services'**
+  String get enrolStepServices;
+
+  /// M07 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Service area'**
+  String get enrolStepArea;
+
+  /// M08 title.
+  ///
+  /// In en, this message translates to:
+  /// **'National ID'**
+  String get enrolStepNid;
+
+  /// M09 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Live selfie'**
+  String get enrolStepSelfie;
+
+  /// M10 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Police clearance'**
+  String get enrolStepPolice;
+
+  /// M11 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Skill proof'**
+  String get enrolStepSkill;
+
+  /// M12 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency contact'**
+  String get enrolStepContact;
+
+  /// M13 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Code of conduct'**
+  String get enrolStepConduct;
+
+  /// Wizard review title.
+  ///
+  /// In en, this message translates to:
+  /// **'Review and submit'**
+  String get enrolReviewTitle;
+
+  /// Wizard main button.
+  ///
+  /// In en, this message translates to:
+  /// **'Save and continue'**
+  String get enrolSaveContinue;
+
+  /// Skips the optional skill proof.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get enrolSkip;
+
+  /// Empty date field.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a date'**
+  String get enrolPickDate;
+
+  /// M05 name field.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name (as on your NID)'**
+  String get enrolNameLabel;
+
+  /// M05 name validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your full name as written on your NID.'**
+  String get enrolNameError;
+
+  /// M05 date of birth field.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth'**
+  String get enrolDobLabel;
+
+  /// M05 age rule.
+  ///
+  /// In en, this message translates to:
+  /// **'You must be at least 18 years old.'**
+  String get enrolDobError;
+
+  /// M05 gender label.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get enrolGenderLabel;
+
+  /// Gender option.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get enrolGenderFemale;
+
+  /// Gender option.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get enrolGenderMale;
+
+  /// Gender option.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get enrolGenderOther;
+
+  /// M05 gender validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your gender.'**
+  String get enrolGenderError;
+
+  /// M05 field.
+  ///
+  /// In en, this message translates to:
+  /// **'Present address'**
+  String get enrolPresentAddress;
+
+  /// M05 field.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent address'**
+  String get enrolPermanentAddress;
+
+  /// M05 address validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a full address.'**
+  String get enrolAddressError;
+
+  /// M06 hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose up to 5 services you offer.'**
+  String get enrolServicesHint;
+
+  /// M06 validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose at least one service.'**
+  String get enrolServicesError;
+
+  /// M06 empty catalog.
+  ///
+  /// In en, this message translates to:
+  /// **'No services are open for enrolment yet.'**
+  String get enrolServicesEmpty;
+
+  /// M06 experience stepper.
+  ///
+  /// In en, this message translates to:
+  /// **'Years of experience'**
+  String get enrolExperience;
+
+  /// M07 hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Set your home base. You will get requests within your working radius.'**
+  String get enrolAreaHint;
+
+  /// M07 button.
+  ///
+  /// In en, this message translates to:
+  /// **'Use my current location'**
+  String get enrolAreaLocate;
+
+  /// M07 map label without a pin.
+  ///
+  /// In en, this message translates to:
+  /// **'No location set yet'**
+  String get enrolAreaNoPin;
+
+  /// M07 map label with coordinates.
+  ///
+  /// In en, this message translates to:
+  /// **'Home base: {lat}, {lng}'**
+  String enrolAreaPinned(String lat, String lng);
+
+  /// M07 location unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on location and allow PAO Partner to use it.'**
+  String get enrolAreaOff;
+
+  /// M07 validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Set your home base first.'**
+  String get enrolAreaError;
+
+  /// M07 radius slider label.
+  ///
+  /// In en, this message translates to:
+  /// **'Working radius: {km} km'**
+  String enrolAreaRadius(int km);
+
+  /// M08 field.
+  ///
+  /// In en, this message translates to:
+  /// **'NID number'**
+  String get enrolNidNumber;
+
+  /// M08 validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 10, 13 or 17-digit NID number.'**
+  String get enrolNidError;
+
+  /// M08 photo slot.
+  ///
+  /// In en, this message translates to:
+  /// **'Front of the card'**
+  String get enrolNidFront;
+
+  /// M08 photo slot.
+  ///
+  /// In en, this message translates to:
+  /// **'Back of the card'**
+  String get enrolNidBack;
+
+  /// Missing uploads.
+  ///
+  /// In en, this message translates to:
+  /// **'Add every photo before you continue.'**
+  String get enrolPhotoError;
+
+  /// Opens the camera.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get enrolTakePhoto;
+
+  /// Opens the gallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get enrolChoosePhoto;
+
+  /// Replaces a photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake'**
+  String get enrolRetake;
+
+  /// Upload progress.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading {percent}%'**
+  String enrolUploading(int percent);
+
+  /// Upload done.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploaded'**
+  String get enrolUploaded;
+
+  /// Upload failure, followed by the reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload failed.'**
+  String get enrolUploadFailed;
+
+  /// M09 guidance.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold the phone at eye level in good light, take off sunglasses or a cap, and look at the camera.'**
+  String get enrolSelfieHint;
+
+  /// M10 hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your police clearance certificate. It must be issued within the last 12 months.'**
+  String get enrolPoliceHint;
+
+  /// M10 date field.
+  ///
+  /// In en, this message translates to:
+  /// **'Issue date'**
+  String get enrolIssueDate;
+
+  /// M10 validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the issue date.'**
+  String get enrolIssueDateError;
+
+  /// M11 hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional: add training certificates or photos of your work. They help you reach Level 2.'**
+  String get enrolSkillHint;
+
+  /// M11 photo slot.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo {number}'**
+  String enrolSkillPhoto(int number);
+
+  /// M12 hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone we can call in an emergency. We will text them a code to confirm.'**
+  String get enrolContactHint;
+
+  /// M12 field.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get enrolContactName;
+
+  /// M12 field.
+  ///
+  /// In en, this message translates to:
+  /// **'Relation'**
+  String get enrolContactRelation;
+
+  /// M12 field.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number'**
+  String get enrolContactPhone;
+
+  /// M12 validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter their name.'**
+  String get enrolContactNameError;
+
+  /// M12 validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter how you are related.'**
+  String get enrolContactRelationError;
+
+  /// M12 validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an 11-digit Bangladeshi mobile number.'**
+  String get enrolContactPhoneError;
+
+  /// M12 button.
+  ///
+  /// In en, this message translates to:
+  /// **'Send code'**
+  String get enrolContactSendCode;
+
+  /// M12 code entry.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the code we sent to {phone}.'**
+  String enrolContactCodeSent(String phone);
+
+  /// M12 resend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send the code again'**
+  String get enrolContactResend;
+
+  /// M12 edit contact.
+  ///
+  /// In en, this message translates to:
+  /// **'Change contact'**
+  String get enrolContactChange;
+
+  /// M13 heading.
+  ///
+  /// In en, this message translates to:
+  /// **'As a PAO partner, I will:'**
+  String get enrolConductIntro;
+
+  /// M13 rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Treat every customer with respect and keep their home and belongings safe.'**
+  String get enrolConductRule1;
+
+  /// M13 rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrive on time and tell the customer if I am delayed.'**
+  String get enrolConductRule2;
+
+  /// M13 rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Charge only the price shown in the app.'**
+  String get enrolConductRule3;
+
+  /// M13 rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Never ask a customer for favours, extra money or contact outside PAO.'**
+  String get enrolConductRule4;
+
+  /// M13 rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Never work under the influence of alcohol or drugs.'**
+  String get enrolConductRule5;
+
+  /// M13 checkbox.
+  ///
+  /// In en, this message translates to:
+  /// **'I have read and accept the code of conduct.'**
+  String get enrolConductAccept;
+
+  /// Review body.
+  ///
+  /// In en, this message translates to:
+  /// **'Check that every step is complete, then submit for verification.'**
+  String get enrolReviewBody;
+
+  /// Review body after submission.
+  ///
+  /// In en, this message translates to:
+  /// **'Your enrolment has been submitted.'**
+  String get enrolSubmittedBody;
+
+  /// Review main button.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit for verification'**
+  String get enrolSubmit;
+
+  /// Review button after submission.
+  ///
+  /// In en, this message translates to:
+  /// **'See verification status'**
+  String get enrolGoVerification;
+
+  /// Step badge.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get enrolStepDone;
+
+  /// Step badge.
+  ///
+  /// In en, this message translates to:
+  /// **'To do'**
+  String get enrolStepTodo;
+
+  /// Step badge.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get enrolOptional;
+
+  /// M14 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification'**
+  String get verifTitle;
+
+  /// M14 verification level.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {level}'**
+  String verifLevel(int level);
+
+  /// Level 0 badge.
+  ///
+  /// In en, this message translates to:
+  /// **'Not verified yet'**
+  String get verifBadgeNone;
+
+  /// Level 1 badge.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get verifBadgeVerified;
+
+  /// Level 2 badge.
+  ///
+  /// In en, this message translates to:
+  /// **'PAO Verified Pro'**
+  String get verifBadgePro;
+
+  /// M14 status when cleared.
+  ///
+  /// In en, this message translates to:
+  /// **'You are verified and can receive bookings.'**
+  String get verifCleared;
+
+  /// M14 status before submission.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish your enrolment so we can check your documents.'**
+  String get verifIncomplete;
+
+  /// M14 status with rejected or expired items.
+  ///
+  /// In en, this message translates to:
+  /// **'Some items need your attention. Upload them again below.'**
+  String get verifAttention;
+
+  /// M14 status while in review.
+  ///
+  /// In en, this message translates to:
+  /// **'We are checking your documents. This usually takes up to 48 hours.'**
+  String get verifPending;
+
+  /// M14 button once cleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to home'**
+  String get verifGoHome;
+
+  /// M14 button to the next missing step.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue enrolment'**
+  String get verifContinue;
+
+  /// M14 button when every step is done but not submitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Review and submit'**
+  String get verifSubmit;
+
+  /// M14 section heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents'**
+  String get verifItemsTitle;
+
+  /// M14 empty list.
+  ///
+  /// In en, this message translates to:
+  /// **'No documents yet.'**
+  String get verifNoItems;
+
+  /// Verification item.
+  ///
+  /// In en, this message translates to:
+  /// **'National ID'**
+  String get verifItemNid;
+
+  /// Verification item.
+  ///
+  /// In en, this message translates to:
+  /// **'Live selfie'**
+  String get verifItemSelfie;
+
+  /// Verification item.
+  ///
+  /// In en, this message translates to:
+  /// **'Police clearance'**
+  String get verifItemPolice;
+
+  /// Verification item.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get verifItemAddress;
+
+  /// Verification item.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency contact'**
+  String get verifItemContact;
+
+  /// Verification item.
+  ///
+  /// In en, this message translates to:
+  /// **'Skill proof'**
+  String get verifItemSkill;
+
+  /// Verification item.
+  ///
+  /// In en, this message translates to:
+  /// **'Services and area'**
+  String get verifItemArea;
+
+  /// Verification item.
+  ///
+  /// In en, this message translates to:
+  /// **'Code of conduct'**
+  String get verifItemConduct;
+
+  /// Item status.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing'**
+  String get verifStatusMissing;
+
+  /// Item status.
+  ///
+  /// In en, this message translates to:
+  /// **'In review'**
+  String get verifStatusPending;
+
+  /// Item status.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get verifStatusApproved;
+
+  /// Item status.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get verifStatusRejected;
+
+  /// Item status.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get verifStatusExpired;
+
+  /// Rejection reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason: {reason}'**
+  String verifReason(String reason);
+
+  /// Document expiry.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid until {date}'**
+  String verifExpires(String date);
+
+  /// Expired document.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired on {date}'**
+  String verifExpired(String date);
+
+  /// Re-upload button.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload again'**
+  String get verifReupload;
+
+  /// Level 2 card title.
+  ///
+  /// In en, this message translates to:
+  /// **'Level 2: skill check'**
+  String get verifLevel2Title;
+
+  /// Level 2 eligible.
+  ///
+  /// In en, this message translates to:
+  /// **'You can take a skill check to earn PAO Verified Pro. Our team will contact you to schedule it.'**
+  String get verifLevel2Eligible;
+
+  /// Level 2 not eligible.
+  ///
+  /// In en, this message translates to:
+  /// **'Reach Level 1 first, then you can take a skill check.'**
+  String get verifLevel2NotEligible;
+
+  /// Scheduled Level 2 session.
+  ///
+  /// In en, this message translates to:
+  /// **'Skill check on {date} at {place}'**
+  String verifLevel2Session(String date, String place);
+
+  /// Level 2 cooling-off.
+  ///
+  /// In en, this message translates to:
+  /// **'You can try again after {date}.'**
+  String verifLevel2Retry(String date);
+
+  /// M23 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Jobs'**
+  String get jobsTitle;
+
+  /// M23 tab: jobs not yet finished.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get jobsUpcoming;
+
+  /// M23 tab: finished jobs.
+  ///
+  /// In en, this message translates to:
+  /// **'Past'**
+  String get jobsPast;
+
+  /// M23 empty upcoming tab.
+  ///
+  /// In en, this message translates to:
+  /// **'No upcoming jobs'**
+  String get jobsEmptyUpcoming;
+
+  /// M23 empty past tab.
+  ///
+  /// In en, this message translates to:
+  /// **'No past jobs yet'**
+  String get jobsEmptyPast;
+
+  /// M23 empty state hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Go online on Home to receive job requests.'**
+  String get jobsEmptyBody;
+
+  /// Booking status.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested'**
+  String get jobsStatusRequested;
+
+  /// Booking status.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get jobsStatusAccepted;
+
+  /// Booking status.
+  ///
+  /// In en, this message translates to:
+  /// **'On the way'**
+  String get jobsStatusOnTheWay;
+
+  /// Booking status.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrived'**
+  String get jobsStatusArrived;
+
+  /// Booking status.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get jobsStatusInProgress;
+
+  /// Booking status.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get jobsStatusCompleted;
+
+  /// Booking status.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get jobsStatusRejected;
+
+  /// Booking status: request not answered in time.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get jobsStatusTimedOut;
+
+  /// Booking status.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get jobsStatusCancelled;
+
+  /// M24 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Job details'**
+  String get jobsDetailTitle;
+
+  /// Customer first name on M24.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer: {name}'**
+  String jobsCustomer(String name);
+
+  /// Service area on M24.
+  ///
+  /// In en, this message translates to:
+  /// **'Area: {area}'**
+  String jobsArea(String area);
+
+  /// M24 section heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Items'**
+  String get jobsItems;
+
+  /// Marks an extra item approved by the customer.
+  ///
+  /// In en, this message translates to:
+  /// **'Added during the job'**
+  String get jobsExtra;
+
+  /// Total row.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get jobsTotal;
+
+  /// M24 section heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline'**
+  String get jobsTimeline;
+
+  /// M24 button to the active job screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue job'**
+  String get jobsOpenLive;
+
+  /// M24 button for a completed job.
+  ///
+  /// In en, this message translates to:
+  /// **'View receipt'**
+  String get jobsReceipt;
+
+  /// Receipt sheet title.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipt'**
+  String get jobsReceiptTitle;
+
+  /// Receipt payment method.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid in cash'**
+  String get jobsPaidCash;
+
+  /// M24 button to M25.
+  ///
+  /// In en, this message translates to:
+  /// **'Report a problem'**
+  String get jobsReport;
+
+  /// M25 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Report a problem'**
+  String get jobsReportTitle;
+
+  /// M25 reason heading.
+  ///
+  /// In en, this message translates to:
+  /// **'What went wrong?'**
+  String get jobsReportReason;
+
+  /// Report reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer not available'**
+  String get jobsReasonCustomerUnavailable;
+
+  /// Report reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment problem'**
+  String get jobsReasonPayment;
+
+  /// Report reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer behaviour'**
+  String get jobsReasonBehaviour;
+
+  /// Report reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety concern'**
+  String get jobsReasonSafety;
+
+  /// Report reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Damage'**
+  String get jobsReasonDamage;
+
+  /// Report reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Something else'**
+  String get jobsReasonOther;
+
+  /// M25 validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a reason.'**
+  String get jobsReportNeedReason;
+
+  /// M25 description label.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the problem'**
+  String get jobsReportDescription;
+
+  /// M25 description hint.
+  ///
+  /// In en, this message translates to:
+  /// **'What happened, and when?'**
+  String get jobsReportDescriptionHint;
+
+  /// M25 validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Write between 10 and 1000 characters.'**
+  String get jobsReportDescriptionInvalid;
+
+  /// M25 photo heading with the count and the limit.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos ({count} of {max})'**
+  String jobsReportPhotos(String count, String max);
+
+  /// M25 camera button.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photo'**
+  String get jobsReportAddPhoto;
+
+  /// Tooltip on a photo remove button.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove photo'**
+  String get jobsReportRemovePhoto;
+
+  /// M25 submit button.
+  ///
+  /// In en, this message translates to:
+  /// **'Send report'**
+  String get jobsReportSubmit;
+
+  /// M25 success title.
+  ///
+  /// In en, this message translates to:
+  /// **'Report sent'**
+  String get jobsReportSent;
+
+  /// M25 success message.
+  ///
+  /// In en, this message translates to:
+  /// **'Your ticket number is {ticket}. Our team will contact you.'**
+  String jobsReportTicket(String ticket);
+
+  /// M25 success button.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to job'**
+  String get jobsBackToJob;
+
+  /// M26 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Earnings'**
+  String get earnTitle;
+
+  /// M26 period: today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get earnDay;
+
+  /// M26 period: this week.
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get earnWeek;
+
+  /// M26 period: this month.
+  ///
+  /// In en, this message translates to:
+  /// **'This month'**
+  String get earnMonth;
+
+  /// Number of completed jobs; formatted is the count in local digits.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{formatted} job} other{{formatted} jobs}}'**
+  String earnJobs(int count, String formatted);
+
+  /// M27 heading.
+  ///
+  /// In en, this message translates to:
+  /// **'By job'**
+  String get earnByJob;
+
+  /// M27 empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'No earnings yet'**
+  String get earnEmptyTitle;
+
+  /// M27 empty state body.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed jobs and what you earned appear here.'**
+  String get earnEmptyBody;
+
+  /// M28 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profTitle;
+
+  /// M28 button.
+  ///
+  /// In en, this message translates to:
+  /// **'Change photo'**
+  String get profChangePhoto;
+
+  /// Verification level with its name.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {level}: {name}'**
+  String profLevelOf(String level, String name);
+
+  /// Number of ratings; formatted is the count in local digits.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No ratings yet} =1{{formatted} rating} other{{formatted} ratings}}'**
+  String profRatingCount(int count, String formatted);
+
+  /// Shown when the bio is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell customers about your work.'**
+  String get profNoBio;
+
+  /// M28 button and sheet title.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit bio'**
+  String get profEditBio;
+
+  /// Bio field label.
+  ///
+  /// In en, this message translates to:
+  /// **'About you'**
+  String get profBioLabel;
+
+  /// Bio field hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your skills and experience'**
+  String get profBioHint;
+
+  /// Bio validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep it under 500 characters.'**
+  String get profBioTooLong;
+
+  /// Badge for level 0.
+  ///
+  /// In en, this message translates to:
+  /// **'No badge yet'**
+  String get profBadgeNone;
+
+  /// Badge for level 1.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get profBadgeVerified;
+
+  /// Badge for level 2.
+  ///
+  /// In en, this message translates to:
+  /// **'PAO Verified Pro'**
+  String get profBadgeVerifiedPro;
+
+  /// Level 0 name.
+  ///
+  /// In en, this message translates to:
+  /// **'Registered'**
+  String get profLevel0;
+
+  /// Level 1 name.
+  ///
+  /// In en, this message translates to:
+  /// **'Document verified'**
+  String get profLevel1;
+
+  /// Level 2 name.
+  ///
+  /// In en, this message translates to:
+  /// **'Skill verified'**
+  String get profLevel2;
+
+  /// How level 0 is earned.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed up and verified your phone. You cannot receive bookings yet.'**
+  String get profLevel0How;
+
+  /// How level 1 is earned.
+  ///
+  /// In en, this message translates to:
+  /// **'All documents approved by PAO. Customers see \"Verified\" and you receive bookings.'**
+  String get profLevel1How;
+
+  /// How level 2 is earned.
+  ///
+  /// In en, this message translates to:
+  /// **'PAO checked your work in person. Customers see \"PAO Verified Pro\" and you rank higher.'**
+  String get profLevel2How;
+
+  /// M32 heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Level 2 skill check'**
+  String get profLevel2Title;
+
+  /// Level 2 reached.
+  ///
+  /// In en, this message translates to:
+  /// **'You are a PAO Verified Pro.'**
+  String get profLevel2Done;
+
+  /// Scheduled level 2 session.
+  ///
+  /// In en, this message translates to:
+  /// **'Your skill check is on {when} at {place}.'**
+  String profLevel2Session(String when, String place);
+
+  /// Cooling-off after a failed level 2 session.
+  ///
+  /// In en, this message translates to:
+  /// **'You can try the skill check again after {date}.'**
+  String profLevel2Retry(String date);
+
+  /// Level 2 available.
+  ///
+  /// In en, this message translates to:
+  /// **'You can book a skill check. Call PAO support to arrange one.'**
+  String get profLevel2Eligible;
+
+  /// Level 2 not available yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Reach Level 1 first; then PAO can check your work in person.'**
+  String get profLevel2NotYet;
+
+  /// M29 title and menu row.
+  ///
+  /// In en, this message translates to:
+  /// **'Public profile'**
+  String get profPublicTitle;
+
+  /// M29 explanation.
+  ///
+  /// In en, this message translates to:
+  /// **'This is how customers see you. They never see your documents or phone number.'**
+  String get profPublicHint;
+
+  /// Years of experience; formatted is the count in local digits.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{New to the trade} =1{{formatted} year of experience} other{{formatted} years of experience}}'**
+  String profExperience(int count, String formatted);
+
+  /// M30 title and menu row.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviews'**
+  String get profReviewsTitle;
+
+  /// M30 empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'No reviews yet'**
+  String get profReviewsEmpty;
+
+  /// M30 empty state body.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers can review you after each completed job.'**
+  String get profReviewsEmptyBody;
+
+  /// Review tag.
+  ///
+  /// In en, this message translates to:
+  /// **'On time'**
+  String get profTagOnTime;
+
+  /// Review tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Professional'**
+  String get profTagProfessional;
+
+  /// Review tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality work'**
+  String get profTagQualityWork;
+
+  /// Review tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Clean'**
+  String get profTagClean;
+
+  /// Review tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Friendly'**
+  String get profTagFriendly;
+
+  /// Review tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair price'**
+  String get profTagFairPrice;
+
+  /// Review tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Late'**
+  String get profTagLate;
+
+  /// Review tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Rude'**
+  String get profTagRude;
+
+  /// Review tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Poor quality'**
+  String get profTagPoorQuality;
+
+  /// Review tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Messy'**
+  String get profTagMessy;
+
+  /// Review tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Polite'**
+  String get profTagPolite;
+
+  /// Review tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear instructions'**
+  String get profTagClearInstructions;
+
+  /// Review tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid promptly'**
+  String get profTagPaidPromptly;
+
+  /// Review tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Safe place'**
+  String get profTagSafePlace;
+
+  /// Review tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Unclear instructions'**
+  String get profTagUnclearInstructions;
+
+  /// Review tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsafe place'**
+  String get profTagUnsafePlace;
+
+  /// M31 title and menu row.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents'**
+  String get profDocumentsTitle;
+
+  /// M31 empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'No documents yet'**
+  String get profDocumentsEmpty;
+
+  /// M31 button to the verification screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Update documents'**
+  String get profDocumentsUpdate;
+
+  /// Verification item.
+  ///
+  /// In en, this message translates to:
+  /// **'National ID'**
+  String get profItemNid;
+
+  /// Verification item.
+  ///
+  /// In en, this message translates to:
+  /// **'Live selfie'**
+  String get profItemSelfie;
+
+  /// Verification item.
+  ///
+  /// In en, this message translates to:
+  /// **'Police clearance'**
+  String get profItemPoliceClearance;
+
+  /// Verification item.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get profItemAddress;
+
+  /// Verification item.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency contact'**
+  String get profItemEmergencyContact;
+
+  /// Verification item.
+  ///
+  /// In en, this message translates to:
+  /// **'Skill proof'**
+  String get profItemSkillProof;
+
+  /// Verification item.
+  ///
+  /// In en, this message translates to:
+  /// **'Services and area'**
+  String get profItemServiceArea;
+
+  /// Verification item.
+  ///
+  /// In en, this message translates to:
+  /// **'Code of conduct'**
+  String get profItemCodeOfConduct;
+
+  /// Document status.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing'**
+  String get profStatusMissing;
+
+  /// Document status.
+  ///
+  /// In en, this message translates to:
+  /// **'In review'**
+  String get profStatusPending;
+
+  /// Document status.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get profStatusApproved;
+
+  /// Document status.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get profStatusRejected;
+
+  /// Document status.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get profStatusExpired;
+
+  /// Document expiry.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid until {date}'**
+  String profValidUntil(String date);
+
+  /// Document expiring within 30 days.
+  ///
+  /// In en, this message translates to:
+  /// **'Expires on {date}. Renew it soon to keep receiving bookings.'**
+  String profExpiresSoon(String date);
+
+  /// Expired document.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired on {date}. Bookings are paused until you renew it.'**
+  String profExpired(String date);
+
+  /// M32 title and menu row.
+  ///
+  /// In en, this message translates to:
+  /// **'Badge and level'**
+  String get profLevelTitle;
+
+  /// M33 title and menu row.
+  ///
+  /// In en, this message translates to:
+  /// **'Services and area'**
+  String get profServicesTitle;
+
+  /// M33 heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Services you offer (up to {max})'**
+  String profServicesPick(String max);
+
+  /// M33 field.
+  ///
+  /// In en, this message translates to:
+  /// **'Years of experience'**
+  String get profExperienceLabel;
+
+  /// M33 radius heading.
+  ///
+  /// In en, this message translates to:
+  /// **'How far you travel'**
+  String get profRadius;
+
+  /// Working radius option.
+  ///
+  /// In en, this message translates to:
+  /// **'{km} km'**
+  String profRadiusKm(String km);
+
+  /// M33 row.
+  ///
+  /// In en, this message translates to:
+  /// **'Home base'**
+  String get profHomeBase;
+
+  /// Home base is saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Set'**
+  String get profHomeBaseSet;
+
+  /// Home base is missing.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get profHomeBaseMissing;
+
+  /// M33 button.
+  ///
+  /// In en, this message translates to:
+  /// **'Use my location'**
+  String get profUseLocation;
+
+  /// Location unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on location and try again.'**
+  String get profLocationOff;
+
+  /// Confirmation after saving.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get profSaved;
+
+  /// M34 title and menu row.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get profLanguageTitle;
+
+  /// M34 explanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the language for the app, notifications and messages from PAO.'**
+  String get profLanguageBody;
+
+  /// M34 profile update failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved on this phone, but not on your profile: {reason}'**
+  String profLanguageNotSynced(String reason);
+
+  /// M35 title and menu row.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get profHelpTitle;
+
+  /// Help topic.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I get jobs?'**
+  String get profHelpJobsQ;
+
+  /// Help answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Go online on Home. Requests from nearby customers appear with a countdown; accept them before it ends.'**
+  String get profHelpJobsA;
+
+  /// Help topic.
+  ///
+  /// In en, this message translates to:
+  /// **'What is the start code?'**
+  String get profHelpCodeQ;
+
+  /// Help answer.
+  ///
+  /// In en, this message translates to:
+  /// **'When you arrive, ask the customer for their 4-digit code. The job starts only after you enter it.'**
+  String get profHelpCodeA;
+
+  /// Help topic.
+  ///
+  /// In en, this message translates to:
+  /// **'How am I paid?'**
+  String get profHelpCashQ;
+
+  /// Help answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers pay you in cash when the job is done. Confirm the cash in the app to complete the job.'**
+  String get profHelpCashA;
+
+  /// Help topic.
+  ///
+  /// In en, this message translates to:
+  /// **'Why did my bookings stop?'**
+  String get profHelpDocumentsQ;
+
+  /// Help answer.
+  ///
+  /// In en, this message translates to:
+  /// **'An expired document, such as the police clearance, pauses bookings. Upload a new one in Documents.'**
+  String get profHelpDocumentsA;
+
+  /// Help topic.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I become a PAO Verified Pro?'**
+  String get profHelpLevelQ;
+
+  /// Help answer.
+  ///
+  /// In en, this message translates to:
+  /// **'After Level 1, PAO can check your work in person. Passing gives you Level 2 and more bookings.'**
+  String get profHelpLevelA;
+
+  /// M35 call prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Still need help? Our team can help you by phone.'**
+  String get profHelpStillStuck;
+
+  /// M35 button.
+  ///
+  /// In en, this message translates to:
+  /// **'Call PAO support'**
+  String get profHelpCall;
+
+  /// M36 menu row and confirm button.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get profLogOut;
+
+  /// M36 sheet title.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out?'**
+  String get profLogOutTitle;
+
+  /// M36 sheet body.
+  ///
+  /// In en, this message translates to:
+  /// **'You will stop receiving job requests on this phone until you sign in again.'**
+  String get profLogOutBody;
+
+  /// M15 switch title while online.
+  ///
+  /// In en, this message translates to:
+  /// **'You are online'**
+  String get homeOnline;
+
+  /// M15 switch title while offline.
+  ///
+  /// In en, this message translates to:
+  /// **'You are offline'**
+  String get homeOffline;
+
+  /// M15 switch subtitle while online.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers nearby can send you requests.'**
+  String get homeOnlineBody;
+
+  /// Android notification body while the online service runs in the background.
+  ///
+  /// In en, this message translates to:
+  /// **'PAO Partner is sharing your location so customers nearby can send you requests. Go offline in the app to stop.'**
+  String get homeServiceBody;
+
+  /// M15 switch subtitle while offline.
+  ///
+  /// In en, this message translates to:
+  /// **'Go online to receive requests.'**
+  String get homeOfflineBody;
+
+  /// Shown when going online fails because location is off (PRD §11).
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on location to go online. It is shared only while you are online.'**
+  String get homeLocationOff;
+
+  /// M15b title.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests paused'**
+  String get homePausedTitle;
+
+  /// M15b body.
+  ///
+  /// In en, this message translates to:
+  /// **'A document has expired. Renew it to receive requests again.'**
+  String get homePausedBody;
+
+  /// M15b button to the documents screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Renew document'**
+  String get homeRenew;
+
+  /// Expiry banner on M15 (P-11).
+  ///
+  /// In en, this message translates to:
+  /// **'A document expires on {date}. Renew it to keep receiving requests.'**
+  String homeExpiring(String date);
+
+  /// Earnings card title.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s earnings'**
+  String get homeToday;
+
+  /// Completed jobs today.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 job today} other{{count} jobs today}}'**
+  String homeJobsToday(int count);
+
+  /// Active job card heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Active job'**
+  String get homeActiveJob;
+
+  /// Pending requests heading.
+  ///
+  /// In en, this message translates to:
+  /// **'New requests'**
+  String get homeRequests;
+
+  /// Empty requests title.
+  ///
+  /// In en, this message translates to:
+  /// **'No requests right now'**
+  String get homeNoRequests;
+
+  /// Empty requests body.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay online to receive requests nearby.'**
+  String get homeNoRequestsBody;
+
+  /// M16 title.
+  ///
+  /// In en, this message translates to:
+  /// **'New request'**
+  String get reqTitle;
+
+  /// M16 countdown, time as m:ss.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} left to answer'**
+  String reqTimeLeft(String time);
+
+  /// ASAP timing.
+  ///
+  /// In en, this message translates to:
+  /// **'As soon as possible'**
+  String get reqAsap;
+
+  /// Scheduled timing.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled for {time}'**
+  String reqScheduled(String time);
+
+  /// Distance to the customer area.
+  ///
+  /// In en, this message translates to:
+  /// **'{km} km away'**
+  String reqDistance(String km);
+
+  /// Booking note label.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer note'**
+  String get reqNote;
+
+  /// Accept button.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get reqAccept;
+
+  /// Reject button.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get reqReject;
+
+  /// Reject sheet title.
+  ///
+  /// In en, this message translates to:
+  /// **'Why are you rejecting?'**
+  String get reqRejectTitle;
+
+  /// Reject reason busy.
+  ///
+  /// In en, this message translates to:
+  /// **'I am busy'**
+  String get reqReasonBusy;
+
+  /// Reject reason too_far.
+  ///
+  /// In en, this message translates to:
+  /// **'Too far away'**
+  String get reqReasonTooFar;
+
+  /// Reject reason not_my_service.
+  ///
+  /// In en, this message translates to:
+  /// **'Not my service'**
+  String get reqReasonNotMyService;
+
+  /// Reject reason other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other reason'**
+  String get reqReasonOther;
+
+  /// Expired request title.
+  ///
+  /// In en, this message translates to:
+  /// **'This request is no longer open'**
+  String get reqExpiredTitle;
+
+  /// Expired request body.
+  ///
+  /// In en, this message translates to:
+  /// **'The time to answer passed or it was already answered.'**
+  String get reqExpiredBody;
+
+  /// M17 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Active job'**
+  String get jobLiveTitle;
+
+  /// Status requested.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for your answer'**
+  String get jobStatusRequested;
+
+  /// Status accepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get jobStepAccepted;
+
+  /// Status on_the_way.
+  ///
+  /// In en, this message translates to:
+  /// **'On the way'**
+  String get jobStepOnTheWay;
+
+  /// Status arrived.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrived'**
+  String get jobStepArrived;
+
+  /// Status in_progress.
+  ///
+  /// In en, this message translates to:
+  /// **'Job started'**
+  String get jobStepStarted;
+
+  /// Status completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get jobStepCompleted;
+
+  /// Status cancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get jobStatusCancelled;
+
+  /// Status rejected or timed out.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get jobStatusClosed;
+
+  /// Customer fallback name.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer'**
+  String get jobCustomer;
+
+  /// Opens Google Maps (P-07).
+  ///
+  /// In en, this message translates to:
+  /// **'Directions'**
+  String get jobActionNavigate;
+
+  /// Calls the customer.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get jobActionCall;
+
+  /// Marks on the way.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m on the way'**
+  String get jobActionOnTheWay;
+
+  /// Marks arrived.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'ve arrived'**
+  String get jobActionArrived;
+
+  /// Opens M18.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter start code'**
+  String get jobActionStart;
+
+  /// Opens M19.
+  ///
+  /// In en, this message translates to:
+  /// **'Add extra items'**
+  String get jobActionExtras;
+
+  /// Opens M20 and confirms there.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete job'**
+  String get jobActionComplete;
+
+  /// Opens M21.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate customer'**
+  String get jobActionRate;
+
+  /// Opens M16 for a job still requested.
+  ///
+  /// In en, this message translates to:
+  /// **'Open request'**
+  String get jobActionOpenRequest;
+
+  /// Cancel button.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel job'**
+  String get jobActionCancel;
+
+  /// Returns to M15.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to home'**
+  String get jobBackHome;
+
+  /// Returns to M17.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to job'**
+  String get jobBackToJob;
+
+  /// Bill total label.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get jobTotal;
+
+  /// Booked line quantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity {count}'**
+  String jobQuantity(int count);
+
+  /// Extra line quantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra · quantity {count}'**
+  String jobExtraQuantity(int count);
+
+  /// Cancel sheet title.
+  ///
+  /// In en, this message translates to:
+  /// **'Why are you cancelling?'**
+  String get jobCancelTitle;
+
+  /// Cancel consequence (PRD §5).
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelling after accepting lowers your ranking.'**
+  String get jobCancelWarning;
+
+  /// Cancel reason emergency.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency'**
+  String get jobCancelEmergency;
+
+  /// Cancel reason customer_unreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer not reachable'**
+  String get jobCancelUnreachable;
+
+  /// Cancel reason unsafe_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsafe location'**
+  String get jobCancelUnsafe;
+
+  /// Cancel reason other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other reason'**
+  String get jobCancelOther;
+
+  /// Reason note field.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get jobNoteLabel;
+
+  /// Cancelled job title.
+  ///
+  /// In en, this message translates to:
+  /// **'This job was cancelled'**
+  String get jobCancelledTitle;
+
+  /// Cancelled by the customer.
+  ///
+  /// In en, this message translates to:
+  /// **'The customer cancelled this job.'**
+  String get jobCancelledByCustomer;
+
+  /// Cancelled by someone else.
+  ///
+  /// In en, this message translates to:
+  /// **'It can no longer be worked on.'**
+  String get jobCancelledOther;
+
+  /// Rejected or timed-out job title.
+  ///
+  /// In en, this message translates to:
+  /// **'This job is no longer active'**
+  String get jobClosedTitle;
+
+  /// M18 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter start code'**
+  String get jobStartTitle;
+
+  /// M18 body.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the customer for the 4-digit code in their app.'**
+  String get jobStartBody;
+
+  /// M19 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Add extra items'**
+  String get jobExtrasTitle;
+
+  /// M19 empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no extra items for this service.'**
+  String get jobExtrasEmpty;
+
+  /// M19 submit with the added total.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to customer · {amount}'**
+  String jobExtrasSend(String amount);
+
+  /// M19 pending title.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the customer'**
+  String get jobExtrasWaitingTitle;
+
+  /// Pending extras note.
+  ///
+  /// In en, this message translates to:
+  /// **'The customer is asked to approve {amount} of extra items.'**
+  String jobExtrasWaiting(String amount);
+
+  /// Last proposal approved.
+  ///
+  /// In en, this message translates to:
+  /// **'The customer approved the last extra items.'**
+  String get jobExtrasApproved;
+
+  /// Last proposal declined.
+  ///
+  /// In en, this message translates to:
+  /// **'The customer declined the last extra items.'**
+  String get jobExtrasDeclined;
+
+  /// M20 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete job'**
+  String get jobCompleteTitle;
+
+  /// M20 cash confirmation (D4).
+  ///
+  /// In en, this message translates to:
+  /// **'I received {amount} in cash'**
+  String jobCashReceived(String amount);
+
+  /// M21 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate the customer'**
+  String get jobRateTitle;
+
+  /// M21 question.
+  ///
+  /// In en, this message translates to:
+  /// **'How was this customer?'**
+  String get jobRateQuestion;
+
+  /// Star input label.
+  ///
+  /// In en, this message translates to:
+  /// **'{stars} out of 5 stars'**
+  String jobRateStars(int stars);
+
+  /// Comment field.
+  ///
+  /// In en, this message translates to:
+  /// **'Comment (optional)'**
+  String get jobRateComment;
+
+  /// M21 submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit rating'**
+  String get jobRateSubmit;
+
+  /// M21 skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get jobRateSkip;
+
+  /// Tag polite.
+  ///
+  /// In en, this message translates to:
+  /// **'Polite'**
+  String get jobTagPolite;
+
+  /// Tag clear_instructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear instructions'**
+  String get jobTagClearInstructions;
+
+  /// Tag paid_promptly.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid promptly'**
+  String get jobTagPaidPromptly;
+
+  /// Tag safe_place.
+  ///
+  /// In en, this message translates to:
+  /// **'Safe place'**
+  String get jobTagSafePlace;
+
+  /// Tag rude.
+  ///
+  /// In en, this message translates to:
+  /// **'Rude'**
+  String get jobTagRude;
+
+  /// Tag unclear_instructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Unclear instructions'**
+  String get jobTagUnclearInstructions;
+
+  /// Tag unsafe_place.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsafe place'**
+  String get jobTagUnsafePlace;
+
+  /// Inbox action.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all read'**
+  String get notifReadAll;
+
+  /// Inbox empty title.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications yet'**
+  String get notifEmpty;
+
+  /// Inbox empty body.
+  ///
+  /// In en, this message translates to:
+  /// **'Updates about requests, jobs and documents appear here.'**
+  String get notifEmptyBody;
+
+  /// Billing screen title.
+  ///
+  /// In en, this message translates to:
+  /// **'PAO dues'**
+  String get billTitle;
+
+  /// Due summary label.
+  ///
+  /// In en, this message translates to:
+  /// **'Due to PAO'**
+  String get billDue;
+
+  /// Due block limit.
+  ///
+  /// In en, this message translates to:
+  /// **'Limit {amount}'**
+  String billLimit(String amount);
+
+  /// Commission rate line.
+  ///
+  /// In en, this message translates to:
+  /// **'Commission {rate}% of each completed job'**
+  String billRate(String rate);
+
+  /// Pending payments total.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for confirmation: {amount}'**
+  String billPendingTotal(String amount);
+
+  /// Explains the block.
+  ///
+  /// In en, this message translates to:
+  /// **'Your due is over the limit, so you can\'t accept new jobs. Offers and notifications still arrive.'**
+  String get billBlockedBody;
+
+  /// Home banner when blocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Due {due} is over the {limit} limit. Pay to accept new jobs.'**
+  String billBannerBlocked(String due, String limit);
+
+  /// Home banner near the limit.
+  ///
+  /// In en, this message translates to:
+  /// **'Due {due} is close to the {limit} limit.'**
+  String billBannerNear(String due, String limit);
+
+  /// Opens the pay screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay now'**
+  String get billPayNow;
+
+  /// Ledger tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledger'**
+  String get billLedger;
+
+  /// Payments tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments'**
+  String get billPayments;
+
+  /// Ledger debit row.
+  ///
+  /// In en, this message translates to:
+  /// **'Commission · {number}'**
+  String billCommission(String number);
+
+  /// Ledger row subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Job total {amount}'**
+  String billJobTotal(String amount);
+
+  /// Ledger credit row.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment received'**
+  String get billCredit;
+
+  /// Empty ledger title.
+  ///
+  /// In en, this message translates to:
+  /// **'No entries yet'**
+  String get billLedgerEmpty;
+
+  /// Empty ledger body.
+  ///
+  /// In en, this message translates to:
+  /// **'PAO\'s commission on each completed job appears here.'**
+  String get billLedgerEmptyBody;
+
+  /// Empty payments title.
+  ///
+  /// In en, this message translates to:
+  /// **'No payments yet'**
+  String get billPaymentsEmpty;
+
+  /// Empty payments body.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments you report appear here until an admin confirms them.'**
+  String get billPaymentsEmptyBody;
+
+  /// Payment status.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get billStatusPending;
+
+  /// Payment status.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get billStatusConfirmed;
+
+  /// Payment status.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get billStatusRejected;
+
+  /// Rejection reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected: {reason}'**
+  String billRejectedReason(String reason);
+
+  /// Pay screen title.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay your due'**
+  String get payTitle;
+
+  /// Pay screen intro.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay PAO first, then report it here. An admin confirms it and your due goes down.'**
+  String get payIntro;
+
+  /// Amount field.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount (৳)'**
+  String get payAmount;
+
+  /// Amount error.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an amount between ৳0.01 and ৳10,00,000.'**
+  String get payAmountInvalid;
+
+  /// Method label.
+  ///
+  /// In en, this message translates to:
+  /// **'How you paid'**
+  String get payMethod;
+
+  /// Method error.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how you paid.'**
+  String get payMethodMissing;
+
+  /// Method.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash to agent'**
+  String get payCashToAgent;
+
+  /// Method.
+  ///
+  /// In en, this message translates to:
+  /// **'bKash'**
+  String get payBkash;
+
+  /// Method.
+  ///
+  /// In en, this message translates to:
+  /// **'Nagad'**
+  String get payNagad;
+
+  /// Method.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank transfer'**
+  String get payBank;
+
+  /// Reference field.
+  ///
+  /// In en, this message translates to:
+  /// **'Reference'**
+  String get payReference;
+
+  /// Reference hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction ID, receipt number or agent name'**
+  String get payReferenceHint;
+
+  /// Reference error.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a reference of 1 to 120 characters.'**
+  String get payReferenceInvalid;
+
+  /// Submit button.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit payment'**
+  String get paySubmit;
+
+  /// Snack after submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment submitted. An admin will confirm it soon.'**
+  String get paySent;
+}
+
+class _PartnerL10nDelegate extends LocalizationsDelegate<PartnerL10n> {
+  const _PartnerL10nDelegate();
+
+  @override
+  Future<PartnerL10n> load(Locale locale) {
+    return SynchronousFuture<PartnerL10n>(lookupPartnerL10n(locale));
+  }
+
+  @override
+  bool isSupported(Locale locale) =>
+      <String>['bn', 'en'].contains(locale.languageCode);
+
+  @override
+  bool shouldReload(_PartnerL10nDelegate old) => false;
+}
+
+PartnerL10n lookupPartnerL10n(Locale locale) {
+  // Lookup logic when only language code is specified.
+  switch (locale.languageCode) {
+    case 'bn':
+      return PartnerL10nBn();
+    case 'en':
+      return PartnerL10nEn();
+  }
+
+  throw FlutterError(
+    'PartnerL10n.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
+}

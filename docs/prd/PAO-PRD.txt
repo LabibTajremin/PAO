@@ -23,7 +23,7 @@
     Platforms                          Customer app and Provider app (Android + iOS,
                                        Flutter); Admin web panel
 
-    Backend                            NestJS (TypeScript), API-first, modular monolith
+    Backend                            .NET 10 (C#, ASP.NET Core), API-first, modular monolith
                                        built to split into
                                        microservices later
 
@@ -718,8 +718,8 @@
 PAO — Product Requirements Document
 
   9. Technical architecture
-  The backend is a NestJS (TypeScript) modular monolith, deployed as one Node image with
-  three entry points: api, worker and migrate. It is built so that any module can later become its own microservice by moving its folder and replacing in-
+  The backend is a .NET 10 (C#, ASP.NET Core) modular monolith (ADR-0034), deployed as one
+  Docker image with three entry points: api, worker and migrate. It is built so that any module can later become its own microservice by moving its folder and replacing in-
   process calls with network calls. The two Flutter apps talk to it only through a versioned
   REST API.
 
@@ -727,7 +727,7 @@
 
     Layer                        Choice                                Notes
 
-    Backend                      NestJS (TypeScript, Node.js 22)       REST/JSON API, OpenAPI 3 spec
+    Backend                      .NET 10 (C#, ASP.NET Core)            REST/JSON API, OpenAPI 3 spec
     language                                                           written first
 
     Mobile apps                  Flutter (Android + iOS)               Two apps in one monorepo, sharing
@@ -819,48 +819,32 @@
 
   9.4 Inside a module (clean architecture + repository pattern)
 
-     backend/
-        src/main.ts                    # composition root: wires modules together
-        src/worker.ts, src/migrate.ts  # worker and migration entry points
-        src/
-          platform/                    # shared infrastructure only: config, db,
-     logger,
-                                       # http server, auth guards, event bus,
-     outbox
-         modules/
-               booking/
-                   contract/           # PUBLIC: the only folder other modules
-     import
-                       booking-service.ts  # service-to-service interface
-     (BookingService) + injection token
-                       dto.ts
-                     events.ts
-                   domain/             # entities, value objects, state machine,
-     rules (no imports from outside)
-                   app/                # use cases: create-booking.ts, accept-booking.ts, ...
-                   port/               # repository and gateway interfaces used by
-     app/
-                   adapter/
-                       postgres/       # repository implementations
-                       http/           # controllers, request validation, mapping to
-     use cases
-                       inproc/         # implementation of contract/ for other
-     modules
-                   booking.module.ts   # Nest module: wires the module, exports its
-     contract
+     Backend/
+        PAO.Core/                      # API host: Program.cs wires areas through
+                                       # one registration method per concern
+          Areas/
+            Booking/                   # one ASP.NET area per module
+              Controllers/             # HTTP only: send commands and queries
+              Features/<Feature>/      # one use case: Commands|Queries, validator,
+                                       # handler (CQRS)
+              Services/Shared/         # PUBLIC: IBookingSharedService, the only
+                                       # thing other areas call
+              Services/  Repositories/ # area logic, EF Core data access
+        PAO.Worker/  PAO.Migrator/     # worker and migration entry points
+        PAO.Lib/                       # request and view models, DTOs, events,
+                                       # error reasons, mapping profiles
+        PAO.EF/                        # DbContext and db models
+        PAO.Infrastructure/            # shared infrastructure only: config, logging,
+                                       # HTTP edge, auth, event bus, outbox
+        DB Changes/<module>/           # SQL migrations per module schema
+        Docs/Areas/<Area>/             # what the module owns, its contract, events
+                                       # in and out
+        Api/openapi.yaml               # API contract for the Flutter apps
+     docs/adr/                         # architecture decision records
 
-PAO — Product Requirements Document
-
-     and subscribers
-             README.md                   # what the module owns, its contract, events
-     in and out
-        migrations/<module>/             # SQL migrations per module schema
-        api/openapi.yaml                 # API contract for the Flutter apps
-        docs/adr/                        # architecture decision records
-
-  Dependencies point inwards only: adapter → app → domain . The domain layer has no
-  knowledge of HTTP, SQL or other modules. Use cases depend on interfaces in port/ ,
-  never on concrete repositories (dependency inversion).
+  Dependencies point inwards only: controllers → handlers → services and repositories.
+  Areas never reach into each other except through shared services; handlers depend on
+  repository interfaces, never on another area's data (dependency inversion).
 
   9.5 Flutter structure
 
@@ -871,7 +855,7 @@
         packages/
             pao_core/                    # config, networking, auth/session, error
      handling
-         pao_api/                        # API client generated from api/openapi.yaml
+         pao_api/                        # API client generated from Backend/Api/openapi.yaml
             pao_ui/                      # design system: theme, colours, typography,
      shared widgets
             pao_l10n/                    # Bangla + English strings
@@ -952,19 +936,19 @@
 
        Root README.md : what PAO is, how to run everything locally with one command, folder
        map
-        docs/architecture.md : module map, boundary rules, how to extract a module into a
+        docs/guides/architecture.md : module map, boundary rules, how to extract a module into a
        service
-        README.md in every module: responsibility, contract methods, events published and
-       consumed, tables owned
-        api/openapi.yaml : complete, with examples, served as interactive docs in
+        Backend/Docs/Areas/<Area>/ for every module: responsibility, contract methods,
+       events published and consumed, tables owned
+        Backend/Api/openapi.yaml : complete, with examples, served as interactive docs in
        development
         docs/adr/ : one record per significant decision (modular monolith, PostGIS, state
        management, auth)
-        docs/verification.md : the verification process from section 6, as an operations
+        docs/guides/verification.md : the verification process from section 6, as an operations
        runbook
-        docs/domain-glossary.md : booking, sub-service, level, start code and other terms
+        docs/guides/domain-glossary.md : booking, sub-service, level, start code and other terms
 
-        CONTRIBUTING.md : branch naming, commit style (Conventional Commits), PR checklist
+        docs/CONTRIBUTING.md : branch naming, commit style (Conventional Commits), PR checklist
        Seed data script with the 5 MVP services and sample providers for demos
 
 PAO — Product Requirements Document
@@ -1016,7 +1000,7 @@
 
    1. Design first. Produce wireframes and then UI designs for every screen in section 8,
        plus the design system (colours, type, components). Freeze the MVP screen list.
-   2. Contracts. Write api/openapi.yaml , the module list, each module's
+   2. Contracts. Write Backend/Api/openapi.yaml , the module list, each module's
         contract/ service interface and events, and the database schema per module. Review all of
        these before any implementation.
    3. Backend skeleton. Set up the platform layer, module scaffolding, CI (lint, architecture

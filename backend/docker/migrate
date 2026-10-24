@@ -1,3 +1,0 @@
-#!/bin/sh
-# Migrations and seed data: "up", "seed" or "perf-seed N".
-exec node /app/dist/migrate.js "$@"

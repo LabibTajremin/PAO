@@ -1,0 +1,1896 @@
+{
+  "@@locale": "en",
+  "appTitle": "PAO",
+  "@appTitle": {
+    "description": "App name on the splash"
+  },
+  "authPhoneTitle": "What is your phone number?",
+  "@authPhoneTitle": {
+    "description": "C03 heading"
+  },
+  "authPhoneBody": "We will text you a code to sign in.",
+  "@authPhoneBody": {
+    "description": "C03 explanation"
+  },
+  "authPhoneLabel": "Mobile number",
+  "@authPhoneLabel": {
+    "description": "Phone field label"
+  },
+  "authPhoneInvalid": "Enter an 11-digit Bangladeshi mobile number.",
+  "@authPhoneInvalid": {
+    "description": "Invalid phone number"
+  },
+  "authSendCode": "Send code",
+  "@authSendCode": {
+    "description": "C03 button"
+  },
+  "authTermsNote": "By continuing you agree to PAO's terms and privacy policy.",
+  "@authTermsNote": {
+    "description": "C03 consent note"
+  },
+  "authTermsLink": "Read the terms and privacy policy",
+  "@authTermsLink": {
+    "description": "C03 link to C28"
+  },
+  "authOtpTitle": "Enter the 6-digit code",
+  "@authOtpTitle": {
+    "description": "C04 heading"
+  },
+  "authOtpSentTo": "We sent it to {phone}.",
+  "@authOtpSentTo": {
+    "description": "C04 explanation",
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "authResendIn": "Resend code in {seconds}s",
+  "@authResendIn": {
+    "description": "Resend countdown",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authResend": "Resend code",
+  "@authResend": {
+    "description": "Resend button"
+  },
+  "authProfileTitle": "Set up your profile",
+  "@authProfileTitle": {
+    "description": "C05 heading"
+  },
+  "authProfileBody": "Tell providers what to call you. A photo is optional.",
+  "@authProfileBody": {
+    "description": "C05 explanation"
+  },
+  "authProfileName": "Your name",
+  "@authProfileName": {
+    "description": "C05 name field"
+  },
+  "authProfileNameInvalid": "Enter a name of 2 to 80 characters.",
+  "@authProfileNameInvalid": {
+    "description": "C05 invalid name"
+  },
+  "authProfileAddPhoto": "Add a photo",
+  "@authProfileAddPhoto": {
+    "description": "C05 photo button"
+  },
+  "onbTagline": "Trusted help at home",
+  "@onbTagline": {
+    "description": "Splash tagline"
+  },
+  "onbLanguage": "Language",
+  "@onbLanguage": {
+    "description": "Language switch label"
+  },
+  "onbSkip": "Skip",
+  "@onbSkip": {
+    "description": "Skip onboarding"
+  },
+  "onbNext": "Next",
+  "@onbNext": {
+    "description": "Next slide"
+  },
+  "onbStart": "Get started",
+  "@onbStart": {
+    "description": "Finish onboarding"
+  },
+  "onbSlide1Title": "Find help nearby",
+  "@onbSlide1Title": {
+    "description": "C02 title"
+  },
+  "onbSlide1Body": "Electricians, plumbers, cleaners and more, close to your home.",
+  "@onbSlide1Body": {
+    "description": "C02 body"
+  },
+  "onbSlide2Title": "Verified providers",
+  "@onbSlide2Title": {
+    "description": "C31 title"
+  },
+  "onbSlide2Body": "Every provider's NID, police clearance and skills are checked before they work.",
+  "@onbSlide2Body": {
+    "description": "C31 body"
+  },
+  "onbSlide3Title": "Fixed prices, pay in cash",
+  "@onbSlide3Title": {
+    "description": "C32 title"
+  },
+  "onbSlide3Body": "See the price before you book. Pay the provider in cash when the job is done.",
+  "@onbSlide3Body": {
+    "description": "C32 body"
+  },
+  "bookingsTitle": "My bookings",
+  "@bookingsTitle": {
+    "description": "C18 title"
+  },
+  "bookingsUpcoming": "Upcoming",
+  "@bookingsUpcoming": {
+    "description": "C18 tab"
+  },
+  "bookingsPast": "Past",
+  "@bookingsPast": {
+    "description": "C18b tab"
+  },
+  "bookingsEmptyUpcoming": "No upcoming bookings",
+  "@bookingsEmptyUpcoming": {
+    "description": "C58 title"
+  },
+  "bookingsEmptyUpcomingBody": "Book a verified provider and the booking will show up here.",
+  "@bookingsEmptyUpcomingBody": {
+    "description": "C58 body"
+  },
+  "bookingsEmptyPast": "No past bookings yet",
+  "@bookingsEmptyPast": {
+    "description": "Empty past tab title"
+  },
+  "bookingsEmptyPastBody": "Finished and cancelled bookings will appear here.",
+  "@bookingsEmptyPastBody": {
+    "description": "Empty past tab body"
+  },
+  "bookingsBookService": "Book a service",
+  "@bookingsBookService": {
+    "description": "C58 button"
+  },
+  "bookingsStatusRequested": "Waiting for reply",
+  "@bookingsStatusRequested": {
+    "description": "Booking status"
+  },
+  "bookingsStatusAccepted": "Accepted",
+  "@bookingsStatusAccepted": {
+    "description": "Booking status"
+  },
+  "bookingsStatusOnTheWay": "On the way",
+  "@bookingsStatusOnTheWay": {
+    "description": "Booking status"
+  },
+  "bookingsStatusArrived": "Arrived",
+  "@bookingsStatusArrived": {
+    "description": "Booking status"
+  },
+  "bookingsStatusInProgress": "In progress",
+  "@bookingsStatusInProgress": {
+    "description": "Booking status"
+  },
+  "bookingsStatusCompleted": "Completed",
+  "@bookingsStatusCompleted": {
+    "description": "Booking status"
+  },
+  "bookingsStatusRejected": "Declined",
+  "@bookingsStatusRejected": {
+    "description": "Booking status"
+  },
+  "bookingsStatusTimedOut": "No response",
+  "@bookingsStatusTimedOut": {
+    "description": "Booking status"
+  },
+  "bookingsStatusCancelled": "Cancelled",
+  "@bookingsStatusCancelled": {
+    "description": "Booking status"
+  },
+  "bookingsDetailTitle": "Booking details",
+  "@bookingsDetailTitle": {
+    "description": "C19 title"
+  },
+  "bookingsProvider": "Your provider",
+  "@bookingsProvider": {
+    "description": "C19 provider heading"
+  },
+  "bookingsCallProvider": "Call provider",
+  "@bookingsCallProvider": {
+    "description": "C19 call button tooltip"
+  },
+  "bookingsRatingSummary": "{rating} rating · {count} reviews",
+  "@bookingsRatingSummary": {
+    "description": "Provider rating line",
+    "placeholders": {
+      "rating": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingsAddress": "Address",
+  "@bookingsAddress": {
+    "description": "C19 address heading"
+  },
+  "bookingsNote": "Your note",
+  "@bookingsNote": {
+    "description": "C19 note heading"
+  },
+  "bookingsTimeline": "Timeline",
+  "@bookingsTimeline": {
+    "description": "C19 timeline heading"
+  },
+  "bookingsBill": "Bill",
+  "@bookingsBill": {
+    "description": "C19 bill heading"
+  },
+  "bookingsExtra": "Added during the job",
+  "@bookingsExtra": {
+    "description": "Extra item note"
+  },
+  "bookingsTotal": "Total",
+  "@bookingsTotal": {
+    "description": "Bill total"
+  },
+  "bookingsPayCash": "Pay the provider in cash when the job is done.",
+  "@bookingsPayCash": {
+    "description": "Cash payment note"
+  },
+  "bookingsPaidCash": "Paid in cash",
+  "@bookingsPaidCash": {
+    "description": "Paid note on completed bookings"
+  },
+  "bookingsTrack": "Track live",
+  "@bookingsTrack": {
+    "description": "Opens C14"
+  },
+  "bookingsWaiting": "See request status",
+  "@bookingsWaiting": {
+    "description": "Opens C13"
+  },
+  "bookingsReceipt": "View receipt",
+  "@bookingsReceipt": {
+    "description": "Opens C64"
+  },
+  "bookingsRate": "Rate provider",
+  "@bookingsRate": {
+    "description": "Opens C17"
+  },
+  "bookingsBookAgain": "Book again",
+  "@bookingsBookAgain": {
+    "description": "Opens the service"
+  },
+  "bookingsReport": "Report a problem",
+  "@bookingsReport": {
+    "description": "Opens C20"
+  },
+  "bookingsCancelledTitle": "This booking was cancelled",
+  "@bookingsCancelledTitle": {
+    "description": "C57 heading"
+  },
+  "bookingsRejectedTitle": "The provider declined this booking",
+  "@bookingsRejectedTitle": {
+    "description": "Declined heading"
+  },
+  "bookingsTimedOutTitle": "The provider did not answer in time",
+  "@bookingsTimedOutTitle": {
+    "description": "Timed-out heading"
+  },
+  "bookingsCancelledByYou": "You cancelled it.",
+  "@bookingsCancelledByYou": {
+    "description": "C57 who cancelled"
+  },
+  "bookingsCancelledByProvider": "The provider cancelled it.",
+  "@bookingsCancelledByProvider": {
+    "description": "C57 who cancelled"
+  },
+  "bookingsCancelledByPao": "PAO cancelled it.",
+  "@bookingsCancelledByPao": {
+    "description": "C57 who cancelled"
+  },
+  "bookingsEndedReason": "Reason: {reason}",
+  "@bookingsEndedReason": {
+    "description": "C57 reason",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingsNoCharge": "You were not charged.",
+  "@bookingsNoCharge": {
+    "description": "C57 note"
+  },
+  "bookingsReasonChangedMind": "Changed my mind",
+  "@bookingsReasonChangedMind": {
+    "description": "Cancel reason"
+  },
+  "bookingsReasonFoundOther": "Found another provider",
+  "@bookingsReasonFoundOther": {
+    "description": "Cancel reason"
+  },
+  "bookingsReasonProviderLate": "Provider was late",
+  "@bookingsReasonProviderLate": {
+    "description": "Cancel reason"
+  },
+  "bookingsReasonByMistake": "Booked by mistake",
+  "@bookingsReasonByMistake": {
+    "description": "Cancel reason"
+  },
+  "bookingsReasonEmergency": "Provider had an emergency",
+  "@bookingsReasonEmergency": {
+    "description": "Provider cancel reason"
+  },
+  "bookingsReasonUnreachable": "Could not reach you",
+  "@bookingsReasonUnreachable": {
+    "description": "Provider cancel reason"
+  },
+  "bookingsReasonUnsafe": "Location felt unsafe",
+  "@bookingsReasonUnsafe": {
+    "description": "Provider cancel reason"
+  },
+  "bookingsReasonBusy": "Provider was busy",
+  "@bookingsReasonBusy": {
+    "description": "Decline reason"
+  },
+  "bookingsReasonTooFar": "Too far away",
+  "@bookingsReasonTooFar": {
+    "description": "Decline reason"
+  },
+  "bookingsReasonNotMyService": "Not a service they offer",
+  "@bookingsReasonNotMyService": {
+    "description": "Decline reason"
+  },
+  "bookingsReasonOther": "Other reason",
+  "@bookingsReasonOther": {
+    "description": "Cancel or decline reason"
+  },
+  "bookingsReceiptTitle": "Receipt",
+  "@bookingsReceiptTitle": {
+    "description": "C64 title"
+  },
+  "bookingsReceiptNumber": "Receipt {number}",
+  "@bookingsReceiptNumber": {
+    "description": "C64 number",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingsReceiptCompleted": "Completed {date}",
+  "@bookingsReceiptCompleted": {
+    "description": "C64 completion time",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingsReceiptService": "Service",
+  "@bookingsReceiptService": {
+    "description": "C64 field"
+  },
+  "bookingsReceiptProvider": "Provider",
+  "@bookingsReceiptProvider": {
+    "description": "C64 field"
+  },
+  "bookingsReceiptCustomer": "Customer",
+  "@bookingsReceiptCustomer": {
+    "description": "C64 field"
+  },
+  "bookingsReceiptArea": "Area",
+  "@bookingsReceiptArea": {
+    "description": "C64 field"
+  },
+  "bookingsReceiptThanks": "Thank you for choosing PAO.",
+  "@bookingsReceiptThanks": {
+    "description": "C64 footer"
+  },
+  "bookingsReceiptShare": "Share as PDF",
+  "@bookingsReceiptShare": {
+    "description": "C64 button"
+  },
+  "bookingsReceiptShareFailed": "Could not share the receipt. Please try again.",
+  "@bookingsReceiptShareFailed": {
+    "description": "C64 share error"
+  },
+  "reportTitle": "Report a problem",
+  "@reportTitle": {
+    "description": "C20 title"
+  },
+  "reportIntro": "Tell us what went wrong. Our support team reads every report.",
+  "@reportIntro": {
+    "description": "C20 intro"
+  },
+  "reportReason": "What went wrong?",
+  "@reportReason": {
+    "description": "C20 reason heading"
+  },
+  "reportNeedReason": "Choose a reason.",
+  "@reportNeedReason": {
+    "description": "Missing reason"
+  },
+  "reportReasonNoShow": "Provider did not come",
+  "@reportReasonNoShow": {
+    "description": "Complaint reason"
+  },
+  "reportReasonLate": "Provider was late",
+  "@reportReasonLate": {
+    "description": "Complaint reason"
+  },
+  "reportReasonPoorQuality": "Poor quality work",
+  "@reportReasonPoorQuality": {
+    "description": "Complaint reason"
+  },
+  "reportReasonOvercharge": "Charged more than the price",
+  "@reportReasonOvercharge": {
+    "description": "Complaint reason"
+  },
+  "reportReasonDamage": "Something was damaged",
+  "@reportReasonDamage": {
+    "description": "Complaint reason"
+  },
+  "reportReasonBehaviour": "Rude or unprofessional",
+  "@reportReasonBehaviour": {
+    "description": "Complaint reason"
+  },
+  "reportReasonSafety": "I felt unsafe",
+  "@reportReasonSafety": {
+    "description": "Complaint reason"
+  },
+  "reportReasonPayment": "Payment problem",
+  "@reportReasonPayment": {
+    "description": "Complaint reason"
+  },
+  "reportReasonOther": "Something else",
+  "@reportReasonOther": {
+    "description": "Complaint reason"
+  },
+  "reportDescription": "Describe the problem",
+  "@reportDescription": {
+    "description": "Description label"
+  },
+  "reportDescriptionHint": "What happened, and when?",
+  "@reportDescriptionHint": {
+    "description": "Description hint"
+  },
+  "reportDescriptionInvalid": "Write 10 to 1000 characters.",
+  "@reportDescriptionInvalid": {
+    "description": "Bad description"
+  },
+  "reportPhotos": "Photos ({count} of {max})",
+  "@reportPhotos": {
+    "description": "Photo heading",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "reportTakePhoto": "Take photo",
+  "@reportTakePhoto": {
+    "description": "Camera button"
+  },
+  "reportChoosePhoto": "Choose photo",
+  "@reportChoosePhoto": {
+    "description": "Gallery button"
+  },
+  "reportRemovePhoto": "Remove photo",
+  "@reportRemovePhoto": {
+    "description": "Remove photo tooltip"
+  },
+  "reportSubmit": "Send report",
+  "@reportSubmit": {
+    "description": "C20 button"
+  },
+  "reportSent": "Report sent",
+  "@reportSent": {
+    "description": "C56 heading"
+  },
+  "reportTicket": "Your ticket number is {ticket}. Our team will review it and contact you.",
+  "@reportTicket": {
+    "description": "C56 body",
+    "placeholders": {
+      "ticket": {
+        "type": "String"
+      }
+    }
+  },
+  "reportBackToBooking": "Back to booking",
+  "@reportBackToBooking": {
+    "description": "C56 button"
+  },
+  "notifReadAll": "Mark all read",
+  "@notifReadAll": {
+    "description": "C21 action"
+  },
+  "notifEmpty": "No notifications yet",
+  "@notifEmpty": {
+    "description": "C59 title"
+  },
+  "notifEmptyBody": "Updates about your bookings will appear here.",
+  "@notifEmptyBody": {
+    "description": "C59 body"
+  },
+  "notifUnread": "Unread",
+  "@notifUnread": {
+    "description": "Unread marker label"
+  },
+  "accountEditProfile": "Edit profile",
+  "@accountEditProfile": {
+    "description": "C22 row and C23 title"
+  },
+  "accountAddresses": "Saved addresses",
+  "@accountAddresses": {
+    "description": "C22 row and C24 title"
+  },
+  "accountLanguage": "Language",
+  "@accountLanguage": {
+    "description": "C22 row and C26 title"
+  },
+  "accountHelp": "Help & support",
+  "@accountHelp": {
+    "description": "C22 row and C27 title"
+  },
+  "accountLegal": "Terms & privacy",
+  "@accountLegal": {
+    "description": "C22 row and C28 title"
+  },
+  "accountDelete": "Delete account",
+  "@accountDelete": {
+    "description": "C22 row and C29 title"
+  },
+  "accountLogOut": "Log out",
+  "@accountLogOut": {
+    "description": "C22 row and C30 button"
+  },
+  "accountLogOutTitle": "Log out of PAO?",
+  "@accountLogOutTitle": {
+    "description": "C30 title"
+  },
+  "accountLogOutBody": "You will need your phone number and a code to sign in again.",
+  "@accountLogOutBody": {
+    "description": "C30 body"
+  },
+  "accountChangePhoto": "Change photo",
+  "@accountChangePhoto": {
+    "description": "C23 photo button"
+  },
+  "accountProfileSaved": "Profile saved",
+  "@accountProfileSaved": {
+    "description": "C23 saved message"
+  },
+  "accountAddressesEmpty": "No saved addresses",
+  "@accountAddressesEmpty": {
+    "description": "C24 empty title"
+  },
+  "accountAddressesEmptyBody": "Save your home or office to book faster.",
+  "@accountAddressesEmptyBody": {
+    "description": "C24 empty body"
+  },
+  "accountAddressAdd": "Add address",
+  "@accountAddressAdd": {
+    "description": "C24 button"
+  },
+  "accountAddressLimit": "You can save up to {max} addresses.",
+  "@accountAddressLimit": {
+    "description": "C24 limit note",
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "accountAddressDefault": "Default",
+  "@accountAddressDefault": {
+    "description": "Default address badge"
+  },
+  "accountAddressMakeDefault": "Make default",
+  "@accountAddressMakeDefault": {
+    "description": "Address action"
+  },
+  "accountAddressEdit": "Edit",
+  "@accountAddressEdit": {
+    "description": "Address action"
+  },
+  "accountAddressDelete": "Delete",
+  "@accountAddressDelete": {
+    "description": "Address action"
+  },
+  "accountAddressDeleteTitle": "Delete this address?",
+  "@accountAddressDeleteTitle": {
+    "description": "Delete confirm title"
+  },
+  "accountAddressDeleteBody": "It will be removed from your saved addresses.",
+  "@accountAddressDeleteBody": {
+    "description": "Delete confirm body"
+  },
+  "accountAddressActions": "Address actions",
+  "@accountAddressActions": {
+    "description": "Address menu tooltip"
+  },
+  "accountAddressHome": "Home",
+  "@accountAddressHome": {
+    "description": "Address label"
+  },
+  "accountAddressOffice": "Office",
+  "@accountAddressOffice": {
+    "description": "Address label"
+  },
+  "accountAddressOther": "Other",
+  "@accountAddressOther": {
+    "description": "Address label"
+  },
+  "accountLanguageBody": "Choose the language for the app, notifications and SMS.",
+  "@accountLanguageBody": {
+    "description": "C26 body"
+  },
+  "accountLanguageNotSynced": "Saved on this phone but not on your profile yet: {reason}",
+  "@accountLanguageNotSynced": {
+    "description": "C26 sync error",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "accountHelpIntro": "Answers to common questions",
+  "@accountHelpIntro": {
+    "description": "C27 heading"
+  },
+  "accountHelpBookQ": "How do I book a service?",
+  "@accountHelpBookQ": {
+    "description": "FAQ"
+  },
+  "accountHelpBookA": "Pick a service, choose a nearby verified provider, then confirm the time and address. The provider has a few minutes to accept.",
+  "@accountHelpBookA": {
+    "description": "FAQ"
+  },
+  "accountHelpPayQ": "How do I pay?",
+  "@accountHelpPayQ": {
+    "description": "FAQ"
+  },
+  "accountHelpPayA": "Pay the provider in cash when the job is done. You pay the price shown when booking, plus any extras you approve.",
+  "@accountHelpPayA": {
+    "description": "FAQ"
+  },
+  "accountHelpCodeQ": "What is the start code?",
+  "@accountHelpCodeQ": {
+    "description": "FAQ"
+  },
+  "accountHelpCodeA": "When the provider arrives, tell them the 4-digit code from the app. The job starts only after they enter it, so you know the right person is at your door.",
+  "@accountHelpCodeA": {
+    "description": "FAQ"
+  },
+  "accountHelpCancelQ": "Can I cancel a booking?",
+  "@accountHelpCancelQ": {
+    "description": "FAQ"
+  },
+  "accountHelpCancelA": "Yes, until the job starts. Open the booking, tap Cancel and pick a reason.",
+  "@accountHelpCancelA": {
+    "description": "FAQ"
+  },
+  "accountHelpProblemQ": "Something went wrong. What now?",
+  "@accountHelpProblemQ": {
+    "description": "FAQ"
+  },
+  "accountHelpProblemA": "Open the booking and tap Report a problem. Our support team reviews every report.",
+  "@accountHelpProblemA": {
+    "description": "FAQ"
+  },
+  "accountHelpStillStuck": "Still need help? Our support team is here for you.",
+  "@accountHelpStillStuck": {
+    "description": "C27 contact heading"
+  },
+  "accountHelpCall": "Call support",
+  "@accountHelpCall": {
+    "description": "C27 call button"
+  },
+  "accountHelpEmail": "Email support",
+  "@accountHelpEmail": {
+    "description": "C27 email button"
+  },
+  "accountHelpEmailSubject": "PAO support request",
+  "@accountHelpEmailSubject": {
+    "description": "Support email subject"
+  },
+  "accountLegalTermsHeading": "Terms of use",
+  "@accountLegalTermsHeading": {
+    "description": "C28 heading"
+  },
+  "accountLegalTermsBody": "PAO connects you with independent, verified service providers. Prices are fixed and shown before you book; extra work needs your approval in the app. You pay the provider in cash when the job is done. Please be at the address on time, treat providers with respect and cancel early if your plans change. Accounts that misuse PAO may be suspended.",
+  "@accountLegalTermsBody": {
+    "description": "C28 terms"
+  },
+  "accountLegalPrivacyHeading": "Privacy",
+  "@accountLegalPrivacyHeading": {
+    "description": "C28 heading"
+  },
+  "accountLegalPrivacyBody": "We keep your name, phone number, photo and saved addresses to run your bookings. A provider sees your exact address and phone number only after accepting your booking. We use your location only when you ask us to find it. We never sell your data.",
+  "@accountLegalPrivacyBody": {
+    "description": "C28 privacy"
+  },
+  "accountLegalChoicesHeading": "Your choices",
+  "@accountLegalChoicesHeading": {
+    "description": "C28 heading"
+  },
+  "accountLegalChoicesBody": "You can change your profile and language at any time, and delete your account from the Account tab. Deleting removes your personal details; records of past bookings are kept without them.",
+  "@accountLegalChoicesBody": {
+    "description": "C28 choices"
+  },
+  "accountDeleteHeading": "Before you go",
+  "@accountDeleteHeading": {
+    "description": "C29 heading"
+  },
+  "accountDeleteBody": "Deleting your account removes your name, photo, phone number and saved addresses, and signs you out on every device. This cannot be undone.",
+  "@accountDeleteBody": {
+    "description": "C29 body"
+  },
+  "accountDeleteRecords": "Records of past bookings are kept without your personal details.",
+  "@accountDeleteRecords": {
+    "description": "C29 note"
+  },
+  "accountDeleteSendCode": "Send confirmation code",
+  "@accountDeleteSendCode": {
+    "description": "C29 button"
+  },
+  "accountDeleteCodeTitle": "Enter the code",
+  "@accountDeleteCodeTitle": {
+    "description": "C61 heading"
+  },
+  "accountDeleteCodeBody": "We sent a 6-digit code to {phone}. Enter it to delete your account.",
+  "@accountDeleteCodeBody": {
+    "description": "C61 body",
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "accountDeleteResend": "Send a new code",
+  "@accountDeleteResend": {
+    "description": "C61 resend"
+  },
+  "accountDeleteConfirm": "Delete my account",
+  "@accountDeleteConfirm": {
+    "description": "C61 button"
+  },
+  "accountDeletedTitle": "Your account is deleted",
+  "@accountDeletedTitle": {
+    "description": "C62 title"
+  },
+  "accountDeletedBody": "Thank you for using PAO. You can create a new account with your phone number at any time.",
+  "@accountDeletedBody": {
+    "description": "C62 body"
+  },
+  "bookingSetupTitle": "Confirm booking",
+  "@bookingSetupTitle": {
+    "description": "C12 title"
+  },
+  "bookingNothingTitle": "Nothing to book yet",
+  "@bookingNothingTitle": {
+    "description": "Setup opened without a provider or items"
+  },
+  "bookingNothingBody": "Choose a service and a provider first.",
+  "@bookingNothingBody": {
+    "description": "Setup without a draft, explanation"
+  },
+  "bookingBrowse": "Browse services",
+  "@bookingBrowse": {
+    "description": "Button to the service list"
+  },
+  "bookingTotal": "Total",
+  "@bookingTotal": {
+    "description": "Bill total label"
+  },
+  "bookingLine": "{name} × {count}",
+  "@bookingLine": {
+    "description": "A bill line: item name and quantity",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingExtra": "Extra",
+  "@bookingExtra": {
+    "description": "Badge on an item added during the job"
+  },
+  "bookingRating": "★ {rating} ({count})",
+  "@bookingRating": {
+    "description": "Provider rating and number of reviews",
+    "placeholders": {
+      "rating": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingBadgeVerified": "Verified",
+  "@bookingBadgeVerified": {
+    "description": "Provider badge"
+  },
+  "bookingBadgePro": "Verified Pro",
+  "@bookingBadgePro": {
+    "description": "Provider badge, level 2"
+  },
+  "bookingWhenTitle": "When",
+  "@bookingWhenTitle": {
+    "description": "C12 timing section"
+  },
+  "bookingAsap": "As soon as possible",
+  "@bookingAsap": {
+    "description": "Timing option ASAP (C45)"
+  },
+  "bookingScheduled": "Schedule",
+  "@bookingScheduled": {
+    "description": "Timing option scheduled (C12)"
+  },
+  "bookingPickTime": "Pick a date and time",
+  "@bookingPickTime": {
+    "description": "Scheduled time not chosen yet"
+  },
+  "bookingTimeInvalid": "Pick a time at least 1 hour from now and within 30 days.",
+  "@bookingTimeInvalid": {
+    "description": "Invalid scheduled time"
+  },
+  "bookingWhereTitle": "Where",
+  "@bookingWhereTitle": {
+    "description": "C12 address section"
+  },
+  "bookingChange": "Change",
+  "@bookingChange": {
+    "description": "Change the address"
+  },
+  "bookingNoAddress": "Add an address so the provider can find you.",
+  "@bookingNoAddress": {
+    "description": "No saved address yet"
+  },
+  "bookingAddAddress": "Add address",
+  "@bookingAddAddress": {
+    "description": "Button to add an address"
+  },
+  "bookingAddressTitle": "Choose address",
+  "@bookingAddressTitle": {
+    "description": "C46 sheet title"
+  },
+  "bookingDefault": "Default",
+  "@bookingDefault": {
+    "description": "Badge on the default address"
+  },
+  "bookingLabelHome": "Home",
+  "@bookingLabelHome": {
+    "description": "Address label"
+  },
+  "bookingLabelOffice": "Office",
+  "@bookingLabelOffice": {
+    "description": "Address label"
+  },
+  "bookingLabelOther": "Other",
+  "@bookingLabelOther": {
+    "description": "Address label"
+  },
+  "bookingNoteLabel": "Note for the provider (optional)",
+  "@bookingNoteLabel": {
+    "description": "Note field label"
+  },
+  "bookingNoteHint": "Gate code, floor, landmark…",
+  "@bookingNoteHint": {
+    "description": "Note field hint"
+  },
+  "bookingPaymentTitle": "Payment",
+  "@bookingPaymentTitle": {
+    "description": "C12 payment section"
+  },
+  "bookingCash": "Cash on delivery",
+  "@bookingCash": {
+    "description": "Payment method"
+  },
+  "bookingCashBody": "Pay the provider in cash when the job is done.",
+  "@bookingCashBody": {
+    "description": "Payment explanation"
+  },
+  "bookingConfirm": "Confirm booking · {amount}",
+  "@bookingConfirm": {
+    "description": "Confirm button with the total",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingBackHome": "Back to home",
+  "@bookingBackHome": {
+    "description": "Button to the home tab"
+  },
+  "bookingWaitingTitle": "Booking request",
+  "@bookingWaitingTitle": {
+    "description": "C13 title"
+  },
+  "bookingWaitingHeading": "Waiting for {name} to accept",
+  "@bookingWaitingHeading": {
+    "description": "C13 heading",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingWaitingBody": "We will let you know as soon as the provider answers.",
+  "@bookingWaitingBody": {
+    "description": "C13 explanation"
+  },
+  "bookingWaitingCancel": "Cancel request",
+  "@bookingWaitingCancel": {
+    "description": "C13 cancel button"
+  },
+  "bookingWaitingDeclinedTitle": "{name} can't take this job",
+  "@bookingWaitingDeclinedTitle": {
+    "description": "C47 title",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingWaitingTimedOutTitle": "No answer in time",
+  "@bookingWaitingTimedOutTitle": {
+    "description": "C13b title"
+  },
+  "bookingWaitingMissedBody": "Choose another provider nearby. Your items are kept.",
+  "@bookingWaitingMissedBody": {
+    "description": "C47 and C13b explanation"
+  },
+  "bookingWaitingChooseAnother": "Choose another provider",
+  "@bookingWaitingChooseAnother": {
+    "description": "C47 and C13b button"
+  },
+  "bookingConfirmedTitle": "Booking confirmed",
+  "@bookingConfirmedTitle": {
+    "description": "C48 title"
+  },
+  "bookingConfirmedHeading": "Your provider accepted. See you then!",
+  "@bookingConfirmedHeading": {
+    "description": "C48 heading"
+  },
+  "bookingConfirmedView": "View booking",
+  "@bookingConfirmedView": {
+    "description": "C48 button to the detail"
+  },
+  "liveTitle": "Your booking",
+  "@liveTitle": {
+    "description": "C14 title"
+  },
+  "liveCall": "Call provider",
+  "@liveCall": {
+    "description": "Call button tooltip"
+  },
+  "liveStepAccepted": "Accepted",
+  "@liveStepAccepted": {
+    "description": "Status step"
+  },
+  "liveStepOnTheWay": "On the way",
+  "@liveStepOnTheWay": {
+    "description": "Status step"
+  },
+  "liveStepArrived": "Arrived",
+  "@liveStepArrived": {
+    "description": "Status step"
+  },
+  "liveStepInProgress": "In progress",
+  "@liveStepInProgress": {
+    "description": "Status step"
+  },
+  "liveStepCompleted": "Completed",
+  "@liveStepCompleted": {
+    "description": "Status step"
+  },
+  "liveAcceptedTitle": "{name} accepted your booking",
+  "@liveAcceptedTitle": {
+    "description": "C49 heading",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "liveAcceptedHint": "They will set off soon. Keep your start code ready.",
+  "@liveAcceptedHint": {
+    "description": "C49 hint"
+  },
+  "liveOnTheWayTitle": "{name} is on the way",
+  "@liveOnTheWayTitle": {
+    "description": "C14 heading",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "liveArrivedTitle": "{name} has arrived",
+  "@liveArrivedTitle": {
+    "description": "C50 heading",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "liveArrivedHint": "Read out the start code so the job can begin.",
+  "@liveArrivedHint": {
+    "description": "C50 hint"
+  },
+  "liveInProgressTitle": "Job in progress",
+  "@liveInProgressTitle": {
+    "description": "C51 heading"
+  },
+  "liveInProgressHint": "Extra items need your approval before they are added.",
+  "@liveInProgressHint": {
+    "description": "C51 hint"
+  },
+  "liveScheduledFor": "Scheduled for {when}",
+  "@liveScheduledFor": {
+    "description": "Scheduled start",
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "liveCodeTitle": "Start code",
+  "@liveCodeTitle": {
+    "description": "Start code card heading"
+  },
+  "liveCodeHint": "Share the code only when the provider is with you.",
+  "@liveCodeHint": {
+    "description": "Start code advice"
+  },
+  "liveCodeSemantics": "Start code {digits}",
+  "@liveCodeSemantics": {
+    "description": "Screen reader label of the code",
+    "placeholders": {
+      "digits": {
+        "type": "String"
+      }
+    }
+  },
+  "liveExtrasNoticeTitle": "Extra items to approve",
+  "@liveExtrasNoticeTitle": {
+    "description": "Pending extras card title"
+  },
+  "liveExtrasNoticeBody": "Your provider added {amount} of items.",
+  "@liveExtrasNoticeBody": {
+    "description": "Pending extras card body",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "liveExtrasNoticeReview": "Review",
+  "@liveExtrasNoticeReview": {
+    "description": "Pending extras card action"
+  },
+  "liveCancel": "Cancel booking",
+  "@liveCancel": {
+    "description": "Cancel button on the live booking"
+  },
+  "liveReport": "Report a problem",
+  "@liveReport": {
+    "description": "Report button"
+  },
+  "liveApprovalTitle": "Extra items",
+  "@liveApprovalTitle": {
+    "description": "C15 title"
+  },
+  "liveApprovalHeading": "Your provider added items",
+  "@liveApprovalHeading": {
+    "description": "C15 heading"
+  },
+  "liveApprovalBody": "Prices are fixed by PAO. Nothing is added without your approval.",
+  "@liveApprovalBody": {
+    "description": "C15 explanation"
+  },
+  "liveApprovalAdded": "Added",
+  "@liveApprovalAdded": {
+    "description": "Total of the extras"
+  },
+  "liveApprovalNewTotal": "New total",
+  "@liveApprovalNewTotal": {
+    "description": "Booking total with the extras"
+  },
+  "liveApprovalApprove": "Approve",
+  "@liveApprovalApprove": {
+    "description": "C15 approve"
+  },
+  "liveApprovalDecline": "Decline",
+  "@liveApprovalDecline": {
+    "description": "C15 decline"
+  },
+  "liveApprovalNone": "No extra items are waiting for you.",
+  "@liveApprovalNone": {
+    "description": "C15 with nothing pending"
+  },
+  "liveCompletedTitle": "Job completed",
+  "@liveCompletedTitle": {
+    "description": "C16 title"
+  },
+  "liveCompletedHeading": "All done!",
+  "@liveCompletedHeading": {
+    "description": "C16 heading"
+  },
+  "liveCompletedPay": "Pay {amount} in cash",
+  "@liveCompletedPay": {
+    "description": "C16 amount to pay",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "liveCompletedPayBody": "Hand the cash to {name}.",
+  "@liveCompletedPayBody": {
+    "description": "C16 payment instruction",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "liveCompletedPaid": "{amount} paid in cash",
+  "@liveCompletedPaid": {
+    "description": "C16 once the provider confirmed the cash",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "liveCompletedRate": "Rate {name}",
+  "@liveCompletedRate": {
+    "description": "C16 button to rating",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "liveCompletedReceipt": "View receipt",
+  "@liveCompletedReceipt": {
+    "description": "C16 button to the receipt"
+  },
+  "cancelTitle": "Cancel booking",
+  "@cancelTitle": {
+    "description": "C52 title"
+  },
+  "cancelQuestion": "Why are you cancelling?",
+  "@cancelQuestion": {
+    "description": "C52 heading"
+  },
+  "cancelFree": "Cancelling is free until the job starts.",
+  "@cancelFree": {
+    "description": "C52 policy note"
+  },
+  "cancelReasonChangedMind": "I changed my mind",
+  "@cancelReasonChangedMind": {
+    "description": "Cancel reason"
+  },
+  "cancelReasonOtherProvider": "I found another provider",
+  "@cancelReasonOtherProvider": {
+    "description": "Cancel reason"
+  },
+  "cancelReasonLate": "The provider is late",
+  "@cancelReasonLate": {
+    "description": "Cancel reason"
+  },
+  "cancelReasonMistake": "I booked by mistake",
+  "@cancelReasonMistake": {
+    "description": "Cancel reason"
+  },
+  "cancelReasonOther": "Something else",
+  "@cancelReasonOther": {
+    "description": "Cancel reason"
+  },
+  "cancelNote": "Anything to add? (optional)",
+  "@cancelNote": {
+    "description": "Cancel note label"
+  },
+  "cancelConfirm": "Cancel booking",
+  "@cancelConfirm": {
+    "description": "C52 confirm"
+  },
+  "cancelKeep": "Keep booking",
+  "@cancelKeep": {
+    "description": "C52 keep"
+  },
+  "cancelDoneTitle": "Booking cancelled",
+  "@cancelDoneTitle": {
+    "description": "C53 title"
+  },
+  "cancelDoneBody": "No charge. You can book another provider any time.",
+  "@cancelDoneBody": {
+    "description": "C53 explanation"
+  },
+  "cancelBookAgain": "Book another provider",
+  "@cancelBookAgain": {
+    "description": "C53 button"
+  },
+  "cancelBlockedTitle": "The job has already started",
+  "@cancelBlockedTitle": {
+    "description": "C54 title"
+  },
+  "cancelBlockedBody": "A booking can't be cancelled after the start code is entered. If something is wrong, report a problem.",
+  "@cancelBlockedBody": {
+    "description": "C54 explanation"
+  },
+  "cancelClosedTitle": "This booking is no longer active",
+  "@cancelClosedTitle": {
+    "description": "Cancel opened on a declined or expired booking"
+  },
+  "ratingTitle": "Rate provider",
+  "@ratingTitle": {
+    "description": "C17 title"
+  },
+  "ratingQuestion": "How was {name}?",
+  "@ratingQuestion": {
+    "description": "C17 heading",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "ratingComment": "Tell others more (optional)",
+  "@ratingComment": {
+    "description": "C17 comment label"
+  },
+  "ratingSubmit": "Submit rating",
+  "@ratingSubmit": {
+    "description": "C17 submit"
+  },
+  "ratingSkip": "Not now",
+  "@ratingSkip": {
+    "description": "C17 skip"
+  },
+  "ratingTagOnTime": "On time",
+  "@ratingTagOnTime": {
+    "description": "Review tag"
+  },
+  "ratingTagProfessional": "Professional",
+  "@ratingTagProfessional": {
+    "description": "Review tag"
+  },
+  "ratingTagQuality": "Quality work",
+  "@ratingTagQuality": {
+    "description": "Review tag"
+  },
+  "ratingTagClean": "Clean",
+  "@ratingTagClean": {
+    "description": "Review tag"
+  },
+  "ratingTagFriendly": "Friendly",
+  "@ratingTagFriendly": {
+    "description": "Review tag"
+  },
+  "ratingTagFairPrice": "Fair price",
+  "@ratingTagFairPrice": {
+    "description": "Review tag"
+  },
+  "ratingTagLate": "Late",
+  "@ratingTagLate": {
+    "description": "Review tag"
+  },
+  "ratingTagRude": "Rude",
+  "@ratingTagRude": {
+    "description": "Review tag"
+  },
+  "ratingTagPoorQuality": "Poor quality",
+  "@ratingTagPoorQuality": {
+    "description": "Review tag"
+  },
+  "ratingTagMessy": "Messy",
+  "@ratingTagMessy": {
+    "description": "Review tag"
+  },
+  "ratingThanksTitle": "Thanks for your rating!",
+  "@ratingThanksTitle": {
+    "description": "C55 title"
+  },
+  "ratingThanksBody": "Your feedback keeps PAO safe and reliable.",
+  "@ratingThanksBody": {
+    "description": "C55 body"
+  },
+  "ratingMyBookings": "My bookings",
+  "@ratingMyBookings": {
+    "description": "C55 button"
+  },
+  "connectivityStale": "Showing the last known status. We will update it when you are back online.",
+  "@connectivityStale": {
+    "description": "Booking screen could not refresh"
+  },
+  "connectivityCodeSaved": "You are offline. Your start code is saved on this phone.",
+  "@connectivityCodeSaved": {
+    "description": "Live booking offline with a cached code"
+  },
+  "locPermTitle": "Find services near you",
+  "@locPermTitle": {
+    "description": "C34 heading"
+  },
+  "locPermBody": "PAO reads your location once to set your address and show providers nearby. We never track you in the background.",
+  "@locPermBody": {
+    "description": "C34 explanation"
+  },
+  "locPermAllow": "Allow location access",
+  "@locPermAllow": {
+    "description": "C34 primary button"
+  },
+  "locPermManual": "Enter address manually",
+  "@locPermManual": {
+    "description": "C34 secondary button"
+  },
+  "locTitleSet": "Set your location",
+  "@locTitleSet": {
+    "description": "C06 title"
+  },
+  "locTitleNew": "Add address",
+  "@locTitleNew": {
+    "description": "C25 title when adding"
+  },
+  "locTitleEdit": "Edit address",
+  "@locTitleEdit": {
+    "description": "C25 title when editing"
+  },
+  "locUseCurrent": "Use my current location",
+  "@locUseCurrent": {
+    "description": "Button that reads the GPS position"
+  },
+  "locLocateFailed": "We could not find your location. Search for your address or move the pin.",
+  "@locLocateFailed": {
+    "description": "GPS off or refused"
+  },
+  "locDragHint": "Drag the map to move the pin",
+  "@locDragHint": {
+    "description": "Hint under the map"
+  },
+  "locPinHere": "Your pin",
+  "@locPinHere": {
+    "description": "Map label before a place name is known"
+  },
+  "locSearch": "Search for an address",
+  "@locSearch": {
+    "description": "Address search field label"
+  },
+  "locSearchHint": "Road, area or landmark",
+  "@locSearchHint": {
+    "description": "Address search placeholder"
+  },
+  "locLabel": "Save as",
+  "@locLabel": {
+    "description": "Address label chooser heading"
+  },
+  "locLabelHome": "Home",
+  "@locLabelHome": {
+    "description": "Address label"
+  },
+  "locLabelOffice": "Office",
+  "@locLabelOffice": {
+    "description": "Address label"
+  },
+  "locLabelOther": "Other",
+  "@locLabelOther": {
+    "description": "Address label"
+  },
+  "locLine1": "House and road",
+  "@locLine1": {
+    "description": "Address line 1 label"
+  },
+  "locLine1Hint": "House 12, Road 5, Block C",
+  "@locLine1Hint": {
+    "description": "Address line 1 example"
+  },
+  "locLine1Invalid": "Enter 3 to 200 characters.",
+  "@locLine1Invalid": {
+    "description": "Address line 1 too short or long"
+  },
+  "locLine2": "Floor, flat or landmark (optional)",
+  "@locLine2": {
+    "description": "Address line 2 label"
+  },
+  "locArea": "Area",
+  "@locArea": {
+    "description": "Address area label"
+  },
+  "locSave": "Save address",
+  "@locSave": {
+    "description": "Save button"
+  },
+  "locCovered": "PAO works in {area}",
+  "@locCovered": {
+    "description": "The pin is inside a launch area",
+    "placeholders": {
+      "area": {
+        "type": "String"
+      }
+    }
+  },
+  "locNotCoveredTitle": "We are not here yet",
+  "@locNotCoveredTitle": {
+    "description": "C35 heading"
+  },
+  "locNotCoveredBody": "PAO is not available at this location yet. You can still save it and book once we arrive.",
+  "@locNotCoveredBody": {
+    "description": "C35 note on the address form"
+  },
+  "homeAddressTitle": "Your address",
+  "@homeAddressTitle": {
+    "description": "C07 address header caption"
+  },
+  "homeNoAddress": "Set your address",
+  "@homeNoAddress": {
+    "description": "C07 header without an address"
+  },
+  "homeNoAddressBody": "Add your address to see services near you.",
+  "@homeNoAddressBody": {
+    "description": "C07 without an address"
+  },
+  "homeSearchHint": "Search for a service",
+  "@homeSearchHint": {
+    "description": "C07 search bar"
+  },
+  "homeCategories": "Services",
+  "@homeCategories": {
+    "description": "C07 category grid heading"
+  },
+  "homeAllServices": "All services",
+  "@homeAllServices": {
+    "description": "C07 link and C37 title"
+  },
+  "homeNoServices": "No services yet",
+  "@homeNoServices": {
+    "description": "Empty catalog"
+  },
+  "homeAddressSheet": "Choose address",
+  "@homeAddressSheet": {
+    "description": "Address switch sheet title"
+  },
+  "homeAddAddress": "Add a new address",
+  "@homeAddAddress": {
+    "description": "Address sheet action"
+  },
+  "homeNotCoveredBody": "PAO is not available at this address yet. Choose another address to see services.",
+  "@homeNotCoveredBody": {
+    "description": "C35 on home"
+  },
+  "homeChangeAddress": "Change address",
+  "@homeChangeAddress": {
+    "description": "C35 button"
+  },
+  "homeActiveOpen": "Track",
+  "@homeActiveOpen": {
+    "description": "Active booking banner action"
+  },
+  "homeStatusRequested": "Waiting for the provider to accept",
+  "@homeStatusRequested": {
+    "description": "Active booking status"
+  },
+  "homeStatusAccepted": "The provider accepted",
+  "@homeStatusAccepted": {
+    "description": "Active booking status"
+  },
+  "homeStatusOnTheWay": "The provider is on the way",
+  "@homeStatusOnTheWay": {
+    "description": "Active booking status"
+  },
+  "homeStatusArrived": "The provider has arrived",
+  "@homeStatusArrived": {
+    "description": "Active booking status"
+  },
+  "homeStatusInProgress": "The job is in progress",
+  "@homeStatusInProgress": {
+    "description": "Active booking status"
+  },
+  "searchHint": "Search services, e.g. fan repair",
+  "@searchHint": {
+    "description": "C08 field placeholder"
+  },
+  "searchPrompt": "What do you need help with?",
+  "@searchPrompt": {
+    "description": "C08 before typing"
+  },
+  "searchServices": "Services",
+  "@searchServices": {
+    "description": "C08 services heading"
+  },
+  "searchSubServices": "Specific jobs",
+  "@searchSubServices": {
+    "description": "C08 sub-services heading"
+  },
+  "searchNoResults": "No results for \"{query}\"",
+  "@searchNoResults": {
+    "description": "C38 heading",
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchNoResultsBody": "Check the spelling or try another word. You can also browse all services.",
+  "@searchNoResultsBody": {
+    "description": "C38 explanation"
+  },
+  "svcPerJob": "per job",
+  "@svcPerJob": {
+    "description": "Price unit"
+  },
+  "svcPerUnit": "per unit",
+  "@svcPerUnit": {
+    "description": "Price unit"
+  },
+  "svcPerHour": "per hour",
+  "@svcPerHour": {
+    "description": "Price unit"
+  },
+  "svcPerDay": "per day",
+  "@svcPerDay": {
+    "description": "Price unit"
+  },
+  "svcIncluded": "Included",
+  "@svcIncluded": {
+    "description": "Inclusions heading"
+  },
+  "svcExcluded": "Not included",
+  "@svcExcluded": {
+    "description": "Exclusions heading"
+  },
+  "svcTotal": "Total",
+  "@svcTotal": {
+    "description": "Price total label"
+  },
+  "svcChooseHint": "Choose at least one item to continue.",
+  "@svcChooseHint": {
+    "description": "Nothing selected yet"
+  },
+  "svcWomenOnly": "Only women providers do this service.",
+  "@svcWomenOnly": {
+    "description": "C43 note"
+  },
+  "svcSeeProviders": "See providers",
+  "@svcSeeProviders": {
+    "description": "C09 continue button"
+  },
+  "svcFixedPrice": "Prices are fixed by PAO. Pay in cash after the job.",
+  "@svcFixedPrice": {
+    "description": "C09 price note"
+  },
+  "svcNoItems": "Nothing can be booked for this service yet.",
+  "@svcNoItems": {
+    "description": "Service without sub-services"
+  },
+  "svcHireStart": "Start",
+  "@svcHireStart": {
+    "description": "C44 start heading"
+  },
+  "svcHireDate": "Choose a date",
+  "@svcHireDate": {
+    "description": "C44 date button"
+  },
+  "svcHireTime": "Choose a time",
+  "@svcHireTime": {
+    "description": "C44 time button"
+  },
+  "svcHireDuty": "Duty",
+  "@svcHireDuty": {
+    "description": "C44 duty heading"
+  },
+  "svcHireStartPast": "Choose a start time in the future.",
+  "@svcHireStartPast": {
+    "description": "C44 start in the past"
+  },
+  "svcHireNeedStart": "Choose when the driver should start.",
+  "@svcHireNeedStart": {
+    "description": "C44 start missing"
+  },
+  "svcHours": "{count, plural, =1{{n} hour} other{{n} hours}}",
+  "@svcHours": {
+    "description": "Duty length; n is the count in local digits",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "svcDays": "{count, plural, =1{{n} day} other{{n} days}}",
+  "@svcDays": {
+    "description": "Duty length; n is the count in local digits",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "provTitle": "Providers near you",
+  "@provTitle": {
+    "description": "C10 title"
+  },
+  "provSortFilter": "Sort & filter",
+  "@provSortFilter": {
+    "description": "C40 button and sheet title"
+  },
+  "provSort": "Sort by",
+  "@provSort": {
+    "description": "C40 sort heading"
+  },
+  "provSortDistance": "Nearest",
+  "@provSortDistance": {
+    "description": "Sort option"
+  },
+  "provSortRating": "Top rated",
+  "@provSortRating": {
+    "description": "Sort option"
+  },
+  "provFilter": "Show only",
+  "@provFilter": {
+    "description": "C40 filter heading"
+  },
+  "provFilterTopRated": "4 stars and above",
+  "@provFilterTopRated": {
+    "description": "Filter option"
+  },
+  "provFilterPro": "PAO Verified Pro",
+  "@provFilterPro": {
+    "description": "Filter option"
+  },
+  "provApply": "Apply",
+  "@provApply": {
+    "description": "C40 apply button"
+  },
+  "provEmptyTitle": "No providers nearby right now",
+  "@provEmptyTitle": {
+    "description": "C39 heading"
+  },
+  "provEmptyBody": "Providers come online throughout the day. Try again in a few minutes or change the filters.",
+  "@provEmptyBody": {
+    "description": "C39 explanation"
+  },
+  "provNoAddressTitle": "Add your address first",
+  "@provNoAddressTitle": {
+    "description": "C10 without an address"
+  },
+  "provNoAddressBody": "We need your address to find providers near you.",
+  "@provNoAddressBody": {
+    "description": "C10 without an address"
+  },
+  "provNoDraft": "Choose what you need on the service page first.",
+  "@provNoDraft": {
+    "description": "C10 opened without a selection"
+  },
+  "provChooseItems": "Choose items",
+  "@provChooseItems": {
+    "description": "Back to the service page"
+  },
+  "provPriceFor": "Price for your selection",
+  "@provPriceFor": {
+    "description": "C10 price summary"
+  },
+  "provJobs": "{count, plural, =1{{n} job done} other{{n} jobs done}}",
+  "@provJobs": {
+    "description": "Completed jobs; n is the count in local digits",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "provKmAway": "{km} km away",
+  "@provKmAway": {
+    "description": "Distance in kilometres",
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "provMAway": "{m} m away",
+  "@provMAway": {
+    "description": "Distance in metres",
+    "placeholders": {
+      "m": {
+        "type": "String"
+      }
+    }
+  },
+  "provBadgeNone": "Not verified",
+  "@provBadgeNone": {
+    "description": "Badge"
+  },
+  "provBadgeVerified": "Verified",
+  "@provBadgeVerified": {
+    "description": "Badge"
+  },
+  "provBadgeVerifiedPro": "PAO Verified Pro",
+  "@provBadgeVerifiedPro": {
+    "description": "Badge"
+  },
+  "provBadgeWhat": "What do badges mean?",
+  "@provBadgeWhat": {
+    "description": "C41 link"
+  },
+  "provBadgeSheet": "About badges",
+  "@provBadgeSheet": {
+    "description": "C41 title"
+  },
+  "provBadgeVerifiedBody": "A PAO verifier checked their NID, selfie, police clearance, address and emergency contact.",
+  "@provBadgeVerifiedBody": {
+    "description": "C41 Level 1"
+  },
+  "provBadgeProBody": "Verified, and PAO also checked their work in person with a skill test or a supervised job. Pros are listed higher.",
+  "@provBadgeProBody": {
+    "description": "C41 Level 2"
+  },
+  "provExperience": "{count, plural, =1{{n} year of experience} other{{n} years of experience}}",
+  "@provExperience": {
+    "description": "Experience; n is the count in local digits",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "provMemberSince": "On PAO since {date}",
+  "@provMemberSince": {
+    "description": "Join date",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "provServices": "Services",
+  "@provServices": {
+    "description": "C11 services heading"
+  },
+  "provRatings": "Ratings",
+  "@provRatings": {
+    "description": "C11 rating heading"
+  },
+  "provRatingCount": "{count, plural, =0{No ratings yet} =1{{n} rating} other{{n} ratings}}",
+  "@provRatingCount": {
+    "description": "Number of ratings; n is the count in local digits",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "provReviews": "Recent reviews",
+  "@provReviews": {
+    "description": "C11 reviews heading"
+  },
+  "provAllReviews": "All reviews",
+  "@provAllReviews": {
+    "description": "C11 link and C42 title"
+  },
+  "provNoReviews": "No reviews yet",
+  "@provNoReviews": {
+    "description": "No reviews"
+  },
+  "provNoReviewsBody": "Reviews appear here after completed jobs.",
+  "@provNoReviewsBody": {
+    "description": "No reviews explanation"
+  },
+  "provBook": "Book {name}",
+  "@provBook": {
+    "description": "C11 book button",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "provAbout": "About",
+  "@provAbout": {
+    "description": "C11 bio heading"
+  },
+  "provTagOnTime": "On time",
+  "@provTagOnTime": {
+    "description": "Review tag"
+  },
+  "provTagProfessional": "Professional",
+  "@provTagProfessional": {
+    "description": "Review tag"
+  },
+  "provTagQualityWork": "Quality work",
+  "@provTagQualityWork": {
+    "description": "Review tag"
+  },
+  "provTagClean": "Clean",
+  "@provTagClean": {
+    "description": "Review tag"
+  },
+  "provTagFriendly": "Friendly",
+  "@provTagFriendly": {
+    "description": "Review tag"
+  },
+  "provTagFairPrice": "Fair price",
+  "@provTagFairPrice": {
+    "description": "Review tag"
+  },
+  "provTagLate": "Late",
+  "@provTagLate": {
+    "description": "Review tag"
+  },
+  "provTagRude": "Rude",
+  "@provTagRude": {
+    "description": "Review tag"
+  },
+  "provTagPoorQuality": "Poor quality",
+  "@provTagPoorQuality": {
+    "description": "Review tag"
+  },
+  "provTagMessy": "Messy",
+  "@provTagMessy": {
+    "description": "Review tag"
+  },
+  "provTagPolite": "Polite",
+  "@provTagPolite": {
+    "description": "Review tag"
+  },
+  "provTagClearInstructions": "Clear instructions",
+  "@provTagClearInstructions": {
+    "description": "Review tag"
+  },
+  "provTagPaidPromptly": "Paid promptly",
+  "@provTagPaidPromptly": {
+    "description": "Review tag"
+  },
+  "provTagSafePlace": "Safe place",
+  "@provTagSafePlace": {
+    "description": "Review tag"
+  },
+  "provTagUnclearInstructions": "Unclear instructions",
+  "@provTagUnclearInstructions": {
+    "description": "Review tag"
+  },
+  "provTagUnsafePlace": "Unsafe place",
+  "@provTagUnsafePlace": {
+    "description": "Review tag"
+  },
+  "bookingsPaymentCod": "Payment: Cash on delivery",
+  "@bookingsPaymentCod": {
+    "description": "Payment method on a booking, bill and receipt (ADR-0035)."
+  },
+  "bookingsReceiptPayment": "Payment",
+  "@bookingsReceiptPayment": {
+    "description": "Receipt payment label."
+  }
+}

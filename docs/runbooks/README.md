@@ -11,12 +11,12 @@ to use it, what you need, the steps and how to check the result.
 | [restore-database.md](restore-database.md) | data is lost or damaged; also the monthly restore drill |
 | [incident-checklist.md](incident-checklist.md) | an alert fires or users report an outage |
 
-Related: [../verification.md](../verification.md) (the verification team's procedure),
-[../../ops/README.md](../../ops/README.md) (dashboards and alert rules).
+Related: [../verification.md](../guides/verification.md) (the verification team's procedure),
+[../../infra/ops/README.md](../../infra/ops/README.md) (dashboards and alert rules).
 
 ## The system in one paragraph
 
-One Docker image (`backend/Dockerfile`) with three entry points: `/app/api` (stateless
+One Docker image (`Backend/docker/Dockerfile`) with three entry points: `/app/api` (stateless
 HTTP API on `:8080`, scale horizontally), `/app/worker` (outbox relay and scheduled
 jobs; one or more instances, jobs take an advisory lock) and `/app/migrate`
 (`up` applies migrations, `seed` loads reference data). State lives in PostgreSQL 16 +

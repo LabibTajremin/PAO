@@ -19,7 +19,7 @@ README, contract, app and specs).
   pattern, CQRS handlers in feature folders with Commands and Queries, separate request,
   view and db models, a hand-written mapper, FluentValidation, an authorisation attribute
   on every controller, no N+1 queries and no database calls in loops, config files per
-  concern, logs by date folder.
+  concern, logs by date folder, `Program.cs` that registers services through one method per concern and per area, and documentation in `Backend/Docs` covering 100% of areas, features, controllers, jobs, config and scripts, with XML docs on every public member.
 
 ## Tasks
 
@@ -52,7 +52,10 @@ README, contract, app and specs).
 8. **Cut-over** — port the journeys to C# (`Backend/Test/PAO.E2ETests`) and the k6
    scripts to `Backend/Test/Load`. Then:
    - delete the NestJS backend and its tooling;
-   - move `backend-dotnet/` to `Backend/` and `frontend/` to `Frontend/`;
+   - move `backend-dotnet/` to `Backend/` and `frontend/` to `Frontend/`, then apply the
+     full layout in ADR-0034 ("Repository layout after cut-over"): `api/` → `Backend/Api`,
+     `test/` split by owner, `docker/`, `ops/` and the security configs → `infra/`,
+     `scripts/` → `tools/`, root docs → `docs/`;
    - switch `./pao`, hooks, CI workflows, `.env.example`, docs and the PRD;
    - get `./pao ci` green on a clean clone.
 

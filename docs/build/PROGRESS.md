@@ -24,17 +24,19 @@ it first and continues from **Current task**.
 | P14 End-to-end | done | — | ADR-0031 |
 | P15 NestJS backend | done | — | ADR-0032 |
 | P16 Hardening & handover | done | — | ADR-0023, ADR-0032 |
-| P17 .NET backend, COD & merchant dues | in_progress | — | ADR-0034, ADR-0035 |
+| P17 .NET backend, COD & merchant dues | in_review | — | ADR-0034, ADR-0035; tasks 1–8 complete, `done` once merged |
 
 Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (merged).
 
 ## Current task
 
-P17 / task 1 — .NET foundation in `backend-dotnet/` (see `docs/build/phases/P17-dotnet-backend.md`).
-The owner's handwritten conversion rules are summarised in ADR-0034; the billing rules
-(cash on delivery, 10% commission, ৳500 due limit, merchant-submitted payments confirmed
-by an admin, Catering and Monthly Bazar) are in ADR-0035. .NET 10 SDK installs to
-`/root/.dotnet` with `dotnet-install.sh --channel 10.0`.
+P17 is complete (tasks 1–8); mark it `done` once the branch is merged. Task 8 (cut-over):
+the API journeys are C# (`Backend/Test/PAO.E2ETests/Journeys`, 13 tests), the k6 scripts
+are in `Backend/Test/Load`, the NestJS backend and its tooling are deleted, and the
+repository follows ADR-0034 "Repository layout after cut-over" (see "Cut-over as done"
+there and E15 in `04-decisions.md`). There is no next phase in the build kit.
+Run the full `./pao ci` in the background and one heavy job at a time: two parallel .NET
+builds overload the 4-CPU container. .NET 10 SDK installs to `/root/.dotnet`.
 
 Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
 build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
@@ -42,28 +44,26 @@ with `./pao ci` green and a `chore(progress): complete <id>` commit is pushed.
 
 ## Environment notes
 
-- Node.js 22, NestJS 11, TypeScript 5.9, sqlc 1.27 (TypeScript plugin), Flutter 3.47.7.
+- .NET 10 SDK (`Backend/global.json`), Flutter 3.47.7; Node.js only for `npx` (Redocly bundle).
 - Local S3 is RustFS (ADR-0007); MinIO images are no longer published.
 - Docker Hub rate-limits pulls here; `mirror.gcr.io/library/<image>` works as a mirror.
 - Docker builds behind the sandbox proxy need `PAO_EXTRA_CA_FILE=/root/.ccr/ca-bundle.crt`
   in `.env` (build secret `extra_ca`).
 - No Android SDK in the build container: APK builds run only in CI (`frontend.yml`).
-- Backend integration specs (`*.int-spec.ts`) sit beside the code and need the compose
+- Backend integration tests (`Backend/Test/PAO.IntegrationTests`) need the compose
   Postgres/Redis/RustFS (ADR-0008); each spec file gets a private database and key prefix.
 - `./pao gen` bundles the spec with redocly (npx) and builds `pao_api` with the
   `openapitools/openapi-generator-cli:v7.16.0` Docker image (Maven Central rate-limits).
-- Every route carries `@RequirePermission`/`@Public`/`@Authenticated` matching the spec's
-  `x-permission`; `src/app/contract.int-spec.ts` fails on any drift or unserved operation.
-- Cross-module cycles (identity → verification levels, admin → most modules) resolve
-  through `LazyContract` on first use.
+- Every controller action carries an authorisation attribute matching the spec's
+  `x-permission`; `AuthorizationTests` and the RBAC contract tests fail on any drift.
+- Cross-area calls go through `I<Area>SharedService`, resolved by each area's peers on first use.
 - Request timeouts run as a 15 s periodic sweep (`booking.expire_requests`) rather than a
   job per booking, so a missed run catches up on the next one.
 - k6 v1.3.0 is installed in this container from the GitHub release tarball.
 - Flutter tests that await real I/O (http_mock_adapter) inside `testWidgets` must use
   `tester.runAsync`, or they hang in fake async.
-- `backend/test/kit/` has `signIn`, `adminSession`, `verifiedProvider`, `completedJob` …
-  for full-API specs.
-- E2E: `test/e2e/stack.sh` (separate compose project), `./pao test e2e` runs API and app
+- `Backend/Test/PAO.TestKit` has the test environment, private databases and fakes.
+- E2E: `infra/e2e/stack.sh` (separate compose project), `./pao test e2e` runs API and app
   journeys. Locally the admin web journey needs `CHROMEDRIVER`/`CHROME_EXECUTABLE`
   matching the installed Chromium (chromedriver 141 for Playwright's Chromium 141).
 
@@ -75,6 +75,17 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-10-24 P17.8 cut-over: journeys ported to C# (13/13), k6 to Backend/Test/Load,
+  NestJS backend and tooling deleted, ADR-0034 layout applied (Backend, Frontend, infra,
+  tools, docs/guides, out/), CLI, hooks, workflows and docs switched.
+- 2026-10-24 P17.6 apps for ADR-0035: partner due banner, 409 MERCHANT_DUE_LIMIT pay link,
+  billing (ledger, payments) and pay screens; admin payments queue, merchant ledger,
+  billing settings validation; customer cash on delivery; failure codes mapped; journeys
+  added (7b8a0ff, d0e6902).
+- 2026-10-17 P17.1 .NET foundation in Backend/: solution and projects, area skeletons
+  and Shared contracts, config/Serilog/EF/migrator, mediator, mapper, auth, HTTP edge,
+  Redis, outbox, jobs, storage, SMS, push, metrics, registration layout, Docs + gates
+  (see git log for the sha).
 - 2026-10-12 P15.6–7 cut-over: `./pao`, hooks and CI run the NestJS gates; API journeys
   ported to TypeScript (13/13); Go backend and Go tooling deleted, `backend/` is NestJS;
   CLAUDE.md, build docs and PRD describe NestJS; `./pao ci` green (5f2bcee).
@@ -111,7 +122,7 @@ Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (c
   incremental aggregates with distribution, public review lists, provider public
   profile; `testkit.CompletedJob` and `PAO_TEST_LOG=1` for server logs in tests.
 - 2026-10-09 P07 perf: `./pao perf` seeds 2,000 online providers (`migrate perf-seed`)
-  and runs `test/perf/nearby.js`; nearby search p95 14 ms locally (limit 300 ms).
+  and runs `Backend/Test/Load/nearby.js`; nearby search p95 14 ms locally (limit 300 ms).
 - 2026-10-09 P07.1–9 booking: state machine per booking-states.md, idempotent create with
   price/name snapshots, accept under provider + row locks (one active ASAP job), reject,
   timeout sweep, start code with lockout, catalog-only extras, cancel rules, lists,

@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Fast checks before each commit, scoped to what is staged: file sizes and shell always,
+# the backend's format check and gates when C# changed, Dart lint and tests when the
+# Flutter workspace changed. The full gate runs before push.
+set -euo pipefail
+root="$(git rev-parse --show-toplevel)"
+mapfile -t staged < <(git -C "$root" diff --cached --name-only --diff-filter=ACMR)
+((${#staged[@]})) || exit 0
+
+backend=0 shell=0 dart=0
+for file in "${staged[@]}"; do
+  case "$file" in
+    Backend/scripts/*) shell=1 ;;
+    Backend/*) backend=1 ;;
+    pao | tools/* | infra/e2e/*.sh | Frontend/test/e2e/*.sh) shell=1 ;;
+    Frontend/*) dart=1 ;;
+  esac
+done
+
+"$root/pao" lint sizes
+"$root/pao" lint shell
+if ((shell)); then bats "$root/tools/cli" >/dev/null; fi
+if ((backend)); then "$root/pao" lint backend; fi
+if ((dart)); then
+  # Flutter reads its own version with git; the commit's GIT_* variables would point
+  # it at this repository instead and break version solving.
+  (
+    unset GIT_DIR GIT_INDEX_FILE GIT_WORK_TREE GIT_PREFIX
+    "$root/pao" lint dart
+    "$root/pao" test dart
+  )
+fi

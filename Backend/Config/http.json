@@ -1,0 +1,10 @@
+{
+  "Http": {
+    "Address": ":8080",
+    "MetricsAddress": ":9090",
+    "MaxBodyBytes": 1048576,
+    "RateLimitPerUser": 120,
+    "RateLimitPerIp": 60,
+    "RateLimitWindowSeconds": 60
+  }
+}

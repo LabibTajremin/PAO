@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Unit tests (in-memory fakes, fake clock), architecture rules and size limits. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
+    <PackageReference Include="NetArchTest.Rules" />
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PAO.Core\PAO.Core.csproj" />
+    <ProjectReference Include="..\..\PAO.Worker\PAO.Worker.csproj" />
+    <ProjectReference Include="..\..\PAO.Migrator\PAO.Migrator.csproj" />
+    <ProjectReference Include="..\PAO.TestKit\PAO.TestKit.csproj" />
+    <ProjectReference Include="..\..\Tools\PAO.Gates\PAO.Gates.csproj" />
+  </ItemGroup>
+</Project>

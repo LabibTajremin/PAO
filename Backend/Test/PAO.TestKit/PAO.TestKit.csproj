@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Shared test kit: provided endpoints (ADR-0008), private databases and key prefixes,
+       fakes for the clock and ids. -->
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PAO.Infrastructure\PAO.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
