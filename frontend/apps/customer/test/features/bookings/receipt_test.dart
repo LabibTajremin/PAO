@@ -103,6 +103,7 @@ void main() {
     expect(find.text('Completed 9 Oct 2026, 12:30 PM'), findsOneWidget);
     expect(find.text('Nusrat Jahan'), findsOneWidget);
     expect(find.text('Banani'), findsOneWidget);
+    expect(find.text('Cash on delivery'), findsOneWidget);
     expect(find.text('৳2,000.50'), findsOneWidget);
     await tester.tap(find.text('Share as PDF'));
     await h.settle(tester);

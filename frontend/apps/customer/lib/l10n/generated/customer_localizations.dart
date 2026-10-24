@@ -1331,7 +1331,7 @@ abstract class CustomerL10n {
   /// Payment method
   ///
   /// In en, this message translates to:
-  /// **'Cash'**
+  /// **'Cash on delivery'**
   String get bookingCash;
 
   /// Payment explanation
@@ -2599,6 +2599,18 @@ abstract class CustomerL10n {
   /// In en, this message translates to:
   /// **'Unsafe place'**
   String get provTagUnsafePlace;
+
+  /// Payment method on a booking, bill and receipt (ADR-0035).
+  ///
+  /// In en, this message translates to:
+  /// **'Payment: Cash on delivery'**
+  String get bookingsPaymentCod;
+
+  /// Receipt payment label.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get bookingsReceiptPayment;
 }
 
 class _CustomerL10nDelegate extends LocalizationsDelegate<CustomerL10n> {

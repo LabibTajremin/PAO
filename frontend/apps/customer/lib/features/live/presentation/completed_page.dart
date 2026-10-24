@@ -73,6 +73,7 @@ class _Body extends StatelessWidget {
           lines: [for (final item in b.items) BillLine.of(item)],
           total: b.total,
         ),
+        Text(context.t.bookingsPaymentCod),
         const SizedBox(height: PaoSpace.xl),
         ..._actions(context, name),
       ],

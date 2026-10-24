@@ -74,7 +74,7 @@ void main() {
     expect(find.text('Item x3 × 1'), findsNothing);
     expect(find.text('Home'), findsOneWidget);
     expect(find.text('House a1, Road 5, Banani'), findsOneWidget);
-    expect(find.text('Cash'), findsOneWidget);
+    expect(find.text('Cash on delivery'), findsOneWidget);
     await tester.enterText(find.byType(TextField), 'Gate 4');
     h.http.onPost(
       '/v1/customer/bookings',

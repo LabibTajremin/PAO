@@ -76,6 +76,7 @@ List<Widget> _timelineAndBill(BuildContext context, Booking b) => [
   ],
   _Heading(context.t.bookingsBill),
   BillRows(items: b.items, total: b.total),
+  Text(context.t.bookingsPaymentCod),
   Text(
     b.status == BookingStatus.completed
         ? context.t.bookingsPaidCash

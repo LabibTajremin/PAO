@@ -44,6 +44,7 @@ Future<Uint8List> receiptPdf(Receipt receipt) async {
             pw.Divider(),
             _row(_t.bookingsTotal, _money(receipt.total), bold: true),
             pw.SizedBox(height: 16),
+            pw.Text(_t.bookingsPaymentCod),
             pw.Text(_t.bookingsPaidCash),
             pw.Text(_t.bookingsReceiptThanks),
           ],

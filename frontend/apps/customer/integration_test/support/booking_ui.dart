@@ -45,6 +45,8 @@ Future<void> bookAsap(WidgetTester tester, String name) async {
   await tapOn(tester, find.text(name));
   await tapText(tester, 'Book $name');
   await tapText(tester, 'As soon as possible');
+  // The only payment in the first release (ADR-0035).
+  await reveal(tester, find.text('Cash on delivery'));
   await tapOn(tester, find.textContaining('Confirm booking ·'));
   await pumpUntil(tester, find.text('Waiting for $name to accept'));
 }

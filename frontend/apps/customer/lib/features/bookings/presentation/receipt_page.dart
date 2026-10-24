@@ -89,6 +89,7 @@ class _ReceiptView extends StatelessWidget {
               _Fact(t.bookingsReceiptCustomer, r.customerName),
               if (r.area case final String area)
                 _Fact(t.bookingsReceiptArea, area),
+              _Fact(t.bookingsReceiptPayment, t.bookingCash),
               const Divider(),
               BillRows(items: r.items, total: r.total),
               Text(t.bookingsPaidCash, style: text.bodySmall),

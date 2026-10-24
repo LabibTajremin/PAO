@@ -205,7 +205,7 @@
   "bookingNoteLabel": "সেবাদাতার জন্য নোট (ঐচ্ছিক)",
   "bookingNoteHint": "গেট কোড, তলা, কাছের চিহ্ন…",
   "bookingPaymentTitle": "পেমেন্ট",
-  "bookingCash": "নগদ",
+  "bookingCash": "ক্যাশ অন ডেলিভারি",
   "bookingCashBody": "কাজ শেষে সেবাদাতাকে নগদে টাকা দিন।",
   "bookingConfirm": "বুকিং নিশ্চিত করুন · {amount}",
   "bookingBackHome": "হোমে ফিরুন",
@@ -416,5 +416,7 @@
   "provTagPaidPromptly": "সময়মতো পরিশোধ",
   "provTagSafePlace": "নিরাপদ জায়গা",
   "provTagUnclearInstructions": "অস্পষ্ট নির্দেশনা",
-  "provTagUnsafePlace": "অনিরাপদ জায়গা"
+  "provTagUnsafePlace": "অনিরাপদ জায়গা",
+  "bookingsPaymentCod": "পেমেন্ট: ক্যাশ অন ডেলিভারি",
+  "bookingsReceiptPayment": "পেমেন্ট"
 }

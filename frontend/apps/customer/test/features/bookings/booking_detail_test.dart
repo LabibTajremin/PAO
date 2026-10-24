@@ -86,6 +86,7 @@ void main() {
     expect(find.byType(WaitingPage), findsOneWidget);
     await _open(tester, h, booking(status: 'completed'));
     expect(find.text('Paid in cash'), findsOneWidget);
+    expect(find.text('Payment: Cash on delivery'), findsOneWidget);
     expect(find.byTooltip('Call provider'), findsNothing);
     await _tapAndBack(tester, h, 'Rate provider');
     expect(find.byType(RatingPage), findsOneWidget);

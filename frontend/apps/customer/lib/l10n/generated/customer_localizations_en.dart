@@ -678,7 +678,7 @@ class CustomerL10nEn extends CustomerL10n {
   String get bookingPaymentTitle => 'Payment';
 
   @override
-  String get bookingCash => 'Cash';
+  String get bookingCash => 'Cash on delivery';
 
   @override
   String get bookingCashBody =>
@@ -1414,4 +1414,10 @@ class CustomerL10nEn extends CustomerL10n {
 
   @override
   String get provTagUnsafePlace => 'Unsafe place';
+
+  @override
+  String get bookingsPaymentCod => 'Payment: Cash on delivery';
+
+  @override
+  String get bookingsReceiptPayment => 'Payment';
 }

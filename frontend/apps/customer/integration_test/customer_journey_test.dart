@@ -69,6 +69,7 @@ void main() {
     await pumpUntil(tester, find.text('Job in progress'));
     await provider.complete(id);
     await pumpUntil(tester, find.text('All done!'));
+    await reveal(tester, find.text('Payment: Cash on delivery'));
 
     await tapText(tester, 'Rate $name');
     await tapOn(tester, find.byTooltip('5'));

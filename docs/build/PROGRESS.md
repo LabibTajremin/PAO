@@ -30,8 +30,11 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-P17 / task 6 — app screens for ADR-0035 (see `docs/build/phases/P17-dotnet-backend.md`).
-Tasks 1–5 are done: all 129 spec operations are served by .NET, Billing included (gates
+P17 / task 7 — parity: journeys against the .NET stack (see `docs/build/phases/P17-dotnet-backend.md`).
+Task 6 is done: partner due banner, billing and pay screens; admin payments queue, merchant
+ledger and billing settings; customer "Cash on delivery"; new app journey
+`apps/partner/integration_test/billing_journey_test.dart` needs the .NET stack (NestJS answers
+billing with 501), so it is first run in task 7. Tasks 1–5 are done: all 129 spec operations are served by .NET, Billing included (gates
 green, 100% line coverage, 468 unit / 115 integration tests). The Dart client is regenerated
 with `ProviderBillingApi`, `AdminBillingApi` and `paymentMethod: cash_on_delivery`. NestJS
 answers the billing routes with 501 until the cut-over (task 8).
@@ -80,6 +83,10 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-10-24 P17.6 apps for ADR-0035: partner due banner, 409 MERCHANT_DUE_LIMIT pay link,
+  billing (ledger, payments) and pay screens; admin payments queue, merchant ledger,
+  billing settings validation; customer cash on delivery; failure codes mapped; journeys
+  added (7b8a0ff, d0e6902).
 - 2026-10-17 P17.1 .NET foundation in backend-dotnet/: solution and projects, area skeletons
   and Shared contracts, config/Serilog/EF/migrator, mediator, mapper, auth, HTTP edge,
   Redis, outbox, jobs, storage, SMS, push, metrics, registration layout, Docs + gates

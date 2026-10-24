@@ -897,7 +897,7 @@
   "@bookingPaymentTitle": {
     "description": "C12 payment section"
   },
-  "bookingCash": "Cash",
+  "bookingCash": "Cash on delivery",
   "@bookingCash": {
     "description": "Payment method"
   },
@@ -1884,5 +1884,13 @@
   "provTagUnsafePlace": "Unsafe place",
   "@provTagUnsafePlace": {
     "description": "Review tag"
+  },
+  "bookingsPaymentCod": "Payment: Cash on delivery",
+  "@bookingsPaymentCod": {
+    "description": "Payment method on a booking, bill and receipt (ADR-0035)."
+  },
+  "bookingsReceiptPayment": "Payment",
+  "@bookingsReceiptPayment": {
+    "description": "Receipt payment label."
   }
 }

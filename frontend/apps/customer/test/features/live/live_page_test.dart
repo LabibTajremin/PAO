@@ -175,6 +175,7 @@ void main() {
   ) async {
     final h = await _live(tester, booking(status: 'completed'), code: false);
     expect(find.byType(CompletedPage), findsOneWidget);
+    expect(find.text('Payment: Cash on delivery'), findsOneWidget);
     expect(find.text('Pay ৳1,300 in cash'), findsOneWidget);
     expect(find.text('Hand the cash to Rahim Uddin.'), findsOneWidget);
     expect(find.text('Extra'), findsOneWidget);
