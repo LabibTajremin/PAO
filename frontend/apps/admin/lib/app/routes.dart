@@ -45,6 +45,15 @@ abstract final class Routes {
   /// A12.
   static const settings = '/settings';
 
+  /// Merchant payments to confirm or reject (ADR-0035 §4).
+  static const payments = '/billing/payments';
+
+  /// One merchant's ledger.
+  static const ledger = '/billing/merchants/:providerId';
+
+  /// The ledger of merchant [providerId].
+  static String ledgerOf(String providerId) => '/billing/merchants/$providerId';
+
   /// A service in the editor.
   static String serviceOf(String id) => '/catalog/services/$id';
 

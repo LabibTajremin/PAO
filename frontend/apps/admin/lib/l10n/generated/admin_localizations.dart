@@ -3066,6 +3066,258 @@ abstract class AdminL10n {
   /// In en, this message translates to:
   /// **'Clear'**
   String get auditClear;
+
+  /// Navigation: merchant payments.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments'**
+  String get navPayments;
+
+  /// Payments queue title.
+  ///
+  /// In en, this message translates to:
+  /// **'Merchant payments'**
+  String get payTitle;
+
+  /// Empty payments queue.
+  ///
+  /// In en, this message translates to:
+  /// **'No payments match'**
+  String get payEmpty;
+
+  /// Column.
+  ///
+  /// In en, this message translates to:
+  /// **'Merchant'**
+  String get payMerchant;
+
+  /// Column.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get payAmount;
+
+  /// Column.
+  ///
+  /// In en, this message translates to:
+  /// **'Method'**
+  String get payMethod;
+
+  /// Column.
+  ///
+  /// In en, this message translates to:
+  /// **'Reference'**
+  String get payReference;
+
+  /// Column.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted'**
+  String get paySubmitted;
+
+  /// Fact label.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviewed'**
+  String get payReviewed;
+
+  /// Fact label.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason'**
+  String get payReason;
+
+  /// Status.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get payStatusPending;
+
+  /// Status.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get payStatusConfirmed;
+
+  /// Status.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get payStatusRejected;
+
+  /// Method.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash to agent'**
+  String get payCashToAgent;
+
+  /// Method.
+  ///
+  /// In en, this message translates to:
+  /// **'bKash'**
+  String get payBkash;
+
+  /// Method.
+  ///
+  /// In en, this message translates to:
+  /// **'Nagad'**
+  String get payNagad;
+
+  /// Method.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank transfer'**
+  String get payBank;
+
+  /// Action.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm payment'**
+  String get payConfirm;
+
+  /// Action.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject payment'**
+  String get payReject;
+
+  /// Reject dialog title.
+  ///
+  /// In en, this message translates to:
+  /// **'Why are you rejecting this payment?'**
+  String get payRejectTitle;
+
+  /// Snack.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment confirmed; the ledger is credited.'**
+  String get payConfirmed;
+
+  /// Snack.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment rejected; the merchant is told why.'**
+  String get payRejected;
+
+  /// Opens merchant ledger.
+  ///
+  /// In en, this message translates to:
+  /// **'View ledger'**
+  String get payViewLedger;
+
+  /// Ledger title.
+  ///
+  /// In en, this message translates to:
+  /// **'Merchant ledger'**
+  String get ledgerTitle;
+
+  /// Back link.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments'**
+  String get ledgerBack;
+
+  /// Fact.
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get ledgerDue;
+
+  /// Fact.
+  ///
+  /// In en, this message translates to:
+  /// **'Block limit'**
+  String get ledgerLimit;
+
+  /// Fact.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending payments'**
+  String get ledgerPending;
+
+  /// Fact.
+  ///
+  /// In en, this message translates to:
+  /// **'Commission rate'**
+  String get ledgerRate;
+
+  /// Badge.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked from accepting'**
+  String get ledgerBlocked;
+
+  /// Badge.
+  ///
+  /// In en, this message translates to:
+  /// **'Can accept'**
+  String get ledgerClear;
+
+  /// Empty ledger.
+  ///
+  /// In en, this message translates to:
+  /// **'No ledger entries yet'**
+  String get ledgerEmpty;
+
+  /// Column.
+  ///
+  /// In en, this message translates to:
+  /// **'Entry'**
+  String get ledgerKind;
+
+  /// Debit row.
+  ///
+  /// In en, this message translates to:
+  /// **'Commission · {number}'**
+  String ledgerCommission(String number);
+
+  /// Credit row.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get ledgerPayment;
+
+  /// Column.
+  ///
+  /// In en, this message translates to:
+  /// **'Job total'**
+  String get ledgerJobTotal;
+
+  /// Column.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get ledgerDate;
+
+  /// Commission rate error.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter basis points from 0 to 10000 (1000 = 10%).'**
+  String get settingsRateRange;
+
+  /// Commission rate hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Basis points: 1000 = 10% of the final job price.'**
+  String get settingsRateHint;
+
+  /// Commission rate shown.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% ({bp} bp)'**
+  String settingsRateValue(String percent, String bp);
+
+  /// Due limit error.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a whole amount in paisa, 0 or more (50000 = ৳500).'**
+  String get settingsAmountRange;
+
+  /// Due limit hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Paisa: 50000 = ৳500. Merchants above it cannot accept jobs.'**
+  String get settingsAmountHint;
 }
 
 class _AdminL10nDelegate extends LocalizationsDelegate<AdminL10n> {

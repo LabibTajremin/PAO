@@ -1614,4 +1614,138 @@ class AdminL10nEn extends AdminL10n {
 
   @override
   String get auditClear => 'Clear';
+
+  @override
+  String get navPayments => 'Payments';
+
+  @override
+  String get payTitle => 'Merchant payments';
+
+  @override
+  String get payEmpty => 'No payments match';
+
+  @override
+  String get payMerchant => 'Merchant';
+
+  @override
+  String get payAmount => 'Amount';
+
+  @override
+  String get payMethod => 'Method';
+
+  @override
+  String get payReference => 'Reference';
+
+  @override
+  String get paySubmitted => 'Submitted';
+
+  @override
+  String get payReviewed => 'Reviewed';
+
+  @override
+  String get payReason => 'Reason';
+
+  @override
+  String get payStatusPending => 'Pending';
+
+  @override
+  String get payStatusConfirmed => 'Confirmed';
+
+  @override
+  String get payStatusRejected => 'Rejected';
+
+  @override
+  String get payCashToAgent => 'Cash to agent';
+
+  @override
+  String get payBkash => 'bKash';
+
+  @override
+  String get payNagad => 'Nagad';
+
+  @override
+  String get payBank => 'Bank transfer';
+
+  @override
+  String get payConfirm => 'Confirm payment';
+
+  @override
+  String get payReject => 'Reject payment';
+
+  @override
+  String get payRejectTitle => 'Why are you rejecting this payment?';
+
+  @override
+  String get payConfirmed => 'Payment confirmed; the ledger is credited.';
+
+  @override
+  String get payRejected => 'Payment rejected; the merchant is told why.';
+
+  @override
+  String get payViewLedger => 'View ledger';
+
+  @override
+  String get ledgerTitle => 'Merchant ledger';
+
+  @override
+  String get ledgerBack => 'Payments';
+
+  @override
+  String get ledgerDue => 'Due';
+
+  @override
+  String get ledgerLimit => 'Block limit';
+
+  @override
+  String get ledgerPending => 'Pending payments';
+
+  @override
+  String get ledgerRate => 'Commission rate';
+
+  @override
+  String get ledgerBlocked => 'Blocked from accepting';
+
+  @override
+  String get ledgerClear => 'Can accept';
+
+  @override
+  String get ledgerEmpty => 'No ledger entries yet';
+
+  @override
+  String get ledgerKind => 'Entry';
+
+  @override
+  String ledgerCommission(String number) {
+    return 'Commission · $number';
+  }
+
+  @override
+  String get ledgerPayment => 'Payment';
+
+  @override
+  String get ledgerJobTotal => 'Job total';
+
+  @override
+  String get ledgerDate => 'Date';
+
+  @override
+  String get settingsRateRange =>
+      'Enter basis points from 0 to 10000 (1000 = 10%).';
+
+  @override
+  String get settingsRateHint =>
+      'Basis points: 1000 = 10% of the final job price.';
+
+  @override
+  String settingsRateValue(String percent, String bp) {
+    return '$percent% ($bp bp)';
+  }
+
+  @override
+  String get settingsAmountRange =>
+      'Enter a whole amount in paisa, 0 or more (50000 = ৳500).';
+
+  @override
+  String get settingsAmountHint =>
+      'Paisa: 50000 = ৳500. Merchants above it cannot accept jobs.';
 }

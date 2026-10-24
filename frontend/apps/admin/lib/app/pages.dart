@@ -4,6 +4,10 @@ import 'package:pao_admin/app/routes.dart';
 import 'package:pao_admin/app/services.dart';
 import 'package:pao_admin/features/auth/presentation/login_page.dart';
 import 'package:pao_admin/features/auth/presentation/password_page.dart';
+import 'package:pao_admin/features/billing/data/api_billing_repository.dart';
+import 'package:pao_admin/features/billing/domain/billing_repository.dart';
+import 'package:pao_admin/features/billing/presentation/ledger_page.dart';
+import 'package:pao_admin/features/billing/presentation/payments_page.dart';
 import 'package:pao_admin/features/bookings/presentation/booking_detail_page.dart';
 import 'package:pao_admin/features/bookings/presentation/bookings_page.dart';
 import 'package:pao_admin/features/catalog/presentation/catalog_page.dart';
@@ -75,6 +79,7 @@ List<RouteBase> consoleRoutes(AppServices s) => [
     ),
   ),
   ...peopleRoutes(s),
+  ...billingRoutes(s),
   _page(Routes.settings, (_) => SettingsPage(services: s)),
   _page(
     '/settings/:tab',
@@ -96,3 +101,26 @@ List<RouteBase> peopleRoutes(AppServices s) => [
     (st) => ComplaintDetailPage(services: s, id: _id(st)),
   ),
 ];
+
+/// The payments queue and merchant ledgers, for admins with
+/// `billing:manage`; the routes have no screen ID, so the permission gates
+/// them here.
+List<RouteBase> billingRoutes(AppServices s) {
+  Widget gated(Widget page) =>
+      s.permissions.can(billingPermission) ? page : const PaoAccessDeniedView();
+  return [
+    _page(
+      Routes.payments,
+      (_) => gated(PaymentsPage(repo: ApiBillingRepository(s.api))),
+    ),
+    _page(
+      Routes.ledger,
+      (st) => gated(
+        LedgerPage(
+          repo: ApiBillingRepository(s.api),
+          providerId: st.pathParameters['providerId']!,
+        ),
+      ),
+    ),
+  ];
+}

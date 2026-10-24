@@ -1599,4 +1599,139 @@ class AdminL10nBn extends AdminL10n {
 
   @override
   String get auditClear => 'মুছুন';
+
+  @override
+  String get navPayments => 'পেমেন্ট';
+
+  @override
+  String get payTitle => 'মার্চেন্টের পেমেন্ট';
+
+  @override
+  String get payEmpty => 'মিলে যাওয়া কোনো পেমেন্ট নেই';
+
+  @override
+  String get payMerchant => 'মার্চেন্ট';
+
+  @override
+  String get payAmount => 'পরিমাণ';
+
+  @override
+  String get payMethod => 'মাধ্যম';
+
+  @override
+  String get payReference => 'রেফারেন্স';
+
+  @override
+  String get paySubmitted => 'জমা';
+
+  @override
+  String get payReviewed => 'পর্যালোচনা';
+
+  @override
+  String get payReason => 'কারণ';
+
+  @override
+  String get payStatusPending => 'অপেক্ষমাণ';
+
+  @override
+  String get payStatusConfirmed => 'নিশ্চিত';
+
+  @override
+  String get payStatusRejected => 'বাতিল';
+
+  @override
+  String get payCashToAgent => 'এজেন্টকে নগদ';
+
+  @override
+  String get payBkash => 'বিকাশ';
+
+  @override
+  String get payNagad => 'নগদ';
+
+  @override
+  String get payBank => 'ব্যাংক ট্রান্সফার';
+
+  @override
+  String get payConfirm => 'পেমেন্ট নিশ্চিত করুন';
+
+  @override
+  String get payReject => 'পেমেন্ট বাতিল করুন';
+
+  @override
+  String get payRejectTitle => 'কেন এই পেমেন্ট বাতিল করছেন?';
+
+  @override
+  String get payConfirmed => 'পেমেন্ট নিশ্চিত হয়েছে; হিসাবে জমা হয়েছে।';
+
+  @override
+  String get payRejected =>
+      'পেমেন্ট বাতিল হয়েছে; মার্চেন্টকে কারণ জানানো হয়েছে।';
+
+  @override
+  String get payViewLedger => 'হিসাব দেখুন';
+
+  @override
+  String get ledgerTitle => 'মার্চেন্টের হিসাব';
+
+  @override
+  String get ledgerBack => 'পেমেন্ট';
+
+  @override
+  String get ledgerDue => 'বকেয়া';
+
+  @override
+  String get ledgerLimit => 'ব্লক সীমা';
+
+  @override
+  String get ledgerPending => 'অপেক্ষমাণ পেমেন্ট';
+
+  @override
+  String get ledgerRate => 'কমিশনের হার';
+
+  @override
+  String get ledgerBlocked => 'কাজ নেওয়া বন্ধ';
+
+  @override
+  String get ledgerClear => 'কাজ নিতে পারেন';
+
+  @override
+  String get ledgerEmpty => 'এখনো কোনো হিসাব নেই';
+
+  @override
+  String get ledgerKind => 'এন্ট্রি';
+
+  @override
+  String ledgerCommission(String number) {
+    return 'কমিশন · $number';
+  }
+
+  @override
+  String get ledgerPayment => 'পেমেন্ট';
+
+  @override
+  String get ledgerJobTotal => 'কাজের মোট';
+
+  @override
+  String get ledgerDate => 'তারিখ';
+
+  @override
+  String get settingsRateRange =>
+      '০ থেকে ১০০০০ বেসিস পয়েন্ট লিখুন (১০০০ = ১০%)।';
+
+  @override
+  String get settingsRateHint =>
+      'বেসিস পয়েন্ট: ১০০০ = চূড়ান্ত কাজের দামের ১০%।';
+
+  @override
+  String settingsRateValue(String percent, String bp) {
+    return '$percent% ($bp বিপি)';
+  }
+
+  @override
+  String get settingsAmountRange =>
+      'পয়সায় ০ বা তার বেশি পূর্ণ সংখ্যা লিখুন (৫০০০০ = ৳৫০০)।';
+
+  @override
+  String get settingsAmountHint =>
+      'পয়সা: ৫০০০০ = ৳৫০০। এর বেশি বকেয়ায় মার্চেন্ট কাজ নিতে পারবেন না।';
 }

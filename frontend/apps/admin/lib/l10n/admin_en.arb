@@ -2213,5 +2213,186 @@
   "auditClear": "Clear",
   "@auditClear": {
     "description": "Audit filter reset"
+  },
+  "navPayments": "Payments",
+  "@navPayments": {
+    "description": "Navigation: merchant payments."
+  },
+  "payTitle": "Merchant payments",
+  "@payTitle": {
+    "description": "Payments queue title."
+  },
+  "payEmpty": "No payments match",
+  "@payEmpty": {
+    "description": "Empty payments queue."
+  },
+  "payMerchant": "Merchant",
+  "@payMerchant": {
+    "description": "Column."
+  },
+  "payAmount": "Amount",
+  "@payAmount": {
+    "description": "Column."
+  },
+  "payMethod": "Method",
+  "@payMethod": {
+    "description": "Column."
+  },
+  "payReference": "Reference",
+  "@payReference": {
+    "description": "Column."
+  },
+  "paySubmitted": "Submitted",
+  "@paySubmitted": {
+    "description": "Column."
+  },
+  "payReviewed": "Reviewed",
+  "@payReviewed": {
+    "description": "Fact label."
+  },
+  "payReason": "Reason",
+  "@payReason": {
+    "description": "Fact label."
+  },
+  "payStatusPending": "Pending",
+  "@payStatusPending": {
+    "description": "Status."
+  },
+  "payStatusConfirmed": "Confirmed",
+  "@payStatusConfirmed": {
+    "description": "Status."
+  },
+  "payStatusRejected": "Rejected",
+  "@payStatusRejected": {
+    "description": "Status."
+  },
+  "payCashToAgent": "Cash to agent",
+  "@payCashToAgent": {
+    "description": "Method."
+  },
+  "payBkash": "bKash",
+  "@payBkash": {
+    "description": "Method."
+  },
+  "payNagad": "Nagad",
+  "@payNagad": {
+    "description": "Method."
+  },
+  "payBank": "Bank transfer",
+  "@payBank": {
+    "description": "Method."
+  },
+  "payConfirm": "Confirm payment",
+  "@payConfirm": {
+    "description": "Action."
+  },
+  "payReject": "Reject payment",
+  "@payReject": {
+    "description": "Action."
+  },
+  "payRejectTitle": "Why are you rejecting this payment?",
+  "@payRejectTitle": {
+    "description": "Reject dialog title."
+  },
+  "payConfirmed": "Payment confirmed; the ledger is credited.",
+  "@payConfirmed": {
+    "description": "Snack."
+  },
+  "payRejected": "Payment rejected; the merchant is told why.",
+  "@payRejected": {
+    "description": "Snack."
+  },
+  "payViewLedger": "View ledger",
+  "@payViewLedger": {
+    "description": "Opens merchant ledger."
+  },
+  "ledgerTitle": "Merchant ledger",
+  "@ledgerTitle": {
+    "description": "Ledger title."
+  },
+  "ledgerBack": "Payments",
+  "@ledgerBack": {
+    "description": "Back link."
+  },
+  "ledgerDue": "Due",
+  "@ledgerDue": {
+    "description": "Fact."
+  },
+  "ledgerLimit": "Block limit",
+  "@ledgerLimit": {
+    "description": "Fact."
+  },
+  "ledgerPending": "Pending payments",
+  "@ledgerPending": {
+    "description": "Fact."
+  },
+  "ledgerRate": "Commission rate",
+  "@ledgerRate": {
+    "description": "Fact."
+  },
+  "ledgerBlocked": "Blocked from accepting",
+  "@ledgerBlocked": {
+    "description": "Badge."
+  },
+  "ledgerClear": "Can accept",
+  "@ledgerClear": {
+    "description": "Badge."
+  },
+  "ledgerEmpty": "No ledger entries yet",
+  "@ledgerEmpty": {
+    "description": "Empty ledger."
+  },
+  "ledgerKind": "Entry",
+  "@ledgerKind": {
+    "description": "Column."
+  },
+  "ledgerCommission": "Commission · {number}",
+  "@ledgerCommission": {
+    "description": "Debit row.",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "ledgerPayment": "Payment",
+  "@ledgerPayment": {
+    "description": "Credit row."
+  },
+  "ledgerJobTotal": "Job total",
+  "@ledgerJobTotal": {
+    "description": "Column."
+  },
+  "ledgerDate": "Date",
+  "@ledgerDate": {
+    "description": "Column."
+  },
+  "settingsRateRange": "Enter basis points from 0 to 10000 (1000 = 10%).",
+  "@settingsRateRange": {
+    "description": "Commission rate error."
+  },
+  "settingsRateHint": "Basis points: 1000 = 10% of the final job price.",
+  "@settingsRateHint": {
+    "description": "Commission rate hint."
+  },
+  "settingsRateValue": "{percent}% ({bp} bp)",
+  "@settingsRateValue": {
+    "description": "Commission rate shown.",
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "bp": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsAmountRange": "Enter a whole amount in paisa, 0 or more (50000 = ৳500).",
+  "@settingsAmountRange": {
+    "description": "Due limit error."
+  },
+  "settingsAmountHint": "Paisa: 50000 = ৳500. Merchants above it cannot accept jobs.",
+  "@settingsAmountHint": {
+    "description": "Due limit hint."
   }
 }

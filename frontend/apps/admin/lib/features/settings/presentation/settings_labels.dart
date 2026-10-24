@@ -1,3 +1,4 @@
+import 'package:pao_admin/features/settings/presentation/billing_settings.dart';
 import 'package:pao_admin/l10n/generated/admin_localizations.dart';
 import 'package:pao_api/pao_api.dart';
 
@@ -47,5 +48,5 @@ String roleLabel(AdminL10n t, String role) => switch (role) {
 String settingValue(AdminL10n t, Setting s) => switch (s.type) {
   SettingTypeEnum.boolean => s.value == 'true' ? t.settingsOn : t.settingsOff,
   SettingTypeEnum.geojson => t.settingsShape,
-  _ => s.value,
+  _ => billingSettingValue(t, s.key, s.value) ?? s.value,
 };

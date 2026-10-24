@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pao_admin/shared/l10n.dart';
 import 'package:pao_ui/pao_ui.dart';
 
@@ -7,17 +8,22 @@ const minReasonLength = 5;
 
 /// Asks the admin to confirm [title] with a written reason, offering
 /// [templates] to start from; resolves with the reason, or null if cancelled.
+/// [minLength] and [maxLength] follow the API operation the reason is for.
 Future<String?> confirmWithReason(
   BuildContext context, {
   required String title,
   required String confirmLabel,
   List<String> templates = const [],
+  int minLength = minReasonLength,
+  int? maxLength,
 }) => showDialog<String>(
   context: context,
   builder: (_) => _ReasonDialog(
     title: title,
     confirmLabel: confirmLabel,
     templates: templates,
+    minLength: minLength,
+    maxLength: maxLength,
   ),
 );
 
@@ -26,11 +32,15 @@ class _ReasonDialog extends StatefulWidget {
     required this.title,
     required this.confirmLabel,
     required this.templates,
+    required this.minLength,
+    required this.maxLength,
   });
 
   final String title;
   final String confirmLabel;
   final List<String> templates;
+  final int minLength;
+  final int? maxLength;
 
   @override
   State<_ReasonDialog> createState() => _ReasonDialogState();
@@ -48,7 +58,7 @@ class _ReasonDialogState extends State<_ReasonDialog> {
 
   void _confirm() {
     final text = _reason.text.trim();
-    if (text.length < minReasonLength) return setState(() => _short = true);
+    if (text.length < widget.minLength) return setState(() => _short = true);
     Navigator.pop(context, text);
   }
 
@@ -74,7 +84,11 @@ class _ReasonDialogState extends State<_ReasonDialog> {
             label: context.t.reasonLabel,
             controller: _reason,
             maxLines: 3,
-            error: _short ? context.t.reasonTooShort(minReasonLength) : null,
+            inputFormatters: [
+              if (widget.maxLength case final max?)
+                LengthLimitingTextInputFormatter(max),
+            ],
+            error: _short ? context.t.reasonTooShort(widget.minLength) : null,
           ),
         ],
       ),

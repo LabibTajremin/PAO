@@ -35,6 +35,7 @@ const List<String> superAdminPermissions = [
   'admin_user:manage',
   'audit:read',
   'role:manage',
+  'billing:manage',
 ];
 
 /// An API error body.

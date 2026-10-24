@@ -61,7 +61,10 @@ class _Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final visible = navEntries.where(
-      (e) => services.permissions.canSee(e.screen),
+      (e) => switch (e.permission) {
+        final p? => services.permissions.can(p),
+        null => services.permissions.canSee(e.screen),
+      },
     );
     return SafeArea(
       child: Column(

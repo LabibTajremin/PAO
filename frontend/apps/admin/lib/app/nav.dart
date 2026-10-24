@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:pao_admin/app/routes.dart';
+import 'package:pao_admin/features/billing/domain/billing_repository.dart';
 import 'package:pao_admin/l10n/generated/admin_localizations.dart';
 
 /// One console section in the navigation.
 class NavEntry {
-  /// Creates an entry.
-  const NavEntry(this.screen, this.path, this.icon, this.label);
+  /// Creates an entry; with [permission] that permission shows it instead of
+  /// the screen ID.
+  const NavEntry(
+    this.screen,
+    this.path,
+    this.icon,
+    this.label, {
+    this.permission,
+  });
 
   /// Screen ID that must be permitted for the entry to show.
   final String screen;
+
+  /// Permission that shows the entry, for sections without a screen ID.
+  final String? permission;
 
   /// Where the entry goes.
   final String path;
@@ -64,6 +75,15 @@ final List<NavEntry> navEntries = [
     Routes.complaints,
     Icons.report_outlined,
     (t) => t.navComplaints,
+  ),
+  // Billing came after the screen catalogue (ADR-0035), so its permission
+  // shows it.
+  NavEntry(
+    '',
+    Routes.payments,
+    Icons.payments_outlined,
+    (t) => t.navPayments,
+    permission: billingPermission,
   ),
   NavEntry(
     'A12',
