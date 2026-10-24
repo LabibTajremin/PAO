@@ -1,7 +1,7 @@
 # PAO build — start here
 
 This folder is a complete, phased instruction set for an AI coding agent to build PAO from
-an empty repository to a working, tested product: NestJS API, Flutter customer app, Flutter
+an empty repository to a working, tested product: .NET API, Flutter customer app, Flutter
 partner (provider) app and Flutter Web admin panel.
 
 The agent works autonomously, one phase at a time. Each phase ends with a pull request
@@ -29,6 +29,7 @@ below is `done` in `PROGRESS.md`.
 | P14 | [End-to-end](phases/P14-e2e.md) | Full-journey tests across API and apps |
 | P15 | [NestJS backend](phases/P15-nestjs-backend.md) | The backend rebuilt on NestJS (ADR-0032), Go removed |
 | P16 | [Hardening & handover](phases/P16-hardening.md) | Security and performance pass, docs, release builds |
+| P17 | [.NET backend](phases/P17-dotnet-backend.md) | The backend rebuilt on .NET (ADR-0034), billing (ADR-0035), NestJS removed, repository re-laid out |
 
 Phases are strictly sequential. A phase may not start until the previous one is merged.
 

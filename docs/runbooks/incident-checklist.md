@@ -1,6 +1,6 @@
 # Incident checklist
 
-Use it when an alert fires (ops/prometheus/rules/pao.yml) or users report a problem.
+Use it when an alert fires (infra/ops/prometheus/rules/pao.yml) or users report a problem.
 Work top to bottom; write every step with its time in the incident channel.
 
 ## 1. Take charge (first 5 minutes)

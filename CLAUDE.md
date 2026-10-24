@@ -1,6 +1,6 @@
 # PAO — agent rules
 
-You are building PAO, a home-services marketplace for Bangladesh: NestJS backend, Flutter apps.
+You are building PAO, a home-services marketplace for Bangladesh: .NET backend (`Backend/`), Flutter apps (`Frontend/`).
 These rules apply to every session. Read them fully; they are short on purpose.
 
 ## Where things are
@@ -16,6 +16,12 @@ These rules apply to every session. Read them fully; they are short on purpose.
 | Screen list mapped to Figma | `docs/build/05-screens.md` |
 | The phase you are working on | `docs/build/phases/PNN-*.md` |
 | Product requirements (plain text) | `docs/prd/PAO-PRD.txt` |
+| Backend rules and layout (.NET, read before touching `Backend/`) | `Backend/PAO.AI/README.md` |
+| Backend reference (areas, config, database, operations, testing) | `Backend/Docs/` |
+| API contract | `Backend/Api/openapi.yaml` |
+| The `pao` CLI internals, hooks, CLI tests | `tools/` |
+| Compose stack, e2e stack, monitoring, scanner configs | `infra/` |
+| Handover, release, deployment and other guides | `docs/HANDOVER.md`, `docs/guides/` |
 
 ## Non-negotiables
 
@@ -27,7 +33,7 @@ These rules apply to every session. Read them fully; they are short on purpose.
 4. Never commit secrets. Configuration comes from environment variables only.
 5. Update `PROGRESS.md` after every completed task, then commit. It is how the next
    session resumes.
-6. Keep files small (TypeScript ≤ 250 lines, Dart ≤ 200 lines, functions ≤ 40 lines). Split
+6. Keep files small (C# ≤ 250 lines, Dart ≤ 200 lines, methods ≤ 40 lines). Split
    instead of growing.
 7. Comments explain *why*, never *what*. No AI narration ("Here we…", "Step 1").
 8. When the PRD and these docs disagree, the PRD wins for behaviour and these docs win
@@ -36,8 +42,8 @@ These rules apply to every session. Read them fully; they are short on purpose.
 ## Token discipline
 
 - Read only what the current task needs: its phase file, the PRD section it cites and the
-  module README. Do not re-read files you have already read in this session.
+  area docs (`Backend/Docs/Areas/<Area>/`). Do not re-read files you have already read in this session.
 - Search with `rg` or Grep before opening files; open line ranges, not whole files.
-- Prefer generators (`sqlc`, `openapi-typescript`, OpenAPI Dart client) over hand-written
+- Prefer generators (the OpenAPI bundle, the OpenAPI Dart client, l10n) over hand-written
   boilerplate.
 - Do not paste long command output into your notes. Summarise failures in one line.

@@ -1,3 +1,0 @@
-#!/bin/sh
-# The API: serves the contract, or answers the container health check with "healthcheck".
-exec node /app/dist/main.js "$@"

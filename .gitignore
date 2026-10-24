@@ -3,9 +3,8 @@
 *.pem
 *.key
 
-# Node and coverage
-node_modules/
-/coverage/
+# Generated output: coverage, the perf fixture, the e2e stack's state
+/out/
 
 # Flutter / Dart
 .dart_tool/
@@ -24,7 +23,4 @@ pubspec_overrides.yaml
 .vscode/
 *.swp
 # An empty CA bundle the compose build uses when PAO_EXTRA_CA_FILE is unset.
-!docker/no-extra-ca.pem
-.perf-fixture.json
-test/e2e/.stack.env
-test/e2e/.admins.env
+!infra/no-extra-ca.pem

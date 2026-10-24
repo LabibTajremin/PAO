@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Start-up smoke tests (the three built hosts as processes) and the black-box journeys
+       (Journeys/, trait Category=Journey) against the e2e stack, over plain HTTP only. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PAO.TestKit\PAO.TestKit.csproj" />
+  </ItemGroup>
+</Project>

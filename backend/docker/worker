@@ -1,3 +1,0 @@
-#!/bin/sh
-# The worker: outbox relay and periodic jobs, or the container health check with "healthcheck".
-exec node /app/dist/worker.js "$@"

@@ -137,6 +137,37 @@ under the ignored `out/`.
 written before any backend existed (P01) and shared by the backend, the generated Dart
 client and the journeys. With one backend that owns it, it lives in `Backend/Api`.
 
+## Cut-over as done (P17 task 8, 2026-10-24)
+
+The layout above was applied with these choices where it left room:
+
+- **Journeys.** The black-box journeys are C# in `Backend/Test/PAO.E2ETests/Journeys`
+  (the project that already held the start-up smoke tests) rather than a separate
+  `Test/E2E` folder: 8 files and 13 tests, the same as the Jest suite they replace. They
+  carry the trait `Category=Journey`; `Backend/scripts/ci.sh e2e` filters them out (it runs
+  without a stack) and `./pao test e2e` runs them against a fresh stack. They use plain
+  HTTP and reference no backend project. The k6 scripts are in `Backend/Test/Load`.
+- **The e2e stack** (`stack.sh`, `compose.e2e.yml`) serves both the API and the app
+  journeys, so it lives in `infra/e2e/`. Its state (`.stack.env`, `.admins.env`) moved to
+  the ignored `out/e2e/` (`PAO_E2E_STATE` overrides it); the perf fixture is
+  `out/perf-fixture.json`, coverage `out/coverage/`.
+- **Compose** runs with the repository root as its project directory
+  (`--project-directory`), so build contexts, the `.env` file and `PAO_EXTRA_CA_FILE` stay
+  relative to the root as before. The empty default CA bundle is `infra/no-extra-ca.pem`.
+- **Security configs** are `infra/security/{gitleaks.toml,osv-scanner.toml,trivyignore}`,
+  passed explicitly by `./pao security`. NuGet lock files (`packages.lock.json`, enabled in
+  `Directory.Build.props`) give osv-scanner the .NET dependency graph that the npm
+  lockfiles used to provide.
+- **Gates.** `./pao ci` runs every stage of `Backend/scripts/ci.sh` exactly once: `lint`
+  (build, format, gates), `gen --check` (spec bundle), `test integration` (unit +
+  integration with the merged 100% coverage gate) and `test e2e` (start-up smoke, then the
+  journeys). `./pao dotnet <stage>` still runs one stage alone.
+- **CI.** `dotnet.yml` became `backend.yml` with two jobs: `dotnet` (`ci.sh all`) and
+  `tooling` (shellcheck, ops check, CLI tests, security with the image scan), which used
+  to run in the NestJS job.
+- **Root.** `./pao` is a two-line wrapper (shebang + `exec tools/pao`); `tools/fixtures`
+  stays as the CLI tests' fixture folder.
+
 ## Consequences
 
 - The apps, the database and the API contract carry over unchanged, apart from the

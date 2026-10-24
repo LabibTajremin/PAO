@@ -7,89 +7,79 @@ adds the concrete choices the PRD left open.
 
 ```
 /
-├── CLAUDE.md                 agent rules
-├── README.md                 product + one-command local run
-├── pao                       developer CLI (bash) — tests, lint, coverage, phases
-├── docker-compose.yml        postgres+postgis, redis, minio, api (local + CI)
-├── api/openapi.yaml          REST contract shared by backend and frontend
-├── backend/                  NestJS (TypeScript) modular monolith
-├── frontend/                 Flutter melos workspace (customer, partner, admin web)
-├── test/                     cross-system tests and shared test infrastructure
-├── docs/                     prd/, build/, adr/, architecture.md, glossary, runbooks
+├── CLAUDE.md  README.md  LICENSE  .editorconfig  .gitignore  .env.example
+├── pao                       one-line wrapper that runs tools/pao (the developer CLI)
+├── Backend/                  the .NET solution (ADR-0034)
+├── Frontend/                 Flutter workspace (customer, partner, admin web) + app journeys
+├── docs/                     prd/, build/, adr/, guides/, runbooks/, HANDOVER.md, CONTRIBUTING.md
+├── infra/                    docker-compose.yml, e2e/ (journey stack), ops/, security/
+├── tools/                    pao CLI internals (lib/), hooks/, cli/ tests, fixtures/, release build
+├── out/                      generated and ignored: coverage/, perf-fixture.json, e2e/ state
 └── .github/workflows/        CI
 ```
 
-### backend/
+### Backend/
 
 ```
-backend/
-├── src/main.ts               API entry point: config → infra → modules → HTTP server
-├── src/worker.ts             outbox relay + periodic jobs (same image)
-├── src/migrate.ts            migrations, seed data, perf fixture (up | seed | perf-seed N)
-├── src/app/                  composition roots: the api and worker Nest modules
-├── src/platform/             shared infrastructure, no business rules, never imports modules
-│   ├── config/  db/  redis/  http/  auth/  rbac/  events/  outbox/  jobs/  storage/
-│   ├── clock/  ids/  logging/  metrics/  health/  di/  errors/  geo/  i18n/  seeding/
-└── src/modules/<module>/
-    ├── contract/             PUBLIC: service interfaces + injection tokens, DTOs, events,
-    │                         error reasons
-    ├── domain/               entities, value objects, rules — no I/O imports
-    ├── app/                  use cases, one file per use case
-    ├── port/                 repository + gateway interfaces (and tokens) used by app/
-    ├── adapter/postgres/     queries.sql, generated sqlc/ functions, repositories
-    ├── adapter/http/         controllers, error map, view mapping
-    ├── adapter/inproc/       implements contract/ for other modules
-    ├── <module>.module.ts    @Global() Nest module exporting only its contract tokens
-    └── README.md
-backend/migrations/<module>/  goose-format SQL migrations, one Postgres schema per module
-backend/seed/                 catalog, prices and demo admins (migrate seed)
-backend/test/                 integration test kit and unit-test fakes
+Backend/
+├── PAO.sln  global.json  Directory.Build.props  Directory.Packages.props
+├── Api/                      the OpenAPI contract (openapi.yaml + paths/, schemas/, components/)
+├── PAO.Core/                 API host: Areas/<Area>/{Controllers,Features,Services,Repositories},
+│                             Registration/, Spec/openapi.gen.yaml (bundled contract)
+├── PAO.Worker/               outbox relay + periodic jobs (same image, /app/worker)
+├── PAO.Migrator/             migrations, seed data, perf fixture (up | seed | perf-seed N)
+├── PAO.Lib/                  request/view models, events, error reasons, mapping, validation
+├── PAO.EF/                   PaoDbContext, db models, configurations
+├── PAO.Infrastructure/       platform: config, logging, Redis, crypto, HTTP edge, outbox,
+│                             storage, SMS, push, metrics, health
+├── PAO.BackgroundJobs/       scheduler, relay loop, platform jobs
+├── Config/  DB Changes/  Seed/   JSON config per concern, goose SQL per module, seed data
+├── Docs/                     areas, architecture, config, database, operations, testing, API
+├── Tools/PAO.Gates/          size and docs checkers
+├── Test/                     PAO.UnitTests, PAO.IntegrationTests, PAO.TestKit,
+│                             PAO.E2ETests (start-up smoke + black-box journeys), Load/ (k6)
+├── docker/                   Dockerfile and the api, worker, migrate entry points
+└── scripts/                  ci.sh (the backend gates), coverage.py, gen-spec.sh
 ```
 
-Modules (PRD §9.2): `identity`, `customer`, `provider`, `verification`, `catalog`,
-`booking`, `rating`, `notification`, `media`, `admin` (admin users, settings, complaints),
-`audit`.
+Modules (PRD §9.2) are ASP.NET areas: `Identity`, `Customer`, `Merchant` (provider),
+`Verification`, `Catalog`, `Booking`, `Rating`, `Notification`, `Media`, `Admin`, `Audit`,
+`Billing`. Boundary rules (PRD §9.3) are architecture tests in `PAO.UnitTests`
+(`./pao lint backend`): an area reaches another only through its
+`Services/Shared/I<Area>SharedService`; the platform never references an area. The binding
+rules are in `Backend/PAO.AI/README.md`.
 
-Boundary rules (PRD §9.3) are enforced by dependency-cruiser in `./pao lint`
-(`backend/.dependency-cruiser.cjs`): `modules/A/**` may import only `modules/B/contract`
-and `platform/**`; `domain/` imports only Node built-ins and its own module's `domain/`;
-`platform/` never imports a module. Cycles between modules are broken with a lazy contract
-resolved through `ModuleRef` on first use (`platform/di/lazy-contract.ts`).
-
-### frontend/
+### Frontend/
 
 ```
-frontend/
-├── melos.yaml
+Frontend/
 ├── apps/customer/            PAO            (Android + iOS)
 ├── apps/partner/             PAO Partner    (Android + iOS)
 ├── apps/admin/               PAO Admin      (Flutter Web)
-└── packages/
-    ├── pao_core/             env config, Dio client, auth/session, token refresh,
-    │                         error mapping, permission service, router guards
-    ├── pao_api/              generated from api/openapi.yaml — never edited by hand
-    ├── pao_ui/               design system: tokens, accent themes, shared widgets
-    └── pao_l10n/             ARB files (en, bn) + generated localisations
+├── packages/
+│   ├── pao_core/             env config, Dio client, auth/session, token refresh,
+│   │                         error mapping, permission service, router guards
+│   ├── pao_api/              generated from Backend/Api/openapi.yaml — never edited by hand
+│   ├── pao_ui/               design system: tokens, accent themes, shared widgets
+│   ├── pao_l10n/             ARB files (en, bn) + generated localisations
+│   └── pao_e2e/              shared support for the app journeys
+└── test/e2e/                 run.sh: the app journeys against the e2e stack
 ```
 
 Each app: `lib/features/<feature>/{data,domain,presentation}`, `lib/app/` (router, DI,
 bootstrap). Unit and widget tests in each package's `test/`; app journeys in
 `integration_test/` (Flutter requires both locations).
 
-### test/
+### Tests outside the projects
 
 ```
-test/
-├── cli/                      bats tests for the pao CLI and git hooks
-├── e2e/stack.sh              a fresh Docker stack for the journeys (APP_ENV=test)
-├── e2e/api/                  TypeScript (Jest): black-box journeys over plain HTTP
-├── e2e/mobile/               Flutter app journeys against the same stack
-├── fixtures/                 sample documents and shared test data
-└── perf/                     k6 scripts (nearby search p95)
+infra/e2e/stack.sh            a fresh Docker stack for the journeys (APP_ENV=test)
+tools/cli/                    bats tests for the pao CLI and git hooks
+tools/fixtures/               shared test data for the CLI tests
 ```
 
-Backend unit specs (`*.spec.ts`) and integration specs (`*.int-spec.ts`) sit beside the
-code they test; integration specs run against real Postgres, Redis and S3 (ADR-0008).
+Backend unit and integration tests are separate projects under `Backend/Test/`;
+integration tests run against real Postgres, Redis and S3 (ADR-0008).
 
 ## 2. Runtime view
 
@@ -104,22 +94,21 @@ code they test; integration specs run against real Postgres, Redis and S3 (ADR-0
 
 Adding anything else requires an ADR.
 
-| Concern | Backend (TypeScript, ADR-0032) | Flutter |
+| Concern | Backend (.NET 10, ADR-0034) | Flutter |
 |---|---|---|
-| HTTP | NestJS 11 on Express, `openapi-typescript` (types from the spec) | `dio`, generated `pao_api` |
-| DB | `pg`, `sqlc` + `sqlc-gen-typescript`, goose-format migrations (own migrator) | — |
-| Redis | `ioredis` | — |
+| HTTP | ASP.NET Core (areas, controllers), own OpenAPI edge (`YamlDotNet`, bundled spec) | `dio`, generated `pao_api` |
+| DB | EF Core + `Npgsql` (+ NetTopologySuite), goose-format SQL scripts (own migrator) | — |
+| Redis | `StackExchange.Redis` | — |
 | Jobs | in-process scheduler with a Postgres advisory lock per job | — |
-| Auth | `jose` (EdDSA JWT), `otplib` (TOTP), `@node-rs/argon2`, `node:crypto` AES-256-GCM | `flutter_secure_storage` |
-| Validation | `ajv` + `ajv-formats` against the bundled spec, `zod` (config) | `formz` |
-| Logging/metrics | `pino` (JSON), `prom-client` | `sentry_flutter` (behind interface) |
-| Storage | `@aws-sdk/client-s3`, `@aws-sdk/s3-request-presigner` | `image_picker`, `flutter_image_compress` |
-| Push | `google-auth-library` (FCM HTTP v1) | `firebase_messaging` |
-| Ids, YAML | `uuid` (v7), `yaml` | — |
+| Auth | BouncyCastle (EdDSA JWT), `Otp.NET` (TOTP), `Konscious` argon2id, AES-256-GCM | `flutter_secure_storage` |
+| Validation | `FluentValidation`, spec validation at the edge | `formz` |
+| Logging/metrics | `Serilog` (JSON, date folders), `prometheus-net` | `sentry_flutter` (behind interface) |
+| Storage | `AWSSDK.S3` | `image_picker`, `flutter_image_compress` |
+| Push | FCM HTTP v1 | `firebase_messaging` |
 | State/routing | — | `flutter_bloc`, `go_router`, `get_it` |
 | Maps | — | `google_maps_flutter` behind `MapView` port |
-| Testing | `jest` (+ `@swc/jest`), `@nestjs/testing`, `supertest`, real services (ADR-0008) | `flutter_test`, `bloc_test`, `mocktail`, `patrol` |
-| Quality | `typescript-eslint` (strict type-checked), `prettier`, `dependency-cruiser`, `npm audit` | `very_good_analysis`, `dart_code_linter`, `very_good_cli` |
+| Testing | `xunit.v3`, `Microsoft.AspNetCore.TestHost`, `NetArchTest.Rules`, real services (ADR-0008), k6 | `flutter_test`, `bloc_test`, `mocktail`, `patrol` |
+| Quality | .NET analyzers (warnings as errors), `dotnet format`, size/docs gates, `osv-scanner` on `packages.lock.json` | `very_good_analysis`, `dart_code_linter`, `very_good_cli` |
 
 ## 4. Redis design
 
@@ -198,14 +187,14 @@ document returns the provider to this gate.
 | Transport | HTTPS only in deployed envs; HSTS; TLS terminates at the load balancer |
 | Headers | `X-Content-Type-Options`, `X-Frame-Options: DENY`, strict CSP on admin web |
 | Input | All requests validated against the OpenAPI schema (Ajv); max body 1 MB (uploads go direct to storage) |
-| SQL | Only parameterised `sqlc` queries; no string-built SQL |
+| SQL | EF Core queries and parameterised raw SQL only; no string-built SQL |
 | AuthZ | Deny by default; every route has an explicit permission |
 | Rate limits | OTP per phone/IP; API per user and per IP; login per account |
 | Sensitive data | NID numbers encrypted with AES-256-GCM (key from env); documents in private buckets, 5-minute signed URLs, every view audited (PRD §6.6) |
 | Privacy | Exact customer address only after acceptance; provider location only while online or on a job (PRD §11) |
 | Audit | `audit.entries` is append-only (DB trigger rejects UPDATE/DELETE) |
 | Secrets | Env vars only; `.env.example` documents them; `gitleaks` in CI |
-| Dependencies | `npm audit` (runtime dependencies), `osv-scanner` over the Dart and npm lockfiles, `trivy` source and image scan; accepted findings in `osv-scanner.toml` / `.trivyignore` |
+| Dependencies | `osv-scanner` over the Dart `pubspec.lock` and the NuGet `packages.lock.json` files, `trivy` source and image scan; accepted findings in `infra/security/osv-scanner.toml` / `infra/security/trivyignore` |
 | Mobile | Certificate pinning on release builds (SPKI SHA-256, `--dart-define=PAO_PIN_SHA256`); no secrets in the app binary; screenshots blocked on start-code and document screens |
 
 ## 8. Events (published through the outbox)

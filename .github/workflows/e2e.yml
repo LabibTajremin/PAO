@@ -19,11 +19,9 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
         with:
-          node-version: "22"
-          cache: npm
-          cache-dependency-path: test/e2e/api/package-lock.json
+          global-json-file: Backend/global.json
       - name: Journeys
         # The app journeys run in the apps job, in parallel and with Flutter.
         env:
@@ -34,7 +32,7 @@ jobs:
         run: ./pao ops restore-test e2e
       - name: Stack logs
         if: failure()
-        run: docker compose -p pao-e2e logs --no-color | tail -200
+        run: docker compose --project-directory . -f infra/docker-compose.yml -p pao-e2e logs --no-color | tail -200
 
   perf:
     runs-on: ubuntu-24.04
@@ -48,9 +46,9 @@ jobs:
         run: ./pao perf e2e
       - name: Stack logs
         if: failure()
-        run: docker compose -p pao-e2e logs --no-color | tail -200
+        run: docker compose --project-directory . -f infra/docker-compose.yml -p pao-e2e logs --no-color | tail -200
 
-  # The Flutter journeys and start-up smoke tests (test/e2e/mobile/run.sh), each app
+  # The Flutter journeys and start-up smoke tests (Frontend/test/e2e/run.sh), each app
   # against its own stack: partner and customer on the Linux desktop under Xvfb,
   # the admin panel in the runner's Chrome through its matching chromedriver.
   apps:
@@ -73,11 +71,11 @@ jobs:
           sudo apt-get install -y --no-install-recommends clang cmake ninja-build \
             pkg-config libgtk-3-dev libsecret-1-dev libcurl4-openssl-dev xvfb dbus gnome-keyring
       - name: Stack
-        run: test/e2e/stack.sh
+        run: infra/e2e/stack.sh
       - name: Journeys
         env:
           CHROME_EXECUTABLE: /usr/bin/google-chrome
-        run: CHROMEDRIVER="$CHROMEWEBDRIVER/chromedriver" test/e2e/mobile/run.sh ${{ matrix.app }}
+        run: CHROMEDRIVER="$CHROMEWEBDRIVER/chromedriver" Frontend/test/e2e/run.sh ${{ matrix.app }}
       - name: Stack logs
         if: failure()
-        run: docker compose -p pao-e2e logs --no-color | tail -200
+        run: docker compose --project-directory . -f infra/docker-compose.yml -p pao-e2e logs --no-color | tail -200

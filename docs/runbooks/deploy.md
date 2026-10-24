@@ -4,7 +4,7 @@
 workflows) and is to go to staging, then production.
 
 **You need:** deploy access to the container platform, the image registry and the
-secret store; the PAO dashboards open (`ops/grafana/dashboards`).
+secret store; the PAO dashboards open (`infra/ops/grafana/dashboards`).
 
 ## Rules
 
@@ -18,7 +18,7 @@ secret store; the PAO dashboards open (`ops/grafana/dashboards`).
 
 ## Steps
 
-1. **Build and tag.** `docker build -t <registry>/pao-backend:<git-sha> backend` and push.
+1. **Build and tag.** `docker build -t <registry>/pao-backend:<git-sha> -f Backend/docker/Dockerfile Backend` and push.
    Note the digest. Scan it: `PAO_SCAN_IMAGE=<registry>/pao-backend:<git-sha> ./pao security`.
 2. **Check the environment.** Compare the release's `.env.example` with the target's
    variables; add new ones to the secret store first. The API refuses to start on a
@@ -53,6 +53,6 @@ If any check fails and the cause is not obvious within 10 minutes, roll back.
 
 ## Apps and admin web
 
-Mobile and admin web builds follow `docs/release.md`. The apps must keep working with
+Mobile and admin web builds follow `docs/guides/release.md`. The apps must keep working with
 the previous backend for as long as old app versions are in use: the API contract
-(`api/openapi.yaml`) only grows; removing a field needs a new API version.
+(`Backend/Api/openapi.yaml`) only grows; removing a field needs a new API version.
