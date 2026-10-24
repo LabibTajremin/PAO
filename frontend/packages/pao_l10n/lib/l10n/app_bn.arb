@@ -89,5 +89,7 @@
   "errorSessionClosed": "এই লেভেল ২ সেশনটি বন্ধ।",
   "errorAcceptDeadlinePassed": "গ্রহণ করার সময় পার হয়ে গেছে।",
   "errorNoPendingExtras": "সিদ্ধান্ত নেওয়ার মতো কোনো অতিরিক্ত আইটেম নেই।",
+  "errorMerchantDueLimit": "আপনার PAO বকেয়া সীমার বেশি। নতুন কাজ নিতে বকেয়া পরিশোধ করুন।",
+  "errorPaymentNotPending": "এই পেমেন্টের সিদ্ধান্ত আগেই নেওয়া হয়েছে।",
   "actionLoadMore": "আরও দেখুন"
 }

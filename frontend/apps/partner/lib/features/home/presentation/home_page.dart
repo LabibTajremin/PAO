@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pao_api/pao_api.dart' show DueSummary;
 import 'package:pao_core/pao_core.dart';
 import 'package:pao_l10n/pao_l10n.dart';
 import 'package:pao_partner/app/routes.dart';
 import 'package:pao_partner/app/services.dart';
+import 'package:pao_partner/features/billing/data/api_billing_repository.dart';
+import 'package:pao_partner/features/billing/presentation/due_banner.dart';
 import 'package:pao_partner/features/home/data/api_home_repository.dart';
 import 'package:pao_partner/features/home/data/prefs_online_memory.dart';
 import 'package:pao_partner/features/home/data/service_heartbeat.dart';
@@ -40,6 +43,11 @@ class HomePage extends StatelessWidget {
           create: (_) => LoadCubit<HomeSummary>(repo.summary)..load().ignore(),
         ),
         BlocProvider(
+          create: (_) =>
+              LoadCubit<DueSummary>(ApiBillingRepository(services.api).due)
+                ..load().ignore(),
+        ),
+        BlocProvider(
           create: (_) => PresenceCubit(
             repo,
             services.location,
@@ -72,9 +80,11 @@ class HomePage extends StatelessWidget {
 
   Widget _body(BuildContext context, DocumentNotice notice) {
     final summary = context.read<LoadCubit<HomeSummary>>();
+    final due = context.read<LoadCubit<DueSummary>>();
     final expires = notice.expiresAt;
     return RefreshIndicator(
-      onRefresh: () => Future.wait([summary.refresh(), services.gate.load()]),
+      onRefresh: () =>
+          Future.wait([summary.refresh(), due.refresh(), services.gate.load()]),
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(PaoSpace.lg),
@@ -94,6 +104,7 @@ class HomePage extends StatelessWidget {
               ),
             ),
           const SizedBox(height: PaoSpace.md),
+          const DueBanner(),
           BlocBuilder<PresenceCubit, OnlineState>(
             builder: (_, s) => PresenceCard(state: s, paused: notice.paused),
           ),

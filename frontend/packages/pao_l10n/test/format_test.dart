@@ -41,7 +41,7 @@ void main() {
         expect(failureMessage(l10n, code), isNotEmpty);
       }
     }
-    expect(codes, hasLength(61));
+    expect(codes, hasLength(63));
     final en = await PaoL10n.delegate.load(const Locale('en'));
     expect(failureMessage(en, 'WHO_KNOWS'), en.failureUnexpected);
     expect(en.itemCount(2), '2 items');

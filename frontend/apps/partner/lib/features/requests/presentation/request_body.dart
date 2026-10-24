@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pao_api/pao_api.dart'
     show Booking, RejectInputReasonEnum, Timing;
 import 'package:pao_l10n/pao_l10n.dart';
+import 'package:pao_partner/app/routes.dart';
 import 'package:pao_partner/features/job/presentation/job_items.dart';
 import 'package:pao_partner/features/job/presentation/reason_sheet.dart';
 import 'package:pao_partner/features/requests/presentation/request_cubit.dart';
@@ -85,6 +87,16 @@ class RequestBody extends StatelessWidget {
           context.failureText(state.failure)!,
           style: const TextStyle(color: PaoColors.danger),
         ),
+      // Blocked by the due: the request stays open, so paying is the way on.
+      if (state.failure?.code == 'MERCHANT_DUE_LIMIT') ...[
+        const SizedBox(height: PaoSpace.sm),
+        PaoButton(
+          label: context.t.billPayNow,
+          variant: PaoButtonVariant.soft,
+          onPressed: () => context.push(Routes.pay),
+        ),
+      ],
+      const SizedBox(height: PaoSpace.sm),
       PaoButton(
         label: context.t.reqAccept,
         loading: state.busy,

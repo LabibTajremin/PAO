@@ -318,5 +318,12 @@ class PaoL10nEn extends PaoL10n {
   String get errorNoPendingExtras => 'There are no extra items to decide on.';
 
   @override
+  String get errorMerchantDueLimit =>
+      'Your PAO due is over the limit. Pay it to accept new jobs.';
+
+  @override
+  String get errorPaymentNotPending => 'This payment has already been decided.';
+
+  @override
   String get actionLoadMore => 'Load more';
 }

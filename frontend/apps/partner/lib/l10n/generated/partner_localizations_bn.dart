@@ -1312,4 +1312,135 @@ class PartnerL10nBn extends PartnerL10n {
 
   @override
   String get notifEmptyBody => 'অনুরোধ, কাজ ও কাগজপত্রের খবর এখানে দেখাবে।';
+
+  @override
+  String get billTitle => 'PAO বকেয়া';
+
+  @override
+  String get billDue => 'PAO-র কাছে বকেয়া';
+
+  @override
+  String billLimit(String amount) {
+    return 'সীমা $amount';
+  }
+
+  @override
+  String billRate(String rate) {
+    return 'প্রতিটি সম্পন্ন কাজের $rate% কমিশন';
+  }
+
+  @override
+  String billPendingTotal(String amount) {
+    return 'নিশ্চিতকরণের অপেক্ষায়: $amount';
+  }
+
+  @override
+  String get billBlockedBody =>
+      'আপনার বকেয়া সীমার বেশি, তাই নতুন কাজ নিতে পারবেন না। অফার ও নোটিফিকেশন আসতে থাকবে।';
+
+  @override
+  String billBannerBlocked(String due, String limit) {
+    return 'বকেয়া $due, সীমা $limit ছাড়িয়েছে। নতুন কাজ নিতে পরিশোধ করুন।';
+  }
+
+  @override
+  String billBannerNear(String due, String limit) {
+    return 'বকেয়া $due, সীমা $limit-এর কাছাকাছি।';
+  }
+
+  @override
+  String get billPayNow => 'এখনই পরিশোধ করুন';
+
+  @override
+  String get billLedger => 'হিসাব';
+
+  @override
+  String get billPayments => 'পেমেন্ট';
+
+  @override
+  String billCommission(String number) {
+    return 'কমিশন · $number';
+  }
+
+  @override
+  String billJobTotal(String amount) {
+    return 'কাজের মোট $amount';
+  }
+
+  @override
+  String get billCredit => 'পেমেন্ট গৃহীত';
+
+  @override
+  String get billLedgerEmpty => 'এখনো কোনো হিসাব নেই';
+
+  @override
+  String get billLedgerEmptyBody =>
+      'প্রতিটি সম্পন্ন কাজে PAO-র কমিশন এখানে দেখাবে।';
+
+  @override
+  String get billPaymentsEmpty => 'এখনো কোনো পেমেন্ট নেই';
+
+  @override
+  String get billPaymentsEmptyBody =>
+      'আপনার জানানো পেমেন্ট অ্যাডমিন নিশ্চিত না করা পর্যন্ত এখানে দেখাবে।';
+
+  @override
+  String get billStatusPending => 'অপেক্ষমাণ';
+
+  @override
+  String get billStatusConfirmed => 'নিশ্চিত';
+
+  @override
+  String get billStatusRejected => 'বাতিল';
+
+  @override
+  String billRejectedReason(String reason) {
+    return 'বাতিল: $reason';
+  }
+
+  @override
+  String get payTitle => 'বকেয়া পরিশোধ';
+
+  @override
+  String get payIntro =>
+      'আগে PAO-কে পরিশোধ করুন, তারপর এখানে জানান। অ্যাডমিন নিশ্চিত করলে বকেয়া কমবে।';
+
+  @override
+  String get payAmount => 'পরিমাণ (৳)';
+
+  @override
+  String get payAmountInvalid => '৳০.০১ থেকে ৳১০,০০,০০০-এর মধ্যে পরিমাণ লিখুন।';
+
+  @override
+  String get payMethod => 'কীভাবে পরিশোধ করেছেন';
+
+  @override
+  String get payMethodMissing => 'কীভাবে পরিশোধ করেছেন বেছে নিন।';
+
+  @override
+  String get payCashToAgent => 'এজেন্টকে নগদ';
+
+  @override
+  String get payBkash => 'বিকাশ';
+
+  @override
+  String get payNagad => 'নগদ';
+
+  @override
+  String get payBank => 'ব্যাংক ট্রান্সফার';
+
+  @override
+  String get payReference => 'রেফারেন্স';
+
+  @override
+  String get payReferenceHint => 'ট্রানজেকশন আইডি, রসিদ নম্বর বা এজেন্টের নাম';
+
+  @override
+  String get payReferenceInvalid => '১ থেকে ১২০ অক্ষরের রেফারেন্স লিখুন।';
+
+  @override
+  String get paySubmit => 'পেমেন্ট জমা দিন';
+
+  @override
+  String get paySent => 'পেমেন্ট জমা হয়েছে। শিগগিরই অ্যাডমিন নিশ্চিত করবেন।';
 }

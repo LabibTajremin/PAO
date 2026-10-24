@@ -1319,4 +1319,136 @@ class PartnerL10nEn extends PartnerL10n {
   @override
   String get notifEmptyBody =>
       'Updates about requests, jobs and documents appear here.';
+
+  @override
+  String get billTitle => 'PAO dues';
+
+  @override
+  String get billDue => 'Due to PAO';
+
+  @override
+  String billLimit(String amount) {
+    return 'Limit $amount';
+  }
+
+  @override
+  String billRate(String rate) {
+    return 'Commission $rate% of each completed job';
+  }
+
+  @override
+  String billPendingTotal(String amount) {
+    return 'Waiting for confirmation: $amount';
+  }
+
+  @override
+  String get billBlockedBody =>
+      'Your due is over the limit, so you can\'t accept new jobs. Offers and notifications still arrive.';
+
+  @override
+  String billBannerBlocked(String due, String limit) {
+    return 'Due $due is over the $limit limit. Pay to accept new jobs.';
+  }
+
+  @override
+  String billBannerNear(String due, String limit) {
+    return 'Due $due is close to the $limit limit.';
+  }
+
+  @override
+  String get billPayNow => 'Pay now';
+
+  @override
+  String get billLedger => 'Ledger';
+
+  @override
+  String get billPayments => 'Payments';
+
+  @override
+  String billCommission(String number) {
+    return 'Commission · $number';
+  }
+
+  @override
+  String billJobTotal(String amount) {
+    return 'Job total $amount';
+  }
+
+  @override
+  String get billCredit => 'Payment received';
+
+  @override
+  String get billLedgerEmpty => 'No entries yet';
+
+  @override
+  String get billLedgerEmptyBody =>
+      'PAO\'s commission on each completed job appears here.';
+
+  @override
+  String get billPaymentsEmpty => 'No payments yet';
+
+  @override
+  String get billPaymentsEmptyBody =>
+      'Payments you report appear here until an admin confirms them.';
+
+  @override
+  String get billStatusPending => 'Pending';
+
+  @override
+  String get billStatusConfirmed => 'Confirmed';
+
+  @override
+  String get billStatusRejected => 'Rejected';
+
+  @override
+  String billRejectedReason(String reason) {
+    return 'Rejected: $reason';
+  }
+
+  @override
+  String get payTitle => 'Pay your due';
+
+  @override
+  String get payIntro =>
+      'Pay PAO first, then report it here. An admin confirms it and your due goes down.';
+
+  @override
+  String get payAmount => 'Amount (৳)';
+
+  @override
+  String get payAmountInvalid =>
+      'Enter an amount between ৳0.01 and ৳10,00,000.';
+
+  @override
+  String get payMethod => 'How you paid';
+
+  @override
+  String get payMethodMissing => 'Choose how you paid.';
+
+  @override
+  String get payCashToAgent => 'Cash to agent';
+
+  @override
+  String get payBkash => 'bKash';
+
+  @override
+  String get payNagad => 'Nagad';
+
+  @override
+  String get payBank => 'Bank transfer';
+
+  @override
+  String get payReference => 'Reference';
+
+  @override
+  String get payReferenceHint => 'Transaction ID, receipt number or agent name';
+
+  @override
+  String get payReferenceInvalid => 'Enter a reference of 1 to 120 characters.';
+
+  @override
+  String get paySubmit => 'Submit payment';
+
+  @override
+  String get paySent => 'Payment submitted. An admin will confirm it soon.';
 }

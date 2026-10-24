@@ -2383,6 +2383,228 @@ abstract class PartnerL10n {
   /// In en, this message translates to:
   /// **'Updates about requests, jobs and documents appear here.'**
   String get notifEmptyBody;
+
+  /// Billing screen title.
+  ///
+  /// In en, this message translates to:
+  /// **'PAO dues'**
+  String get billTitle;
+
+  /// Due summary label.
+  ///
+  /// In en, this message translates to:
+  /// **'Due to PAO'**
+  String get billDue;
+
+  /// Due block limit.
+  ///
+  /// In en, this message translates to:
+  /// **'Limit {amount}'**
+  String billLimit(String amount);
+
+  /// Commission rate line.
+  ///
+  /// In en, this message translates to:
+  /// **'Commission {rate}% of each completed job'**
+  String billRate(String rate);
+
+  /// Pending payments total.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for confirmation: {amount}'**
+  String billPendingTotal(String amount);
+
+  /// Explains the block.
+  ///
+  /// In en, this message translates to:
+  /// **'Your due is over the limit, so you can\'t accept new jobs. Offers and notifications still arrive.'**
+  String get billBlockedBody;
+
+  /// Home banner when blocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Due {due} is over the {limit} limit. Pay to accept new jobs.'**
+  String billBannerBlocked(String due, String limit);
+
+  /// Home banner near the limit.
+  ///
+  /// In en, this message translates to:
+  /// **'Due {due} is close to the {limit} limit.'**
+  String billBannerNear(String due, String limit);
+
+  /// Opens the pay screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay now'**
+  String get billPayNow;
+
+  /// Ledger tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledger'**
+  String get billLedger;
+
+  /// Payments tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments'**
+  String get billPayments;
+
+  /// Ledger debit row.
+  ///
+  /// In en, this message translates to:
+  /// **'Commission · {number}'**
+  String billCommission(String number);
+
+  /// Ledger row subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Job total {amount}'**
+  String billJobTotal(String amount);
+
+  /// Ledger credit row.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment received'**
+  String get billCredit;
+
+  /// Empty ledger title.
+  ///
+  /// In en, this message translates to:
+  /// **'No entries yet'**
+  String get billLedgerEmpty;
+
+  /// Empty ledger body.
+  ///
+  /// In en, this message translates to:
+  /// **'PAO\'s commission on each completed job appears here.'**
+  String get billLedgerEmptyBody;
+
+  /// Empty payments title.
+  ///
+  /// In en, this message translates to:
+  /// **'No payments yet'**
+  String get billPaymentsEmpty;
+
+  /// Empty payments body.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments you report appear here until an admin confirms them.'**
+  String get billPaymentsEmptyBody;
+
+  /// Payment status.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get billStatusPending;
+
+  /// Payment status.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get billStatusConfirmed;
+
+  /// Payment status.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get billStatusRejected;
+
+  /// Rejection reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected: {reason}'**
+  String billRejectedReason(String reason);
+
+  /// Pay screen title.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay your due'**
+  String get payTitle;
+
+  /// Pay screen intro.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay PAO first, then report it here. An admin confirms it and your due goes down.'**
+  String get payIntro;
+
+  /// Amount field.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount (৳)'**
+  String get payAmount;
+
+  /// Amount error.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an amount between ৳0.01 and ৳10,00,000.'**
+  String get payAmountInvalid;
+
+  /// Method label.
+  ///
+  /// In en, this message translates to:
+  /// **'How you paid'**
+  String get payMethod;
+
+  /// Method error.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how you paid.'**
+  String get payMethodMissing;
+
+  /// Method.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash to agent'**
+  String get payCashToAgent;
+
+  /// Method.
+  ///
+  /// In en, this message translates to:
+  /// **'bKash'**
+  String get payBkash;
+
+  /// Method.
+  ///
+  /// In en, this message translates to:
+  /// **'Nagad'**
+  String get payNagad;
+
+  /// Method.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank transfer'**
+  String get payBank;
+
+  /// Reference field.
+  ///
+  /// In en, this message translates to:
+  /// **'Reference'**
+  String get payReference;
+
+  /// Reference hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction ID, receipt number or agent name'**
+  String get payReferenceHint;
+
+  /// Reference error.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a reference of 1 to 120 characters.'**
+  String get payReferenceInvalid;
+
+  /// Submit button.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit payment'**
+  String get paySubmit;
+
+  /// Snack after submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment submitted. An admin will confirm it soon.'**
+  String get paySent;
 }
 
 class _PartnerL10nDelegate extends LocalizationsDelegate<PartnerL10n> {

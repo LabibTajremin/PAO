@@ -314,5 +314,13 @@ class PaoL10nBn extends PaoL10n {
       'সিদ্ধান্ত নেওয়ার মতো কোনো অতিরিক্ত আইটেম নেই।';
 
   @override
+  String get errorMerchantDueLimit =>
+      'আপনার PAO বকেয়া সীমার বেশি। নতুন কাজ নিতে বকেয়া পরিশোধ করুন।';
+
+  @override
+  String get errorPaymentNotPending =>
+      'এই পেমেন্টের সিদ্ধান্ত আগেই নেওয়া হয়েছে।';
+
+  @override
   String get actionLoadMore => 'আরও দেখুন';
 }

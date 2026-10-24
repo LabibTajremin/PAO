@@ -631,6 +631,18 @@ abstract class PaoL10n {
   /// **'There are no extra items to decide on.'**
   String get errorNoPendingExtras;
 
+  /// API error MERCHANT_DUE_LIMIT.
+  ///
+  /// In en, this message translates to:
+  /// **'Your PAO due is over the limit. Pay it to accept new jobs.'**
+  String get errorMerchantDueLimit;
+
+  /// API error PAYMENT_NOT_PENDING.
+  ///
+  /// In en, this message translates to:
+  /// **'This payment has already been decided.'**
+  String get errorPaymentNotPending;
+
   /// Button that loads the next page of a list.
   ///
   /// In en, this message translates to:

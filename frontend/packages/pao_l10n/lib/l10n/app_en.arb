@@ -371,6 +371,14 @@
   "@errorNoPendingExtras": {
     "description": "API error NO_PENDING_EXTRAS."
   },
+  "errorMerchantDueLimit": "Your PAO due is over the limit. Pay it to accept new jobs.",
+  "@errorMerchantDueLimit": {
+    "description": "API error MERCHANT_DUE_LIMIT."
+  },
+  "errorPaymentNotPending": "This payment has already been decided.",
+  "@errorPaymentNotPending": {
+    "description": "API error PAYMENT_NOT_PENDING."
+  },
   "actionLoadMore": "Load more",
   "@actionLoadMore": {
     "description": "Button that loads the next page of a list."

@@ -42,6 +42,12 @@ abstract final class Routes {
   /// Notification inbox.
   static const notifications = '/notifications';
 
+  /// Dues to PAO: summary, ledger and payments (ADR-0035).
+  static const billing = '/billing';
+
+  /// Reporting a payment of the due (ADR-0035 §4).
+  static const pay = '/billing/pay';
+
   /// One enrolment step.
   static String enrolStep(String step) => '/enrol/$step';
 

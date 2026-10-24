@@ -1759,5 +1759,199 @@
   "notifEmptyBody": "Updates about requests, jobs and documents appear here.",
   "@notifEmptyBody": {
     "description": "Inbox empty body."
+  },
+  "billTitle": "PAO dues",
+  "@billTitle": {
+    "description": "Billing screen title."
+  },
+  "billDue": "Due to PAO",
+  "@billDue": {
+    "description": "Due summary label."
+  },
+  "billLimit": "Limit {amount}",
+  "@billLimit": {
+    "description": "Due block limit.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "billRate": "Commission {rate}% of each completed job",
+  "@billRate": {
+    "description": "Commission rate line.",
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "billPendingTotal": "Waiting for confirmation: {amount}",
+  "@billPendingTotal": {
+    "description": "Pending payments total.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "billBlockedBody": "Your due is over the limit, so you can't accept new jobs. Offers and notifications still arrive.",
+  "@billBlockedBody": {
+    "description": "Explains the block."
+  },
+  "billBannerBlocked": "Due {due} is over the {limit} limit. Pay to accept new jobs.",
+  "@billBannerBlocked": {
+    "description": "Home banner when blocked.",
+    "placeholders": {
+      "due": {
+        "type": "String"
+      },
+      "limit": {
+        "type": "String"
+      }
+    }
+  },
+  "billBannerNear": "Due {due} is close to the {limit} limit.",
+  "@billBannerNear": {
+    "description": "Home banner near the limit.",
+    "placeholders": {
+      "due": {
+        "type": "String"
+      },
+      "limit": {
+        "type": "String"
+      }
+    }
+  },
+  "billPayNow": "Pay now",
+  "@billPayNow": {
+    "description": "Opens the pay screen."
+  },
+  "billLedger": "Ledger",
+  "@billLedger": {
+    "description": "Ledger tab."
+  },
+  "billPayments": "Payments",
+  "@billPayments": {
+    "description": "Payments tab."
+  },
+  "billCommission": "Commission · {number}",
+  "@billCommission": {
+    "description": "Ledger debit row.",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "billJobTotal": "Job total {amount}",
+  "@billJobTotal": {
+    "description": "Ledger row subtitle.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "billCredit": "Payment received",
+  "@billCredit": {
+    "description": "Ledger credit row."
+  },
+  "billLedgerEmpty": "No entries yet",
+  "@billLedgerEmpty": {
+    "description": "Empty ledger title."
+  },
+  "billLedgerEmptyBody": "PAO's commission on each completed job appears here.",
+  "@billLedgerEmptyBody": {
+    "description": "Empty ledger body."
+  },
+  "billPaymentsEmpty": "No payments yet",
+  "@billPaymentsEmpty": {
+    "description": "Empty payments title."
+  },
+  "billPaymentsEmptyBody": "Payments you report appear here until an admin confirms them.",
+  "@billPaymentsEmptyBody": {
+    "description": "Empty payments body."
+  },
+  "billStatusPending": "Pending",
+  "@billStatusPending": {
+    "description": "Payment status."
+  },
+  "billStatusConfirmed": "Confirmed",
+  "@billStatusConfirmed": {
+    "description": "Payment status."
+  },
+  "billStatusRejected": "Rejected",
+  "@billStatusRejected": {
+    "description": "Payment status."
+  },
+  "billRejectedReason": "Rejected: {reason}",
+  "@billRejectedReason": {
+    "description": "Rejection reason.",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "payTitle": "Pay your due",
+  "@payTitle": {
+    "description": "Pay screen title."
+  },
+  "payIntro": "Pay PAO first, then report it here. An admin confirms it and your due goes down.",
+  "@payIntro": {
+    "description": "Pay screen intro."
+  },
+  "payAmount": "Amount (৳)",
+  "@payAmount": {
+    "description": "Amount field."
+  },
+  "payAmountInvalid": "Enter an amount between ৳0.01 and ৳10,00,000.",
+  "@payAmountInvalid": {
+    "description": "Amount error."
+  },
+  "payMethod": "How you paid",
+  "@payMethod": {
+    "description": "Method label."
+  },
+  "payMethodMissing": "Choose how you paid.",
+  "@payMethodMissing": {
+    "description": "Method error."
+  },
+  "payCashToAgent": "Cash to agent",
+  "@payCashToAgent": {
+    "description": "Method."
+  },
+  "payBkash": "bKash",
+  "@payBkash": {
+    "description": "Method."
+  },
+  "payNagad": "Nagad",
+  "@payNagad": {
+    "description": "Method."
+  },
+  "payBank": "Bank transfer",
+  "@payBank": {
+    "description": "Method."
+  },
+  "payReference": "Reference",
+  "@payReference": {
+    "description": "Reference field."
+  },
+  "payReferenceHint": "Transaction ID, receipt number or agent name",
+  "@payReferenceHint": {
+    "description": "Reference hint."
+  },
+  "payReferenceInvalid": "Enter a reference of 1 to 120 characters.",
+  "@payReferenceInvalid": {
+    "description": "Reference error."
+  },
+  "paySubmit": "Submit payment",
+  "@paySubmit": {
+    "description": "Submit button."
+  },
+  "paySent": "Payment submitted. An admin will confirm it soon.",
+  "@paySent": {
+    "description": "Snack after submit."
   }
 }
