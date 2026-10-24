@@ -55,10 +55,9 @@ test_backend_integration() {
 
 test_e2e() {
   local ran=0
-  if [[ -f "$E2E_API/package.json" ]]; then
+  if [[ -d "$E2E_API" ]]; then
     "$PAO_ROOT/test/e2e/stack.sh" || die "e2e stack failed"
-    npm_install "$E2E_API"
-    (cd "$E2E_API" && npm test --silent) || die "API e2e journeys failed"
+    dotnet test --project "$E2E_API" -- --filter-trait "Category=Journey" || die "API e2e journeys failed"
     ran=1
   fi
   if [[ -x "$PAO_ROOT/test/e2e/mobile/run.sh" ]]; then

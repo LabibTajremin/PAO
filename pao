@@ -38,7 +38,6 @@ cmd_setup() {
   command -v sqlc >/dev/null 2>&1 || log "sqlc not found — ./pao gen will fail (https://docs.sqlc.dev)"
   command -v flutter >/dev/null 2>&1 || log "flutter not found — Flutter commands will fail"
   npm_install "$BACKEND"
-  npm_install "$E2E_API"
   git -C "$PAO_ROOT" config core.hooksPath scripts/hooks
   [[ -f "$PAO_ROOT/.env" ]] || create_env
   ok "setup complete — hooks installed from scripts/hooks"
@@ -81,7 +80,7 @@ cmd_ci() {
 # cmd_perf runs the k6 scripts against the development stack, or with "e2e" against a
 # fresh end-to-end stack (test/e2e/stack.sh) that can run beside other work.
 cmd_perf() {
-  compgen -G "$PAO_ROOT/test/perf/*.js" >/dev/null || {
+  compgen -G "$PAO_ROOT/backend-dotnet/Test/Load/*.js" >/dev/null || {
     nothing_to_run "perf"
     return 0
   }
@@ -102,7 +101,7 @@ cmd_perf() {
     compose run --rm -T --entrypoint /app/migrate migrate perf-seed 2000 >"$fixture" ||
       die "perf seed failed"
   fi
-  for script in "$PAO_ROOT"/test/perf/*.js; do
+  for script in "$PAO_ROOT"/backend-dotnet/Test/Load/*.js; do
     BASE_URL="$base" FIXTURE="$fixture" k6 run --quiet "$script" ||
       die "performance threshold missed in ${script##*/}"
   done

@@ -5,7 +5,7 @@ PAO_ROOT="${PAO_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
 export PAO_ROOT
 export BACKEND="$PAO_ROOT/backend"
 export FRONTEND="$PAO_ROOT/frontend"
-export E2E_API="$PAO_ROOT/test/e2e/api"
+export E2E_API="$PAO_ROOT/backend-dotnet/Test/PAO.E2ETests"
 export COVERAGE_DIR="$PAO_ROOT/coverage"
 
 log() { printf '\033[1;34m▸\033[0m %s\n' "$*" >&2; }

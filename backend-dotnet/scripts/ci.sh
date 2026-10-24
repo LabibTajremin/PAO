@@ -46,7 +46,7 @@ ci_test() {
 
 ci_e2e() {
   step "start-up smoke tests"
-  dotnet test --project Test/PAO.E2ETests --no-build
+  dotnet test --project Test/PAO.E2ETests --no-build -- --filter-not-trait "Category=Journey"
 }
 
 # Stages run as separate statements, never chained with && or ||: bash ignores set -e
