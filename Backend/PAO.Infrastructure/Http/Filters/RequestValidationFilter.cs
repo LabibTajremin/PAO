@@ -9,7 +9,7 @@ namespace PAO.Infrastructure.Http.Filters;
 /// <summary>
 /// Rejects requests that break the contract with 422 VALIDATION_FAILED, `details.reason`
 /// saying why, before the handler runs. It runs before idempotency, so an invalid request
-/// never claims an idempotency key, as in NestJS.
+/// never claims an idempotency key.
 /// </summary>
 public sealed class RequestValidationFilter(RequestValidator validator) : IAsyncActionFilter
 {

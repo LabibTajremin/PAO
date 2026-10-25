@@ -153,7 +153,7 @@ public sealed record EnrolmentStatus
     public required bool Submitted { get; init; }
 }
 
-/// <summary>The Merchant area's error reasons; the `provider.` prefix is kept from NestJS.</summary>
+/// <summary>The Merchant area's error reasons; the `provider.` prefix is kept so existing clients still match.</summary>
 public static class MerchantErrors
 {
     /// <summary>The `"provider.not_found"` value.</summary>

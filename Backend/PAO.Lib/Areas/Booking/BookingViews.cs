@@ -83,7 +83,7 @@ public sealed record TimelineEntryView
     public string? Reason { get; init; }
 }
 
-/// <summary>The spec's `Booking` for one side, field for field what NestJS answered.</summary>
+/// <summary>The spec's `Booking` for one side, field for field what existing clients read.</summary>
 public sealed record BookingView
 {
     /// <summary>The id.</summary>

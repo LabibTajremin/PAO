@@ -8,7 +8,7 @@ namespace PAO.BackgroundJobs;
 
 /// <summary>
 /// Runs the worker's periodic jobs (02-architecture §9). Each run holds a Postgres advisory
-/// lock on the job's name (class 7041, `hashtext(name)`, as NestJS), so with several
+/// lock on the job's name (class 7041, `hashtext(name)`, the key existing deployments use), so with several
 /// workers, of either backend, only one runs a job at a time.
 /// </summary>
 public sealed class JobScheduler

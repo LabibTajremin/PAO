@@ -12,7 +12,7 @@ namespace PAO.Infrastructure.Registration;
 public static class PlatformStartup
 {
     /// <summary>
-    /// Fails fast at start, as NestJS did: the database and Redis must answer and the
+    /// Fails fast at start: the database and Redis must answer and the
     /// buckets must exist (created with default encryption when missing).
     /// </summary>
     public static async Task Prepare(this IServiceProvider services, CancellationToken cancellationToken)

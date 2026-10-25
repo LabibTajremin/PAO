@@ -4,7 +4,7 @@ using PAO.Infrastructure.Crypto;
 namespace PAO.Infrastructure.Events;
 
 /// <summary>
-/// Reads another area's event the way the NestJS (and Go) decoding did: a missing field is
+/// Reads another area's event the way earlier releases decoded it: a missing field is
 /// its zero value (the nil UUID for ids), while a field of the wrong type or a payload that
 /// is not an object fails, so the relay retries the event.
 /// </summary>

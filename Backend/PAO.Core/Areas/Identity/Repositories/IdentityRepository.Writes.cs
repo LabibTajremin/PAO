@@ -4,7 +4,7 @@ using PAO.Lib.Areas.Identity;
 
 namespace PAO.Core.Areas.Identity.Repositories;
 
-// The writes, in the SQL the NestJS queries ran; they join the command's transaction.
+// The writes, in the SQL the existing schema expects; they join the command's transaction.
 public sealed partial class IdentityRepository
 {
     /// <inheritdoc />

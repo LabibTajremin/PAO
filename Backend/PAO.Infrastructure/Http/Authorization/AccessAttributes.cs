@@ -17,7 +17,7 @@ public enum Audience
 /// The authorisation attribute every controller action carries (deny by default,
 /// 02-architecture §7). The audience names who the operation is for; the permission is
 /// what RBAC enforces, so super_admin keeps the grants it has in the identity tables, as
-/// it did with NestJS.
+/// it did in earlier releases.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
 public abstract class AccessAttribute : Attribute

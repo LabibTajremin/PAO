@@ -10,7 +10,7 @@ public sealed record RateDecision(bool Allowed, TimeSpan RetryAfter);
 public sealed class RateLimiter(IConnectionMultiplexer redis, IClock clock, IIdGenerator ids)
 {
     // Drops hits older than the window, then records this hit if the limit allows it, in
-    // one atomic step. Returns {allowed, oldest hit in ms}. Same script as NestJS.
+    // one atomic step. Returns {allowed, oldest hit in ms}. Same script as earlier releases.
     private const string SlidingWindow = """
         local key, now, window, limit, member = KEYS[1], tonumber(ARGV[1]), tonumber(ARGV[2]), tonumber(ARGV[3]), ARGV[4]
         redis.call('ZREMRANGEBYSCORE', key, '-inf', now - window)

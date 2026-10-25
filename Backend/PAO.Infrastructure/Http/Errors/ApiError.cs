@@ -35,7 +35,7 @@ public sealed class ApiError : Exception
     public ApiError Wrap(Exception cause) => new(Status, Code, Message, Details, RetryAfter, cause);
 }
 
-/// <summary>The errors the platform itself answers with; codes and messages match NestJS.</summary>
+/// <summary>The errors the platform itself answers with; codes and messages are stable for existing clients.</summary>
 public static class ApiErrors
 {
     /// <summary>No valid session; the app signs in again.</summary>

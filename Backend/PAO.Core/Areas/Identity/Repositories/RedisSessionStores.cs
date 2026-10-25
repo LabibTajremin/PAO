@@ -7,7 +7,7 @@ using StackExchange.Redis;
 
 namespace PAO.Core.Areas.Identity.Repositories;
 
-/// <summary>Families as hashes `rt:{familyId}`, indexed by the set `sess:{accountId}`, the NestJS layout.</summary>
+/// <summary>Families as hashes `rt:{familyId}`, indexed by the set `sess:{accountId}`, the layout existing sessions use.</summary>
 public sealed class RedisSessionStore(IConnectionMultiplexer redis, RedisKeys keys) : ISessionStore
 {
     /// <inheritdoc />
@@ -84,7 +84,7 @@ public sealed class RedisSessionStore(IConnectionMultiplexer redis, RedisKeys ke
     private string AccountKey(Guid id) => keys.Key("sess", id.ToString());
 }
 
-/// <summary>Challenges as the JSON the Go and NestJS backends stored under `mfa:{id}`.</summary>
+/// <summary>Challenges as the JSON stored under `mfa:{id}`.</summary>
 public sealed class RedisChallengeStore(IConnectionMultiplexer redis, RedisKeys keys) : IChallengeStore
 {
     private sealed record Stored(string ID, string AdminID, int Attempts, string EnrolSecret);

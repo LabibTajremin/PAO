@@ -15,7 +15,7 @@ namespace PAO.Infrastructure.Outbox;
 /// </summary>
 public sealed class OutboxWriter(IIdGenerator ids, IClock clock)
 {
-    /// <summary>Event payloads are camelCase JSON, field for field what NestJS stored.</summary>
+    /// <summary>Event payloads are camelCase JSON, field for field what existing rows hold.</summary>
     public static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
 
     /// <summary>Stores `domainEvent` for `aggregateId` in `{schema}.outbox` through `db`'s connection and transaction.</summary>

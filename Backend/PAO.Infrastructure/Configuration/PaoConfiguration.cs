@@ -6,7 +6,7 @@ namespace PAO.Infrastructure.Configuration;
 /// <summary>
 /// Builds the configuration every host reads: the defaults in `Config/*.json`, then a
 /// developer's `appsettings.Local.json` (never in staging or prod), then `Section__Key`
-/// environment variables, then the NestJS variable names (shared deployments take secrets
+/// environment variables, then the deployment variable names (shared deployments take secrets
 /// only from the environment).
 /// </summary>
 public static class PaoConfiguration
@@ -25,7 +25,7 @@ public static class PaoConfiguration
         }
         AddLocalFile(builder, configDirectory, environment);
         builder.AddEnvironmentVariables();
-        builder.AddInMemoryCollection(LegacyEnvironment.Map(environment));
+        builder.AddInMemoryCollection(EnvironmentVariables.Map(environment));
         return builder;
     }
 

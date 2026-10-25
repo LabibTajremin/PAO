@@ -43,7 +43,7 @@ public sealed class IdentityRulesTests
     }
 
     [Fact]
-    public void Shares_the_contract_reasons_and_the_nestjs_values()
+    public void Shares_the_contract_reasons_and_values()
     {
         Assert.Equal(IdentityErrors.StatusInvalid, IdentityReasons.StatusChange);
         Assert.Equal((6, 300, 5, 60), (IdentityRules.CodeLength, (int)IdentityRules.CodeTtl.TotalSeconds, IdentityRules.CodeMaxAttempts, (int)IdentityRules.ResendAfter.TotalSeconds));

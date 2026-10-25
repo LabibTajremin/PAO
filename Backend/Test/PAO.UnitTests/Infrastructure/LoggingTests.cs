@@ -18,7 +18,7 @@ public sealed class LoggingTests : IDisposable
         [new LogEventProperty("Name", new ScalarValue("pao")), new LogEventProperty("request_id", new ScalarValue("r-1"))]);
 
     [Fact]
-    public void Writes_one_nestjs_shaped_json_line_per_event()
+    public void Writes_one_json_line_per_event()
     {
         var output = new StringWriter();
         new PaoJsonFormatter().Format(Event(new DateTimeOffset(2026, 10, 17, 1, 2, 3, 4, TimeSpan.Zero), LogEventLevel.Warning, new InvalidOperationException("boom")), output);
@@ -41,7 +41,7 @@ public sealed class LoggingTests : IDisposable
     [InlineData(LogEventLevel.Warning, "WARN")]
     [InlineData(LogEventLevel.Error, "ERROR")]
     [InlineData(LogEventLevel.Fatal, "FATAL")]
-    public void Names_levels_as_nestjs_did(LogEventLevel level, string name)
+    public void Names_levels_as_the_log_pipeline_expects(LogEventLevel level, string name)
     {
         Assert.Equal(name, PaoJsonFormatter.LevelName(level));
     }

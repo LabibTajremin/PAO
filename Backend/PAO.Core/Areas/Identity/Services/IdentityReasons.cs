@@ -48,7 +48,7 @@ public static class IdentityReasons
     public const string PasswordTooWeak = "identity.password_too_weak";
 }
 
-/// <summary>Identity's reasons as API errors, as the NestJS and Go APIs answered them.</summary>
+/// <summary>Identity's reasons as API errors, with the codes and messages existing clients rely on.</summary>
 public sealed class IdentityErrorMap : IErrorMap
 {
     private static readonly ApiError SignInAgain = new(401, "REFRESH_TOKEN_INVALID", "Sign in again.");

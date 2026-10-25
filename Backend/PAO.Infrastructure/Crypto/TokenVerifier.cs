@@ -8,7 +8,7 @@ namespace PAO.Infrastructure.Crypto;
 
 /// <summary>
 /// Checks access tokens against the current and previous public keys (kid → key), so keys
-/// can rotate without signing everyone out. The checks are those jose ran for NestJS:
+/// can rotate without signing everyone out. The checks are those jose runs:
 /// EdDSA only, known kid, valid signature, `iss` = pao, numeric `exp` in the future.
 /// </summary>
 public sealed class TokenVerifier(IReadOnlyDictionary<string, Ed25519PublicKeyParameters> keys, IClock clock)

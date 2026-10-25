@@ -2,7 +2,7 @@ using System.Globalization;
 
 namespace PAO.Lib.Common;
 
-/// <summary>Timestamps in API answers, as JavaScript's `toISOString` wrote them for NestJS.</summary>
+/// <summary>Timestamps in API answers, in JavaScript's `toISOString` form existing clients parse.</summary>
 public static class IsoTime
 {
     /// <summary>`2026-10-09T10:00:00.000Z`: UTC with milliseconds.</summary>

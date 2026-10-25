@@ -13,7 +13,7 @@ namespace PAO.Core.Areas.Customer.Services;
 /// </summary>
 public sealed class CustomerSubscriptions(IdempotentEventHandler idempotent) : IEventSubscriptions
 {
-    // Keyed by handler name in processed_events; the names are Go's and NestJS's, so events
+    // Keyed by handler name in processed_events; the names are kept from earlier releases, so events
     // those workers already applied stay skipped.
     private static readonly (string Handler, string Event, Func<PaoDbContext, EventPayload, CancellationToken, Task> Apply)[] Handlers =
     [

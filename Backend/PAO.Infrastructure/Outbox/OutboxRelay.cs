@@ -19,7 +19,7 @@ public interface IRelayObserver
 /// <summary>
 /// Moves events from every area's outbox to the bus: at least once, in order per
 /// aggregate, retrying with exponential backoff (capped at five minutes) and
-/// dead-lettering after <see cref="MaxAttempts"/>, as the NestJS relay did.
+/// dead-lettering after <see cref="MaxAttempts"/>.
 /// </summary>
 public sealed class OutboxRelay(NpgsqlDataSource dataSource, IEventDispatcher bus, IReadOnlyList<string> modules, IClock clock, IRelayObserver observer, ILogger<OutboxRelay> logger)
 {

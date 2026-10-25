@@ -11,8 +11,8 @@ public sealed class ConfigException(IReadOnlyList<string> problems)
 }
 
 /// <summary>
-/// Checks the bound settings with the rules and messages of the NestJS config loader, so a
-/// deployment that started NestJS starts .NET or fails with the same complaints.
+/// Checks the bound settings with stable rules and messages, so a
+/// deployment's existing configuration starts or fails with the same complaints.
 /// </summary>
 public static class ConfigValidator
 {

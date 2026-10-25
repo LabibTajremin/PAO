@@ -3,11 +3,11 @@ using System.Collections;
 namespace PAO.Infrastructure.Configuration;
 
 /// <summary>
-/// Keeps the NestJS environment variables working (`.env.example`, infra/docker-compose.yml):
+/// Maps the deployment's environment variables (`.env.example`, infra/docker-compose.yml):
 /// each maps onto a configuration key, which the config files only default. An empty
-/// variable counts as unset, as the NestJS backend read it.
+/// variable counts as unset.
 /// </summary>
-public static class LegacyEnvironment
+public static class EnvironmentVariables
 {
     /// <summary>Environment variable → configuration key.</summary>
     public static readonly IReadOnlyDictionary<string, string> Keys = new Dictionary<string, string>(StringComparer.Ordinal)

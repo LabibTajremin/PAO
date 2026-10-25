@@ -7,7 +7,7 @@ namespace PAO.Lib.Areas.Media;
 /// <summary>The Media area's maps: rows to stored objects, objects to views and contract DTOs.</summary>
 public sealed class MediaMappingProfile : IMappingProfile
 {
-    /// <summary>The ISO 8601 form the API uses for times (milliseconds, UTC), as NestJS wrote them.</summary>
+    /// <summary>The ISO 8601 form the API uses for times (milliseconds, UTC).</summary>
     public static string Iso(DateTimeOffset at) => at.UtcDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss.fff'Z'", CultureInfo.InvariantCulture);
 
     /// <inheritdoc />

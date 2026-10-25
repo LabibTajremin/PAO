@@ -3,13 +3,13 @@ using Npgsql;
 namespace PAO.Infrastructure.Data.Migrations;
 
 /// <summary>
-/// Applies the per-module goose migrations with the NestJS (and Go) migrator's rules: each
+/// Applies the per-module goose migrations with goose's rules: each
 /// module keeps its own version table, `goose_&lt;module&gt;`, in the exact shape goose v3
 /// creates, so a database either backend migrated is up to date for the other.
 /// </summary>
 public sealed class GooseMigrator(NpgsqlDataSource dataSource, Func<string, IReadOnlyList<GooseMigration>> load, IReadOnlyList<string> modules)
 {
-    // Serialises concurrent migrators (two deploys starting at once); same key as NestJS.
+    // Serialises concurrent migrators (two deploys starting at once); same key as earlier releases.
     private const long MigrationLockKey = 7_041_998_310;
 
     /// <summary>Applies every pending migration of every module, in module order.</summary>

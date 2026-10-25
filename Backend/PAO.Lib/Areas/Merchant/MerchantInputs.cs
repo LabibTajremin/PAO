@@ -83,7 +83,7 @@ public sealed record HeartbeatInput
     public GeoPoint Location { get; init; } = new() { Lat = 0, Lng = 0 };
 }
 
-/// <summary>Why the Merchant area refused something; the `provider.` prefix is kept from NestJS.</summary>
+/// <summary>Why the Merchant area refused something; the `provider.` prefix is kept so existing clients still match.</summary>
 public static class MerchantReasons
 {
     /// <summary>The fields break the rules.</summary>

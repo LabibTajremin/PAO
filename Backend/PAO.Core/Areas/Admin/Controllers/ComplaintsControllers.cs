@@ -10,7 +10,7 @@ using PAO.Lib.Mediator;
 
 namespace PAO.Core.Areas.Admin.Controllers;
 
-/// <summary>Admin failures as API errors, equal to the Go and NestJS map.</summary>
+/// <summary>Admin failures as API errors, with the codes and messages existing clients rely on.</summary>
 public sealed class AdminErrorMap : IErrorMap
 {
     /// <inheritdoc />

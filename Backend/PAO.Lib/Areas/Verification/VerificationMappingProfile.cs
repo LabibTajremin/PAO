@@ -8,7 +8,7 @@ namespace PAO.Lib.Areas.Verification;
 /// <summary>The Verification area's maps: rows to domain records, domain records to views.</summary>
 public sealed class VerificationMappingProfile : IMappingProfile
 {
-    /// <summary>JSON columns (`fields`, `checklist`) in the camelCase NestJS wrote.</summary>
+    /// <summary>JSON columns (`fields`, `checklist`) in camelCase, as existing rows hold them.</summary>
     public static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
 
     /// <summary>The ISO 8601 form the API uses for times (milliseconds, UTC), as `toISOString` wrote them.</summary>

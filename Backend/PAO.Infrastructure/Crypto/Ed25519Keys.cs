@@ -6,7 +6,7 @@ namespace PAO.Infrastructure.Crypto;
 /// <summary>
 /// Ed25519 keys kept in the environment as raw base64 bytes (a 32-byte seed for the
 /// private key, 32 raw bytes for public keys), the format Go's crypto/ed25519 and the
-/// NestJS backend read, so existing keys load unchanged.
+/// earlier releases read, so existing keys load unchanged.
 /// </summary>
 public static class Ed25519Keys
 {

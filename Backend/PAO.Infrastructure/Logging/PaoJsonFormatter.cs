@@ -5,7 +5,7 @@ using Serilog.Formatting.Json;
 namespace PAO.Infrastructure.Logging;
 
 /// <summary>
-/// Writes one JSON object per line shaped like the NestJS logs (`time`, `level`, `msg`,
+/// Writes one JSON object per line shaped for the existing log pipeline (`time`, `level`, `msg`,
 /// then the properties, `err` for an exception), so log queries keep working.
 /// </summary>
 public sealed class PaoJsonFormatter : ITextFormatter
@@ -36,7 +36,7 @@ public sealed class PaoJsonFormatter : ITextFormatter
         output.Write('\n');
     }
 
-    /// <summary>The level as the NestJS logs wrote it.</summary>
+    /// <summary>The level as the log pipeline expects it.</summary>
     public static string LevelName(LogEventLevel level) => level switch
     {
         LogEventLevel.Verbose => "TRACE",

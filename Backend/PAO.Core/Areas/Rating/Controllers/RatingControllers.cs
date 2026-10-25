@@ -9,7 +9,7 @@ using PAO.Lib.Mediator;
 
 namespace PAO.Core.Areas.Rating.Controllers;
 
-/// <summary>Rating failures as API errors, equal to the Go and NestJS map.</summary>
+/// <summary>Rating failures as API errors, with the codes and messages existing clients rely on.</summary>
 public sealed class RatingErrorMap : IErrorMap
 {
     /// <inheritdoc />

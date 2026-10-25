@@ -7,7 +7,7 @@ using Serilog.Context;
 namespace PAO.Infrastructure.Http.Edge;
 
 /// <summary>
-/// The middleware every request passes before routing, in the NestJS order: client IP,
+/// The middleware every request passes before routing, in the order existing clients rely on: client IP,
 /// request id, security headers, CORS, body reading.
 /// </summary>
 public static partial class EdgeMiddleware

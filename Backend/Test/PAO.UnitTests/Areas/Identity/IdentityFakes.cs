@@ -9,7 +9,7 @@ using PAO.Lib.Events;
 
 namespace PAO.UnitTests.Areas.Identity;
 
-/// <summary>Fails a named step on demand, the way the NestJS fakes did.</summary>
+/// <summary>Fails a named step on demand.</summary>
 public abstract class Faulty
 {
     public Dictionary<string, Exception> Faults { get; } = [];

@@ -16,7 +16,7 @@ using PAO.TestKit;
 
 namespace PAO.UnitTests.Areas.Identity;
 
-/// <summary>The Identity use cases over in-memory fakes, as the NestJS unit harness had them.</summary>
+/// <summary>The Identity use cases over in-memory fakes.</summary>
 public sealed class IdentityHarness
 {
     public const string Phone = "01712345678";

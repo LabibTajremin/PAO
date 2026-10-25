@@ -56,7 +56,7 @@ public sealed class MerchantProfileRecord
     public required string AccountStatus { get; set; }
     /// <summary>The verification level copy.</summary>
     public int Level { get; set; }
-    /// <summary>Unused since NestJS; kept so the row maps whole.</summary>
+    /// <summary>Unused; kept so the row maps whole.</summary>
     public bool CanReceiveBookings { get; set; }
     /// <summary>The rating average copy.</summary>
     public double RatingAvg { get; set; }

@@ -8,7 +8,7 @@ public sealed record TotpEnrolment(string Secret, string Url);
 
 /// <summary>
 /// RFC 6238 codes (SHA-1, 6 digits, 30 s) with base32 secrets, as otplib produced them for
-/// NestJS, so enrolled authenticator apps keep working.
+/// earlier releases, so enrolled authenticator apps keep working.
 /// </summary>
 public static class Totp
 {

@@ -2,7 +2,7 @@ namespace PAO.TestKit;
 
 /// <summary>
 /// The services tests run against (ADR-0008): PAO_TEST_* variables, defaulting to the local
-/// docker compose stack. The same names the NestJS test kit read.
+/// docker compose stack. The names the deployment stack sets.
 /// </summary>
 public static class TestEnvironment
 {

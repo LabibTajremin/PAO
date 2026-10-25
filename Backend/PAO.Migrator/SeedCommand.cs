@@ -54,7 +54,7 @@ public static class SeedCommand
         }
         foreach (var admin in admins)
         {
-            // One scope per admin: each is its own command, as NestJS ensured them one by one.
+            // One scope per admin: each is its own command, ensured one by one.
             await using var scope = host.Services.CreateAsyncScope();
             await scope.ServiceProvider.GetRequiredService<IMediator>()
                 .Send(new EnsureSeedAdminCommand(admin.Email, admin.Name, admin.Roles, app.SeedAdminPassword));

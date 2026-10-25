@@ -9,7 +9,7 @@ using PAO.Lib.Mediator;
 
 namespace PAO.Core.Areas.Media.Controllers;
 
-/// <summary>Media failures as API errors, with the Go and NestJS codes and messages.</summary>
+/// <summary>Media failures as API errors, with the codes and messages existing clients rely on.</summary>
 public sealed class MediaErrorMap : IErrorMap
 {
     /// <inheritdoc />

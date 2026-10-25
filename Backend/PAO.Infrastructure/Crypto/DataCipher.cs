@@ -8,7 +8,7 @@ public sealed class CiphertextException() : Exception("ciphertext invalid");
 
 /// <summary>
 /// Encrypts sensitive fields (NID numbers, TOTP secrets) with AES-GCM as `nonce ‖
-/// ciphertext ‖ tag`, the layout Go's cipher.AEAD.Seal and the NestJS backend produced, and
+/// ciphertext ‖ tag`, the layout Go's cipher.AEAD.Seal produces, and
 /// derives keyed lookup hashes so equal values can be found without decrypting.
 /// </summary>
 public sealed class DataCipher

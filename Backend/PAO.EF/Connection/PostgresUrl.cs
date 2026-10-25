@@ -6,7 +6,7 @@ namespace PAO.EF.Connection;
 
 /// <summary>
 /// Turns DATABASE_URL (`postgres://user:pass@host:5432/db?sslmode=disable`) into an Npgsql
-/// connection string. Pool sizing follows the NestJS backend, which followed pgxpool:
+/// connection string. Pool sizing follows pgxpool:
 /// `pool_max_conns` (default max(4, CPUs)), `pool_max_conn_lifetime` (1h),
 /// `pool_max_conn_idle_time` (30m) and `connect_timeout` in seconds.
 /// </summary>

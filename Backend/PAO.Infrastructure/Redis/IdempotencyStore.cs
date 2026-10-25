@@ -12,7 +12,7 @@ public sealed record Reservation(bool Reserved, IdempotencyRecord Record);
 
 /// <summary>
 /// Remembers responses per idempotency key for 24 hours (PRD §9.6). The stored JSON is
-/// field for field what the Go and NestJS backends wrote (`h`, `d`, `s`, `b` in base64),
+/// field for field what earlier releases wrote (`h`, `d`, `s`, `b` in base64),
 /// so a retry that crosses the cut-over still gets its first answer.
 /// </summary>
 public sealed class IdempotencyStore(IConnectionMultiplexer redis)

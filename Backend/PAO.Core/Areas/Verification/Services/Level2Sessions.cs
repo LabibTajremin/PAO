@@ -74,7 +74,7 @@ public sealed class Level2Sessions(VerificationStates states, VerificationPeers 
     {
         ProviderId = s.ProviderId,
         SessionId = s.Id,
-        // NestJS dropped the milliseconds: "2026-10-20T10:00:00Z".
+        // The wire format has no milliseconds: "2026-10-20T10:00:00Z".
         ScheduledAt = s.ScheduledAt.UtcDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture),
         Location = s.Location,
     };

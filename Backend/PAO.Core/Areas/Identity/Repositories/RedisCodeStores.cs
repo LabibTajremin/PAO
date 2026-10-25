@@ -6,7 +6,7 @@ using StackExchange.Redis;
 
 namespace PAO.Core.Areas.Identity.Repositories;
 
-/// <summary>Codes as hashes `otp:{purpose}:{phone}` = `{h: hash, a: attempts}`, the NestJS layout.</summary>
+/// <summary>Codes as hashes `otp:{purpose}:{phone}` = `{h: hash, a: attempts}`, the layout existing sessions use.</summary>
 public sealed class RedisCodeStore(IConnectionMultiplexer redis, RedisKeys keys) : ICodeStore
 {
     /// <inheritdoc />

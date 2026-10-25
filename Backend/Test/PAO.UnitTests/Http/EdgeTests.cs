@@ -168,6 +168,9 @@ public sealed class EdgeMiddlewareTests
         Assert.Equal(204, context.Response.StatusCode);
         Assert.Equal("http://admin", context.Response.Headers.AccessControlAllowOrigin);
         Assert.Equal("DENY", context.Response.Headers.XFrameOptions);
+        Assert.Equal("nosniff", context.Response.Headers.XContentTypeOptions);
+        Assert.Equal("default-src 'none'; frame-ancestors 'none'", context.Response.Headers.ContentSecurityPolicy);
+        Assert.Equal("max-age=31536000; includeSubDomains", context.Response.Headers.StrictTransportSecurity);
         var other = Contexts.New();
         other.Request.Headers.Origin = "http://evil";
         await EdgeMiddleware.Cors("http://admin")(other, _ => { called = true; return Task.CompletedTask; });
@@ -242,7 +245,7 @@ public sealed class EdgeMiddlewareTests
 public sealed class CursorTests
 {
     [Fact]
-    public void Round_trips_and_reads_nestjs_cursors()
+    public void Round_trips_and_reads_existing_cursors()
     {
         var cursor = new Cursor("2026-10-17T10:00:00.123456Z", "0190a5b2-7c1d-7e3f-8a9b-0c1d2e3f4a5c");
         Assert.Equal(cursor, Cursor.Decode(cursor.Encode()));

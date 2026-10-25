@@ -13,7 +13,7 @@ public sealed class ConfigurationTests : IDisposable
     public void Dispose() => Directory.Delete(dir, recursive: true);
 
     [Fact]
-    public void Files_hold_defaults_and_the_nestjs_variables_override_them()
+    public void Files_hold_defaults_and_the_environment_variables_override_them()
     {
         File.WriteAllText(Path.Combine(dir, "http.json"), """{"Http":{"Address":":8081","RateLimitPerIp":5}}""");
         File.WriteAllText(Path.Combine(dir, "app.json"), """{"App":{"Environment":"dev"}}""");
@@ -47,15 +47,15 @@ public sealed class ConfigurationTests : IDisposable
     }
 
     [Fact]
-    public void Legacy_variables_map_every_documented_name()
+    public void Deployment_variables_map_every_documented_name()
     {
         var env = new Hashtable();
-        foreach (var name in LegacyEnvironment.Keys.Keys)
+        foreach (var name in EnvironmentVariables.Keys.Keys)
         {
             env[name] = "x";
         }
-        Assert.Equal(LegacyEnvironment.Keys.Count, LegacyEnvironment.Map(env).Count);
-        Assert.Empty(LegacyEnvironment.Map(new Hashtable { ["DATABASE_URL"] = "" }));
+        Assert.Equal(EnvironmentVariables.Keys.Count, EnvironmentVariables.Map(env).Count);
+        Assert.Empty(EnvironmentVariables.Map(new Hashtable { ["DATABASE_URL"] = "" }));
     }
 
     [Fact]
@@ -67,7 +67,7 @@ public sealed class ConfigurationTests : IDisposable
     }
 
     [Fact]
-    public void Every_problem_is_reported_at_once_with_the_nestjs_messages()
+    public void Every_problem_is_reported_at_once_with_stable_messages()
     {
         var s = TestSettings.Create();
         s.App.Environment = "qa";

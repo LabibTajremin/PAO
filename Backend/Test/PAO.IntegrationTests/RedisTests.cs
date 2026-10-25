@@ -69,7 +69,7 @@ public sealed class RedisTests : IDisposable
     }
 
     [Fact]
-    public async Task Idempotency_records_use_the_nestjs_format()
+    public async Task Idempotency_records_use_the_stored_format()
     {
         var store = new IdempotencyStore(redis);
         var key = keys.Key("idem", "u", "k");

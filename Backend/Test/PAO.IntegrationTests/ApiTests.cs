@@ -148,6 +148,21 @@ public sealed class ApiTests(MigratedDatabase database) : IClassFixture<Migrated
     }
 
     [Fact]
+    public async Task Signed_in_calls_are_rate_limited_per_user()
+    {
+        var customer = Hosts.Token(app.Services, ["customer"]);
+        var path = $"/v1/customer/providers/{Guid.NewGuid()}/reviews";
+        HttpResponseMessage last = null!;
+        for (var i = 0; i < 121; i++)
+        {
+            last = await client.SendAsync(Hosts.Request(HttpMethod.Get, path, customer));
+        }
+        Assert.Equal(HttpStatusCode.TooManyRequests, last.StatusCode);
+        var other = Hosts.Token(app.Services, ["customer"]);
+        Assert.Equal(HttpStatusCode.OK, (await client.SendAsync(Hosts.Request(HttpMethod.Get, path, other))).StatusCode);
+    }
+
+    [Fact]
     public async Task Test_hooks_read_codes_the_captured_sms_adapter_kept()
     {
         await app.Services.GetRequiredService<ISmsSender>().Send("+8801712345678", "code 654321", CancellationToken.None);

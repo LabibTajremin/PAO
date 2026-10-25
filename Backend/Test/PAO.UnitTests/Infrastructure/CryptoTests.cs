@@ -8,7 +8,7 @@ namespace PAO.UnitTests.Infrastructure;
 
 public sealed class TokenTests
 {
-    // Signed by the NestJS backend (jose) with the seed TestEnvironment.Key, kid k1.
+    // Signed by an earlier release (jose) with the seed TestEnvironment.Key, kid k1.
     private const string NestToken =
         "eyJhbGciOiJFZERTQSIsImtpZCI6ImsxIiwidHlwIjoiSldUIn0.eyJyb2xlcyI6WyJjdXN0b21lciJdLCJ2ZXIiOjMsInNpZCI6IjAxOTBhNWIyLTdjMWQtN2UzZi04YTliLTBjMWQyZTNmNGE1YiIsImlzcyI6InBhbyIsInN1YiI6IjAxOTBhNWIyLTdjMWQtN2UzZi04YTliLTBjMWQyZTNmNGE1YyIsImV4cCI6NDEwMjQ0NDgwMCwiaWF0IjoxNzYwMDAwMDAwLCJqdGkiOiIwMTkwYTViMi03YzFkLTdlM2YtOGE5Yi0wYzFkMmUzZjRhNWQifQ.yLc5awwrBwCGHtDSJ-LGpyP8RuQzvYhtbomDsyx-QiDeF7Q1twt-nqcgtdWu2nnyYtSm6A8qqtJvWw5t1Fn5CA";
 
@@ -18,7 +18,7 @@ public sealed class TokenTests
     private static TokenVerifier Verifier(DateTimeOffset now) => new(Ring.VerificationKeys, new FakeClock(now));
 
     [Fact]
-    public void Signs_byte_for_byte_what_the_nestjs_backend_signed()
+    public void Signs_byte_for_byte_what_earlier_releases_signed()
     {
         var signing = Ring.Signing with { Ttl = TimeSpan.FromSeconds(4102444800 - 1760000000) };
         var signer = new TokenSigner(signing, new FakeClock(IssuedAt), new SequenceIds(Guid.Parse("0190a5b2-7c1d-7e3f-8a9b-0c1d2e3f4a5d")));
@@ -28,7 +28,7 @@ public sealed class TokenTests
     }
 
     [Fact]
-    public void Verifies_nestjs_tokens()
+    public void Verifies_existing_tokens()
     {
         var claims = Verifier(IssuedAt).Verify(NestToken);
         Assert.Equal("0190a5b2-7c1d-7e3f-8a9b-0c1d2e3f4a5c", claims.Subject);
@@ -132,7 +132,7 @@ public sealed class SecretTests
     private const string NestHash = "$argon2id$v=19$m=8192,t=1,p=1$MDEyMzQ1Njc4OWFiY2RlZg$64zw4y6hGNSGW1HTKDajc74EIkJpCJ+AUBXDspyrFEU";
 
     [Fact]
-    public async Task Verifies_hashes_the_nestjs_backend_stored()
+    public async Task Verifies_hashes_already_stored()
     {
         Assert.True(await SecretHasher.Verify("correct horse", NestHash));
         Assert.False(await SecretHasher.Verify("wrong horse", NestHash));
@@ -159,7 +159,7 @@ public sealed class SecretTests
     }
 
     [Fact]
-    public void Decrypts_nestjs_ciphertext_and_derives_the_same_lookup_hash()
+    public void Decrypts_existing_ciphertext_and_derives_the_same_lookup_hash()
     {
         var cipher = new DataCipher(Convert.FromBase64String(TestEnvironment.Key));
         var nest = Convert.FromBase64String("AAECAwQFBgcICQoLHNeISOwu5ZSR7Bn/B7vQuMV0MaUshRGTavg=");

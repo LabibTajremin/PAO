@@ -45,7 +45,7 @@ public static class PerfSeedCommand
         }
         for (var k = 0; k < n; k++)
         {
-            // Each merchant is its own command and transaction, as NestJS seeded them one by one.
+            // Each merchant is its own command and transaction, seeded one by one.
             await using var scope = services.CreateAsyncScope();
             await scope.ServiceProvider.GetRequiredService<IMediator>().Send(new AddPerfMerchant(Guid.NewGuid(), SpiralPoint(k, n)));
         }

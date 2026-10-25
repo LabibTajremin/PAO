@@ -6,7 +6,7 @@ using Prometheus;
 namespace PAO.Infrastructure.Metrics;
 
 /// <summary>
-/// Prometheus metrics for requests, errors and latency (PRD §11), with the NestJS metric
+/// Prometheus metrics for requests, errors and latency (PRD §11), with the established metric
 /// names so dashboards and alerts carry over. The registry belongs to the instance, so
 /// nothing is registered globally and tests stay independent.
 /// </summary>

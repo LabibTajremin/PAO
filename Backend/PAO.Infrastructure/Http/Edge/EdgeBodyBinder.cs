@@ -10,7 +10,7 @@ namespace PAO.Infrastructure.Http.Edge;
 /// <summary>
 /// Binds every <c>[FromBody]</c> parameter from the JSON the edge already parsed, and never
 /// fails. MVC binds before action filters run, and its own body binder answers 415 or 400 to a
-/// missing or wrong body there, ahead of the access filter. NestJS authenticated and
+/// missing or wrong body there, ahead of the access filter. Earlier releases authenticated and
 /// authorised first, so a body problem must not surface until request validation, which runs
 /// after access and reports <see cref="EdgeState.BodyError"/> and schema errors as 422.
 /// </summary>

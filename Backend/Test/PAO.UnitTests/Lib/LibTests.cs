@@ -96,7 +96,7 @@ public sealed class ValidationTests
 public sealed class ContractTests
 {
     [Fact]
-    public void Seed_ids_match_the_nestjs_uuid_v5_derivation()
+    public void Seed_ids_match_the_uuid_v5_derivation()
     {
         Assert.Equal(Guid.Parse("36dab175-76f7-5578-9d1a-bfec11c6c195"), SeedIds.For("service", "electrician"));
     }

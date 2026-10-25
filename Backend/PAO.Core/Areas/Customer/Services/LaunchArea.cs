@@ -38,7 +38,7 @@ public static class LaunchArea
         }
     }
 
-    // A malformed position reads as zeros, as the NestJS destructuring defaults did.
+    // A malformed position reads as zeros, as existing clients expect.
     private static List<double[][]> Polygon(JsonElement rings) =>
         [.. rings.EnumerateArray().Select(ring => ring.EnumerateArray()
             .Select(pos => new[] { At(pos, 0), At(pos, 1) }).ToArray())];

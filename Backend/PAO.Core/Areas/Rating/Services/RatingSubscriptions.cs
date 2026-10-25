@@ -11,7 +11,7 @@ namespace PAO.Core.Areas.Rating.Services;
 
 /// <summary>
 /// Opens completed bookings for review and erases deleted authors. Both are idempotent, so
-/// a redelivered event is harmless (handler name `rating`, as NestJS).
+/// a redelivered event is harmless (handler name `rating`, kept from earlier releases).
 /// </summary>
 public sealed class RatingSubscriptions(IServiceScopeFactory scopes) : IEventSubscriptions
 {

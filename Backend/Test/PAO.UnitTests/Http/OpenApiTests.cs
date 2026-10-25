@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using PAO.Infrastructure.Hosting;
 using PAO.Infrastructure.Http.OpenApi;
 
@@ -141,6 +142,47 @@ public sealed class OpenApiTests
         Assert.All(routes.Operations, op => Assert.NotNull(op.Permission));
     }
 
+    [Fact]
+    public void Customer_answers_never_carry_verification_documents()
+    {
+        var doc = SpecDocument.Load(PaoPaths.Resolve(AppContext.BaseDirectory, null).Spec);
+        var names = new HashSet<string>(StringComparer.Ordinal);
+        var seen = new HashSet<JsonNode>(ReferenceEqualityComparer.Instance);
+        var operations = doc.Root["paths"]!.AsObject()
+            .Where(p => p.Key.StartsWith("/v1/customer", StringComparison.Ordinal))
+            .SelectMany(p => p.Value!.AsObject().Select(o => o.Value).OfType<JsonObject>());
+        foreach (var op in operations)
+        {
+            PropertyNames(doc, op["responses"], names, seen);
+        }
+        Assert.Contains("items", names);
+        string[] banned = ["nid", "document", "documents", "selfie", "police", "clearance"];
+        Assert.DoesNotContain(names, n => Regex.Split(n, "(?<=[a-z0-9])(?=[A-Z])|_").Any(w => banned.Contains(w.ToLowerInvariant())));
+    }
+
+    private static void PropertyNames(SpecDocument doc, JsonNode? node, HashSet<string> names, HashSet<JsonNode> seen)
+    {
+        var resolved = doc.Resolve(node);
+        if (resolved is null || !seen.Add(resolved))
+        {
+            return;
+        }
+        if (resolved is JsonObject { } o && o["properties"] is JsonObject properties)
+        {
+            names.UnionWith(properties.Select(p => p.Key));
+        }
+        IEnumerable<JsonNode?> children = resolved switch
+        {
+            JsonObject obj => obj.Select(c => c.Value),
+            JsonArray array => array,
+            _ => [],
+        };
+        foreach (var child in children)
+        {
+            PropertyNames(doc, child, names, seen);
+        }
+    }
+
     [Theory]
     [InlineData("""{"name":"ab"}""", null)]
     [InlineData("""{"name":"ab","count":null,"price":9,"kind":"a","when":"2026-10-17T10:00:00Z","labels":["x"],"extra":{"n":1}}""", null)]
@@ -231,7 +273,7 @@ public sealed class OpenApiTests
     }
 
     [Fact]
-    public void Validates_bodies_like_the_nestjs_edge()
+    public void Validates_bodies_with_the_contract_reasons()
     {
         var doc = Document();
         var validator = new RequestValidator(doc);

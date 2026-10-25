@@ -5,7 +5,7 @@ namespace PAO.Lib.Areas.Catalog;
 
 /// <summary>
 /// Stable ids derived from seed keys, so reseeding updates rows instead of duplicating
-/// them. UUIDv5 in the namespace the Go and NestJS backends used, so all derive the same ids.
+/// them. UUIDv5 in the namespace earlier releases used, so all derive the same ids.
 /// </summary>
 public static class SeedIds
 {

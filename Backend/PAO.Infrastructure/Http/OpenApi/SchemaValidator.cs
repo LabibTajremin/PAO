@@ -10,7 +10,7 @@ namespace PAO.Infrastructure.Http.OpenApi;
 /// Validates JSON against the JSON Schema 2020-12 keywords the contract uses (type, enum,
 /// lengths, pattern, format, bounds, items, required, properties, additionalProperties,
 /// $ref) and reports the first problem in Ajv's words (`body/phone must match pattern
-/// "…"`), the text the NestJS edge returned in `details.reason`.
+/// "…"`), the text existing clients read in `details.reason`.
 /// </summary>
 public sealed class SchemaValidator(SpecDocument document)
 {

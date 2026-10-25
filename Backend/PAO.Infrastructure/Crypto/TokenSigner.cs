@@ -11,7 +11,7 @@ public sealed record SigningKey(string KeyId, Ed25519PrivateKeyParameters Key, T
 
 /// <summary>
 /// Issues EdDSA (Ed25519) access tokens: the same header, claim names and claim order as
-/// the NestJS backend (jose), so either backend accepts the other's tokens.
+/// earlier releases (jose), so existing tokens still verify.
 /// </summary>
 public sealed class TokenSigner(SigningKey signing, IClock clock, IIdGenerator ids)
 {

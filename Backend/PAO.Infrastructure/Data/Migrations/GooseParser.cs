@@ -13,7 +13,7 @@ public sealed record GooseMigration(
 
 /// <summary>
 /// Parses goose SQL migrations (`-- +goose Up/Down`, `StatementBegin/End`,
-/// `NO TRANSACTION`) exactly as the NestJS migrator did, so both apply the same statements.
+/// `NO TRANSACTION`) exactly as goose does, so both apply the same statements.
 /// </summary>
 public static partial class GooseParser
 {

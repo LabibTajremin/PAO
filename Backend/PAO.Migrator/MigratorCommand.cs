@@ -8,7 +8,7 @@ namespace PAO.Migrator;
 
 /// <summary>
 /// The migration tool: `migrate up` applies every pending script in "DB Changes" and
-/// records versions in the `goose_&lt;module&gt;` tables, exactly as the NestJS migrator did.
+/// records versions in the `goose_&lt;module&gt;` tables, exactly as goose does.
 /// `seed` loads the seed data through <see cref="SeedCommand"/>; `perf-seed N` puts N online
 /// merchants in place for the load test through <see cref="PerfSeedCommand"/>.
 /// </summary>
@@ -38,7 +38,7 @@ public static class MigratorCommand
             await output.WriteLineAsync(Usage);
             return 2;
         }
-        var url = LegacyEnvironment.Map(environment).GetValueOrDefault("Database:Url")
+        var url = EnvironmentVariables.Map(environment).GetValueOrDefault("Database:Url")
             ?? environment["Database__Url"] as string;
         if (string.IsNullOrEmpty(url))
         {

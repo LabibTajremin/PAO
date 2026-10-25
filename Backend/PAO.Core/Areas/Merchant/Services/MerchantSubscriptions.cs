@@ -9,7 +9,7 @@ using PAO.Lib.Areas.Verification;
 
 namespace PAO.Core.Areas.Merchant.Services;
 
-/// <summary>The Merchant area's read-model handlers, each applied once per event (handler name = event name, as NestJS).</summary>
+/// <summary>The Merchant area's read-model handlers, each applied once per event (handler name = event name, kept from earlier releases).</summary>
 public sealed class MerchantSubscriptions(IdempotentEventHandler idempotent, MerchantReadModel model) : IEventSubscriptions
 {
     /// <inheritdoc />

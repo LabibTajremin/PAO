@@ -8,7 +8,7 @@ namespace PAO.Infrastructure.Rbac;
 /// Answers "may these roles do this?" and "which screens may they see?" from Redis sets
 /// keyed by the RBAC version (`rbac:role:{role}:v{n}`, `rbac:screens:{role}:v{n}`),
 /// falling back to the identity tables (02-architecture §6). Keys, marker and TTL match
-/// the NestJS backend, so both can share one Redis during the cut-over.
+/// earlier releases, so existing Redis data stays valid.
 /// </summary>
 public sealed class RbacChecker(IConnectionMultiplexer redis, RedisKeys keys, IRbacSource source)
 {

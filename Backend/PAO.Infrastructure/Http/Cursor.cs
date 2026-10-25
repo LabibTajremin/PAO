@@ -9,7 +9,7 @@ namespace PAO.Infrastructure.Http;
 /// <summary>
 /// The last row of a page, ordered by (created_at, id) descending. `CreatedAt` keeps the
 /// timestamp as text so Postgres' microseconds survive the round trip. The encoding is
-/// NestJS's (`{"t","i"}` in base64url), so cursors issued before the cut-over still work.
+/// the earlier format (`{"t","i"}` in base64url), so cursors issued before the cut-over still work.
 /// </summary>
 public sealed partial record Cursor(string CreatedAt, string Id)
 {

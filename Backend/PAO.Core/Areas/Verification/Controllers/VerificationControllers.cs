@@ -13,7 +13,7 @@ using PAO.Lib.Mediator;
 
 namespace PAO.Core.Areas.Verification.Controllers;
 
-/// <summary>Verification failures as API errors, with the Go and NestJS codes and messages.</summary>
+/// <summary>Verification failures as API errors, with the codes and messages existing clients rely on.</summary>
 public sealed class VerificationErrorMap : IErrorMap
 {
     /// <inheritdoc />

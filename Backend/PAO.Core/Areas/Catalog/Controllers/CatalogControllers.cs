@@ -7,7 +7,7 @@ using PAO.Lib.Mediator;
 
 namespace PAO.Core.Areas.Catalog.Controllers;
 
-/// <summary>Catalog failures as API errors, as the Go and NestJS APIs answered them.</summary>
+/// <summary>Catalog failures as API errors, with the codes and messages existing clients rely on.</summary>
 public sealed class CatalogErrorMap : IErrorMap
 {
     /// <inheritdoc />

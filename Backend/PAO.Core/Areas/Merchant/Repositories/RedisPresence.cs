@@ -32,7 +32,7 @@ public interface IPresence
 }
 
 /// <summary>
-/// Presence in Redis, the NestJS layout: a GEO set per service (`presence:svc:{serviceId}`),
+/// Presence in Redis, the layout existing data uses: a GEO set per service (`presence:svc:{serviceId}`),
 /// a heartbeat key per merchant (`presence:hb:{id}`, 90 s) and the set `presence:online`.
 /// </summary>
 public sealed class RedisPresence(IConnectionMultiplexer redis, RedisKeys keys) : IPresence

@@ -6,7 +6,7 @@ using PAO.Lib.Areas.Identity;
 
 namespace PAO.Core.Areas.Identity.Services;
 
-/// <summary>The identity rules and their values, as the NestJS and Go backends had them.</summary>
+/// <summary>The identity rules and their values, unchanged across releases.</summary>
 public static partial class IdentityRules
 {
     /// <summary>Digits in a one-time code.</summary>
@@ -101,7 +101,7 @@ public static partial class IdentityRules
     public static string PhoneOrFail(string raw) =>
         PhoneNumber.Normalize(raw) ?? throw new PAO.Lib.Errors.DomainException(IdentityReasons.InvalidPhone);
 
-    // Counts a surrogate pair as one character, as the NestJS rule did.
+    // Counts a surrogate pair as one character, as the contract defines it.
     [GeneratedRegex("[\uD800-\uDBFF][\uDC00-\uDFFF]")]
     private static partial Regex SurrogatePair();
 }

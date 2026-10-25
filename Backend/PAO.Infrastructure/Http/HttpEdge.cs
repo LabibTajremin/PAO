@@ -12,7 +12,7 @@ using PAO.Infrastructure.Testing;
 namespace PAO.Infrastructure.Http;
 
 /// <summary>
-/// The HTTP edge every API request passes, in the NestJS order: error envelope, test hooks
+/// The HTTP edge every API request passes, in the order existing clients rely on: error envelope, test hooks
 /// (APP_ENV=test only), client IP, request id, security headers, CORS, body, metrics,
 /// operation matching (404/405) → filters (access, rate limit, validation, idempotency)
 /// → controller; one exception filter answers errors.

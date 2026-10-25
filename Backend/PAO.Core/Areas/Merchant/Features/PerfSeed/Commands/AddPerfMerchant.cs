@@ -19,7 +19,7 @@ public sealed record AddPerfMerchant(Guid MerchantId, GeoPoint At) : ICommand
 
 /// <summary>
 /// Writes the merchant and their Level 1 straight into the provider and verification
-/// schemas, as the Go and NestJS perf seeds did: enrolling thousands through the API would
+/// schemas, as earlier perf seeds did: enrolling thousands through the API would
 /// dominate the run. The level row is plain SQL so Merchant takes no dependency on the
 /// Verification area's code.
 /// </summary>

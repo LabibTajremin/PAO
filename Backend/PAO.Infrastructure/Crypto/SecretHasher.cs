@@ -9,7 +9,7 @@ namespace PAO.Infrastructure.Crypto;
 /// <summary>argon2id cost settings; memory in KiB.</summary>
 public sealed record Argon2Params(int Memory, int Time, int Threads)
 {
-    /// <summary>Passwords: the OWASP-recommended cost the Go and NestJS backends used.</summary>
+    /// <summary>Passwords: the OWASP-recommended cost, kept so stored hashes still verify.</summary>
     public static readonly Argon2Params Password = new(64 * 1024, 3, 2);
 
     /// <summary>One-time codes live five minutes and allow five attempts, so a cheaper cost is enough.</summary>
@@ -21,7 +21,7 @@ public sealed class HashMalformedException() : Exception("password hash malforme
 
 /// <summary>
 /// argon2id (version 0x13) hashes in PHC format, `$argon2id$v=19$m=…,t=…,p=…$salt$key`,
-/// byte-compatible with the hashes the Go and NestJS backends stored.
+/// byte-compatible with the hashes already stored.
 /// </summary>
 public static partial class SecretHasher
 {
