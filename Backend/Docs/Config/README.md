@@ -3,7 +3,7 @@
 Each concern has one file in `Config/`, bound to a typed options class
 (`PAO.Infrastructure/Configuration/Options.cs`) and validated at start
 (`ConfigValidator`). Files hold defaults only; secrets come from the environment, either as
-`Section__Key` or through the NestJS variable names listed in [variables](variables.md).
+`Section__Key` or through the deployment variable names listed in [variables](variables.md).
 
 | File | Section | Keys |
 |---|---|---|

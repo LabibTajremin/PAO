@@ -15,15 +15,15 @@ otherwise):
 | `[PermissionFromSpec]` | the matched operation's | only on the 501 catch-all |
 
 The attribute names the audience; the permission is what RBAC enforces, so `super_admin`
-keeps every grant it has in `identity.role_permissions`, as with NestJS. A second test
+keeps every grant it has in `identity.role_permissions`. A second test
 checks each action's attribute against its operation's `x-permission` and security.
 
 ## Tokens and RBAC
 
 - Access tokens are EdDSA (Ed25519) JWTs signed with BouncyCastle: header
   `{"alg":"EdDSA","kid","typ":"JWT"}`, claims `roles, ver, sid, iss=pao, sub, exp, iat, jti`
-  in the NestJS order. A test signs byte for byte the token NestJS (jose) signed with the
-  same seed and verifies it. `JWT_SIGNING_KEY` is the 32-byte seed; previous public keys in
+  in a fixed order. A test signs byte for byte a token an earlier release (jose) signed
+  with the same seed and verifies it, so existing tokens still verify. `JWT_SIGNING_KEY` is the 32-byte seed; previous public keys in
   `JWT_PREVIOUS_PUBLIC_KEYS` still verify during rotation.
 - Revoked token ids: `pao:{env}:deny:jti:{jti}`.
 - Grants: `RbacChecker` reads `pao:{env}:rbac:role:{role}:v{n}` and

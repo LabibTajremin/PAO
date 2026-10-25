@@ -4,13 +4,13 @@
 - Date: 2026-10-17
 - Source: owner decision ("PAO C# conversion instructions", handwritten, 2026-10-16);
   docs/build/phases/P17-dotnet-backend.md
-- Supersedes: the NestJS framework and layout choices in ADR-0032. The HTTP contract,
+- Supersedes: the framework and layout choices in ADR-0032. The HTTP contract,
   database schemas, Redis keys, error codes and events of ADR-0032 stay.
 
 ## Context
 
 The owner chose C#/.NET for the backend and gave a concrete layout and pattern set. The
-NestJS backend is complete, covered at 100% and proven by the black-box journeys. The
+ADR-0032 backend is complete, covered at 100% and proven by the black-box journeys. The
 replacement must keep `api/openapi.yaml` so the Flutter apps keep working, and keep the
 engineering bar: modular monolith, deny-by-default RBAC, 100% coverage, strict linting.
 
@@ -95,12 +95,12 @@ engineering bar: modular monolith, deny-by-default RBAC, 100% coverage, strict l
 - **Quality gates.** `dotnet format` and analyzers (warnings as errors), architecture
   tests, file and method size checks (C# files ≤ 250 lines, methods ≤ 40 lines, tests
   ≤ 400), unit and integration tests merged at 100% line and branch-free statement
-  coverage of hand-written code (coverlet), black-box e2e tests, load tests (k6), plus the
+  coverage of hand-written code (coverlet), black-box e2e tests, load tests (a C# console app, see below), plus the
   existing security scans. Excluded from coverage, as before: generated code and the
   composition roots (`Program.cs` of each host), which the start-up smoke test covers.
-- **Migration path.** Build in `backend-dotnet/` beside the NestJS backend. When its own
+- **Migration path.** Build in `backend-dotnet/` beside the ADR-0032 backend. When its own
   suites pass at 100% and the existing journeys and app journeys pass against it, port the
-  journeys to C#, delete the NestJS backend, move `backend-dotnet/` to `Backend/` and
+  journeys to C#, delete the ADR-0032 backend, move `backend-dotnet/` to `Backend/` and
   `frontend/` to `Frontend/`, and switch every gate, hook and workflow.
 
 ## Repository layout after cut-over (owner request, 2026-10-17)
@@ -114,7 +114,7 @@ Backend/            the .NET solution (above), plus:
   Api/              the OpenAPI contract (moved from api/). The backend owns and serves
                     the contract. The Flutter client generator and the e2e tests read it
                     from here.
-  Test/E2E, Test/Load   black-box journeys (from test/e2e/api) and k6 scripts (from test/perf)
+  Test/E2E, Test/Load   black-box journeys (from test/e2e/api) and load tests (from test/perf)
   docker/           backend image files
 Frontend/           Flutter apps and packages, plus test/e2e (the app journeys)
 docs/               product and project docs: prd/, adr/, build/, guides/ (release,
@@ -146,7 +146,9 @@ The layout above was applied with these choices where it left room:
   `Test/E2E` folder: 8 files and 13 tests, the same as the Jest suite they replace. They
   carry the trait `Category=Journey`; `Backend/scripts/ci.sh e2e` filters them out (it runs
   without a stack) and `./pao test e2e` runs them against a fresh stack. They use plain
-  HTTP and reference no backend project. The k6 scripts are in `Backend/Test/Load`.
+  HTTP and reference no backend project. The load test is the C# console app `Backend/Test/PAO.LoadTests` (it replaced the k6
+  script after cut-over: `HttpClient` at a constant arrival rate, same scenario and
+  thresholds, no extra tool to install).
 - **The e2e stack** (`stack.sh`, `compose.e2e.yml`) serves both the API and the app
   journeys, so it lives in `infra/e2e/`. Its state (`.stack.env`, `.admins.env`) moved to
   the ignored `out/e2e/` (`PAO_E2E_STATE` overrides it); the perf fixture is
@@ -164,7 +166,7 @@ The layout above was applied with these choices where it left room:
   journeys). `./pao dotnet <stage>` still runs one stage alone.
 - **CI.** `dotnet.yml` became `backend.yml` with two jobs: `dotnet` (`ci.sh all`) and
   `tooling` (shellcheck, ops check, CLI tests, security with the image scan), which used
-  to run in the NestJS job.
+  to run in the previous backend's job.
 - **Root.** `./pao` is a two-line wrapper (shebang + `exec tools/pao`); `tools/fixtures`
   stays as the CLI tests' fixture folder.
 

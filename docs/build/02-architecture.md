@@ -37,7 +37,7 @@ Backend/
 ├── Docs/                     areas, architecture, config, database, operations, testing, API
 ├── Tools/PAO.Gates/          size and docs checkers
 ├── Test/                     PAO.UnitTests, PAO.IntegrationTests, PAO.TestKit,
-│                             PAO.E2ETests (start-up smoke + black-box journeys), Load/ (k6)
+│                             PAO.E2ETests (start-up smoke + black-box journeys), PAO.LoadTests
 ├── docker/                   Dockerfile and the api, worker, migrate entry points
 └── scripts/                  ci.sh (the backend gates), coverage.py, gen-spec.sh
 ```
@@ -107,7 +107,7 @@ Adding anything else requires an ADR.
 | Push | FCM HTTP v1 | `firebase_messaging` |
 | State/routing | — | `flutter_bloc`, `go_router`, `get_it` |
 | Maps | — | `google_maps_flutter` behind `MapView` port |
-| Testing | `xunit.v3`, `Microsoft.AspNetCore.TestHost`, `NetArchTest.Rules`, real services (ADR-0008), k6 | `flutter_test`, `bloc_test`, `mocktail`, `patrol` |
+| Testing | `xunit.v3`, `Microsoft.AspNetCore.TestHost`, `NetArchTest.Rules`, real services (ADR-0008), `PAO.LoadTests` (HttpClient) | `flutter_test`, `bloc_test`, `mocktail`, `patrol` |
 | Quality | .NET analyzers (warnings as errors), `dotnet format`, size/docs gates, `osv-scanner` on `packages.lock.json` | `very_good_analysis`, `dart_code_linter`, `very_good_cli` |
 
 ## 4. Redis design
@@ -186,7 +186,7 @@ document returns the provider to this gate.
 |---|---|
 | Transport | HTTPS only in deployed envs; HSTS; TLS terminates at the load balancer |
 | Headers | `X-Content-Type-Options`, `X-Frame-Options: DENY`, strict CSP on admin web |
-| Input | All requests validated against the OpenAPI schema (Ajv); max body 1 MB (uploads go direct to storage) |
+| Input | All requests validated against the OpenAPI schema (`SchemaValidator`, Ajv-compatible messages); max body 1 MB (uploads go direct to storage) |
 | SQL | EF Core queries and parameterised raw SQL only; no string-built SQL |
 | AuthZ | Deny by default; every route has an explicit permission |
 | Rate limits | OTP per phone/IP; API per user and per IP; login per account |
@@ -210,8 +210,8 @@ every event that changes a person's status or money.
 
 ## 9. Background jobs (scheduler)
 
-Only periodic jobs. The worker runs an in-process scheduler (`platform/jobs/scheduler.ts`)
-with `every(ms)` and `dailyAt(hour, minute)` (Asia/Dhaka); each run takes a Postgres
+Only periodic jobs. The worker runs an in-process scheduler (`JobScheduler` in `Backend/PAO.BackgroundJobs`)
+with interval and daily (Asia/Dhaka) schedules; each run takes a Postgres
 advisory lock named after the job, so with several workers exactly one runs it.
 
 | Job | Schedule | Effect |

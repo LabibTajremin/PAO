@@ -8,4 +8,4 @@ Reviews after completed bookings and the rating aggregates of merchants and cust
 - Layout: `Controllers/` (thin, mediator only), `Features/<Feature>/Commands|Queries/`
   (handler, request and validator together), `Services/` (logic shared by several
   handlers), `Repositories/` (EF Core data access).
-- Status: ported from NestJS in P17 task 4.
+- Status: built in P17 task 4.

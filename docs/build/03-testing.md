@@ -14,7 +14,7 @@ A task is not done until its tests pass and coverage stays at 100% (PRD §10).
 | Start-up smoke | `Backend/Test/PAO.E2ETests/StartupSmokeTests.cs` | the built hosts as processes | migrator, API and worker start, answer health and metrics, fail fast on bad config |
 | End-to-end (API) | `Backend/Test/PAO.E2ETests/Journeys/` (C#, `Category=Journey`) | full Docker stack (`infra/e2e/stack.sh`) | complete journeys: enrol → verify → online → book → accept → start code → extras → complete → rate; cancel; timeout; expiry |
 | End-to-end (apps) | `Frontend/apps/*/integration_test/`, orchestrated by `Frontend/test/e2e/` | the same stack + Linux desktop / Chrome | the same journeys through the real UI |
-| Performance | `Backend/Test/Load/` (k6) | Docker stack | nearby search p95 < 300 ms; request reaches provider < 3 s (PRD §11) |
+| Performance | `Backend/Test/PAO.LoadTests/` (C# console, HttpClient) | Docker stack | nearby search p95 < 300 ms; request reaches provider < 3 s (PRD §11) |
 
 Rules:
 
@@ -66,7 +66,7 @@ prints a one-line summary, so humans, git hooks and CI use the same entry point.
 | `./pao ci` | lint → ops check → gen check → test all → cover → `pao perf e2e` → security (what CI runs) |
 | `./pao dotnet [stage]` | one stage of `Backend/scripts/ci.sh` (build, format, spec, gates, unit, test, e2e; `ci` = all) |
 | `./pao phase finish <id>` | `ci`, push branch with retry, open PR via `gh`, print the PR URL |
-| `./pao perf [e2e]` | k6 scripts (`Backend/Test/Load`) against the local stack, or a fresh e2e stack |
+| `./pao perf [e2e]` | the C# load tests (`Backend/Test/PAO.LoadTests`) against the local stack, or a fresh e2e stack |
 
 Implementation rules for the script: `set -euo pipefail`, one function per command,
 under 250 lines (helpers in `tools/lib/*.sh`), `shellcheck` clean, and tested by
@@ -91,7 +91,7 @@ Workflows in `.github/workflows/`, all required for merging into `main`:
   osv-scanner, trivy on the source tree and the built backend image).
 - `frontend.yml`: format, analyze, unit/widget tests with coverage per package, web build
   of admin, Android debug build of both apps.
-- `e2e.yml`: Docker stack + the C# API journeys and the backup restore drill; k6 performance thresholds on a fresh
+- `e2e.yml`: Docker stack + the C# API journeys and the backup restore drill; C# load-test thresholds on a fresh
   stack; the app journeys per app (partner and customer on the Linux desktop, admin in
   Chrome).
 - `contract.yml`: OpenAPI lint (`redocly lint Backend/Api/openapi.yaml`), generated code is

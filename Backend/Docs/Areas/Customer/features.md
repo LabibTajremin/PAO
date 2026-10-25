@@ -11,4 +11,4 @@ request, validator and handler. Overview: [overview.md](overview.md).
 | `Addresses` | `AddAddress`, `UpdateAddress`, `SetDefaultAddress`, `DeleteAddress` | command | validators check label, lines and the Bangladesh box (OUTSIDE_SERVICE_AREA); writes hold the customer's row lock; up to 10; the first is the default; deleting the default promotes the newest |
 | `ServiceArea` | `CheckServiceArea` | query | the launch-area polygon from Admin's `service_area.geojson`; empty covers everywhere, unreadable covers nothing |
 
-Favourites: the NestJS customer module and the spec have no favourites, so there is nothing to port.
+Favourites: the spec has no favourites, so there is nothing to implement.

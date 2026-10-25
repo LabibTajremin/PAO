@@ -15,4 +15,4 @@ Schema `notification`, created by the scripts in `DB Changes/notification/` ([da
 |---|---|
 | `NotificationRepository` | Inbox (insert once per recipient and dedupe key, keyset pages, unread count, read state) and device tokens (upsert, newest ten, drop, erase). |
 
-Db models: `PAO.EF/Notification/` (`NotificationRecord`, `DeviceTokenRecord`). `notification.recipients` is not used: languages are read from the profiles, as in NestJS.
+Db models: `PAO.EF/Notification/` (`NotificationRecord`, `DeviceTokenRecord`). `notification.recipients` is not used: languages are read from the profiles.

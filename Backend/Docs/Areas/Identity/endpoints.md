@@ -4,7 +4,7 @@ One entry per controller and its operations, with the authorisation attribute th
 each operation's `x-permission` (see [authorisation](../../Architecture/authorization.md)).
 Every controller maps the area's reasons with `IdentityErrorMap` and reads its body through
 `RequestBody`: the body the edge parsed and the spec validated. MVC's own body binding would
-answer 415 to a request without a body before authorisation, where NestJS answered 401/403.
+answer 415 to a request without a body before authorisation, where earlier releases answered 401/403.
 
 | Controller | Operation | Route | Attribute |
 |---|---|---|---|
@@ -27,4 +27,4 @@ answer 415 to a request without a body before authorisation, where NestJS answer
 Error codes: `OTP_INVALID`, `OTP_EXPIRED` (401), `OTP_LOCKED`, `RATE_LIMITED`, `ACCOUNT_LOCKED`
 (429), `ACCOUNT_BANNED`, `ACCOUNT_SUSPENDED` (403), `REFRESH_TOKEN_INVALID`,
 `INVALID_CREDENTIALS`, `MFA_CHALLENGE_EXPIRED`, `TOTP_INVALID` (401), `CONFLICT` (409),
-`ROLE_INVALID` (422), as the NestJS API answered.
+`ROLE_INVALID` (422), as existing clients expect.

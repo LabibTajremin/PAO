@@ -38,7 +38,7 @@ storage (S3). Production refuses the fake SMS and push adapters.
 ./pao setup          # tools, NuGet restore, git hooks, .env with fresh local keys
 ./pao up && ./pao seed
 ./pao ci             # lint, generated-code drift, unit + integration + e2e, 100% coverage, security
-./pao perf           # k6: nearby search at 50 rps, p95 < 300 ms
+./pao perf           # C# load test: nearby search at 50 rps, p95 < 300 ms
 ```
 
 - Testing strategy and gates: [`docs/build/03-testing.md`](build/03-testing.md).
@@ -81,8 +81,8 @@ From ADRs 0026–0032 and the build log:
 - **Admin data (ADR-0026).** Face references are not stored, so a ban blocks phone and
   NID only; read models catch up from events, so lists can lag a status change briefly.
 - **Backend (ADR-0034).** One worker runs periodic jobs under an advisory lock (request
-  expiry is a 15 s sweep, not per booking). The NestJS backend was removed at the P17
-  cut-over; its behaviour, tables, Redis keys and env vars carry over unchanged.
+  expiry is a 15 s sweep, not per booking). The backends before it were retired at the
+  P17 cut-over; behaviour, tables, Redis keys and env vars carried over unchanged.
 - **Placeholders.** Staging and prod API hostnames, support phone and email, app icons,
   and the terms, privacy and FAQ text are drafts.
 

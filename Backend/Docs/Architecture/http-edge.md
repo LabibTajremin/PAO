@@ -1,6 +1,6 @@
 # HTTP edge
 
-Every API request passes, in the NestJS order:
+Every API request passes, in this order (kept so existing clients see the same answers):
 
 1. `ErrorEnvelopeMiddleware` — anything that escapes becomes the PRD §9.6 envelope.
 2. Test hooks (`/__test/*`, only with `APP_ENV=test`).
@@ -16,8 +16,8 @@ Every API request passes, in the NestJS order:
 
 ## Request bodies: read after authorisation
 
-NestJS authenticated and authorised before it looked at the body, so a request without a
-token got 401, and one without the permission got 403, whatever its body. ASP.NET binds
+The API authenticates and authorises before it looks at the body, so a request without a
+token gets 401, and one without the permission gets 403, whatever its body. ASP.NET binds
 action parameters *before* action filters run, and its `[FromBody]` binder answers 415
 (wrong or missing content type) or 400 there, ahead of `AccessFilter`.
 
@@ -38,13 +38,13 @@ Controllers write plain `[FromBody] SomeInput body` parameters. Never read
 Requests are validated against the OpenAPI spec (`RequestValidator` with the in-house
 `SchemaValidator` for the keywords the contract uses), not by hand-written validators per
 endpoint. It keeps one source of truth with the Flutter client, validates operations no
-area serves yet, and reproduces NestJS behaviour: 422 `VALIDATION_FAILED` with
+area serves yet, and keeps the established behaviour: 422 `VALIDATION_FAILED` with
 `details.reason` in Ajv's wording (`body/phone must match pattern "…"`). FluentValidation
 runs in the mediator pipeline for business rules the schema cannot express.
 
 ## Idempotency
 
 Operations declaring `Idempotency-Key` store their first answer below 500 for 24 hours under
-`idem:{userId}:{key}`, in the record format NestJS wrote, and replay it with
+`idem:{userId}:{key}`, in the record format earlier releases wrote, and replay it with
 `Idempotent-Replayed: true`. A different body under the same key is 422
 `IDEMPOTENCY_KEY_REUSED`; a request still running is 409 `CONFLICT`.

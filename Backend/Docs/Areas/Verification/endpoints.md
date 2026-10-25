@@ -1,7 +1,7 @@
 # Verification area — endpoints
 
 All in `VerificationControllers` (see [authorisation](../../Architecture/authorization.md)).
-Errors map through `VerificationErrorMap` to the NestJS codes.
+Errors map through `VerificationErrorMap` to the codes existing clients rely on.
 
 | Controller | Operation | Route | Attribute |
 |---|---|---|---|

@@ -27,9 +27,9 @@ below is `done` in `PROGRESS.md`.
 | P12 | [Customer app](phases/P12-customer-app.md) | All customer screens, wired to the real API |
 | P13 | [Admin web](phases/P13-admin-web.md) | All admin screens (verification first) |
 | P14 | [End-to-end](phases/P14-e2e.md) | Full-journey tests across API and apps |
-| P15 | [NestJS backend](phases/P15-nestjs-backend.md) | The backend rebuilt on NestJS (ADR-0032), Go removed |
+| P15 | [Interim backend](phases/P15-nestjs-backend.md) | An interim backend rewrite (ADR-0032), Go removed; superseded by P17 |
 | P16 | [Hardening & handover](phases/P16-hardening.md) | Security and performance pass, docs, release builds |
-| P17 | [.NET backend](phases/P17-dotnet-backend.md) | The backend rebuilt on .NET (ADR-0034), billing (ADR-0035), NestJS removed, repository re-laid out |
+| P17 | [.NET backend](phases/P17-dotnet-backend.md) | The backend rebuilt on .NET (ADR-0034), billing (ADR-0035), the interim backend removed, repository re-laid out |
 
 Phases are strictly sequential. A phase may not start until the previous one is merged.
 

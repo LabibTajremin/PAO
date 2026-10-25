@@ -8,4 +8,4 @@ Accounts, roles, permissions and screen permissions; phone OTP sign-in for custo
 - Layout: `Controllers/` (thin, mediator only), `Features/<Feature>/Commands|Queries/`
   (handler, request and validator together), `Services/` (logic shared by several
   handlers), `Repositories/` (EF Core data access).
-- Status: ported from NestJS (P17); see `Docs/Areas/Identity/`.
+- Status: built in P17; see `Docs/Areas/Identity/`.

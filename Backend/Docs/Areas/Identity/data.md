@@ -27,4 +27,4 @@ and the RBAC tables).
 | `RedisCodeStores` | `RedisCodeStore` (`otp:{purpose}:{phone}` hash) and `RedisSendThrottle` (`rl:otp:resend|phone|ip:*`). |
 | `RedisSessionStores` | `RedisSessionStore` (`rt:{familyId}` hash, `sess:{accountId}` set) and `RedisChallengeStore` (`mfa:{id}` JSON). |
 
-Redis layouts are the NestJS and Go ones, so sessions survive the cut-over.
+Redis layouts are unchanged from earlier releases, so existing sessions stay valid.

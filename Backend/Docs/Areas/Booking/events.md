@@ -3,7 +3,7 @@
 Events are written to the area's outbox in the same transaction as the change and relayed at
 least once ([events and jobs](../../Architecture/events-and-jobs.md)). Every payload carries
 `bookingId`, `number`, `customerId`, `providerId`, `serviceId` and `at`, field for field as
-NestJS wrote them; Notification, Audit, Merchant, Customer, Rating and Admin subscribe.
+earlier releases wrote them; Notification, Audit, Merchant, Customer, Rating and Admin subscribe.
 
 | Published event | Extra fields |
 |---|---|

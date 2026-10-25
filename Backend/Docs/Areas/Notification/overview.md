@@ -8,7 +8,7 @@ Code: `PAO.Core/Areas/Notification/`; contracts: `PAO.Lib/Areas/Notification/`. 
 
 | Service | Role |
 |---|---|
-| `INotificationSharedService` | The only way other areas reach Notification (`Services/Shared/`); implemented by `NotificationSharedService`. Inbox and push are always used; SMS stays with Identity's one-time codes, as in NestJS. |
+| `INotificationSharedService` | The only way other areas reach Notification (`Services/Shared/`); implemented by `NotificationSharedService`. Inbox and push are always used; SMS stays with Identity's one-time codes. |
 | `NotificationTemplates` | Every message in English and Bangla; any language but `en` reads as Bangla. |
 | `NotificationSender` | Stores once per (recipient, dedupe key), then pushes to the newest ten devices; dead tokens are dropped, other push failures logged (FCM or the capture adapter, `PUSH_ADAPTER`). |
 | `NotificationPeers` | Languages from the Customer and Merchant profiles (Bangla without one) and booking text, resolved on first use. |

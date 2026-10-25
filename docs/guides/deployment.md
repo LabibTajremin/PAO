@@ -230,7 +230,7 @@ There is no deploy workflow in `.github/workflows` today. A job would:
 ### 3.2 Environment variables
 
 Every variable the .NET hosts read (`Backend/Docs/Config/variables.md`; mapped onto
-configuration keys by `LegacyEnvironment`). The API and the
+configuration keys by `EnvironmentVariables`). The API and the
 worker refuse to start on a missing or invalid value and list all problems in one log
 line (`invalid configuration: …`). Give API, worker and migrate the same environment.
 

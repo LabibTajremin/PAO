@@ -3,7 +3,7 @@
 `DB Changes/` holds goose-format SQL scripts, one folder and one Postgres schema per
 module, the only schema source (ADR-0034); EF Core maps to it without migrations. The
 migrator (`PAO.Migrator up`) applies pending scripts in `modules.json` order and records
-versions in `goose_<module>` tables, exactly as the NestJS migrator did, so existing
+versions in `goose_<module>` tables, exactly as goose does, so existing
 databases carry over. See [migrations](migrations.md).
 
 | Script | Purpose |

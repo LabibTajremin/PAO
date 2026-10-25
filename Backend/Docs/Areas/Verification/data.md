@@ -23,4 +23,4 @@ Schema `verification`, created by the scripts in `DB Changes/verification/` ([da
 | `VerificationRepository` | Levels, pending count, the review queue, sessions, expiry queries, reminders (one insert per threshold), the NID block list and blocking. |
 | `ClosedAccountRepository` | `closed_accounts`, Level 2 photos of closed accounts and the batch purge of every verification table. |
 
-NID numbers are `nonce ‖ ciphertext ‖ tag` (AES-GCM, `DataCipher`), the layout NestJS and Go wrote.
+NID numbers are `nonce ‖ ciphertext ‖ tag` (AES-GCM, `DataCipher`), the layout already stored.

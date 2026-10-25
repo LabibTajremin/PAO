@@ -9,6 +9,6 @@
   `IdempotentEventHandler` records `(handler, event_id)` in `<schema>.processed_events` in
   the same transaction, so redelivery is harmless.
 - Periodic jobs implement `IScheduledJob` (`JobSchedule.Every` or `DailyAt` Asia/Dhaka).
-  `JobScheduler` runs each under `pg_try_advisory_lock(7041, hashtext(name))`, the NestJS
-  lock, so one worker of either backend runs a job at a time. Jobs are listed in
+  `JobScheduler` runs each under `pg_try_advisory_lock(7041, hashtext(name))`, the
+  lock earlier releases took too, so one worker runs a job at a time. Jobs are listed in
   [Operations/jobs.md](../Operations/jobs.md).

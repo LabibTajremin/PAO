@@ -42,7 +42,7 @@ revise)`. Changing one later means a new ADR, not silent edits.
 | E11 | Error codes | `{ "error": { "code", "message", "details" } }`; codes are `UPPER_SNAKE` and listed in `Backend/Api/openapi.yaml` `components/schemas/ErrorCode`. |
 | E13 | Backend runtime | .NET 10, ASP.NET Core areas, CQRS handlers, EF Core over the SQL scripts in `DB Changes` (ADR-0034, superseding ADR-0032's framework). |
 | E14 | Payment and revenue | Cash on delivery only; 10% commission becomes the merchant's due; accepting is blocked above ৳500 due; merchants submit payments, admins confirm (ADR-0035). |
-| E15 | Repository layout | `Backend/` (.NET, contract in `Backend/Api`, journeys in `Backend/Test/PAO.E2ETests`, k6 in `Backend/Test/Load`), `Frontend/` (+ `test/e2e` app journeys), `docs/`, `infra/` (compose, `e2e/` stack, `ops/`, `security/`), `tools/` (CLI, hooks, CLI tests), ignored `out/` for generated output; `./pao` wraps `tools/pao` (ADR-0034 "Cut-over as done"). |
+| E15 | Repository layout | `Backend/` (.NET, contract in `Backend/Api`, journeys in `Backend/Test/PAO.E2ETests`, load tests in `Backend/Test/PAO.LoadTests`), `Frontend/` (+ `test/e2e` app journeys), `docs/`, `infra/` (compose, `e2e/` stack, `ops/`, `security/`), `tools/` (CLI, hooks, CLI tests), ignored `out/` for generated output; `./pao` wraps `tools/pao` (ADR-0034 "Cut-over as done"). |
 | E12 | Design | Figma file below is the visual source of truth; accent colours are a theme token with ten presets; Midnight is the default (`05-screens.md`). |
 
 Figma: <https://www.figma.com/design/ytbbSEIF1I6cZN0iWJVQsC>

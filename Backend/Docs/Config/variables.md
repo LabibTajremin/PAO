@@ -1,8 +1,8 @@
 # Environment variables
 
-The NestJS variable names keep working (`LegacyEnvironment`); an empty value counts as unset.
+The deployment variable names (`.env.example`) map to settings (`EnvironmentVariables`); an empty value counts as unset.
 `Section__Key` variables (for example `Http__RateLimitPerIp`) override any other key.
-Validation messages match NestJS (`DATABASE_URL is required`, …). Back to [Config](README.md).
+Validation messages are stable (`DATABASE_URL is required`, …). Back to [Config](README.md).
 
 | Variable | Key | Notes |
 |---|---|---|

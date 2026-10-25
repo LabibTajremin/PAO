@@ -22,7 +22,7 @@ it first and continues from **Current task**.
 | P12 Customer app | done | — | ADR-0029 |
 | P13 Admin web | done | — | ADR-0030 |
 | P14 End-to-end | done | — | ADR-0031 |
-| P15 NestJS backend | done | — | ADR-0032 |
+| P15 Interim backend | done | — | ADR-0032 |
 | P16 Hardening & handover | done | — | ADR-0023, ADR-0032 |
 | P17 .NET backend, COD & merchant dues | in_review | — | ADR-0034, ADR-0035; tasks 1–8 complete, `done` once merged |
 
@@ -31,8 +31,8 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 ## Current task
 
 P17 is complete (tasks 1–8); mark it `done` once the branch is merged. Task 8 (cut-over):
-the API journeys are C# (`Backend/Test/PAO.E2ETests/Journeys`, 13 tests), the k6 scripts
-are in `Backend/Test/Load`, the NestJS backend and its tooling are deleted, and the
+the API journeys are C# (`Backend/Test/PAO.E2ETests/Journeys`, 13 tests), the load test
+is C# (`Backend/Test/PAO.LoadTests`), the earlier backends and their tooling are deleted, and the
 repository follows ADR-0034 "Repository layout after cut-over" (see "Cut-over as done"
 there and E15 in `04-decisions.md`). There is no next phase in the build kit.
 Run the full `./pao ci` in the background and one heavy job at a time: two parallel .NET
@@ -59,7 +59,7 @@ with `./pao ci` green and a `chore(progress): complete <id>` commit is pushed.
 - Cross-area calls go through `I<Area>SharedService`, resolved by each area's peers on first use.
 - Request timeouts run as a 15 s periodic sweep (`booking.expire_requests`) rather than a
   job per booking, so a missed run catches up on the next one.
-- k6 v1.3.0 is installed in this container from the GitHub release tarball.
+- `./pao perf` needs only the .NET SDK (the load test is `Backend/Test/PAO.LoadTests`).
 - Flutter tests that await real I/O (http_mock_adapter) inside `testWidgets` must use
   `tester.runAsync`, or they hang in fake async.
 - `Backend/Test/PAO.TestKit` has the test environment, private databases and fakes.
@@ -75,6 +75,10 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-10-25 P17 follow-up: last NestJS/JavaScript traces removed. k6 replaced by the C#
+  load test `Backend/Test/PAO.LoadTests` (`./pao perf`, CI perf job without k6);
+  `LegacyEnvironment` → `EnvironmentVariables`; comments, test names and docs neutral;
+  security checklist evidence re-mapped to C# tests (3 tests added); PRD PDF regenerated.
 - 2026-10-24 P17.8 cut-over: journeys ported to C# (13/13), k6 to Backend/Test/Load,
   NestJS backend and tooling deleted, ADR-0034 layout applied (Backend, Frontend, infra,
   tools, docs/guides, out/), CLI, hooks, workflows and docs switched.

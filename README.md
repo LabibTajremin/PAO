@@ -31,7 +31,7 @@ Run the whole quality gate (what CI runs) with `./pao ci`. `./pao help` lists ev
 
 | Path | What it holds |
 |---|---|
-| `Backend/` | .NET solution (ADR-0034): hosts `PAO.Core` (API), `PAO.Worker`, `PAO.Migrator`; `Api/` (the OpenAPI contract), `Config/`, `DB Changes/`, `Seed/`, `Docs/`, `Test/` (unit, integration, `PAO.E2ETests` journeys, `Load` k6 scripts), `docker/` |
+| `Backend/` | .NET solution (ADR-0034): hosts `PAO.Core` (API), `PAO.Worker`, `PAO.Migrator`; `Api/` (the OpenAPI contract), `Config/`, `DB Changes/`, `Seed/`, `Docs/`, `Test/` (unit, integration, `PAO.E2ETests` journeys, `PAO.LoadTests` load tests), `docker/` |
 | `Frontend/` | Flutter workspace: `apps/` (customer, partner, admin) and `packages/` (pao_core, pao_api, pao_ui, pao_l10n, pao_e2e); per-app `config/<flavour>.json`; `test/e2e` (the app journeys) |
 | `docs/` | PRD, build kit, ADRs, `guides/` (architecture, release, deployment, glossary, ...), runbooks, handover, contributing |
 | `infra/` | `docker-compose.yml`, the e2e stack (`e2e/`), `ops/` (Prometheus, Grafana), `security/` (gitleaks, trivy, osv-scanner configs) |

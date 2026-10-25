@@ -16,7 +16,7 @@ One image (`Backend/docker/Dockerfile`, built from `Backend/`) with three entry 
 
 - `GET /healthz`: 200 while the process serves. `GET /readyz`: 200 `{status: ok}` or 503
   naming each failed dependency (database, redis, storage).
-- Prometheus metrics (prometheus-net) keep the NestJS names: `pao_http_*`, `pao_job_*`,
+- Prometheus metrics (prometheus-net) keep their established names: `pao_http_*`, `pao_job_*`,
   `pao_outbox_*`, plus .NET runtime metrics.
 
 ## Logs
