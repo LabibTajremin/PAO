@@ -6,7 +6,7 @@ export PAO_ROOT
 export BACKEND="$PAO_ROOT/Backend"
 export FRONTEND="$PAO_ROOT/Frontend"
 export E2E_TESTS="$BACKEND/Test/PAO.E2ETests"
-export LOAD_DIR="$BACKEND/Test/Load"
+export LOAD_DIR="$BACKEND/Test/PAO.LoadTests"
 export APP_JOURNEYS="$FRONTEND/test/e2e"
 export INFRA="$PAO_ROOT/infra"
 export E2E_STACK="$INFRA/e2e/stack.sh"

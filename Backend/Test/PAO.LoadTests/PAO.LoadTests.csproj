@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Load tests run by ./pao perf against a running stack over plain HTTP: a console
+       app, not an xunit project, so the unit and coverage runs never pick it up. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+</Project>

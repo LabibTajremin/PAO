@@ -26,7 +26,7 @@ usage: pao <command>
   ops restore-test [e2e]  dump the stack's database, restore it, compare counts
   ci                    lint → ops check → gen check → test all → cover → perf → security
   phase finish <id>     ci, push the branch, open the PR
-  perf [e2e]            k6 load scripts against the local (or a fresh e2e) stack
+  perf [e2e]            C# load tests (PAO.LoadTests) against the local (or a fresh e2e) stack
   dotnet [ci|build|format|spec|gates|unit|test|e2e]  one stage of Backend/scripts/ci.sh
 USAGE
 }
@@ -65,15 +65,15 @@ cmd_ci() {
   ok "ci passed"
 }
 
-# cmd_perf runs the k6 scripts against the development stack, or with "e2e" against a
+# cmd_perf runs the C# load tests against the development stack, or with "e2e" against a
 # fresh end-to-end stack (infra/e2e/stack.sh) that can run beside other work.
 cmd_perf() {
-  compgen -G "$LOAD_DIR/*.js" >/dev/null || {
+  [[ -f "$LOAD_DIR/PAO.LoadTests.csproj" ]] || {
     nothing_to_run "perf"
     return 0
   }
-  require_tool k6 "https://grafana.com/docs/k6/latest/set-up/install-k6/"
-  local fixture="$OUT_DIR/perf-fixture.json" base=http://localhost:8080 script
+  require_tool dotnet "https://dotnet.microsoft.com/download"
+  local fixture="$OUT_DIR/perf-fixture.json" base=http://localhost:8080
   mkdir -p "$OUT_DIR"
   if [[ "${1:-}" == e2e ]]; then
     # The fixture's tokens must be signed with the stack's keys, so both share them.
@@ -90,10 +90,8 @@ cmd_perf() {
     compose run --rm -T --entrypoint /app/migrate migrate perf-seed 2000 >"$fixture" ||
       die "perf seed failed"
   fi
-  for script in "$LOAD_DIR"/*.js; do
-    BASE_URL="$base" FIXTURE="$fixture" k6 run --quiet "$script" ||
-      die "performance threshold missed in ${script##*/}"
-  done
+  dotnet run --project "$LOAD_DIR" -c Release -- "$base" "$fixture" ||
+    die "performance threshold missed"
   ok "performance thresholds met"
 }
 

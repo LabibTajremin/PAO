@@ -63,7 +63,7 @@ setup() {
   [[ "$output" == *"usage: pao ops check|restore-test [e2e]"* ]]
 }
 
-@test "perf with no scripts has nothing to run" {
+@test "perf with no load project has nothing to run" {
   PAO_ROOT="$BATS_TEST_TMPDIR" run bash -c ". '$ROOT/tools/lib/common.sh'; nothing_to_run perf"
   [ "$status" -eq 0 ]
   [[ "$output" == *"perf: nothing to run"* ]]
