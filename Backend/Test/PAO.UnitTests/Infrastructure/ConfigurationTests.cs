@@ -173,3 +173,53 @@ public sealed class HostingPathTests
         Assert.Equal(AppContext.BaseDirectory, PaoPaths.Current().BaseDirectory);
     }
 }
+
+public sealed class LocalSettingsFileTests : IDisposable
+{
+    private readonly string dir = Directory.CreateTempSubdirectory("pao-local").FullName;
+
+    public void Dispose() => Directory.Delete(dir, recursive: true);
+
+    [Theory]
+    [InlineData("APP_ENV", "dev", "local")]
+    [InlineData("App__Environment", "test", "local")]
+    [InlineData("APP_ENV", " Prod ", "file")]
+    [InlineData("App__Environment", "staging", "file")]
+    public void The_local_file_overrides_the_defaults_outside_staging_and_prod(string key, string appEnv, string expected)
+    {
+        var config = WriteLocalLayout();
+        File.WriteAllText(Path.Combine(dir, PaoConfiguration.LocalFileName), """{"Redis":{"Url":"local"}}""");
+        var built = new ConfigurationBuilder().AddPaoConfiguration(config, new Hashtable { [key] = appEnv }).Build();
+        Assert.Equal(expected, PaoConfiguration.Bind(built).Redis.Url);
+    }
+
+    [Fact]
+    public void Without_a_local_file_the_defaults_stand()
+    {
+        var built = new ConfigurationBuilder().AddPaoConfiguration(WriteLocalLayout(), new Hashtable()).Build();
+        Assert.Equal("file", PaoConfiguration.Bind(built).Redis.Url);
+    }
+
+    [Fact]
+    public void The_committed_example_binds_and_passes_validation()
+    {
+        var paths = PaoPaths.Resolve(AppContext.BaseDirectory, null);
+        var example = new ConfigurationBuilder()
+            .AddPaoConfiguration(paths.Config, new Hashtable())
+            .AddJsonFile(Path.Combine(paths.Home, "appsettings.Local.example.json"), optional: false)
+            .Build();
+        var settings = ConfigValidator.Validate(PaoConfiguration.Bind(example));
+        Assert.Equal("dev", settings.App.Environment);
+        Assert.Equal("console", settings.Sms.Adapter);
+        Assert.NotEmpty(settings.Jwt.SigningKey);
+        Assert.StartsWith("postgres://", settings.Database.Url);
+    }
+
+    private string WriteLocalLayout()
+    {
+        var config = Path.Combine(dir, "Config");
+        Directory.CreateDirectory(config);
+        File.WriteAllText(Path.Combine(config, "redis.json"), """{"Redis":{"Url":"file"}}""");
+        return config;
+    }
+}

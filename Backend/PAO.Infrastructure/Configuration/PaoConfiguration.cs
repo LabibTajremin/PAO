@@ -4,9 +4,10 @@ using Microsoft.Extensions.Configuration;
 namespace PAO.Infrastructure.Configuration;
 
 /// <summary>
-/// Builds the configuration every host reads: the defaults in `Config/*.json`, then
-/// `Section__Key` environment variables, then the NestJS variable names (secrets only
-/// ever come from the environment).
+/// Builds the configuration every host reads: the defaults in `Config/*.json`, then a
+/// developer's `appsettings.Local.json` (never in staging or prod), then `Section__Key`
+/// environment variables, then the NestJS variable names (shared deployments take secrets
+/// only from the environment).
 /// </summary>
 public static class PaoConfiguration
 {
@@ -22,9 +23,26 @@ public static class PaoConfiguration
         {
             builder.AddJsonFile(file, optional: false, reloadOnChange: false);
         }
+        AddLocalFile(builder, configDirectory, environment);
         builder.AddEnvironmentVariables();
         builder.AddInMemoryCollection(LegacyEnvironment.Map(environment));
         return builder;
+    }
+
+    /// <summary>The git-ignored developer file next to `Config/`, copied from `appsettings.Local.example.json`.</summary>
+    public const string LocalFileName = "appsettings.Local.json";
+
+    private static readonly string[] SharedEnvironments = ["staging", "prod"];
+
+    private static void AddLocalFile(IConfigurationBuilder builder, string configDirectory, IDictionary environment)
+    {
+        var file = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(configDirectory))!, LocalFileName);
+        // The file holds public demo keys; a shared deployment must fail on a missing secret, not run on them.
+        var appEnv = (environment["APP_ENV"] ?? environment["App__Environment"]) as string;
+        if (File.Exists(file) && !SharedEnvironments.Contains(appEnv?.Trim().ToLowerInvariant()))
+        {
+            builder.AddJsonFile(file, optional: false, reloadOnChange: false);
+        }
     }
 
     /// <summary>Binds every section; values the files and environment leave out keep their defaults.</summary>

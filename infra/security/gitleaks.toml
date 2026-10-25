@@ -4,8 +4,8 @@
 useDefault = true
 
 [allowlist]
-description = ".env.example documents variable names with empty or local-only placeholder values; the TOTP tests use the key published in RFC 6238 appendix B; the .NET crypto tests use the dummy key base64(\"0123456789abcdef\" x2) and a JWT test vector signed with it (kept so tokens issued before the .NET cut-over still verify)"
-paths = ['''^\.env\.example$''']
+description = ".env.example and Backend/appsettings.Local.example.json document variable names with empty or local-only placeholder values; the TOTP tests use the key published in RFC 6238 appendix B; the .NET crypto tests use the dummy key base64(\"0123456789abcdef\" x2) and a JWT test vector signed with it (kept so tokens issued before the .NET cut-over still verify)"
+paths = ['''^\.env\.example$''', '''^Backend/appsettings\.Local\.example\.json$''']
 regexes = [
   '''GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ''',
   '''MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=''',

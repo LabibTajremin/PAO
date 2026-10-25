@@ -24,3 +24,6 @@ pubspec_overrides.yaml
 *.swp
 # An empty CA bundle the compose build uses when PAO_EXTRA_CA_FILE is unset.
 !infra/no-extra-ca.pem
+
+# Developer settings copied from Backend/appsettings.Local.example.json.
+Backend/appsettings.Local.json
