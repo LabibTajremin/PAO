@@ -56,7 +56,7 @@ void main() {
         PaoApp(services: services, initial: Routes.requestOf(next)),
       );
       await tapText(tester, 'Accept');
-      await pumpUntil(tester, find.textContaining('due is over the limit'));
+      await pumpUntil(tester, find.textContaining('Pay to accept new jobs'));
 
       await tapText(tester, 'Pay now');
       await typeInto(tester, 'Amount (৳)', (due / 100).toStringAsFixed(2));
