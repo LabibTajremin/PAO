@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- The scheduler, the outbox relay and the platform's periodic jobs. -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PAO.Infrastructure\PAO.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

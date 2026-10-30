@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Applies the goose-format scripts in "DB Changes" and records their versions; loads the seed data through the areas. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PAO.Core\PAO.Core.csproj" />
+  </ItemGroup>
+</Project>

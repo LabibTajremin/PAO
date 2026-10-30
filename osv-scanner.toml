@@ -1,9 +1,0 @@
-# Accepted osv-scanner findings (./pao security). Each entry needs a reason and an
-# expiry date so it is looked at again; docs/security-checklist.md lists them too.
-
-[[IgnoredVulns]]
-id = "GHSA-hp3w-g68c-fv3c"
-ignoreUntil = 2027-04-12
-reason = """sprintf-js 1.0.3 (medium, no fixed release) reaches us only through Jest's \
-coverage tooling (istanbul -> js-yaml 3 -> argparse 1): dev-only, never in the image, \
-and it formats no untrusted input."""

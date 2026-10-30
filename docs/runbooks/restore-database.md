@@ -53,10 +53,10 @@ announce the downtime.
      ```
 3. **Check the restored database:**
    ```sh
-   psql "$NEW_DATABASE_URL" -At -f scripts/ops/fingerprint.sql > restored.txt
+   psql "$NEW_DATABASE_URL" -At -f tools/ops/fingerprint.sql > restored.txt
    ```
    Every module's `migration goose_<module>` line must show the version of the release
-   you will run (compare with `backend/migrations/<module>/`); table counts must be
+   you will run (compare with `Backend/DB Changes/<module>/`); table counts must be
    plausible (bookings, providers and accounts close to the dashboard's last figures).
 4. **Run migrations** if the restore point predates the current release:
    `/app/migrate up` with `DATABASE_URL` set to the new instance.

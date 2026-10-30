@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Integration tests against the real Postgres, Redis and S3 the environment provides
+       (ADR-0008); each test class gets a private database and key prefix. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" />
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PAO.Core\PAO.Core.csproj" />
+    <ProjectReference Include="..\..\PAO.Worker\PAO.Worker.csproj" />
+    <ProjectReference Include="..\..\PAO.Migrator\PAO.Migrator.csproj" />
+    <ProjectReference Include="..\PAO.TestKit\PAO.TestKit.csproj" />
+  </ItemGroup>
+</Project>

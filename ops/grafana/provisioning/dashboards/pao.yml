@@ -1,9 +1,0 @@
-# Loads the dashboards in ops/grafana/dashboards (mounted at /var/lib/grafana/dashboards).
-apiVersion: 1
-providers:
-  - name: pao
-    folder: PAO
-    type: file
-    allowUiUpdates: false
-    options:
-      path: /var/lib/grafana/dashboards

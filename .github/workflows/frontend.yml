@@ -31,12 +31,12 @@ jobs:
       - name: Coverage (100% per package)
         run: ./pao cover dart
       - name: Build admin web (prod)
-        run: scripts/build-release.sh admin prod web
+        run: tools/build-release.sh admin prod web
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: always()
-        with: { name: dart-coverage, path: "frontend/**/coverage/lcov.info" }
+        with: { name: dart-coverage, path: "Frontend/**/coverage/lcov.info" }
 
-  # One app bundle and APK per app and flavour (docs/release.md).
+  # One app bundle and APK per app and flavour (docs/guides/release.md).
   android:
     runs-on: ubuntu-24.04
     strategy:
@@ -48,9 +48,14 @@ jobs:
       PAO_BUILD_NUMBER: ${{ github.run_number }}
       PAO_MAPS_API_KEY: ${{ secrets.PAO_MAPS_API_KEY }}
       PAO_FCM_API_KEY: ${{ secrets.PAO_FCM_API_KEY }}
+      # The per-platform App ID wins over the older per-app one (build-release.sh).
       PAO_FCM_APP_ID: ${{ secrets[format('PAO_FCM_APP_ID_{0}', matrix.app)] }}
+      PAO_FCM_APP_ID_CUSTOMER_ANDROID: ${{ secrets.PAO_FCM_APP_ID_CUSTOMER_ANDROID }}
+      PAO_FCM_APP_ID_PARTNER_ANDROID: ${{ secrets.PAO_FCM_APP_ID_PARTNER_ANDROID }}
       PAO_FCM_SENDER_ID: ${{ secrets.PAO_FCM_SENDER_ID }}
       PAO_FCM_PROJECT_ID: ${{ secrets.PAO_FCM_PROJECT_ID }}
+      PAO_PIN_SHA256: ${{ secrets.PAO_PIN_SHA256 }}
+      PAO_SENTRY_DSN: ${{ secrets.PAO_SENTRY_DSN }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
@@ -79,16 +84,16 @@ jobs:
           PAO_ANDROID_KEY_ALIAS: ${{ secrets.PAO_ANDROID_KEY_ALIAS }}
           PAO_ANDROID_KEY_PASSWORD: ${{ secrets.PAO_ANDROID_KEY_PASSWORD }}
         run: |
-          scripts/build-release.sh "${{ matrix.app }}" "${{ matrix.flavour }}" appbundle
-          scripts/build-release.sh "${{ matrix.app }}" "${{ matrix.flavour }}" apk
+          tools/build-release.sh "${{ matrix.app }}" "${{ matrix.flavour }}" appbundle
+          tools/build-release.sh "${{ matrix.app }}" "${{ matrix.flavour }}" apk
           rm -f "$RUNNER_TEMP/upload.jks"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: ${{ matrix.app }}-${{ matrix.flavour }}-android
           path: |
-            frontend/apps/${{ matrix.app }}/build/app/outputs/bundle/${{ matrix.flavour }}Release/*.aab
-            frontend/apps/${{ matrix.app }}/build/app/outputs/flutter-apk/*-${{ matrix.flavour }}-release.apk
-            frontend/apps/${{ matrix.app }}/build/symbols/${{ matrix.flavour }}
+            Frontend/apps/${{ matrix.app }}/build/app/outputs/bundle/${{ matrix.flavour }}Release/*.aab
+            Frontend/apps/${{ matrix.app }}/build/app/outputs/flutter-apk/*-${{ matrix.flavour }}-release.apk
+            Frontend/apps/${{ matrix.app }}/build/symbols/${{ matrix.flavour }}
 
   # The prod archive per app; signed when the distribution secrets are present.
   # macos-26 because connectivity_plus 7.x needs the Xcode 26 SDK (NWPath.isUltraConstrained).
@@ -101,6 +106,14 @@ jobs:
     env:
       PAO_BUILD_NUMBER: ${{ github.run_number }}
       PAO_MAPS_API_KEY: ${{ secrets.PAO_MAPS_API_KEY }}
+      PAO_FCM_API_KEY: ${{ secrets.PAO_FCM_API_KEY }}
+      PAO_FCM_APP_ID: ${{ secrets[format('PAO_FCM_APP_ID_{0}', matrix.app)] }}
+      PAO_FCM_APP_ID_CUSTOMER_IOS: ${{ secrets.PAO_FCM_APP_ID_CUSTOMER_IOS }}
+      PAO_FCM_APP_ID_PARTNER_IOS: ${{ secrets.PAO_FCM_APP_ID_PARTNER_IOS }}
+      PAO_FCM_SENDER_ID: ${{ secrets.PAO_FCM_SENDER_ID }}
+      PAO_FCM_PROJECT_ID: ${{ secrets.PAO_FCM_PROJECT_ID }}
+      PAO_PIN_SHA256: ${{ secrets.PAO_PIN_SHA256 }}
+      PAO_SENTRY_DSN: ${{ secrets.PAO_SENTRY_DSN }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: subosito/flutter-action@fd55f4c5af5b953cc57a2be44cb082c8f6635e8e # v2.21.0
@@ -134,11 +147,11 @@ jobs:
           echo "$EXPORT_OPTIONS_BASE64" | base64 -d >"$RUNNER_TEMP/ExportOptions.plist"
           echo "PAO_IOS_EXPORT_OPTIONS=$RUNNER_TEMP/ExportOptions.plist" >>"$GITHUB_ENV"
       - name: Build prod archive
-        run: scripts/build-release.sh "${{ matrix.app }}" prod ipa
+        run: tools/build-release.sh "${{ matrix.app }}" prod ipa
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: ${{ matrix.app }}-prod-ios
           path: |
-            frontend/apps/${{ matrix.app }}/build/ios/ipa/*.ipa
-            frontend/apps/${{ matrix.app }}/build/ios/archive
-            frontend/apps/${{ matrix.app }}/build/symbols/prod
+            Frontend/apps/${{ matrix.app }}/build/ios/ipa/*.ipa
+            Frontend/apps/${{ matrix.app }}/build/ios/archive
+            Frontend/apps/${{ matrix.app }}/build/symbols/prod

@@ -18,8 +18,9 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "22"
-          cache: npm
-          cache-dependency-path: backend/package-lock.json
+      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
+        with:
+          global-json-file: Backend/global.json
       - uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with: { distribution: temurin, java-version: "17" }
       - uses: subosito/flutter-action@fd55f4c5af5b953cc57a2be44cb082c8f6635e8e # v2.21.0
@@ -29,14 +30,10 @@ jobs:
           cache: true
       - name: OpenAPI lint
         run: |
-          if [ -f api/openapi.yaml ]; then
-            npx --yes @redocly/cli@1.34.3 lint api/openapi.yaml
+          if [ -f Backend/Api/openapi.yaml ]; then
+            npx --yes @redocly/cli@1.34.3 lint Backend/Api/openapi.yaml
           else
             echo "no spec yet: nothing to run"
           fi
-      - name: Install sqlc
-        run: |
-          curl -fsSL https://downloads.sqlc.dev/sqlc_1.27.0_linux_amd64.tar.gz |
-            sudo tar -xz -C /usr/local/bin sqlc
       - name: Generated code is up to date
         run: ./pao gen --check

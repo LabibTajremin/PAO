@@ -103,6 +103,8 @@ provider back to M14 and hides incoming requests.
 | M32 | Badge & level | `/profile/level` | P-10 |
 | M33 | Services & area | `/profile/services` | P-02 |
 | M34, M35, M36 | Language, help, log out | `/profile/*` | P-13 |
+| — | Dues to PAO: due summary, ledger, payment history; home due banner | `/billing` | ADR-0035 |
+| — | Pay the due: amount, method (cash to agent, bKash, Nagad, bank), reference | `/billing/pay` | ADR-0035 |
 
 Also required (not separate Figma frames; reuse patterns from the customer app): request
 expired, reject reason sheet, job cancelled by customer, empty jobs/earnings, offline.
@@ -126,3 +128,4 @@ tables, detail drawers), same tokens and accent theme. Screens follow PRD §8.3.
 | A10 | Bookings monitor + timeline | `booking:read:any` | A-06 |
 | A11 | Complaints queue | `complaint:manage` | A-07 |
 | A12 | Settings, admin users, roles, audit log | `settings:manage`, `admin_user:manage`, `audit:read` | A-08, A-10 |
+| — | Merchant payments queue (confirm, reject with reason) and merchant ledger, `/billing/*`; no screen ID, the permission gates the menu and routes | `billing:manage` | ADR-0035 |

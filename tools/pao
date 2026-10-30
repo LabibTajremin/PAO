@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+# pao — the single developer entry point used by humans, git hooks and CI.
+# Every command exits non-zero on failure. See docs/build/03-testing.md §3.
+set -euo pipefail
+
+PAO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export PAO_ROOT
+for lib in common lint test cover stack gen security ops phase; do
+  # shellcheck source=/dev/null
+  . "$PAO_ROOT/tools/lib/$lib.sh"
+done
+
+usage() {
+  cat <<'USAGE'
+usage: pao <command>
+
+  setup                 check tools, install dependencies and git hooks, create .env
+  up | down             start or stop the Docker stack
+  seed                  apply migrations and load seed data
+  gen [--check]         run code generators (fail on drift with --check or CI=true)
+  lint [backend|dart|shell|sizes]  formatting, analyzers, architecture/size/docs gates
+  test unit|integration|e2e|all (or backend|dart for one stack's unit tests)
+  cover [backend|dart]  enforce 100% coverage, write out/coverage/summary.md
+  security              gitleaks, osv-scanner, trivy
+  ops check             validate alert rules (promtool) and Grafana dashboards
+  ops restore-test [e2e]  dump the stack's database, restore it, compare counts
+  ci                    lint → ops check → gen check → test all → cover → perf → security
+  phase finish <id>     ci, push the branch, open the PR
+  perf [e2e]            C# load tests (PAO.LoadTests) against the local (or a fresh e2e) stack
+  dotnet [ci|build|format|spec|gates|unit|test|e2e]  one stage of Backend/scripts/ci.sh
+USAGE
+}
+
+cmd_setup() {
+  require_tool git "https://git-scm.com"
+  require_tool docker "https://docs.docker.com/engine/install/"
+  require_dotnet
+  command -v flutter >/dev/null 2>&1 || log "flutter not found — Flutter commands will fail"
+  command -v npx >/dev/null 2>&1 || log "npx not found — ./pao gen cannot bundle the OpenAPI contract"
+  (cd "$BACKEND" && dotnet restore PAO.sln -v quiet >/dev/null) || die "dotnet restore failed"
+  git -C "$PAO_ROOT" config core.hooksPath tools/hooks
+  [[ -f "$PAO_ROOT/.env" ]] || create_env
+  ok "setup complete — hooks installed from tools/hooks"
+}
+
+# create_env copies .env.example and fills the local-only keys with fresh random values.
+create_env() {
+  local jwt data
+  jwt=$(head -c 32 /dev/urandom | base64)
+  data=$(head -c 32 /dev/urandom | base64)
+  sed -e "s|^JWT_SIGNING_KEY=.*|JWT_SIGNING_KEY=$jwt|" -e "s|^DATA_ENCRYPTION_KEY=.*|DATA_ENCRYPTION_KEY=$data|" \
+    -e "s|^SEED_ADMIN_PASSWORD=.*|SEED_ADMIN_PASSWORD=local-$(head -c 9 /dev/urandom | base64 | tr -d '/+')|" \
+    "$PAO_ROOT/.env.example" >"$PAO_ROOT/.env"
+  log "created .env with fresh local keys"
+}
+
+cmd_ci() {
+  cmd_lint
+  cmd_ops check
+  cmd_gen --check
+  cmd_test all
+  cmd_cover
+  cmd_perf e2e
+  cmd_security
+  ok "ci passed"
+}
+
+# cmd_perf runs the C# load tests against the development stack, or with "e2e" against a
+# fresh end-to-end stack (infra/e2e/stack.sh) that can run beside other work.
+cmd_perf() {
+  [[ -f "$LOAD_DIR/PAO.LoadTests.csproj" ]] || {
+    nothing_to_run "perf"
+    return 0
+  }
+  require_tool dotnet "https://dotnet.microsoft.com/download"
+  local fixture="$OUT_DIR/perf-fixture.json" base=http://localhost:8080
+  mkdir -p "$OUT_DIR"
+  if [[ "${1:-}" == e2e ]]; then
+    # The fixture's tokens must be signed with the stack's keys, so both share them.
+    JWT_SIGNING_KEY=$(head -c 32 /dev/urandom | base64)
+    DATA_ENCRYPTION_KEY=$(head -c 32 /dev/urandom | base64)
+    export JWT_SIGNING_KEY DATA_ENCRYPTION_KEY APP_ENV=test
+    "$E2E_STACK" >/dev/null || die "e2e stack failed"
+    base=$(sed -n 's/^PAO_E2E_API=//p' "$E2E_STATE/.stack.env")
+    e2e_compose run --rm -T --entrypoint /app/migrate migrate perf-seed 2000 >"$fixture" ||
+      die "perf seed failed"
+  else
+    cmd_up
+    cmd_seed
+    compose run --rm -T --entrypoint /app/migrate migrate perf-seed 2000 >"$fixture" ||
+      die "perf seed failed"
+  fi
+  dotnet run --project "$LOAD_DIR" -c Release -- "$base" "$fixture" ||
+    die "performance threshold missed"
+  ok "performance thresholds met"
+}
+
+# cmd_dotnet runs one stage of the backend's own gate script (all of them by default).
+cmd_dotnet() {
+  local stage="${1:-ci}"
+  [[ "$stage" == ci ]] && stage=all
+  backend_ci "$stage"
+}
+
+main() {
+  local cmd="${1:-}"
+  [[ $# -gt 0 ]] && shift
+  case "$cmd" in
+    setup | up | down | seed | gen | lint | test | cover | security | ops | ci | phase | perf | dotnet)
+      "cmd_$cmd" "$@"
+      ;;
+    -h | --help | help) usage ;;
+    *)
+      usage >&2
+      exit 2
+      ;;
+  esac
+}
+
+main "$@"

@@ -1,0 +1,90 @@
+# Merchant dues (ADR-0035): the partner app's due banner, ledger and pay screen.
+summary:
+  get:
+    operationId: getMyDue
+    tags:
+    - Provider billing
+    summary: My due against the block limit (ADR-0035 §3)
+    x-permission: provider:manage:own
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/billing.yaml#/DueSummary
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+ledger:
+  get:
+    operationId: listMyLedger
+    tags:
+    - Provider billing
+    summary: My ledger, newest first
+    x-permission: provider:manage:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/billing.yaml#/LedgerEntryList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+payments:
+  get:
+    operationId: listMyPayments
+    tags:
+    - Provider billing
+    summary: My payment submissions, newest first
+    x-permission: provider:manage:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/Cursor
+    - $ref: ../components/parameters.yaml#/Limit
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/billing.yaml#/PaymentSubmissionList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+  post:
+    operationId: submitPayment
+    tags:
+    - Provider billing
+    summary: Report a payment of my due for admin review (ADR-0035 §4)
+    x-permission: provider:manage:own
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/billing.yaml#/PaymentSubmissionInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/billing.yaml#/PaymentSubmission
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

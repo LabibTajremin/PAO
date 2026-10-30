@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <!-- The worker host: outbox relay and scheduled jobs, plus liveness and metrics. -->
+  <ItemGroup>
+    <ProjectReference Include="..\PAO.Core\PAO.Core.csproj" />
+    <ProjectReference Include="..\PAO.BackgroundJobs\PAO.BackgroundJobs.csproj" />
+  </ItemGroup>
+</Project>

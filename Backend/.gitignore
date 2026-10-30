@@ -1,0 +1,6 @@
+bin/
+obj/
+Logs/*
+!Logs/.gitkeep
+coverage/
+TestResults/

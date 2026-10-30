@@ -1,0 +1,7 @@
+{
+  "Logging": {
+    "Level": "info",
+    "Directory": "Logs",
+    "WriteFiles": true
+  }
+}

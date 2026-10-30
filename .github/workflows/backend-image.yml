@@ -1,0 +1,42 @@
+name: backend-image
+
+# Builds the backend image and pushes it to GHCR, by hand only. It does not deploy:
+# the MVP deploys per docs/runbooks/deploy.md, by the digest this job prints (ADR-0036).
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Extra tag besides the commit SHA, e.g. v1.0.0 (optional)
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: backend-image-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  image:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Build and push
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACTOR: ${{ github.actor }}
+          REPOSITORY: ${{ github.repository }}
+          EXTRA_TAG: ${{ inputs.tag }}
+        run: |
+          image="ghcr.io/${REPOSITORY,,}/pao-backend"
+          echo "$GH_TOKEN" | docker login ghcr.io -u "$ACTOR" --password-stdin
+          docker build -t "$image:$GITHUB_SHA" -f Backend/docker/Dockerfile Backend
+          docker push -q "$image:$GITHUB_SHA"
+          if [[ -n "$EXTRA_TAG" ]]; then
+            docker tag "$image:$GITHUB_SHA" "$image:$EXTRA_TAG"
+            docker push -q "$image:$EXTRA_TAG"
+          fi
+          digest="$(docker inspect --format '{{index .RepoDigests 0}}' "$image:$GITHUB_SHA")"
+          echo "Deploy by digest: $digest" | tee -a "$GITHUB_STEP_SUMMARY"

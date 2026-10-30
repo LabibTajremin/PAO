@@ -1,8 +1,0 @@
-# gitleaks configuration: the default rules plus two documented false positives.
-[extend]
-useDefault = true
-
-[allowlist]
-description = ".env.example documents variable names with empty or local-only placeholder values; the TOTP tests use the key published in RFC 6238 appendix B"
-paths = ['''^\.env\.example$''']
-regexes = ['''GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ''']

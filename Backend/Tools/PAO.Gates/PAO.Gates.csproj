@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- The custom quality gates: file and method sizes, and documentation coverage. The unit
+       test suite runs them over the tree (`./pao dotnet ci`). -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+  </ItemGroup>
+</Project>

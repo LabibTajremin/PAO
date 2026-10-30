@@ -1,0 +1,77 @@
+# Cash on delivery and merchant dues (ADR-0035). Money is integer paisa.
+PaymentMethodKind:
+  type: string
+  description: How the merchant paid PAO.
+  enum: [cash_to_agent, bkash, nagad, bank]
+PaymentSubmissionStatus:
+  type: string
+  enum: [pending, confirmed, rejected]
+DueSummary:
+  type: object
+  description: |
+    The merchant's due (ADR-0035 §3): commission debits minus confirmed payment credits,
+    never below zero. Accepting a job is refused while `due` is above `blockAmount`.
+  required: [due, blockAmount, blocked, commissionRateBp, pendingPayments]
+  properties:
+    due: { $ref: "./common.yaml#/Money" }
+    blockAmount: { $ref: "./common.yaml#/Money" }
+    blocked: { type: boolean }
+    commissionRateBp: { type: integer, minimum: 0, maximum: 10000, example: 1000 }
+    pendingPayments: { $ref: "./common.yaml#/Money" }
+LedgerEntry:
+  type: object
+  required: [id, kind, amount, createdAt]
+  properties:
+    id: { type: string, format: uuid }
+    kind: { type: string, enum: [commission, payment], description: "A commission is a debit; a confirmed payment is a credit." }
+    amount: { $ref: "./common.yaml#/Money" }
+    bookingId: { type: string, format: uuid }
+    bookingNumber: { type: string, example: PAO-104233 }
+    jobTotal: { $ref: "./common.yaml#/Money" }
+    submissionId: { type: string, format: uuid }
+    createdAt: { type: string, format: date-time }
+LedgerEntryList:
+  type: object
+  required: [items]
+  properties:
+    items: { type: array, items: { $ref: "#/LedgerEntry" } }
+    nextCursor: { $ref: "./common.yaml#/PageCursor" }
+PaymentSubmissionInput:
+  type: object
+  required: [amountPaisa, method, reference]
+  properties:
+    amountPaisa: { type: integer, format: int64, minimum: 1, maximum: 100000000 }
+    method: { $ref: "#/PaymentMethodKind" }
+    reference: { type: string, minLength: 1, maxLength: 120, description: "Transaction id, receipt number or agent name." }
+PaymentSubmission:
+  type: object
+  required: [id, providerId, amount, method, reference, status, createdAt]
+  properties:
+    id: { type: string, format: uuid }
+    providerId: { type: string, format: uuid }
+    amount: { $ref: "./common.yaml#/Money" }
+    method: { $ref: "#/PaymentMethodKind" }
+    reference: { type: string }
+    status: { $ref: "#/PaymentSubmissionStatus" }
+    reviewerId: { type: string, format: uuid }
+    reason: { type: string }
+    createdAt: { type: string, format: date-time }
+    reviewedAt: { type: string, format: date-time }
+PaymentSubmissionList:
+  type: object
+  required: [items]
+  properties:
+    items: { type: array, items: { $ref: "#/PaymentSubmission" } }
+    nextCursor: { $ref: "./common.yaml#/PageCursor" }
+PaymentRejectInput:
+  type: object
+  required: [reason]
+  properties:
+    reason: { type: string, minLength: 3, maxLength: 500 }
+MerchantLedger:
+  type: object
+  required: [providerId, summary, entries]
+  properties:
+    providerId: { type: string, format: uuid }
+    summary: { $ref: "#/DueSummary" }
+    entries: { $ref: "#/LedgerEntryList" }

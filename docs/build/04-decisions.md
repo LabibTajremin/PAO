@@ -16,7 +16,7 @@ revise)`. Changing one later means a new ADR, not silent edits.
 | D6 | Recruitment | Self-enrolment through the Partner app. |
 | D7 | Level 2 | Required before first booking only for services flagged `requires_level_2` (none of the MVP five). Level 2 still ranks providers higher. |
 | D8 | Cancellation | Free for the customer until the start code is entered (PRD §5). Provider cancellation after acceptance is allowed with a reason and counted in quality metrics (PRD §6.4). No fees in MVP. |
-| D9 | Admin technology | Flutter Web (`frontend/apps/admin`), sharing `pao_core`, `pao_ui`, `pao_api`. |
+| D9 | Admin technology | Flutter Web (`Frontend/apps/admin`), sharing `pao_core`, `pao_ui`, `pao_api`. |
 | D10 | Third parties | SMS: `SmsSender` port with `console` (dev) and `sslwireless` (prod) adapters. NID: `NidVerifier` port with a `manual` adapter (verifier checks by eye). Maps: Google Maps. Push: FCM with a `log` adapter in dev. |
 | D11 | Home-salon gender rule | Home salon is served only by women providers (`provider.gender = female` and service flag `women_providers_only`). Customers cannot pick provider gender for other services in MVP. |
 | D12 | Accept time limit | 3 minutes for ASAP, 30 minutes for scheduled; both admin settings (PRD §5). |
@@ -39,9 +39,11 @@ revise)`. Changing one later means a new ADR, not silent edits.
 | E8 | Time | Stored UTC (`timestamptz`); formatted Asia/Dhaka in apps. |
 | E9 | Money | `int64` paisa; formatted `৳1,130` in apps. |
 | E10 | API versioning | `/v1/...`; breaking changes need `/v2`. |
-| E11 | Error codes | `{ "error": { "code", "message", "details" } }`; codes are `UPPER_SNAKE` and listed in `api/openapi.yaml` `components/schemas/ErrorCode`. |
+| E11 | Error codes | `{ "error": { "code", "message", "details" } }`; codes are `UPPER_SNAKE` and listed in `Backend/Api/openapi.yaml` `components/schemas/ErrorCode`. |
 | E13 | Backend runtime | .NET 10, ASP.NET Core areas, CQRS handlers, EF Core over the SQL scripts in `DB Changes` (ADR-0034, superseding ADR-0032's framework). |
 | E14 | Payment and revenue | Cash on delivery only; 10% commission becomes the merchant's due; accepting is blocked above ৳500 due; merchants submit payments, admins confirm (ADR-0035). |
+| E15 | Repository layout | `Backend/` (.NET, contract in `Backend/Api`, journeys in `Backend/Test/PAO.E2ETests`, load tests in `Backend/Test/PAO.LoadTests`), `Frontend/` (+ `test/e2e` app journeys), `docs/`, `infra/` (compose, `e2e/` stack, `ops/`, `security/`), `tools/` (CLI, hooks, CLI tests), ignored `out/` for generated output; `./pao` wraps `tools/pao` (ADR-0034 "Cut-over as done"). |
+| E16 | Launch defaults | First admin via `migrate create-admin` (password from `ADMIN_PASSWORD`); CORS origin list; `FCM_CREDENTIALS_JSON`; `S3_ENSURE_ENCRYPTION`; data-key rotation with `DATA_ENCRYPTION_PREVIOUS_KEYS` + `migrate reencrypt`; placeholders in `docs/guides/launch-values.md`; manual deploys and store uploads (ADR-0036). |
 | E12 | Design | Figma file below is the visual source of truth; accent colours are a theme token with ten presets; Midnight is the default (`05-screens.md`). |
 
 Figma: <https://www.figma.com/design/ytbbSEIF1I6cZN0iWJVQsC>
