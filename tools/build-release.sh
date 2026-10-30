@@ -27,7 +27,8 @@ args=(--release "--dart-define-from-file=config/$flavour.json")
 [[ -n "${PAO_BUILD_NUMBER:-}" ]] && args+=("--build-number=$PAO_BUILD_NUMBER")
 platform=ANDROID
 [[ "$target" == ipa ]] && platform=IOS
-platform_app_id="PAO_FCM_APP_ID_${app^^}_${platform}"
+# macOS runners ship bash 3.2, which has no ${var^^}.
+platform_app_id="PAO_FCM_APP_ID_$(printf %s "$app" | tr '[:lower:]' '[:upper:]')_${platform}"
 for key in PAO_MAPS_API_KEY PAO_FCM_API_KEY PAO_FCM_APP_ID PAO_FCM_SENDER_ID PAO_FCM_PROJECT_ID PAO_PIN_SHA256 PAO_SENTRY_DSN; do
   value="${!key:-}"
   if [[ "$key" == PAO_FCM_APP_ID && -n "${!platform_app_id:-}" ]]; then value="${!platform_app_id}"; fi
