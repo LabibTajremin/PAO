@@ -24,7 +24,7 @@ it first and continues from **Current task**.
 | P14 End-to-end | done | — | ADR-0031 |
 | P15 Interim backend | done | — | ADR-0032 |
 | P16 Hardening & handover | done | — | ADR-0023, ADR-0032 |
-| P17 .NET backend, COD & merchant dues | in_review | — | ADR-0034, ADR-0035; tasks 1–8 complete, `done` once merged |
+| P17 .NET backend, COD & merchant dues | done | — | ADR-0034, ADR-0035 |
 
 Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (merged).
 
