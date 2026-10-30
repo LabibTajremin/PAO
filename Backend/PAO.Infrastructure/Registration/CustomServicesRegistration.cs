@@ -56,7 +56,8 @@ public static class CustomServicesRegistration
         services.AddSingleton(ring);
         services.AddSingleton(sp => new TokenSigner(ring.Signing, sp.GetRequiredService<IClock>(), sp.GetRequiredService<IIdGenerator>()));
         services.AddSingleton(sp => new TokenVerifier(ring.VerificationKeys, sp.GetRequiredService<IClock>()));
-        services.AddSingleton(new DataCipher(StrictBase64.Decode(settings.App.DataEncryptionKey)!));
+        services.AddSingleton(new DataCipher(
+            StrictBase64.Decode(settings.App.DataEncryptionKey)!, ConfigValidator.DataKeys(settings.App.DataEncryptionPreviousKeys, [])));
     }
 
     private static void AddSms(IServiceCollection services, PaoSettings settings)
@@ -84,7 +85,7 @@ public static class CustomServicesRegistration
         {
             services.AddSingleton<IPushSender>(sp =>
             {
-                var account = ServiceAccount.Parse(File.ReadAllText(settings.Push.FcmCredentialsFile));
+                var account = ServiceAccount.Parse(FcmCredentials.Read(settings.Push));
                 var http = sp.GetRequiredService<IHttpClientFactory>();
                 var tokens = new GoogleAccessTokens(http.CreateClient(), account, sp.GetRequiredService<IClock>());
                 return new FcmPushSender(http.CreateClient(), FcmPushSender.EndpointFor(account.ProjectId), tokens);

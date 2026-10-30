@@ -3,6 +3,7 @@
     "Environment": "dev",
     "AdminCorsOrigin": "http://localhost:5000",
     "DataEncryptionKey": "",
+    "DataEncryptionPreviousKeys": "",
     "SeedAdminPassword": ""
   }
 }

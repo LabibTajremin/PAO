@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
+using PAO.Infrastructure.Configuration;
 using Serilog.Context;
 
 namespace PAO.Infrastructure.Http.Edge;
@@ -45,10 +46,16 @@ public static partial class EdgeMiddleware
     }
 
     /// <summary>Allows only the admin web origin, with credentials for its refresh cookie.</summary>
-    public static Func<HttpContext, RequestDelegate, Task> Cors(string origin) => (context, next) =>
+    public static Func<HttpContext, RequestDelegate, Task> Cors(string origins)
+    {
+        var allowed = new HashSet<string>(CorsOrigins.Parse(origins), StringComparer.Ordinal);
+        return (context, next) => Cors(context, next, allowed);
+    }
+
+    private static Task Cors(HttpContext context, RequestDelegate next, HashSet<string> allowed)
     {
         var request = context.Request;
-        if (request.Headers.Origin == origin)
+        if (request.Headers.Origin.ToString() is { Length: > 0 } origin && allowed.Contains(origin))
         {
             var headers = context.Response.Headers;
             headers.AccessControlAllowOrigin = origin;
@@ -64,7 +71,7 @@ public static partial class EdgeMiddleware
             return Task.CompletedTask;
         }
         return next(context);
-    };
+    }
 
     /// <summary>
     /// Reads the body (at most `maxBytes`) and parses JSON. Problems are recorded, not

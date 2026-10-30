@@ -6,6 +6,7 @@
     "AccessKey": "",
     "SecretKey": "",
     "BucketPrivate": "pao-private",
-    "BucketPublic": "pao-public"
+    "BucketPublic": "pao-public",
+    "EnsureEncryption": true
   }
 }

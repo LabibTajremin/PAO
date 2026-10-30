@@ -97,7 +97,7 @@ public sealed class ErrorMapAttribute(Type mapType) : Attribute
         {
             if (e is DomainException domain && Map.Errors.TryGetValue(domain.Reason, out var api))
             {
-                return api.Wrap(error);
+                return (domain.Details is { } details ? api.WithDetails(details) : api).Wrap(error);
             }
         }
         return error;

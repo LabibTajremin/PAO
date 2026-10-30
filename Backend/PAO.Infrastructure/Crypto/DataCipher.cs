@@ -10,26 +10,44 @@ public sealed class CiphertextException() : Exception("ciphertext invalid");
 /// Encrypts sensitive fields (NID numbers, TOTP secrets) with AES-GCM as `nonce ‖
 /// ciphertext ‖ tag`, the layout Go's cipher.AEAD.Seal produces, and
 /// derives keyed lookup hashes so equal values can be found without decrypting.
+/// Rotation (ADR-0036): new data uses the current key; data under a previous key still
+/// decrypts until `migrate reencrypt` rewrites it. Lookup hashes always use the original key
+/// (the last previous key, or the current one when there are none) because blocked NIDs are
+/// stored only as hashes and could never be re-hashed.
 /// </summary>
 public sealed class DataCipher
 {
     private const int NonceBytes = 12;
     private const int TagBytes = 16;
     private readonly byte[] key;
+    private readonly IReadOnlyList<byte[]> previousKeys;
     private readonly byte[] macKey;
 
-    /// <summary>Uses a 16, 24 or 32-byte AES key (DATA_ENCRYPTION_KEY is 32).</summary>
+    /// <summary>Uses a 16, 24 or 32-byte AES key (DATA_ENCRYPTION_KEY is 32) and no previous keys.</summary>
     public DataCipher(byte[] key)
+        : this(key, [])
     {
-        if (key.Length is not (16 or 24 or 32))
-        {
-            throw new ArgumentException($"data key: invalid key size {key.Length}", nameof(key));
-        }
-        this.key = key;
-        macKey = HMACSHA256.HashData(key, "pao-lookup-hash"u8);
     }
 
-    /// <summary>Returns nonce ‖ ciphertext ‖ tag.</summary>
+    /// <summary>
+    /// Uses `key` for new data and also decrypts with `previousKeys`
+    /// (DATA_ENCRYPTION_PREVIOUS_KEYS, newest first, the original key last).
+    /// </summary>
+    public DataCipher(byte[] key, IReadOnlyList<byte[]> previousKeys)
+    {
+        foreach (var candidate in previousKeys.Prepend(key))
+        {
+            if (candidate.Length is not (16 or 24 or 32))
+            {
+                throw new ArgumentException($"data key: invalid key size {candidate.Length}", nameof(key));
+            }
+        }
+        this.key = key;
+        this.previousKeys = previousKeys;
+        macKey = HMACSHA256.HashData(previousKeys.Count > 0 ? previousKeys[^1] : key, "pao-lookup-hash"u8);
+    }
+
+    /// <summary>Returns nonce ‖ ciphertext ‖ tag under the current key.</summary>
     public byte[] Encrypt(byte[] plaintext)
     {
         var output = new byte[NonceBytes + plaintext.Length + TagBytes];
@@ -40,30 +58,49 @@ public sealed class DataCipher
         return output;
     }
 
-    /// <summary>Reverses <see cref="Encrypt"/>; throws <see cref="CiphertextException"/> for anything else.</summary>
+    /// <summary>Reverses <see cref="Encrypt"/> under any known key; throws <see cref="CiphertextException"/> for anything else.</summary>
     public byte[] Decrypt(byte[] data)
     {
-        if (data.Length < NonceBytes + TagBytes)
+        foreach (var candidate in previousKeys.Prepend(key))
         {
-            throw new CiphertextException();
+            if (TryDecrypt(candidate, data) is { } plaintext)
+            {
+                return plaintext;
+            }
         }
-        var bodyLength = data.Length - NonceBytes - TagBytes;
-        var plaintext = new byte[bodyLength];
-        using var aes = new AesGcm(key, TagBytes);
-        try
-        {
-            aes.Decrypt(data.AsSpan(0, NonceBytes), data.AsSpan(NonceBytes, bodyLength), data.AsSpan(NonceBytes + bodyLength), plaintext);
-        }
-        catch (AuthenticationTagMismatchException)
-        {
-            throw new CiphertextException();
-        }
-        return plaintext;
+        throw new CiphertextException();
     }
+
+    /// <summary>
+    /// Returns `data` encrypted under the current key, or null when it already is; throws
+    /// <see cref="CiphertextException"/> when no known key opens it (`migrate reencrypt`).
+    /// </summary>
+    public byte[]? Reencrypt(byte[] data) =>
+        TryDecrypt(key, data) is null ? Encrypt(Decrypt(data)) : null;
 
     /// <summary>Returns a keyed hash (hex) of `value` for equality lookups.</summary>
     public string LookupHash(string value) =>
         Convert.ToHexStringLower(HMACSHA256.HashData(macKey, Encoding.UTF8.GetBytes(value)));
+
+    private static byte[]? TryDecrypt(byte[] candidate, byte[] data)
+    {
+        if (data.Length < NonceBytes + TagBytes)
+        {
+            return null;
+        }
+        var bodyLength = data.Length - NonceBytes - TagBytes;
+        var plaintext = new byte[bodyLength];
+        using var aes = new AesGcm(candidate, TagBytes);
+        try
+        {
+            aes.Decrypt(data.AsSpan(0, NonceBytes), data.AsSpan(NonceBytes, bodyLength), data.AsSpan(NonceBytes + bodyLength), plaintext);
+            return plaintext;
+        }
+        catch (AuthenticationTagMismatchException)
+        {
+            return null;
+        }
+    }
 }
 
 /// <summary>Random tokens and digits from the CSPRNG.</summary>

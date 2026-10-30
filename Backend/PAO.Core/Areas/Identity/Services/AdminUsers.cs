@@ -44,17 +44,19 @@ public sealed class AdminUsers(IIdentityRepository repository, IClock clock, IId
 
     /// <summary>
     /// Creates a demo admin with a known password unless the email exists; the seed uses it
-    /// for dev and staging. TOTP enrolment still happens at the first login.
+    /// for dev and staging, and `migrate create-admin` for the first production admin.
+    /// TOTP enrolment still happens at the first login. Returns whether it created the admin.
     /// </summary>
-    public async Task Ensure(string email, string name, IReadOnlyCollection<string> roles, string password, CancellationToken cancellationToken)
+    public async Task<bool> Ensure(string email, string name, IReadOnlyCollection<string> roles, string password, CancellationToken cancellationToken)
     {
         if (await Exists(email.Trim().ToLowerInvariant(), cancellationToken))
         {
-            return;
+            return false;
         }
         var created = await Create(email, name, roles, cancellationToken);
         var hash = await SecretHasher.Hash(password, Argon2Params.Password);
         await repository.SaveAdmin(created.Admin with { PasswordHash = hash, MustChangePassword = false }, cancellationToken);
+        return true;
     }
 
     private async Task<bool> Exists(string email, CancellationToken cancellationToken)

@@ -17,6 +17,12 @@ public sealed class DomainException : Exception
     /// <summary>The stable reason key.</summary>
     public string Reason { get; }
 
+    /// <summary>
+    /// Machine-readable context the edge copies into the error envelope's `details`
+    /// (for example the due and limit of MERCHANT_DUE_LIMIT); null for none.
+    /// </summary>
+    public IReadOnlyDictionary<string, object?>? Details { get; init; }
+
     /// <summary>Reports whether `error` is a <see cref="DomainException"/> with `reason`.</summary>
     public static bool Is(Exception? error, string reason) =>
         error is DomainException domain && domain.Reason == reason;

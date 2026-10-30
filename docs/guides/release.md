@@ -23,7 +23,7 @@ git-ignored.
   `PAO_SUPPORT_EMAIL`). `flutter run` defaults to `dev` (`default-flavor` in the
   pubspec); pass `--dart-define-from-file=config/dev.json` too.
 - The staging and prod hostnames and the support contacts are placeholders until the
-  owner confirms them. Application IDs cannot change once an app is on a store.
+  owner confirms them; [`launch-values.md`](launch-values.md) lists every placeholder. Application IDs cannot change once an app is on a store.
 
 ## Building
 
@@ -131,7 +131,8 @@ Set `PAO_WEB_BASE_HREF=/admin/` when the panel is served under a path.
 Before the first submission of each mobile app:
 
 - [ ] Final application ID / bundle ID confirmed (table above); app names and icons
-      (the launcher icons are still Flutter's defaults).
+      (the launcher icons are still Flutter's defaults; see
+      [`launch-values.md`](launch-values.md)).
 - [ ] Upload key and iOS distribution secrets added to CI; a signed prod build from
       `main` installs on a real device.
 - [ ] Production `config/prod.json` values confirmed: API host, support phone and email.

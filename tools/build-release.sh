@@ -7,7 +7,11 @@
 # Non-secret settings come from Frontend/apps/<app>/config/<flavour>.json; keys that
 # must stay out of the repo are read from the environment when set:
 #   PAO_MAPS_API_KEY, PAO_FCM_API_KEY, PAO_FCM_APP_ID, PAO_FCM_SENDER_ID,
-#   PAO_FCM_PROJECT_ID, PAO_BUILD_NUMBER, PAO_WEB_BASE_HREF, PAO_IOS_EXPORT_OPTIONS.
+#   PAO_FCM_PROJECT_ID, PAO_PIN_SHA256, PAO_SENTRY_DSN, PAO_BUILD_NUMBER,
+#   PAO_WEB_BASE_HREF, PAO_IOS_EXPORT_OPTIONS.
+# Firebase issues one App ID per platform and app, so PAO_FCM_APP_ID_<APP>_<ANDROID|IOS>
+# (e.g. PAO_FCM_APP_ID_CUSTOMER_IOS) wins over PAO_FCM_APP_ID when set (ADR-0036).
+# An unset or empty value leaves its feature off: no push, no pinning, no Sentry.
 set -euo pipefail
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -21,8 +25,13 @@ target="${3:-$default_target}"
 dir="$root/Frontend/apps/$app"
 args=(--release "--dart-define-from-file=config/$flavour.json")
 [[ -n "${PAO_BUILD_NUMBER:-}" ]] && args+=("--build-number=$PAO_BUILD_NUMBER")
-for key in PAO_MAPS_API_KEY PAO_FCM_API_KEY PAO_FCM_APP_ID PAO_FCM_SENDER_ID PAO_FCM_PROJECT_ID; do
-  [[ -n "${!key:-}" ]] && args+=("--dart-define=$key=${!key}")
+platform=ANDROID
+[[ "$target" == ipa ]] && platform=IOS
+platform_app_id="PAO_FCM_APP_ID_${app^^}_${platform}"
+for key in PAO_MAPS_API_KEY PAO_FCM_API_KEY PAO_FCM_APP_ID PAO_FCM_SENDER_ID PAO_FCM_PROJECT_ID PAO_PIN_SHA256 PAO_SENTRY_DSN; do
+  value="${!key:-}"
+  if [[ "$key" == PAO_FCM_APP_ID && -n "${!platform_app_id:-}" ]]; then value="${!platform_app_id}"; fi
+  if [[ -n "$value" ]]; then args+=("--dart-define=$key=$value"); fi
 done
 
 case "$target" in

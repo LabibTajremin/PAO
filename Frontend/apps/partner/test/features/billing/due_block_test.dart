@@ -92,4 +92,38 @@ void main() {
     await h.settle(tester);
     expect(find.byType(PayPage), findsOneWidget);
   });
+
+  testWidgets(
+    'the refusal names the due and the limit when the API sends them',
+    (tester) async {
+      tallScreen(tester);
+      final h = await Harness.create();
+      await h.signIn(tester);
+      h.http
+        ..onGet(
+          _job,
+          (s) => s.reply(
+            200,
+            booking(status: 'requested', party: null, located: false),
+          ),
+        )
+        ..onPost(
+          '$_job/accept',
+          (s) => s.reply(409, {
+            'error': {
+              'code': 'MERCHANT_DUE_LIMIT',
+              'message': 'due',
+              'details': {'duePaisa': 62000, 'blockAmountPaisa': 50000},
+            },
+          }),
+        );
+      await h.pumpApp(tester, Routes.requestOf('b1'));
+      await tester.tap(find.text('Accept'));
+      await h.settle(tester);
+      expect(
+        find.text('Due ৳620 is over the ৳500 limit. Pay to accept new jobs.'),
+        findsOneWidget,
+      );
+    },
+  );
 }

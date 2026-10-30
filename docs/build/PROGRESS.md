@@ -35,6 +35,14 @@ the API journeys are C# (`Backend/Test/PAO.E2ETests/Journeys`, 13 tests), the lo
 is C# (`Backend/Test/PAO.LoadTests`), the earlier backends and their tooling are deleted, and the
 repository follows ADR-0034 "Repository layout after cut-over" (see "Cut-over as done"
 there and E15 in `04-decisions.md`). There is no next phase in the build kit.
+
+Pre-launch items (ADR-0036, E16): every code item of the former deployment "Gaps" is
+done — `migrate create-admin`, CORS origin list, `FCM_CREDENTIALS_JSON`,
+`S3_ENSURE_ENCRYPTION`, billing setting bounds, `MERCHANT_DUE_LIMIT` details, CI pins/
+Sentry/per-platform FCM App IDs, data-key rotation (`DATA_ENCRYPTION_PREVIOUS_KEYS`,
+`migrate reencrypt`), the cross-account sweep (`CrossAccountTests`), the idempotent
+replay race and the manual `backend-image` workflow. What remains is owner action:
+`docs/guides/deployment.md` "Gaps to close before launch" and `docs/guides/launch-values.md`.
 Run the full `./pao ci` in the background and one heavy job at a time: two parallel .NET
 builds overload the 4-CPU container. .NET 10 SDK installs to `/root/.dotnet`.
 

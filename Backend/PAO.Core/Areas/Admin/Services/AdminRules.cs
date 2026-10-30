@@ -21,6 +21,20 @@ public static partial class AdminRules
     // The spellings Go's strconv.ParseBool accepts.
     private static readonly HashSet<string> Booleans = ["1", "t", "T", "TRUE", "true", "True", "0", "f", "F", "FALSE", "false", "False"];
 
+    // Upper bounds beyond the type: a commission rate is in basis points, so 10000 is 100%.
+    private static readonly Dictionary<string, long> Maximums = new(StringComparer.Ordinal)
+    {
+        ["billing.commission_rate_bp"] = 10_000,
+    };
+
+    /// <summary>
+    /// Reports whether a new value fits the setting `key` of `type`: its type and, for
+    /// bounded settings such as billing.commission_rate_bp, its maximum.
+    /// </summary>
+    public static bool Fits(string key, string type, string value) =>
+        FitsType(type, value)
+        && (!Maximums.TryGetValue(key, out var maximum) || BigInteger.Parse(value, CultureInfo.InvariantCulture) <= maximum);
+
     /// <summary>Reports whether a new value fits the setting's type; numbers are never negative, as every setting is a duration, count, radius or threshold.</summary>
     public static bool FitsType(string type, string value) => type switch
     {

@@ -71,6 +71,11 @@ public static class ConfigValidator
         {
             problems.Add("METRICS_ADDR must be a host:port listen address");
         }
+        var origins = CorsOrigins.Parse(s.App.AdminCorsOrigin);
+        if (origins.Count == 0 || !origins.All(CorsOrigins.IsValid))
+        {
+            problems.Add("ADMIN_CORS_ORIGIN must be one or more comma-separated http(s) origins without a path");
+        }
     }
 
     private static void CheckServices(PaoSettings s, List<string> problems)
@@ -89,6 +94,23 @@ public static class ConfigValidator
         CheckKey(problems, "JWT_SIGNING_KEY", s.Jwt.SigningKey);
         PreviousKeys(s.Jwt.PreviousPublicKeys, problems);
         CheckKey(problems, "DATA_ENCRYPTION_KEY", s.App.DataEncryptionKey);
+        DataKeys(s.App.DataEncryptionPreviousKeys, problems);
+    }
+
+    /// <summary>Parses DATA_ENCRYPTION_PREVIOUS_KEYS (`base64,base64`); reports malformed entries to `problems`.</summary>
+    public static List<byte[]> DataKeys(string list, List<string> problems)
+    {
+        var keys = new List<byte[]>();
+        foreach (var entry in list.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        {
+            if (StrictBase64.Decode(entry) is { Length: KeyBytes } key)
+            {
+                keys.Add(key);
+                continue;
+            }
+            problems.Add($"DATA_ENCRYPTION_PREVIOUS_KEYS entries must be {KeyBytes} bytes, base64-encoded");
+        }
+        return keys;
     }
 
     private static void CheckAdapters(PaoSettings s, List<string> problems)
@@ -110,7 +132,10 @@ public static class ConfigValidator
         }
         if (push == "fcm")
         {
-            Require(problems, "FCM_CREDENTIALS_FILE", s.Push.FcmCredentialsFile);
+            if (s.Push.FcmCredentialsFile.Length == 0 && s.Push.FcmCredentialsJson.Length == 0)
+            {
+                problems.Add("FCM_CREDENTIALS_FILE or FCM_CREDENTIALS_JSON is required");
+            }
         }
         if (s.App.Environment == AppEnvironments.Prod && (sms == "console" || push == "log"))
         {

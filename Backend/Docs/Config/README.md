@@ -7,17 +7,17 @@ Each concern has one file in `Config/`, bound to a typed options class
 
 | File | Section | Keys |
 |---|---|---|
-| `app.json` | `App` | `Environment`, `AdminCorsOrigin`, `DataEncryptionKey`, `SeedAdminPassword` |
+| `app.json` | `App` | `Environment`, `AdminCorsOrigin`, `DataEncryptionKey`, `DataEncryptionPreviousKeys`, `SeedAdminPassword` |
 | `database.json` | `Database` | `Url` |
 | `http.json` | `Http` | `Address`, `MetricsAddress`, `MaxBodyBytes`, `RateLimitPerUser`, `RateLimitPerIp`, `RateLimitWindowSeconds` |
 | `jobs.json` | `Jobs` | `OutboxRelayIntervalMs`, `OutboxRetentionDays` |
 | `jwt.json` | `Jwt` | `KeyId`, `SigningKey`, `PreviousPublicKeys`, `AccessTokenTtlSeconds` |
 | `logging.json` | `Logging` | `Level`, `Directory`, `WriteFiles` |
-| `push.json` | `Push` | `Adapter`, `FcmCredentialsFile` |
+| `push.json` | `Push` | `Adapter`, `FcmCredentialsFile`, `FcmCredentialsJson` |
 | `redis.json` | `Redis` | `Url` |
 | `sms.json` | `Sms` | `Adapter`, `SslWirelessEndpoint`, `SslWirelessApiToken`, `SslWirelessSid`, `TimeoutSeconds` |
 | `smtp.json` | `Smtp` | `Host`, `Port`, `UseTls`, `From`, `Username`, `Password` |
-| `storage.json` | `Storage` | `Endpoint`, `PublicEndpoint`, `Region`, `AccessKey`, `SecretKey`, `BucketPrivate`, `BucketPublic` |
+| `storage.json` | `Storage` | `Endpoint`, `PublicEndpoint`, `Region`, `AccessKey`, `SecretKey`, `BucketPrivate`, `BucketPublic`, `EnsureEncryption` |
 
 ## Local settings file (`appsettings.Local.json`)
 

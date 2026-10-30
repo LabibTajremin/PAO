@@ -34,7 +34,7 @@ class ProviderJobsApi {
   const ProviderJobsApi(this._dio);
 
   /// Accept a request (one active ASAP job at a time)
-  ///
+  /// A merchant whose due is above the block limit gets 409 MERCHANT_DUE_LIMIT with &#x60;details.duePaisa&#x60; and &#x60;details.blockAmountPaisa&#x60; (ADR-0035 §3, ADR-0036).
   ///
   /// Parameters:
   /// * [bookingId]

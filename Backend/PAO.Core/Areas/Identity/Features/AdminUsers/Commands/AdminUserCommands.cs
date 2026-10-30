@@ -78,3 +78,32 @@ public sealed class EnsureSeedAdminHandler(Services.AdminUsers admins) : IReques
         return Unit.Value;
     }
 }
+
+/// <summary>
+/// Creates the first production super admin (`migrate create-admin`) with an operator-chosen
+/// password; an existing email is left untouched. The result says whether it was created.
+/// </summary>
+public sealed record CreateSuperAdminCommand(string Email, string Name, string Password) : ICommand<bool>;
+
+/// <summary>Validates <see cref="CreateSuperAdminCommand"/>: a long password, since it guards every permission.</summary>
+public sealed class CreateSuperAdminValidator : AbstractValidator<CreateSuperAdminCommand>
+{
+    /// <summary>The shortest accepted password.</summary>
+    public const int MinimumPasswordLength = 12;
+
+    /// <summary>The rules.</summary>
+    public CreateSuperAdminValidator()
+    {
+        RuleFor(c => c.Email).NotEmpty().EmailAddress();
+        RuleFor(c => c.Name).NotEmpty();
+        RuleFor(c => c.Password).MinimumLength(MinimumPasswordLength);
+    }
+}
+
+/// <summary>Handles <see cref="CreateSuperAdminCommand"/>.</summary>
+public sealed class CreateSuperAdminHandler(Services.AdminUsers admins) : IRequestHandler<CreateSuperAdminCommand, bool>
+{
+    /// <inheritdoc />
+    public Task<bool> Handle(CreateSuperAdminCommand request, CancellationToken cancellationToken) =>
+        admins.Ensure(request.Email, request.Name, [Roles.SuperAdmin], request.Password, cancellationToken);
+}

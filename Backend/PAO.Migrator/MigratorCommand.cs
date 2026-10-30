@@ -15,16 +15,22 @@ namespace PAO.Migrator;
 public static class MigratorCommand
 {
     /// <summary>The usage line printed for anything else.</summary>
-    public const string Usage = "usage: migrate up|seed|perf-seed N";
+    public const string Usage = "usage: migrate up|seed|perf-seed N|create-admin --email E --name N|reencrypt";
 
     /// <summary>
     /// Runs `args` and returns the process exit code; messages go to `output`. `seed` runs
-    /// `migrate seed` and `perfSeed` runs `migrate perf-seed N` with N of at least one.
+    /// `migrate seed` and `perfSeed` runs `migrate perf-seed N` with N of at least one;
+    /// `commands` holds the other commands by their first word, each given the remaining words.
     /// </summary>
     public static async Task<int> RunMigrator(
         this string[] args, IDictionary environment, string migrationsDirectory, TextWriter output,
-        Func<Task<int>>? seed = null, Func<int, Task<int>>? perfSeed = null)
+        Func<Task<int>>? seed = null, Func<int, Task<int>>? perfSeed = null,
+        IReadOnlyDictionary<string, Func<string[], Task<int>>>? commands = null)
     {
+        if (args.Length > 0 && commands is not null && commands.TryGetValue(args[0], out var command))
+        {
+            return await command(args[1..]);
+        }
         if (args is ["seed"] && seed is not null)
         {
             return await seed();

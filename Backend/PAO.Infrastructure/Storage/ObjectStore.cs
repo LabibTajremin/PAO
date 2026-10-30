@@ -24,10 +24,12 @@ public sealed class ObjectStore : IDisposable
 {
     private readonly AmazonS3Client client;
     private readonly AmazonS3Client presigner;
+    private readonly bool ensureEncryption;
 
     /// <summary>Connects to the configured endpoint; presigns for the public one.</summary>
     public ObjectStore(StorageOptions options)
     {
+        ensureEncryption = options.EnsureEncryption;
         client = Build(options, options.Endpoint);
         presigner = Build(options, string.IsNullOrEmpty(options.PublicEndpoint) ? options.Endpoint : options.PublicEndpoint);
     }
@@ -91,14 +93,26 @@ public sealed class ObjectStore : IDisposable
         client.DeleteObjectAsync(bucket, key, cancellationToken);
 
     /// <summary>
-    /// Creates the bucket when missing and asks for default AES-256 server-side encryption,
-    /// so documents are encrypted at rest (PRD §6.6).
+    /// Creates the bucket when missing and, unless Storage:EnsureEncryption is off, asks for
+    /// default AES-256 server-side encryption, so documents are encrypted at rest (PRD §6.6).
+    /// A bucket another instance created meanwhile counts as present.
     /// </summary>
     public async Task EnsureBucket(string bucket, CancellationToken cancellationToken)
     {
         if (!await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(client, bucket))
         {
-            await client.PutBucketAsync(new PutBucketRequest { BucketName = bucket }, cancellationToken);
+            try
+            {
+                await client.PutBucketAsync(new PutBucketRequest { BucketName = bucket }, cancellationToken);
+            }
+            catch (AmazonS3Exception error) when (error.ErrorCode == "BucketAlreadyOwnedByYou")
+            {
+                // The API and the worker start together; whichever creates it second lands here.
+            }
+        }
+        if (!ensureEncryption)
+        {
+            return;
         }
         await client.PutBucketEncryptionAsync(new PutBucketEncryptionRequest
         {

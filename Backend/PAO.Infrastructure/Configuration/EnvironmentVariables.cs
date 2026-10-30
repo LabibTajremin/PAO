@@ -15,6 +15,7 @@ public static class EnvironmentVariables
         ["APP_ENV"] = "App:Environment",
         ["ADMIN_CORS_ORIGIN"] = "App:AdminCorsOrigin",
         ["DATA_ENCRYPTION_KEY"] = "App:DataEncryptionKey",
+        ["DATA_ENCRYPTION_PREVIOUS_KEYS"] = "App:DataEncryptionPreviousKeys",
         ["SEED_ADMIN_PASSWORD"] = "App:SeedAdminPassword",
         ["LOG_LEVEL"] = "Logging:Level",
         ["HTTP_ADDR"] = "Http:Address",
@@ -28,6 +29,7 @@ public static class EnvironmentVariables
         ["S3_SECRET_KEY"] = "Storage:SecretKey",
         ["S3_BUCKET_PRIVATE"] = "Storage:BucketPrivate",
         ["S3_BUCKET_PUBLIC"] = "Storage:BucketPublic",
+        ["S3_ENSURE_ENCRYPTION"] = "Storage:EnsureEncryption",
         ["JWT_SIGNING_KEY"] = "Jwt:SigningKey",
         ["JWT_KEY_ID"] = "Jwt:KeyId",
         ["JWT_PREVIOUS_PUBLIC_KEYS"] = "Jwt:PreviousPublicKeys",
@@ -36,6 +38,7 @@ public static class EnvironmentVariables
         ["SSLWIRELESS_SID"] = "Sms:SslWirelessSid",
         ["PUSH_ADAPTER"] = "Push:Adapter",
         ["FCM_CREDENTIALS_FILE"] = "Push:FcmCredentialsFile",
+        ["FCM_CREDENTIALS_JSON"] = "Push:FcmCredentialsJson",
     };
 
     /// <summary>Returns the configuration values the set variables of `environment` define.</summary>

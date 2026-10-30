@@ -70,6 +70,5 @@ accepted, so do not keep it as a previous key:
 
 ## Not covered here
 
-`DATA_ENCRYPTION_KEY` (AES-GCM for NID numbers) has no rotation support yet: changing it
-makes stored NID numbers unreadable. Rotating it needs a re-encryption job; see
-`HANDOVER.md` (known limitations).
+`DATA_ENCRYPTION_KEY` (AES-GCM for NID numbers and TOTP secrets) has its own runbook:
+[rotate-data-key.md](rotate-data-key.md).

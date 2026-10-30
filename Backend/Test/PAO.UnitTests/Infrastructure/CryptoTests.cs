@@ -173,6 +173,24 @@ public sealed class SecretTests
     }
 
     [Fact]
+    public void A_rotated_key_still_decrypts_old_data_and_keeps_lookup_hashes()
+    {
+        var original = Convert.FromBase64String(TestEnvironment.Key);
+        var next = System.Security.Cryptography.RandomNumberGenerator.GetBytes(32);
+        var old = new DataCipher(original);
+        var rotated = new DataCipher(next, [original]);
+        var stored = old.Encrypt("1234567890"u8.ToArray());
+        Assert.Equal("1234567890", Encoding.UTF8.GetString(rotated.Decrypt(stored)));
+        Assert.Equal(old.LookupHash("1234567890"), rotated.LookupHash("1234567890"));
+        var fresh = rotated.Reencrypt(stored)!;
+        Assert.Throws<CiphertextException>(() => old.Decrypt(fresh));
+        Assert.Equal("1234567890", Encoding.UTF8.GetString(new DataCipher(next).Decrypt(fresh)));
+        Assert.Null(rotated.Reencrypt(fresh));
+        Assert.Throws<CiphertextException>(() => rotated.Reencrypt(new DataCipher(new byte[32]).Encrypt([1])));
+        Assert.Throws<ArgumentException>(() => new DataCipher(next, [new byte[5]]));
+    }
+
+    [Fact]
     public void Totp_codes_match_otplib_with_one_step_of_drift()
     {
         const string secret = "JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP";

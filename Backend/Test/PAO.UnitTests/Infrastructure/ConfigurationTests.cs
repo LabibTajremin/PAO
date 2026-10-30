@@ -78,6 +78,8 @@ public sealed class ConfigurationTests : IDisposable
         s.Jwt.SigningKey = "AAAA";
         s.Jwt.PreviousPublicKeys = "old:AAAA,:x,k0";
         s.App.DataEncryptionKey = string.Empty;
+        s.App.DataEncryptionPreviousKeys = "AAAA";
+        s.App.AdminCorsOrigin = "https://admin.pao.com.bd/, https://preview.pao.com.bd";
         s.Sms.Adapter = "pigeon";
         s.Push.Adapter = "carrier";
         var error = Assert.Throws<ConfigException>(() => ConfigValidator.Validate(s));
@@ -90,6 +92,8 @@ public sealed class ConfigurationTests : IDisposable
         Assert.Contains("JWT_PREVIOUS_PUBLIC_KEYS entry \"old\" must be kid:base64-public-key", error.Problems);
         Assert.Contains("JWT_PREVIOUS_PUBLIC_KEYS entry \"k0\" must be kid:base64-public-key", error.Problems);
         Assert.Contains("DATA_ENCRYPTION_KEY is required", error.Problems);
+        Assert.Contains("DATA_ENCRYPTION_PREVIOUS_KEYS entries must be 32 bytes, base64-encoded", error.Problems);
+        Assert.Contains("ADMIN_CORS_ORIGIN must be one or more comma-separated http(s) origins without a path", error.Problems);
         Assert.Contains("SMS_ADAPTER must be one of console, sslwireless", error.Problems);
         Assert.Contains("PUSH_ADAPTER must be one of log, fcm", error.Problems);
         Assert.StartsWith("invalid configuration: ", error.Message, StringComparison.Ordinal);
@@ -104,11 +108,48 @@ public sealed class ConfigurationTests : IDisposable
         s.Sms.Adapter = "sslwireless";
         s.Push.Adapter = "fcm";
         var missing = Assert.Throws<ConfigException>(() => ConfigValidator.Validate(s));
-        Assert.Equal(["SSLWIRELESS_API_TOKEN is required", "SSLWIRELESS_SID is required", "FCM_CREDENTIALS_FILE is required"], missing.Problems);
+        Assert.Equal(["SSLWIRELESS_API_TOKEN is required", "SSLWIRELESS_SID is required", "FCM_CREDENTIALS_FILE or FCM_CREDENTIALS_JSON is required"], missing.Problems);
         s.Sms.SslWirelessApiToken = "t";
         s.Sms.SslWirelessSid = "s";
+        s.Push.FcmCredentialsJson = "{}";
+        ConfigValidator.Validate(s);
+        s.Push.FcmCredentialsJson = string.Empty;
         s.Push.FcmCredentialsFile = "/run/fcm.json";
         ConfigValidator.Validate(s);
+    }
+
+    [Theory]
+    [InlineData("http://localhost:5000", true)]
+    [InlineData("https://admin.pao.com.bd, https://pao-admin-git-main.vercel.app", true)]
+    [InlineData("https://admin.pao.com.bd,", true)]
+    [InlineData("", false)]
+    [InlineData(" , ", false)]
+    [InlineData("admin.pao.com.bd", false)]
+    [InlineData("ftp://admin.pao.com.bd", false)]
+    [InlineData("https://admin.pao.com.bd/app", false)]
+    [InlineData("https://user@admin.pao.com.bd", false)]
+    [InlineData("https://admin.pao.com.bd?x=1", false)]
+    public void Admin_cors_origin_takes_one_or_more_origins(string value, bool valid)
+    {
+        var s = TestSettings.Create();
+        s.App.AdminCorsOrigin = value;
+        Assert.Equal(valid, Record.Exception(() => ConfigValidator.Validate(s)) is null);
+    }
+
+    [Fact]
+    public void Data_keys_and_fcm_credentials_parse()
+    {
+        var problems = new List<string>();
+        Assert.Equal(2, ConfigValidator.DataKeys($"{TestEnvironment.Key}, ,{TestEnvironment.Key}", problems).Count);
+        Assert.Empty(problems);
+        Assert.Equal(["DATA_ENCRYPTION_PREVIOUS_KEYS entries must be 32 bytes, base64-encoded"], (ConfigValidator.DataKeys("x", problems), problems).problems);
+        const string json = """{"project_id":"p"}""";
+        Assert.Equal(json, FcmCredentials.Read(new PushOptions { FcmCredentialsJson = " " + json }));
+        Assert.Equal(json, FcmCredentials.Read(new PushOptions { FcmCredentialsJson = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(json)) }));
+        var file = Path.GetTempFileName();
+        File.WriteAllText(file, json);
+        Assert.Equal(json, FcmCredentials.Read(new PushOptions { FcmCredentialsFile = file, FcmCredentialsJson = "ignored" }));
+        File.Delete(file);
     }
 
     [Fact]

@@ -1765,6 +1765,7 @@ paths:
       tags:
         - Provider jobs
       summary: Accept a request (one active ASAP job at a time)
+      description: A merchant whose due is above the block limit gets 409 MERCHANT_DUE_LIMIT with `details.duePaisa` and `details.blockAmountPaisa` (ADR-0035 §3, ADR-0036).
       x-permission: job:respond
       parameters:
         - $ref: '#/components/parameters/BookingId'

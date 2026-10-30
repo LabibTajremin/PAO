@@ -191,13 +191,16 @@ There is no deploy workflow in `.github/workflows` today. A job would:
 - Add the custom domain (e.g. `admin.pao.com.bd`) under Project → Domains and create
   the CNAME Vercel shows.
 - The API's CORS check (`EdgeMiddleware` in
-  `Backend/PAO.Infrastructure/Http/Edge/EdgeMiddleware.cs`) allows exactly **one** origin, the
-  value of `ADMIN_CORS_ORIGIN`, compared as an exact string. Set it to the full
-  origin with scheme and no trailing slash: `ADMIN_CORS_ORIGIN=https://admin.pao.com.bd`.
-- Consequently Vercel preview URLs (`*.vercel.app`) cannot call the production API.
-  Use previews against staging: build with `staging`, deploy without `--prod`, and give
-  the staging API a fixed preview alias as its `ADMIN_CORS_ORIGIN` (for example assign
-  `admin-staging.pao.com.bd` to the staging deployment with `vercel alias`).
+  `Backend/PAO.Infrastructure/Http/Edge/EdgeMiddleware.cs`) allows the origins listed in
+  `ADMIN_CORS_ORIGIN`: one origin or a comma-separated list, each compared as an exact
+  string. Write each with scheme and no path or trailing slash; the API refuses to start
+  otherwise: `ADMIN_CORS_ORIGIN=https://admin.pao.com.bd`.
+- Wildcards are not accepted, so a Vercel preview URL (`*.vercel.app`) must be listed
+  by name to call an API. MVP rule (ADR-0036): production lists only the production
+  admin origin; previews run against staging, whose `ADMIN_CORS_ORIGIN` lists the
+  staging alias and, while needed, a fixed preview alias, e.g.
+  `ADMIN_CORS_ORIGIN=https://admin-staging.pao.com.bd,https://pao-admin-preview.vercel.app`
+  (assign the alias with `vercel alias`).
 - Vercel environment variables do not reach the app: Flutter compiles
   `--dart-define` values into the JavaScript at build time, so a different API host
   means a different build.
@@ -214,12 +217,11 @@ There is no deploy workflow in `.github/workflows` today. A job would:
    `rediss://default:<password>@<host>:6379` URL.
 3. **Storage (Cloudflare R2).** Create an API token with Object Read & Write on the two
    buckets. Endpoint `https://<account-id>.r2.cloudflarestorage.com`, region `auto`.
-   The API creates `S3_BUCKET_PRIVATE` and `S3_BUCKET_PUBLIC` at start-up and sets
-   default encryption (`PutBucketEncryption`) on every start. Create the buckets
-   yourself first if the token cannot create them. R2 may not implement
-   `PutBucketEncryption`; if the API fails at start-up with `prepare storage`, that is
-   the cause and AWS S3 is the fallback (no code path skips that call). Verify this on
-   staging before choosing R2.
+   The API creates `S3_BUCKET_PRIVATE` and `S3_BUCKET_PUBLIC` at start-up when missing
+   (a bucket the worker created a moment earlier counts as present) and sets default
+   encryption (`PutBucketEncryption`) on every start. R2 encrypts every object at rest
+   itself and may not implement that call, so on R2 set `S3_ENSURE_ENCRYPTION=false`
+   (ADR-0036). Create the buckets yourself first if the token cannot create them.
    On AWS S3: an IAM user limited to the two buckets, endpoint
    `https://s3.<region>.amazonaws.com`.
 4. **Firebase.** Create one project; add the Android and iOS apps (§4.3); create a
@@ -252,14 +254,18 @@ line (`invalid configuration: …`). Give API, worker and migrate the same envir
 | `JWT_SIGNING_KEY` | **yes** | base64 of 32 bytes | generate (§3.3) |
 | `JWT_KEY_ID` | no (default `k1`) | `k202610` | your choice; change on rotation |
 | `JWT_PREVIOUS_PUBLIC_KEYS` | no | empty on first deploy | `kid:base64pub,…`, only during rotation |
-| `DATA_ENCRYPTION_KEY` | **yes** | base64 of 32 bytes | generate (§3.3); cannot be rotated yet |
-| `ADMIN_CORS_ORIGIN` | no (default `http://localhost:5000`) | `https://admin.pao.com.bd` | the admin web origin (§2.5) |
+| `DATA_ENCRYPTION_KEY` | **yes** | base64 of 32 bytes | generate (§3.3); rotate with [`rotate-data-key.md`](../runbooks/rotate-data-key.md) |
+| `DATA_ENCRYPTION_PREVIOUS_KEYS` | no | empty on first deploy | earlier data keys, comma-separated, newest first, original key last; only after a rotation |
+| `ADMIN_CORS_ORIGIN` | no (default `http://localhost:5000`) | `https://admin.pao.com.bd` | the admin web origin, or a comma-separated list (§2.5) |
+| `S3_ENSURE_ENCRYPTION` | no (default `true`) | `false` on R2 | `false` skips `PutBucketEncryption` for providers that encrypt at rest themselves |
 | `SMS_ADAPTER` | no (default `console`); prod needs `sslwireless` | `sslwireless` | — |
 | `SSLWIRELESS_API_TOKEN` | when `SMS_ADAPTER=sslwireless` | `…` | SSL Wireless |
 | `SSLWIRELESS_SID` | when `SMS_ADAPTER=sslwireless` | `…` | SSL Wireless |
 | `PUSH_ADAPTER` | no (default `log`); prod needs `fcm` | `fcm` | — |
-| `FCM_CREDENTIALS_FILE` | when `PUSH_ADAPTER=fcm` | `/etc/secrets/fcm.json` | path to the Firebase service-account JSON, mounted as a secret file (Render "Secret Files", Fly `fly secrets` + a file written at start, Railway volume) |
+| `FCM_CREDENTIALS_FILE` | this or `FCM_CREDENTIALS_JSON` when `PUSH_ADAPTER=fcm` | `/etc/secrets/fcm.json` | path to the Firebase service-account JSON, mounted as a secret file (Render "Secret Files"); wins when both are set |
+| `FCM_CREDENTIALS_JSON` | this or `FCM_CREDENTIALS_FILE` when `PUSH_ADAPTER=fcm` | output of `base64 -w0 fcm.json` | the same JSON as a plain secret, raw or base64, for hosts without secret files (Fly, Railway) |
 | `SEED_ADMIN_PASSWORD` | no | empty in prod | dev/staging only: password for the demo admins `seed` creates; ignored when `APP_ENV=prod` |
+| `ADMIN_PASSWORD` | only for `migrate create-admin` | — | the first super admin's password (§3.5); set it for that one run, never on the API or worker |
 
 ### 3.3 Generate secrets
 
@@ -273,8 +279,9 @@ openssl rand -base64 32        # → DATA_ENCRYPTION_KEY
 ```
 
 Use different values per environment. Store `DATA_ENCRYPTION_KEY` in a second, offline
-place: losing or changing it makes stored NID numbers unreadable (no rotation support,
-see `rotate-jwt-keys.md`, "Not covered here"). The JWT public key is derived from the
+place: losing it makes stored NID numbers and TOTP secrets unreadable. Change it only with
+[`rotate-data-key.md`](../runbooks/rotate-data-key.md), which keeps the old key in
+`DATA_ENCRYPTION_PREVIOUS_KEYS`. The JWT public key is derived from the
 seed by the API; the command to print it, needed only for rotation, is in
 [`rotate-jwt-keys.md`](../runbooks/rotate-jwt-keys.md).
 
@@ -292,7 +299,8 @@ The same image runs three ways:
 Dockerfile `Backend/docker/Dockerfile`, port 8080, health check path `/readyz`, pre-deploy
 command `/app/migrate up`. Create a Background Worker from the same repo with Docker
 command `/app/worker`. Use an Environment Group for the variables in §3.2 and attach it
-to both; add the FCM JSON as a Secret File.
+to both; add the FCM JSON as a Secret File (`FCM_CREDENTIALS_FILE`) or as the variable
+`FCM_CREDENTIALS_JSON`.
 
 **Fly.io**: `fly launch --no-deploy` in `Backend/` (Dockerfile `docker/Dockerfile`), then in `fly.toml` set
 `[deploy] release_command = "/app/migrate up"`, `[http_service] internal_port = 8080`
@@ -312,19 +320,34 @@ Build behind a TLS-intercepting proxy only: pass the CA as build secret `extra_c
 
 1. Provision Postgres, Redis, storage, Firebase and SMS (§3.1); fill the secret store
    (§3.2, §3.3).
-2. Build and push the image: `docker build -t <registry>/pao-backend:<git-sha> -f Backend/docker/Dockerfile Backend`
+2. Build and push the image: run the **backend-image** workflow (Actions → backend-image →
+   Run workflow); it pushes `ghcr.io/<owner>/<repo>/pao-backend:<git-sha>` and prints the
+   digest to deploy. By hand:
+   `docker build -t <registry>/pao-backend:<git-sha> -f Backend/docker/Dockerfile Backend`
    (or let the host build it). Optionally scan it:
    `PAO_SCAN_IMAGE=<registry>/pao-backend:<git-sha> ./pao security`.
 3. Migrate: run the image with `/app/migrate up`. It applies every module's migrations
    and exits 0.
 4. Seed reference data: `/app/migrate seed`. It loads the service catalog
    (idempotent). In `staging` with `SEED_ADMIN_PASSWORD` set it also creates the demo
-   admin users; in `prod` it creates no admins (see Gaps).
-5. Start the API; wait until `GET https://<api host>/readyz` returns 200.
-6. Start the worker; its health check must pass.
-7. Point DNS for the API host at the platform; TLS is issued by the platform.
-8. Deploy the admin web (§2) with `ADMIN_CORS_ORIGIN` already set to its origin.
-9. Run the smoke tests (§5).
+   admin users; in `prod` it creates none.
+5. Create the first super admin, once, with the same environment plus `ADMIN_PASSWORD`
+   (at least 12 characters, from your password manager; it is read from the environment
+   so it never appears in argv or shell history):
+   ```sh
+   docker run --rm --env-file prod.env -e ADMIN_PASSWORD \
+     --entrypoint /app/migrate <image> create-admin --email owner@pao.com.bd --name "PAO Owner"
+   ```
+   (Render: a one-off job; Fly: `fly ssh console -C "/app/migrate create-admin …"` after
+   `fly secrets set ADMIN_PASSWORD=…`, then `fly secrets unset ADMIN_PASSWORD`.) It
+   prints `created super admin`, or `already exists; nothing changed` when the email is
+   taken, so repeating it is safe. The first sign-in at the admin web enrols TOTP before
+   anything else; invite every other admin from the console (A-10).
+6. Start the API; wait until `GET https://<api host>/readyz` returns 200.
+7. Start the worker; its health check must pass.
+8. Point DNS for the API host at the platform; TLS is issued by the platform.
+9. Deploy the admin web (§2) with `ADMIN_CORS_ORIGIN` already set to its origin.
+10. Sign in as the super admin, enrol TOTP, then run the smoke tests (§5).
 
 Later releases follow [`docs/runbooks/deploy.md`](../runbooks/deploy.md): staging first,
 production by image digest, migrate, roll API, roll worker, seed only when the release
@@ -369,8 +392,9 @@ All app configuration is compiled in with `--dart-define`; nothing is read at ru
 | `PAO_SUPPORT_PHONE`, `PAO_SUPPORT_EMAIL` | customer, partner | `config/<flavour>.json` | same |
 | `PAO_MAPS_API_KEY` | customer (Geocoding via `maps.googleapis.com`) | Google Cloud console → APIs & Services → Credentials; enable the Geocoding API; restrict to the package names / bundle IDs and SHA-256 certs | env var, forwarded by `build-release.sh` |
 | `PAO_FCM_API_KEY`, `PAO_FCM_APP_ID`, `PAO_FCM_SENDER_ID`, `PAO_FCM_PROJECT_ID` | customer, partner | Firebase console → Project settings → Your apps (API key, App ID, Sender ID, Project ID) | env vars, forwarded by `build-release.sh`. Without `PAO_FCM_API_KEY` the app runs without push. |
-| `PAO_PIN_SHA256` | all | computed from the live API certificate (below) | **not** forwarded by `build-release.sh`; add it to `config/prod.json` or pass `--dart-define` with the raw command |
-| `PAO_SENTRY_DSN` | all | Sentry project → Client Keys (DSN) | **not** forwarded by `build-release.sh`; same as above. Without it errors stay on the device. |
+| `PAO_FCM_APP_ID_<APP>_<PLATFORM>` | customer, partner | Firebase console → Your apps: the App ID of that platform's app, e.g. `PAO_FCM_APP_ID_CUSTOMER_ANDROID`, `PAO_FCM_APP_ID_PARTNER_IOS` | env vars; `build-release.sh` uses the one for the app and target (`ipa` → IOS, else ANDROID) in place of `PAO_FCM_APP_ID` when set |
+| `PAO_PIN_SHA256` | all | computed from the live API certificate (below) | env var, forwarded by `build-release.sh` when set; empty leaves pinning off |
+| `PAO_SENTRY_DSN` | all | Sentry project → Client Keys (DSN) | env var, forwarded by `build-release.sh` when set; empty leaves crash reporting off (errors stay on the device) |
 
 **Firebase config files.** The apps do not use `google-services.json` or
 `GoogleService-Info.plist`; they call `Firebase.initializeApp` with `FirebaseOptions`
@@ -444,7 +468,9 @@ Without either, release builds are signed with the debug key and Play rejects th
 ### 4.6 Build
 
 ```sh
-export PAO_MAPS_API_KEY=… PAO_FCM_API_KEY=… PAO_FCM_APP_ID=… PAO_FCM_SENDER_ID=… PAO_FCM_PROJECT_ID=…
+export PAO_MAPS_API_KEY=… PAO_FCM_API_KEY=… PAO_FCM_SENDER_ID=… PAO_FCM_PROJECT_ID=…
+export PAO_FCM_APP_ID_CUSTOMER_ANDROID=… PAO_FCM_APP_ID_CUSTOMER_IOS=…   # one per platform and app
+export PAO_PIN_SHA256="<live pin>,<backup pin>" PAO_SENTRY_DSN=…        # optional; empty = off
 export PAO_BUILD_NUMBER=42                      # strictly increasing per store upload
 
 tools/build-release.sh customer prod          # .aab → build/app/outputs/bundle/prodRelease/
@@ -453,7 +479,7 @@ tools/build-release.sh partner staging apk    # APK for testers
 PAO_IOS_EXPORT_OPTIONS=$PWD/ExportOptions.plist tools/build-release.sh customer prod ipa
 ```
 
-The equivalent raw command, including the two defines the script does not forward:
+The equivalent raw command:
 
 ```sh
 cd Frontend/apps/customer
@@ -492,15 +518,20 @@ The full store checklist is in [`docs/guides/release.md`](release.md#store-check
 |---|---|
 | `PAO_MAPS_API_KEY` | Maps define |
 | `PAO_FCM_API_KEY`, `PAO_FCM_SENDER_ID`, `PAO_FCM_PROJECT_ID` | FCM defines |
-| `PAO_FCM_APP_ID_customer`, `PAO_FCM_APP_ID_partner` | FCM app ID per app |
+| `PAO_FCM_APP_ID_CUSTOMER_ANDROID`, `PAO_FCM_APP_ID_CUSTOMER_IOS`, `PAO_FCM_APP_ID_PARTNER_ANDROID`, `PAO_FCM_APP_ID_PARTNER_IOS` | FCM App ID per platform and app (preferred) |
+| `PAO_FCM_APP_ID_customer`, `PAO_FCM_APP_ID_partner` | fallback FCM App ID per app, used when the per-platform secret is missing |
+| `PAO_PIN_SHA256` | certificate pins (comma-separated); missing → pinning off |
+| `PAO_SENTRY_DSN` | Sentry DSN; missing → crash reporting off |
 | `PAO_ANDROID_KEYSTORE_BASE64`, `PAO_ANDROID_KEYSTORE_PASSWORD`, `PAO_ANDROID_KEY_ALIAS`, `PAO_ANDROID_KEY_PASSWORD` | Android signing (CI decodes the keystore and sets `PAO_ANDROID_KEYSTORE`) |
 | `PAO_IOS_CERT_P12_BASE64`, `PAO_IOS_CERT_PASSWORD` | iOS distribution certificate |
 | `PAO_IOS_PROFILE_BASE64_customer`, `PAO_IOS_PROFILE_BASE64_partner` | provisioning profiles |
 | `PAO_IOS_EXPORT_OPTIONS_BASE64_customer`, `PAO_IOS_EXPORT_OPTIONS_BASE64_partner` | `ExportOptions.plist` per app |
 
-CI sets `PAO_BUILD_NUMBER` to the run number. It does not pass `PAO_PIN_SHA256` or
-`PAO_SENTRY_DSN`, and it does not upload to the stores; download the artifacts and
-upload them by hand.
+CI sets `PAO_BUILD_NUMBER` to the run number and passes every secret above that is set
+to both the Android and the iOS builds. Firebase registers one app per application ID,
+so the dev and staging flavours share the prod App ID in CI and get no push; that is the
+MVP rule (ADR-0036). CI does not upload to the stores; download the artifacts and upload
+them by hand (§4.7).
 
 ## 5. After deploying
 
@@ -554,23 +585,43 @@ certificate change.
 
 ## Gaps to close before launch
 
-- **The API and worker cannot run on Vercel** (no .NET runtime); they need a container host.
-- **No first production admin.** `migrate seed` skips admin users when `APP_ENV=prod`
-  (`Backend/PAO.Migrator/SeedCommand.cs`), although `docs/HANDOVER.md` lists `SEED_ADMIN_PASSWORD` "for
-  the first super admin". There is no command to create a super admin in production;
-  one is needed (or seed once with `APP_ENV=staging` against the prod database — not
-  recommended).
-- **CORS takes a single origin**, so Vercel preview deployments cannot use the API they
-  are not configured for.
-- **`build-release.sh` and CI do not pass `PAO_PIN_SHA256` or `PAO_SENTRY_DSN`**;
-  pinning and crash reporting are off in CI-built apps unless added to
-  `config/<flavour>.json` or the script.
-- **One `PAO_FCM_APP_ID` per app** in CI, shared by Android and iOS and by all flavours,
-  while Firebase issues a different App ID per platform and per application ID.
-- **No deploy workflow** for the admin web or the backend, and no store upload in CI.
-- **`FCM_CREDENTIALS_FILE` is a path**, so the host must support secret files.
-- **`DATA_ENCRYPTION_KEY` cannot be rotated.**
-- **Storage start-up calls `PutBucketEncryption`** on both buckets every start; untested
-  against Cloudflare R2.
-- Production hostnames, support contacts and app icons are still placeholders
-  (`docs/guides/release.md`).
+Everything that can be done in code is done (ADR-0036). What remains needs the owner's
+accounts, secrets or decisions; the values to confirm are collected in
+[`launch-values.md`](launch-values.md).
+
+1. **Container host for the API and worker** (no .NET runtime on Vercel). Create the two
+   services on Render, Fly.io or Railway exactly as in §3.4.
+2. **Backend secrets.** Generate `JWT_SIGNING_KEY` and `DATA_ENCRYPTION_KEY` (§3.3), store
+   both offline as well, and fill §3.2 in the host's secret store.
+3. **Managed services.** Create Neon Postgres, Upstash Redis and the R2 (or S3) buckets
+   and token (§3.1); on R2 set `S3_ENSURE_ENCRYPTION=false`.
+4. **Firebase.** Create the project; add the four apps (customer/partner × Android/iOS)
+   with the prod IDs of §4.2; generate a service-account key and set it as
+   `FCM_CREDENTIALS_FILE` or `FCM_CREDENTIALS_JSON` (`base64 -w0 key.json`); upload the
+   APNs key (Project settings → Cloud Messaging). Add `PAO_FCM_API_KEY`,
+   `PAO_FCM_SENDER_ID`, `PAO_FCM_PROJECT_ID` and the four `PAO_FCM_APP_ID_<APP>_<PLATFORM>`
+   values as GitHub secrets (Settings → Secrets and variables → Actions).
+5. **SSL Wireless** API token and SID (§3.1 item 5).
+6. **First super admin.** After the first `migrate up`, run `migrate create-admin` once
+   (§3.5 step 5) and enrol TOTP at the first sign-in.
+7. **DNS and domains.** Buy or confirm the domain, point the API and admin hosts at the
+   platforms (§2.5, §3.5), then set `ADMIN_CORS_ORIGIN`.
+8. **Certificate pins and Sentry (optional).** Once the API host serves its real
+   certificate, compute the pins (§4.3) and add `PAO_PIN_SHA256`; create a Sentry
+   project and add `PAO_SENTRY_DSN`. Empty secrets leave both features off.
+9. **Android signing.** Create the upload key (§4.4 step 1), enrol both apps in Play App
+   Signing, then add `PAO_ANDROID_KEYSTORE_BASE64` (`base64 -w0 upload.jks`),
+   `PAO_ANDROID_KEYSTORE_PASSWORD`, `PAO_ANDROID_KEY_ALIAS` and
+   `PAO_ANDROID_KEY_PASSWORD` as GitHub secrets.
+10. **iOS signing.** In the Apple Developer account register the two prod bundle IDs with
+    Push Notifications, create an Apple Distribution certificate (export it as `.p12`) and
+    an App Store profile per app, write `ExportOptions.plist` per app (§4.5), then add
+    `PAO_IOS_CERT_P12_BASE64`, `PAO_IOS_CERT_PASSWORD`,
+    `PAO_IOS_PROFILE_BASE64_customer|partner` and
+    `PAO_IOS_EXPORT_OPTIONS_BASE64_customer|partner` (each `base64 -i <file>`).
+11. **Store listings and upload.** Create both apps in Play Console and App Store Connect,
+    complete the store checklist in [`release.md`](release.md#store-checklist), download
+    the signed CI artifacts and upload them by hand (§4.7). Store upload from CI is not
+    part of the MVP.
+12. **Placeholders.** Confirm or replace the hostnames, support contacts and app icons
+    listed in [`launch-values.md`](launch-values.md).

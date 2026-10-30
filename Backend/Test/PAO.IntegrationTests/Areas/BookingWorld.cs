@@ -160,9 +160,9 @@ public sealed class BookingWorld
 
     private static readonly string[] OutboxModules = ["identity", "customer", "provider", "verification", "catalog", "booking", "rating", "media", "admin", "billing"];
 
-    private async Task<(HttpStatusCode Status, JsonElement Body)> Send(HttpMethod method, string path, string token, object body, string key)
+    public async Task<(HttpStatusCode Status, JsonElement Body)> Send(HttpMethod method, string path, string token, object? body, string key)
     {
-        using var request = new HttpRequestMessage(method, path) { Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json") };
+        using var request = new HttpRequestMessage(method, path) { Content = body is null ? null : new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json") };
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         request.Headers.Add("Idempotency-Key", key);
         using var response = await Api.Api.Client.SendAsync(request);

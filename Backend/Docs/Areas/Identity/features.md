@@ -15,6 +15,6 @@ request, validator and handler. Overview: [overview.md](overview.md).
 | `GetMe` | `GetMeQuery` | The signed-in account. |
 | `GetMyPermissions` | `GetMyPermissionsQuery` | Roles, permissions and screens; a merchant below Level 1 sees only M01–M14 of the partner screens (PRD §8.5). |
 | `DeleteMe` | `DeleteMeCommand` | After a `delete_account` code: roles removed, data anonymised, `AccountDeleted` published, every session ended (PRD §11). |
-| `AdminUsers` | `ListAdminUsersQuery`, `InviteAdminUserCommand`, `UpdateAdminUserCommand`, `EnsureSeedAdminCommand` | The admin user screens (A-10) and the seed's demo admins. Updating revokes the admin's sessions. |
+| `AdminUsers` | `ListAdminUsersQuery`, `InviteAdminUserCommand`, `UpdateAdminUserCommand`, `EnsureSeedAdminCommand`, `CreateSuperAdminCommand` | The admin user screens (A-10), the seed's demo admins and the first production super admin (`migrate create-admin`). Updating revokes the admin's sessions. |
 | `RoleEditor` | `ListRolesQuery`, `UpdateRoleCommand` | The role editor (A-10); an update bumps `rbac:version`. |
 | `SetAccountStatus` | `SetAccountStatusCommand` | Suspend, ban, reinstate (A-05), for other areas through the shared service. |

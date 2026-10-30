@@ -113,7 +113,7 @@ The owner supplies these; none belong in the repository.
 | Google Maps key (Geocoding, restricted) | CI secret `PAO_MAPS_API_KEY` |
 | Firebase project: app configs and a service account | CI secrets `PAO_FCM_*`; backend `PUSH_ADAPTER=fcm`, `FCM_CREDENTIALS_FILE` |
 | SMS gateway (SSL Wireless) account and sender ID | backend `SMS_ADAPTER=sslwireless`, `SSLWIRELESS_API_TOKEN`, `SSLWIRELESS_SID` |
-| Production secrets | `JWT_SIGNING_KEY`, `DATA_ENCRYPTION_KEY`, S3 credentials, database and Redis URLs, `SEED_ADMIN_PASSWORD` for the first super admin |
+| Production secrets | `JWT_SIGNING_KEY`, `DATA_ENCRYPTION_KEY`, S3 credentials, database and Redis URLs, `ADMIN_PASSWORD` for `migrate create-admin` (the first super admin, ADR-0036) |
 | Android upload key, Apple distribution certificate and profiles | CI secrets listed in `docs/guides/release.md` |
 | Domains and TLS | API host, admin console origin (`ADMIN_CORS_ORIGIN`), storage host |
 | Store accounts | Google Play Console and Apple Developer Program, with reviewer test accounts |

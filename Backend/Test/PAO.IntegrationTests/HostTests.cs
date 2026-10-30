@@ -53,6 +53,45 @@ public sealed class StorageTests
         using var secure = new ObjectStore(https);
         Assert.StartsWith("https://files.pao.test/", await secure.PresignGet("b", "k", TimeSpan.FromMinutes(1)), StringComparison.Ordinal);
     }
+
+    [Fact]
+    public async Task A_bucket_created_meanwhile_counts_and_encryption_can_be_left_to_the_provider()
+    {
+        // A stand-in S3: the bucket looks missing, then creating it says another start-up won.
+        var probe = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Loopback, 0);
+        probe.Start();
+        var port = ((System.Net.IPEndPoint)probe.LocalEndpoint).Port;
+        probe.Stop();
+        using var listener = new System.Net.HttpListener();
+        listener.Prefixes.Add($"http://127.0.0.1:{port}/");
+        listener.Start();
+        var seen = new List<string>();
+        var server = Task.Run(async () =>
+        {
+            while (listener.IsListening)
+            {
+                var context = await listener.GetContextAsync();
+                seen.Add($"{context.Request.HttpMethod} {context.Request.Url!.PathAndQuery}");
+                var (status, code) = context.Request.HttpMethod == "PUT" ? (409, "BucketAlreadyOwnedByYou") : (404, "NoSuchBucket");
+                context.Response.StatusCode = status;
+                var body = System.Text.Encoding.UTF8.GetBytes($"<?xml version=\"1.0\"?><Error><Code>{code}</Code><Message>m</Message></Error>");
+                context.Response.ContentType = "application/xml";
+                await context.Response.OutputStream.WriteAsync(body);
+                context.Response.Close();
+            }
+        });
+        var options = TestSettings.Create().Storage;
+        options.Endpoint = $"http://127.0.0.1:{port}";
+        options.EnsureEncryption = false;
+        using (var store = new ObjectStore(options))
+        {
+            await store.EnsureBucket("shared", CancellationToken.None);
+        }
+        listener.Stop();
+        Assert.Contains(seen, s => s.StartsWith("PUT /shared", StringComparison.Ordinal));
+        Assert.DoesNotContain(seen, s => s.Contains("encryption", StringComparison.Ordinal));
+        await Assert.ThrowsAnyAsync<Exception>(() => server);
+    }
 }
 
 public sealed class HostTests(MigratedDatabase database) : IClassFixture<MigratedDatabase>

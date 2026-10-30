@@ -43,6 +43,7 @@ revise)`. Changing one later means a new ADR, not silent edits.
 | E13 | Backend runtime | .NET 10, ASP.NET Core areas, CQRS handlers, EF Core over the SQL scripts in `DB Changes` (ADR-0034, superseding ADR-0032's framework). |
 | E14 | Payment and revenue | Cash on delivery only; 10% commission becomes the merchant's due; accepting is blocked above ৳500 due; merchants submit payments, admins confirm (ADR-0035). |
 | E15 | Repository layout | `Backend/` (.NET, contract in `Backend/Api`, journeys in `Backend/Test/PAO.E2ETests`, load tests in `Backend/Test/PAO.LoadTests`), `Frontend/` (+ `test/e2e` app journeys), `docs/`, `infra/` (compose, `e2e/` stack, `ops/`, `security/`), `tools/` (CLI, hooks, CLI tests), ignored `out/` for generated output; `./pao` wraps `tools/pao` (ADR-0034 "Cut-over as done"). |
+| E16 | Launch defaults | First admin via `migrate create-admin` (password from `ADMIN_PASSWORD`); CORS origin list; `FCM_CREDENTIALS_JSON`; `S3_ENSURE_ENCRYPTION`; data-key rotation with `DATA_ENCRYPTION_PREVIOUS_KEYS` + `migrate reencrypt`; placeholders in `docs/guides/launch-values.md`; manual deploys and store uploads (ADR-0036). |
 | E12 | Design | Figma file below is the visual source of truth; accent colours are a theme token with ten presets; Midnight is the default (`05-screens.md`). |
 
 Figma: <https://www.figma.com/design/ytbbSEIF1I6cZN0iWJVQsC>

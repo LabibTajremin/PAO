@@ -27,7 +27,7 @@ public sealed class UpdateSettingHandler(SettingsRepository repository, SettingV
     public async Task<SettingView> Handle(UpdateSetting request, CancellationToken cancellationToken)
     {
         var current = await repository.Get(request.Key, cancellationToken);
-        if (!AdminRules.FitsType(current.Type, request.Value))
+        if (!AdminRules.Fits(current.Key, current.Type, request.Value))
         {
             throw new DomainException(AdminReasons.SettingInvalid);
         }

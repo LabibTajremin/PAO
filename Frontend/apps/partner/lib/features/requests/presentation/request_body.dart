@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pao_api/pao_api.dart'
     show Booking, RejectInputReasonEnum, Timing;
+import 'package:pao_core/pao_core.dart' show ApiFailure;
 import 'package:pao_l10n/pao_l10n.dart';
 import 'package:pao_partner/app/routes.dart';
+import 'package:pao_partner/features/billing/presentation/billing_labels.dart';
 import 'package:pao_partner/features/job/presentation/job_items.dart';
 import 'package:pao_partner/features/job/presentation/reason_sheet.dart';
 import 'package:pao_partner/features/requests/presentation/request_cubit.dart';
@@ -79,12 +81,22 @@ class RequestBody extends StatelessWidget {
         null => null,
       };
 
+  // A due refusal names both amounts when the API sends them (ADR-0036).
+  String _failureText(BuildContext context) => switch (state.failure) {
+    ApiFailure(
+      code: 'MERCHANT_DUE_LIMIT',
+      details: {'duePaisa': final int due, 'blockAmountPaisa': final int limit},
+    ) =>
+      context.t.billBannerBlocked(context.money(due), context.money(limit)),
+    final failure => context.failureText(failure)!,
+  };
+
   List<Widget> _answers(BuildContext context) {
     final cubit = context.read<RequestCubit>();
     return [
       if (state.failure != null)
         Text(
-          context.failureText(state.failure)!,
+          _failureText(context),
           style: const TextStyle(color: PaoColors.danger),
         ),
       // Blocked by the due: the request stays open, so paying is the way on.

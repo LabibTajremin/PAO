@@ -92,13 +92,22 @@ public sealed class BookingPeers(IServiceProvider services)
     /// <summary>
     /// The one check before an accept that Billing owns (ADR-0035 §3): a merchant whose due is
     /// above the block limit cannot accept. Billing arrives in P17 task 5; until its shared
-    /// service is registered there is no due to check.
+    /// service is registered there is no due to check. The refusal carries both amounts so
+    /// the partner app can say how much to pay.
     /// </summary>
     public async Task EnsureCanAccept(Guid merchantId, CancellationToken cancellationToken)
     {
-        if (services.GetService<IBillingSharedService>() is { } billing && (await billing.GetDueStatus(merchantId, cancellationToken)).Blocked)
+        if (services.GetService<IBillingSharedService>() is not { } billing)
         {
-            throw new DomainException(BillingErrors.DueLimit);
+            return;
+        }
+        var due = await billing.GetDueStatus(merchantId, cancellationToken);
+        if (due.Blocked)
+        {
+            throw new DomainException(BillingErrors.DueLimit)
+            {
+                Details = new Dictionary<string, object?> { ["duePaisa"] = due.DuePaisa, ["blockAmountPaisa"] = due.BlockAmountPaisa },
+            };
         }
     }
 

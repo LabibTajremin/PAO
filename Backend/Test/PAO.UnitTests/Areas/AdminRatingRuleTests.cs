@@ -41,6 +41,17 @@ public sealed class AdminRuleTests
     [InlineData("unknown", "1")]
     public void Refuses_values_of_another_type(string type, string value) => Assert.False(AdminRules.FitsType(type, value));
 
+    [Theory]
+    [InlineData("billing.commission_rate_bp", "0", true)]
+    [InlineData("billing.commission_rate_bp", "10000", true)]
+    [InlineData("billing.commission_rate_bp", "10001", false)]
+    [InlineData("billing.commission_rate_bp", "-1", false)]
+    [InlineData("billing.due_block_amount", "0", true)]
+    [InlineData("billing.due_block_amount", "99999999", true)]
+    [InlineData("billing.due_block_amount", "-1", false)]
+    public void Bounds_the_billing_settings(string key, string value, bool fits) =>
+        Assert.Equal(fits, AdminRules.Fits(key, "integer", value));
+
     [Fact]
     public void Checks_reports_resolutions_and_tickets()
     {

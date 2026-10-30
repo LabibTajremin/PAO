@@ -178,6 +178,22 @@ public sealed class EdgeMiddlewareTests
         Assert.False(other.Response.Headers.ContainsKey("Access-Control-Allow-Origin"));
     }
 
+    [Fact]
+    public async Task Cors_answers_each_listed_origin_with_its_own_name()
+    {
+        var cors = EdgeMiddleware.Cors("https://admin.pao.com.bd, https://preview.vercel.app");
+        foreach (var origin in new[] { "https://admin.pao.com.bd", "https://preview.vercel.app" })
+        {
+            var context = Contexts.New();
+            context.Request.Headers.Origin = origin;
+            await cors(context, Contexts.Done);
+            Assert.Equal(origin, context.Response.Headers.AccessControlAllowOrigin);
+        }
+        var none = Contexts.New();
+        await cors(none, Contexts.Done);
+        Assert.False(none.Response.Headers.ContainsKey("Access-Control-Allow-Origin"));
+    }
+
     [Theory]
     [InlineData("""{"a":1}""", "application/json", null, true)]
     [InlineData("", "application/json", null, false)]

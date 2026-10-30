@@ -42,7 +42,7 @@ the C# suite does not yet repeat; the control itself is in place.
 | 1.2 Authentication architecture: one mechanism, least privilege between components | pass | `TokenSigner`/`TokenVerifier` (EdDSA JWT); areas talk only through shared services (`ArchitectureTests.Areas_reach_other_areas_only_through_their_shared_services`) |
 | 1.4 Access control architecture: enforced server-side at one place, deny by default | pass | `AccessFilter`; `AuthorizationTests.Every_attribute_matches_the_spec_permission_and_security`, `RbacContractTests.Every_protected_route_refuses_a_token_without_its_permission` |
 | 1.5 Input/output architecture: schema validation at the edge | pass | `RequestValidationFilter` (`SchemaValidator`, Ajv wording); `ApiTests.Bodies_are_validated_against_the_spec_before_the_action`, `OpenApiTests.Validates_parameters_after_coercing_them` |
-| 1.6 Cryptographic key management: keys from env, rotation | pass | `JWT_SIGNING_KEY` / `JWT_PREVIOUS_PUBLIC_KEYS`, `DATA_ENCRYPTION_KEY`; runbook (P16 task 3) |
+| 1.6 Cryptographic key management: keys from env, rotation | pass | `JWT_SIGNING_KEY` / `JWT_PREVIOUS_PUBLIC_KEYS`, `DATA_ENCRYPTION_KEY` / `DATA_ENCRYPTION_PREVIOUS_KEYS` + `migrate reencrypt`; runbooks `rotate-jwt-keys.md`, `rotate-data-key.md` |
 | 1.7 Logging architecture: central, no sensitive data | pass | `PaoJsonFormatter` (Serilog JSON lines with request id; `LoggingTests.Writes_one_json_line_per_event`); phones/codes never logged (`Backend/Docs/Operations`) |
 | 1.8 Data protection: sensitive data identified and classified | pass | PRD §6.6; NID/documents classed sensitive in `MediaRules` (`MediaRuleTests.Each_uploader_may_send_only_its_purposes_within_type_and_size`) |
 | 1.9 Communications: TLS between all components | risk | TLS ends at the load balancer; inside the private network traffic to Postgres/Redis/S3 is plain. Use managed TLS endpoints at deploy |
@@ -76,7 +76,7 @@ the C# suite does not yet repeat; the control itself is in place.
 | Item | Status | Where |
 |---|---|---|
 | 4.1 Enforced at a trusted service layer, deny by default | pass | `AccessFilter` on every action; an action without an access attribute fails the build gate (`AuthorizationTests.The_audit_catches_missing_and_wrong_attributes`); `ApiTests.Protected_operations_need_a_valid_unrevoked_token_and_the_permission` |
-| 4.2.1 Object-level (IDOR) on every owned id | pass | Booking routes called by another merchant or a stranger customer → 404 (`BookingSupportTests.Hides_the_booking_serves_the_contract_and_pages_earnings`); each side kept to its own endpoints (`BookingExitTests.Keeps_each_side_to_its_own_endpoints`); app roles refused on the admin API (`RbacJourney.Rbac_app_users_cannot_reach_the_admin_api`). *Gap:* the earlier spec-driven walk of every `/v1/customer` and `/v1/provider` path id has no C# counterpart yet |
+| 4.2.1 Object-level (IDOR) on every owned id | pass | Booking routes called by another merchant or a stranger customer → 404 (`BookingSupportTests.Hides_the_booking_serves_the_contract_and_pages_earnings`); each side kept to its own endpoints (`BookingExitTests.Keeps_each_side_to_its_own_endpoints`); app roles refused on the admin API (`RbacJourney.Rbac_app_users_cannot_reach_the_admin_api`); the spec-driven sweep calls every `/v1/customer` and `/v1/provider` route with an owned path id as another account of the same role and fails on any route without a case (`CrossAccountTests`, ADR-0036) |
 | 4.2.2 CSRF | pass | API is bearer-only; the one cookie is `SameSite=Strict` on `/v1/auth` |
 | 4.3 Admin interfaces: MFA, least privilege | pass | TOTP; role matrix (`02-architecture.md` §6), role edits audited |
 | Admin `:id` routes | pass | Admins act across accounts by design; each is gated by its permission (`RbacContractTests.Every_role_reaches_exactly_its_seeded_permissions`), document views audited |
@@ -97,7 +97,7 @@ the C# suite does not yet repeat; the control itself is in place.
 | 6.1 Data classification; PII encrypted at rest where required | pass | NID numbers AES-256-GCM (`DataCipher`; `SecretTests.Decrypts_existing_ciphertext_and_derives_the_same_lookup_hash`), lookup by keyed hash |
 | 6.2 Approved algorithms | pass | Ed25519, AES-256-GCM, argon2id, SHA-256 |
 | 6.3 Random values | pass | `RandomNumberGenerator` only (`RandomSecrets`, `SecretHasher`, `DataCipher`) |
-| 6.4 Secret management | risk | Keys in env vars, no KMS/vault in the MVP; rotation runbook covers JWT keys |
+| 6.4 Secret management | risk | Keys in env vars, no KMS/vault in the MVP; rotation runbooks cover the JWT and data keys |
 | Document files at rest | risk | Private bucket, signed 5-minute URLs; server-side encryption is the storage provider's setting (enable SSE at deploy) |
 
 ### V7 Error handling and logging

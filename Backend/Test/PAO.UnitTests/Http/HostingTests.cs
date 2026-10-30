@@ -257,28 +257,8 @@ public sealed class AccessTests
     }
 
     [Fact]
-    public async Task The_tee_stream_copies_writes_and_refuses_reads()
-    {
-        var inner = new MemoryStream();
-        var copy = new MemoryStream();
-        var tee = new TeeStream(inner, copy);
-        tee.Write([1], 0, 1);
-        await tee.WriteAsync(new byte[] { 2, 3 }, 0, 2);
-        await tee.WriteAsync(new byte[] { 4 });
-        tee.Flush();
-        await tee.FlushAsync();
-        Assert.Equal(new byte[] { 1, 2, 3, 4 }, inner.ToArray());
-        Assert.Equal(inner.ToArray(), copy.ToArray());
-        Assert.True(tee.CanWrite);
-        Assert.False(tee.CanRead || tee.CanSeek);
-        Assert.Throws<NotSupportedException>(() => tee.Length);
-        Assert.Throws<NotSupportedException>(() => tee.Position);
-        Assert.Throws<NotSupportedException>(() => tee.Position = 1);
-        Assert.Throws<NotSupportedException>(() => tee.Read([], 0, 0));
-        Assert.Throws<NotSupportedException>(() => tee.Seek(0, SeekOrigin.Begin));
-        Assert.Throws<NotSupportedException>(() => tee.SetLength(0));
+    public void The_idempotency_hash_covers_method_path_and_body() =>
         Assert.Equal(
             RandomSecrets.Sha256Hex("POST /v1/customer/bookings\n{}"),
             IdempotencyFilter.RequestHash("POST", "/v1/customer/bookings", "{}"u8.ToArray()));
-    }
 }

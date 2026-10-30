@@ -8,11 +8,20 @@ public sealed class AppOptions
 
     /// <summary>dev | test | staging | prod; "test" mounts the e2e test hooks.</summary>
     public string Environment { get; set; } = AppEnvironments.Dev;
-    /// <summary>The admin cors origin.</summary>
+    /// <summary>
+    /// The admin web origin, or several separated by commas (production plus a preview
+    /// host); each must be an absolute http(s) origin without a path.
+    /// </summary>
     public string AdminCorsOrigin { get; set; } = "http://localhost:5000";
 
     /// <summary>AES-256 key (base64) for encrypted fields; a secret, from DATA_ENCRYPTION_KEY.</summary>
     public string DataEncryptionKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Earlier data keys (base64, comma-separated, newest first, the original key last) that
+    /// still decrypt; a secret, from DATA_ENCRYPTION_PREVIOUS_KEYS (ADR-0036).
+    /// </summary>
+    public string DataEncryptionPreviousKeys { get; set; } = string.Empty;
     /// <summary>The seed admin password.</summary>
     public string SeedAdminPassword { get; set; } = string.Empty;
 }
@@ -116,6 +125,12 @@ public sealed class StorageOptions
     public string BucketPrivate { get; set; } = string.Empty;
     /// <summary>The bucket public.</summary>
     public string BucketPublic { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Whether start-up sets default SSE-S3 encryption on both buckets; off for providers
+    /// that encrypt at rest themselves and reject PutBucketEncryption (Cloudflare R2).
+    /// </summary>
+    public bool EnsureEncryption { get; set; } = true;
 }
 
 /// <summary>Text messages (`Config/sms.json`).</summary>
@@ -144,8 +159,14 @@ public sealed class PushOptions
 
     /// <summary>log | fcm.</summary>
     public string Adapter { get; set; } = "log";
-    /// <summary>The fcm credentials file.</summary>
+    /// <summary>The FCM service-account JSON file (a mounted secret file).</summary>
     public string FcmCredentialsFile { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The service-account JSON itself, raw or base64, for hosts without secret files;
+    /// used when <see cref="FcmCredentialsFile"/> is empty.
+    /// </summary>
+    public string FcmCredentialsJson { get; set; } = string.Empty;
 }
 
 /// <summary>The worker's relay and jobs (`Config/jobs.json`).</summary>
