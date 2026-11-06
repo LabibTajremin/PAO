@@ -66,14 +66,14 @@ jobs:
           channel: stable
           cache: true
       # The upload key lives only in repository secrets. Without it the build is
-      # debug-signed (Play rejects it), and a push to main stops instead.
+      # debug-signed: fine for sharing APKs during the MVP, rejected by Play
+      # (ADR-0036). Add PAO_ANDROID_KEYSTORE_BASE64 before publishing to a store.
       - name: Install the upload key
         env:
           KEYSTORE_BASE64: ${{ secrets.PAO_ANDROID_KEYSTORE_BASE64 }}
         run: |
           if [[ -z "$KEYSTORE_BASE64" ]]; then
-            [[ "$GITHUB_REF" != refs/heads/main ]] || { echo "upload key secret missing" >&2; exit 1; }
-            echo "no upload key: debug-signed build"
+            echo "::warning::no upload key secret: debug-signed build, not for Play"
             exit 0
           fi
           echo "$KEYSTORE_BASE64" | base64 -d >"$RUNNER_TEMP/upload.jks"

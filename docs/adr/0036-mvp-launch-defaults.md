@@ -142,3 +142,13 @@ idempotent operations are small JSON bodies, so buffering costs nothing noticeab
 | Load-test warm-up | 5 s at the test rate, reported but not judged | `NearbySearch.WarmUp` |
 | Deploys | manual per `docs/runbooks/deploy.md`, by image digest; the `backend-image` workflow (manual trigger) builds and pushes the image to GHCR and does not deploy | add a deploy step once a host is chosen |
 | Signing and store upload | owner action: secrets and steps in `deployment.md` "Gaps"; upload by hand | add a store-upload job later (fastlane or the store APIs) |
+
+## 12. Android builds without the upload key
+
+- **Decision:** when `PAO_ANDROID_KEYSTORE_BASE64` is not set, the Android jobs build a
+  debug-signed APK and log a warning, on `main` as well. Before, a push to `main` failed.
+- **Why:** the MVP shares APKs directly and has no Play listing yet, so a red `main`
+  only blocked work without protecting anything.
+- **How to change it:** add the four `PAO_ANDROID_*` secrets (deployment §4.4, §4.8);
+  builds are then upload-key signed. To make a missing key fail `main` again, restore
+  the `refs/heads/main` check in `.github/workflows/frontend.yml` ("Install the upload key").

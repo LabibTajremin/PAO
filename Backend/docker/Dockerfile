@@ -25,6 +25,9 @@ RUN --mount=type=secret,id=extra_ca,required=false \
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 ENV PAO_HOME=/app DOTNET_CLI_TELEMETRY_OPTOUT=1
+# The base image lags Ubuntu's security fixes by days; take them at build time so the
+# image scan does not fail between Microsoft's republishes.
+RUN apt-get update && apt-get upgrade -y --no-install-recommends && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY --from=build /out ./
 COPY Config ./Config
