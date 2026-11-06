@@ -26,3 +26,15 @@ Secrets are not here: they live only in the host's secret store and GitHub secre
 To replace the icons, put a 1024×1024 PNG per app in place and regenerate the sizes
 (for example with `flutter_launcher_icons`, run once and commit the output; it is not a
 build dependency).
+
+## Firebase (Android push, MVP)
+
+The Firebase client values are committed in `Frontend/apps/customer/config/prod.json` and
+`Frontend/apps/partner/config/prod.json`: project `pao-notification`, sender
+`474216579948`, the shared API key and one Android App ID per app. They are public by
+design (every APK contains them), so `tools/build-release.sh <app> prod` builds with push
+without exporting anything. An exported `PAO_FCM_*` variable still wins over the file.
+iOS is not set up: an iOS build reuses the Android App ID and push will not work there
+until an iOS app is added in Firebase and `PAO_FCM_APP_ID_<APP>_IOS` is set.
+The backend's service-account key is a secret and stays out of the repository
+(`FCM_CREDENTIALS_JSON` on the host).

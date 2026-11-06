@@ -4,10 +4,11 @@
 useDefault = true
 
 [allowlist]
-description = ".env.example and Backend/appsettings.Local.example.json document variable names with empty or local-only placeholder values; the TOTP tests use the key published in RFC 6238 appendix B; the .NET crypto tests use the dummy key base64(\"0123456789abcdef\" x2) and a JWT test vector signed with it (kept so tokens issued before the .NET cut-over still verify)"
+description = ".env.example and Backend/appsettings.Local.example.json document variable names with empty or local-only placeholder values; the TOTP tests use the key published in RFC 6238 appendix B; the .NET crypto tests use the dummy key base64(\"0123456789abcdef\" x2) and a JWT test vector signed with it (kept so tokens issued before the .NET cut-over still verify); the Firebase client API key in Frontend/apps/*/config/prod.json is public by design (it ships inside every APK; access is limited by Firebase rules and app restrictions)"
 paths = ['''^\.env\.example$''', '''^Backend/appsettings\.Local\.example\.json$''']
 regexes = [
   '''GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ''',
   '''MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=''',
+  '''AIzaSyCNGYO9p2tGNfxhaBBsgEmZDBJErjht0s8''',
   '''eyJhbGciOiJFZERTQSIsImtpZCI6ImsxIiwidHlwIjoiSldUIn0\.eyJyb2xlcyI6WyJjdXN0b21lciJdLCJ2ZXIiOjMsInNpZCI6IjAxOTBhNWI''',
 ]
