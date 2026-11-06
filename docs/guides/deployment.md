@@ -227,7 +227,8 @@ There is no deploy workflow in `.github/workflows` today. A job would:
 4. **Firebase.** Create one project; add the Android and iOS apps (§4.3); create a
    service account key (Project settings → Service accounts → Generate new private key)
    for the backend.
-5. **SSL Wireless.** API token and SID for OTP SMS.
+5. **SSL Wireless.** API token and SID for OTP SMS. Optional for the MVP: without an SMS
+   provider, launch with SMS verification off (§3.2.1) and add it later.
 
 ### 3.2 Environment variables
 
@@ -238,7 +239,7 @@ line (`invalid configuration: …`). Give API, worker and migrate the same envir
 
 | Variable | Required | Example (prod) | Where it comes from |
 |---|---|---|---|
-| `APP_ENV` | yes in practice (default `dev`) | `prod` | `dev`, `test`, `staging` or `prod`. `prod` requires real SMS and push adapters. Never `test` outside CI. |
+| `APP_ENV` | yes in practice (default `dev`) | `prod` | `dev`, `test`, `staging` or `prod`. `prod` requires real SMS and push adapters (a real SMS adapter only while `SMS_VERIFICATION_ENABLED=true`). Never `test` outside CI. |
 | `LOG_LEVEL` | no (default `info`) | `info` | `debug`, `info`, `warn`, `error` |
 | `HTTP_ADDR` | no (default `:8080`) | `:8080` | Match the port your host routes to. The container health check probes `127.0.0.1:8080` and assumes the default. |
 | `METRICS_ADDR` | no (default `:9090`) | `:9090` | Internal only; never expose publicly. The worker health check probes `127.0.0.1:9090`. |
@@ -258,14 +259,41 @@ line (`invalid configuration: …`). Give API, worker and migrate the same envir
 | `DATA_ENCRYPTION_PREVIOUS_KEYS` | no | empty on first deploy | earlier data keys, comma-separated, newest first, original key last; only after a rotation |
 | `ADMIN_CORS_ORIGIN` | no (default `http://localhost:5000`) | `https://admin.pao.com.bd` | the admin web origin, or a comma-separated list (§2.5) |
 | `S3_ENSURE_ENCRYPTION` | no (default `true`) | `false` on R2 | `false` skips `PutBucketEncryption` for providers that encrypt at rest themselves |
-| `SMS_ADAPTER` | no (default `console`); prod needs `sslwireless` | `sslwireless` | — |
-| `SSLWIRELESS_API_TOKEN` | when `SMS_ADAPTER=sslwireless` | `…` | SSL Wireless |
-| `SSLWIRELESS_SID` | when `SMS_ADAPTER=sslwireless` | `…` | SSL Wireless |
+| `SMS_ADAPTER` | no (default `console`); prod needs `sslwireless` while verification is on | `sslwireless` | — |
+| `SSLWIRELESS_API_TOKEN` | when `SMS_ADAPTER=sslwireless` and verification is on | `…` | SSL Wireless |
+| `SSLWIRELESS_SID` | when `SMS_ADAPTER=sslwireless` and verification is on | `…` | SSL Wireless |
+| `SMS_VERIFICATION_ENABLED` | no (default `true`) | `false` for the MVP | `false` sends no SMS and accepts `SMS_FIXED_CODE` (§3.2.1) |
+| `SMS_FIXED_CODE` | no (default `123456`) | `123456` | 6 digits; the code every phone check accepts while verification is off |
 | `PUSH_ADAPTER` | no (default `log`); prod needs `fcm` | `fcm` | — |
 | `FCM_CREDENTIALS_FILE` | this or `FCM_CREDENTIALS_JSON` when `PUSH_ADAPTER=fcm` | `/etc/secrets/fcm.json` | path to the Firebase service-account JSON, mounted as a secret file (Render "Secret Files"); wins when both are set |
 | `FCM_CREDENTIALS_JSON` | this or `FCM_CREDENTIALS_FILE` when `PUSH_ADAPTER=fcm` | output of `base64 -w0 fcm.json` | the same JSON as a plain secret, raw or base64, for hosts without secret files (Fly, Railway) |
 | `SEED_ADMIN_PASSWORD` | no | empty in prod | dev/staging only: password for the demo admins `seed` creates; ignored when `APP_ENV=prod` |
 | `ADMIN_PASSWORD` | only for `migrate create-admin` | — | the first super admin's password (§3.5); set it for that one run, never on the API or worker |
+
+#### 3.2.1 MVP without an SMS provider
+
+To launch before an SMS contract exists, give the API, worker and migrate:
+
+```sh
+APP_ENV=prod
+SMS_VERIFICATION_ENABLED=false
+SMS_FIXED_CODE=123456      # optional, this is the default; any 6 digits
+SMS_ADAPTER=console        # or leave unset; no SSLWIRELESS_* needed
+```
+
+The apps are unchanged: a user taps "send code", no SMS is sent, and they type
+`123456`. The ban list, the per-phone and per-IP request limits, the five-attempt lockout
+and the five-minute expiry still apply; audit and tokens work as usual. Anyone who knows
+the code can sign in as any phone number, so treat this as a closed beta: share the code
+only with testers and do not advertise the app. Every API and worker start logs the
+warning `SMS verification is OFF …`.
+
+**Turning SMS on later.** Get the SSL Wireless API token and SID (§3.1), then set
+`SMS_ADAPTER=sslwireless`, `SSLWIRELESS_API_TOKEN`, `SSLWIRELESS_SID` and
+`SMS_VERIFICATION_ENABLED=true` (or remove it) on the API and worker and redeploy. No
+migration or app release is needed; codes requested before the switch keep working until
+they expire (five minutes). The start-up warning disappears and the log field
+`sms_verification` reads `on`.
 
 ### 3.3 Generate secrets
 
@@ -318,8 +346,8 @@ Build behind a TLS-intercepting proxy only: pass the CA as build secret `extra_c
 
 ### 3.5 First deploy order
 
-1. Provision Postgres, Redis, storage, Firebase and SMS (§3.1); fill the secret store
-   (§3.2, §3.3).
+1. Provision Postgres, Redis, storage, Firebase and SMS (§3.1; SMS is optional with
+   `SMS_VERIFICATION_ENABLED=false`, §3.2.1); fill the secret store (§3.2, §3.3).
 2. Build and push the image: run the **backend-image** workflow (Actions → backend-image →
    Run workflow); it pushes `ghcr.io/<owner>/<repo>/pao-backend:<git-sha>` and prints the
    digest to deploy. By hand:
@@ -327,9 +355,13 @@ Build behind a TLS-intercepting proxy only: pass the CA as build secret `extra_c
    (or let the host build it). Optionally scan it:
    `PAO_SCAN_IMAGE=<registry>/pao-backend:<git-sha> ./pao security`.
 3. Migrate: run the image with `/app/migrate up`. It applies every module's migrations
-   and exits 0.
+   and exits 0. Without a place to run the image yet, paste
+   `Backend/DB Changes/bundle/schema.sql` into Neon's SQL editor instead: it applies the
+   same migrations and records the same versions, so a later `migrate up` finds nothing
+   to do ([Database](../../Backend/Docs/Database/README.md#single-file-scripts-bundle)).
 4. Seed reference data: `/app/migrate seed`. It loads the service catalog
-   (idempotent). In `staging` with `SEED_ADMIN_PASSWORD` set it also creates the demo
+   (idempotent); `Backend/DB Changes/bundle/seed.sql` in the SQL editor loads the same
+   catalog. In `staging` with `SEED_ADMIN_PASSWORD` set it also creates the demo
    admin users; in `prod` it creates none.
 5. Create the first super admin, once, with the same environment plus `ADMIN_PASSWORD`
    (at least 12 characters, from your password manager; it is read from the environment
@@ -548,7 +580,7 @@ curl -sI https://admin.pao.com.bd | grep -i content-security-policy
 ```
 
 Then by hand: sign in to the admin panel; on a release build of each app, sign in with
-OTP (a real SMS arrives), search nearby providers, receive a push; upload a partner
+OTP (a real SMS arrives; with SMS verification off, type `SMS_FIXED_CODE`), search nearby providers, receive a push; upload a partner
 document and open it from the admin panel (signed storage URL). Check the worker logs
 show no `invalid configuration` and the outbox is draining.
 
@@ -574,7 +606,9 @@ certificate change.
 | Symptom | Likely cause |
 |---|---|
 | API exits with `invalid configuration: …` | Missing or malformed variable; the message lists all of them. Keys must be padded base64 of 32 bytes. |
-| `production needs real SMS_ADAPTER and PUSH_ADAPTER` | `APP_ENV=prod` with `console`/`log` adapters |
+| `production needs real SMS_ADAPTER and PUSH_ADAPTER` | `APP_ENV=prod` with `console`/`log` adapters; set `SMS_VERIFICATION_ENABLED=false` to launch without SMS (§3.2.1) |
+| `production needs a real PUSH_ADAPTER` | `APP_ENV=prod`, SMS verification off, `PUSH_ADAPTER=log` |
+| `SMS_FIXED_CODE must be 6 digits` | `SMS_FIXED_CODE` is not exactly six ASCII digits |
 | `prepare storage` at start-up | Wrong S3 endpoint/credentials, or the token may not create buckets or set encryption |
 | `/readyz` fails, `/healthz` passes | Database, Redis or storage unreachable (TLS: use `sslmode=require` / `rediss://`) |
 | Admin panel: network errors, CORS in console | `ADMIN_CORS_ORIGIN` not exactly the browser origin, or a preview URL |

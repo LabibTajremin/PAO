@@ -1,4 +1,5 @@
 using PAO.Core.Areas.Identity.Repositories;
+using PAO.Infrastructure.Configuration;
 using PAO.Infrastructure.Crypto;
 using PAO.Infrastructure.Sms;
 using PAO.Lib.Areas.Identity;
@@ -18,12 +19,15 @@ public sealed class CodeRateLimitedException(TimeSpan retryAfter) : Exception("c
 
 /// <summary>
 /// Sends and checks one-time codes. A code sent for one purpose never satisfies another
-/// (`login`, `delete_account`, `emergency_contact`).
+/// (`login`, `delete_account`, `emergency_contact`). With SMS verification off
+/// (`SMS_VERIFICATION_ENABLED=false`) nothing is texted and the code is `SMS_FIXED_CODE`;
+/// the throttle, attempts, lockout and expiry still apply (ADR-0036).
 /// </summary>
-public sealed class PhoneCodes(IIdentityRepository repository, ICodeStore codes, ISendThrottle throttle, ISmsSender sms)
+public sealed class PhoneCodes(IIdentityRepository repository, ICodeStore codes, ISendThrottle throttle, ISmsSender sms, PaoSettings settings)
 {
     /// <summary>
-    /// Rate-limits, stores the hash of a fresh 6-digit code and texts it; returns the phone.
+    /// Rate-limits, stores the hash of a fresh 6-digit code and texts it (with verification
+    /// off, stores the fixed code and texts nothing); returns the phone.
     /// `clientIp` is null when the server sends on behalf of a signed-in user: those share
     /// no address, so a per-IP window would throttle every merchant at once.
     /// </summary>
@@ -40,8 +44,13 @@ public sealed class PhoneCodes(IIdentityRepository repository, ICodeStore codes,
         {
             throw new DomainException(IdentityReasons.RateLimited, new CodeRateLimitedException(wait));
         }
-        var code = RandomSecrets.Digits(IdentityRules.CodeLength);
+        var texting = settings.Sms.VerificationEnabled;
+        var code = texting ? RandomSecrets.Digits(IdentityRules.CodeLength) : settings.Sms.FixedCode;
         await codes.Save(purpose, phone, new StoredCode(await SecretHasher.Hash(code, Argon2Params.Code), 0));
+        if (!texting)
+        {
+            return phone;
+        }
         var message = $"PAO code: {code}. Valid for 5 minutes. Never share it. / আপনার PAO কোড {code}";
         try
         {

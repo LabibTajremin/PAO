@@ -15,9 +15,21 @@ Each concern has one file in `Config/`, bound to a typed options class
 | `logging.json` | `Logging` | `Level`, `Directory`, `WriteFiles` |
 | `push.json` | `Push` | `Adapter`, `FcmCredentialsFile`, `FcmCredentialsJson` |
 | `redis.json` | `Redis` | `Url` |
-| `sms.json` | `Sms` | `Adapter`, `SslWirelessEndpoint`, `SslWirelessApiToken`, `SslWirelessSid`, `TimeoutSeconds` |
+| `sms.json` | `Sms` | `Adapter`, `SslWirelessEndpoint`, `SslWirelessApiToken`, `SslWirelessSid`, `TimeoutSeconds`, `VerificationEnabled`, `FixedCode` |
 | `smtp.json` | `Smtp` | `Host`, `Port`, `UseTls`, `From`, `Username`, `Password` |
 | `storage.json` | `Storage` | `Endpoint`, `PublicEndpoint`, `Region`, `AccessKey`, `SecretKey`, `BucketPrivate`, `BucketPublic`, `EnsureEncryption` |
+
+## SMS verification switch
+
+`Sms:VerificationEnabled` (`SMS_VERIFICATION_ENABLED`, default `true`) turns phone-code
+texting off for a launch without an SMS provider. While it is `false`, `POST
+/v1/auth/otp/request` (and the other code requests) still checks the ban list and the
+rate limits and stores a code, but the code is `Sms:FixedCode` (`SMS_FIXED_CODE`, default
+`123456`) and no SMS adapter is called; verify then accepts only that code, with the usual
+attempts, lockout and expiry. `ConfigValidator` lets production start without sslwireless
+credentials in this mode, and every host logs `SMS verification is OFF` at start. Set it
+back to `true` with a real `SMS_ADAPTER` once one is contracted
+([ADR-0036](../../../docs/adr/0036-mvp-launch-defaults.md)).
 
 ## Local settings file (`appsettings.Local.json`)
 

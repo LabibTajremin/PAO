@@ -19,5 +19,7 @@ Validation messages are stable (`DATABASE_URL is required`, …). Back to [Confi
 | `S3_ENDPOINT`, `S3_PUBLIC_ENDPOINT`, `S3_REGION`, `S3_ACCESS_KEY`, `S3_SECRET_KEY`, `S3_BUCKET_PRIVATE`, `S3_BUCKET_PUBLIC`, `S3_ENSURE_ENCRYPTION` | `Storage:*` | keys are secrets; `S3_ENSURE_ENCRYPTION=false` skips PutBucketEncryption (R2) |
 | `JWT_SIGNING_KEY`, `JWT_KEY_ID`, `JWT_PREVIOUS_PUBLIC_KEYS` | `Jwt:*` | seed is a secret |
 | `SMS_ADAPTER`, `SSLWIRELESS_API_TOKEN`, `SSLWIRELESS_SID` | `Sms:*` | console or sslwireless |
+| `SMS_VERIFICATION_ENABLED` | `Sms:VerificationEnabled` | default `true`; `false` sends no SMS and accepts `SMS_FIXED_CODE` for every phone code (rate limits, lockouts and bans still apply), lets `APP_ENV=prod` start without sslwireless credentials, and logs a start-up warning ([ADR-0036](../../../docs/adr/0036-mvp-launch-defaults.md)) |
+| `SMS_FIXED_CODE` | `Sms:FixedCode` | default `123456`; exactly 6 ASCII digits (`SMS_FIXED_CODE must be 6 digits`); used only while verification is off |
 | `PUSH_ADAPTER`, `FCM_CREDENTIALS_FILE`, `FCM_CREDENTIALS_JSON` | `Push:*` | log or fcm; with fcm set the file path or the JSON (raw or base64), the file wins |
 | `PAO_HOME` | — | folder holding `Config/`, `Logs/`, `DB Changes/` (default: the backend folder or the binaries' folder) |

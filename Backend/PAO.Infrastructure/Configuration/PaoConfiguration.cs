@@ -102,6 +102,7 @@ public sealed record PaoSettings
         ["app_env"] = App.Environment,
         ["http_addr"] = Http.Address,
         ["sms_adapter"] = Sms.Adapter,
+        ["sms_verification"] = Sms.VerificationEnabled ? "on" : "off",
         ["push_adapter"] = Push.Adapter,
         ["jwt_key_id"] = Jwt.KeyId,
     };

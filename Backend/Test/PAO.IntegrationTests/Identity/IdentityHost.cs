@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using PAO.Core.Areas.Identity.Features.AdminUsers.Commands;
 using PAO.Core.Areas.Verification.Services.Shared;
+using PAO.Infrastructure.Configuration;
 using PAO.Infrastructure.Crypto;
 using PAO.Infrastructure.Data;
 using PAO.Infrastructure.Testing;
@@ -58,11 +59,13 @@ public sealed class IdentityHost : IAsyncDisposable
     public HttpClient Client { get; }
     public FixedLevels Levels => App.Services.GetRequiredService<FixedLevels>();
 
-    public static async Task<IdentityHost> Start(string databaseUrl)
+    public static async Task<IdentityHost> Start(string databaseUrl, bool smsVerification = true)
     {
         var clock = new FakeClock(DateTimeOffset.UtcNow);
         var app = await Hosts.Api(databaseUrl, configure: services =>
         {
+            var settings = (PaoSettings)services.Single(d => d.ServiceType == typeof(PaoSettings)).ImplementationInstance!;
+            settings.Sms.VerificationEnabled = smsVerification;
             services.Replace(ServiceDescriptor.Singleton<IClock>(clock));
             services.AddSingleton<FixedLevels>();
             services.AddSingleton<IVerificationSharedService>(sp => sp.GetRequiredService<FixedLevels>());

@@ -149,6 +149,13 @@ public sealed class SmsOptions
     public string SslWirelessSid { get; set; } = string.Empty;
     /// <summary>The timeout seconds.</summary>
     public int TimeoutSeconds { get; set; } = 10;
+    /// <summary>
+    /// Whether phone codes go out by SMS. Off only for a launch without an SMS provider:
+    /// no SMS is sent and every code is <see cref="FixedCode"/> (ADR-0036).
+    /// </summary>
+    public bool VerificationEnabled { get; set; } = true;
+    /// <summary>The 6-digit code every phone check accepts while <see cref="VerificationEnabled"/> is off.</summary>
+    public string FixedCode { get; set; } = "123456";
 }
 
 /// <summary>Push notifications (`Config/push.json`).</summary>

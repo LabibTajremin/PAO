@@ -16,7 +16,7 @@ Code: `PAO.Core/Areas/Identity/`; contracts, records, request and view models an
 | `ShortLivedState` | `ICodeStore`, `ISendThrottle`, `ISessionStore`, `IChallengeStore` and their records (`StoredCode`, `Family`, `Challenge`). |
 | `AccessTokens` | `IAccessTokens` (sign at the RBAC version, revoke via the denylist) and `IRbacGrants`. |
 | `VerificationLevels` | `ILevelReader`; resolves `IVerificationSharedService` on first use, since Verification is ported later. |
-| `PhoneCodes` | Sends and checks one-time codes per purpose. |
+| `PhoneCodes` | Sends and checks one-time codes per purpose; with SMS verification off it stores the fixed code and texts nothing. |
 | `PhoneAccounts` | Finds and registers people by phone; also `AccountStatusChanger` (A-05). |
 | `Sessions` | Refresh families: open, rotate with reuse detection, logout, revoke all. |
 | `AdminUsers` | Invites admins and ensures the seed's demo admins. |

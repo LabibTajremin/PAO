@@ -152,3 +152,27 @@ idempotent operations are small JSON bodies, so buffering costs nothing noticeab
 - **How to change it:** add the four `PAO_ANDROID_*` secrets (deployment §4.4, §4.8);
   builds are then upload-key signed. To make a missing key fail `main` again, restore
   the `refs/heads/main` check in `.github/workflows/frontend.yml` ("Install the upload key").
+
+## 13. SMS verification switch
+
+**Decision.** `SMS_VERIFICATION_ENABLED` (`Sms:VerificationEnabled`, default `true`) lets
+the MVP launch without an SMS provider. When `false`, a code request runs every check it
+runs today (phone format, ban list, per-phone and per-IP throttle) and stores a code,
+but the code is `SMS_FIXED_CODE` (`Sms:FixedCode`, default `123456`, exactly 6 digits)
+and the SMS adapter is not called. Verify is unchanged: attempts, lockout, expiry, the
+purpose binding, account bans, token issuance and audit behave exactly as with SMS on.
+`ConfigValidator` then accepts `APP_ENV=prod` with the console adapter and no
+sslwireless credentials (push must still be real: `production needs a real
+PUSH_ADAPTER`), and every host logs `SMS verification is OFF` at start and
+`sms_verification: off` in its ready line.
+
+**Why.** The owner deploys for free first and has no SMS contract. Storing the fixed code
+instead of skipping the store keeps every abuse control in one code path, so turning
+SMS on later changes only where the code comes from. The apps need no change: they never
+read the SMS, the user types the code.
+
+**Risk.** Anyone who knows the code can sign in as any phone. Acceptable for a closed
+beta; not for a public launch.
+
+**Change it by** setting `SMS_ADAPTER=sslwireless`, the two `SSLWIRELESS_*` secrets and
+`SMS_VERIFICATION_ENABLED=true` and redeploying (`docs/guides/deployment.md` §3.2.1).

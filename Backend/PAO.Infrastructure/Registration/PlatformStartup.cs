@@ -23,6 +23,21 @@ public static class PlatformStartup
         var store = services.GetRequiredService<ObjectStore>();
         await store.EnsureBucket(settings.Storage.BucketPrivate, cancellationToken);
         await store.EnsureBucket(settings.Storage.BucketPublic, cancellationToken);
-        services.GetRequiredService<ILoggerFactory>().CreateLogger("PAO").LogInformation("platform ready {@Config}", settings.LogFields());
+        var logger = services.GetRequiredService<ILoggerFactory>().CreateLogger("PAO");
+        logger.LogInformation("platform ready {@Config}", settings.LogFields());
+        WarnWhenSmsVerificationIsOff(settings, logger);
+    }
+
+    /// <summary>
+    /// Logs a warning at every start while SMS verification is off, so a deployment that
+    /// accepts the fixed code for every phone is never mistaken for a normal one.
+    /// </summary>
+    public static void WarnWhenSmsVerificationIsOff(PaoSettings settings, ILogger logger)
+    {
+        if (!settings.Sms.VerificationEnabled)
+        {
+            logger.LogWarning(
+                "SMS verification is OFF: no SMS is sent and every phone code is the fixed SMS_FIXED_CODE; set SMS_VERIFICATION_ENABLED=true once an SMS provider is configured");
+        }
     }
 }

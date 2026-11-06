@@ -5,7 +5,7 @@ request, validator and handler. Overview: [overview.md](overview.md).
 
 | Feature | Request | Use case |
 |---|---|---|
-| `RequestOtp` | `RequestOtpCommand` | Sends a 6-digit code by SMS (`login` or `delete_account`). Banned phones get no login code; resend, per-phone and per-IP windows answer 429 `RATE_LIMITED` with Retry-After. |
+| `RequestOtp` | `RequestOtpCommand` | Sends a 6-digit code by SMS (`login` or `delete_account`). Banned phones get no login code; resend, per-phone and per-IP windows answer 429 `RATE_LIMITED` with Retry-After. With `SMS_VERIFICATION_ENABLED=false` the same checks run but no SMS is sent and the stored code is `SMS_FIXED_CODE` ([Config](../../Config/README.md#sms-verification-switch)). |
 | `VerifyOtp` | `VerifyOtpCommand` | Checks the code (5 guesses, then `OTP_LOCKED`), creates the account on first sign-in or adds the app's role (partner app → `provider`), publishes `AccountCreated`/`RoleGranted`, opens a session. |
 | `RefreshToken` | `RefreshTokenCommand` | Rotates the refresh family; presenting a rotated token revokes the family. The admin web app's cookie is rotated as a cookie. |
 | `Logout` | `LogoutCommand` | Denylists the access token and ends this family, or every family of the account. |
