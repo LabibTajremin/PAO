@@ -42,7 +42,7 @@ done — `migrate create-admin`, CORS origin list, `FCM_CREDENTIALS_JSON`,
 Sentry/per-platform FCM App IDs, data-key rotation (`DATA_ENCRYPTION_PREVIOUS_KEYS`,
 `migrate reencrypt`), the cross-account sweep (`CrossAccountTests`), the idempotent
 replay race, the manual `backend-image` workflow, the SMS verification switch
-(`SMS_VERIFICATION_ENABLED`, ADR-0036 §12), the single-file database scripts
+(`SMS_VERIFICATION_ENABLED`, ADR-0036 §13), the single-file database scripts
 (`Backend/DB Changes/bundle`, `Backend/Docs/Database/schema.md`) and background jobs in the
 API (`JOBS_IN_API`, ADR-0036 §14). What remains is owner action:
 `docs/guides/deployment.md` "Gaps to close before launch" and `docs/guides/launch-values.md`.
