@@ -10,6 +10,7 @@ namespace PAO.E2ETests;
 public sealed class StartupSmokeTests : IAsyncLifetime
 {
     private static readonly string Home = PaoPaths.Resolve(AppContext.BaseDirectory, null).Home;
+    private readonly System.Collections.Concurrent.ConcurrentQueue<string> output = new();
     private string databaseUrl = string.Empty;
 
     public async ValueTask InitializeAsync() => databaseUrl = await TestDatabases.CreateEmpty();
@@ -43,7 +44,7 @@ public sealed class StartupSmokeTests : IAsyncLifetime
         }
         info.Environment["Logging__WriteFiles"] = "false";
         var process = Process.Start(info)!;
-        process.OutputDataReceived += (_, _) => { };
+        process.OutputDataReceived += (_, line) => output.Enqueue(line.Data ?? string.Empty);
         process.BeginOutputReadLine();
         process.ErrorDataReceived += (_, _) => { };
         process.BeginErrorReadLine();
@@ -103,6 +104,26 @@ public sealed class StartupSmokeTests : IAsyncLifetime
         using var worker = Start("PAO.Worker", Environment(FreePort(), workerMetrics));
         Assert.Equal(HttpStatusCode.OK, (await Poll($"http://127.0.0.1:{workerMetrics}/healthz")).StatusCode);
         await Stop(worker);
+    }
+
+    [Fact]
+    public async Task With_jobs_in_api_the_api_alone_runs_the_background_jobs()
+    {
+        using var migrate = Start("PAO.Migrator", TestSettings.Environment(databaseUrl), "up");
+        await migrate.WaitForExitAsync();
+        Assert.Equal(0, migrate.ExitCode);
+        var http = FreePort();
+        var environment = Environment(http, FreePort());
+        environment["JOBS_IN_API"] = "true";
+        using var api = Start("PAO.Core", environment);
+        Assert.Equal(HttpStatusCode.OK, (await Poll($"http://127.0.0.1:{http}/readyz")).StatusCode);
+        // The line is logged before the API listens, but stdout is read asynchronously.
+        for (var i = 0; i < 40 && !output.Any(l => l.Contains("background jobs: in api", StringComparison.Ordinal)); i++)
+        {
+            await Task.Delay(250);
+        }
+        Assert.Contains(output, l => l.Contains("background jobs: in api", StringComparison.Ordinal));
+        await Stop(api);
     }
 
     [Fact]

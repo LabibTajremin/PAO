@@ -3,12 +3,14 @@
 # l10n) and the "generated code is committed" check used by CI.
 
 # gen_backend bundles Backend/Api/openapi.yaml into the document the HTTP edge matches and
-# validates against; the Dart client is generated from the same bundle.
+# validates against (the Dart client is generated from the same bundle), and writes the
+# single-file database scripts in "Backend/DB Changes/bundle".
 gen_backend() {
   [[ -f "$BACKEND/Api/openapi.yaml" ]] || return 0
   require_tool npx "https://nodejs.org (npx runs the pinned Redocly CLI)"
   require_dotnet
   "$BACKEND/scripts/gen-spec.sh" >/dev/null || die "OpenAPI bundling failed"
+  "$BACKEND/scripts/gen-db-bundle.sh" >/dev/null || die "database bundle generation failed"
 }
 
 gen_dart_client() {

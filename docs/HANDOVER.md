@@ -30,7 +30,10 @@ package has a README beside its `pubspec.yaml`.
 
 Third parties sit behind ports with local fakes (ADR-0019): SMS (`SMS_ADAPTER=console |
 sslwireless`), push (`PUSH_ADAPTER=log | fcm`), maps (customer app, Google Geocoding),
-storage (S3). Production refuses the fake SMS and push adapters.
+storage (S3). Production refuses the fake SMS and push adapters, except that an MVP
+launch without an SMS provider may set `SMS_VERIFICATION_ENABLED=false` (no SMS, fixed
+code `SMS_FIXED_CODE`; ADR-0036 §13). A deployment with no worker service (Render's free
+plan) sets `JOBS_IN_API=true` so the API runs the outbox relay and the jobs (ADR-0036 §14).
 
 ## Run, test, release
 
@@ -112,7 +115,7 @@ The owner supplies these; none belong in the repository.
 | Terms, privacy policy, FAQ (legal review) | app copy (ARB files) and a public privacy-policy URL for the stores |
 | Google Maps key (Geocoding, restricted) | CI secret `PAO_MAPS_API_KEY` |
 | Firebase project: app configs and a service account | CI secrets `PAO_FCM_*`; backend `PUSH_ADAPTER=fcm`, `FCM_CREDENTIALS_FILE` |
-| SMS gateway (SSL Wireless) account and sender ID | backend `SMS_ADAPTER=sslwireless`, `SSLWIRELESS_API_TOKEN`, `SSLWIRELESS_SID` |
+| SMS gateway (SSL Wireless) account and sender ID | backend `SMS_ADAPTER=sslwireless`, `SSLWIRELESS_API_TOKEN`, `SSLWIRELESS_SID`, `SMS_VERIFICATION_ENABLED=true` (until then `false` with the fixed code, `deployment.md` §3.2.1) |
 | Production secrets | `JWT_SIGNING_KEY`, `DATA_ENCRYPTION_KEY`, S3 credentials, database and Redis URLs, `ADMIN_PASSWORD` for `migrate create-admin` (the first super admin, ADR-0036) |
 | Android upload key, Apple distribution certificate and profiles | CI secrets listed in `docs/guides/release.md` |
 | Domains and TLS | API host, admin console origin (`ADMIN_CORS_ORIGIN`), storage host |

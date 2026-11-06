@@ -15,3 +15,10 @@ Every `IScheduledJob`, its schedule and effect. Areas add theirs as they are por
 | `OutboxPurgeJob` | `outbox.purge_published` | daily 03:00 Asia/Dhaka | deletes outbox events delivered more than `Jobs:OutboxRetentionDays` (7) ago |
 
 The outbox relay is not a job: `WorkerLoop` runs it every `Jobs:OutboxRelayIntervalMs` (250 ms).
+
+All of them run in the worker, or in the API when `JOBS_IN_API=true`
+([Operations](README.md#where-the-background-jobs-run)). A daily run that falls while that
+process is down (for example a free instance asleep) is skipped, not replayed: the next
+run of the purges and of the document expiry picks up what is due, but the expiry
+reminders of the missed day are not sent, as each looks one day ahead. The 15 s and
+one-minute sweeps catch up at their next run.

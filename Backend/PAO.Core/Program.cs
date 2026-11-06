@@ -1,6 +1,7 @@
-// The API process: serves the contract on HTTP_ADDR and metrics on METRICS_ADDR;
-// `api healthcheck` is the container health check. Composition root: it only calls the
-// named registration methods (excluded from coverage; the start-up smoke tests run it).
+// The API process: serves the contract on HTTP_ADDR and metrics on METRICS_ADDR, and with
+// JOBS_IN_API=true also runs the worker's relay and jobs; `api healthcheck` is the container
+// health check. Composition root: it only calls the named registration methods (excluded
+// from coverage; the start-up smoke tests run it).
 using PAO.Core;
 using PAO.Core.Registration;
 using PAO.Infrastructure.Hosting;
@@ -21,7 +22,8 @@ try
         .AddCustomServices(settings, typeof(ApiHost).Assembly)
         .AddDatabase(settings)
         .AddRepositories()
-        .AddAreas();
+        .AddAreas()
+        .AddBackgroundJobsInApi(settings, paths);
     var app = builder.Build();
     app.UseHttpEdge(settings);
     return await app.RunApi(settings);

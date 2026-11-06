@@ -8,6 +8,7 @@ using PAO.Core.Areas.Identity.Features.RoleEditor.Commands;
 using PAO.Core.Areas.Identity.Features.RoleEditor.Queries;
 using PAO.Core.Areas.Identity.Features.VerifyOtp.Commands;
 using PAO.Core.Areas.Identity.Services;
+using PAO.Infrastructure.Configuration;
 using PAO.Infrastructure.Crypto;
 using PAO.Lib.Areas.Identity;
 using PAO.Lib.Errors;
@@ -23,17 +24,19 @@ public sealed class IdentityHarness
     public const string E164 = "+8801712345678";
     public const string Email = "verifier@pao.bd";
 
-    public IdentityHarness()
+    public IdentityHarness(bool smsVerification = true)
     {
+        Settings.Sms.VerificationEnabled = smsVerification;
         Mapper = new Mapper([new IdentityMappingProfile()]);
         Rbac = new FakeRbac(Repo);
-        PhoneCodes = new PhoneCodes(Repo, Codes, Throttle, Sms);
+        PhoneCodes = new PhoneCodes(Repo, Codes, Throttle, Sms, Settings);
         Accounts = new PhoneAccounts(Repo, Clock, new SequenceIds());
         Sessions = new Sessions(Repo, Families, Tokens, new SequenceIds());
         Status = new AccountStatusChanger(Repo, Sessions);
         AdminUsers = new AdminUsers(Repo, Clock, new SequenceIds());
     }
 
+    public PaoSettings Settings { get; } = TestSettings.Create();
     public FakeRepository Repo { get; } = new();
     public FakeCodes Codes { get; } = new();
     public FakeThrottle Throttle { get; } = new();

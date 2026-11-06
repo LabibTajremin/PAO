@@ -152,3 +152,69 @@ idempotent operations are small JSON bodies, so buffering costs nothing noticeab
 - **How to change it:** add the four `PAO_ANDROID_*` secrets (deployment §4.4, §4.8);
   builds are then upload-key signed. To make a missing key fail `main` again, restore
   the `refs/heads/main` check in `.github/workflows/frontend.yml` ("Install the upload key").
+
+## 13. SMS verification switch
+
+**Decision.** `SMS_VERIFICATION_ENABLED` (`Sms:VerificationEnabled`, default `true`) lets
+the MVP launch without an SMS provider. When `false`, a code request runs every check it
+runs today (phone format, ban list, per-phone and per-IP throttle) and stores a code,
+but the code is `SMS_FIXED_CODE` (`Sms:FixedCode`, default `123456`, exactly 6 digits)
+and the SMS adapter is not called. Verify is unchanged: attempts, lockout, expiry, the
+purpose binding, account bans, token issuance and audit behave exactly as with SMS on.
+`ConfigValidator` then accepts `APP_ENV=prod` with the console adapter and no
+sslwireless credentials (push must still be real: `production needs a real
+PUSH_ADAPTER`), and every host logs `SMS verification is OFF` at start and
+`sms_verification: off` in its ready line.
+
+**Why.** The owner deploys for free first and has no SMS contract. Storing the fixed code
+instead of skipping the store keeps every abuse control in one code path, so turning
+SMS on later changes only where the code comes from. The apps need no change: they never
+read the SMS, the user types the code.
+
+**Risk.** Anyone who knows the code can sign in as any phone. Acceptable for a closed
+beta; not for a public launch.
+
+**Change it by** setting `SMS_ADAPTER=sslwireless`, the two `SSLWIRELESS_*` secrets and
+`SMS_VERIFICATION_ENABLED=true` and redeploying (`docs/guides/deployment.md` §3.2.1).
+
+## 14. Background jobs in the API
+
+**Decision.** `JOBS_IN_API` (`Jobs:RunInApi`, default `false`) lets the API process run
+everything the worker runs: the outbox relay that delivers events to their subscribers
+(notifications and push, commission on `BookingCompleted`, opening the rating, dashboard
+and read-model stats, audit) and the scheduler with every job (booking expiry every 15 s,
+merchant presence reap, media orphan purge, document expiry and reminders, closed-account
+purge, outbox purge). The API calls `AddBackgroundJobsInApi`
+(`PAO.Core/Registration/BackgroundJobsInApiRegistration.cs`), which calls the worker's own
+`AddBackgroundJobs` when the setting is on and adds nothing when it is off, so there is
+one list of background services and the job classes are untouched. The hosted
+`WorkerLoop` starts after the API's start-up checks and stops with the API; `/readyz` does
+not depend on it. The API logs `background jobs: in api` or `background jobs: in worker`
+at start; the worker logs `background jobs: in worker` and warns if it sees
+`JOBS_IN_API=true`. The MVP on Render's free plan sets it to `true` and runs no worker
+(`docs/guides/deployment.md` §3.4.1). The worker host is unchanged.
+
+**Why.** The free plan runs one web service and no background worker, and without the
+worker bookings never time out and no event is delivered. Reusing the worker's
+registration keeps both hosts identical and costs no new code paths. Running both is not
+a correctness problem: job runs take a Postgres advisory lock per job, the relay claims
+outbox rows with `FOR UPDATE SKIP LOCKED` and marks them published in the same
+transaction, and handlers are idempotent; the same rules already let several workers
+overlap during a release. It only doubles the polling and loosens per-aggregate order to
+"within one relay", so the guides say to run one of them.
+
+**Trade-offs.** On the free plan the API sleeps after about 15 minutes without requests
+and the jobs sleep with it: events wait in the outbox and the expiry sweep catches up on
+waking, but a daily run that falls in a sleep is skipped (purges and document expiry
+catch up the next day; that day's expiry reminders are not sent). Job and outbox metrics
+are served on the API's metrics port. The architecture rule that kept `PAO.Core` away
+from `PAO.BackgroundJobs` now allows that one registration class only
+(`Only_the_jobs_in_api_registration_uses_the_background_jobs`).
+
+**How to revert.** Start the worker service (`/app/worker`, same image and environment),
+wait for its health check, then set `JOBS_IN_API=false` (or remove it) on the API and
+redeploy it. To remove the option entirely: delete
+`BackgroundJobsInApiRegistration.cs` and its call in `PAO.Core/Program.cs`, the
+`PAO.BackgroundJobs` reference in `PAO.Core.csproj`, `JobsOptions.RunInApi`, the
+`JOBS_IN_API` mapping and `RunInApi` in `Config/jobs.json`, and restore `PAO.BackgroundJobs`
+to the forbidden list of `PAO.Core` in `ArchitectureTests`.

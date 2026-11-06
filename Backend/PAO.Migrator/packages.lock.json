@@ -272,9 +272,16 @@
         "resolved": "10.0.12",
         "contentHash": "jDix4bBMYnpZdSPcnY+KDV6ik3SRMzpMKby/bZl/XUwIiflwRNAFZ0oOl61R/pSaveIJ8t1gs2BUlrGsPs/bcg=="
       },
+      "pao.backgroundjobs": {
+        "type": "Project",
+        "dependencies": {
+          "PAO.Infrastructure": "[1.0.0, )"
+        }
+      },
       "pao.core": {
         "type": "Project",
         "dependencies": {
+          "PAO.BackgroundJobs": "[1.0.0, )",
           "PAO.Infrastructure": "[1.0.0, )"
         }
       },

@@ -20,11 +20,22 @@ public sealed class ArchitectureTests
     [InlineData("PAO.Lib", new[] { "PAO.Infrastructure", "PAO.Core", "PAO.BackgroundJobs", "PAO.Worker", "PAO.Migrator" })]
     [InlineData("PAO.Infrastructure", new[] { "PAO.Core", "PAO.BackgroundJobs", "PAO.Worker", "PAO.Migrator" })]
     [InlineData("PAO.BackgroundJobs", new[] { "PAO.Core", "PAO.Worker", "PAO.Migrator" })]
-    [InlineData("PAO.Core", new[] { "PAO.BackgroundJobs", "PAO.Worker", "PAO.Migrator" })]
+    [InlineData("PAO.Core", new[] { "PAO.Worker", "PAO.Migrator" })]
     public void Projects_depend_only_downwards(string project, string[] forbidden)
     {
         var assembly = Assembly.Load(project);
         Holds(Types.InAssembly(assembly).ShouldNot().HaveDependencyOnAny(forbidden).GetResult());
+    }
+
+    // JOBS_IN_API (ADR-0036 §14) lets the MVP run the relay and jobs inside the API, so the
+    // API references PAO.BackgroundJobs, but only its one registration class may use it.
+    [Fact]
+    public void Only_the_jobs_in_api_registration_uses_the_background_jobs()
+    {
+        Holds(Types.InAssembly(Core).That().DoNotHaveName(nameof(BackgroundJobsInApiRegistration))
+            .ShouldNot().HaveDependencyOn("PAO.BackgroundJobs").GetResult());
+        Assert.True(Types.InAssembly(Core).That().HaveName(nameof(BackgroundJobsInApiRegistration))
+            .Should().HaveDependencyOn("PAO.BackgroundJobs").GetResult().IsSuccessful);
     }
 
     [Fact]

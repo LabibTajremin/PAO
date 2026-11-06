@@ -149,6 +149,13 @@ public sealed class SmsOptions
     public string SslWirelessSid { get; set; } = string.Empty;
     /// <summary>The timeout seconds.</summary>
     public int TimeoutSeconds { get; set; } = 10;
+    /// <summary>
+    /// Whether phone codes go out by SMS. Off only for a launch without an SMS provider:
+    /// no SMS is sent and every code is <see cref="FixedCode"/> (ADR-0036).
+    /// </summary>
+    public bool VerificationEnabled { get; set; } = true;
+    /// <summary>The 6-digit code every phone check accepts while <see cref="VerificationEnabled"/> is off.</summary>
+    public string FixedCode { get; set; } = "123456";
 }
 
 /// <summary>Push notifications (`Config/push.json`).</summary>
@@ -178,6 +185,12 @@ public sealed class JobsOptions
     public int OutboxRelayIntervalMs { get; set; } = 250;
     /// <summary>The outbox retention days.</summary>
     public int OutboxRetentionDays { get; set; } = 7;
+
+    /// <summary>
+    /// Whether the API process also runs the relay and the jobs, for a deployment with no
+    /// worker service (the MVP on one free instance, ADR-0036 §14). Off, the API runs none.
+    /// </summary>
+    public bool RunInApi { get; set; }
 }
 
 /// <summary>Listen addresses, body limit and API rate limits (`Config/http.json`).</summary>

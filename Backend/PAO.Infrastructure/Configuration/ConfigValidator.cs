@@ -117,6 +117,8 @@ public static class ConfigValidator
     {
         var sms = s.Sms.Adapter;
         var push = s.Push.Adapter;
+        // With verification off the SMS adapter is never called, so it needs no credentials.
+        var texting = s.Sms.VerificationEnabled;
         if (sms is not ("console" or "sslwireless"))
         {
             problems.Add("SMS_ADAPTER must be one of console, sslwireless");
@@ -125,7 +127,11 @@ public static class ConfigValidator
         {
             problems.Add("PUSH_ADAPTER must be one of log, fcm");
         }
-        if (sms == "sslwireless")
+        if (!FixedCodeIsValid(s.Sms.FixedCode))
+        {
+            problems.Add("SMS_FIXED_CODE must be 6 digits");
+        }
+        if (texting && sms == "sslwireless")
         {
             Require(problems, "SSLWIRELESS_API_TOKEN", s.Sms.SslWirelessApiToken);
             Require(problems, "SSLWIRELESS_SID", s.Sms.SslWirelessSid);
@@ -137,11 +143,27 @@ public static class ConfigValidator
                 problems.Add("FCM_CREDENTIALS_FILE or FCM_CREDENTIALS_JSON is required");
             }
         }
-        if (s.App.Environment == AppEnvironments.Prod && (sms == "console" || push == "log"))
+        CheckProductionAdapters(s, problems);
+    }
+
+    private static void CheckProductionAdapters(PaoSettings s, List<string> problems)
+    {
+        if (s.App.Environment != AppEnvironments.Prod)
+        {
+            return;
+        }
+        var fakePush = s.Push.Adapter == "log";
+        if (s.Sms.VerificationEnabled && (s.Sms.Adapter == "console" || fakePush))
         {
             problems.Add("production needs real SMS_ADAPTER and PUSH_ADAPTER");
         }
+        else if (!s.Sms.VerificationEnabled && fakePush)
+        {
+            problems.Add("production needs a real PUSH_ADAPTER");
+        }
     }
+
+    private static bool FixedCodeIsValid(string code) => code.Length == 6 && code.All(char.IsAsciiDigit);
 
     private static void Require(List<string> problems, string name, string value)
     {

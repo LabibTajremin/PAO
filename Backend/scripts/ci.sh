@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # The .NET quality gates (ADR-0034): build (warnings as errors, XML docs), format,
 # architecture/size/docs gates, unit + integration tests with merged 100% line coverage,
-# the bundled-spec check and the start-up smoke tests.
+# the bundled-spec and database-bundle checks and the start-up smoke tests.
 # Usage: ci.sh [build|format|spec|gates|unit|test|e2e|all]
 # Coverage goes to PAO_COVERAGE_OUT, by default out/coverage/backend at the repository root.
 set -euo pipefail
@@ -20,6 +20,8 @@ ci_build() {
 ci_spec() {
   step "bundled OpenAPI document is up to date"
   scripts/gen-spec.sh --check
+  step "single-file database scripts (DB Changes/bundle) are up to date"
+  scripts/gen-db-bundle.sh --check
 }
 
 ci_format() {

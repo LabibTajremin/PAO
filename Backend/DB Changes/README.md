@@ -15,3 +15,7 @@ database it migrated stays up to date (ADR-0032).
   `-- +goose Down` section rolls a module back to version zero in tests.
 - sqlc reads each module folder as that module's schema (`sqlc.yaml`), so the typed
   query functions see a new migration after `npm run gen`.
+- `bundle/` is generated, not a module: `schema.sql` and `seed.sql` replay every script
+  and the seed catalog as two idempotent files for a SQL editor. Regenerate them with
+  `Backend/scripts/gen-db-bundle.sh` after changing a script or `Seed/catalog.yaml`; CI
+  fails when they are stale (`Docs/Database/README.md`).

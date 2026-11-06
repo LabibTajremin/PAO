@@ -36,9 +36,12 @@ public static class EnvironmentVariables
         ["SMS_ADAPTER"] = "Sms:Adapter",
         ["SSLWIRELESS_API_TOKEN"] = "Sms:SslWirelessApiToken",
         ["SSLWIRELESS_SID"] = "Sms:SslWirelessSid",
+        ["SMS_VERIFICATION_ENABLED"] = "Sms:VerificationEnabled",
+        ["SMS_FIXED_CODE"] = "Sms:FixedCode",
         ["PUSH_ADAPTER"] = "Push:Adapter",
         ["FCM_CREDENTIALS_FILE"] = "Push:FcmCredentialsFile",
         ["FCM_CREDENTIALS_JSON"] = "Push:FcmCredentialsJson",
+        ["JOBS_IN_API"] = "Jobs:RunInApi",
     };
 
     /// <summary>Returns the configuration values the set variables of `environment` define.</summary>

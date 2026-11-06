@@ -2,5 +2,9 @@
   "PAO_FLAVOUR": "prod",
   "PAO_API_BASE_URL": "https://api.pao.com.bd",
   "PAO_SUPPORT_PHONE": "09610000000",
-  "PAO_SUPPORT_EMAIL": "support@pao.com.bd"
+  "PAO_SUPPORT_EMAIL": "support@pao.com.bd",
+  "PAO_FCM_API_KEY": "AIzaSyCNGYO9p2tGNfxhaBBsgEmZDBJErjht0s8",
+  "PAO_FCM_SENDER_ID": "474216579948",
+  "PAO_FCM_PROJECT_ID": "pao-notification",
+  "PAO_FCM_APP_ID": "1:474216579948:android:82d120adb5652fcf396949"
 }

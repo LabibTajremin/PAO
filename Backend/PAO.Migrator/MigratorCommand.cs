@@ -15,7 +15,7 @@ namespace PAO.Migrator;
 public static class MigratorCommand
 {
     /// <summary>The usage line printed for anything else.</summary>
-    public const string Usage = "usage: migrate up|seed|perf-seed N|create-admin --email E --name N|reencrypt";
+    public const string Usage = "usage: migrate up|seed|perf-seed N|create-admin --email E --name N|reencrypt|bundle [--check]";
 
     /// <summary>
     /// Runs `args` and returns the process exit code; messages go to `output`. `seed` runs

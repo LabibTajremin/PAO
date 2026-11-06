@@ -35,7 +35,9 @@ secret store; the PAO dashboards open (`infra/ops/grafana/dashboards`).
    unavailable). The platform health check is `/app/api healthcheck` or `GET /healthz`;
    route traffic only after `GET /readyz` answers 200.
 6. **Roll the worker.** Replace the worker instances. Several may run at once (jobs take
-   an advisory lock, the outbox relay uses `SKIP LOCKED`), so overlap is safe.
+   an advisory lock, the outbox relay uses `SKIP LOCKED`), so overlap is safe. With
+   `JOBS_IN_API=true` there is no worker: step 5 rolled the jobs with the API
+   (`docs/guides/deployment.md` §3.4.1).
 7. **Seed reference data** only when the release notes say the catalog or settings
    changed: `/app/migrate seed` (idempotent).
 

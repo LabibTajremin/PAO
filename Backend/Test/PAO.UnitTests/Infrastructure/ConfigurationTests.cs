@@ -63,7 +63,8 @@ public sealed class ConfigurationTests : IDisposable
     {
         var settings = TestSettings.Create();
         Assert.Same(settings, ConfigValidator.Validate(settings));
-        Assert.Equal(["app_env", "http_addr", "jwt_key_id", "push_adapter", "sms_adapter"], settings.LogFields().Keys.Order());
+        Assert.Equal(["app_env", "http_addr", "jwt_key_id", "push_adapter", "sms_adapter", "sms_verification"], settings.LogFields().Keys.Order());
+        Assert.Equal("on", settings.LogFields()["sms_verification"]);
     }
 
     [Fact]
@@ -116,6 +117,56 @@ public sealed class ConfigurationTests : IDisposable
         s.Push.FcmCredentialsJson = string.Empty;
         s.Push.FcmCredentialsFile = "/run/fcm.json";
         ConfigValidator.Validate(s);
+    }
+
+    [Fact]
+    public void Production_without_sms_verification_needs_no_sms_provider()
+    {
+        var s = TestSettings.Create(appEnv: AppEnvironments.Prod);
+        s.Sms.VerificationEnabled = false;
+        Assert.Equal(["production needs a real PUSH_ADAPTER"], Assert.Throws<ConfigException>(() => ConfigValidator.Validate(s)).Problems);
+        s.Push.Adapter = "fcm";
+        s.Push.FcmCredentialsJson = "{}";
+        ConfigValidator.Validate(s);
+        s.Sms.Adapter = "sslwireless";
+        ConfigValidator.Validate(s);
+        Assert.Equal("off", s.LogFields()["sms_verification"]);
+    }
+
+    [Theory]
+    [InlineData("123456", true)]
+    [InlineData("000000", true)]
+    [InlineData("12345", false)]
+    [InlineData("1234567", false)]
+    [InlineData("12345a", false)]
+    [InlineData("١٢٣٤٥٦", false)]
+    public void The_fixed_code_is_six_ascii_digits(string code, bool valid)
+    {
+        var s = TestSettings.Create();
+        s.Sms.FixedCode = code;
+        var problems = Record.Exception(() => ConfigValidator.Validate(s)) is ConfigException error ? error.Problems : [];
+        Assert.Equal(valid ? [] : ["SMS_FIXED_CODE must be 6 digits"], problems);
+    }
+
+    [Fact]
+    public void Sms_verification_variables_bind()
+    {
+        var env = new Hashtable { ["SMS_VERIFICATION_ENABLED"] = "false", ["SMS_FIXED_CODE"] = "654321" };
+        var settings = PaoConfiguration.Bind(new ConfigurationBuilder().AddPaoConfiguration(PaoPaths.Resolve(AppContext.BaseDirectory, null).Config, env).Build());
+        Assert.False(settings.Sms.VerificationEnabled);
+        Assert.Equal("654321", settings.Sms.FixedCode);
+        Assert.True(new SmsOptions().VerificationEnabled);
+        Assert.Equal("123456", new SmsOptions().FixedCode);
+    }
+
+    [Fact]
+    public void Jobs_in_api_is_off_unless_the_variable_turns_it_on()
+    {
+        var config = PaoPaths.Resolve(AppContext.BaseDirectory, null).Config;
+        Assert.False(PaoConfiguration.Bind(new ConfigurationBuilder().AddPaoConfiguration(config, new Hashtable()).Build()).Jobs.RunInApi);
+        var env = new Hashtable { ["JOBS_IN_API"] = "true" };
+        Assert.True(PaoConfiguration.Bind(new ConfigurationBuilder().AddPaoConfiguration(config, env).Build()).Jobs.RunInApi);
+        Assert.False(new JobsOptions().RunInApi);
     }
 
     [Theory]
