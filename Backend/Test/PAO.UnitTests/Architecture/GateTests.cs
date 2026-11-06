@@ -87,7 +87,8 @@ public sealed class DocsCheckerTests : IDisposable
         Write("PAO.Core/Platform/UnimplementedController.cs", "class U {}");
         Write("PAO.BackgroundJobs/ExpireJob.cs", "public sealed class ExpireJob(int x) : IScheduledJob {}");
         Write("Config/http.json", """{"Http":{"Address":":8080"}}""");
-        Write("DB Changes/booking/0001_init.sql", "-- +goose Up");
+        Write("DB Changes/booking/0001_init.sql", "-- +goose Up\nCREATE TABLE booking.bookings (id uuid);\nCREATE UNIQUE INDEX bookings_number_key ON booking.bookings (id);");
+        Write("DB Changes/bundle/schema.sql", "CREATE TABLE bundle.only (id uuid);");
         Write("Test/Fake.cs", "class FakeJob : IScheduledJob {}");
     }
 
@@ -100,7 +101,8 @@ public sealed class DocsCheckerTests : IDisposable
         Write("Docs/Api/README.md", "UnimplementedController [ops](../Operations/jobs.md) [web](https://pao.test) [top](#errors) [mail](mailto:a@b)");
         Write("Docs/Operations/jobs.md", "ExpireJob");
         Write("Docs/Config/README.md", "http.json Http");
-        Write("Docs/Database/README.md", "booking/0001_init.sql");
+        Write("Docs/Database/README.md", "booking/0001_init.sql bundle/schema.sql");
+        Write("Docs/Database/schema.md", "booking.bookings bookings_number_key");
     }
 
     [Fact]
@@ -128,6 +130,9 @@ public sealed class DocsCheckerTests : IDisposable
         Assert.Contains("Config/README.md: no entry for config file or section http.json", problems);
         Assert.Contains("Config/README.md: no entry for config file or section Http", problems);
         Assert.Contains("Database/README.md: no entry for script booking/0001_init.sql", problems);
+        Assert.Contains("Database/schema.md: no entry for table or index booking.bookings", problems);
+        Assert.Contains("Database/schema.md: no entry for table or index bookings_number_key", problems);
+        Assert.DoesNotContain(problems, p => p.Contains("bundle.only", StringComparison.Ordinal));
         Assert.Contains("Docs/Guide.md: broken link Missing.md", problems);
         Assert.DoesNotContain(problems, p => p.Contains("FakeJob", StringComparison.Ordinal));
     }

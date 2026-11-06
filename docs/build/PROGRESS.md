@@ -41,7 +41,9 @@ done — `migrate create-admin`, CORS origin list, `FCM_CREDENTIALS_JSON`,
 `S3_ENSURE_ENCRYPTION`, billing setting bounds, `MERCHANT_DUE_LIMIT` details, CI pins/
 Sentry/per-platform FCM App IDs, data-key rotation (`DATA_ENCRYPTION_PREVIOUS_KEYS`,
 `migrate reencrypt`), the cross-account sweep (`CrossAccountTests`), the idempotent
-replay race and the manual `backend-image` workflow. What remains is owner action:
+replay race, the manual `backend-image` workflow, the SMS verification switch
+(`SMS_VERIFICATION_ENABLED`, ADR-0036 §12) and the single-file database scripts
+(`Backend/DB Changes/bundle`, `Backend/Docs/Database/schema.md`). What remains is owner action:
 `docs/guides/deployment.md` "Gaps to close before launch" and `docs/guides/launch-values.md`.
 Run the full `./pao ci` in the background and one heavy job at a time: two parallel .NET
 builds overload the 4-CPU container. .NET 10 SDK installs to `/root/.dotnet`.
@@ -82,6 +84,11 @@ None.
 ## Log
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
+
+- 2026-11-06 MVP launch: `SMS_VERIFICATION_ENABLED`/`SMS_FIXED_CODE` (no SMS, fixed code,
+  limits unchanged; prod starts without sslwireless), `Docs/Database/schema.md` with the
+  index review (5 indexes in identity/0004, booking/0003, admin/0003),
+  `DB Changes/bundle/{schema,seed}.sql` from `migrate bundle`, checked in CI.
 
 - 2026-10-25 P17 follow-up: last NestJS/JavaScript traces removed. k6 replaced by the C#
   load test `Backend/Test/PAO.LoadTests` (`./pao perf`, CI perf job without k6);

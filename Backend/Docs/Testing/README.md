@@ -20,7 +20,11 @@ key environment; nothing shared is dropped.
 4. Unit and integration tests with Microsoft code coverage, merged by
    `scripts/coverage.py`, gated at 100% line coverage. Only generated code and the three
    `Program.cs` files are excluded (`coverage.config`).
-5. The bundled spec is current (`scripts/gen-spec.sh --check`; the contract folder is the MSBuild property `PaoApiDir`).
+5. The bundled spec is current (`scripts/gen-spec.sh --check`; the contract folder is the MSBuild property `PaoApiDir`),
+   and so are the single-file database scripts (`scripts/gen-db-bundle.sh --check`,
+   [Database](../Database/README.md#single-file-scripts-bundle)). The integration test
+   `DatabaseBundleTests` applies them to an empty database and compares it with `migrate up`
+   and `migrate seed`.
 6. E2E start-up smoke tests (the journeys are filtered out by their trait; `./pao test e2e`
    runs them against a fresh stack).
 

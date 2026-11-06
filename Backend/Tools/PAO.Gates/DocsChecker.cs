@@ -6,7 +6,8 @@ namespace PAO.Gates;
 /// <summary>
 /// Documentation coverage (ADR-0034): every area, feature, controller, service, repository,
 /// job, config file and section, and DB script has its page or index entry under `Docs/`,
-/// and no Markdown link points at a missing file.
+/// every table and index the scripts create is in `Docs/Database/schema.md`, and no
+/// Markdown link points at a missing file.
 /// </summary>
 public static partial class DocsChecker
 {
@@ -26,6 +27,7 @@ public static partial class DocsChecker
         Mentioned(problems, Path.Combine(docs, "Operations", "jobs.md"), Jobs(root), "job");
         CheckConfig(root, docs, problems);
         Mentioned(problems, Path.Combine(docs, "Database", "README.md"), Scripts(root), "script");
+        Mentioned(problems, Path.Combine(docs, "Database", "schema.md"), SchemaObjects(root), "table or index");
         CheckLinks(root, problems);
         return problems;
     }
@@ -67,6 +69,13 @@ public static partial class DocsChecker
         return Files(dir, "*.sql", SearchOption.AllDirectories).Select(f => Path.GetRelativePath(dir, f).Replace('\\', '/'));
     }
 
+    // The generated bundle repeats every script, so only the module folders count.
+    private static IEnumerable<string> SchemaObjects(string root) =>
+        Scripts(root).Where(s => !s.StartsWith("bundle/", StringComparison.Ordinal))
+            .SelectMany(s => CreatedObject().Matches(File.ReadAllText(Path.Combine(root, "DB Changes", s))))
+            .Select(m => m.Groups[1].Success ? m.Groups[1].Value : m.Groups[2].Value)
+            .Distinct(StringComparer.Ordinal);
+
     private static void CheckLinks(string root, List<string> problems)
     {
         foreach (var page in Files(root, "*.md", SearchOption.AllDirectories).Where(f => !f.Contains($"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}", StringComparison.Ordinal)))
@@ -107,6 +116,9 @@ public static partial class DocsChecker
 
     [GeneratedRegex(@"class\s+(\w+)[^{;]*\bIScheduledJob\b")]
     private static partial Regex JobClass();
+
+    [GeneratedRegex(@"CREATE\s+(?:TABLE\s+([a-z_]+\.[a-z0-9_]+)|(?:UNIQUE\s+)?INDEX\s+([a-z0-9_]+))")]
+    private static partial Regex CreatedObject();
 
     [GeneratedRegex(@"\]\(([^)\s]+)\)")]
     private static partial Regex Link();

@@ -8,7 +8,7 @@ One image (`Backend/docker/Dockerfile`, built from `Backend/`) with three entry 
 |---|---|---|
 | `/app/api` | `PAO.Core` — contract on `HTTP_ADDR`, metrics on `METRICS_ADDR` | `/app/api healthcheck` (GET :8080/healthz) |
 | `/app/worker` | `PAO.Worker` — relay, jobs; liveness and metrics on `METRICS_ADDR` | `/app/worker healthcheck` (GET :9090/healthz) |
-| `/app/migrate` | `PAO.Migrator` — `up`, `seed` (loads `Seed/catalog.yaml` through `SeedCommand`: the catalog, and the demo admins outside prod when `SEED_ADMIN_PASSWORD` is set), `perf-seed N` (`PerfSeedCommand`: N online electricians and a customer-token fixture as JSON; refuses prod), `create-admin --email E --name N` (`CreateAdminCommand`), `reencrypt` (`ReencryptCommand`) | — |
+| `/app/migrate` | `PAO.Migrator` — `up`, `seed` (loads `Seed/catalog.yaml` through `SeedCommand`: the catalog, and the demo admins outside prod when `SEED_ADMIN_PASSWORD` is set), `perf-seed N` (`PerfSeedCommand`: N online electricians and a customer-token fixture as JSON; refuses prod), `create-admin --email E --name N` (`CreateAdminCommand`), `reencrypt` (`ReencryptCommand`), `bundle [--check]` (`BundleCommand`: writes or checks `DB Changes/bundle/schema.sql` and `seed.sql`, no database needed; see [Database](../Database/README.md)) | — |
 
 `infra/docker-compose.yml` builds the api, worker and migrate services from this image.
 
