@@ -85,6 +85,8 @@ integration tests run against real Postgres, Redis and S3 (ADR-0008).
 
 - One API process, stateless, horizontally scalable (PRD §11).
 - One worker process (same image, `/app/worker`) runs the outbox relay and periodic jobs.
+  For the MVP on a single free instance, `JOBS_IN_API=true` runs the same services inside
+  the API instead and no worker is deployed (ADR-0036 §14).
 - PostgreSQL 16 + PostGIS 3: system of record. One schema per module.
 - Redis 7: sessions, tokens, permission caches, rate limits, locks, presence (§4).
 - RustFS locally (S3-compatible, ADR-0007) / any S3 in production: private buckets, signed URLs only.

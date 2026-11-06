@@ -47,8 +47,9 @@ scripts/           ci.sh, coverage.py, gen-spec.sh
 - **Behaviour.** Keep use-case names, error codes, events, tables, Redis keys and env vars
   stable: the apps and deployed databases depend on them. The PRD wins on behaviour.
 - **Registration.** `Program.cs` only calls `AddPaoSettings`, `AddBuiltInServices`,
-  `AddCustomServices`, `AddDatabase`, `AddRepositories`, `Add<Area>Area`; each lives in its own
-  file under `Registration/` and is tested.
+  `AddCustomServices`, `AddDatabase`, `AddRepositories`, `Add<Area>Area` and, for the jobs,
+  `AddBackgroundJobs` (worker) or `AddBackgroundJobsInApi` (API, `JOBS_IN_API`); each lives in
+  its own file under `Registration/` and is tested.
 - **Docs.** Every public type and member has XML docs (CS1591 is an error). Every area,
   feature, controller, service, repository, job, config section and script has a page or
   index entry under `Docs/`; the docs gate fails otherwise.

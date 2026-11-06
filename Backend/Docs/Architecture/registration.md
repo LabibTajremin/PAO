@@ -12,7 +12,9 @@ its own file under the project's `Registration/` folder (ADR-0034):
 | `AddRepositories` | `PAO.Core/Registration/RepositoriesRegistration.cs` | repositories |
 | `Add<Area>Area` | `PAO.Core/Registration/<Area>AreaRegistration.cs` | the area's handlers, validators, services and shared contract |
 | `AddAreas` | `PAO.Core/Registration/AreasRegistration.cs` | calls every `Add<Area>Area` |
-| `AddBackgroundJobs` | `PAO.BackgroundJobs/WorkerServices.cs` | bus, relay, scheduler, platform jobs (worker only) |
+| `AddBackgroundJobs` | `PAO.BackgroundJobs/WorkerServices.cs` | bus, relay, scheduler, platform jobs (the worker, and the API with `JOBS_IN_API=true`) |
+| `AddBackgroundJobsInApi` | `PAO.Core/Registration/BackgroundJobsInApiRegistration.cs` | the API's call: `AddBackgroundJobs` when `Jobs:RunInApi`, nothing otherwise ([events and jobs](events-and-jobs.md#running-the-jobs-in-the-api)) |
 
 `ApiHost.RunApi`, `WorkerHost.RunWorker` and `MigratorCommand.RunMigrator` run the built
-hosts; `PlatformStartup.Prepare` checks Postgres, Redis and the buckets first.
+hosts; `PlatformStartup.Prepare` checks Postgres, Redis and the buckets first and logs
+where the background jobs run (`background jobs: in api` or `in worker`).

@@ -32,7 +32,8 @@ Third parties sit behind ports with local fakes (ADR-0019): SMS (`SMS_ADAPTER=co
 sslwireless`), push (`PUSH_ADAPTER=log | fcm`), maps (customer app, Google Geocoding),
 storage (S3). Production refuses the fake SMS and push adapters, except that an MVP
 launch without an SMS provider may set `SMS_VERIFICATION_ENABLED=false` (no SMS, fixed
-code `SMS_FIXED_CODE`; ADR-0036 §13).
+code `SMS_FIXED_CODE`; ADR-0036 §13). A deployment with no worker service (Render's free
+plan) sets `JOBS_IN_API=true` so the API runs the outbox relay and the jobs (ADR-0036 §14).
 
 ## Run, test, release
 

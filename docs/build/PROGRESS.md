@@ -42,8 +42,9 @@ done — `migrate create-admin`, CORS origin list, `FCM_CREDENTIALS_JSON`,
 Sentry/per-platform FCM App IDs, data-key rotation (`DATA_ENCRYPTION_PREVIOUS_KEYS`,
 `migrate reencrypt`), the cross-account sweep (`CrossAccountTests`), the idempotent
 replay race, the manual `backend-image` workflow, the SMS verification switch
-(`SMS_VERIFICATION_ENABLED`, ADR-0036 §12) and the single-file database scripts
-(`Backend/DB Changes/bundle`, `Backend/Docs/Database/schema.md`). What remains is owner action:
+(`SMS_VERIFICATION_ENABLED`, ADR-0036 §12), the single-file database scripts
+(`Backend/DB Changes/bundle`, `Backend/Docs/Database/schema.md`) and background jobs in the
+API (`JOBS_IN_API`, ADR-0036 §14). What remains is owner action:
 `docs/guides/deployment.md` "Gaps to close before launch" and `docs/guides/launch-values.md`.
 Run the full `./pao ci` in the background and one heavy job at a time: two parallel .NET
 builds overload the 4-CPU container. .NET 10 SDK installs to `/root/.dotnet`.
@@ -84,6 +85,10 @@ None.
 ## Log
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
+
+- 2026-11-06 MVP launch: `JOBS_IN_API` (default false) lets the API run the worker's relay
+  and jobs through the same `AddBackgroundJobs` (`AddBackgroundJobsInApi`), for Render's
+  free plan without a worker; start-up line `background jobs: in api|in worker`.
 
 - 2026-11-06 MVP launch: `SMS_VERIFICATION_ENABLED`/`SMS_FIXED_CODE` (no SMS, fixed code,
   limits unchanged; prod starts without sslwireless), `Docs/Database/schema.md` with the

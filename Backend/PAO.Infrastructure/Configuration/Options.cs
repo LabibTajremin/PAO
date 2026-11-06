@@ -185,6 +185,12 @@ public sealed class JobsOptions
     public int OutboxRelayIntervalMs { get; set; } = 250;
     /// <summary>The outbox retention days.</summary>
     public int OutboxRetentionDays { get; set; } = 7;
+
+    /// <summary>
+    /// Whether the API process also runs the relay and the jobs, for a deployment with no
+    /// worker service (the MVP on one free instance, ADR-0036 §14). Off, the API runs none.
+    /// </summary>
+    public bool RunInApi { get; set; }
 }
 
 /// <summary>Listen addresses, body limit and API rate limits (`Config/http.json`).</summary>

@@ -10,7 +10,7 @@ Each concern has one file in `Config/`, bound to a typed options class
 | `app.json` | `App` | `Environment`, `AdminCorsOrigin`, `DataEncryptionKey`, `DataEncryptionPreviousKeys`, `SeedAdminPassword` |
 | `database.json` | `Database` | `Url` |
 | `http.json` | `Http` | `Address`, `MetricsAddress`, `MaxBodyBytes`, `RateLimitPerUser`, `RateLimitPerIp`, `RateLimitWindowSeconds` |
-| `jobs.json` | `Jobs` | `OutboxRelayIntervalMs`, `OutboxRetentionDays` |
+| `jobs.json` | `Jobs` | `OutboxRelayIntervalMs`, `OutboxRetentionDays`, `RunInApi` |
 | `jwt.json` | `Jwt` | `KeyId`, `SigningKey`, `PreviousPublicKeys`, `AccessTokenTtlSeconds` |
 | `logging.json` | `Logging` | `Level`, `Directory`, `WriteFiles` |
 | `push.json` | `Push` | `Adapter`, `FcmCredentialsFile`, `FcmCredentialsJson` |
@@ -30,6 +30,19 @@ attempts, lockout and expiry. `ConfigValidator` lets production start without ss
 credentials in this mode, and every host logs `SMS verification is OFF` at start. Set it
 back to `true` with a real `SMS_ADAPTER` once one is contracted
 ([ADR-0036](../../../docs/adr/0036-mvp-launch-defaults.md)).
+
+## Background jobs in the API
+
+`Jobs:RunInApi` (`JOBS_IN_API`, default `false`) is for a deployment that runs only the API
+service, such as the MVP on Render's free plan. When `true`, the API host also registers
+what the worker registers, through the same `AddBackgroundJobs` method
+(`AddBackgroundJobsInApi` in `PAO.Core/Registration`): the event bus with every area's
+subscribers, the outbox relay and the scheduler with every job. They start after the
+start-up checks and stop with the API. `/readyz` does not depend on them. Every host logs
+`background jobs: in api` or `background jobs: in worker` at start. Run either the worker
+or `JOBS_IN_API=true`, not both; overlapping is safe but doubles the polling
+([events and jobs](../Architecture/events-and-jobs.md#running-the-jobs-in-the-api),
+[ADR-0036](../../../docs/adr/0036-mvp-launch-defaults.md) §14).
 
 ## Local settings file (`appsettings.Local.json`)
 

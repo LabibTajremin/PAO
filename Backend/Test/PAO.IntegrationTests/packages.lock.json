@@ -430,6 +430,7 @@
       "pao.core": {
         "type": "Project",
         "dependencies": {
+          "PAO.BackgroundJobs": "[1.0.0, )",
           "PAO.Infrastructure": "[1.0.0, )"
         }
       },

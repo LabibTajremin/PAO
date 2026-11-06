@@ -41,6 +41,7 @@ public static class EnvironmentVariables
         ["PUSH_ADAPTER"] = "Push:Adapter",
         ["FCM_CREDENTIALS_FILE"] = "Push:FcmCredentialsFile",
         ["FCM_CREDENTIALS_JSON"] = "Push:FcmCredentialsJson",
+        ["JOBS_IN_API"] = "Jobs:RunInApi",
     };
 
     /// <summary>Returns the configuration values the set variables of `environment` define.</summary>

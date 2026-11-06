@@ -39,7 +39,8 @@ Inside an area, controllers only send commands and queries (`IMediator`); handle
 ## Runtime
 
 One stateless API process and one worker process (outbox relay + periodic jobs on an
-in-process scheduler) from the same image; PostgreSQL 16 + PostGIS; Redis 7 for sessions, rate limits, locks and presence;
+in-process scheduler) from the same image (on a single free instance the API runs the
+worker's services itself with `JOBS_IN_API=true`, ADR-0036 §14); PostgreSQL 16 + PostGIS; Redis 7 for sessions, rate limits, locks and presence;
 S3-compatible private storage with signed URLs; FCM, SMS and maps behind ports.
 
 ## Extracting a module into a service

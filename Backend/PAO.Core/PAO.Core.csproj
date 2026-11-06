@@ -2,6 +2,9 @@
   <!-- The web API: one ASP.NET area per module. -->
   <ItemGroup>
     <ProjectReference Include="..\PAO.Infrastructure\PAO.Infrastructure.csproj" />
+    <!-- Only Registration/BackgroundJobsInApiRegistration.cs uses it: JOBS_IN_API lets the
+         API run the worker's relay and jobs (ADR-0036 §14). -->
+    <ProjectReference Include="..\PAO.BackgroundJobs\PAO.BackgroundJobs.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="appsettings*.json" />

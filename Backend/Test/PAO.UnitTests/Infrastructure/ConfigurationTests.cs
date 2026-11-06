@@ -159,6 +159,16 @@ public sealed class ConfigurationTests : IDisposable
         Assert.Equal("123456", new SmsOptions().FixedCode);
     }
 
+    [Fact]
+    public void Jobs_in_api_is_off_unless_the_variable_turns_it_on()
+    {
+        var config = PaoPaths.Resolve(AppContext.BaseDirectory, null).Config;
+        Assert.False(PaoConfiguration.Bind(new ConfigurationBuilder().AddPaoConfiguration(config, new Hashtable()).Build()).Jobs.RunInApi);
+        var env = new Hashtable { ["JOBS_IN_API"] = "true" };
+        Assert.True(PaoConfiguration.Bind(new ConfigurationBuilder().AddPaoConfiguration(config, env).Build()).Jobs.RunInApi);
+        Assert.False(new JobsOptions().RunInApi);
+    }
+
     [Theory]
     [InlineData("http://localhost:5000", true)]
     [InlineData("https://admin.pao.com.bd, https://pao-admin-git-main.vercel.app", true)]

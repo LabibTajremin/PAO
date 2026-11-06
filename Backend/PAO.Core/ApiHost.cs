@@ -17,7 +17,7 @@ public static class ApiHost
     /// </summary>
     public static async Task<int> RunApi(this WebApplication app, PaoSettings settings, Action<IWebHostBuilder>? configureMetrics = null)
     {
-        await app.Services.Prepare(CancellationToken.None);
+        await app.Services.Prepare(PlatformStartup.ApiHostName, CancellationToken.None);
         await using var metrics = InternalServer.Build(settings.Http.MetricsAddress, app.Services, configureMetrics, InternalServer.Metrics);
         await metrics.StartAsync();
         await app.RunAsync();

@@ -1,6 +1,7 @@
 {
   "Jobs": {
     "OutboxRelayIntervalMs": 250,
-    "OutboxRetentionDays": 7
+    "OutboxRetentionDays": 7,
+    "RunInApi": false
   }
 }

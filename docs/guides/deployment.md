@@ -18,7 +18,7 @@ Related: [`docs/guides/release.md`](release.md) (flavours, signing, store checkl
 |---|---|---|
 | Admin web | `Frontend/apps/admin` (Flutter web) | static files (`build/web`) |
 | API | `Backend/PAO.Core` → `/app/api` | long-running ASP.NET Core server on `HTTP_ADDR` (`:8080`), metrics on `METRICS_ADDR` (`:9090`) |
-| Worker | `Backend/PAO.Worker` → `/app/worker` | long-running process: outbox relay and periodic jobs, liveness on `:9090/healthz` |
+| Worker | `Backend/PAO.Worker` → `/app/worker` | long-running process: outbox relay and periodic jobs, liveness on `:9090/healthz`; not deployed when the API runs them (`JOBS_IN_API=true`, §3.4.1) |
 | Migrations | `Backend/PAO.Migrator` → `/app/migrate up` / `seed` | one-off job per release |
 | PostgreSQL 16 + PostGIS 3 | — | managed database (migrations run `CREATE EXTENSION postgis` and `pg_trgm`) |
 | Redis 7 | — | sessions, refresh tokens, OTP codes, rate limits, cache (StackExchange.Redis) |
@@ -269,6 +269,7 @@ line (`invalid configuration: …`). Give API, worker and migrate the same envir
 | `FCM_CREDENTIALS_JSON` | this or `FCM_CREDENTIALS_FILE` when `PUSH_ADAPTER=fcm` | output of `base64 -w0 fcm.json` | the same JSON as a plain secret, raw or base64, for hosts without secret files (Fly, Railway) |
 | `SEED_ADMIN_PASSWORD` | no | empty in prod | dev/staging only: password for the demo admins `seed` creates; ignored when `APP_ENV=prod` |
 | `ADMIN_PASSWORD` | only for `migrate create-admin` | — | the first super admin's password (§3.5); set it for that one run, never on the API or worker |
+| `JOBS_IN_API` | no (default `false`) | `true` on Render free, `false` with a worker | `true` makes the API also run the outbox relay and the scheduled jobs, for a deployment with no worker service (§3.4.1) |
 
 #### 3.2.1 MVP without an SMS provider
 
@@ -326,7 +327,8 @@ The same image runs three ways:
 **Render** (Docker): create a Web Service from the repo, root directory `Backend`,
 Dockerfile `Backend/docker/Dockerfile`, port 8080, health check path `/readyz`, pre-deploy
 command `/app/migrate up`. Create a Background Worker from the same repo with Docker
-command `/app/worker`. Use an Environment Group for the variables in §3.2 and attach it
+command `/app/worker` (paid plans; on the free plan create none and set `JOBS_IN_API=true`
+on the Web Service, §3.4.1). Use an Environment Group for the variables in §3.2 and attach it
 to both; add the FCM JSON as a Secret File (`FCM_CREDENTIALS_FILE`) or as the variable
 `FCM_CREDENTIALS_JSON`.
 
@@ -343,6 +345,51 @@ start command to `/app/worker`; on the API set the pre-deploy command to
 
 Build behind a TLS-intercepting proxy only: pass the CA as build secret `extra_ca`
 (see the Dockerfile); hosted builders do not need it.
+
+#### 3.4.1 One service only: background jobs in the API (Render free plan)
+
+The worker delivers every event (notifications and push, commission charging on a
+completed booking, opening the rating, dashboard stats) and runs the scheduled jobs
+(booking expiry every 15 s, merchant presence reaping, media orphan purge, document
+expiry and reminders, closed-account purge, outbox purge; [jobs](../../Backend/Docs/Operations/jobs.md)).
+Without it bookings never time out and no push is sent. Render's free plan has no
+Background Workers, so for the MVP the API runs them itself:
+
+| Plan | API (`pao-api`) | Worker (`pao-worker`) |
+|---|---|---|
+| **Render free (MVP)** | free Web Service with `JOBS_IN_API=true` | **none**: do not create it |
+| **Paid** (Render Starter or higher, Fly, Railway) | `JOBS_IN_API=false` (or unset) | Background Worker, `/app/worker`, as above |
+
+With `JOBS_IN_API=true` the API registers exactly the services the worker registers (the
+same `AddBackgroundJobs` method), starts them after its start-up checks and stops them
+gracefully on shutdown. Confirm it in the API's start-up logs: `background jobs: in api`
+(with `false` the line reads `background jobs: in worker`). `/readyz` stays the health
+check path; it does not depend on the jobs. Job and outbox metrics move to the API's
+`METRICS_ADDR`.
+
+Things to know on the free plan:
+
+- **Sleep.** A free web service spins down after about 15 minutes without inbound
+  requests, and the jobs sleep with it. Nothing is lost: events wait in the outbox and
+  are delivered when the API wakes, and the booking expiry sweep times out every overdue
+  request on its first run (15 s after start). Daily jobs (02:00–09:00 Asia/Dhaka) run
+  only if the service is awake at that time; a missed purge or expiry is picked up the
+  next day, but that day's document-expiry reminders are skipped. Waking takes up to a
+  minute, which the first app request after a quiet period feels.
+- **Migrations.** If the plan offers no pre-deploy command, run `/app/migrate up` with
+  the same environment from a machine before deploying a release
+  (`docker run --rm --env-file prod.env --entrypoint /app/migrate <image> up`), or apply
+  `DB Changes/bundle/schema.sql` as in §3.5 step 3.
+- **Never both.** Run either a worker or `JOBS_IN_API=true`. Both at once is safe (job
+  runs take an advisory lock, the relay claims rows with `SKIP LOCKED`, handlers are
+  idempotent) but runs every sweep twice; a worker that sees `JOBS_IN_API=true` logs a
+  warning.
+
+**Moving to a paid plan.** Create the Background Worker (`/app/worker`, same image and
+Environment Group) and wait for its health check, then set `JOBS_IN_API=false` (or
+remove it) on the API and redeploy the API. For the moments in between both run, which
+is safe. To go back, set `JOBS_IN_API=true` on the API, redeploy it, then delete the
+worker ([ADR-0036](../adr/0036-mvp-launch-defaults.md) §14).
 
 ### 3.5 First deploy order
 
@@ -376,7 +423,8 @@ Build behind a TLS-intercepting proxy only: pass the CA as build secret `extra_c
    taken, so repeating it is safe. The first sign-in at the admin web enrols TOTP before
    anything else; invite every other admin from the console (A-10).
 6. Start the API; wait until `GET https://<api host>/readyz` returns 200.
-7. Start the worker; its health check must pass.
+7. Start the worker; its health check must pass. With `JOBS_IN_API=true` (§3.4.1) there
+   is no worker: check the API logged `background jobs: in api` instead.
 8. Point DNS for the API host at the platform; TLS is issued by the platform.
 9. Deploy the admin web (§2) with `ADMIN_CORS_ORIGIN` already set to its origin.
 10. Sign in as the super admin, enrol TOTP, then run the smoke tests (§5).
@@ -582,7 +630,8 @@ curl -sI https://admin.pao.com.bd | grep -i content-security-policy
 Then by hand: sign in to the admin panel; on a release build of each app, sign in with
 OTP (a real SMS arrives; with SMS verification off, type `SMS_FIXED_CODE`), search nearby providers, receive a push; upload a partner
 document and open it from the admin panel (signed storage URL). Check the worker logs
-show no `invalid configuration` and the outbox is draining.
+(the API logs with `JOBS_IN_API=true`) show no `invalid configuration` and the outbox is
+draining.
 
 ### Pinning warning
 
@@ -615,6 +664,7 @@ certificate change.
 | Admin panel: blank page, CSP errors | API or storage host missing from `connect-src`/`img-src` |
 | Admin deep links 404 | `vercel.json` rewrites missing from the uploaded folder |
 | App cannot connect in release, works in debug | Pin mismatch |
+| No push, bookings never time out | No process runs the background jobs: start the worker, or set `JOBS_IN_API=true` on the API (§3.4.1); the start-up line names where they run |
 | No push on iOS | APNs key not uploaded to Firebase, or the iOS app uses the Android `PAO_FCM_APP_ID` |
 
 ## Gaps to close before launch
@@ -624,7 +674,8 @@ accounts, secrets or decisions; the values to confirm are collected in
 [`launch-values.md`](launch-values.md).
 
 1. **Container host for the API and worker** (no .NET runtime on Vercel). Create the two
-   services on Render, Fly.io or Railway exactly as in §3.4.
+   services on Render, Fly.io or Railway exactly as in §3.4, or on Render's free plan only
+   the API with `JOBS_IN_API=true` (§3.4.1).
 2. **Backend secrets.** Generate `JWT_SIGNING_KEY` and `DATA_ENCRYPTION_KEY` (§3.3), store
    both offline as well, and fill §3.2 in the host's secret store.
 3. **Managed services.** Create Neon Postgres, Upstash Redis and the R2 (or S3) buckets

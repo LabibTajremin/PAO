@@ -19,7 +19,7 @@ public static class WorkerHost
     /// <summary>Checks the platform, starts the internal server and runs until the host stops.</summary>
     public static async Task<int> RunWorker(this IHost host, PaoSettings settings, Action<IWebHostBuilder>? configureServer = null)
     {
-        await host.Services.Prepare(CancellationToken.None);
+        await host.Services.Prepare(PlatformStartup.WorkerHostName, CancellationToken.None);
         await using var server = InternalServer.Build(settings.Http.MetricsAddress, host.Services, configureServer, Handlers(settings));
         await server.StartAsync();
         await host.RunAsync();
