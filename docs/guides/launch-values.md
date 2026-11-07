@@ -7,7 +7,7 @@ Secrets are not here: they live only in the host's secret store and GitHub secre
 
 | Value | MVP placeholder | Status | Where it is set |
 |---|---|---|---|
-| Production API host | `https://api.pao.com.bd` | placeholder | `Frontend/apps/{customer,partner,admin}/config/prod.json` (`PAO_API_BASE_URL`); DNS |
+| Production API host | `https://pao-1-zbl8.onrender.com` (Render free, MVP) | set | `Frontend/apps/{customer,partner,admin}/config/prod.json` (`PAO_API_BASE_URL`); swap for `https://api.pao.com.bd` once DNS points at the API |
 | Staging API host | `https://api.staging.pao.com.bd` | placeholder | `Frontend/apps/*/config/staging.json` |
 | Production admin web | `https://admin.pao.com.bd` | placeholder | Vercel domain; backend `ADMIN_CORS_ORIGIN` |
 | Staging admin web | `https://admin-staging.pao.com.bd` | placeholder | Vercel alias; staging `ADMIN_CORS_ORIGIN` |

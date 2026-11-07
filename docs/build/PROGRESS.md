@@ -86,6 +86,10 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-11-07 MVP deployed: API on Render free (`https://pao-1-zbl8.onrender.com`,
+  `JOBS_IN_API=true`), Neon set up from `DB Changes/bundle` (68 tables, catalog seeded);
+  the three apps' `config/prod.json` point at that host until `api.pao.com.bd` exists.
+
 - 2026-11-06 MVP launch: `JOBS_IN_API` (default false) lets the API run the worker's relay
   and jobs through the same `AddBackgroundJobs` (`AddBackgroundJobsInApi`), for Render's
   free plan without a worker; start-up line `background jobs: in api|in worker`.
