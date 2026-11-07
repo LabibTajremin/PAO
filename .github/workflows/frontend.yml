@@ -65,6 +65,26 @@ jobs:
           flutter-version: 3.47.7
           channel: stable
           cache: true
+      # Gradle otherwise downloads the NDK Flutter asks for mid-build, and that download
+      # sometimes arrives corrupt on the runner and fails the job; fetch it first, retried.
+      - name: Install the Android NDK
+        run: |
+          flutter_root="${FLUTTER_ROOT:-$(dirname "$(dirname "$(readlink -f "$(command -v flutter)")")")}"
+          ndk=$(sed -nE 's/.*val ndkVersion: String = "([^"]+)".*/\1/p' \
+            "$flutter_root/packages/flutter_tools/gradle/src/main/kotlin/FlutterExtension.kt")
+          if [[ -z "$ndk" ]]; then
+            echo "::error::Flutter's NDK version not found"
+            exit 1
+          fi
+          for attempt in 1 2 3; do
+            if "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;$ndk" >/dev/null; then
+              exit 0
+            fi
+            echo "::warning::NDK $ndk install failed (attempt $attempt)"
+            rm -rf "$ANDROID_HOME/ndk/$ndk"
+            sleep 10
+          done
+          exit 1
       # The upload key lives only in repository secrets. Without it the build is
       # debug-signed: fine for sharing APKs during the MVP, rejected by Play
       # (ADR-0036). Add PAO_ANDROID_KEYSTORE_BASE64 before publishing to a store.
