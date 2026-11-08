@@ -159,7 +159,22 @@ Notes:
   releases), so do **not** mark `main.dart.js` immutable; the one-day cache above covers
   only `assets/` and `canvaskit/`, which change rarely. Lower it if that is too long.
 
-### 2.3 Deploy from a machine
+### 2.3 Deploy from GitHub with Vercel's own build (MVP default)
+
+`Frontend/apps/admin/vercel.json` holds the build settings and the §2.2 headers, so the
+project needs only its root directory:
+
+1. Vercel → Add New → Project → import the GitHub repository.
+2. Root Directory: `Frontend/apps/admin` (keep "include files outside the root directory" on).
+3. Deploy. Every push to `main` then redeploys production; other branches get previews.
+
+The build runs `tools/vercel-build.sh`: Vercel's image has no Flutter, so it clones the
+version `frontend.yml` pins (about two minutes from cold) and runs `build-release.sh admin
+prod web`. Afterwards set the backend's `ADMIN_CORS_ORIGIN` to the site's address; until
+then the API refuses the panel's requests. The CSP in that file names the live API host
+and `*.supabase.co` storage; change both when the API or storage host changes.
+
+### 2.4 Deploy from a machine
 
 ```sh
 npm i -g vercel
@@ -175,7 +190,7 @@ framework preset must be "Other" with no build command. (`vercel deploy --prebui
 expects a `.vercel/output` directory produced by `vercel build`; for a plain static
 folder, `vercel deploy` from inside it is the simpler form.)
 
-### 2.4 Deploy from GitHub Actions
+### 2.5 Deploy from GitHub Actions
 
 There is no deploy workflow in `.github/workflows` today. A job would:
 
@@ -186,7 +201,7 @@ There is no deploy workflow in `.github/workflows` today. A job would:
    folder, with `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` set (from `.vercel/project.json`
    after `vercel link`). These three would be new repository secrets.
 
-### 2.5 Domains, previews, flavours
+### 2.6 Domains, previews, flavours
 
 - Add the custom domain (e.g. `admin.pao.com.bd`) under Project → Domains and create
   the CNAME Vercel shows.
@@ -257,7 +272,7 @@ line (`invalid configuration: …`). Give API, worker and migrate the same envir
 | `JWT_PREVIOUS_PUBLIC_KEYS` | no | empty on first deploy | `kid:base64pub,…`, only during rotation |
 | `DATA_ENCRYPTION_KEY` | **yes** | base64 of 32 bytes | generate (§3.3); rotate with [`rotate-data-key.md`](../runbooks/rotate-data-key.md) |
 | `DATA_ENCRYPTION_PREVIOUS_KEYS` | no | empty on first deploy | earlier data keys, comma-separated, newest first, original key last; only after a rotation |
-| `ADMIN_CORS_ORIGIN` | no (default `http://localhost:5000`) | `https://admin.pao.com.bd` | the admin web origin, or a comma-separated list (§2.5) |
+| `ADMIN_CORS_ORIGIN` | no (default `http://localhost:5000`) | `https://admin.pao.com.bd` | the admin web origin, or a comma-separated list (§2.6) |
 | `S3_ENSURE_ENCRYPTION` | no (default `true`) | `false` on R2 | `false` skips `PutBucketEncryption` for providers that encrypt at rest themselves |
 | `SMS_ADAPTER` | no (default `console`); prod needs `sslwireless` while verification is on | `sslwireless` | — |
 | `SSLWIRELESS_API_TOKEN` | when `SMS_ADAPTER=sslwireless` and verification is on | `…` | SSL Wireless |
@@ -690,7 +705,7 @@ accounts, secrets or decisions; the values to confirm are collected in
 6. **First super admin.** After the first `migrate up`, run `migrate create-admin` once
    (§3.5 step 5) and enrol TOTP at the first sign-in.
 7. **DNS and domains.** Buy or confirm the domain, point the API and admin hosts at the
-   platforms (§2.5, §3.5), then set `ADMIN_CORS_ORIGIN`.
+   platforms (§2.6, §3.5), then set `ADMIN_CORS_ORIGIN`.
 8. **Certificate pins and Sentry (optional).** Once the API host serves its real
    certificate, compute the pins (§4.3) and add `PAO_PIN_SHA256`; create a Sentry
    project and add `PAO_SENTRY_DSN`. Empty secrets leave both features off.
