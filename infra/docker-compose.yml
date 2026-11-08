@@ -36,7 +36,9 @@ services:
     ports: ["5432:5432"]
     volumes: [pgdata:/var/lib/postgresql/data]
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U pao -d pao"]
+      # Over TCP: on first start the image's init server answers on the socket only, so a
+      # socket check reports healthy before the real server opens 5432 and migrate is refused.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U pao -d pao"]
       interval: 5s
       timeout: 3s
       retries: 20
