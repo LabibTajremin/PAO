@@ -1,0 +1,22 @@
+// CI only (.github/workflows/frontend.yml). Maven Central has answered some downloads by
+// redirecting to GitHub Releases, which returned 504 and failed every Android build; Google's
+// mirror of Maven Central serves the same files directly. Applies to included builds too
+// (Flutter's Gradle plugin), and leaves google() and Flutter's own repository alone.
+def mirror = 'https://maven-central.storage-download.googleapis.com/maven2/'
+def centralHosts = ['repo.maven.apache.org', 'repo1.maven.org']
+def useMirror = { RepositoryHandler repos ->
+    repos.withType(MavenArtifactRepository).configureEach { repo ->
+        if (repo.url.host in centralHosts) {
+            repo.url = mirror
+        }
+    }
+}
+beforeSettings { settings ->
+    useMirror(settings.pluginManagement.repositories)
+    useMirror(settings.buildscript.repositories)
+    useMirror(settings.dependencyResolutionManagement.repositories)
+}
+allprojects { project ->
+    useMirror(project.buildscript.repositories)
+    useMirror(project.repositories)
+}
