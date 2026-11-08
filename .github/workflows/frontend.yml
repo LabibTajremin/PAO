@@ -191,8 +191,21 @@ jobs:
           echo "$PROFILE_BASE64" | base64 -d >"$profiles/pao-${{ matrix.app }}.mobileprovision"
           echo "$EXPORT_OPTIONS_BASE64" | base64 -d >"$RUNNER_TEMP/ExportOptions.plist"
           echo "PAO_IOS_EXPORT_OPTIONS=$RUNNER_TEMP/ExportOptions.plist" >>"$GITHUB_ENV"
+      # Xcode fetches Swift package binaries (Sentry, Firebase) from GitHub Releases at the
+      # start of the build and has failed on its 504s; retry only that, a compile error
+      # still fails at once.
       - name: Build prod archive
-        run: tools/build-release.sh "${{ matrix.app }}" prod ipa
+        run: |
+          log="$RUNNER_TEMP/build.log"
+          for attempt in 1 2 3; do
+            if tools/build-release.sh "${{ matrix.app }}" prod ipa 2>&1 | tee "$log"; then
+              exit 0
+            fi
+            grep -q "Could not resolve package dependencies" "$log" || exit 1
+            echo "::warning::Swift package download failed (attempt $attempt)"
+            sleep 30
+          done
+          exit 1
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: ${{ matrix.app }}-prod-ios
