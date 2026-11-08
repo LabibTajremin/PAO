@@ -85,6 +85,31 @@ jobs:
             sleep 10
           done
           exit 1
+      # The Gradle wrapper's download redirects to GitHub Releases, which has answered with
+      # 504 for hours at a time. Fetch it from there or, failing that, a mirror, keep it only
+      # if it matches the checksum Gradle serves from its own host, and point the wrapper at
+      # the local copy (in this checkout only).
+      - name: Fetch the Gradle distribution
+        run: |
+          props=(Frontend/apps/*/android/gradle/wrapper/gradle-wrapper.properties)
+          url=$(sed -nE 's/^distributionUrl=(.*)$/\1/p' "${props[0]}" | sed 's/\\:/:/')
+          name="${url##*/}"
+          version=$(sed -nE 's/^gradle-(.+)-(all|bin)\.zip$/\1/p' <<<"$name")
+          zip="$RUNNER_TEMP/$name"
+          sum=$(curl -fsSL --retry 5 --retry-all-errors --retry-delay 5 "$url.sha256")
+          matches() { [[ -f "$zip" ]] && echo "$sum  $zip" | sha256sum -c --status; }
+          for src in "$url" \
+            "https://mirrors.cloud.tencent.com/gradle/$name" \
+            "https://mirrors.aliyun.com/gradle/distributions/v$version/$name"; do
+            matches && break
+            curl -fsSL --retry 3 --retry-all-errors --retry-delay 5 -o "$zip" "$src" ||
+              echo "::warning::Gradle download from $src failed"
+          done
+          if ! matches; then
+            echo "::error::no download of $name matched $url.sha256"
+            exit 1
+          fi
+          sed -i "s#^distributionUrl=.*#distributionUrl=file\\\\:$zip#" "${props[@]}"
       # The upload key lives only in repository secrets. Without it the build is
       # debug-signed: fine for sharing APKs during the MVP, rejected by Play
       # (ADR-0036). Add PAO_ANDROID_KEYSTORE_BASE64 before publishing to a store.
