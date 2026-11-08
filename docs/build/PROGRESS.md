@@ -87,8 +87,8 @@ None.
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
 - 2026-11-08 CI downloads retried: the Android NDK step, release files and image pulls in
-  `tooling` (promtool from the pinned image, as GitHub kept answering the Prometheus archive
-  with 504) and apt; main went red on these downloads, never on a test.
+  `tooling` (gitleaks, osv-scanner and promtool from their pinned images: GitHub kept answering
+  release downloads with 504) and apt; main went red on these downloads, never on a test.
 
 - 2026-11-07 MVP deployed: API on Render free (`https://pao-1-zbl8.onrender.com`,
   `JOBS_IN_API=true`), Neon set up from `DB Changes/bundle` (68 tables, catalog seeded);
