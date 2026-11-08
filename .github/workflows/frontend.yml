@@ -110,6 +110,8 @@ jobs:
             exit 1
           fi
           sed -i "s#^distributionUrl=.*#distributionUrl=file\\\\:$zip#" "${props[@]}"
+      - name: Use Google's Maven Central mirror
+        run: install -D -m 644 .github/gradle/maven-mirror.gradle "$HOME/.gradle/init.d/maven-mirror.gradle"
       # The upload key lives only in repository secrets. Without it the build is
       # debug-signed: fine for sharing APKs during the MVP, rejected by Play
       # (ADR-0036). Add PAO_ANDROID_KEYSTORE_BASE64 before publishing to a store.
