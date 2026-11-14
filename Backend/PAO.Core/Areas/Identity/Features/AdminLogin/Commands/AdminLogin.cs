@@ -46,7 +46,7 @@ public sealed class AdminLoginHandler(IIdentityRepository repository, IChallenge
             await repository.SaveAdmin(IdentityRules.RecordFailure(admin, now), cancellationToken);
             throw new DomainException(IdentityReasons.InvalidCredentials);
         }
-        var cleared = IdentityRules.RecordSuccess(admin);
+        var cleared = WithPendingSecret(IdentityRules.RecordSuccess(admin));
         await repository.SaveAdmin(cleared, cancellationToken);
         return mapper.Map<AdminChallengeResult, AdminLoginChallengeView>(await StartChallenge(cleared));
     }
@@ -63,9 +63,14 @@ public sealed class AdminLoginHandler(IIdentityRepository repository, IChallenge
         }
     }
 
+    // Until the first code is accepted the key is kept on the account, so every sign-in
+    // shows the key already added to the authenticator app instead of a new one.
+    private static AdminRecord WithPendingSecret(AdminRecord admin) =>
+        admin.TotpEnrolled || admin.TotpSecret.Length > 0 ? admin : admin with { TotpSecret = Totp.NewSecret(admin.Email).Secret };
+
     private async Task<AdminChallengeResult> StartChallenge(AdminRecord admin)
     {
-        var enrolment = admin.TotpEnrolled ? new TotpEnrolment(string.Empty, string.Empty) : Totp.NewSecret(admin.Email);
+        var enrolment = admin.TotpEnrolled ? new TotpEnrolment(string.Empty, string.Empty) : Totp.For(admin.Email, admin.TotpSecret);
         var id = ids.NewId();
         await challenges.Save(new Challenge { Id = id, AdminId = admin.Id, EnrolSecret = enrolment.Secret }, IdentityRules.ChallengeTtl);
         return new AdminChallengeResult

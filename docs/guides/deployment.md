@@ -175,7 +175,14 @@ then the API refuses the panel's requests, which the panel reports as "No connec
 the address from the project's Domains list (here `https://pao-admin-pied.vercel.app`):
 `<project>.vercel.app` may belong to another account's project of the same name, and
 allowing it would let that site call the admin API. The panel uses plain paths
-(`/verification`, not `/#/verification`); the rewrite to `index.html` keeps reloads working. The CSP in that file names the live API host
+(`/verification`, not `/#/verification`); the rewrite to `index.html` keeps reloads working.
+
+The panel calls the API through its own domain: `vercel.json` proxies `/v1/*` to the API
+and `config/prod.json` points `PAO_API_BASE_URL` at the panel's address. The refresh cookie
+(`Path=/v1/auth`, `SameSite=Strict`) is then first-party, so a reload keeps the admin signed
+in; called cross-site, browsers drop it and every reload signs out. Proxied responses are
+never cached (`x-vercel-enable-rewrite-caching: 0`). Behind the proxy the API sees Vercel's
+address as the client IP, so the per-IP sign-in limit is shared by the admins. The CSP in that file names the live API host
 and `*.supabase.co` storage; change both when the API or storage host changes.
 
 ### 2.4 Deploy from a machine

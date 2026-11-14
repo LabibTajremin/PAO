@@ -29,6 +29,9 @@ public sealed class AdminTests
         var ch = await Login(h, Email, temporary);
         Assert.True(ch.MustChangePassword);
         Assert.Contains("otpauth://", ch.TotpEnrolment!.OtpauthUrl, StringComparison.Ordinal);
+        // Signing in again before the first code is accepted shows the same key.
+        var retry = await Login(h, Email, temporary);
+        Assert.Equal(ch.TotpEnrolment, retry.TotpEnrolment);
         var s = await h.AdminTotp.Handle(TotpCommand(Id(ch), h.Totp(ch.TotpEnrolment.Secret)), CancellationToken.None);
         Assert.Equal(admin.Id.ToString(), s.View.Account.Id);
         Assert.True(h.Repo.Admins[admin.Id].TotpEnrolled);
