@@ -21,7 +21,12 @@ public static class Totp
         {
             throw new ArgumentException("generate totp secret: account name is required", nameof(account));
         }
-        var secret = Base32Encoding.ToString(KeyGeneration.GenerateRandomKey(20));
+        return For(account, Base32Encoding.ToString(KeyGeneration.GenerateRandomKey(20)));
+    }
+
+    /// <summary>The enrolment for an existing `secret`, so a pending one is shown unchanged.</summary>
+    public static TotpEnrolment For(string account, string secret)
+    {
         var label = EncodeComponent($"PAO:{account}").Replace("%3A", ":", StringComparison.Ordinal).Replace("%40", "@", StringComparison.Ordinal);
         var query = $"algorithm=SHA1&digits=6&issuer=PAO&period={PeriodSeconds}&secret={secret}";
         return new TotpEnrolment(secret, $"otpauth://totp/{label}?{query}");

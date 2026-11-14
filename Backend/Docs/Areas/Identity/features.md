@@ -9,7 +9,7 @@ request, validator and handler. Overview: [overview.md](overview.md).
 | `VerifyOtp` | `VerifyOtpCommand` | Checks the code (5 guesses, then `OTP_LOCKED`), creates the account on first sign-in or adds the app's role (partner app → `provider`), publishes `AccountCreated`/`RoleGranted`, opens a session. |
 | `RefreshToken` | `RefreshTokenCommand` | Rotates the refresh family; presenting a rotated token revokes the family. The admin web app's cookie is rotated as a cookie. |
 | `Logout` | `LogoutCommand` | Denylists the access token and ends this family, or every family of the account. |
-| `AdminLogin` | `AdminLoginRequest` | Email + password; 5 wrong passwords lock out for 15 minutes. Not a command on purpose: the failure count must persist although the login is refused. Starts the TOTP challenge (enrolment secret on the first login). |
+| `AdminLogin` | `AdminLoginRequest` | Email + password; 5 wrong passwords lock out for 15 minutes. Not a command on purpose: the failure count must persist although the login is refused. Starts the TOTP challenge. Until the first code is accepted the enrolment key is kept (encrypted) on the account and shown unchanged at every sign-in. |
 | `AdminVerifyTotp` | `AdminVerifyTotpCommand` | Completes the login; the first code confirms enrolment; 5 wrong codes drop the challenge. |
 | `ChangeAdminPassword` | `ChangeAdminPasswordCommand` | Checks the current password, requires a passphrase (≥ 12, letters and another kind). |
 | `GetMe` | `GetMeQuery` | The signed-in account. |
