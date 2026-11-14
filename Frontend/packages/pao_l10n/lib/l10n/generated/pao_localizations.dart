@@ -133,6 +133,18 @@ abstract class PaoL10n {
   /// **'Cancel'**
   String get actionCancel;
 
+  /// Eye button on a password field.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get actionShowPassword;
+
+  /// Eye button on a password field while it shows the password.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get actionHidePassword;
+
   /// Save button.
   ///
   /// In en, this message translates to:

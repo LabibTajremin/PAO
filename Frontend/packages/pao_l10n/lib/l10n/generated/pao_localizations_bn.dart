@@ -28,6 +28,12 @@ class PaoL10nBn extends PaoL10n {
   String get actionCancel => 'বাতিল';
 
   @override
+  String get actionShowPassword => 'পাসওয়ার্ড দেখান';
+
+  @override
+  String get actionHidePassword => 'পাসওয়ার্ড লুকান';
+
+  @override
   String get actionSave => 'সংরক্ষণ করুন';
 
   @override
