@@ -43,7 +43,7 @@ Future<AddressChoice?> showAddressSheet(
             title: addressLabelName(context.t, a.label),
             subtitle: addressLine(a),
             trailing: a.id == currentId
-                ? Icon(Icons.check_circle, color: context.pao.accent.primary)
+                ? Icon(Icons.check_circle, color: context.pao.action)
                 : const SizedBox.shrink(),
             onTap: () => Navigator.pop(context, UseAddress(a.id)),
           ),

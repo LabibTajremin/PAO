@@ -118,7 +118,7 @@ class _Bar extends StatelessWidget {
         Expanded(
           child: LinearProgressIndicator(
             value: total == 0 ? 0 : count / total,
-            color: context.pao.accent.primary,
+            color: context.pao.action,
             backgroundColor: context.pao.hairline,
           ),
         ),

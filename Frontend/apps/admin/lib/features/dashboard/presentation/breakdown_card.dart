@@ -71,7 +71,7 @@ class _Row extends StatelessWidget {
           minHeight: 6,
           borderRadius: BorderRadius.circular(PaoRadius.sm),
           backgroundColor: context.pao.hairline,
-          color: context.pao.accent.primary,
+          color: context.pao.action,
         ),
       ],
     ),

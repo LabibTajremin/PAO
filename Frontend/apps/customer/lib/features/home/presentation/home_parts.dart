@@ -25,7 +25,7 @@ class AddressHeader extends StatelessWidget {
       onTap: onTap,
       child: Row(
         children: [
-          Icon(Icons.location_on, color: context.pao.accent.primary),
+          Icon(Icons.location_on, color: context.pao.action),
           const SizedBox(width: PaoSpace.sm),
           Expanded(
             child: Column(

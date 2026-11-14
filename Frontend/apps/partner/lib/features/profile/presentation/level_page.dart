@@ -101,7 +101,7 @@ class _Levels extends StatelessWidget {
           PaoListRow(
             leading: Icon(
               i <= status.level ? Icons.check_circle : Icons.circle_outlined,
-              color: context.pao.accent.primary,
+              color: context.pao.action,
             ),
             title: t.profLevelOf(context.count(i), name),
             subtitle: how,

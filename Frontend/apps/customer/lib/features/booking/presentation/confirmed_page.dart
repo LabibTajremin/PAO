@@ -90,7 +90,7 @@ class _Body extends StatelessWidget {
   List<Widget> _heading(BuildContext context) {
     final at = booking.scheduledAt;
     return [
-      Icon(Icons.event_available, size: 64, color: context.pao.accent.primary),
+      Icon(Icons.event_available, size: 64, color: context.pao.action),
       const SizedBox(height: PaoSpace.md),
       Text(
         context.t.bookingConfirmedHeading,

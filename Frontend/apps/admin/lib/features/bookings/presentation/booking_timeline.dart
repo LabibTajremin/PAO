@@ -77,6 +77,6 @@ class _Dot extends StatelessWidget {
   Widget build(BuildContext context) => Icon(
     last ? Icons.radio_button_checked : Icons.circle,
     size: 14,
-    color: last ? context.pao.accent.primary : context.pao.inkFaint,
+    color: last ? context.pao.action : context.pao.inkFaint,
   );
 }
