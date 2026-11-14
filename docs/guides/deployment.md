@@ -171,7 +171,11 @@ project needs only its root directory:
 The build runs `tools/vercel-build.sh`: Vercel's image has no Flutter, so it clones the
 version `frontend.yml` pins (about two minutes from cold) and runs `build-release.sh admin
 prod web`. Afterwards set the backend's `ADMIN_CORS_ORIGIN` to the site's address; until
-then the API refuses the panel's requests. The CSP in that file names the live API host
+then the API refuses the panel's requests, which the panel reports as "No connection". Take
+the address from the project's Domains list (here `https://pao-admin-pied.vercel.app`):
+`<project>.vercel.app` may belong to another account's project of the same name, and
+allowing it would let that site call the admin API. The panel uses plain paths
+(`/verification`, not `/#/verification`); the rewrite to `index.html` keeps reloads working. The CSP in that file names the live API host
 and `*.supabase.co` storage; change both when the API or storage host changes.
 
 ### 2.4 Deploy from a machine

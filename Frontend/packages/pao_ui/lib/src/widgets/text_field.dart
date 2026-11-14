@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pao_l10n/pao_l10n.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
 
-/// A labelled text field with an optional error below it.
-class PaoTextField extends StatelessWidget {
+/// A labelled text field with an optional error below it. An [obscureText]
+/// field carries an eye button that shows and hides what was typed.
+class PaoTextField extends StatefulWidget {
   /// Creates a field.
   const PaoTextField({
     required this.label,
@@ -51,29 +53,49 @@ class PaoTextField extends StatelessWidget {
   final bool obscureText;
 
   @override
+  State<PaoTextField> createState() => _PaoTextFieldState();
+}
+
+class _PaoTextFieldState extends State<PaoTextField> {
+  var _shown = false;
+
+  Widget? _eye(BuildContext context) {
+    if (!widget.obscureText) return null;
+    final t = PaoL10n.of(context);
+    return IconButton(
+      tooltip: _shown ? t.actionHidePassword : t.actionShowPassword,
+      icon: Icon(
+        _shown ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+      ),
+      onPressed: () => setState(() => _shown = !_shown),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          label,
+          widget.label,
           style: Theme.of(context).textTheme.labelMedium!
               .copyWith(color: context.pao.inkMuted),
         ),
         const SizedBox(height: PaoSpace.sm),
         TextField(
-          controller: controller,
-          keyboardType: keyboardType,
-          inputFormatters: inputFormatters,
-          onChanged: onChanged,
-          maxLines: obscureText ? 1 : maxLines,
-          obscureText: obscureText,
+          controller: widget.controller,
+          keyboardType: widget.keyboardType,
+          inputFormatters: widget.inputFormatters,
+          onChanged: widget.onChanged,
+          maxLines: widget.obscureText ? 1 : widget.maxLines,
+          obscureText: widget.obscureText && !_shown,
           decoration: InputDecoration(
-            hintText: hint,
-            errorText: error,
-            prefixText: prefix == null ? null : '$prefix ',
-            semanticCounterText: label,
+            hintText: widget.hint,
+            errorText: widget.error,
+            prefixText: widget.prefix == null ? null : '${widget.prefix} ',
+            suffixIcon: _eye(context),
+            semanticCounterText: widget.label,
           ),
         ),
       ],

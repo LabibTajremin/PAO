@@ -24,6 +24,14 @@
   "@actionCancel": {
     "description": "Cancel button."
   },
+  "actionShowPassword": "Show password",
+  "@actionShowPassword": {
+    "description": "Eye button on a password field."
+  },
+  "actionHidePassword": "Hide password",
+  "@actionHidePassword": {
+    "description": "Eye button on a password field while it shows the password."
+  },
   "actionSave": "Save",
   "@actionSave": {
     "description": "Save button."

@@ -28,6 +28,12 @@ class PaoL10nEn extends PaoL10n {
   String get actionCancel => 'Cancel';
 
   @override
+  String get actionShowPassword => 'Show password';
+
+  @override
+  String get actionHidePassword => 'Hide password';
+
+  @override
   String get actionSave => 'Save';
 
   @override

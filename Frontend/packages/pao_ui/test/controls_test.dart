@@ -125,4 +125,22 @@ void main() {
     await tester.tap(find.text('Past'));
     expect(picked, 'past');
   });
+
+  testWidgets('a password field shows and hides what was typed', (
+    tester,
+  ) async {
+    await pumpPao(
+      tester,
+      const PaoTextField(label: 'Password', obscureText: true),
+    );
+    bool hidden() =>
+        tester.widget<TextField>(find.byType(TextField)).obscureText;
+    expect(hidden(), isTrue);
+    await tester.tap(find.byTooltip('Show password'));
+    await tester.pump();
+    expect(hidden(), isFalse);
+    await tester.tap(find.byTooltip('Hide password'));
+    await tester.pump();
+    expect(hidden(), isTrue);
+  });
 }
