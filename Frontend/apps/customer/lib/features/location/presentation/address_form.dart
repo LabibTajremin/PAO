@@ -133,7 +133,7 @@ class _AddressFormState extends State<AddressForm> {
         if (context.failureText(s.failure) case final error?)
           Padding(
             padding: const EdgeInsets.only(top: PaoSpace.md),
-            child: Text(error, style: const TextStyle(color: PaoColors.danger)),
+            child: Text(error, style: TextStyle(color: context.pao.dangerInk)),
           ),
         const SizedBox(height: PaoSpace.xl),
         PaoButton(
@@ -173,7 +173,7 @@ class _Locate extends StatelessWidget {
       if (state.locateFailed)
         Text(
           context.t.locLocateFailed,
-          style: const TextStyle(color: PaoColors.warning),
+          style: TextStyle(color: context.pao.warningInk),
         ),
     ],
   );

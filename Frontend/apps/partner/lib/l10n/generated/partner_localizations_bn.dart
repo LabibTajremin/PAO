@@ -917,6 +917,18 @@ class PartnerL10nBn extends PartnerL10n {
   String get profLanguageTitle => 'ভাষা';
 
   @override
+  String get profAppearance => 'থিম';
+
+  @override
+  String get profAppearanceSystem => 'ফোনের মতো';
+
+  @override
+  String get profAppearanceLight => 'লাইট';
+
+  @override
+  String get profAppearanceDark => 'ডার্ক';
+
+  @override
   String get profLanguageBody =>
       'অ্যাপ, নোটিফিকেশন ও পাওর বার্তার ভাষা বেছে নিন।';
 

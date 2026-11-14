@@ -88,7 +88,7 @@ class _QueuePageState extends State<QueuePage> {
         (r) => Text(
           waitedLabel(t, r.ageHours),
           style: TextStyle(
-            color: waitedColor(r.ageHours),
+            color: waitedColor(r.ageHours, context.pao),
             fontWeight: FontWeight.w600,
           ),
         ),

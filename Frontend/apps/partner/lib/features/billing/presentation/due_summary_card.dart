@@ -25,7 +25,7 @@ class DueSummaryCard extends StatelessWidget {
           PaoMoneyText(
             due.due,
             style: text.headlineSmall?.copyWith(
-              color: due.blocked ? PaoColors.danger : null,
+              color: due.blocked ? context.pao.dangerInk : null,
             ),
           ),
           Text(t.billLimit(context.money(due.blockAmount))),
@@ -36,7 +36,7 @@ class DueSummaryCard extends StatelessWidget {
             const SizedBox(height: PaoSpace.sm),
             Text(
               t.billBlockedBody,
-              style: const TextStyle(color: PaoColors.danger),
+              style: TextStyle(color: context.pao.dangerInk),
             ),
           ],
         ],

@@ -79,7 +79,7 @@ class WhenSection extends StatelessWidget {
         if (state.invalidTime)
           Text(
             t.bookingTimeInvalid,
-            style: const TextStyle(color: PaoColors.danger),
+            style: TextStyle(color: context.pao.dangerInk),
           ),
       ],
     );

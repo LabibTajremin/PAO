@@ -85,7 +85,7 @@ class _ReportFormState extends State<ReportForm> {
       ? const SizedBox.shrink()
       : Padding(
           padding: const EdgeInsets.only(top: PaoSpace.sm),
-          child: Text(message, style: const TextStyle(color: PaoColors.danger)),
+          child: Text(message, style: TextStyle(color: context.pao.dangerInk)),
         );
 }
 

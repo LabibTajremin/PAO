@@ -77,10 +77,7 @@ class _Proposal extends StatelessWidget {
       children: [
         Text(t.liveApprovalHeading, style: text.titleLarge),
         const SizedBox(height: PaoSpace.xs),
-        Text(
-          t.liveApprovalBody,
-          style: const TextStyle(color: PaoColors.textSecondary),
-        ),
+        Text(t.liveApprovalBody, style: TextStyle(color: context.pao.inkMuted)),
         const SizedBox(height: PaoSpace.lg),
         BillView(
           lines: [for (final item in proposal.items) BillLine.of(item)],
@@ -98,7 +95,7 @@ class _Proposal extends StatelessWidget {
         if (state.failure != null)
           Text(
             context.failureText(state.failure)!,
-            style: const TextStyle(color: PaoColors.danger),
+            style: TextStyle(color: context.pao.dangerInk),
           ),
         const SizedBox(height: PaoSpace.xl),
         ..._decision(context),

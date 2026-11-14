@@ -20,6 +20,7 @@ void main() {
         },
       ),
     );
+    const ink = PaoColors(AccentPreset.midnight);
     for (final locale in ['en', 'bn']) {
       final t = await AdminL10n.delegate.load(Locale(locale));
       final labels = [
@@ -42,15 +43,20 @@ void main() {
       expect(labels.every((l) => l.isNotEmpty), isTrue, reason: locale);
     }
     expect(
-      [null, ...VerificationReviewFaceMatchEnum.values].map(faceColor).toSet(),
+      [
+        null,
+        ...VerificationReviewFaceMatchEnum.values,
+      ].map((f) => faceColor(f, ink)).toSet(),
       hasLength(4),
     );
     expect(ItemStatus.values.map(statusTone).toSet(), hasLength(4));
-    expect([1, 30, 60].map(waitedColor), [
-      PaoColors.textPrimary,
-      PaoColors.warning,
-      PaoColors.danger,
+    expect([1, 30, 60].map((h) => waitedColor(h, ink)), [
+      ink.ink,
+      ink.warningInk,
+      ink.dangerInk,
     ]);
+    const dark = PaoColors(AccentPreset.midnight, dark: true);
+    expect(waitedColor(1, dark), dark.ink);
     expect(context.lang, 'en');
     expect(shortId('0123456789'), '01234567');
     expect(shortId('abc'), 'abc');

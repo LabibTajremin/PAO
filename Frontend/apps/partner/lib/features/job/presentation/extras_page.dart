@@ -90,7 +90,7 @@ class ExtrasPage extends StatelessWidget {
         if (s.failure != null)
           Text(
             context.failureText(s.failure)!,
-            style: const TextStyle(color: PaoColors.danger),
+            style: TextStyle(color: context.pao.dangerInk),
           ),
         const SizedBox(height: PaoSpace.lg),
         PaoButton(

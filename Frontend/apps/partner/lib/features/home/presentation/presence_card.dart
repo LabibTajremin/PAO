@@ -38,12 +38,12 @@ class PresenceCard extends StatelessWidget {
           if (state.locationOff)
             Text(
               t.homeLocationOff,
-              style: const TextStyle(color: PaoColors.warning),
+              style: TextStyle(color: context.pao.warningInk),
             ),
           if (state.failure != null)
             Text(
               context.failureText(state.failure)!,
-              style: const TextStyle(color: PaoColors.danger),
+              style: TextStyle(color: context.pao.dangerInk),
             ),
         ],
       ),

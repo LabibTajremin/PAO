@@ -35,7 +35,7 @@ class WaitingView extends StatelessWidget {
         Text(
           t.bookingWaitingBody,
           textAlign: TextAlign.center,
-          style: const TextStyle(color: PaoColors.textSecondary),
+          style: TextStyle(color: context.pao.inkMuted),
         ),
         const SizedBox(height: PaoSpace.xl),
         if (provider != null) PartyCard.party(provider),

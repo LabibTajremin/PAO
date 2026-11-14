@@ -97,7 +97,7 @@ class RequestBody extends StatelessWidget {
       if (state.failure != null)
         Text(
           _failureText(context),
-          style: const TextStyle(color: PaoColors.danger),
+          style: TextStyle(color: context.pao.dangerInk),
         ),
       // Blocked by the due: the request stays open, so paying is the way on.
       if (state.failure?.code == 'MERCHANT_DUE_LIMIT') ...[

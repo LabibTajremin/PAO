@@ -924,6 +924,18 @@ class PartnerL10nEn extends PartnerL10n {
   String get profLanguageTitle => 'Language';
 
   @override
+  String get profAppearance => 'Appearance';
+
+  @override
+  String get profAppearanceSystem => 'Like the phone';
+
+  @override
+  String get profAppearanceLight => 'Light';
+
+  @override
+  String get profAppearanceDark => 'Dark';
+
+  @override
   String get profLanguageBody =>
       'Choose the language for the app, notifications and messages from PAO.';
 

@@ -58,7 +58,7 @@ class _Body extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(PaoSpace.lg),
       children: [
-        const Icon(Icons.task_alt, size: 64, color: PaoColors.success),
+        Icon(Icons.task_alt, size: 64, color: context.pao.successInk),
         const SizedBox(height: PaoSpace.md),
         Text(
           context.t.liveCompletedHeading,

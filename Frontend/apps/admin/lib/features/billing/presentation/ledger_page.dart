@@ -100,7 +100,7 @@ class _Amount extends StatelessWidget {
     final debit = entry.kind == LedgerEntryKindEnum.commission;
     return Text(
       '${debit ? '+' : '−'}${context.money(entry.amount)}',
-      style: TextStyle(color: debit ? PaoColors.danger : null),
+      style: TextStyle(color: debit ? context.pao.dangerInk : null),
     );
   }
 }

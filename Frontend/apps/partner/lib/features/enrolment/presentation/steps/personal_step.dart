@@ -97,7 +97,7 @@ class _PersonalStepState extends State<PersonalStep> {
       onChanged: (g) => setState(() => _gender = g),
     ),
     if (_error(_gender != null, t.enrolGenderError) case final e?)
-      Text(e, style: const TextStyle(color: PaoColors.danger)),
+      Text(e, style: TextStyle(color: context.pao.dangerInk)),
   ];
 
   List<Widget> _addresses(PartnerL10n t) => [

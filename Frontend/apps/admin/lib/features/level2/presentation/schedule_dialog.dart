@@ -144,7 +144,7 @@ class _ScheduleFormState extends State<ScheduleForm> {
           inputFormatters: [LengthLimitingTextInputFormatter(200)],
         ),
         if (error != null)
-          Text(error, style: const TextStyle(color: PaoColors.danger)),
+          Text(error, style: TextStyle(color: context.pao.dangerInk)),
       ],
     );
   }

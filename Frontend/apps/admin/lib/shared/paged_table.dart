@@ -68,7 +68,7 @@ class _HeaderRow<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = Theme.of(context).textTheme.labelMedium!
-        .copyWith(color: PaoColors.textSecondary);
+        .copyWith(color: context.pao.inkMuted);
     return _Cells(
       children: [
         for (final c in columns)
@@ -88,8 +88,8 @@ class _Cells extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => DecoratedBox(
-    decoration: const BoxDecoration(
-      border: Border(bottom: BorderSide(color: PaoColors.border)),
+    decoration: BoxDecoration(
+      border: Border(bottom: BorderSide(color: context.pao.hairline)),
     ),
     child: Padding(
       padding: const EdgeInsets.symmetric(

@@ -64,7 +64,7 @@ class _NidStepState extends State<NidStep> {
         if (_checked && photosMissing)
           Text(
             t.enrolPhotoError,
-            style: const TextStyle(color: PaoColors.danger),
+            style: TextStyle(color: context.pao.dangerInk),
           ),
       ],
     );

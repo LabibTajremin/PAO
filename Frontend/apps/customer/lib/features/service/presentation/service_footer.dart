@@ -58,7 +58,7 @@ class ServiceFooter extends StatelessWidget {
             if (problem != null)
               Text(
                 problemText(context.t, problem),
-                style: const TextStyle(color: PaoColors.textSecondary),
+                style: TextStyle(color: context.pao.inkMuted),
               ),
             const SizedBox(height: PaoSpace.sm),
             PaoButton(

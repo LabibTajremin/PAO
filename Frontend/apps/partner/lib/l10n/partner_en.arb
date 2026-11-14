@@ -1248,6 +1248,22 @@
   "@profLanguageTitle": {
     "description": "M34 title and menu row."
   },
+  "profAppearance": "Appearance",
+  "@profAppearance": {
+    "description": "Appearance setting on the language page"
+  },
+  "profAppearanceSystem": "Like the phone",
+  "@profAppearanceSystem": {
+    "description": "Appearance setting on the language page"
+  },
+  "profAppearanceLight": "Light",
+  "@profAppearanceLight": {
+    "description": "Appearance setting on the language page"
+  },
+  "profAppearanceDark": "Dark",
+  "@profAppearanceDark": {
+    "description": "Appearance setting on the language page"
+  },
   "profLanguageBody": "Choose the language for the app, notifications and messages from PAO.",
   "@profLanguageBody": {
     "description": "M34 explanation."

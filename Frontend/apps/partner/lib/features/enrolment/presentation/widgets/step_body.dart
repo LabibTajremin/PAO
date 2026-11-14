@@ -46,7 +46,7 @@ class StepBody extends StatelessWidget {
           const SizedBox(height: PaoSpace.md),
           Text(
             context.failureText(s.failure)!,
-            style: const TextStyle(color: PaoColors.danger),
+            style: TextStyle(color: context.pao.dangerInk),
           ),
         ],
         const SizedBox(height: PaoSpace.xxl),

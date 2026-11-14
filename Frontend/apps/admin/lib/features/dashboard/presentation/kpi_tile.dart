@@ -43,7 +43,7 @@ class KpiTile extends StatelessWidget {
                   Text(
                     label,
                     style: text.bodySmall!.copyWith(
-                      color: PaoColors.textSecondary,
+                      color: context.pao.inkMuted,
                     ),
                   ),
                 ],

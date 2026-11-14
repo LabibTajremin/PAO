@@ -538,6 +538,22 @@
   "@accountLanguage": {
     "description": "C22 row and C26 title"
   },
+  "accountAppearance": "Appearance",
+  "@accountAppearance": {
+    "description": "Appearance setting on the language page"
+  },
+  "accountAppearanceSystem": "Like the phone",
+  "@accountAppearanceSystem": {
+    "description": "Appearance setting on the language page"
+  },
+  "accountAppearanceLight": "Light",
+  "@accountAppearanceLight": {
+    "description": "Appearance setting on the language page"
+  },
+  "accountAppearanceDark": "Dark",
+  "@accountAppearanceDark": {
+    "description": "Appearance setting on the language page"
+  },
   "accountHelp": "Help & support",
   "@accountHelp": {
     "description": "C22 row and C27 title"

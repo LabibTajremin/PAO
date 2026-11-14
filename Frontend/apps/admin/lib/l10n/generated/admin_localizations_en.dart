@@ -1381,6 +1381,55 @@ class AdminL10nEn extends AdminL10n {
   }
 
   @override
+  String get bannersOpen => 'Home banners';
+
+  @override
+  String get bannersTitle => 'Home banners';
+
+  @override
+  String get bannersSubtitle => 'Shown on the customer home, in sort order';
+
+  @override
+  String get bannersNew => 'New banner';
+
+  @override
+  String get bannersEdit => 'Edit banner';
+
+  @override
+  String get bannersEmptyTitle => 'No banners yet';
+
+  @override
+  String get bannersEmptyBody => 'Add one to show it on the customer home.';
+
+  @override
+  String get bannersHeadline => 'Title';
+
+  @override
+  String get bannersTagline => 'Subtitle (optional)';
+
+  @override
+  String get bannersImage => 'Image URL (optional)';
+
+  @override
+  String get bannersImageHint =>
+      'An https link; without one the banner uses the brand colour.';
+
+  @override
+  String get bannersImageInvalid => 'Use an https link';
+
+  @override
+  String get bannersService => 'Opens service';
+
+  @override
+  String get bannersNoService => 'None';
+
+  @override
+  String get bannersDelete => 'Delete banner';
+
+  @override
+  String get bannersDeleted => 'Banner deleted';
+
+  @override
   String get catalogCurrentPrice => 'Current';
 
   @override

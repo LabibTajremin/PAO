@@ -43,7 +43,7 @@ class DueBanner extends StatelessWidget {
             PaoListRow(
               leading: Icon(
                 due.blocked ? Icons.block_outlined : Icons.info_outline,
-                color: due.blocked ? PaoColors.danger : null,
+                color: due.blocked ? context.pao.dangerInk : null,
               ),
               title: due.blocked
                   ? t.billBannerBlocked(amount, limit)

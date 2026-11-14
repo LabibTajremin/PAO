@@ -115,7 +115,7 @@ class _ResultFormState extends State<ResultForm> {
           inputFormatters: [LengthLimitingTextInputFormatter(maxNotes)],
         ),
         if (error != null)
-          Text(error, style: const TextStyle(color: PaoColors.danger)),
+          Text(error, style: TextStyle(color: context.pao.dangerInk)),
         PaoButton(
           label: t.level2Record,
           loading: widget.busy,

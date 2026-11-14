@@ -68,7 +68,7 @@ class NotificationsPage extends StatelessWidget {
   Widget _row(BuildContext context, Notification n) => PaoListRow(
     leading: Icon(
       n.read ? Icons.notifications_none_outlined : Icons.notifications_active,
-      color: n.read ? PaoColors.textTertiary : context.pao.accent.primary,
+      color: n.read ? context.pao.inkFaint : context.pao.accent.primary,
     ),
     title: n.title,
     subtitle: [

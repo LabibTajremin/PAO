@@ -21,9 +21,17 @@ and one file serves every weight, so the bundle is smaller than four Hind weight
 
 **Decision.** `catalog.banners` holds bilingual title and subtitle, an optional https image
 URL, an optional service to open, a sort order and a published flag. Admins manage them on
-the panel's Banners page; the customer catalog response carries the published ones. A demo
-banner is seeded by the migration.
+the panel's Home banners page (opened from Catalog, screen A03); the customer app reads
+`GET /v1/customer/banners`. A demo banner is seeded by the migration. Images are https URLs
+for now; uploading through the media service is a follow-up, as its links expire.
 
 ## 3. Dark mode
 
-**Decision.** Each app offers System, Light and Dark (default System), saved on the device.
+**Decision.** The customer and partner apps offer System, Light and Dark (default System) on
+their language page, saved on the device (`ThemeModeController`, key `pao.theme`). The admin
+web follows the browser's setting. Widgets take colours from `context.pao` (ink, card,
+hairline, dangerInk and the like), never the light-only constants, so text stays readable
+in both palettes.
+
+**Why.** Following the phone needs no setting for most people; the choice is there for those
+who want one app different from the rest.

@@ -27,7 +27,7 @@ class LedgerRow extends StatelessWidget {
       ].join(' · '),
       trailing: Text(
         '${debit ? '+' : '−'}${context.money(entry.amount)}',
-        style: TextStyle(color: debit ? PaoColors.danger : null),
+        style: TextStyle(color: debit ? context.pao.dangerInk : null),
       ),
     );
   }

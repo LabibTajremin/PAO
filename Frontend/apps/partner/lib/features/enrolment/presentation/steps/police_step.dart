@@ -53,7 +53,7 @@ class _PoliceStepState extends State<PoliceStep> {
         if (_checked && id == null)
           Text(
             t.enrolPhotoError,
-            style: const TextStyle(color: PaoColors.danger),
+            style: TextStyle(color: context.pao.dangerInk),
           ),
         const SizedBox(height: PaoSpace.lg),
         DateField(

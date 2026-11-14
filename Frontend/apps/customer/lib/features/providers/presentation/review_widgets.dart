@@ -119,7 +119,7 @@ class _Bar extends StatelessWidget {
           child: LinearProgressIndicator(
             value: total == 0 ? 0 : count / total,
             color: context.pao.accent.primary,
-            backgroundColor: PaoColors.border,
+            backgroundColor: context.pao.hairline,
           ),
         ),
         SizedBox(

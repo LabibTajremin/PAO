@@ -101,5 +101,5 @@ class FormError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      Text(message, style: const TextStyle(color: PaoColors.danger));
+      Text(message, style: TextStyle(color: context.pao.dangerInk));
 }

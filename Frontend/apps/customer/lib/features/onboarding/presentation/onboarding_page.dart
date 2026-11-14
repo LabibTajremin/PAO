@@ -125,7 +125,9 @@ class _Dots extends StatelessWidget {
           height: 8,
           margin: const EdgeInsets.symmetric(horizontal: PaoSpace.xs),
           decoration: BoxDecoration(
-            color: i == index ? context.pao.accent.primary : PaoColors.border,
+            color: i == index
+                ? context.pao.accent.primary
+                : context.pao.hairline,
             borderRadius: BorderRadius.circular(PaoRadius.pill),
           ),
         ),

@@ -49,12 +49,13 @@ String faceLabel(AdminL10n t, VerificationReviewFaceMatchEnum? face) =>
     };
 
 /// Icon colour of a face check.
-Color faceColor(VerificationReviewFaceMatchEnum? face) => switch (face) {
-  VerificationReviewFaceMatchEnum.match => PaoColors.success,
-  VerificationReviewFaceMatchEnum.noMatch => PaoColors.danger,
-  VerificationReviewFaceMatchEnum.manualReview => PaoColors.warning,
-  _ => PaoColors.textTertiary,
-};
+Color faceColor(VerificationReviewFaceMatchEnum? face, PaoColors c) =>
+    switch (face) {
+      VerificationReviewFaceMatchEnum.match => c.successInk,
+      VerificationReviewFaceMatchEnum.noMatch => c.dangerInk,
+      VerificationReviewFaceMatchEnum.manualReview => c.warningInk,
+      _ => c.inkFaint,
+    };
 
 /// Gender as written in the profile.
 String genderLabel(AdminL10n t, Gender gender) => switch (gender) {
@@ -102,8 +103,8 @@ String waitedLabel(AdminL10n t, int hours) =>
     hours < 48 ? t.verifyAgeHours(hours) : t.verifyAgeDays(hours ~/ 24);
 
 /// Colour of the wait: amber after a day, red after two.
-Color waitedColor(int hours) => hours >= 48
-    ? PaoColors.danger
+Color waitedColor(int hours, PaoColors c) => hours >= 48
+    ? c.dangerInk
     : hours >= 24
-    ? PaoColors.warning
-    : PaoColors.textPrimary;
+    ? c.warningInk
+    : c.ink;

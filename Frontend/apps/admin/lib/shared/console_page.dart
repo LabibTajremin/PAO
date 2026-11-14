@@ -67,7 +67,7 @@ class ConsolePage extends StatelessWidget {
         if (subtitle != null)
           Text(
             subtitle!,
-            style: text.bodySmall!.copyWith(color: PaoColors.textSecondary),
+            style: text.bodySmall!.copyWith(color: context.pao.inkMuted),
           ),
       ],
     );

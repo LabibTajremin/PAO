@@ -836,6 +836,30 @@ abstract class CustomerL10n {
   /// **'Language'**
   String get accountLanguage;
 
+  /// Appearance setting on the language page
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get accountAppearance;
+
+  /// Appearance setting on the language page
+  ///
+  /// In en, this message translates to:
+  /// **'Like the phone'**
+  String get accountAppearanceSystem;
+
+  /// Appearance setting on the language page
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get accountAppearanceLight;
+
+  /// Appearance setting on the language page
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get accountAppearanceDark;
+
   /// C22 row and C27 title
   ///
   /// In en, this message translates to:

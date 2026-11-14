@@ -37,7 +37,7 @@ class DetailPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Material(
-    color: PaoColors.surface,
+    color: context.pao.card,
     child: SizedBox(
       width: 480,
       height: double.infinity,

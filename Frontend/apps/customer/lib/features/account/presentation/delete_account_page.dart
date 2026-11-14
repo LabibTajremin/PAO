@@ -44,7 +44,7 @@ class DeleteAccountPage extends StatelessWidget {
                 padding: const EdgeInsets.only(top: PaoSpace.md),
                 child: Text(
                   error,
-                  style: const TextStyle(color: PaoColors.danger),
+                  style: TextStyle(color: context.pao.dangerInk),
                 ),
               ),
           ],
@@ -65,10 +65,10 @@ class _Explain extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Icon(
+        Icon(
           Icons.warning_amber_rounded,
           size: 48,
-          color: PaoColors.danger,
+          color: context.pao.dangerInk,
         ),
         const SizedBox(height: PaoSpace.lg),
         Text(

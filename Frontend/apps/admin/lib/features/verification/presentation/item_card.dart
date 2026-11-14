@@ -72,7 +72,7 @@ class ItemCard extends StatelessWidget {
           if (item.rejectionReason case final reason?)
             Text(
               t.verifyRejectedBecause(reason),
-              style: const TextStyle(color: PaoColors.danger),
+              style: TextStyle(color: context.pao.dangerInk),
             ),
           if (item.expiresAt case final at?)
             Text(t.verifyExpires(context.when(at, 'd MMM y'))),
@@ -116,7 +116,7 @@ class _Title extends StatelessWidget {
         ),
         Text(
           item.required_ ? t.verifyRequired : t.verifyOptional,
-          style: const TextStyle(color: PaoColors.textSecondary),
+          style: TextStyle(color: context.pao.inkMuted),
         ),
       ],
     );

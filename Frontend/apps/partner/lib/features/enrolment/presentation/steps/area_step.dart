@@ -74,7 +74,7 @@ class _AreaStepState extends State<AreaStep> {
         if (_off || (_checked && _point == null))
           Text(
             _off ? t.enrolAreaOff : t.enrolAreaError,
-            style: const TextStyle(color: PaoColors.danger),
+            style: TextStyle(color: context.pao.dangerInk),
           ),
         const SizedBox(height: PaoSpace.xl),
         Text(t.enrolAreaRadius(_radiusKm)),

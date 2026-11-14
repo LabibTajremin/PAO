@@ -34,7 +34,7 @@ class OnboardingSlide extends StatelessWidget {
           const SizedBox(height: PaoSpace.md),
           Text(
             body,
-            style: text.bodyLarge!.copyWith(color: PaoColors.textSecondary),
+            style: text.bodyLarge!.copyWith(color: context.pao.inkMuted),
             textAlign: TextAlign.center,
           ),
         ],

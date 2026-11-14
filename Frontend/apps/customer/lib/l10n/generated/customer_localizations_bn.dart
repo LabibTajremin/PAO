@@ -404,6 +404,18 @@ class CustomerL10nBn extends CustomerL10n {
   String get accountLanguage => 'ভাষা';
 
   @override
+  String get accountAppearance => 'থিম';
+
+  @override
+  String get accountAppearanceSystem => 'ফোনের মতো';
+
+  @override
+  String get accountAppearanceLight => 'লাইট';
+
+  @override
+  String get accountAppearanceDark => 'ডার্ক';
+
+  @override
   String get accountHelp => 'সাহায্য ও সহায়তা';
 
   @override

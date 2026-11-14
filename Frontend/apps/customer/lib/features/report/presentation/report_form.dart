@@ -94,7 +94,7 @@ class _Error extends StatelessWidget {
         ? const SizedBox.shrink()
         : Padding(
             padding: const EdgeInsets.only(top: PaoSpace.sm),
-            child: Text(text, style: const TextStyle(color: PaoColors.danger)),
+            child: Text(text, style: TextStyle(color: context.pao.dangerInk)),
           );
   }
 }

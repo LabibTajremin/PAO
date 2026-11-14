@@ -1366,6 +1366,55 @@ class AdminL10nBn extends AdminL10n {
   }
 
   @override
+  String get bannersOpen => 'হোম ব্যানার';
+
+  @override
+  String get bannersTitle => 'হোম ব্যানার';
+
+  @override
+  String get bannersSubtitle => 'গ্রাহকের হোমে ক্রম অনুযায়ী দেখানো হয়';
+
+  @override
+  String get bannersNew => 'নতুন ব্যানার';
+
+  @override
+  String get bannersEdit => 'ব্যানার সম্পাদনা';
+
+  @override
+  String get bannersEmptyTitle => 'এখনো কোনো ব্যানার নেই';
+
+  @override
+  String get bannersEmptyBody => 'গ্রাহকের হোমে দেখাতে একটি যোগ করুন।';
+
+  @override
+  String get bannersHeadline => 'শিরোনাম';
+
+  @override
+  String get bannersTagline => 'উপশিরোনাম (ঐচ্ছিক)';
+
+  @override
+  String get bannersImage => 'ছবির লিংক (ঐচ্ছিক)';
+
+  @override
+  String get bannersImageHint =>
+      'https লিংক; না দিলে ব্যানারে ব্র্যান্ডের রং থাকবে।';
+
+  @override
+  String get bannersImageInvalid => 'https লিংক দিন';
+
+  @override
+  String get bannersService => 'যে সেবা খুলবে';
+
+  @override
+  String get bannersNoService => 'কোনোটি নয়';
+
+  @override
+  String get bannersDelete => 'ব্যানার মুছুন';
+
+  @override
+  String get bannersDeleted => 'ব্যানার মুছে ফেলা হয়েছে';
+
+  @override
   String get catalogCurrentPrice => 'বর্তমান';
 
   @override

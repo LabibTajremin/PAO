@@ -20,7 +20,7 @@ class CheckItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = context.t;
     final secondary = Theme.of(context).textTheme.bodySmall!
-        .copyWith(color: PaoColors.textSecondary);
+        .copyWith(color: context.pao.inkMuted);
     return Padding(
       padding: const EdgeInsets.only(top: PaoSpace.md),
       child: PaoCard(

@@ -405,6 +405,18 @@ class CustomerL10nEn extends CustomerL10n {
   String get accountLanguage => 'Language';
 
   @override
+  String get accountAppearance => 'Appearance';
+
+  @override
+  String get accountAppearanceSystem => 'Like the phone';
+
+  @override
+  String get accountAppearanceLight => 'Light';
+
+  @override
+  String get accountAppearanceDark => 'Dark';
+
+  @override
   String get accountHelp => 'Help & support';
 
   @override

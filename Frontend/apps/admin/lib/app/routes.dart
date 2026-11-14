@@ -21,6 +21,9 @@ abstract final class Routes {
   /// A04.
   static const service = '/catalog/services/:id';
 
+  /// The customer home's banners, under the catalog's screen (A03).
+  static const banners = '/catalog/banners';
+
   /// A05.
   static const verification = '/verification';
 
@@ -72,6 +75,7 @@ abstract final class Routes {
     dashboard: 'A02',
     catalog: 'A03',
     service: 'A04',
+    banners: 'A03',
     verification: 'A05',
     review: 'A06',
     level2: 'A07',

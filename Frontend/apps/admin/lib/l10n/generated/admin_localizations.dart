@@ -2629,6 +2629,102 @@ abstract class AdminL10n {
   /// **'From {when} · by {admin}'**
   String catalogPriceSince(String when, String admin);
 
+  /// Home banners page (C07 content)
+  ///
+  /// In en, this message translates to:
+  /// **'Home banners'**
+  String get bannersOpen;
+
+  /// Home banners page (C07 content)
+  ///
+  /// In en, this message translates to:
+  /// **'Home banners'**
+  String get bannersTitle;
+
+  /// Home banners page (C07 content)
+  ///
+  /// In en, this message translates to:
+  /// **'Shown on the customer home, in sort order'**
+  String get bannersSubtitle;
+
+  /// Home banners page (C07 content)
+  ///
+  /// In en, this message translates to:
+  /// **'New banner'**
+  String get bannersNew;
+
+  /// Home banners page (C07 content)
+  ///
+  /// In en, this message translates to:
+  /// **'Edit banner'**
+  String get bannersEdit;
+
+  /// Home banners page (C07 content)
+  ///
+  /// In en, this message translates to:
+  /// **'No banners yet'**
+  String get bannersEmptyTitle;
+
+  /// Home banners page (C07 content)
+  ///
+  /// In en, this message translates to:
+  /// **'Add one to show it on the customer home.'**
+  String get bannersEmptyBody;
+
+  /// Home banners page (C07 content)
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get bannersHeadline;
+
+  /// Home banners page (C07 content)
+  ///
+  /// In en, this message translates to:
+  /// **'Subtitle (optional)'**
+  String get bannersTagline;
+
+  /// Home banners page (C07 content)
+  ///
+  /// In en, this message translates to:
+  /// **'Image URL (optional)'**
+  String get bannersImage;
+
+  /// Home banners page (C07 content)
+  ///
+  /// In en, this message translates to:
+  /// **'An https link; without one the banner uses the brand colour.'**
+  String get bannersImageHint;
+
+  /// Home banners page (C07 content)
+  ///
+  /// In en, this message translates to:
+  /// **'Use an https link'**
+  String get bannersImageInvalid;
+
+  /// Home banners page (C07 content)
+  ///
+  /// In en, this message translates to:
+  /// **'Opens service'**
+  String get bannersService;
+
+  /// Home banners page (C07 content)
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get bannersNoService;
+
+  /// Home banners page (C07 content)
+  ///
+  /// In en, this message translates to:
+  /// **'Delete banner'**
+  String get bannersDelete;
+
+  /// Home banners page (C07 content)
+  ///
+  /// In en, this message translates to:
+  /// **'Banner deleted'**
+  String get bannersDeleted;
+
   /// Badge on the price in force
   ///
   /// In en, this message translates to:

@@ -41,7 +41,7 @@ class TotpStep extends StatelessWidget {
           const SizedBox(height: PaoSpace.md),
           Text(
             context.failureText(state.failure)!,
-            style: const TextStyle(color: PaoColors.danger),
+            style: TextStyle(color: context.pao.dangerInk),
           ),
         ],
         if (state.busy) const Center(child: CircularProgressIndicator()),

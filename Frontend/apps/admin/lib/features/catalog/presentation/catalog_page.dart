@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pao_admin/app/routes.dart';
 import 'package:pao_admin/app/services.dart';
 import 'package:pao_admin/features/catalog/data/api_catalog_repository.dart';
 import 'package:pao_admin/features/catalog/presentation/catalog_cubits.dart';
@@ -36,6 +38,13 @@ class CatalogPage extends StatelessWidget {
             _ => null,
           },
           actions: [
+            PaoButton(
+              label: context.t.bannersOpen,
+              icon: Icons.view_carousel_outlined,
+              variant: PaoButtonVariant.outline,
+              expand: false,
+              onPressed: () => context.push(Routes.banners),
+            ),
             PaoButton(
               label: context.t.catalogNewCategory,
               icon: Icons.add,

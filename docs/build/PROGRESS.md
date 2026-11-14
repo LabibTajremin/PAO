@@ -86,6 +86,9 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-11-14 Dark mode (System/Light/Dark in the customer and partner apps, admin follows
+  the browser), theme-aware colours everywhere, Bangla theme wired to the locale, admin Home
+  banners page (ADR-0037).
 - 2026-11-14 Home banners API: `catalog.banners` with a seeded demo banner, admin CRUD at
   `/v1/admin/catalog/banners`, published list at `/v1/customer/banners` (ADR-0037 §2).
 - 2026-11-14 Bangla type: Noto Sans Bengali replaces Hind Siliguri, larger size and line

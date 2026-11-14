@@ -47,7 +47,7 @@ class ProfilePanel extends StatelessWidget {
             children: [
               Icon(
                 Icons.face_retouching_natural,
-                color: faceColor(review.faceMatch),
+                color: faceColor(review.faceMatch, context.pao),
               ),
               Expanded(child: Text(faceLabel(t, review.faceMatch))),
             ],
@@ -71,7 +71,7 @@ class _Fact extends StatelessWidget {
       Text(
         label,
         style: Theme.of(context).textTheme.labelMedium!
-            .copyWith(color: PaoColors.textSecondary),
+            .copyWith(color: context.pao.inkMuted),
       ),
       SelectableText(
         value == null || value!.isEmpty ? context.t.verifyNotGiven : value!,

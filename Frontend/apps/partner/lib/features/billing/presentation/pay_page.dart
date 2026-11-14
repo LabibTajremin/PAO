@@ -113,6 +113,6 @@ class _PayFormState extends State<_PayForm> {
       ? const SizedBox.shrink()
       : Padding(
           padding: const EdgeInsets.only(top: PaoSpace.sm),
-          child: Text(message, style: const TextStyle(color: PaoColors.danger)),
+          child: Text(message, style: TextStyle(color: context.pao.dangerInk)),
         );
 }

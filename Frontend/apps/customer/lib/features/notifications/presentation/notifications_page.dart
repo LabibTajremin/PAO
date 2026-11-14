@@ -96,7 +96,7 @@ class _Row extends StatelessWidget {
       child: PaoListRow(
         leading: Icon(
           unread ? Icons.notifications_active : Icons.notifications_none,
-          color: unread ? context.pao.accent.primary : PaoColors.textTertiary,
+          color: unread ? context.pao.accent.primary : context.pao.inkFaint,
         ),
         title: note.title,
         subtitle:
