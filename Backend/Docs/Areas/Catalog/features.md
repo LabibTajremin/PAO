@@ -5,6 +5,9 @@ request, validator and handler. Overview: [overview.md](overview.md).
 
 | Feature | Use case | Kind | Notes |
 |---|---|---|---|
+| `Banners` | `ListBanners` | query | every banner for admins, the published ones for the customer home (C07), in sort order |
+| `Banners` | `SaveBanner` | command | create or update; both titles, a whole subtitle if any, an https image URL of at most 500 characters; the linked service must exist |
+| `Banners` | `DeleteBanner` | command | removes a banner; `catalog.not_found` when there is none |
 | `Browse` | `GetPublishedCatalog` | query | the cached published tree (C-03) |
 | `Browse` | `SearchCatalog` | query | trigram search in both languages; hits under unpublished parents dropped (C08) |
 | `Browse` | `GetPublishedService` | query | a published service with its published sub-services (C09) |

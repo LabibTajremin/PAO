@@ -27,3 +27,11 @@ Every action: `[Admin(Permission = "catalog:manage")]`.
 | createService, updateService | `POST /v1/admin/catalog/services`, `PUT .../services/{serviceId}` |
 | createSubService, updateSubService | `POST /v1/admin/catalog/sub-services`, `PUT .../sub-services/{subServiceId}` |
 | changePrice, listPriceHistory | `POST`, `GET /v1/admin/catalog/sub-services/{subServiceId}/prices` |
+
+## BannerControllers
+
+| Controller | Operation | Route | Attribute |
+|---|---|---|---|
+| `CustomerBannersController` | getBanners | `GET /v1/customer/banners` | `[AllUserType(Permission = "catalog:read")]` |
+| `AdminBannersController` | listBanners, createBanner | `GET`, `POST /v1/admin/catalog/banners` | `[Admin(Permission = "catalog:manage")]` |
+| `AdminBannersController` | updateBanner, deleteBanner | `PUT`, `DELETE .../banners/{bannerId}` | `[Admin(Permission = "catalog:manage")]` |

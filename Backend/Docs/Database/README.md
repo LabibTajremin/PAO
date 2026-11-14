@@ -64,6 +64,7 @@ an empty database and compares schema, version rows and catalog with `migrate up
 | `verification/0001_init.sql` | Verification: items, documents, levels, Level 2 sessions and the NID block list. |
 | `verification/0002_closures.sql` | Accounts closed by their owners: their verification records and documents stay for |
 | `catalog/0001_init.sql` | Catalog: Category → Service → Sub-service with immutable price versions (PRD §4). |
+| `catalog/0002_banners.sql` | Home banners managed in the admin panel, with one seeded demo banner (ADR-0037 §2). |
 | `booking/0001_init.sql` | Booking: lifecycle, snapshots, items, extras and the timeline (PRD §5). |
 | `booking/0002_payment_method.sql` | `payment_method`, only `cash_on_delivery` in the first release (ADR-0035 §1). |
 | `booking/0003_lookup_indexes.sql` | Indexes for the expiry sweep, the admin monitor and proposals by booking ([schema](schema.md#index-review)). |

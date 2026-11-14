@@ -548,7 +548,30 @@ Created in `verification/0001_init.sql`.
 Keys: PK `PRIMARY KEY (provider_id, item_type, expires_at, days_before)`.
 
 ## `catalog`
-Tables: [`catalog_version`](#catalogcatalog_version), [`categories`](#catalogcategories), [`outbox`](#catalogoutbox), [`price_versions`](#catalogprice_versions), [`processed_events`](#catalogprocessed_events), [`services`](#catalogservices), [`sub_services`](#catalogsub_services).
+Tables: [`banners`](#catalogbanners), [`catalog_version`](#catalogcatalog_version), [`categories`](#catalogcategories), [`outbox`](#catalogoutbox), [`price_versions`](#catalogprice_versions), [`processed_events`](#catalogprocessed_events), [`services`](#catalogservices), [`sub_services`](#catalogsub_services).
+
+### catalog.banners
+Created in `catalog/0002_banners.sql`, which also seeds one published demo banner.
+
+| Column | Type | Null | Default |
+|---|---|---|---|
+| `id` | uuid | no | — |
+| `title_en` | text | no | — |
+| `title_bn` | text | no | — |
+| `subtitle_en` | text | yes | — |
+| `subtitle_bn` | text | yes | — |
+| `image_url` | text | yes | — |
+| `service_id` | uuid | yes | — |
+| `sort_order` | integer | no | `0` |
+| `published` | boolean | no | `false` |
+| `created_at` | timestamp with time zone | no | `now()` |
+| `updated_at` | timestamp with time zone | no | `now()` |
+
+Keys: PK `PRIMARY KEY (id)`; FK `FOREIGN KEY (service_id) REFERENCES catalog.services(id)`. Checks: both subtitles or neither; `image_url` starts with `https://`.
+
+| Index | Columns | Kind | Serves |
+|---|---|---|---|
+| `banners_published_idx` | `(sort_order) WHERE published` | partial | The customer home's published banners in display order (BannerRepository.List). |
 
 ### catalog.catalog_version
 Created in `catalog/0001_init.sql`.

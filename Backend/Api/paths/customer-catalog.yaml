@@ -17,6 +17,24 @@ catalog:
         $ref: ../components/responses.yaml#/Unauthenticated
       '403':
         $ref: ../components/responses.yaml#/Forbidden
+banners:
+  get:
+    operationId: getBanners
+    tags:
+    - Customer
+    summary: Published home banners in display order (C07)
+    x-permission: catalog:read
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/BannerList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
 search:
   get:
     operationId: searchCatalog

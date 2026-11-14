@@ -20,6 +20,9 @@ import 'package:pao_api/src/model/admin_user_list.dart';
 import 'package:pao_api/src/model/admin_user_update.dart';
 import 'package:pao_api/src/model/audit_entry.dart';
 import 'package:pao_api/src/model/audit_list.dart';
+import 'package:pao_api/src/model/banner.dart';
+import 'package:pao_api/src/model/banner_input.dart';
+import 'package:pao_api/src/model/banner_list.dart';
 import 'package:pao_api/src/model/booking.dart';
 import 'package:pao_api/src/model/booking_address.dart';
 import 'package:pao_api/src/model/booking_create.dart';
@@ -227,6 +230,12 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'AuditList':
       return AuditList.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'Badge':
+    case 'Banner':
+      return Banner.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'BannerInput':
+      return BannerInput.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'BannerList':
+      return BannerList.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'Booking':
       return Booking.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'BookingAddress':

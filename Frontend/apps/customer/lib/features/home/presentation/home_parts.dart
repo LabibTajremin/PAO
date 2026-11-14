@@ -60,11 +60,11 @@ class SearchBarButton extends StatelessWidget {
     onTap: onTap,
     child: Row(
       children: [
-        const Icon(Icons.search, color: PaoColors.textSecondary),
+        Icon(Icons.search, color: context.pao.inkMuted),
         const SizedBox(width: PaoSpace.sm),
         Text(
           context.t.homeSearchHint,
-          style: const TextStyle(color: PaoColors.textSecondary),
+          style: TextStyle(color: context.pao.inkMuted),
         ),
       ],
     ),

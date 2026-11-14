@@ -528,6 +528,24 @@ paths:
           $ref: '#/components/responses/Unauthenticated'
         '403':
           $ref: '#/components/responses/Forbidden'
+  /v1/customer/banners:
+    get:
+      operationId: getBanners
+      tags:
+        - Customer
+      summary: Published home banners in display order (C07)
+      x-permission: catalog:read
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BannerList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
   /v1/customer/catalog/search:
     get:
       operationId: searchCatalog
@@ -2507,6 +2525,98 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/catalog/banners:
+    get:
+      operationId: listBanners
+      tags:
+        - Admin catalog
+      summary: Every home banner, published or not, in display order
+      x-permission: catalog:manage
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BannerList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      operationId: createBanner
+      tags:
+        - Admin catalog
+      summary: Add a home banner
+      x-permission: catalog:manage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BannerInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Banner'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/catalog/banners/{bannerId}:
+    put:
+      operationId: updateBanner
+      tags:
+        - Admin catalog
+      summary: Update a home banner (publish/unpublish with `published`)
+      x-permission: catalog:manage
+      parameters:
+        - $ref: '#/components/parameters/BannerId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BannerInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Banner'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+    delete:
+      operationId: deleteBanner
+      tags:
+        - Admin catalog
+      summary: Remove a home banner
+      x-permission: catalog:manage
+      parameters:
+        - $ref: '#/components/parameters/BannerId'
+      responses:
+        '204':
+          description: No content
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /v1/admin/verifications:
     get:
       operationId: listVerificationQueue
@@ -3825,6 +3935,13 @@ components:
           - month
     SubmissionId:
       name: submissionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    BannerId:
+      name: bannerId
       in: path
       required: true
       schema:
@@ -7007,3 +7124,65 @@ components:
           $ref: '#/components/schemas/DueSummary'
         entries:
           $ref: '#/components/schemas/LedgerEntryList'
+    Banner:
+      type: object
+      description: A home banner (C07). Without an image the app draws it in the accent's deep colour.
+      required:
+        - id
+        - title
+        - sortOrder
+        - published
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          $ref: '#/components/schemas/LocalizedText'
+        subtitle:
+          $ref: '#/components/schemas/LocalizedText'
+        imageUrl:
+          type: string
+          format: uri
+          maxLength: 500
+          example: https://example.com/banner.jpg
+        serviceId:
+          type: string
+          format: uuid
+          description: The service the banner opens.
+        sortOrder:
+          type: integer
+          example: 0
+        published:
+          type: boolean
+    BannerList:
+      type: object
+      required:
+        - banners
+      properties:
+        banners:
+          type: array
+          items:
+            $ref: '#/components/schemas/Banner'
+    BannerInput:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          $ref: '#/components/schemas/LocalizedText'
+        subtitle:
+          $ref: '#/components/schemas/LocalizedText'
+        imageUrl:
+          type: string
+          format: uri
+          pattern: ^https://
+          maxLength: 500
+        serviceId:
+          type: string
+          format: uuid
+        sortOrder:
+          type: integer
+          example: 0
+        published:
+          type: boolean
+          example: true

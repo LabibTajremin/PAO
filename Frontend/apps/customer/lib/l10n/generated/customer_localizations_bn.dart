@@ -1071,6 +1071,20 @@ class CustomerL10nBn extends CustomerL10n {
   String get homeAddressTitle => 'আপনার ঠিকানা';
 
   @override
+  String homeGreeting(String name) {
+    return 'হ্যালো, $name';
+  }
+
+  @override
+  String get homeGreetingNoName => 'হ্যালো!';
+
+  @override
+  String get homeGreetingAsk => 'আজ কোন কাজে সাহায্য লাগবে?';
+
+  @override
+  String get homeBannerOpen => 'এখনই বুক করুন';
+
+  @override
   String get homeNoAddress => 'ঠিকানা ঠিক করুন';
 
   @override

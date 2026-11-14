@@ -18,6 +18,7 @@ IdempotencyKey:
 AddressId: { name: addressId, in: path, required: true, schema: { type: string, format: uuid } }
 ServiceId: { name: serviceId, in: path, required: true, schema: { type: string, format: uuid } }
 CategoryId: { name: categoryId, in: path, required: true, schema: { type: string, format: uuid } }
+BannerId: { name: bannerId, in: path, required: true, schema: { type: string, format: uuid } }
 SubServiceId: { name: subServiceId, in: path, required: true, schema: { type: string, format: uuid } }
 ProviderId: { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }
 CustomerId: { name: customerId, in: path, required: true, schema: { type: string, format: uuid } }

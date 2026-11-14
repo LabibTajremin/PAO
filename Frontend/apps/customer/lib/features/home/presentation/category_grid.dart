@@ -30,7 +30,7 @@ class CategoryGrid extends StatelessWidget {
     physics: const NeverScrollableScrollPhysics(),
     mainAxisSpacing: PaoSpace.md,
     crossAxisSpacing: PaoSpace.md,
-    childAspectRatio: 0.95,
+    childAspectRatio: 0.85,
     children: [
       for (final c in categories)
         PaoCard(
@@ -39,7 +39,7 @@ class CategoryGrid extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              PaoIconTile(icon: catalogIcon(c.iconKey)),
+              PaoIconTile(icon: catalogIcon(c.iconKey), size: 64),
               const SizedBox(height: PaoSpace.sm),
               Text(
                 context.local(c.name),

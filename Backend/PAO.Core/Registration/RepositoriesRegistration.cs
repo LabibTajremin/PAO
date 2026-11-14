@@ -27,6 +27,7 @@ public static class RepositoriesRegistration
         .AddScoped<ComplaintRepository>()
         .AddScoped<DashboardRepository>()
         .AddScoped<CatalogRepository>()
+        .AddScoped<BannerRepository>()
         .AddScoped<CatalogWriteRepository>()
         .AddScoped<CustomerRepository>()
         .AddScoped<AddressRepository>()

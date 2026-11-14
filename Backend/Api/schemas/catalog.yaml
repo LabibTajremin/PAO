@@ -55,6 +55,33 @@ CatalogTree:
   properties:
     version: { type: integer, format: int64, description: Bumped on every catalog change., example: 7 }
     categories: { type: array, items: { $ref: "#/Category" } }
+Banner:
+  type: object
+  description: A home banner (C07). Without an image the app draws it in the accent's deep colour.
+  required: [id, title, sortOrder, published]
+  properties:
+    id: { type: string, format: uuid }
+    title: { $ref: "./common.yaml#/LocalizedText" }
+    subtitle: { $ref: "./common.yaml#/LocalizedText" }
+    imageUrl: { type: string, format: uri, maxLength: 500, example: "https://example.com/banner.jpg" }
+    serviceId: { type: string, format: uuid, description: The service the banner opens. }
+    sortOrder: { type: integer, example: 0 }
+    published: { type: boolean }
+BannerInput:
+  type: object
+  required: [title]
+  properties:
+    title: { $ref: "./common.yaml#/LocalizedText" }
+    subtitle: { $ref: "./common.yaml#/LocalizedText" }
+    imageUrl: { type: string, format: uri, pattern: "^https://", maxLength: 500 }
+    serviceId: { type: string, format: uuid }
+    sortOrder: { type: integer, example: 0 }
+    published: { type: boolean, example: true }
+BannerList:
+  type: object
+  required: [banners]
+  properties:
+    banners: { type: array, items: { $ref: "#/Banner" } }
 CatalogSearchResults:
   type: object
   required: [services, subServices]

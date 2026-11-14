@@ -27,6 +27,10 @@ public sealed class CatalogRepository(PaoDbContext db, IMapper mapper)
     public Task<bool> CategoryExists(Guid id, CancellationToken cancellationToken) =>
         db.Set<CategoryRecord>().AnyAsync(c => c.Id == id, cancellationToken);
 
+    /// <summary>Reports whether the service exists, published or not.</summary>
+    public Task<bool> ServiceExists(Guid id, CancellationToken cancellationToken) =>
+        db.Set<ServiceRecord>().AnyAsync(s => s.Id == id, cancellationToken);
+
     /// <summary>The service with all its sub-services; throws `catalog.not_found`.</summary>
     public async Task<ServiceNode> Service(Guid id, CancellationToken cancellationToken)
     {

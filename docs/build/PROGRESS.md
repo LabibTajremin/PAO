@@ -86,6 +86,8 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-11-14 Home banners API: `catalog.banners` with a seeded demo banner, admin CRUD at
+  `/v1/admin/catalog/banners`, published list at `/v1/customer/banners` (ADR-0037 §2).
 - 2026-11-14 Bangla type: Noto Sans Bengali replaces Hind Siliguri, larger size and line
   height when the app is in Bangla, so vowel signs are not clipped (ADR-0037).
 - 2026-11-14 Sign-in fix from live logs: a repeat OTP request inside the resend minute with a

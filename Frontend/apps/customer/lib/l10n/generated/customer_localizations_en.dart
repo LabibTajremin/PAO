@@ -1073,6 +1073,20 @@ class CustomerL10nEn extends CustomerL10n {
   String get homeAddressTitle => 'Your address';
 
   @override
+  String homeGreeting(String name) {
+    return 'Hi, $name';
+  }
+
+  @override
+  String get homeGreetingNoName => 'Hello!';
+
+  @override
+  String get homeGreetingAsk => 'What do you need help with today?';
+
+  @override
+  String get homeBannerOpen => 'Book now';
+
+  @override
   String get homeNoAddress => 'Set your address';
 
   @override

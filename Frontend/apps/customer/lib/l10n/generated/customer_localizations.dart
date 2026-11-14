@@ -2030,6 +2030,30 @@ abstract class CustomerL10n {
   /// **'Your address'**
   String get homeAddressTitle;
 
+  /// C07 greeting with the customer's first name
+  ///
+  /// In en, this message translates to:
+  /// **'Hi, {name}'**
+  String homeGreeting(String name);
+
+  /// C07 greeting before the customer has a name
+  ///
+  /// In en, this message translates to:
+  /// **'Hello!'**
+  String get homeGreetingNoName;
+
+  /// C07 line under the greeting
+  ///
+  /// In en, this message translates to:
+  /// **'What do you need help with today?'**
+  String get homeGreetingAsk;
+
+  /// C07 banner action when it opens a service
+  ///
+  /// In en, this message translates to:
+  /// **'Book now'**
+  String get homeBannerOpen;
+
   /// C07 header without an address
   ///
   /// In en, this message translates to:
