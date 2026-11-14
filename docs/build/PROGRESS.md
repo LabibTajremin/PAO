@@ -86,6 +86,8 @@ None.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
+- 2026-11-14 Bangla type: Noto Sans Bengali replaces Hind Siliguri, larger size and line
+  height when the app is in Bangla, so vowel signs are not clipped (ADR-0037).
 - 2026-11-14 Sign-in fix from live logs: a repeat OTP request inside the resend minute with a
   live code answers 202 (no resend), so an app timing out on Render's cold start is not stuck
   on 429; the client IP skips private X-Forwarded-For hops (all users shared Render's 10.x).

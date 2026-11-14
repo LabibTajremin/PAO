@@ -7,24 +7,28 @@ import 'package:pao_ui/src/tokens/typography.dart';
 /// Builds the Material theme every PAO app uses.
 abstract final class PaoTheme {
   /// The light (paper) theme for [accent]; Midnight is the default
-  /// (05-screens.md).
-  static ThemeData light({AccentPreset accent = AccentPreset.midnight}) =>
-      _build(PaoColors(accent));
+  /// (05-screens.md). [bangla] sets the Bangla family and metrics.
+  static ThemeData light({
+    AccentPreset accent = AccentPreset.midnight,
+    bool bangla = false,
+  }) => _build(PaoColors(accent), bangla: bangla);
 
-  /// The dark (deep ink) theme for [accent].
-  static ThemeData dark({AccentPreset accent = AccentPreset.midnight}) =>
-      _build(PaoColors(accent, dark: true));
+  /// The dark (deep ink) theme for [accent]; [bangla] as for [light].
+  static ThemeData dark({
+    AccentPreset accent = AccentPreset.midnight,
+    bool bangla = false,
+  }) => _build(PaoColors(accent, dark: true), bangla: bangla);
 
-  static ThemeData _build(PaoColors c) {
-    final text = paoTextTheme(dark: c.dark);
+  static ThemeData _build(PaoColors c, {required bool bangla}) {
+    final text = paoTextTheme(dark: c.dark, bangla: bangla);
     return ThemeData(
       useMaterial3: true,
       colorScheme: paoColorScheme(c),
       scaffoldBackgroundColor: c.paper,
       canvasColor: c.paper,
       textTheme: text,
-      fontFamily: PaoFonts.latin,
-      fontFamilyFallback: const [PaoFonts.bangla],
+      fontFamily: bangla ? PaoFonts.bangla : PaoFonts.latin,
+      fontFamilyFallback: [if (bangla) PaoFonts.latin else PaoFonts.bangla],
       materialTapTargetSize: MaterialTapTargetSize.padded,
       extensions: [c],
       dividerTheme: DividerThemeData(color: c.hairline, space: 1),

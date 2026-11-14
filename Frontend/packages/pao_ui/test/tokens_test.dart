@@ -58,4 +58,17 @@ void main() {
     expect(PaoSpace.lg, 16);
     expect(PaoRadius.pill, greaterThan(PaoRadius.xl));
   });
+
+  test('Bangla leads with Noto at a larger size and line height', () {
+    final en = paoTextTheme().bodyLarge!;
+    final bn = paoTextTheme(bangla: true).bodyLarge!;
+    expect(bn.fontFamily, PaoFonts.bangla);
+    expect(bn.fontFamilyFallback, [PaoFonts.latin]);
+    expect(bn.fontSize, closeTo(en.fontSize! * PaoBanglaScale.size, 1e-9));
+    expect(bn.height, closeTo(en.height! + PaoBanglaScale.height, 1e-9));
+    final heading = paoTextTheme(bangla: true).titleLarge!;
+    expect(heading.fontFamily, PaoFonts.bangla);
+    expect(heading.fontWeight, FontWeight.w700);
+    expect(paoTextTheme(dark: true).bodyLarge!.color, isNot(en.color));
+  });
 }
