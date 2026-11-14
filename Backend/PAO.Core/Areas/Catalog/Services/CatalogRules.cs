@@ -31,6 +31,11 @@ public static class CatalogRules
     /// <summary>Reports whether an amount in paisa can be a price.</summary>
     public static bool IsValidPrice(long amount) => amount >= 0;
 
+    /// <summary>Reports whether a banner has both titles, a full subtitle if any and an https image URL if any.</summary>
+    public static bool IsValidBanner(BannerInput b) =>
+        ValidName(b.Title) && (b.Subtitle is null || ValidName(b.Subtitle))
+        && (b.ImageUrl is null || (b.ImageUrl.Length <= 500 && Uri.TryCreate(b.ImageUrl, UriKind.Absolute, out var url) && url.Scheme == Uri.UriSchemeHttps));
+
     /// <summary>Keeps only published categories, services and sub-services.</summary>
     public static IReadOnlyList<CategoryNode> PublishedOnly(IEnumerable<CategoryNode> tree) =>
         [.. tree.Where(c => c.Published).Select(c => c with

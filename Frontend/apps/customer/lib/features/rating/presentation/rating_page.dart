@@ -87,7 +87,7 @@ class _RatingPageState extends State<RatingPage> {
         if (s.failure != null)
           Text(
             context.failureText(s.failure)!,
-            style: const TextStyle(color: PaoColors.danger),
+            style: TextStyle(color: context.pao.dangerInk),
           ),
         const SizedBox(height: PaoSpace.xl),
         PaoButton(

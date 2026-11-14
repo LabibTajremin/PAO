@@ -1889,6 +1889,70 @@
       }
     }
   },
+  "bannersOpen": "Home banners",
+  "@bannersOpen": {
+    "description": "Home banners page (C07 content)"
+  },
+  "bannersTitle": "Home banners",
+  "@bannersTitle": {
+    "description": "Home banners page (C07 content)"
+  },
+  "bannersSubtitle": "Shown on the customer home, in sort order",
+  "@bannersSubtitle": {
+    "description": "Home banners page (C07 content)"
+  },
+  "bannersNew": "New banner",
+  "@bannersNew": {
+    "description": "Home banners page (C07 content)"
+  },
+  "bannersEdit": "Edit banner",
+  "@bannersEdit": {
+    "description": "Home banners page (C07 content)"
+  },
+  "bannersEmptyTitle": "No banners yet",
+  "@bannersEmptyTitle": {
+    "description": "Home banners page (C07 content)"
+  },
+  "bannersEmptyBody": "Add one to show it on the customer home.",
+  "@bannersEmptyBody": {
+    "description": "Home banners page (C07 content)"
+  },
+  "bannersHeadline": "Title",
+  "@bannersHeadline": {
+    "description": "Home banners page (C07 content)"
+  },
+  "bannersTagline": "Subtitle (optional)",
+  "@bannersTagline": {
+    "description": "Home banners page (C07 content)"
+  },
+  "bannersImage": "Image URL (optional)",
+  "@bannersImage": {
+    "description": "Home banners page (C07 content)"
+  },
+  "bannersImageHint": "An https link; without one the banner uses the brand colour.",
+  "@bannersImageHint": {
+    "description": "Home banners page (C07 content)"
+  },
+  "bannersImageInvalid": "Use an https link",
+  "@bannersImageInvalid": {
+    "description": "Home banners page (C07 content)"
+  },
+  "bannersService": "Opens service",
+  "@bannersService": {
+    "description": "Home banners page (C07 content)"
+  },
+  "bannersNoService": "None",
+  "@bannersNoService": {
+    "description": "Home banners page (C07 content)"
+  },
+  "bannersDelete": "Delete banner",
+  "@bannersDelete": {
+    "description": "Home banners page (C07 content)"
+  },
+  "bannersDeleted": "Banner deleted",
+  "@bannersDeleted": {
+    "description": "Home banners page (C07 content)"
+  },
   "catalogCurrentPrice": "Current",
   "@catalogCurrentPrice": {
     "description": "Badge on the price in force"

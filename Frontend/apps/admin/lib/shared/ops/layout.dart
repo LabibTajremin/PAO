@@ -138,7 +138,7 @@ class Fact extends StatelessWidget {
         children: [
           Text(
             label,
-            style: text.labelMedium!.copyWith(color: PaoColors.textSecondary),
+            style: text.labelMedium!.copyWith(color: context.pao.inkMuted),
           ),
           Text(value, style: text.bodyLarge),
         ],

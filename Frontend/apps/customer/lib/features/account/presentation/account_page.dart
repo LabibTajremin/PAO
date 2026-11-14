@@ -37,9 +37,9 @@ class AccountPage extends StatelessWidget {
                   onTap: () => confirmLogOut(context, services),
                 ),
                 PaoListRow(
-                  leading: const Icon(
+                  leading: Icon(
                     Icons.delete_outline,
-                    color: PaoColors.danger,
+                    color: context.pao.dangerInk,
                   ),
                   title: t.accountDelete,
                   onTap: () => context.push(Routes.accountPage('delete')),

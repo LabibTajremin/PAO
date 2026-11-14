@@ -59,6 +59,10 @@ void main() {
     expect(c.copyWith(dark: false).dark, isFalse);
     expect(c.copyWith().dark, isTrue);
     expect(PaoTheme.light().scaffoldBackgroundColor, PaoColors.canvas);
+    expect(
+      PaoTheme.light(bangla: true).textTheme.bodyMedium!.fontFamily,
+      PaoFonts.bangla,
+    );
   });
 
   test('headings use Fraunces with Bangla fallback; body stays sans', () {

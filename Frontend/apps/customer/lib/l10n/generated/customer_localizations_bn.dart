@@ -404,6 +404,18 @@ class CustomerL10nBn extends CustomerL10n {
   String get accountLanguage => 'ভাষা';
 
   @override
+  String get accountAppearance => 'থিম';
+
+  @override
+  String get accountAppearanceSystem => 'ফোনের মতো';
+
+  @override
+  String get accountAppearanceLight => 'লাইট';
+
+  @override
+  String get accountAppearanceDark => 'ডার্ক';
+
+  @override
   String get accountHelp => 'সাহায্য ও সহায়তা';
 
   @override
@@ -1069,6 +1081,20 @@ class CustomerL10nBn extends CustomerL10n {
 
   @override
   String get homeAddressTitle => 'আপনার ঠিকানা';
+
+  @override
+  String homeGreeting(String name) {
+    return 'হ্যালো, $name';
+  }
+
+  @override
+  String get homeGreetingNoName => 'হ্যালো!';
+
+  @override
+  String get homeGreetingAsk => 'আজ কোন কাজে সাহায্য লাগবে?';
+
+  @override
+  String get homeBannerOpen => 'এখনই বুক করুন';
 
   @override
   String get homeNoAddress => 'ঠিকানা ঠিক করুন';

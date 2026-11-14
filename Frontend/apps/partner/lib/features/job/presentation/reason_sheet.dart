@@ -56,7 +56,7 @@ class _ReasonSheetState<T> extends State<ReasonSheet<T>> {
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
       if (widget.warning != null) ...[
-        Text(widget.warning!, style: const TextStyle(color: PaoColors.warning)),
+        Text(widget.warning!, style: TextStyle(color: context.pao.warningInk)),
         const SizedBox(height: PaoSpace.md),
       ],
       Wrap(

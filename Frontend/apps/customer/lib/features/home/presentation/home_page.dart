@@ -8,12 +8,14 @@ import 'package:pao_customer/features/home/data/api_home_repository.dart';
 import 'package:pao_customer/features/home/domain/home_repository.dart';
 import 'package:pao_customer/features/home/presentation/address_sheet.dart';
 import 'package:pao_customer/features/home/presentation/category_grid.dart';
+import 'package:pao_customer/features/home/presentation/home_banners.dart';
 import 'package:pao_customer/features/home/presentation/home_cubit.dart';
 import 'package:pao_customer/features/home/presentation/home_parts.dart';
 import 'package:pao_customer/shared/l10n.dart';
 import 'package:pao_ui/pao_ui.dart';
 
-/// Home (C07, C35): address, search, active booking and categories.
+/// Home (C07, C35): greeting, address, search, banners, active booking and
+/// categories.
 class HomePage extends StatelessWidget {
   /// Creates the page.
   const HomePage({required this.services, super.key});
@@ -32,7 +34,7 @@ class HomePage extends StatelessWidget {
             onRetry: context.read<HomeCubit>().load,
             builder: (context, data) => RefreshIndicator(
               onRefresh: context.read<HomeCubit>().refresh,
-              child: _HomeBody(data: data),
+              child: _HomeBody(data: data, name: services.gate.profile?.name),
             ),
           ),
         ),
@@ -42,9 +44,10 @@ class HomePage extends StatelessWidget {
 }
 
 class _HomeBody extends StatelessWidget {
-  const _HomeBody({required this.data});
+  const _HomeBody({required this.data, this.name});
 
   final HomeData data;
+  final String? name;
 
   Future<void> _add(BuildContext context) async {
     final cubit = context.read<HomeCubit>();
@@ -80,9 +83,15 @@ class _HomeBody extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(PaoSpace.lg),
       children: [
+        HomeGreeting(name: name),
+        const SizedBox(height: PaoSpace.lg),
         AddressHeader(address: data.current, onTap: () => _choose(context)),
         const PaoStitchDivider(spacing: PaoSpace.sm),
         SearchBarButton(onTap: () => context.push(Routes.search)),
+        if (data.banners.isNotEmpty) ...[
+          const SizedBox(height: PaoSpace.lg),
+          HomeBanners(banners: data.banners),
+        ],
         if (active != null) ...[
           const SizedBox(height: PaoSpace.lg),
           ActiveBookingBanner(

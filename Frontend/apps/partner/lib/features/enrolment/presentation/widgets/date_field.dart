@@ -60,9 +60,7 @@ class DateField extends StatelessWidget {
         ),
         child: Text(
           text,
-          style: value == null
-              ? const TextStyle(color: PaoColors.textTertiary)
-              : null,
+          style: value == null ? TextStyle(color: context.pao.inkFaint) : null,
         ),
       ),
     );

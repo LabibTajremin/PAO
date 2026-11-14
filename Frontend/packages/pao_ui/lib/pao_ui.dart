@@ -33,3 +33,4 @@ export 'src/widgets/status_stepper.dart';
 export 'src/widgets/stepper.dart';
 export 'src/widgets/stitch.dart';
 export 'src/widgets/text_field.dart';
+export 'src/widgets/theme_mode_switch.dart';

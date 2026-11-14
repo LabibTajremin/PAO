@@ -49,7 +49,7 @@ class _Line extends StatelessWidget {
       Text(
         label,
         style: Theme.of(context).textTheme.labelMedium!
-            .copyWith(color: PaoColors.textSecondary),
+            .copyWith(color: context.pao.inkMuted),
       ),
       SelectableText(value),
     ],

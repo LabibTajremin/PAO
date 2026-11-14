@@ -538,6 +538,22 @@
   "@accountLanguage": {
     "description": "C22 row and C26 title"
   },
+  "accountAppearance": "Appearance",
+  "@accountAppearance": {
+    "description": "Appearance setting on the language page"
+  },
+  "accountAppearanceSystem": "Like the phone",
+  "@accountAppearanceSystem": {
+    "description": "Appearance setting on the language page"
+  },
+  "accountAppearanceLight": "Light",
+  "@accountAppearanceLight": {
+    "description": "Appearance setting on the language page"
+  },
+  "accountAppearanceDark": "Dark",
+  "@accountAppearanceDark": {
+    "description": "Appearance setting on the language page"
+  },
   "accountHelp": "Help & support",
   "@accountHelp": {
     "description": "C22 row and C27 title"
@@ -1439,6 +1455,27 @@
   "homeAddressTitle": "Your address",
   "@homeAddressTitle": {
     "description": "C07 address header caption"
+  },
+  "homeGreeting": "Hi, {name}",
+  "@homeGreeting": {
+    "description": "C07 greeting with the customer's first name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGreetingNoName": "Hello!",
+  "@homeGreetingNoName": {
+    "description": "C07 greeting before the customer has a name"
+  },
+  "homeGreetingAsk": "What do you need help with today?",
+  "@homeGreetingAsk": {
+    "description": "C07 line under the greeting"
+  },
+  "homeBannerOpen": "Book now",
+  "@homeBannerOpen": {
+    "description": "C07 banner action when it opens a service"
   },
   "homeNoAddress": "Set your address",
   "@homeNoAddress": {

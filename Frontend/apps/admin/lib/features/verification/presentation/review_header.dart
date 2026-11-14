@@ -33,10 +33,7 @@ class ReviewHeader extends StatelessWidget {
           ? null
           : PaoBadge(label: levelLabel(t, r.level), tone: PaoTone.accent),
       actions: [
-        Text(
-          t.verifyShortcuts,
-          style: const TextStyle(color: PaoColors.textSecondary),
-        ),
+        Text(t.verifyShortcuts, style: TextStyle(color: context.pao.inkMuted)),
         PaoButton(
           label: t.verifyNext,
           icon: Icons.skip_next,

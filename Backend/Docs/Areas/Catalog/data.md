@@ -4,6 +4,7 @@ Schema `catalog`, created by the scripts in `DB Changes/catalog/` ([database ind
 
 | Table | Created by |
 |---|---|
+| `catalog.banners` | `DB Changes/catalog/0002_banners.sql` |
 | `catalog.categories` | `DB Changes/catalog/0001_init.sql` |
 | `catalog.services` | `DB Changes/catalog/0001_init.sql` |
 | `catalog.sub_services` | `DB Changes/catalog/0001_init.sql` |
@@ -16,10 +17,11 @@ Schema `catalog`, created by the scripts in `DB Changes/catalog/` ([database ind
 
 | Repository | Role |
 |---|---|
+| `BannerRepository` | Home banners: the list in display order (all, or published only), existence, upsert and delete on the command's transaction. |
 | `CatalogRepository` | Reads: the whole tree in three queries assembled in memory (no N+1), a service with its sub-services, a sub-service with its current price, price history, trigram search, the catalog version. |
 | `CatalogWriteRepository` | Writes on the command's transaction: upserts of categories, services and sub-services (idempotent reseeding), immutable price versions, the version bump and outbox events. |
 
-Db models: `PAO.EF/Catalog/` (`CategoryRecord`, `ServiceRecord`, `SubServiceRecord`, `PriceVersionRecord`, `CatalogVersionRecord`).
+Db models: `PAO.EF/Catalog/` (`CategoryRecord`, `ServiceRecord`, `SubServiceRecord`, `PriceVersionRecord`, `CatalogVersionRecord`, `BannerRecord`).
 
 ## Cache
 

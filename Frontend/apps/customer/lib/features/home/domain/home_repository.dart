@@ -7,6 +7,7 @@ class HomeData {
   const HomeData({
     required this.addresses,
     required this.categories,
+    this.banners = const [],
     this.active,
     this.coverage,
   });
@@ -16,6 +17,9 @@ class HomeData {
 
   /// Published categories in display order.
   final List<Category> categories;
+
+  /// Published home banners in display order.
+  final List<Banner> banners;
 
   /// A booking still in progress, if any.
   final BookingSummary? active;

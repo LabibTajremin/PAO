@@ -23,7 +23,8 @@ class AppServices {
     this.places = const NoPlacesService(),
     DateTime Function()? clock,
   }) : now = clock ?? DateTime.now,
-       gate = ProfileGate(api);
+       gate = ProfileGate(api),
+       themeMode = ThemeModeController(prefs);
 
   /// The signed-in session.
   final SessionManager sessions;
@@ -39,6 +40,9 @@ class AppServices {
 
   /// Settings that survive restarts.
   final Prefs prefs;
+
+  /// Light, dark or system appearance, saved in [prefs].
+  final ThemeModeController themeMode;
 
   /// Whether the device has a network (C36).
   final ValueNotifier<bool> online;

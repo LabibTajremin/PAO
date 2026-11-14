@@ -30,10 +30,7 @@ class BookingBars extends StatelessWidget {
           children: [
             Text(t.dashBookingsPerDay, style: _title(context)),
             _Key(color: context.pao.accent.soft, label: t.dashLegendTotal),
-            _Key(
-              color: context.pao.accent.primary,
-              label: t.dashLegendCompleted,
-            ),
+            _Key(color: context.pao.action, label: t.dashLegendCompleted),
           ],
         ),
         const SizedBox(height: PaoSpace.lg),

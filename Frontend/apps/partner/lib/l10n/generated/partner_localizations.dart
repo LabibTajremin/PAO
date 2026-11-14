@@ -1712,6 +1712,30 @@ abstract class PartnerL10n {
   /// **'Language'**
   String get profLanguageTitle;
 
+  /// Appearance setting on the language page
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get profAppearance;
+
+  /// Appearance setting on the language page
+  ///
+  /// In en, this message translates to:
+  /// **'Like the phone'**
+  String get profAppearanceSystem;
+
+  /// Appearance setting on the language page
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get profAppearanceLight;
+
+  /// Appearance setting on the language page
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get profAppearanceDark;
+
   /// M34 explanation.
   ///
   /// In en, this message translates to:

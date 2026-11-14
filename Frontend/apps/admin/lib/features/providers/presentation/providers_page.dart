@@ -104,7 +104,7 @@ class _NameCell extends StatelessWidget {
           if (provider.flaggedForReview)
             Tooltip(
               message: context.t.providersFlagged,
-              child: const Icon(Icons.flag, size: 16, color: PaoColors.danger),
+              child: Icon(Icons.flag, size: 16, color: context.pao.dangerInk),
             ),
         ],
       ),

@@ -105,7 +105,7 @@ class _PricePanelState extends State<PricePanel> {
       if (_changed)
         Text(
           t.catalogPriceChanged,
-          style: const TextStyle(color: PaoColors.success),
+          style: TextStyle(color: context.pao.successInk),
         ),
       PaoButton(
         label: t.catalogSetPrice,

@@ -47,3 +47,7 @@ These rules apply to every session. Read them fully; they are short on purpose.
 - Prefer generators (the OpenAPI bundle, the OpenAPI Dart client, l10n) over hand-written
   boilerplate.
 - Do not paste long command output into your notes. Summarise failures in one line.
+
+## Working with the owner
+
+- Before starting any task, tell the user roughly how long it will take and what it covers, then start.

@@ -94,7 +94,7 @@ class _ServicesFormState extends State<_ServicesForm> {
         if (_checked && _chosen.isEmpty)
           Text(
             t.enrolServicesError,
-            style: const TextStyle(color: PaoColors.danger),
+            style: TextStyle(color: context.pao.dangerInk),
           ),
         const SizedBox(height: PaoSpace.xl),
         Text(t.enrolExperience),

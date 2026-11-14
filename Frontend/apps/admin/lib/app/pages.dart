@@ -4,6 +4,7 @@ import 'package:pao_admin/app/routes.dart';
 import 'package:pao_admin/app/services.dart';
 import 'package:pao_admin/features/auth/presentation/login_page.dart';
 import 'package:pao_admin/features/auth/presentation/password_page.dart';
+import 'package:pao_admin/features/banners/presentation/banners_page.dart';
 import 'package:pao_admin/features/billing/data/api_billing_repository.dart';
 import 'package:pao_admin/features/billing/domain/billing_repository.dart';
 import 'package:pao_admin/features/billing/presentation/ledger_page.dart';
@@ -49,6 +50,7 @@ List<RouteBase> entryRoutes(AppServices s) => [
 List<RouteBase> consoleRoutes(AppServices s) => [
   _page(Routes.dashboard, (_) => DashboardPage(services: s)),
   _page(Routes.catalog, (_) => CatalogPage(services: s)),
+  _page(Routes.banners, (_) => BannersPage(services: s)),
   _page(
     Routes.service,
     (state) => ServiceEditorPage(

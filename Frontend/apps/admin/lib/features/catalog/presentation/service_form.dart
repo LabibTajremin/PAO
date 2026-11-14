@@ -110,7 +110,7 @@ class _ServiceFormState extends State<ServiceForm> {
     if (_failure != null)
       Text(
         context.failureText(_failure)!,
-        style: const TextStyle(color: PaoColors.danger),
+        style: TextStyle(color: context.pao.dangerInk),
       ),
     Align(
       alignment: Alignment.centerRight,

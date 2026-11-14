@@ -405,6 +405,18 @@ class CustomerL10nEn extends CustomerL10n {
   String get accountLanguage => 'Language';
 
   @override
+  String get accountAppearance => 'Appearance';
+
+  @override
+  String get accountAppearanceSystem => 'Like the phone';
+
+  @override
+  String get accountAppearanceLight => 'Light';
+
+  @override
+  String get accountAppearanceDark => 'Dark';
+
+  @override
   String get accountHelp => 'Help & support';
 
   @override
@@ -1071,6 +1083,20 @@ class CustomerL10nEn extends CustomerL10n {
 
   @override
   String get homeAddressTitle => 'Your address';
+
+  @override
+  String homeGreeting(String name) {
+    return 'Hi, $name';
+  }
+
+  @override
+  String get homeGreetingNoName => 'Hello!';
+
+  @override
+  String get homeGreetingAsk => 'What do you need help with today?';
+
+  @override
+  String get homeBannerOpen => 'Book now';
 
   @override
   String get homeNoAddress => 'Set your address';

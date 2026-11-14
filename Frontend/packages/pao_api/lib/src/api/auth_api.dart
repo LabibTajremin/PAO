@@ -415,7 +415,7 @@ class AuthApi {
   }
 
   /// Send a 6-digit sign-in code by SMS
-  ///
+  /// Rate-limited per phone and per client IP (429 RATE_LIMITED with Retry-After). A repeat inside the one-minute resend window while the code just sent is still live answers 202 with the remaining seconds and sends nothing, so a client that timed out waiting for a waking server reaches that code.
   ///
   /// Parameters:
   /// * [otpRequest]

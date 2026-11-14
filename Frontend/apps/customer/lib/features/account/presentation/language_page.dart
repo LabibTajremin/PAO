@@ -76,8 +76,23 @@ class _LanguagePageState extends State<LanguagePage> {
                     context.t.accountLanguageNotSynced(
                       context.failureText(failure)!,
                     ),
-                    style: const TextStyle(color: PaoColors.danger),
+                    style: TextStyle(color: context.pao.dangerInk),
                   ),
+          ),
+          const SizedBox(height: PaoSpace.xxl),
+          Text(
+            context.t.accountAppearance,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: PaoSpace.md),
+          PaoThemeModeSwitch(
+            mode: _services.themeMode,
+            labels: {
+              ThemeMode.system: context.t.accountAppearanceSystem,
+              ThemeMode.light: context.t.accountAppearanceLight,
+              ThemeMode.dark: context.t.accountAppearanceDark,
+            },
+            onChanged: (mode) => unawaited(_services.themeMode.select(mode)),
           ),
         ],
       ),

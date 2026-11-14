@@ -86,6 +86,8 @@ paths:
     $ref: ./paths/customer-profile.yaml#/serviceArea
   /v1/customer/catalog:
     $ref: ./paths/customer-catalog.yaml#/catalog
+  /v1/customer/banners:
+    $ref: ./paths/customer-catalog.yaml#/banners
   /v1/customer/catalog/search:
     $ref: ./paths/customer-catalog.yaml#/search
   /v1/customer/services/{serviceId}:
@@ -230,6 +232,10 @@ paths:
     $ref: ./paths/admin-catalog.yaml#/subservicesUpdate
   /v1/admin/catalog/sub-services/{subServiceId}/prices:
     $ref: ./paths/admin-catalog.yaml#/prices
+  /v1/admin/catalog/banners:
+    $ref: ./paths/admin-catalog.yaml#/banners
+  /v1/admin/catalog/banners/{bannerId}:
+    $ref: ./paths/admin-catalog.yaml#/banner
   /v1/admin/verifications:
     $ref: ./paths/admin-verification.yaml#/queue
   /v1/admin/verifications/{providerId}:

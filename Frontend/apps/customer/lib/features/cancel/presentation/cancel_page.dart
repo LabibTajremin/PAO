@@ -71,7 +71,7 @@ class _CancelPageState extends State<CancelPage> {
       children: [
         Text(t.cancelQuestion, style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: PaoSpace.xs),
-        Text(t.cancelFree, style: const TextStyle(color: PaoColors.success)),
+        Text(t.cancelFree, style: TextStyle(color: context.pao.successInk)),
         const SizedBox(height: PaoSpace.md),
         ..._reasons(context, s),
         const SizedBox(height: PaoSpace.md),
@@ -84,7 +84,7 @@ class _CancelPageState extends State<CancelPage> {
         if (s.failure != null)
           Text(
             context.failureText(s.failure)!,
-            style: const TextStyle(color: PaoColors.danger),
+            style: TextStyle(color: context.pao.dangerInk),
           ),
         const SizedBox(height: PaoSpace.xl),
         PaoButton(

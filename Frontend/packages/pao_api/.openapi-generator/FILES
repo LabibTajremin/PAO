@@ -49,6 +49,9 @@ lib/src/model/app_kind.dart
 lib/src/model/audit_entry.dart
 lib/src/model/audit_list.dart
 lib/src/model/badge.dart
+lib/src/model/banner.dart
+lib/src/model/banner_input.dart
+lib/src/model/banner_list.dart
 lib/src/model/booking.dart
 lib/src/model/booking_address.dart
 lib/src/model/booking_create.dart

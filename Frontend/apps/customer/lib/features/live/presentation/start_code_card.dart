@@ -67,7 +67,7 @@ class _StartCodeCardState extends State<StartCodeCard> {
           Text(
             t.liveCodeHint,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: PaoColors.textSecondary),
+            style: TextStyle(color: context.pao.inkMuted),
           ),
         ],
       ),

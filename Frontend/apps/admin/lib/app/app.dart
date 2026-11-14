@@ -49,15 +49,20 @@ class _PaoAppState extends State<PaoApp> {
   }
 
   @override
-  Widget build(BuildContext context) => ValueListenableBuilder<Locale>(
-    valueListenable: widget.services.locale,
-    builder: (_, locale, _) => MaterialApp.router(
-      title: 'PAO Admin',
-      theme: PaoTheme.light(),
-      locale: locale,
-      supportedLocales: PaoLocales.all,
-      localizationsDelegates: adminDelegates,
-      routerConfig: _router,
-    ),
+  Widget build(BuildContext context) => ListenableBuilder(
+    listenable: widget.services.locale,
+    builder: (_, _) {
+      final locale = widget.services.locale.value;
+      final bangla = locale.languageCode == 'bn';
+      return MaterialApp.router(
+        title: 'PAO Admin',
+        theme: PaoTheme.light(bangla: bangla),
+        darkTheme: PaoTheme.dark(bangla: bangla),
+        locale: locale,
+        supportedLocales: PaoLocales.all,
+        localizationsDelegates: adminDelegates,
+        routerConfig: _router,
+      );
+    },
   );
 }

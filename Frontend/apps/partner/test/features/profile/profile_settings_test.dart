@@ -145,6 +145,9 @@ void main() {
     await h.settle(tester);
     expect(h.services.prefs.string(Prefs.languageKey), 'en');
     expect(find.textContaining('Saved on this phone'), findsNothing);
+    await tester.tap(find.text('Dark'));
+    await h.settle(tester);
+    expect(h.services.themeMode.value, ThemeMode.dark);
     await h.go(tester, Routes.profile);
     h.services.locale.select(const Locale('bn'));
     await h.settle(tester);

@@ -65,7 +65,7 @@ class LiveHeadline extends StatelessWidget {
         Text(title, style: Theme.of(context).textTheme.titleLarge),
         if (at != null) Text(t.liveScheduledFor(context.when(at))),
         const SizedBox(height: PaoSpace.xs),
-        Text(hint, style: const TextStyle(color: PaoColors.textSecondary)),
+        Text(hint, style: TextStyle(color: context.pao.inkMuted)),
       ],
     );
   }

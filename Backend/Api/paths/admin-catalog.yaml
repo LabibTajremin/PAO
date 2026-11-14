@@ -244,3 +244,95 @@ prices:
         $ref: ../components/responses.yaml#/NotFound
       '422':
         $ref: ../components/responses.yaml#/ValidationFailed
+banners:
+  get:
+    operationId: listBanners
+    tags:
+    - Admin catalog
+    summary: Every home banner, published or not, in display order
+    x-permission: catalog:manage
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/BannerList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+  post:
+    operationId: createBanner
+    tags:
+    - Admin catalog
+    summary: Add a home banner
+    x-permission: catalog:manage
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/BannerInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/Banner
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+banner:
+  put:
+    operationId: updateBanner
+    tags:
+    - Admin catalog
+    summary: Update a home banner (publish/unpublish with `published`)
+    x-permission: catalog:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/BannerId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/BannerInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/Banner
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+  delete:
+    operationId: deleteBanner
+    tags:
+    - Admin catalog
+    summary: Remove a home banner
+    x-permission: catalog:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/BannerId
+    responses:
+      '204':
+        description: No content
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound

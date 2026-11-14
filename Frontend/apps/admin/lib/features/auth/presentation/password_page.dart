@@ -59,7 +59,7 @@ class _PasswordPageState extends State<PasswordPage> {
             const SizedBox(height: PaoSpace.lg),
           ],
           if (_error(context, s) case final error?)
-            Text(error, style: const TextStyle(color: PaoColors.danger)),
+            Text(error, style: TextStyle(color: context.pao.dangerInk)),
           const SizedBox(height: PaoSpace.lg),
           PaoButton(
             label: context.common.actionSave,

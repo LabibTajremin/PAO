@@ -66,7 +66,7 @@ class ProfileMenu extends StatelessWidget {
               onTap: () => context.push(Routes.profilePage(page)),
             ),
           PaoListRow(
-            leading: const Icon(Icons.logout, color: PaoColors.danger),
+            leading: Icon(Icons.logout, color: context.pao.dangerInk),
             title: t.profLogOut,
             onTap: () => _logOut(context),
           ),

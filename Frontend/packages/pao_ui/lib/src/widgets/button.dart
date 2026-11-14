@@ -62,7 +62,7 @@ class PaoButton extends StatelessWidget {
       BorderSide(color: c.ink.withValues(alpha: 0.22)),
     ),
     PaoButtonVariant.ghost => (Colors.transparent, c.action, null),
-    PaoButtonVariant.danger => (PaoColors.danger, PaoColors.onPrimary, null),
+    PaoButtonVariant.danger => (c.dangerInk, PaoColors.onPrimary, null),
   };
 
   Widget _content(Color fg) => loading

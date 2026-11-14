@@ -84,7 +84,7 @@ class _SlotStatus extends StatelessWidget {
           Expanded(
             child: Text(
               '${t.enrolUploadFailed} ${context.failureText(failure)}',
-              style: const TextStyle(color: PaoColors.danger),
+              style: TextStyle(color: context.pao.dangerInk),
             ),
           ),
           if (value.bytes != null)

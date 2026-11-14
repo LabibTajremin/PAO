@@ -836,6 +836,30 @@ abstract class CustomerL10n {
   /// **'Language'**
   String get accountLanguage;
 
+  /// Appearance setting on the language page
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get accountAppearance;
+
+  /// Appearance setting on the language page
+  ///
+  /// In en, this message translates to:
+  /// **'Like the phone'**
+  String get accountAppearanceSystem;
+
+  /// Appearance setting on the language page
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get accountAppearanceLight;
+
+  /// Appearance setting on the language page
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get accountAppearanceDark;
+
   /// C22 row and C27 title
   ///
   /// In en, this message translates to:
@@ -2029,6 +2053,30 @@ abstract class CustomerL10n {
   /// In en, this message translates to:
   /// **'Your address'**
   String get homeAddressTitle;
+
+  /// C07 greeting with the customer's first name
+  ///
+  /// In en, this message translates to:
+  /// **'Hi, {name}'**
+  String homeGreeting(String name);
+
+  /// C07 greeting before the customer has a name
+  ///
+  /// In en, this message translates to:
+  /// **'Hello!'**
+  String get homeGreetingNoName;
+
+  /// C07 line under the greeting
+  ///
+  /// In en, this message translates to:
+  /// **'What do you need help with today?'**
+  String get homeGreetingAsk;
+
+  /// C07 banner action when it opens a service
+  ///
+  /// In en, this message translates to:
+  /// **'Book now'**
+  String get homeBannerOpen;
 
   /// C07 header without an address
   ///

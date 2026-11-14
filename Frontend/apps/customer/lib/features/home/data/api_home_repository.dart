@@ -23,11 +23,13 @@ class ApiHomeRepository implements HomeRepository {
   ApiHomeRepository(Dio api)
     : _addresses = ApiAddressRepository(api),
       _catalog = ApiCatalogRepository(api),
-      _bookings = CustomerBookingsApi(api);
+      _bookings = CustomerBookingsApi(api),
+      _customer = CustomerApi(api);
 
   final AddressRepository _addresses;
   final CatalogRepository _catalog;
   final CustomerBookingsApi _bookings;
+  final CustomerApi _customer;
 
   @override
   Future<HomeData> load() async {
@@ -35,6 +37,7 @@ class ApiHomeRepository implements HomeRepository {
       _addresses.list(),
       _catalog.categories(),
       _quietly(_active),
+      _quietly(_banners),
     ]);
     final addresses = parts[0]! as List<Address>;
     final current = defaultOf(addresses);
@@ -42,6 +45,7 @@ class ApiHomeRepository implements HomeRepository {
       addresses: addresses,
       categories: parts[1]! as List<Category>,
       active: parts[2] as BookingSummary?,
+      banners: parts[3] as List<Banner>? ?? const [],
       coverage: current == null
           ? null
           : await _quietly(
@@ -60,8 +64,11 @@ class ApiHomeRepository implements HomeRepository {
     (await _bookings.listCustomerBookings(tab: 'upcoming')).data!.items,
   );
 
-  /// The banner and the area check only add to home: when they fail the
-  /// customer still sees the catalog.
+  Future<List<Banner>> _banners() async =>
+      (await _customer.getBanners()).data!.banners;
+
+  /// Banners, the active booking and the area check only add to home: when
+  /// they fail the customer still sees the catalog.
   Future<T?> _quietly<T>(Future<T?> Function() read) async {
     try {
       return await read();

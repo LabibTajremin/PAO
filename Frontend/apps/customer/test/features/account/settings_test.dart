@@ -35,6 +35,13 @@ void main() {
     await h.settle(tester);
     expect(h.services.prefs.string(Prefs.languageKey), 'en');
     expect(find.textContaining('Saved on this phone'), findsNothing);
+    await tester.tap(find.text('Dark'));
+    await h.settle(tester);
+    expect(h.services.themeMode.value, ThemeMode.dark);
+    expect(
+      Theme.of(tester.element(find.text('Dark'))).brightness,
+      Brightness.dark,
+    );
     h.services.gate.clear();
     await tester.tap(find.text('বাংলা'));
     await h.settle(tester);

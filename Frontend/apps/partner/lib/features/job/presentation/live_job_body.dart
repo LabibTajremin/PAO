@@ -82,7 +82,7 @@ class LiveJobBody extends StatelessWidget {
         if (state.failure != null)
           Text(
             context.failureText(state.failure)!,
-            style: const TextStyle(color: PaoColors.danger),
+            style: TextStyle(color: context.pao.dangerInk),
           ),
         const SizedBox(height: PaoSpace.lg),
         ..._actions(context, b),

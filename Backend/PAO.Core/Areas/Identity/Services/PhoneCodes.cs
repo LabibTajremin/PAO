@@ -63,6 +63,20 @@ public sealed class PhoneCodes(IIdentityRepository repository, ICodeStore codes,
         return phone;
     }
 
+    /// <summary>Reports whether `rawPhone` holds an unexpired code for `purpose`; lockout deletes a code, so it can still be used.</summary>
+    public async Task<bool> HasLiveCode(string rawPhone, string purpose)
+    {
+        try
+        {
+            await codes.Get(purpose, IdentityRules.PhoneOrFail(rawPhone));
+            return true;
+        }
+        catch (DomainException error) when (error.Reason == IdentityReasons.CodeExpired)
+        {
+            return false;
+        }
+    }
+
     /// <summary>Verifies a code, consuming it on success or lockout.</summary>
     public async Task Check(string purpose, string phone, string code)
     {

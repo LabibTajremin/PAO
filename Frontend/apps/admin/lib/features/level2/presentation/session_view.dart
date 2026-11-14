@@ -141,7 +141,9 @@ class _Outcome extends StatelessWidget {
             children: [
               Icon(
                 c.passed ? Icons.check_circle : Icons.cancel,
-                color: c.passed ? PaoColors.success : PaoColors.danger,
+                color: c.passed
+                    ? context.pao.successInk
+                    : context.pao.dangerInk,
               ),
               Expanded(child: Text(c.item)),
             ],

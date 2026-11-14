@@ -9,6 +9,7 @@ export 'src/device/photo_source.dart';
 export 'src/device/prefs.dart';
 export 'src/device/push.dart';
 export 'src/device/secure_screen.dart';
+export 'src/device/theme_mode.dart';
 export 'src/env.dart';
 export 'src/errors/error_reporter.dart';
 export 'src/errors/error_reporting.dart';
