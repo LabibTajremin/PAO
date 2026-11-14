@@ -4,8 +4,10 @@ namespace PAO.Infrastructure.Http.Edge;
 
 /// <summary>
 /// Finds the client address. X-Forwarded-For is trusted only when the connection comes from
-/// a private address (our load balancer), and then only its rightmost entry, the one the
-/// load balancer appended, so clients cannot spoof their address for rate limits.
+/// a private address (our load balancer), and then read from the right, skipping private
+/// entries: those are our own proxy hops (Render appends one, so the rightmost entry was the
+/// same internal address for every user and the per-IP limits were shared app-wide). The
+/// first public entry is the one our edge appended, so clients still cannot spoof it.
 /// </summary>
 public static class ClientIp
 {
@@ -34,8 +36,20 @@ public static class ClientIp
         {
             return peer;
         }
-        var last = forwardedFor[^1].Split(',')[^1].Trim();
-        return IPAddress.TryParse(last, out var address) ? Normalize(address) : peer;
+        var hops = forwardedFor.SelectMany(h => h.Split(',')).Select(h => h.Trim()).Reverse();
+        foreach (var hop in hops)
+        {
+            if (!IPAddress.TryParse(hop, out var address))
+            {
+                return peer;
+            }
+            var ip = Normalize(address);
+            if (!IsPrivate(ip))
+            {
+                return ip;
+            }
+        }
+        return peer;
     }
 
     private static bool InNetwork(IPAddress address, IPAddress network, int prefix)

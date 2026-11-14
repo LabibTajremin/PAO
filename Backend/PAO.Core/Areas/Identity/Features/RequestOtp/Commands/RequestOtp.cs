@@ -22,7 +22,10 @@ public sealed class RequestOtpValidator : AbstractValidator<RequestOtpCommand>
     }
 }
 
-/// <summary>Handles <see cref="RequestOtpCommand"/>; a throttled send answers 429 RATE_LIMITED with Retry-After.</summary>
+/// <summary>
+/// Handles <see cref="RequestOtpCommand"/>; a throttled send answers 429 RATE_LIMITED with
+/// Retry-After, except inside the resend minute while the code just sent is still live.
+/// </summary>
 public sealed class RequestOtpHandler(PhoneCodes codes) : IRequestHandler<RequestOtpCommand, OtpRequestAcceptedView>
 {
     /// <inheritdoc />
@@ -34,7 +37,14 @@ public sealed class RequestOtpHandler(PhoneCodes codes) : IRequestHandler<Reques
         }
         catch (DomainException error) when (error.InnerException is CodeRateLimitedException limited)
         {
-            throw ApiErrors.RateLimited("RATE_LIMITED", limited.RetryAfter);
+            // A sleeping server can outlast the app's timeout: the first request still sends,
+            // and the user's retry must lead to that code, not a 429 dead end. Nothing is resent.
+            if (limited.RetryAfter > IdentityRules.ResendAfter || !await codes.HasLiveCode(request.Phone, request.Purpose))
+            {
+                throw ApiErrors.RateLimited("RATE_LIMITED", limited.RetryAfter);
+            }
+            var wait = (int)Math.Ceiling(limited.RetryAfter.TotalSeconds);
+            return new OtpRequestAcceptedView((int)(IdentityRules.CodeTtl - IdentityRules.ResendAfter).TotalSeconds + wait, wait);
         }
         return new OtpRequestAcceptedView((int)IdentityRules.CodeTtl.TotalSeconds, (int)IdentityRules.ResendAfter.TotalSeconds);
     }

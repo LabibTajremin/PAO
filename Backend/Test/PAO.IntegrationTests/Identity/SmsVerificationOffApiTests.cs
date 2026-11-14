@@ -24,12 +24,16 @@ public sealed class SmsVerificationOffApiTests(MigratedDatabase database) : ICla
         var sent = await api.Do(HttpMethod.Post, "/v1/auth/otp/request", new { phone });
         Assert.Equal(HttpStatusCode.Accepted, sent.Status);
         Assert.Null(api.App.Services.GetRequiredService<ISmsCapture>().Last(PhoneNumber.Normalize(phone)!));
+        // A retry after the app timed out on a waking server leads to the same fixed code.
         var again = await api.Do(HttpMethod.Post, "/v1/auth/otp/request", new { phone });
-        Assert.Equal((HttpStatusCode.TooManyRequests, "RATE_LIMITED"), (again.Status, again.Code));
+        Assert.Equal(HttpStatusCode.Accepted, again.Status);
         var wrong = await Verify("654321");
         Assert.Equal((HttpStatusCode.Unauthorized, "OTP_INVALID"), (wrong.Status, wrong.Code));
         var verified = await Verify("123456");
         Assert.Equal(HttpStatusCode.OK, verified.Status);
         Assert.Equal("provider", verified.Body.GetProperty("account").GetProperty("roles")[0].GetString());
+        // The code is spent, so a request inside the minute is throttled again.
+        var throttled = await api.Do(HttpMethod.Post, "/v1/auth/otp/request", new { phone });
+        Assert.Equal((HttpStatusCode.TooManyRequests, "RATE_LIMITED"), (throttled.Status, throttled.Code));
     }
 }

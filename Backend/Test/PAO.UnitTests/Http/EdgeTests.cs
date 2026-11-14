@@ -123,6 +123,10 @@ public sealed class EdgeMiddlewareTests
         Assert.Equal("8.8.8.8", ClientIp.Resolve("8.8.8.8", ["1.1.1.1"]));
         Assert.Equal("10.0.0.5", ClientIp.Resolve("10.0.0.5", []));
         Assert.Equal("10.0.0.5", ClientIp.Resolve("10.0.0.5", ["garbage"]));
+        // Render appends its own internal hop; skipping private entries finds the caller.
+        Assert.Equal("203.0.113.9", ClientIp.Resolve("10.0.0.5", ["203.0.113.9, 10.24.120.78"]));
+        Assert.Equal("203.0.113.9", ClientIp.Resolve("10.0.0.5", ["6.6.6.6, 203.0.113.9", "10.24.120.78"]));
+        Assert.Equal("10.0.0.5", ClientIp.Resolve("10.0.0.5", ["192.168.1.2, 10.24.120.78"]));
         Assert.Equal(string.Empty, ClientIp.Normalize(null));
     }
 

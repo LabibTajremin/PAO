@@ -49,10 +49,13 @@ public sealed class AuthApiTests(MigratedDatabase database) : IClassFixture<Migr
         var first = await api.Do(HttpMethod.Post, "/v1/auth/otp/request", new { phone });
         Assert.Equal(300, first.Body.GetProperty("expiresInSeconds").GetInt32());
         Assert.Equal(60, first.Body.GetProperty("resendAfterSeconds").GetInt32());
-        var again = await api.Do(HttpMethod.Post, "/v1/auth/otp/request", new { phone });
-        Assert.Equal((HttpStatusCode.TooManyRequests, "RATE_LIMITED"), (again.Status, again.Code));
-        Assert.NotNull(again.Response.Headers.RetryAfter);
         var code = api.LastCode(phone);
+        // Inside the resend minute a repeat leads back to the live code and sends nothing.
+        var again = await api.Do(HttpMethod.Post, "/v1/auth/otp/request", new { phone });
+        Assert.Equal(HttpStatusCode.Accepted, again.Status);
+        Assert.InRange(again.Body.GetProperty("resendAfterSeconds").GetInt32(), 1, 60);
+        Assert.InRange(again.Body.GetProperty("expiresInSeconds").GetInt32(), 241, 300);
+        Assert.Equal(code, api.LastCode(phone));
         var wrong = code == "000000" ? "111111" : "000000";
         Task<Answer> Verify(string p, string c) => api.Do(HttpMethod.Post, "/v1/auth/otp/verify", new { phone = p, code = c, app = "customer" });
         var invalid = await Verify(phone, wrong);
@@ -66,6 +69,10 @@ public sealed class AuthApiTests(MigratedDatabase database) : IClassFixture<Migr
         Assert.Equal((HttpStatusCode.TooManyRequests, "OTP_LOCKED"), (locked.Status, locked.Code));
         Assert.Equal("300", locked.Response.Headers.GetValues("Retry-After").Single());
         Assert.Equal("OTP_EXPIRED", (await Verify(phone, code)).Code);
+        // The locked code is gone, so the resend minute refuses again.
+        var throttled = await api.Do(HttpMethod.Post, "/v1/auth/otp/request", new { phone });
+        Assert.Equal((HttpStatusCode.TooManyRequests, "RATE_LIMITED"), (throttled.Status, throttled.Code));
+        Assert.NotNull(throttled.Response.Headers.RetryAfter);
     }
 
     [Fact]
