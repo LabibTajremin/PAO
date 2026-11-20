@@ -19,10 +19,14 @@ installed apps show the new icon on every platform.
 4. **Receipts:** customer receipt (C64, PDF share) and partner `receipt_sheet`: logo tile in the
    header, `receipt/watermark.svg` centred behind the line items, tagline in the footer (from
    P23 once present; fixed text until then).
-5. **Tests:** widget tests for `PaoLogo` in both brightnesses; a PDF test asserting the
+5. **Two apps, two names** (§4 "Telling the two apps apart"): keep the launcher names, rename
+   the APK/AAB outputs to `pao-customer-…` / `pao-partner-…` with flavour and version (Gradle
+   output naming and `tools/build-release.sh`), rename the CI artifacts, give the partner icon its
+   badge, and document both in `docs/guides/release.md`.
+6. **Tests:** widget tests for `PaoLogo` in both brightnesses; a PDF test asserting the
    watermark layer exists.
 
 ## Definition of done
 
-Installed builds on Android (light, dark, themed icons) and iOS (light, dark, tinted) show
+Release files are named `pao-customer-…` and `pao-partner-…`. Installed builds on Android (light, dark, themed icons) and iOS (light, dark, tinted) show
 the new icon. Screenshots in `docs/guides/brand.md`. `./pao ci` green.

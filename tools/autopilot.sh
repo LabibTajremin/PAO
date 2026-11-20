@@ -2,7 +2,7 @@
 # Runs the automatic agentic run until every phase is done, sleeping through usage limits.
 # Start it in tmux on a dedicated machine after the preflight is done:  tools/autopilot.sh
 set -uo pipefail
-cd "$(git rev-parse --show-toplevel)"
+cd "$(git rev-parse --show-toplevel)" || exit 1
 STATE=docs/build/PROGRESS.md
 LIMIT_WAIT=${LIMIT_WAIT:-900}; MAX_RUNS=${MAX_RUNS:-300}
 mkdir -p .autopilot; LOG=.autopilot/autopilot.log
