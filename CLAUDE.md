@@ -14,6 +14,8 @@ These rules apply to every session. Read them fully; they are short on purpose.
 | Test strategy, coverage gates, `pao` CLI | `docs/build/03-testing.md` |
 | Decisions on PRD open questions | `docs/build/04-decisions.md` |
 | Screen list mapped to Figma | `docs/build/05-screens.md` |
+| Update round 2026-11: owner requirements and decisions (P18–P28) | `docs/build/06-update-2026-11.md` |
+| Brand assets, illustrations, icons, owner references | `design/` |
 | The phase you are working on | `docs/build/phases/PNN-*.md` |
 | Product requirements (plain text) | `docs/prd/PAO-PRD.txt` |
 | Backend rules and layout (.NET, read before touching `Backend/`) | `Backend/PAO.AI/README.md` |

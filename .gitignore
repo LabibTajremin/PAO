@@ -27,3 +27,6 @@ pubspec_overrides.yaml
 
 # Developer settings copied from Backend/appsettings.Local.example.json.
 Backend/appsettings.Local.json
+
+# Local state of tools/autopilot.sh
+.autopilot/

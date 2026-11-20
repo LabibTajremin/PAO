@@ -25,36 +25,36 @@ it first and continues from **Current task**.
 | P15 Interim backend | done | — | ADR-0032 |
 | P16 Hardening & handover | done | — | ADR-0023, ADR-0032 |
 | P17 .NET backend, COD & merchant dues | done | — | ADR-0034, ADR-0035 |
+| P18 Notifications pop up | todo | — | update round 2026-11 |
+| P19 Repo layout & docs | todo | — | update round 2026-11 |
+| P20 Palette, type & theme | todo | — | update round 2026-11 |
+| P21 Logo & app icons | todo | — | update round 2026-11 |
+| P22 Service icons | todo | — | update round 2026-11 |
+| P23 Artwork & tagline | todo | — | update round 2026-11 |
+| P24 Illustrations, welcome & sign-in | todo | — | update round 2026-11 |
+| P25 Scheduled delivery | todo | — | update round 2026-11 |
+| P26 Free Dhaka map | todo | — | update round 2026-11 |
+| P27 Motion | todo | — | update round 2026-11 |
+| P28 Design polish & handover | todo | — | update round 2026-11 |
 
 Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (merged).
 
 ## Current task
 
-P17 is complete (tasks 1–8); mark it `done` once the branch is merged. Task 8 (cut-over):
-the API journeys are C# (`Backend/Test/PAO.E2ETests/Journeys`, 13 tests), the load test
-is C# (`Backend/Test/PAO.LoadTests`), the earlier backends and their tooling are deleted, and the
-repository follows ADR-0034 "Repository layout after cut-over" (see "Cut-over as done"
-there and E15 in `04-decisions.md`). There is no next phase in the build kit.
+Update round 2026-11 — start P18, task 1.
 
-Pre-launch items (ADR-0036, E16): every code item of the former deployment "Gaps" is
-done — `migrate create-admin`, CORS origin list, `FCM_CREDENTIALS_JSON`,
-`S3_ENSURE_ENCRYPTION`, billing setting bounds, `MERCHANT_DUE_LIMIT` details, CI pins/
-Sentry/per-platform FCM App IDs, data-key rotation (`DATA_ENCRYPTION_PREVIOUS_KEYS`,
-`migrate reencrypt`), the cross-account sweep (`CrossAccountTests`), the idempotent
-replay race, the manual `backend-image` workflow, the SMS verification switch
-(`SMS_VERIFICATION_ENABLED`, ADR-0036 §13), the single-file database scripts
-(`Backend/DB Changes/bundle`, `Backend/Docs/Database/schema.md`) and background jobs in the
-API (`JOBS_IN_API`, ADR-0036 §14). What remains is owner action:
-`docs/guides/deployment.md` "Gaps to close before launch" and `docs/guides/launch-values.md`.
-Run the full `./pao ci` in the background and one heavy job at a time: two parallel .NET
-builds overload the 4-CPU container. .NET 10 SDK installs to `/root/.dotnet`.
+Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
+`automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
 
-Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
-build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
-with `./pao ci` green and a `chore(progress): complete <id>` commit is pushed.
+Branch and PR (owner's rule for this round): every phase P18–P28 is built on the one branch
+`claude/update-2026-11` and goes into `main` through one pull request, which the owner merges
+once all phases are done. Every push keeps all PR checks green, and the branch is kept merged
+with `main` so `main` stays green after the merge. Preflight is not done yet.
 
 ## Environment notes
 
+- Run the full `./pao ci` in the background and one heavy job at a time: two parallel .NET
+  builds overload the 4-CPU container. .NET 10 SDK installs to `/root/.dotnet`.
 - .NET 10 SDK (`Backend/global.json`), Flutter 3.47.7; Node.js only for `npx` (Redocly bundle).
 - Local S3 is RustFS (ADR-0007); MinIO images are no longer published.
 - Docker Hub rate-limits pulls here; `mirror.gcr.io/library/<image>` works as a mirror.
