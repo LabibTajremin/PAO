@@ -22,8 +22,10 @@ class PushRegistrar {
   final _subs = <StreamSubscription<Object?>>[];
   bool _registered = false;
 
-  /// Starts listening to the session, token refreshes and taps.
+  /// Prepares push and starts listening to the session, token refreshes and
+  /// taps.
   void start() {
+    unawaited(_push.start());
     _sessions.addListener(_onSession);
     _subs
       ..add(_push.tokenRefresh.listen(_register))

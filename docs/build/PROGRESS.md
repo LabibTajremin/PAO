@@ -41,9 +41,10 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P18. Done: task 2 (FCM payload: channel per type, high priority,
-APNs alert/priority 10, interruption level; `PushChannels`). Next: tasks 1 and 3 (Flutter
-channels, foreground display, permission sheet), then 4–5.
+Update round 2026-11 — P18. Done: task 2 (FCM payload), tasks 1 and 3 in code (channels,
+default channel in both manifests, foreground display on Android, iOS presentation
+options, local-notification taps routed). Next: the permission reason sheet (task 1),
+then tasks 4–5.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -85,6 +86,11 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-20 P18.1/3 `LocalNotifier` (flutter_local_notifications) creates the three
+  high-importance channels and shows foreground messages on Android; iOS foreground
+  banners via presentation options; local and launch taps join `PushService.opened`;
+  core library desugaring enabled in both apps.
 
 - 2026-11-20 P18.2 FCM payload asks for heads-up: `PushChannels` maps every template to
   `pao_bookings` / `pao_account` / `pao_general`; Android channel_id + PRIORITY_HIGH, APNs
