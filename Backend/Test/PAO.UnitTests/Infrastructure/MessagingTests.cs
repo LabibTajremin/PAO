@@ -216,7 +216,7 @@ public sealed class SmsAndPushTests
         clock.Advance(TimeSpan.FromMinutes(2));
         Assert.Contains("fcm: 500 fcm says no", (await Assert.ThrowsAsync<HttpRequestException>(() => fcm.Push("device", message, CancellationToken.None))).Message, StringComparison.Ordinal);
         Assert.Equal(2, tokenCalls);
-        Assert.Contains("\"android\":{\"priority\":\"high\"}", stub.Bodies[1], StringComparison.Ordinal);
+        Assert.Contains("\"channel_id\":\"pao_general\"", stub.Bodies[1], StringComparison.Ordinal);
     }
 
     [Fact]

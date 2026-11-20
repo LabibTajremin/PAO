@@ -25,7 +25,7 @@ it first and continues from **Current task**.
 | P15 Interim backend | done | — | ADR-0032 |
 | P16 Hardening & handover | done | — | ADR-0023, ADR-0032 |
 | P17 .NET backend, COD & merchant dues | done | — | ADR-0034, ADR-0035 |
-| P18 Notifications pop up | todo | — | update round 2026-11 |
+| P18 Notifications pop up | in_progress | — | update round 2026-11 |
 | P19 Repo layout & docs | todo | — | update round 2026-11 |
 | P20 Palette, type & theme | todo | — | update round 2026-11 |
 | P21 Logo & app icons | todo | — | update round 2026-11 |
@@ -41,7 +41,9 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — start P18, task 1.
+Update round 2026-11 — P18. Done: task 2 (FCM payload: channel per type, high priority,
+APNs alert/priority 10, interruption level; `PushChannels`). Next: tasks 1 and 3 (Flutter
+channels, foreground display, permission sheet), then 4–5.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -83,6 +85,10 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-20 P18.2 FCM payload asks for heads-up: `PushChannels` maps every template to
+  `pao_bookings` / `pao_account` / `pao_general`; Android channel_id + PRIORITY_HIGH, APNs
+  priority 10, alert push type, time-sensitive for booking events.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
