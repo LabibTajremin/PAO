@@ -24,9 +24,17 @@ def mirrorFirst = { RepositoryHandler repos ->
     }
 }
 beforeSettings { settings ->
-    mirrorFirst(settings.pluginManagement.repositories)
+    def plugins = settings.pluginManagement.repositories
+    mirrorFirst(plugins)
     mirrorFirst(settings.buildscript.repositories)
     useMirror(settings.dependencyResolutionManagement.repositories)
+    // A build that names no plugin repository gets the portal implicitly; the mirror above
+    // would replace that default, so the portal is added back behind it.
+    settings.gradle.settingsEvaluated {
+        if (plugins.size() == 1) {
+            plugins.gradlePluginPortal()
+        }
+    }
 }
 allprojects { project ->
     mirrorFirst(project.buildscript.repositories)
