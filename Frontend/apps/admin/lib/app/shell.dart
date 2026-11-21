@@ -70,9 +70,14 @@ class _Menu extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            title: Text(
-              context.t.appTitle,
-              style: Theme.of(context).textTheme.titleLarge,
+            title: Align(
+              alignment: Alignment.centerLeft,
+              child: Semantics(
+                label: context.t.appTitle,
+                child: const ExcludeSemantics(
+                  child: PaoLogo(variant: PaoLogoVariant.wordmark, height: 28),
+                ),
+              ),
             ),
           ),
           Expanded(

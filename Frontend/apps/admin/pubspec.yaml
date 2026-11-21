@@ -43,8 +43,6 @@ dev_dependencies:
 flutter:
   generate: true
   uses-material-design: true
-  assets:
-    - assets/brand/
 
 coverage_exclude:
   - 'lib/main\.dart$'

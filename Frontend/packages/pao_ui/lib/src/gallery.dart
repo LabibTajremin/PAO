@@ -10,6 +10,7 @@ import 'package:pao_ui/src/widgets/card.dart';
 import 'package:pao_ui/src/widgets/chip.dart';
 import 'package:pao_ui/src/widgets/icon_tile.dart';
 import 'package:pao_ui/src/widgets/list_row.dart';
+import 'package:pao_ui/src/widgets/logo.dart';
 import 'package:pao_ui/src/widgets/map_frame.dart';
 import 'package:pao_ui/src/widgets/money_text.dart';
 import 'package:pao_ui/src/widgets/rating_stars.dart';
@@ -132,7 +133,13 @@ class _PaoGalleryPageState extends State<PaoGalleryPage> {
         body: ListView(
           padding: const EdgeInsets.all(PaoSpace.xl),
           children: [
-            Text('PAO', style: theme.textTheme.displaySmall),
+            const Row(
+              children: [
+                PaoLogo(height: 56),
+                SizedBox(width: PaoSpace.lg),
+                PaoLogo(variant: PaoLogoVariant.wordmark, height: 32),
+              ],
+            ),
             Text('পাও — ঘরের সেবা', style: theme.textTheme.bodyMedium),
             const PaoStitchDivider(),
             _pickers(),

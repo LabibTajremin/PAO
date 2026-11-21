@@ -41,8 +41,9 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P21, task 1 (`PaoLogo` from `design/brand/svg`, inverse in dark mode).
-P18–P20 are done; P18 owner check (real phones) is open.
+Update round 2026-11 — P21. Done: task 1 (`PaoLogo`). Next: task 2 (launcher icons for both
+apps incl. iOS dark/tinted and Android adaptive + monochrome; admin web favicon, PWA icons,
+manifest). P18 owner check (real phones) is open.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -84,6 +85,9 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P21.1 `PaoLogo` (tile/wordmark from the brand SVGs via flutter_svg; ivory inverse
+  on dark). Admin login and sidebar use it; the old admin PNG is gone; goldens show it.
 
 - 2026-11-21 P20 complete: every PR check green on 98c1907 (goldens match on CI).
 

@@ -11,6 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_svg: ^2.5.0
   pao_l10n:
     path: ../pao_l10n
 
@@ -24,6 +25,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/brand/
   fonts:
     - family: Inter
       fonts:

@@ -20,6 +20,7 @@ export 'src/widgets/chip.dart';
 export 'src/widgets/icon_tile.dart';
 export 'src/widgets/language_switch.dart';
 export 'src/widgets/list_row.dart';
+export 'src/widgets/logo.dart';
 export 'src/widgets/map_frame.dart';
 export 'src/widgets/money_text.dart';
 export 'src/widgets/otp_input.dart';
