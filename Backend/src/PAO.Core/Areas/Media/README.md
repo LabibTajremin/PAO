@@ -2,7 +2,7 @@
 
 Uploads to private buckets through presigned URLs, upload confirmation, signed view URLs and the orphan purge.
 
-- Data: `media` schema, `DB Changes/media/`.
+- Data: `media` schema, `database/changes/media/`.
 - Contract: `Services/Shared/IMediaSharedService.cs`, with its DTOs, events and error
   reasons in `src/PAO.Lib/Areas/Media/`. Other areas use only this interface.
 - Layout: `Controllers/` (thin, mediator only), `Features/<Feature>/Commands|Queries/`

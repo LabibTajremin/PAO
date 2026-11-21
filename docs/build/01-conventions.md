@@ -40,7 +40,7 @@ by arbitrary halves.
 ## 4. C# / .NET specifics (ADR-0034)
 
 The binding rules, layout and "adding a feature" recipe are in
-[`Backend/PAO.AI/README.md`](../../Backend/PAO.AI/README.md); the reference is `Backend/Docs/`.
+[`Backend/docs/conventions.md`](../../Backend/docs/conventions.md); the reference is `Backend/docs/`.
 In short:
 
 - .NET 10, C# latest, nullable references, analyzers and warnings as errors
@@ -82,7 +82,7 @@ In short:
 ## 7. Documentation that must stay current
 
 - `README.md` (root): what PAO is, one-command local run, folder map.
-- `Backend/Docs/Areas/<Area>/` (overview, features, endpoints, data, events): updated in
+- `Backend/docs/Areas/<Area>/` (overview, features, endpoints, data, events): updated in
   the same commit as the change; the docs gate fails on a missing page or broken link.
 - `docs/adr/NNNN-title.md`: one per significant decision (template in P00).
-- `Backend/Api/openapi.yaml`: updated before the handler that implements a change.
+- `Backend/api/openapi.yaml`: updated before the handler that implements a change.

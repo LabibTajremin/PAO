@@ -17,7 +17,7 @@ public sealed class DatabaseBundleTests : IDisposable
             Directory.CreateDirectory(Path.GetDirectoryName(target)!);
             File.Copy(file, target);
         }
-        Directory.CreateDirectory(Path.Combine(home, "Seed"));
+        Directory.CreateDirectory(Path.Combine(home, "database", "seed"));
         File.Copy(SeedCommand.CatalogFile(Repository), SeedCommand.CatalogFile(Paths));
     }
 

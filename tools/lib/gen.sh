@@ -2,11 +2,11 @@
 # Code generation (the bundled OpenAPI document the backend serves, the Dart API client,
 # l10n) and the "generated code is committed" check used by CI.
 
-# gen_backend bundles Backend/Api/openapi.yaml into the document the HTTP edge matches and
+# gen_backend bundles Backend/api/openapi.yaml into the document the HTTP edge matches and
 # validates against (the Dart client is generated from the same bundle), and writes the
-# single-file database scripts in "Backend/DB Changes/bundle".
+# single-file database scripts in "Backend/database/changes/bundle".
 gen_backend() {
-  [[ -f "$BACKEND/Api/openapi.yaml" ]] || return 0
+  [[ -f "$BACKEND/api/openapi.yaml" ]] || return 0
   require_tool npx "https://nodejs.org (npx runs the pinned Redocly CLI)"
   require_dotnet
   "$BACKEND/scripts/gen-spec.sh" >/dev/null || die "OpenAPI bundling failed"
@@ -14,7 +14,7 @@ gen_backend() {
 }
 
 gen_dart_client() {
-  [[ -f "$BACKEND/Api/openapi.yaml" && -d "$FRONTEND/packages/pao_api" ]] || return 0
+  [[ -f "$BACKEND/api/openapi.yaml" && -d "$FRONTEND/packages/pao_api" ]] || return 0
   require_tool docker "https://docs.docker.com/engine/install/"
   "$PAO_ROOT/tools/gen-dart-client.sh" || die "Dart client generation failed"
 }

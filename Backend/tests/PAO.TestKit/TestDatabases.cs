@@ -14,13 +14,13 @@ public static class TestDatabases
 {
     private const long TemplateLock = 424_244;
 
-    /// <summary>"DB Changes" of this checkout.</summary>
+    /// <summary>"database/changes" of this checkout.</summary>
     public static string MigrationsDirectory => PaoPaths.Resolve(AppContext.BaseDirectory, null).Migrations;
 
     /// <summary>Creates a fresh, empty database and returns its URL.</summary>
     public static Task<string> CreateEmpty() => Create(template: null);
 
-    /// <summary>Creates a database with every script of "DB Changes" applied.</summary>
+    /// <summary>Creates a database with every script of "database/changes" applied.</summary>
     public static async Task<string> CreateMigrated() => await Create(await EnsureTemplate());
 
     /// <summary>Drops a database this kit created.</summary>
@@ -58,7 +58,7 @@ public static class TestDatabases
         return name;
     }
 
-    /// <summary>Applies every script of "DB Changes" to the database at `url`.</summary>
+    /// <summary>Applies every script of "database/changes" to the database at `url`.</summary>
     public static async Task Migrate(string url)
     {
         await using var dataSource = PAO.EF.PaoDbContextSetup.CreateDataSource(PAO.EF.Connection.PostgresUrl.ToConnectionString(url));

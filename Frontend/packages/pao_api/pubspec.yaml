@@ -1,5 +1,5 @@
 name: pao_api
-description: "Dart client generated from Backend/Api/openapi.yaml by ./pao gen. Never edit lib/ by hand."
+description: "Dart client generated from Backend/api/openapi.yaml by ./pao gen. Never edit lib/ by hand."
 publish_to: none
 version: 1.0.0
 resolution: workspace

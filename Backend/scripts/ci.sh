@@ -20,7 +20,7 @@ ci_build() {
 ci_spec() {
   step "bundled OpenAPI document is up to date"
   scripts/gen-spec.sh --check
-  step "single-file database scripts (DB Changes/bundle) are up to date"
+  step "single-file database scripts (database/changes/bundle) are up to date"
   scripts/gen-db-bundle.sh --check
 }
 

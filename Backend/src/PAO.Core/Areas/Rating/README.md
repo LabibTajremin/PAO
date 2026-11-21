@@ -2,7 +2,7 @@
 
 Reviews after completed bookings and the rating aggregates of merchants and customers.
 
-- Data: `rating` schema, `DB Changes/rating/`.
+- Data: `rating` schema, `database/changes/rating/`.
 - Contract: `Services/Shared/IRatingSharedService.cs`, with its DTOs, events and error
   reasons in `src/PAO.Lib/Areas/Rating/`. Other areas use only this interface.
 - Layout: `Controllers/` (thin, mediator only), `Features/<Feature>/Commands|Queries/`

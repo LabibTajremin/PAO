@@ -1,7 +1,7 @@
 namespace PAO.EF;
 
 /// <summary>
-/// The Postgres schema of each area, as the scripts in "DB Changes" create them. The
+/// The Postgres schema of each area, as the scripts in "database/changes" create them. The
 /// Merchant area keeps the `provider` schema so existing databases carry over.
 /// </summary>
 public static class Schemas

@@ -8,7 +8,7 @@ namespace PAO.Migrator;
 /// <summary>A demo admin of the seed file; Identity seeds them (dev and staging only).</summary>
 public sealed record SeedAdmin(string Email, string Name, IReadOnlyList<string> Roles);
 
-/// <summary>Reads `Seed/catalog.yaml`: the catalog, prices in whole taka, and the demo admins.</summary>
+/// <summary>Reads `database/seed/catalog.yaml`: the catalog, prices in whole taka, and the demo admins.</summary>
 public static class SeedFile
 {
     /// <summary>Parses the file; prices become paisa. Throws <see cref="FormatException"/> for a malformed file.</summary>

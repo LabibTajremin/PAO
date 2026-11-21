@@ -41,10 +41,10 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P19. Done: .NET projects in `Backend/src`, `tests`, `tools`; root
-`PAO.sln`. Next: move `Api`, `Config`, `DB Changes`, `Seed`, `Docs`, `PAO.AI`, drop `Logs`;
-then `Frontend/e2e`, the VS Code workspace and the READMEs. P18 owner check (real phones) is
-open.
+Update round 2026-11 — P19. Done: .NET projects (`Backend/src`, `tests`, `tools`, root
+`PAO.sln`) and the data folders (`api`, `config`, `database/changes`, `database/seed`, `docs`,
+`docs/conventions.md`; `Logs` ignored). Next: `Frontend/e2e`, the VS Code workspace and
+`.vscode`, then the READMEs. P18 owner check (real phones) is open.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -86,6 +86,11 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P19.2 `Backend/api`, `config`, `database/changes` (was "DB Changes"),
+  `database/seed`, `docs` (+ `conventions.md` from PAO.AI); `Logs` untracked. Runtime paths
+  (`PaoPaths`, `MigrationFiles`, seed), the image, gates and `pao` scripts follow. Deployments
+  that set `PAO_HOME` by hand need the new folder names (`config/`, `database/`).
 
 - 2026-11-21 P19.1 .NET projects in `Backend/src`, `Backend/tests`, `Backend/tools`; `PAO.sln` at
   the root. `PaoPaths` finds the backend by `Directory.Packages.props`; gates, `.editorconfig`,
@@ -131,7 +136,7 @@ Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (c
   release downloads with 504) and apt; main went red on these downloads, never on a test.
 
 - 2026-11-07 MVP deployed: API on Render free (`https://pao-1-zbl8.onrender.com`,
-  `JOBS_IN_API=true`), Neon set up from `DB Changes/bundle` (68 tables, catalog seeded);
+  `JOBS_IN_API=true`), Neon set up from `database/changes/bundle` (68 tables, catalog seeded);
   the three apps' `config/prod.json` point at that host until `api.pao.com.bd` exists.
 
 - 2026-11-06 MVP launch: `JOBS_IN_API` (default false) lets the API run the worker's relay
@@ -141,7 +146,7 @@ Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (c
 - 2026-11-06 MVP launch: `SMS_VERIFICATION_ENABLED`/`SMS_FIXED_CODE` (no SMS, fixed code,
   limits unchanged; prod starts without sslwireless), `Docs/Database/schema.md` with the
   index review (5 indexes in identity/0004, booking/0003, admin/0003),
-  `DB Changes/bundle/{schema,seed}.sql` from `migrate bundle`, checked in CI.
+  `database/changes/bundle/{schema,seed}.sql` from `migrate bundle`, checked in CI.
 
 - 2026-10-25 P17 follow-up: last NestJS/JavaScript traces removed. k6 replaced by the C#
   load test `Backend/tests/PAO.LoadTests` (`./pao perf`, CI perf job without k6);

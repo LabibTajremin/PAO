@@ -2,7 +2,7 @@
 
 Accounts, roles, permissions and screen permissions; phone OTP sign-in for customers and merchants, email, password and TOTP for admins; refresh-token families and the access-token denylist.
 
-- Data: `identity` schema, `DB Changes/identity/`.
+- Data: `identity` schema, `database/changes/identity/`.
 - Contract: `Services/Shared/IIdentitySharedService.cs`, with its DTOs, events and error
   reasons in `src/PAO.Lib/Areas/Identity/`. Other areas use only this interface.
 - Layout: `Controllers/` (thin, mediator only), `Features/<Feature>/Commands|Queries/`

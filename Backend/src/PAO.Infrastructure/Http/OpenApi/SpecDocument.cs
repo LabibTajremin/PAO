@@ -6,7 +6,7 @@ using YamlDotNet.RepresentationModel;
 namespace PAO.Infrastructure.Http.OpenApi;
 
 /// <summary>
-/// The bundled OpenAPI document (`Spec/openapi.gen.yaml`, bundled from `Backend/Api/openapi.yaml`)
+/// The bundled OpenAPI document (`Spec/openapi.gen.yaml`, bundled from `Backend/api/openapi.yaml`)
 /// as a JSON tree, with local `$ref` resolution.
 /// </summary>
 public sealed class SpecDocument(JsonObject root)

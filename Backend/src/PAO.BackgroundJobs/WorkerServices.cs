@@ -62,7 +62,7 @@ public sealed class WorkerLoop(JobScheduler scheduler, OutboxRelay relay, IOptio
 /// <summary>Registers what the worker runs: the bus with every area's subscribers, the relay and the jobs.</summary>
 public static class WorkerServices
 {
-    /// <summary>Adds the scheduler, the relay over the outbox modules listed in "DB Changes/modules.json" and the platform jobs.</summary>
+    /// <summary>Adds the scheduler, the relay over the outbox modules listed in "database/changes/modules.json" and the platform jobs.</summary>
     public static IServiceCollection AddBackgroundJobs(this IServiceCollection services, PaoPaths paths)
     {
         var outboxModules = new MigrationFiles(paths.Migrations).ReadModuleLists().OutboxModules;

@@ -1,6 +1,6 @@
 namespace PAO.Infrastructure.Configuration;
 
-/// <summary>Deployment environment and app-wide settings (`Config/app.json`).</summary>
+/// <summary>Deployment environment and app-wide settings (`config/app.json`).</summary>
 public sealed class AppOptions
 {
     /// <summary>The `"App"` value.</summary>
@@ -39,7 +39,7 @@ public static class AppEnvironments
     public const string Prod = "prod";
 }
 
-/// <summary>PostgreSQL (`Config/database.json`).</summary>
+/// <summary>PostgreSQL (`config/database.json`).</summary>
 public sealed class DatabaseOptions
 {
     /// <summary>The `"Database"` value.</summary>
@@ -48,7 +48,7 @@ public sealed class DatabaseOptions
     public string Url { get; set; } = string.Empty;
 }
 
-/// <summary>Redis (`Config/redis.json`).</summary>
+/// <summary>Redis (`config/redis.json`).</summary>
 public sealed class RedisOptions
 {
     /// <summary>The `"Redis"` value.</summary>
@@ -57,7 +57,7 @@ public sealed class RedisOptions
     public string Url { get; set; } = string.Empty;
 }
 
-/// <summary>Access-token keys (`Config/jwt.json`); the keys themselves come from the environment.</summary>
+/// <summary>Access-token keys (`config/jwt.json`); the keys themselves come from the environment.</summary>
 public sealed class JwtOptions
 {
     /// <summary>The `"Jwt"` value.</summary>
@@ -73,7 +73,7 @@ public sealed class JwtOptions
     public int AccessTokenTtlSeconds { get; set; } = 900;
 }
 
-/// <summary>Log level and the folder of the date-named log directories (`Config/logging.json`).</summary>
+/// <summary>Log level and the folder of the date-named log directories (`config/logging.json`).</summary>
 public sealed class LoggingOptions
 {
     /// <summary>The `"Logging"` value.</summary>
@@ -86,7 +86,7 @@ public sealed class LoggingOptions
     public bool WriteFiles { get; set; } = true;
 }
 
-/// <summary>Outgoing mail (`Config/smtp.json`); no feature sends mail yet.</summary>
+/// <summary>Outgoing mail (`config/smtp.json`); no feature sends mail yet.</summary>
 public sealed class SmtpOptions
 {
     /// <summary>The `"Smtp"` value.</summary>
@@ -105,7 +105,7 @@ public sealed class SmtpOptions
     public string Password { get; set; } = string.Empty;
 }
 
-/// <summary>S3-compatible storage (`Config/storage.json`).</summary>
+/// <summary>S3-compatible storage (`config/storage.json`).</summary>
 public sealed class StorageOptions
 {
     /// <summary>The `"Storage"` value.</summary>
@@ -133,7 +133,7 @@ public sealed class StorageOptions
     public bool EnsureEncryption { get; set; } = true;
 }
 
-/// <summary>Text messages (`Config/sms.json`).</summary>
+/// <summary>Text messages (`config/sms.json`).</summary>
 public sealed class SmsOptions
 {
     /// <summary>The `"Sms"` value.</summary>
@@ -158,7 +158,7 @@ public sealed class SmsOptions
     public string FixedCode { get; set; } = "123456";
 }
 
-/// <summary>Push notifications (`Config/push.json`).</summary>
+/// <summary>Push notifications (`config/push.json`).</summary>
 public sealed class PushOptions
 {
     /// <summary>The `"Push"` value.</summary>
@@ -176,7 +176,7 @@ public sealed class PushOptions
     public string FcmCredentialsJson { get; set; } = string.Empty;
 }
 
-/// <summary>The worker's relay and jobs (`Config/jobs.json`).</summary>
+/// <summary>The worker's relay and jobs (`config/jobs.json`).</summary>
 public sealed class JobsOptions
 {
     /// <summary>The `"Jobs"` value.</summary>
@@ -193,7 +193,7 @@ public sealed class JobsOptions
     public bool RunInApi { get; set; }
 }
 
-/// <summary>Listen addresses, body limit and API rate limits (`Config/http.json`).</summary>
+/// <summary>Listen addresses, body limit and API rate limits (`config/http.json`).</summary>
 public sealed class HttpOptions
 {
     /// <summary>The `"Http"` value.</summary>

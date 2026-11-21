@@ -6,7 +6,7 @@ namespace PAO.EF;
 
 /// <summary>
 /// Lets `dotnet ef` tooling (scaffolding, compiled models) build the context from
-/// DATABASE_URL. It never creates migrations: the scripts in "DB Changes" own the schema.
+/// DATABASE_URL. It never creates migrations: the scripts in "database/changes" own the schema.
 /// </summary>
 public sealed class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<PaoDbContext>
 {

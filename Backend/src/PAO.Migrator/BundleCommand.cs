@@ -4,13 +4,13 @@ using PAO.Infrastructure.Hosting;
 namespace PAO.Migrator;
 
 /// <summary>
-/// `migrate bundle [--check]`: writes "DB Changes/bundle/schema.sql" (<see cref="SchemaBundle"/>)
+/// `migrate bundle [--check]`: writes "database/changes/bundle/schema.sql" (<see cref="SchemaBundle"/>)
 /// and "seed.sql" (<see cref="SeedBundle"/>); with `--check` it only compares and fails when
 /// either is out of date, the CI gate. Needs no database.
 /// </summary>
 public static class BundleCommand
 {
-    /// <summary>The bundle folder inside "DB Changes".</summary>
+    /// <summary>The bundle folder inside "database/changes".</summary>
     public const string FolderName = "bundle";
 
     /// <summary>The generated files by name, from the scripts and the seed file under `paths`.</summary>
@@ -53,7 +53,7 @@ public static class BundleCommand
         if (args.Length == 1 && stale.Count > 0)
         {
             await output.WriteLineAsync(
-                $"migrate bundle: {string.Join(", ", stale)} out of date in \"DB Changes/{FolderName}\"; run Backend/scripts/gen-db-bundle.sh");
+                $"migrate bundle: {string.Join(", ", stale)} out of date in \"database/changes/{FolderName}\"; run Backend/scripts/gen-db-bundle.sh");
             return 1;
         }
         await output.WriteLineAsync(args.Length == 1 ? "migrate bundle: up to date" : $"migrate bundle: wrote {stale.Count} file(s)");

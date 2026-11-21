@@ -3,7 +3,7 @@
 **Goal:** every category and service has a clear icon in the accent colour; admins pick from a
 library or add their own by upload or link.
 
-**Read first:** `06-update-2026-11.md` items iv, vi, vii; `Backend/Api/schemas/catalog.yaml`
+**Read first:** `06-update-2026-11.md` items iv, vi, vii; `Backend/api/schemas/catalog.yaml`
 (`iconKey`); `apps/customer/lib/shared/catalog_icons.dart`; admin `features/catalog/`;
 media upload flow (P04).
 

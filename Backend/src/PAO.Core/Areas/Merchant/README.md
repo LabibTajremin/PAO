@@ -2,7 +2,7 @@
 
 Merchant (provider) profiles, the enrolment wizard, services offered, presence and nearby search. "Merchant" is the owner's name for the provider role; the schema, events and API paths keep `provider`.
 
-- Data: `provider` schema, `DB Changes/provider/`.
+- Data: `provider` schema, `database/changes/provider/`.
 - Contract: `Services/Shared/IMerchantSharedService.cs`, with its DTOs, events and error
   reasons in `src/PAO.Lib/Areas/Merchant/`. Other areas use only this interface.
 - Layout: `Controllers/` (thin, mediator only), `Features/<Feature>/Commands|Queries/`

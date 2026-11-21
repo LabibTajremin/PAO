@@ -4,7 +4,7 @@ using PAO.TestKit;
 
 namespace PAO.IntegrationTests;
 
-/// <summary>"DB Changes/bundle": schema.sql equals `migrate up`, seed.sql equals `migrate seed`.</summary>
+/// <summary>"database/changes/bundle": schema.sql equals `migrate up`, seed.sql equals `migrate seed`.</summary>
 public sealed class DatabaseBundleTests : IAsyncLifetime
 {
     // Everything `migrate up` leaves behind that a script could get wrong.

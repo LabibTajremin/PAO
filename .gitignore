@@ -30,3 +30,6 @@ Backend/appsettings.Local.json
 
 # Local state of tools/autopilot.sh
 .autopilot/
+
+# Backend logs are written at run time, never committed.
+Backend/Logs/

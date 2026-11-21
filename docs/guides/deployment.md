@@ -258,7 +258,7 @@ There is no deploy workflow in `.github/workflows` today. A job would:
 
 ### 3.2 Environment variables
 
-Every variable the .NET hosts read (`Backend/Docs/Config/variables.md`; mapped onto
+Every variable the .NET hosts read (`Backend/docs/Config/variables.md`; mapped onto
 configuration keys by `EnvironmentVariables`). The API and the
 worker refuse to start on a missing or invalid value and list all problems in one log
 line (`invalid configuration: …`). Give API, worker and migrate the same environment.
@@ -377,7 +377,7 @@ Build behind a TLS-intercepting proxy only: pass the CA as build secret `extra_c
 The worker delivers every event (notifications and push, commission charging on a
 completed booking, opening the rating, dashboard stats) and runs the scheduled jobs
 (booking expiry every 15 s, merchant presence reaping, media orphan purge, document
-expiry and reminders, closed-account purge, outbox purge; [jobs](../../Backend/Docs/Operations/jobs.md)).
+expiry and reminders, closed-account purge, outbox purge; [jobs](../../Backend/docs/Operations/jobs.md)).
 Without it bookings never time out and no push is sent. Render's free plan has no
 Background Workers, so for the MVP the API runs them itself:
 
@@ -405,7 +405,7 @@ Things to know on the free plan:
 - **Migrations.** If the plan offers no pre-deploy command, run `/app/migrate up` with
   the same environment from a machine before deploying a release
   (`docker run --rm --env-file prod.env --entrypoint /app/migrate <image> up`), or apply
-  `DB Changes/bundle/schema.sql` as in §3.5 step 3.
+  `database/changes/bundle/schema.sql` as in §3.5 step 3.
 - **Never both.** Run either a worker or `JOBS_IN_API=true`. Both at once is safe (job
   runs take an advisory lock, the relay claims rows with `SKIP LOCKED`, handlers are
   idempotent) but runs every sweep twice; a worker that sees `JOBS_IN_API=true` logs a
@@ -429,11 +429,11 @@ worker ([ADR-0036](../adr/0036-mvp-launch-defaults.md) §14).
    `PAO_SCAN_IMAGE=<registry>/pao-backend:<git-sha> ./pao security`.
 3. Migrate: run the image with `/app/migrate up`. It applies every module's migrations
    and exits 0. Without a place to run the image yet, paste
-   `Backend/DB Changes/bundle/schema.sql` into Neon's SQL editor instead: it applies the
+   `Backend/database/changes/bundle/schema.sql` into Neon's SQL editor instead: it applies the
    same migrations and records the same versions, so a later `migrate up` finds nothing
-   to do ([Database](../../Backend/Docs/Database/README.md#single-file-scripts-bundle)).
+   to do ([Database](../../Backend/docs/Database/README.md#single-file-scripts-bundle)).
 4. Seed reference data: `/app/migrate seed`. It loads the service catalog
-   (idempotent); `Backend/DB Changes/bundle/seed.sql` in the SQL editor loads the same
+   (idempotent); `Backend/database/changes/bundle/seed.sql` in the SQL editor loads the same
    catalog. In `staging` with `SEED_ADMIN_PASSWORD` set it also creates the demo
    admin users; in `prod` it creates none.
 5. Create the first super admin, once, with the same environment plus `ADMIN_PASSWORD`

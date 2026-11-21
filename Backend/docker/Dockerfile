@@ -24,9 +24,8 @@ ENV PAO_HOME=/app DOTNET_CLI_TELEMETRY_OPTOUT=1
 RUN apt-get update && apt-get upgrade -y --no-install-recommends && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY --from=build /out ./
-COPY Config ./Config
-COPY ["DB Changes", "./DB Changes"]
-COPY Seed ./Seed
+COPY config ./config
+COPY database ./database
 COPY --chmod=755 docker/api docker/worker docker/migrate ./
 RUN mkdir -p /app/Logs && chown app /app/Logs
 USER app

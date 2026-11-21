@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Bundles the OpenAPI contract into src/PAO.Core/Spec/openapi.gen.yaml, the document the HTTP
 # edge matches and validates against. The contract's folder is the MSBuild property
-# PaoApiDir (Directory.Build.props, Backend/Api), its only definition. With --check (or CI=true) it fails on drift.
+# PaoApiDir (Directory.Build.props, Backend/api), its only definition. With --check (or CI=true) it fails on drift.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

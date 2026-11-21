@@ -13,14 +13,14 @@ using PAO.Lib.Mediator;
 namespace PAO.Migrator;
 
 /// <summary>
-/// `migrate seed`: loads `Seed/catalog.yaml` idempotently through the areas that own the
+/// `migrate seed`: loads `database/seed/catalog.yaml` idempotently through the areas that own the
 /// data: the catalog through Catalog and, outside production and only with
 /// SEED_ADMIN_PASSWORD set, the demo admins through Identity.
 /// </summary>
 public static class SeedCommand
 {
     /// <summary>The seed file under the backend home.</summary>
-    public static string CatalogFile(PaoPaths paths) => Path.Combine(paths.Home, "Seed", "catalog.yaml");
+    public static string CatalogFile(PaoPaths paths) => Path.Combine(paths.Home, "database", "seed", "catalog.yaml");
 
     /// <summary>A host with every area, configured from `environment`, for the seed commands.</summary>
     public static IHost BuildHost(PaoPaths paths, IDictionary environment)

@@ -18,7 +18,7 @@ public static partial class DocsChecker
     public static IReadOnlyList<string> Check(string root)
     {
         var problems = new List<string>();
-        var docs = Path.Combine(root, "Docs");
+        var docs = Path.Combine(root, "docs");
         foreach (var area in Directories(Path.Combine(root, "src", "PAO.Core", "Areas")))
         {
             CheckArea(root, docs, Path.GetFileName(area), problems);
@@ -49,7 +49,7 @@ public static partial class DocsChecker
     private static void CheckConfig(string root, string docs, List<string> problems)
     {
         var expected = new List<string>();
-        foreach (var file in Files(Path.Combine(root, "Config"), "*.json"))
+        foreach (var file in Files(Path.Combine(root, "config"), "*.json"))
         {
             expected.Add(Path.GetFileName(file));
             using var json = JsonDocument.Parse(File.ReadAllText(file));
@@ -65,14 +65,14 @@ public static partial class DocsChecker
 
     private static IEnumerable<string> Scripts(string root)
     {
-        var dir = Path.Combine(root, "DB Changes");
+        var dir = Path.Combine(root, "database", "changes");
         return Files(dir, "*.sql", SearchOption.AllDirectories).Select(f => Path.GetRelativePath(dir, f).Replace('\\', '/'));
     }
 
     // The generated bundle repeats every script, so only the module folders count.
     private static IEnumerable<string> SchemaObjects(string root) =>
         Scripts(root).Where(s => !s.StartsWith("bundle/", StringComparison.Ordinal))
-            .SelectMany(s => CreatedObject().Matches(File.ReadAllText(Path.Combine(root, "DB Changes", s))))
+            .SelectMany(s => CreatedObject().Matches(File.ReadAllText(Path.Combine(root, "database", "changes", s))))
             .Select(m => m.Groups[1].Success ? m.Groups[1].Value : m.Groups[2].Value)
             .Distinct(StringComparer.Ordinal);
 

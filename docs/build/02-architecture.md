@@ -33,7 +33,7 @@ Backend/
 ├── PAO.Infrastructure/       platform: config, logging, Redis, crypto, HTTP edge, outbox,
 │                             storage, SMS, push, metrics, health
 ├── PAO.BackgroundJobs/       scheduler, relay loop, platform jobs
-├── Config/  DB Changes/  Seed/   JSON config per concern, goose SQL per module, seed data
+├── Config/  database/changes/  Seed/   JSON config per concern, goose SQL per module, seed data
 ├── Docs/                     areas, architecture, config, database, operations, testing, API
 ├── tools/PAO.Gates/          size and docs checkers
 ├── Test/                     PAO.UnitTests, PAO.IntegrationTests, PAO.TestKit,
@@ -47,7 +47,7 @@ Modules (PRD §9.2) are ASP.NET areas: `Identity`, `Customer`, `Merchant` (provi
 `Billing`. Boundary rules (PRD §9.3) are architecture tests in `PAO.UnitTests`
 (`./pao lint backend`): an area reaches another only through its
 `Services/Shared/I<Area>SharedService`; the platform never references an area. The binding
-rules are in `Backend/PAO.AI/README.md`.
+rules are in `Backend/docs/conventions.md`.
 
 ### Frontend/
 
@@ -59,7 +59,7 @@ Frontend/
 ├── packages/
 │   ├── pao_core/             env config, Dio client, auth/session, token refresh,
 │   │                         error mapping, permission service, router guards
-│   ├── pao_api/              generated from Backend/Api/openapi.yaml — never edited by hand
+│   ├── pao_api/              generated from Backend/api/openapi.yaml — never edited by hand
 │   ├── pao_ui/               design system: tokens, accent themes, shared widgets
 │   ├── pao_l10n/             ARB files (en, bn) + generated localisations
 │   └── pao_e2e/              shared support for the app journeys

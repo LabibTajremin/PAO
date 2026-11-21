@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Regenerates the single-file database scripts "DB Changes/bundle/schema.sql" and
+# Regenerates the single-file database scripts "database/changes/bundle/schema.sql" and
 # "seed.sql" from the goose migrations and Seed/catalog.yaml (`migrate bundle`). With
 # --check (or CI=true) it only compares and fails when they are out of date.
 set -euo pipefail

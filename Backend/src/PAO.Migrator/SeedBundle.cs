@@ -7,7 +7,7 @@ using static PAO.Lib.Areas.Catalog.CatalogMappingProfile;
 namespace PAO.Migrator;
 
 /// <summary>
-/// Writes the reference data `migrate seed` loads (`Seed/catalog.yaml`) as one idempotent
+/// Writes the reference data `migrate seed` loads (`database/seed/catalog.yaml`) as one idempotent
 /// script (`bundle/seed.sql`): the same upserts, ids and price rule as the SeedCatalog
 /// command, in one transaction. The demo admins are left out: they need a password hash
 /// and exist only outside production.

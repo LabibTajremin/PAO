@@ -86,9 +86,9 @@ public sealed class DocsCheckerTests : IDisposable
         Write("src/PAO.Core/Areas/Booking/Repositories/BookingRepository.cs", "class R {}");
         Write("src/PAO.Core/Platform/UnimplementedController.cs", "class U {}");
         Write("src/PAO.BackgroundJobs/ExpireJob.cs", "public sealed class ExpireJob(int x) : IScheduledJob {}");
-        Write("Config/http.json", """{"Http":{"Address":":8080"}}""");
-        Write("DB Changes/booking/0001_init.sql", "-- +goose Up\nCREATE TABLE booking.bookings (id uuid);\nCREATE UNIQUE INDEX bookings_number_key ON booking.bookings (id);");
-        Write("DB Changes/bundle/schema.sql", "CREATE TABLE bundle.only (id uuid);");
+        Write("config/http.json", """{"Http":{"Address":":8080"}}""");
+        Write("database/changes/booking/0001_init.sql", "-- +goose Up\nCREATE TABLE booking.bookings (id uuid);\nCREATE UNIQUE INDEX bookings_number_key ON booking.bookings (id);");
+        Write("database/changes/bundle/schema.sql", "CREATE TABLE bundle.only (id uuid);");
         Write("tests/Fake.cs", "class FakeJob : IScheduledJob {}");
     }
 
@@ -96,13 +96,13 @@ public sealed class DocsCheckerTests : IDisposable
     {
         foreach (var page in DocsChecker.AreaPages)
         {
-            Write($"Docs/Areas/Booking/{page}", "AcceptBooking JobsController IBookingSharedService BookingRepository");
+            Write($"docs/Areas/Booking/{page}", "AcceptBooking JobsController IBookingSharedService BookingRepository");
         }
-        Write("Docs/Api/README.md", "UnimplementedController [ops](../Operations/jobs.md) [web](https://pao.test) [top](#errors) [mail](mailto:a@b)");
-        Write("Docs/Operations/jobs.md", "ExpireJob");
-        Write("Docs/Config/README.md", "http.json Http");
-        Write("Docs/Database/README.md", "booking/0001_init.sql bundle/schema.sql");
-        Write("Docs/Database/schema.md", "booking.bookings bookings_number_key");
+        Write("docs/Api/README.md", "UnimplementedController [ops](../Operations/jobs.md) [web](https://pao.test) [top](#errors) [mail](mailto:a@b)");
+        Write("docs/Operations/jobs.md", "ExpireJob");
+        Write("docs/Config/README.md", "http.json Http");
+        Write("docs/Database/README.md", "booking/0001_init.sql bundle/schema.sql");
+        Write("docs/Database/schema.md", "booking.bookings bookings_number_key");
     }
 
     [Fact]
@@ -117,8 +117,8 @@ public sealed class DocsCheckerTests : IDisposable
     public void Reports_every_missing_page_entry_and_broken_link()
     {
         Tree();
-        Write("Docs/Areas/Booking/overview.md", "nothing");
-        Write("Docs/Guide.md", "[gone](Missing.md) [area](Areas/Booking/overview.md)");
+        Write("docs/Areas/Booking/overview.md", "nothing");
+        Write("docs/Guide.md", "[gone](Missing.md) [area](Areas/Booking/overview.md)");
         var problems = DocsChecker.Check(root);
         Assert.Contains("Docs/Areas/Booking/features.md: missing page for area Booking", problems);
         Assert.Contains("Booking/features.md: no entry for feature AcceptBooking", problems);
@@ -133,7 +133,7 @@ public sealed class DocsCheckerTests : IDisposable
         Assert.Contains("Database/schema.md: no entry for table or index booking.bookings", problems);
         Assert.Contains("Database/schema.md: no entry for table or index bookings_number_key", problems);
         Assert.DoesNotContain(problems, p => p.Contains("bundle.only", StringComparison.Ordinal));
-        Assert.Contains("Docs/Guide.md: broken link Missing.md", problems);
+        Assert.Contains("docs/Guide.md: broken link Missing.md", problems);
         Assert.DoesNotContain(problems, p => p.Contains("FakeJob", StringComparison.Ordinal));
     }
 

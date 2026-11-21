@@ -18,9 +18,9 @@ These rules apply to every session. Read them fully; they are short on purpose.
 | Brand assets, illustrations, icons, owner references | `design/` |
 | The phase you are working on | `docs/build/phases/PNN-*.md` |
 | Product requirements (plain text) | `docs/prd/PAO-PRD.txt` |
-| Backend rules and layout (.NET, read before touching `Backend/`) | `Backend/PAO.AI/README.md` |
-| Backend reference (areas, config, database, operations, testing) | `Backend/Docs/` |
-| API contract | `Backend/Api/openapi.yaml` |
+| Backend rules and layout (.NET, read before touching `Backend/`) | `Backend/docs/conventions.md` |
+| Backend reference (areas, config, database, operations, testing) | `Backend/docs/` |
+| API contract | `Backend/api/openapi.yaml` |
 | The `pao` CLI internals, hooks, CLI tests | `tools/` |
 | Compose stack, e2e stack, monitoring, scanner configs | `infra/` |
 | Handover, release, deployment and other guides | `docs/HANDOVER.md`, `docs/guides/` |
@@ -44,7 +44,7 @@ These rules apply to every session. Read them fully; they are short on purpose.
 ## Token discipline
 
 - Read only what the current task needs: its phase file, the PRD section it cites and the
-  area docs (`Backend/Docs/Areas/<Area>/`). Do not re-read files you have already read in this session.
+  area docs (`Backend/docs/Areas/<Area>/`). Do not re-read files you have already read in this session.
 - Search with `rg` or Grep before opening files; open line ranges, not whole files.
 - Prefer generators (the OpenAPI bundle, the OpenAPI Dart client, l10n) over hand-written
   boilerplate.

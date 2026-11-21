@@ -7,7 +7,7 @@ using PAO.Infrastructure.Data.Migrations;
 namespace PAO.Migrator;
 
 /// <summary>
-/// The migration tool: `migrate up` applies every pending script in "DB Changes" and
+/// The migration tool: `migrate up` applies every pending script in "database/changes" and
 /// records versions in the `goose_&lt;module&gt;` tables, exactly as goose does.
 /// `seed` loads the seed data through <see cref="SeedCommand"/>; `perf-seed N` puts N online
 /// merchants in place for the load test through <see cref="PerfSeedCommand"/>.

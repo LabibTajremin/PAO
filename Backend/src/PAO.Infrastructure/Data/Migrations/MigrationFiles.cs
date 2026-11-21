@@ -7,13 +7,13 @@ namespace PAO.Infrastructure.Data.Migrations;
 public sealed record ModuleLists(IReadOnlyList<string> Modules, IReadOnlyList<string> OutboxModules);
 
 /// <summary>
-/// Reads "DB Changes": `modules.json` and each module's `NNNN_name.sql` scripts, the only
+/// Reads "database/changes": `modules.json` and each module's `NNNN_name.sql` scripts, the only
 /// schema source (ADR-0034).
 /// </summary>
 public sealed partial class MigrationFiles(string directory)
 {
     /// <summary>The folder name next to the hosts and in the image.</summary>
-    public const string FolderName = "DB Changes";
+    public const string FolderName = "database/changes";
 
     /// <summary>The directory the scripts are read from.</summary>
     public string Directory { get; } = directory;

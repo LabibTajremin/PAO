@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Regenerates Frontend/packages/pao_api from the bundled OpenAPI spec (Backend/Api,
+# Regenerates Frontend/packages/pao_api from the bundled OpenAPI spec (Backend/api,
 # bundled by Backend/scripts/gen-spec.sh) with the pinned
 # openapi-generator image, then runs build_runner for the JSON serializers. OpenAPI
 # `format: date` maps to String: DateTime would serialise with a time part the API

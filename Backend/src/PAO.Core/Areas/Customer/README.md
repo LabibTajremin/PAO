@@ -2,7 +2,7 @@
 
 Customer profiles, saved addresses and launch areas.
 
-- Data: `customer` schema, `DB Changes/customer/`.
+- Data: `customer` schema, `database/changes/customer/`.
 - Contract: `Services/Shared/ICustomerSharedService.cs`, with its DTOs, events and error
   reasons in `src/PAO.Lib/Areas/Customer/`. Other areas use only this interface.
 - Layout: `Controllers/` (thin, mediator only), `Features/<Feature>/Commands|Queries/`

@@ -2,7 +2,7 @@
 
 Categories, services, sub-services and price versions; the published catalog tree and its version.
 
-- Data: `catalog` schema, `DB Changes/catalog/`.
+- Data: `catalog` schema, `database/changes/catalog/`.
 - Contract: `Services/Shared/ICatalogSharedService.cs`, with its DTOs, events and error
   reasons in `src/PAO.Lib/Areas/Catalog/`. Other areas use only this interface.
 - Layout: `Controllers/` (thin, mediator only), `Features/<Feature>/Commands|Queries/`

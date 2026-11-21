@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 namespace PAO.Infrastructure.Configuration;
 
 /// <summary>
-/// Builds the configuration every host reads: the defaults in `Config/*.json`, then a
+/// Builds the configuration every host reads: the defaults in `config/*.json`, then a
 /// developer's `appsettings.Local.json` (never in staging or prod), then `Section__Key`
 /// environment variables, then the deployment variable names (shared deployments take secrets
 /// only from the environment).
@@ -29,7 +29,7 @@ public static class PaoConfiguration
         return builder;
     }
 
-    /// <summary>The git-ignored developer file next to `Config/`, copied from `appsettings.Local.example.json`.</summary>
+    /// <summary>The git-ignored developer file next to `config/`, copied from `appsettings.Local.example.json`.</summary>
     public const string LocalFileName = "appsettings.Local.json";
 
     private static readonly string[] SharedEnvironments = ["staging", "prod"];

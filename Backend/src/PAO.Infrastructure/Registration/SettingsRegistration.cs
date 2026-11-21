@@ -12,7 +12,7 @@ namespace PAO.Infrastructure.Registration;
 public static class SettingsRegistration
 {
     /// <summary>
-    /// Adds `Config/*.json` and the environment to `builder`, validates the result (throwing
+    /// Adds `config/*.json` and the environment to `builder`, validates the result (throwing
     /// <see cref="ConfigException"/> with every problem), wires Serilog for `host` (api,
     /// worker) and points Kestrel at HTTP_ADDR. Returns the validated settings.
     /// </summary>

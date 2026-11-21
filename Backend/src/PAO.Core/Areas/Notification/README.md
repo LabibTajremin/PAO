@@ -2,7 +2,7 @@
 
 Templates, the inbox, device tokens and delivery by push and SMS; subscribes to booking and verification events.
 
-- Data: `notification` schema, `DB Changes/notification/`.
+- Data: `notification` schema, `database/changes/notification/`.
 - Contract: `Services/Shared/INotificationSharedService.cs`, with its DTOs, events and error
   reasons in `src/PAO.Lib/Areas/Notification/`. Other areas use only this interface.
 - Layout: `Controllers/` (thin, mediator only), `Features/<Feature>/Commands|Queries/`

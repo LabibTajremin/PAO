@@ -33,7 +33,7 @@ ops_check() {
   run_promtool test rules "$INFRA"/ops/prometheus/tests/*.yml >/dev/null ||
     die "Prometheus rule tests failed"
   local board metric known
-  known=$(grep -rhoE '"pao_[a-z_]+"' "$BACKEND/PAO.Infrastructure/Metrics" | tr -d '"')
+  known=$(grep -rhoE '"pao_[a-z_]+"' "$BACKEND/src/PAO.Infrastructure/Metrics" | tr -d '"')
   for board in "$INFRA"/ops/grafana/dashboards/*.json; do
     jq -e '.title and .uid and (.panels | length > 0)' "$board" >/dev/null ||
       die "${board#"$PAO_ROOT"/} is not a dashboard"

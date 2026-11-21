@@ -3,7 +3,7 @@ using PAO.Infrastructure.Data.Migrations;
 namespace PAO.Infrastructure.Hosting;
 
 /// <summary>
-/// Where a host finds `Config/`, `Logs/` and `DB Changes/`: PAO_HOME when set, else the
+/// Where a host finds `config/`, `Logs/` and `database/changes/`: PAO_HOME when set, else the
 /// backend folder of a checkout (the one holding Directory.Packages.props) above the
 /// binaries, else the
 /// binaries' folder (`/app` in the image).
@@ -14,7 +14,7 @@ public sealed record PaoPaths(string Home, string BaseDirectory)
     public const string BackendMarker = "Directory.Packages.props";
 
     /// <summary>The non-secret configuration files.</summary>
-    public string Config => Path.Combine(Home, "Config");
+    public string Config => Path.Combine(Home, "config");
 
     /// <summary>The goose-format SQL scripts.</summary>
     public string Migrations => Path.Combine(Home, MigrationFiles.FolderName);

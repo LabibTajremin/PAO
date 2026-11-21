@@ -255,8 +255,8 @@ public sealed class HostingPathTests
     {
         var found = PaoPaths.Resolve(AppContext.BaseDirectory, null);
         Assert.True(File.Exists(Path.Combine(found.Home, PaoPaths.BackendMarker)));
-        Assert.EndsWith("Config", found.Config, StringComparison.Ordinal);
-        Assert.EndsWith("DB Changes", found.Migrations, StringComparison.Ordinal);
+        Assert.EndsWith("config", found.Config, StringComparison.Ordinal);
+        Assert.EndsWith(Path.Combine("database", "changes"), found.Migrations, StringComparison.Ordinal);
         Assert.EndsWith(Path.Combine("Spec", "openapi.gen.yaml"), found.Spec, StringComparison.Ordinal);
         Assert.Equal("/srv/pao", PaoPaths.Resolve(AppContext.BaseDirectory, "/srv/pao").Home);
         var outside = Directory.CreateTempSubdirectory("pao-paths").FullName;
@@ -309,7 +309,7 @@ public sealed class LocalSettingsFileTests : IDisposable
 
     private string WriteLocalLayout()
     {
-        var config = Path.Combine(dir, "Config");
+        var config = Path.Combine(dir, "config");
         Directory.CreateDirectory(config);
         File.WriteAllText(Path.Combine(config, "redis.json"), """{"Redis":{"Url":"file"}}""");
         return config;

@@ -13,7 +13,7 @@ cash (PRD; ADRs 0011–0014).
 | Part | Where | Technology |
 |---|---|---|
 | API, worker, migrator | `Backend/` | .NET 10 (C#) modular monolith, ASP.NET Core areas (ADR-0001, ADR-0034) |
-| Contract | `Backend/Api/openapi.yaml` | OpenAPI 3.1; drives request validation, RBAC (`x-permission`) and the generated Dart client |
+| Contract | `Backend/api/openapi.yaml` | OpenAPI 3.1; drives request validation, RBAC (`x-permission`) and the generated Dart client |
 | Customer app (PAO) | `Frontend/apps/customer` | Flutter, Android + iOS |
 | Partner app (PAO Partner) | `Frontend/apps/partner` | Flutter, Android + iOS |
 | Admin console | `Frontend/apps/admin` | Flutter Web (ADR-0018) |
@@ -25,7 +25,7 @@ The backend has twelve modules, each an ASP.NET area (identity, customer, provid
 billing). Each exposes only its shared service (`Services/Shared/I<Area>SharedService`),
 owns one schema, and publishes events through its own outbox. [`docs/guides/architecture.md`](guides/architecture.md) has the module map,
 boundary rules and how to extract a module into a service; every area is documented in
-`Backend/Docs/Areas/<Area>/` (agent rules in `Backend/PAO.AI/README.md`), every app and
+`Backend/docs/Areas/<Area>/` (agent rules in `Backend/docs/conventions.md`), every app and
 package has a README beside its `pubspec.yaml`.
 
 Third parties sit behind ports with local fakes (ADR-0019): SMS (`SMS_ADAPTER=console |

@@ -6,7 +6,7 @@ namespace PAO.EF;
 
 /// <summary>
 /// The one DbContext over every area's schema. It maps the tables the SQL scripts in
-/// "DB Changes" create; EF never creates or migrates schema (ADR-0034).
+/// "database/changes" create; EF never creates or migrates schema (ADR-0034).
 /// </summary>
 public sealed class PaoDbContext(DbContextOptions<PaoDbContext> options) : DbContext(options)
 {
