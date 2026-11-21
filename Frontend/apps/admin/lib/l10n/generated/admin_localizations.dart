@@ -3414,6 +3414,12 @@ abstract class AdminL10n {
   /// In en, this message translates to:
   /// **'Paisa: 50000 = ৳500. Merchants above it cannot accept jobs.'**
   String get settingsAmountHint;
+
+  /// Sidebar switch between the light (default) and dark theme.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark mode'**
+  String get shellDarkMode;
 }
 
 class _AdminL10nDelegate extends LocalizationsDelegate<AdminL10n> {

@@ -21,23 +21,27 @@ adds the concrete choices the PRD left open.
 ### Backend/
 
 ```
+PAO.sln                       the one solution (repository root): src / tests / tools folders
 Backend/
-├── PAO.sln  global.json  Directory.Build.props  Directory.Packages.props
-├── Api/                      the OpenAPI contract (openapi.yaml + paths/, schemas/, components/)
-├── PAO.Core/                 API host: Areas/<Area>/{Controllers,Features,Services,Repositories},
-│                             Registration/, Spec/openapi.gen.yaml (bundled contract)
-├── PAO.Worker/               outbox relay + periodic jobs (same image, /app/worker)
-├── PAO.Migrator/             migrations, seed data, perf fixture (up | seed | perf-seed N)
-├── PAO.Lib/                  request/view models, events, error reasons, mapping, validation
-├── PAO.EF/                   PaoDbContext, db models, configurations
-├── PAO.Infrastructure/       platform: config, logging, Redis, crypto, HTTP edge, outbox,
-│                             storage, SMS, push, metrics, health
-├── PAO.BackgroundJobs/       scheduler, relay loop, platform jobs
-├── Config/  DB Changes/  Seed/   JSON config per concern, goose SQL per module, seed data
-├── Docs/                     areas, architecture, config, database, operations, testing, API
-├── Tools/PAO.Gates/          size and docs checkers
-├── Test/                     PAO.UnitTests, PAO.IntegrationTests, PAO.TestKit,
+├── global.json  Directory.Build.props  Directory.Packages.props  .editorconfig  coverage.config
+├── api/                      the OpenAPI contract (openapi.yaml + paths/, schemas/, components/)
+├── src/
+│   ├── PAO.Core/             API host: Areas/<Area>/{Controllers,Features,Services,Repositories},
+│   │                         Registration/, Spec/openapi.gen.yaml (bundled contract)
+│   ├── PAO.Worker/           outbox relay + periodic jobs (same image, /app/worker)
+│   ├── PAO.Migrator/         migrations, seed data, perf fixture (up | seed | perf-seed N)
+│   ├── PAO.Lib/              request/view models, events, error reasons, mapping, validation
+│   ├── PAO.EF/               PaoDbContext, db models, configurations
+│   ├── PAO.Infrastructure/   platform: config, logging, Redis, crypto, HTTP edge, outbox,
+│   │                         storage, SMS, push, metrics, health
+│   └── PAO.BackgroundJobs/   scheduler, relay loop, platform jobs
+├── tests/                    PAO.UnitTests, PAO.IntegrationTests, PAO.TestKit,
 │                             PAO.E2ETests (start-up smoke + black-box journeys), PAO.LoadTests
+├── tools/PAO.Gates/          size and docs checkers
+├── config/                   JSON config per concern
+├── database/                 changes/ (goose SQL per module, bundle/), seed/ (seed data)
+├── docs/                     areas, architecture, config, database, operations, testing, API;
+│                             conventions.md (the backend rules)
 ├── docker/                   Dockerfile and the api, worker, migrate entry points
 └── scripts/                  ci.sh (the backend gates), coverage.py, gen-spec.sh
 ```
@@ -47,7 +51,7 @@ Modules (PRD §9.2) are ASP.NET areas: `Identity`, `Customer`, `Merchant` (provi
 `Billing`. Boundary rules (PRD §9.3) are architecture tests in `PAO.UnitTests`
 (`./pao lint backend`): an area reaches another only through its
 `Services/Shared/I<Area>SharedService`; the platform never references an area. The binding
-rules are in `Backend/PAO.AI/README.md`.
+rules are in `Backend/docs/conventions.md`.
 
 ### Frontend/
 
@@ -59,11 +63,11 @@ Frontend/
 ├── packages/
 │   ├── pao_core/             env config, Dio client, auth/session, token refresh,
 │   │                         error mapping, permission service, router guards
-│   ├── pao_api/              generated from Backend/Api/openapi.yaml — never edited by hand
+│   ├── pao_api/              generated from Backend/api/openapi.yaml — never edited by hand
 │   ├── pao_ui/               design system: tokens, accent themes, shared widgets
 │   ├── pao_l10n/             ARB files (en, bn) + generated localisations
 │   └── pao_e2e/              shared support for the app journeys
-└── test/e2e/                 run.sh: the app journeys against the e2e stack
+└── e2e/                      run.sh: the app journeys against the e2e stack
 ```
 
 Each app: `lib/features/<feature>/{data,domain,presentation}`, `lib/app/` (router, DI,
@@ -78,7 +82,7 @@ tools/cli/                    bats tests for the pao CLI and git hooks
 tools/fixtures/               shared test data for the CLI tests
 ```
 
-Backend unit and integration tests are separate projects under `Backend/Test/`;
+Backend unit and integration tests are separate projects under `Backend/tests/`;
 integration tests run against real Postgres, Redis and S3 (ADR-0008).
 
 ## 2. Runtime view
@@ -212,7 +216,7 @@ every event that changes a person's status or money.
 
 ## 9. Background jobs (scheduler)
 
-Only periodic jobs. The worker runs an in-process scheduler (`JobScheduler` in `Backend/PAO.BackgroundJobs`)
+Only periodic jobs. The worker runs an in-process scheduler (`JobScheduler` in `Backend/src/PAO.BackgroundJobs`)
 with interval and daily (Asia/Dhaka) schedules; each run takes a Postgres
 advisory lock named after the job, so with several workers exactly one runs it.
 

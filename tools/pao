@@ -37,7 +37,7 @@ cmd_setup() {
   require_dotnet
   command -v flutter >/dev/null 2>&1 || log "flutter not found — Flutter commands will fail"
   command -v npx >/dev/null 2>&1 || log "npx not found — ./pao gen cannot bundle the OpenAPI contract"
-  (cd "$BACKEND" && dotnet restore PAO.sln -v quiet >/dev/null) || die "dotnet restore failed"
+  (cd "$BACKEND" && dotnet restore ../PAO.sln -v quiet >/dev/null) || die "dotnet restore failed"
   git -C "$PAO_ROOT" config core.hooksPath tools/hooks
   [[ -f "$PAO_ROOT/.env" ]] || create_env
   ok "setup complete — hooks installed from tools/hooks"

@@ -39,7 +39,7 @@ Map<String, String> readEnvFile(String path) => {
 };
 
 /// The stack's seeded admins, with the password and secrets file
-/// `Frontend/test/e2e/run.sh` passes in with `--dart-define`.
+/// `Frontend/e2e/run.sh` passes in with `--dart-define`.
 AdminDriver stackAdmins(StackClient stack) => AdminDriver(
   stack,
   password: const String.fromEnvironment('PAO_E2E_ADMIN_PASSWORD'),

@@ -30,6 +30,7 @@ Future<void> main() async {
     permissions: permissions,
     locale: LocaleController(PaoLocales.english),
     api: api,
+    themeMode: ThemeModeController(await Prefs.open()),
   );
   await restoreSession(services);
   runApp(PaoApp(services: services));

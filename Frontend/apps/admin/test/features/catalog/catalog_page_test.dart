@@ -63,7 +63,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('faucet'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byType(Switch));
+    await tester.tap(find.byType(Switch).last);
     h.http.onPost(_categories, (s) => s.reply(409, apiError('CONFLICT')));
     await _save(tester, h);
     expect(find.text(failureMessage(_l10n(tester), 'CONFLICT')), findsOne);

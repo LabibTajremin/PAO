@@ -2458,5 +2458,9 @@
   "settingsAmountHint": "Paisa: 50000 = ৳500. Merchants above it cannot accept jobs.",
   "@settingsAmountHint": {
     "description": "Due limit hint."
+  },
+  "shellDarkMode": "Dark mode",
+  "@shellDarkMode": {
+    "description": "Sidebar switch between the light (default) and dark theme."
   }
 }

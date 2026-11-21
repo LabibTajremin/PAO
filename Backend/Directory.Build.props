@@ -20,7 +20,7 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   <PropertyGroup>
-    <!-- The OpenAPI contract's folder: the one place it is named (Backend/Api after cut-over). -->
-    <PaoApiDir>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)Api'))</PaoApiDir>
+    <!-- The OpenAPI contract's folder: the one place it is named (Backend/api). -->
+    <PaoApiDir>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)api'))</PaoApiDir>
   </PropertyGroup>
 </Project>

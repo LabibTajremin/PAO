@@ -1,9 +1,18 @@
 import 'dart:ui';
 
-/// The ten accent modes of the Figma `Accent` collection (05-screens.md).
+/// The eleven accent modes of the Figma `Accent` collection (05-screens.md).
 /// Changing the accent re-themes every component.
 enum AccentPreset {
-  /// PAO's default.
+  /// PAO's default: the owner's "Navy trust" palette (ADR-0038).
+  navy(
+    Color(0xFFE6EBF6),
+    Color(0xFFB1BFE2),
+    Color(0xFF16336F),
+    Color(0xFF0F2756),
+    Color(0xFF0E1A3A),
+  ),
+
+  /// The previous default, a lighter navy.
   midnight(
     Color(0xFFF3F5FA),
     Color(0xFFE2E7F2),

@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# Bundles the OpenAPI contract into PAO.Core/Spec/openapi.gen.yaml, the document the HTTP
+# Bundles the OpenAPI contract into src/PAO.Core/Spec/openapi.gen.yaml, the document the HTTP
 # edge matches and validates against. The contract's folder is the MSBuild property
-# PaoApiDir (Directory.Build.props, Backend/Api), its only definition. With --check (or CI=true) it fails on drift.
+# PaoApiDir (Directory.Build.props, Backend/api), its only definition. With --check (or CI=true) it fails on drift.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REDOCLY_CLI="@redocly/cli@1.34.3"
-BUNDLE="$ROOT/PAO.Core/Spec/openapi.gen.yaml"
+BUNDLE="$ROOT/src/PAO.Core/Spec/openapi.gen.yaml"
 export PATH="/root/.dotnet:$PATH" DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1
 
-api_dir=$(dotnet msbuild "$ROOT/PAO.Core/PAO.Core.csproj" -getProperty:PaoApiDir)
+api_dir=$(dotnet msbuild "$ROOT/src/PAO.Core/PAO.Core.csproj" -getProperty:PaoApiDir)
 source="$api_dir/openapi.yaml"
 [[ -f "$source" ]] || { echo "gen-spec: missing $source" >&2; exit 1; }
 

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pao_core/pao_core.dart';
 import 'package:pao_customer/app/app.dart';
@@ -58,5 +59,9 @@ Future<PushService> _push() async {
       projectId: String.fromEnvironment('PAO_FCM_PROJECT_ID'),
     ),
   );
-  return FcmPushService(FirebaseMessaging.instance);
+  return FcmPushService(
+    FirebaseMessaging.instance,
+    local: PluginLocalNotifier.system(),
+    showForeground: defaultTargetPlatform == TargetPlatform.android,
+  );
 }

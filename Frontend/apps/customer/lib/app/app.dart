@@ -52,7 +52,13 @@ class _PaoAppState extends State<PaoApp> {
     push: widget.services.push,
     repo: ApiNotificationsRepository(widget.services.api),
     open: (location) => unawaited(_router.push<void>(location)),
+    explain: _explainPush,
   );
+
+  Future<void> _explainPush() async {
+    final context = _router.routerDelegate.navigatorKey.currentContext;
+    if (context != null) await showPushReason(context);
+  }
 
   @override
   void initState() {

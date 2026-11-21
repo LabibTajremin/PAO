@@ -2,7 +2,7 @@
 
 PAO is a .NET 10 (C#) **modular monolith** (ADR-0001, ADR-0034) with three Flutter clients. The detailed
 engineering reference is [`docs/build/02-architecture.md`](../build/02-architecture.md) and
-`Backend/Docs/`; this page is the summary a new engineer reads first.
+`Backend/docs/`; this page is the summary a new engineer reads first.
 
 ## Module map
 
@@ -23,7 +23,7 @@ engineering reference is [`docs/build/02-architecture.md`](../build/02-architect
 
 ## Boundary rules (PRD §9.3)
 
-1. Each module is an ASP.NET area (`Backend/PAO.Core/Areas/<Area>`) and exposes only its
+1. Each module is an ASP.NET area (`Backend/src/PAO.Core/Areas/<Area>`) and exposes only its
    shared service (`Services/Shared/I<Area>SharedService`), DTOs and events (`PAO.Lib`).
 2. An area uses other areas only through their shared services and the platform
    (`PAO.Infrastructure`) — nothing else. Architecture tests enforce this in `./pao lint`.
@@ -59,9 +59,9 @@ the same shape.
 | Peers | `Areas/<A>/Services/<A>Peers` | resolves other areas' shared services on first use | the service gets clients for the shared services it still needs |
 | Events | `PAO.Lib` event types, written by `OutboxWriter` to schema `<m>.outbox` in the same transaction as the change | `OutboxRelay` (worker) delivers to the in-process `EventBus` | the relay publishes to a broker; subscribers consume from it |
 | Idempotent consumers | `<m>.processed_events` | handlers skip events already seen | unchanged — at-least-once delivery is already assumed |
-| Schema | `Backend/DB Changes/<m>/`, one Postgres schema per module | one database | the schema moves to the service's own database |
-| HTTP routes | `Areas/<A>/Controllers/` + `x-permission` in `Backend/Api/openapi.yaml` | served by the API process | routed to the service by the gateway or load balancer |
-| Jobs | scheduled jobs registered by the area (`Backend/Docs/Operations/jobs.md`) | run in the shared worker under an advisory lock | run in the service's own worker |
+| Schema | `Backend/database/changes/<m>/`, one Postgres schema per module | one database | the schema moves to the service's own database |
+| HTTP routes | `Areas/<A>/Controllers/` + `x-permission` in `Backend/api/openapi.yaml` | served by the API process | routed to the service by the gateway or load balancer |
+| Jobs | scheduled jobs registered by the area (`Backend/docs/Operations/jobs.md`) | run in the shared worker under an advisory lock | run in the service's own worker |
 
 Rules that keep this cheap are enforced today by architecture tests and review: no
 cross-schema joins or foreign keys, no transaction across modules, snapshots instead of
@@ -100,7 +100,7 @@ serialisable data.
    service's worker.
 8. **Prove it.** Run the area's unit and integration tests in the new service, the
    shared-service tests against the remote implementation, and the black-box journeys in
-   `Backend/Test/PAO.E2ETests` against the split deployment. They need no change because the public
+   `Backend/tests/PAO.E2ETests` against the split deployment. They need no change because the public
    API is the same.
 
 Peers resolve other areas' shared services on first use, so they already tolerate a peer

@@ -19,7 +19,7 @@ Secrets are not here: they live only in the host's secret store and GitHub secre
 | Application / bundle IDs | `bd.pao.pao_customer`, `bd.pao.paoCustomer`, `bd.pao.pao_partner`, `bd.pao.paoPartner` | fixed once on a store | [deployment.md §4.2](deployment.md#42-flavours-and-app-ids) |
 | Commission rate | 1000 bp (10%) | owner decision (ADR-0035) | admin setting `billing.commission_rate_bp`, 0–10000 |
 | Due block amount | 50000 paisa (৳500) | owner decision (ADR-0035) | admin setting `billing.due_block_amount`, ≥ 0 |
-| Load-test warm-up | 5 s at the test rate, reported, not judged | MVP rule | `Backend/Test/PAO.LoadTests` (`NearbySearch.WarmUp`) |
+| Load-test warm-up | 5 s at the test rate, reported, not judged | MVP rule | `Backend/tests/PAO.LoadTests` (`NearbySearch.WarmUp`) |
 | Deploys | manual, by image digest | MVP rule | [`docs/runbooks/deploy.md`](../runbooks/deploy.md); image from the `backend-image` workflow |
 | Store upload | manual | MVP rule | [deployment.md §4.7](deployment.md#47-upload) |
 | Background jobs | in the API (`JOBS_IN_API=true`), no worker service, while on Render's free plan | MVP default (ADR-0036 §14) | the API's environment; on a paid plan add the worker and set `JOBS_IN_API=false` ([deployment.md §3.4.1](deployment.md#341-one-service-only-background-jobs-in-the-api-render-free-plan)) |

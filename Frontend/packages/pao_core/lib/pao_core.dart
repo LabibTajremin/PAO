@@ -4,10 +4,13 @@ library;
 
 export 'src/connectivity.dart';
 export 'src/device/launcher.dart';
+export 'src/device/local_notifications.dart';
 export 'src/device/location.dart';
 export 'src/device/photo_source.dart';
 export 'src/device/prefs.dart';
 export 'src/device/push.dart';
+export 'src/device/push_off_notice.dart';
+export 'src/device/push_reason.dart';
 export 'src/device/secure_screen.dart';
 export 'src/device/theme_mode.dart';
 export 'src/env.dart';

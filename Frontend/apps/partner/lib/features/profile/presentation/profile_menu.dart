@@ -53,6 +53,7 @@ class ProfileMenu extends StatelessWidget {
       'level': (Icons.verified_outlined, t.profLevelTitle),
       'services': (Icons.home_repair_service_outlined, t.profServicesTitle),
       'language': (Icons.translate, t.profLanguageTitle),
+      'appearance': (Icons.contrast, t.profAppearance),
       'help': (Icons.help_outline, t.profHelpTitle),
     };
     return PaoCard(

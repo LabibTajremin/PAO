@@ -25,43 +25,44 @@ it first and continues from **Current task**.
 | P15 Interim backend | done | — | ADR-0032 |
 | P16 Hardening & handover | done | — | ADR-0023, ADR-0032 |
 | P17 .NET backend, COD & merchant dues | done | — | ADR-0034, ADR-0035 |
+| P18 Notifications pop up | done | #12 | real-device check is owner action |
+| P19 Repo layout & docs | done | #12 | |
+| P20 Palette, type & theme | in_progress | — | update round 2026-11 |
+| P21 Logo & app icons | todo | — | update round 2026-11 |
+| P22 Service icons | todo | — | update round 2026-11 |
+| P23 Artwork & tagline | todo | — | update round 2026-11 |
+| P24 Illustrations, welcome & sign-in | todo | — | update round 2026-11 |
+| P25 Scheduled delivery | todo | — | update round 2026-11 |
+| P26 Free Dhaka map | todo | — | update round 2026-11 |
+| P27 Motion | todo | — | update round 2026-11 |
+| P28 Design polish & handover | todo | — | update round 2026-11 |
 
 Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (merged).
 
 ## Current task
 
-P17 is complete (tasks 1–8); mark it `done` once the branch is merged. Task 8 (cut-over):
-the API journeys are C# (`Backend/Test/PAO.E2ETests/Journeys`, 13 tests), the load test
-is C# (`Backend/Test/PAO.LoadTests`), the earlier backends and their tooling are deleted, and the
-repository follows ADR-0034 "Repository layout after cut-over" (see "Cut-over as done"
-there and E15 in `04-decisions.md`). There is no next phase in the build kit.
+Update round 2026-11 — P20. Done: tasks 1–4. Next: task 5 (gallery and golden tests,
+light/dark × en/bn), then task 6 (ADR-0038). P18 owner check (real phones) is open.
 
-Pre-launch items (ADR-0036, E16): every code item of the former deployment "Gaps" is
-done — `migrate create-admin`, CORS origin list, `FCM_CREDENTIALS_JSON`,
-`S3_ENSURE_ENCRYPTION`, billing setting bounds, `MERCHANT_DUE_LIMIT` details, CI pins/
-Sentry/per-platform FCM App IDs, data-key rotation (`DATA_ENCRYPTION_PREVIOUS_KEYS`,
-`migrate reencrypt`), the cross-account sweep (`CrossAccountTests`), the idempotent
-replay race, the manual `backend-image` workflow, the SMS verification switch
-(`SMS_VERIFICATION_ENABLED`, ADR-0036 §13), the single-file database scripts
-(`Backend/DB Changes/bundle`, `Backend/Docs/Database/schema.md`) and background jobs in the
-API (`JOBS_IN_API`, ADR-0036 §14). What remains is owner action:
-`docs/guides/deployment.md` "Gaps to close before launch" and `docs/guides/launch-values.md`.
-Run the full `./pao ci` in the background and one heavy job at a time: two parallel .NET
-builds overload the 4-CPU container. .NET 10 SDK installs to `/root/.dotnet`.
+Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
+`automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
 
-Branch: all phases are built on `claude/zealous-davinci-78ogmu` (the only branch this
-build environment may push to; ADR-0009). A phase is "done" when its tasks are committed
-with `./pao ci` green and a `chore(progress): complete <id>` commit is pushed.
+Branch and PR (owner's rule for this round): every phase P18–P28 is built on the one branch
+`claude/update-2026-11` and goes into `main` through one pull request, which the owner merges
+once all phases are done. Every push keeps all PR checks green, and the branch is kept merged
+with `main` so `main` stays green after the merge. Preflight is not done yet.
 
 ## Environment notes
 
+- Run the full `./pao ci` in the background and one heavy job at a time: two parallel .NET
+  builds overload the 4-CPU container. .NET 10 SDK installs to `/root/.dotnet`.
 - .NET 10 SDK (`Backend/global.json`), Flutter 3.47.7; Node.js only for `npx` (Redocly bundle).
 - Local S3 is RustFS (ADR-0007); MinIO images are no longer published.
 - Docker Hub rate-limits pulls here; `mirror.gcr.io/library/<image>` works as a mirror.
 - Docker builds behind the sandbox proxy need `PAO_EXTRA_CA_FILE=/root/.ccr/ca-bundle.crt`
   in `.env` (build secret `extra_ca`).
 - No Android SDK in the build container: APK builds run only in CI (`frontend.yml`).
-- Backend integration tests (`Backend/Test/PAO.IntegrationTests`) need the compose
+- Backend integration tests (`Backend/tests/PAO.IntegrationTests`) need the compose
   Postgres/Redis/RustFS (ADR-0008); each spec file gets a private database and key prefix.
 - `./pao gen` bundles the spec with redocly (npx) and builds `pao_api` with the
   `openapitools/openapi-generator-cli:v7.16.0` Docker image (Maven Central rate-limits).
@@ -70,10 +71,10 @@ with `./pao ci` green and a `chore(progress): complete <id>` commit is pushed.
 - Cross-area calls go through `I<Area>SharedService`, resolved by each area's peers on first use.
 - Request timeouts run as a 15 s periodic sweep (`booking.expire_requests`) rather than a
   job per booking, so a missed run catches up on the next one.
-- `./pao perf` needs only the .NET SDK (the load test is `Backend/Test/PAO.LoadTests`).
+- `./pao perf` needs only the .NET SDK (the load test is `Backend/tests/PAO.LoadTests`).
 - Flutter tests that await real I/O (http_mock_adapter) inside `testWidgets` must use
   `tester.runAsync`, or they hang in fake async.
-- `Backend/Test/PAO.TestKit` has the test environment, private databases and fakes.
+- `Backend/tests/PAO.TestKit` has the test environment, private databases and fakes.
 - E2E: `infra/e2e/stack.sh` (separate compose project), `./pao test e2e` runs API and app
   journeys. Locally the admin web journey needs `CHROMEDRIVER`/`CHROME_EXECUTABLE`
   matching the installed Chromium (chromedriver 141 for Playwright's Chromium 141).
@@ -83,6 +84,67 @@ with `./pao ci` green and a `chore(progress): complete <id>` commit is pushed.
 None.
 
 ## Log
+
+- 2026-11-21 P20.4 Even corners (cards 16, small 12, sheet tops 24; the leaf tip is gone);
+  `PaoCard` is white with the navy shadow in light, an edged navy surface in dark.
+
+- 2026-11-21 P20.3 Light by default (`ThemeModeController`, nothing saved = light). Appearance
+  is its own page: Account › Appearance (customer), Profile › Appearance (partner); a Dark mode
+  switch in the admin sidebar, saved in the browser.
+
+- 2026-11-21 P20.2 Inter + Noto Sans Bengali bundled, system font on iOS (`PaoFonts.latinOn`);
+  Fraunces and Plus Jakarta Sans removed; one scale (28/22/18/16/14/12), headings w600–700
+  at -0.2. Fixed what the larger body text exposed: the home search hint overflowed narrow
+  phones; the admin provider search clipped its retry button.
+
+- 2026-11-21 P20.1 `PaoColors` on the §2 palette (light canvas F6F4EC, white cards, Ground
+  wells; dark navy-ink 0E1322/151B2D/1B2338), new `elevated`, `sunken`, `spark`, `sparkInk`,
+  `actionStrong`, `cardShadow`; `AccentPreset.navy` first and the default. AA tests extended.
+
+- 2026-11-21 P19 complete: every PR check green on e319ed7 (Android builds included).
+
+- 2026-11-21 CI: Android builds failed on 429s from Maven Central reached through the Gradle
+  Plugin Portal; `.github/gradle/maven-mirror.gradle` now puts Google's Central mirror first in
+  build-script repositories (checked with a local Gradle build).
+
+- 2026-11-21 P19.4 READMEs for the root, `Backend`, `Frontend`, `infra`, `tools`, `docs` and every
+  .NET project; `docs/guides/getting-started.md`; `Backend/docs/conventions.md` retitled.
+  `appsettings.Local.example.json` stays in `Backend/`: every `config/*.json` is loaded at run time.
+
+- 2026-11-21 P19.3 `Frontend/test/e2e` → `Frontend/e2e`; `PAO.code-workspace`, `.vscode/`
+  (extensions, launch: API, Worker, Migrator, three apps; tasks: build, pao up/down/ci/test);
+  only `.vscode/settings.local.json` is ignored.
+
+- 2026-11-21 P19.2 `Backend/api`, `config`, `database/changes` (was "DB Changes"),
+  `database/seed`, `docs` (+ `conventions.md` from PAO.AI); `Logs` untracked. Runtime paths
+  (`PaoPaths`, `MigrationFiles`, seed), the image, gates and `pao` scripts follow. Deployments
+  that set `PAO_HOME` by hand need the new folder names (`config/`, `database/`).
+
+- 2026-11-21 P19.1 .NET projects in `Backend/src`, `Backend/tests`, `Backend/tools`; `PAO.sln` at
+  the root. `PaoPaths` finds the backend by `Directory.Packages.props`; gates, `.editorconfig`,
+  scripts, Dockerfile and docs follow.
+
+- 2026-11-21 P18 complete: every PR check green on 9de597f.
+
+- 2026-11-21 P18.5 `docs/guides/push-testing.md`; Notifications pages show "Notifications are
+  off" with a settings shortcut (`PushOffNotice`, `PushService.allowed/openSettings`).
+
+- 2026-11-21 P18.4 iOS: `Runner.entitlements` (aps-environment, time-sensitive) on all 12
+  Runner configurations of both apps, `UIBackgroundModes` remote-notification. The App IDs and
+  provisioning profiles need Push Notifications and Time Sensitive enabled (owner action).
+
+- 2026-11-21 P18.1 permission reason sheet (`showPushReason`, en/bn) before the first
+  permission prompt, after sign-in; `PushService.permissionUndecided`. flutter_local_notifications
+  pinned to 22.x: 23.x needs compileSdk 37.
+
+- 2026-11-20 P18.1/3 `LocalNotifier` (flutter_local_notifications) creates the three
+  high-importance channels and shows foreground messages on Android; iOS foreground
+  banners via presentation options; local and launch taps join `PushService.opened`;
+  core library desugaring enabled in both apps.
+
+- 2026-11-20 P18.2 FCM payload asks for heads-up: `PushChannels` maps every template to
+  `pao_bookings` / `pao_account` / `pao_general`; Android channel_id + PRIORITY_HIGH, APNs
+  priority 10, alert push type, time-sensitive for booking events.
 
 Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (commit sha)`.
 
@@ -102,7 +164,7 @@ Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (c
   release downloads with 504) and apt; main went red on these downloads, never on a test.
 
 - 2026-11-07 MVP deployed: API on Render free (`https://pao-1-zbl8.onrender.com`,
-  `JOBS_IN_API=true`), Neon set up from `DB Changes/bundle` (68 tables, catalog seeded);
+  `JOBS_IN_API=true`), Neon set up from `database/changes/bundle` (68 tables, catalog seeded);
   the three apps' `config/prod.json` point at that host until `api.pao.com.bd` exists.
 
 - 2026-11-06 MVP launch: `JOBS_IN_API` (default false) lets the API run the worker's relay
@@ -112,13 +174,13 @@ Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (c
 - 2026-11-06 MVP launch: `SMS_VERIFICATION_ENABLED`/`SMS_FIXED_CODE` (no SMS, fixed code,
   limits unchanged; prod starts without sslwireless), `Docs/Database/schema.md` with the
   index review (5 indexes in identity/0004, booking/0003, admin/0003),
-  `DB Changes/bundle/{schema,seed}.sql` from `migrate bundle`, checked in CI.
+  `database/changes/bundle/{schema,seed}.sql` from `migrate bundle`, checked in CI.
 
 - 2026-10-25 P17 follow-up: last NestJS/JavaScript traces removed. k6 replaced by the C#
-  load test `Backend/Test/PAO.LoadTests` (`./pao perf`, CI perf job without k6);
+  load test `Backend/tests/PAO.LoadTests` (`./pao perf`, CI perf job without k6);
   `LegacyEnvironment` → `EnvironmentVariables`; comments, test names and docs neutral;
   security checklist evidence re-mapped to C# tests (3 tests added); PRD PDF regenerated.
-- 2026-10-24 P17.8 cut-over: journeys ported to C# (13/13), k6 to Backend/Test/Load,
+- 2026-10-24 P17.8 cut-over: journeys ported to C# (13/13), k6 to Backend/tests/Load,
   NestJS backend and tooling deleted, ADR-0034 layout applied (Backend, Frontend, infra,
   tools, docs/guides, out/), CLI, hooks, workflows and docs switched.
 - 2026-10-24 P17.6 apps for ADR-0035: partner due banner, 409 MERCHANT_DUE_LIMIT pay link,
@@ -165,7 +227,7 @@ Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (c
   incremental aggregates with distribution, public review lists, provider public
   profile; `testkit.CompletedJob` and `PAO_TEST_LOG=1` for server logs in tests.
 - 2026-10-09 P07 perf: `./pao perf` seeds 2,000 online providers (`migrate perf-seed`)
-  and runs `Backend/Test/Load/nearby.js`; nearby search p95 14 ms locally (limit 300 ms).
+  and runs `Backend/tests/Load/nearby.js`; nearby search p95 14 ms locally (limit 300 ms).
 - 2026-10-09 P07.1–9 booking: state machine per booking-states.md, idempotent create with
   price/name snapshots, accept under provider + row locks (one active ASAP job), reject,
   timeout sweep, start code with lockout, catalog-only extras, cancel rules, lists,

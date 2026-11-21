@@ -25,12 +25,9 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   fonts:
-    - family: PlusJakartaSans
+    - family: Inter
       fonts:
-        - asset: fonts/PlusJakartaSans-Variable.ttf
-    - family: Fraunces
-      fonts:
-        - asset: fonts/Fraunces-Variable.ttf
+        - asset: fonts/Inter-Variable.ttf
     - family: NotoSansBengali
       fonts:
         - asset: fonts/NotoSansBengali-Variable.ttf

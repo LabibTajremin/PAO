@@ -92,6 +92,17 @@ class _Menu extends StatelessWidget {
             padding: const EdgeInsets.all(PaoSpace.md),
             child: PaoLanguageSwitch(controller: services.locale),
           ),
+          ValueListenableBuilder(
+            valueListenable: services.themeMode,
+            builder: (context, mode, _) => SwitchListTile(
+              secondary: const Icon(Icons.dark_mode_outlined),
+              title: Text(context.t.shellDarkMode),
+              value: mode == ThemeMode.dark,
+              onChanged: (on) => services.themeMode.value = on
+                  ? ThemeMode.dark
+                  : ThemeMode.light,
+            ),
+          ),
           ListTile(
             leading: const Icon(Icons.logout),
             title: Text(context.common.actionSignOut),

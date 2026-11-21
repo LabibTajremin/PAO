@@ -22,7 +22,7 @@ One logical change per commit, with its tests. The `commit-msg` hook checks the 
 
 - [ ] `./pao ci` passes locally.
 - [ ] Tests cover the change (coverage stays at 100% of hand-written code).
-- [ ] `Backend/Api/openapi.yaml` was updated before the handler that implements a change.
+- [ ] `Backend/api/openapi.yaml` was updated before the handler that implements a change.
 - [ ] The module `README.md` reflects new contract methods, events or tables.
 - [ ] Significant decisions have an ADR in `docs/adr/`.
 - [ ] No secrets, `.env` files, build output or commented-out code.

@@ -1783,4 +1783,7 @@ class AdminL10nBn extends AdminL10n {
   @override
   String get settingsAmountHint =>
       'পয়সা: ৫০০০০ = ৳৫০০। এর বেশি বকেয়ায় মার্চেন্ট কাজ নিতে পারবেন না।';
+
+  @override
+  String get shellDarkMode => 'ডার্ক মোড';
 }

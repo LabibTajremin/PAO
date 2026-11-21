@@ -1,37 +1,29 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/painting.dart';
 
-/// The leaf corner, PAO's signature shape: three soft corners and one tight
-/// "tip" at the bottom right (ADR 0033). Keep the tip on the same corner
-/// everywhere so the shape reads as one brand mark.
+/// Corner radii (ADR-0038): calm, even corners. The names come from the
+/// earlier leaf shape and stay so screens keep their meaning.
 abstract final class PaoShape {
-  /// The soft corners.
-  static const double round = 22;
+  /// Cards, primary buttons and selected chips.
+  static const double round = 16;
 
-  /// The tip.
-  static const double tip = 4;
+  /// Small elements such as icon tiles and inputs.
+  static const double small = 12;
+
+  /// The top corners of bottom sheets.
+  static const double sheetRound = 24;
 
   /// Cards, primary buttons and selected chips.
-  static const BorderRadius leaf = BorderRadius.only(
-    topLeft: Radius.circular(round),
-    topRight: Radius.circular(round),
-    bottomLeft: Radius.circular(round),
-    bottomRight: Radius.circular(tip),
+  static const BorderRadius leaf = BorderRadius.all(Radius.circular(round));
+
+  /// Small elements such as icon tiles, where 16 would make them look round.
+  static const BorderRadius leafSmall = BorderRadius.all(
+    Radius.circular(small),
   );
 
-  /// Small elements such as icon tiles, where 20 would turn them into circles.
-  static const BorderRadius leafSmall = BorderRadius.only(
-    topLeft: Radius.circular(14),
-    topRight: Radius.circular(14),
-    bottomLeft: Radius.circular(14),
-    bottomRight: Radius.circular(3),
-  );
-
-  /// Bottom sheets: only the top edge is visible, so the tip moves to the
-  /// top right there.
-  static const BorderRadius sheet = BorderRadius.only(
-    topLeft: Radius.circular(28),
-    topRight: Radius.circular(tip),
+  /// Bottom sheets: only the top edge is visible.
+  static const BorderRadius sheet = BorderRadius.vertical(
+    top: Radius.circular(sheetRound),
   );
 }
 

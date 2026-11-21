@@ -180,15 +180,20 @@ void main() {
     expect(got.map((d) => d['bookingId']), ['1', '2']);
     await sub.cancel();
     when(m.getInitialMessage).thenAnswer((_) async => null);
-    expect(
-      await FcmPushService(m, openedApp: const Stream.empty()).opened.toList(),
-      isEmpty,
-    );
+    final none = <Map<String, Object?>>[];
+    final quiet = FcmPushService(
+      m,
+      openedApp: const Stream.empty(),
+    ).opened.listen(none.add);
+    await Future<void>.delayed(Duration.zero);
+    expect(none, isEmpty);
+    await quiet.cancel();
     expect(FcmPushService(m), isA<PushService>());
     const make = NoPushService.new;
-    final none = make();
-    expect(await none.token(), isNull);
-    expect(await none.tokenRefresh.isEmpty, isTrue);
-    expect(await none.opened.isEmpty, isTrue);
+    final off = make();
+    await off.start();
+    expect(await off.token(), isNull);
+    expect(await off.tokenRefresh.isEmpty, isTrue);
+    expect(await off.opened.isEmpty, isTrue);
   });
 }
