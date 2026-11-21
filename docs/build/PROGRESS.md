@@ -25,8 +25,8 @@ it first and continues from **Current task**.
 | P15 Interim backend | done | — | ADR-0032 |
 | P16 Hardening & handover | done | — | ADR-0023, ADR-0032 |
 | P17 .NET backend, COD & merchant dues | done | — | ADR-0034, ADR-0035 |
-| P18 Notifications pop up | in_progress | — | update round 2026-11 |
-| P19 Repo layout & docs | todo | — | update round 2026-11 |
+| P18 Notifications pop up | done | #12 | real-device check is owner action |
+| P19 Repo layout & docs | in_progress | — | update round 2026-11 |
 | P20 Palette, type & theme | todo | — | update round 2026-11 |
 | P21 Logo & app icons | todo | — | update round 2026-11 |
 | P22 Service icons | todo | — | update round 2026-11 |
@@ -41,9 +41,9 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P18. Tasks 1–5 done; waiting for green PR checks, then mark P18
-`done` and start P19 task 1. Owner check outstanding: heads-up on a real Android 14 phone
-and an iPhone (`docs/guides/push-testing.md`).
+Update round 2026-11 — P19, task 1 (target layout: `git mv` into `Backend/src`, `tests`,
+`tools`, `api`, `config`, `database`, `docs`; root `PAO.sln`). P18 is done; its owner check
+(heads-up on a real Android 14 phone and an iPhone, `docs/guides/push-testing.md`) is open.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -85,6 +85,8 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P18 complete: every PR check green on 9de597f.
 
 - 2026-11-21 P18.5 `docs/guides/push-testing.md`; Notifications pages show "Notifications are
   off" with a settings shortcut (`PushOffNotice`, `PushService.allowed/openSettings`).
