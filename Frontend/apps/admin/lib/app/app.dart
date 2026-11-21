@@ -50,7 +50,10 @@ class _PaoAppState extends State<PaoApp> {
 
   @override
   Widget build(BuildContext context) => ListenableBuilder(
-    listenable: widget.services.locale,
+    listenable: Listenable.merge([
+      widget.services.locale,
+      widget.services.themeMode,
+    ]),
     builder: (_, _) {
       final locale = widget.services.locale.value;
       final bangla = locale.languageCode == 'bn';
@@ -58,6 +61,7 @@ class _PaoAppState extends State<PaoApp> {
         title: 'PAO Admin',
         theme: PaoTheme.light(bangla: bangla),
         darkTheme: PaoTheme.dark(bangla: bangla),
+        themeMode: widget.services.themeMode.value,
         locale: locale,
         supportedLocales: PaoLocales.all,
         localizationsDelegates: adminDelegates,

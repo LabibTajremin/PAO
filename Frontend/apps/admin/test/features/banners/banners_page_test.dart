@@ -60,7 +60,7 @@ void main() {
     await h.settle(tester);
     await tester.tap(find.text('Electrician').last);
     await h.settle(tester);
-    await tester.tap(find.byType(Switch));
+    await tester.tap(find.byType(Switch).last);
     h.http.onPost(_path, (s) => s.reply(201, _banner('b9')));
     await tester.tap(find.text('Save'));
     await h.settle(tester);

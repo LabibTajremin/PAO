@@ -41,9 +41,9 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P20. Done: tasks 1–2 (palette; type). Next: task 3 (light by
-default; Appearance under Account/Profile › Settings; admin toggle). P18 owner check (real
-phones) is open.
+Update round 2026-11 — P20. Done: tasks 1–3 (palette, type, light by default).
+Next: task 4 (premium surfaces: white cards with the navy shadow, sunken bands, 16/24/12
+radii, 4-pt spacing). P18 owner check (real phones) is open.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -85,6 +85,10 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P20.3 Light by default (`ThemeModeController`, nothing saved = light). Appearance
+  is its own page: Account › Appearance (customer), Profile › Appearance (partner); a Dark mode
+  switch in the admin sidebar, saved in the browser.
 
 - 2026-11-21 P20.2 Inter + Noto Sans Bengali bundled, system font on iOS (`PaoFonts.latinOn`);
   Fraunces and Plus Jakarta Sans removed; one scale (28/22/18/16/14/12), headings w600–700

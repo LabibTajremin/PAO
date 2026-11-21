@@ -5,6 +5,7 @@ import 'package:pao_customer/app/services.dart';
 import 'package:pao_customer/features/account/presentation/account_deleted_page.dart';
 import 'package:pao_customer/features/account/presentation/account_page.dart';
 import 'package:pao_customer/features/account/presentation/addresses_page.dart';
+import 'package:pao_customer/features/account/presentation/appearance_page.dart';
 import 'package:pao_customer/features/account/presentation/delete_account_page.dart';
 import 'package:pao_customer/features/account/presentation/edit_profile_page.dart';
 import 'package:pao_customer/features/account/presentation/help_page.dart';
@@ -22,6 +23,7 @@ GoRoute accountRoute(AppServices s, GlobalKey<NavigatorState> root) {
       sub('profile', EditProfilePage(services: s)),
       sub('addresses', AddressesPage(services: s)),
       sub('language', LanguagePage(services: s)),
+      sub('appearance', AppearancePage(services: s)),
       sub('help', HelpPage(services: s)),
       sub('delete', DeleteAccountPage(services: s)),
     ],

@@ -1797,4 +1797,7 @@ class AdminL10nEn extends AdminL10n {
   @override
   String get settingsAmountHint =>
       'Paisa: 50000 = ৳500. Merchants above it cannot accept jobs.';
+
+  @override
+  String get shellDarkMode => 'Dark mode';
 }
