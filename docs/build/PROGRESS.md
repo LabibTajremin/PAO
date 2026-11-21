@@ -26,8 +26,8 @@ it first and continues from **Current task**.
 | P16 Hardening & handover | done | — | ADR-0023, ADR-0032 |
 | P17 .NET backend, COD & merchant dues | done | — | ADR-0034, ADR-0035 |
 | P18 Notifications pop up | done | #12 | real-device check is owner action |
-| P19 Repo layout & docs | in_progress | — | update round 2026-11 |
-| P20 Palette, type & theme | todo | — | update round 2026-11 |
+| P19 Repo layout & docs | done | #12 | |
+| P20 Palette, type & theme | in_progress | — | update round 2026-11 |
 | P21 Logo & app icons | todo | — | update round 2026-11 |
 | P22 Service icons | todo | — | update round 2026-11 |
 | P23 Artwork & tagline | todo | — | update round 2026-11 |
@@ -41,8 +41,8 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P19. Tasks done (layout, VS Code, READMEs); waiting for green PR
-checks, then mark P19 `done` and start P20 task 1. P18 owner check (real phones) is open.
+Update round 2026-11 — P20, task 1 (colour tokens from `06-update-2026-11.md` §2,
+`AccentPreset.navy` as the default). P18 and P19 are done; P18 owner check (real phones) is open.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -84,6 +84,8 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P19 complete: every PR check green on e319ed7 (Android builds included).
 
 - 2026-11-21 CI: Android builds failed on 429s from Maven Central reached through the Gradle
   Plugin Portal; `.github/gradle/maven-mirror.gradle` now puts Google's Central mirror first in
