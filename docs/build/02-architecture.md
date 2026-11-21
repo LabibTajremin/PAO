@@ -21,23 +21,27 @@ adds the concrete choices the PRD left open.
 ### Backend/
 
 ```
+PAO.sln                       the one solution (repository root): src / tests / tools folders
 Backend/
-├── PAO.sln  global.json  Directory.Build.props  Directory.Packages.props
-├── Api/                      the OpenAPI contract (openapi.yaml + paths/, schemas/, components/)
-├── PAO.Core/                 API host: Areas/<Area>/{Controllers,Features,Services,Repositories},
-│                             Registration/, Spec/openapi.gen.yaml (bundled contract)
-├── PAO.Worker/               outbox relay + periodic jobs (same image, /app/worker)
-├── PAO.Migrator/             migrations, seed data, perf fixture (up | seed | perf-seed N)
-├── PAO.Lib/                  request/view models, events, error reasons, mapping, validation
-├── PAO.EF/                   PaoDbContext, db models, configurations
-├── PAO.Infrastructure/       platform: config, logging, Redis, crypto, HTTP edge, outbox,
-│                             storage, SMS, push, metrics, health
-├── PAO.BackgroundJobs/       scheduler, relay loop, platform jobs
-├── Config/  database/changes/  Seed/   JSON config per concern, goose SQL per module, seed data
-├── Docs/                     areas, architecture, config, database, operations, testing, API
-├── tools/PAO.Gates/          size and docs checkers
-├── Test/                     PAO.UnitTests, PAO.IntegrationTests, PAO.TestKit,
+├── global.json  Directory.Build.props  Directory.Packages.props  .editorconfig  coverage.config
+├── api/                      the OpenAPI contract (openapi.yaml + paths/, schemas/, components/)
+├── src/
+│   ├── PAO.Core/             API host: Areas/<Area>/{Controllers,Features,Services,Repositories},
+│   │                         Registration/, Spec/openapi.gen.yaml (bundled contract)
+│   ├── PAO.Worker/           outbox relay + periodic jobs (same image, /app/worker)
+│   ├── PAO.Migrator/         migrations, seed data, perf fixture (up | seed | perf-seed N)
+│   ├── PAO.Lib/              request/view models, events, error reasons, mapping, validation
+│   ├── PAO.EF/               PaoDbContext, db models, configurations
+│   ├── PAO.Infrastructure/   platform: config, logging, Redis, crypto, HTTP edge, outbox,
+│   │                         storage, SMS, push, metrics, health
+│   └── PAO.BackgroundJobs/   scheduler, relay loop, platform jobs
+├── tests/                    PAO.UnitTests, PAO.IntegrationTests, PAO.TestKit,
 │                             PAO.E2ETests (start-up smoke + black-box journeys), PAO.LoadTests
+├── tools/PAO.Gates/          size and docs checkers
+├── config/                   JSON config per concern
+├── database/                 changes/ (goose SQL per module, bundle/), seed/ (seed data)
+├── docs/                     areas, architecture, config, database, operations, testing, API;
+│                             conventions.md (the backend rules)
 ├── docker/                   Dockerfile and the api, worker, migrate entry points
 └── scripts/                  ci.sh (the backend gates), coverage.py, gen-spec.sh
 ```
@@ -63,7 +67,7 @@ Frontend/
 │   ├── pao_ui/               design system: tokens, accent themes, shared widgets
 │   ├── pao_l10n/             ARB files (en, bn) + generated localisations
 │   └── pao_e2e/              shared support for the app journeys
-└── test/e2e/                 run.sh: the app journeys against the e2e stack
+└── e2e/                      run.sh: the app journeys against the e2e stack
 ```
 
 Each app: `lib/features/<feature>/{data,domain,presentation}`, `lib/app/` (router, DI,

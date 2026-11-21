@@ -1,4 +1,4 @@
-# Frontend/test/e2e
+# Frontend/e2e
 
 The Flutter apps' end-to-end journeys and start-up smoke tests (P14 tasks 3 and 5),
 driven against the running stack (`infra/e2e/stack.sh`). `./pao test e2e` runs them
@@ -32,8 +32,8 @@ after the API journeys; `run.sh` runs them alone.
 
 ```sh
 infra/e2e/stack.sh                       # or with PAO_E2E_PROJECT / PAO_E2E_PORT
-Frontend/test/e2e/run.sh                  # all apps
-Frontend/test/e2e/run.sh customer -- integration_test/customer_journey_test.dart
+Frontend/e2e/run.sh                  # all apps
+Frontend/e2e/run.sh customer -- integration_test/customer_journey_test.dart
 ```
 
 Needs Flutter, `xvfb-run`, `dbus-run-session`, `gnome-keyring` and the Linux desktop

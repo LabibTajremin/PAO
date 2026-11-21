@@ -3,7 +3,7 @@
 # chromedriver (flutter drive). Called by run.sh: admin-web.sh <api url> <dart-defines…>
 set -euo pipefail
 here=$(cd "$(dirname "$0")" && pwd)
-root=$(cd "$here/../../.." && pwd)
+root=$(cd "$here/../.." && pwd)
 admin="$root/Frontend/apps/admin"
 api="$1"
 shift

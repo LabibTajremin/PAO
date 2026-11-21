@@ -7,7 +7,7 @@ export BACKEND="$PAO_ROOT/Backend"
 export FRONTEND="$PAO_ROOT/Frontend"
 export E2E_TESTS="$BACKEND/tests/PAO.E2ETests"
 export LOAD_DIR="$BACKEND/tests/PAO.LoadTests"
-export APP_JOURNEYS="$FRONTEND/test/e2e"
+export APP_JOURNEYS="$FRONTEND/e2e"
 export INFRA="$PAO_ROOT/infra"
 export E2E_STACK="$INFRA/e2e/stack.sh"
 # Generated output (coverage, the perf fixture, the e2e stack's state) lives in ignored out/.

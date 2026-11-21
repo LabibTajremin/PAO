@@ -14,4 +14,4 @@ any app at run time; apps list it under `dev_dependencies`.
 - `secrets_file.dart` (`dart:io`): admins' TOTP secrets in `out/e2e/.admins.env`.
 - `bin/submitted_provider.dart`: a provider waiting for review, for the admin journey.
 
-How the journeys run: `Frontend/test/e2e/README.md`.
+How the journeys run: `Frontend/e2e/README.md`.

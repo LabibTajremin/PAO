@@ -20,7 +20,8 @@ pubspec_overrides.yaml
 
 # OS / editors
 .DS_Store
-.vscode/
+# The shared editor set-up is committed; personal settings are not.
+.vscode/settings.local.json
 *.swp
 # An empty CA bundle the compose build uses when PAO_EXTRA_CA_FILE is unset.
 !infra/no-extra-ca.pem

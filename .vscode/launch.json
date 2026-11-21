@@ -1,0 +1,75 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "API (PAO.Core)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build backend",
+      "program": "${workspaceFolder}/Backend/src/PAO.Core/bin/Debug/net10.0/PAO.Core.dll",
+      "cwd": "${workspaceFolder}/Backend",
+      "env": { "ASPNETCORE_ENVIRONMENT": "Development" },
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Worker (jobs and outbox)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build backend",
+      "program": "${workspaceFolder}/Backend/src/PAO.Worker/bin/Debug/net10.0/PAO.Worker.dll",
+      "cwd": "${workspaceFolder}/Backend",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Migrator: up",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build backend",
+      "program": "${workspaceFolder}/Backend/src/PAO.Migrator/bin/Debug/net10.0/PAO.Migrator.dll",
+      "args": ["up"],
+      "cwd": "${workspaceFolder}/Backend",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Migrator: seed",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build backend",
+      "program": "${workspaceFolder}/Backend/src/PAO.Migrator/bin/Debug/net10.0/PAO.Migrator.dll",
+      "args": ["seed"],
+      "cwd": "${workspaceFolder}/Backend",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Customer app (dev)",
+      "type": "dart",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/Frontend/apps/customer",
+      "program": "lib/main.dart",
+      "args": ["--flavor", "dev", "--dart-define-from-file=config/dev.json"]
+    },
+    {
+      "name": "Partner app (dev)",
+      "type": "dart",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/Frontend/apps/partner",
+      "program": "lib/main.dart",
+      "args": ["--flavor", "dev", "--dart-define-from-file=config/dev.json"]
+    },
+    {
+      "name": "Admin web (dev)",
+      "type": "dart",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/Frontend/apps/admin",
+      "program": "lib/main.dart",
+      "deviceId": "chrome",
+      "args": ["--dart-define-from-file=config/dev.json"]
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Backend (API + Worker)",
+      "configurations": ["API (PAO.Core)", "Worker (jobs and outbox)"]
+    }
+  ]
+}

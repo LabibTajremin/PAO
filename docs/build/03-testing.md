@@ -13,7 +13,7 @@ A task is not done until its tests pass and coverage stays at 100% (PRD §10).
 | Architecture | `./pao lint` (`Category=Gate` tests) | source tree | area boundaries, authorisation attributes, mapping profiles, file-size limits, docs coverage |
 | Start-up smoke | `Backend/tests/PAO.E2ETests/StartupSmokeTests.cs` | the built hosts as processes | migrator, API and worker start, answer health and metrics, fail fast on bad config |
 | End-to-end (API) | `Backend/tests/PAO.E2ETests/Journeys/` (C#, `Category=Journey`) | full Docker stack (`infra/e2e/stack.sh`) | complete journeys: enrol → verify → online → book → accept → start code → extras → complete → rate; cancel; timeout; expiry |
-| End-to-end (apps) | `Frontend/apps/*/integration_test/`, orchestrated by `Frontend/test/e2e/` | the same stack + Linux desktop / Chrome | the same journeys through the real UI |
+| End-to-end (apps) | `Frontend/apps/*/integration_test/`, orchestrated by `Frontend/e2e/` | the same stack + Linux desktop / Chrome | the same journeys through the real UI |
 | Performance | `Backend/tests/PAO.LoadTests/` (C# console, HttpClient) | Docker stack | nearby search p95 < 300 ms; request reaches provider < 3 s (PRD §11) |
 
 Rules:
@@ -59,7 +59,7 @@ prints a one-line summary, so humans, git hooks and CI use the same entry point.
 | `./pao lint [backend\|dart\|shell\|sizes]` | Dart file sizes, shellcheck, backend build (warnings as errors) + `dotnet format` + gates (architecture, authorisation, size, docs; journeys included), dart format, analyze, dart_code_linter |
 | `./pao test unit` | CLI (bats), backend unit tests, Flutter unit/widget tests |
 | `./pao test integration` | backend unit + integration tests with merged coverage (`Backend/scripts/ci.sh test`) |
-| `./pao test e2e` | start-up smoke tests, a fresh e2e stack (`infra/e2e/stack.sh`), the C# journeys (`Backend/tests/PAO.E2ETests`, `Category=Journey`), then the app journeys (`Frontend/test/e2e/run.sh`) |
+| `./pao test e2e` | start-up smoke tests, a fresh e2e stack (`infra/e2e/stack.sh`), the C# journeys (`Backend/tests/PAO.E2ETests`, `Category=Journey`), then the app journeys (`Frontend/e2e/run.sh`) |
 | `./pao test all` | CLI and Flutter unit → backend unit + integration → e2e |
 | `./pao cover` | enforces 100% (backend and every Flutter package), writes `out/coverage/summary.md` |
 | `./pao security` | gitleaks (`infra/security/gitleaks.toml`), osv-scanner over the Dart and NuGet lockfiles (`infra/security/osv-scanner.toml`), trivy 0.64.1 (pinned image) over the source tree and, when `PAO_SCAN_IMAGE` is set, the backend image (`infra/security/trivyignore`) |

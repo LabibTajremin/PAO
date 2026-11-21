@@ -34,7 +34,7 @@ key environment; nothing shared is dropped.
 `Backend/docker/Dockerfile`, so `infra/e2e/stack.sh` and every journey run against
 the .NET hosts: the API journeys (`tests/PAO.E2ETests/Journeys`, plain HTTP, no backend
 references), the app journeys
-(`Frontend/test/e2e/run.sh`: partner, customer and admin) and the load-test thresholds
+(`Frontend/e2e/run.sh`: partner, customer and admin) and the load-test thresholds
 (`./pao perf e2e`). With `APP_ENV=test` the hosts mount the hooks in
 `src/PAO.Infrastructure/Testing/TestHooks.cs` (`/__test/sms`, `/__test/pushes`,
 `/__test/verification/expire`); `migrate seed` and `migrate perf-seed N` prepare the data.

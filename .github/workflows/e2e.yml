@@ -47,7 +47,7 @@ jobs:
         if: failure()
         run: docker compose --project-directory . -f infra/docker-compose.yml -p pao-e2e logs --no-color | tail -200
 
-  # The Flutter journeys and start-up smoke tests (Frontend/test/e2e/run.sh), each app
+  # The Flutter journeys and start-up smoke tests (Frontend/e2e/run.sh), each app
   # against its own stack: partner and customer on the Linux desktop under Xvfb,
   # the admin panel in the runner's Chrome through its matching chromedriver.
   apps:
@@ -74,7 +74,7 @@ jobs:
       - name: Journeys
         env:
           CHROME_EXECUTABLE: /usr/bin/google-chrome
-        run: CHROMEDRIVER="$CHROMEWEBDRIVER/chromedriver" Frontend/test/e2e/run.sh ${{ matrix.app }}
+        run: CHROMEDRIVER="$CHROMEWEBDRIVER/chromedriver" Frontend/e2e/run.sh ${{ matrix.app }}
       - name: Stack logs
         if: failure()
         run: docker compose --project-directory . -f infra/docker-compose.yml -p pao-e2e logs --no-color | tail -200

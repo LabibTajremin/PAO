@@ -15,7 +15,7 @@
 #   PAO_E2E_DRIVER_PORT     chromedriver port (default 4444)
 set -euo pipefail
 here=$(cd "$(dirname "$0")" && pwd)
-root=$(cd "$here/../../.." && pwd)
+root=$(cd "$here/../.." && pwd)
 apps="$root/Frontend/apps"
 stack_env="${PAO_E2E_STATE:-$root/out/e2e}/.stack.env"
 

@@ -43,8 +43,8 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 Update round 2026-11 — P19. Done: .NET projects (`Backend/src`, `tests`, `tools`, root
 `PAO.sln`) and the data folders (`api`, `config`, `database/changes`, `database/seed`, `docs`,
-`docs/conventions.md`; `Logs` ignored). Next: `Frontend/e2e`, the VS Code workspace and
-`.vscode`, then the READMEs. P18 owner check (real phones) is open.
+`docs/conventions.md`; `Logs` ignored). `Frontend/e2e`, `PAO.code-workspace` and `.vscode/` are
+done. Next: the READMEs and `docs/guides/getting-started.md`. P18 owner check (real phones) is open.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -86,6 +86,10 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P19.3 `Frontend/test/e2e` → `Frontend/e2e`; `PAO.code-workspace`, `.vscode/`
+  (extensions, launch: API, Worker, Migrator, three apps; tasks: build, pao up/down/ci/test);
+  only `.vscode/settings.local.json` is ignored.
 
 - 2026-11-21 P19.2 `Backend/api`, `config`, `database/changes` (was "DB Changes"),
   `database/seed`, `docs` (+ `conventions.md` from PAO.AI); `Logs` untracked. Runtime paths
