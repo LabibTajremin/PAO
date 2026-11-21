@@ -41,9 +41,9 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P21. Done: tasks 1–2 (logo, launcher icons). Next: task 3 (splash:
-light #F6F4EC with the ink tile, dark #0E1322 with the inverse, Android 12 splash API). P18
-owner check (real phones) is open.
+Update round 2026-11 — P21. Done: tasks 1–3 (logo, icons, splash). Next: task 4 (receipts:
+logo tile header, watermark behind the items, tagline footer) and the two-apps naming task.
+P18 owner check (real phones) is open.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -85,6 +85,10 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P21.3 Native splash via `tools/brand/splash.sh` (flutter_native_splash would need the
+  same blocked dependency): Android pre-12 layer-list and 12+ SplashScreen API, light and night;
+  iOS launch image and `LaunchBackground` colour with dark variants.
 
 - 2026-11-21 P21.2 Launcher icons from `design/brand` via `tools/brand/app-icons.sh` (ImageMagick;
   flutter_launcher_icons cannot resolve beside melos): Android legacy + adaptive + monochrome,
