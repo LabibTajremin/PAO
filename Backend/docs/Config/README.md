@@ -17,7 +17,7 @@ Each concern has one file in `config/`, bound to a typed options class
 | `redis.json` | `Redis` | `Url` |
 | `sms.json` | `Sms` | `Adapter`, `SslWirelessEndpoint`, `SslWirelessApiToken`, `SslWirelessSid`, `TimeoutSeconds`, `VerificationEnabled`, `FixedCode` |
 | `smtp.json` | `Smtp` | `Host`, `Port`, `UseTls`, `From`, `Username`, `Password` |
-| `storage.json` | `Storage` | `Endpoint`, `PublicEndpoint`, `Region`, `AccessKey`, `SecretKey`, `BucketPrivate`, `BucketPublic`, `EnsureEncryption` |
+| `storage.json` | `Storage` | `Endpoint`, `PublicEndpoint`, `Region`, `AccessKey`, `SecretKey`, `BucketPrivate`, `BucketPublic`, `EnsureEncryption`, `PublicBaseUrl`, `PublicReadPolicy` |
 
 ## SMS verification switch
 

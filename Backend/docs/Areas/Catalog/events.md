@@ -7,3 +7,4 @@ least once ([events and jobs](../../Architecture/events-and-jobs.md)).
 |---|
 | `catalog.CatalogChanged` |
 | `catalog.PriceChanged` |
+| `catalog.IconAdded` |

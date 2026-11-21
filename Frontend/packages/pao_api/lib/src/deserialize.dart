@@ -31,6 +31,7 @@ import 'package:pao_api/src/model/booking_item_input.dart';
 import 'package:pao_api/src/model/booking_list.dart';
 import 'package:pao_api/src/model/booking_party.dart';
 import 'package:pao_api/src/model/booking_summary.dart';
+import 'package:pao_api/src/model/catalog_icon.dart';
 import 'package:pao_api/src/model/catalog_search_results.dart';
 import 'package:pao_api/src/model/catalog_tree.dart';
 import 'package:pao_api/src/model/category.dart';
@@ -66,6 +67,9 @@ import 'package:pao_api/src/model/extras_decision_input.dart';
 import 'package:pao_api/src/model/extras_input.dart';
 import 'package:pao_api/src/model/extras_proposal.dart';
 import 'package:pao_api/src/model/heartbeat_input.dart';
+import 'package:pao_api/src/model/icon_library.dart';
+import 'package:pao_api/src/model/icon_link.dart';
+import 'package:pao_api/src/model/icon_upload.dart';
 import 'package:pao_api/src/model/ledger_entry.dart';
 import 'package:pao_api/src/model/ledger_entry_list.dart';
 import 'package:pao_api/src/model/level2_info.dart';
@@ -257,6 +261,8 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'BookingSummary':
       return BookingSummary.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'CatalogIcon':
+      return CatalogIcon.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'CatalogSearchResults':
       return CatalogSearchResults.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -361,6 +367,12 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'HeartbeatInput':
       return HeartbeatInput.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'IconLibrary':
+      return IconLibrary.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'IconLink':
+      return IconLink.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'IconUpload':
+      return IconUpload.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'ItemStatus':
     case 'ItemType':
     case 'Language':

@@ -9,6 +9,8 @@ public sealed record CategoryInput
     public required Text Name { get; init; }
     /// <summary>The icon key.</summary>
     public required string IconKey { get; init; }
+    /// <summary>An uploaded or linked icon in our public bucket (ADR-0039); null uses the icon key.</summary>
+    public string? IconUrl { get; init; }
     /// <summary>The sort order; 0 when absent.</summary>
     public int? SortOrder { get; init; }
     /// <summary>Whether published; false when absent.</summary>
@@ -24,6 +26,8 @@ public sealed record ServiceInput
     public required Text Name { get; init; }
     /// <summary>The icon key.</summary>
     public required string IconKey { get; init; }
+    /// <summary>An uploaded or linked icon in our public bucket (ADR-0039); null uses the icon key.</summary>
+    public string? IconUrl { get; init; }
     /// <summary>The service model.</summary>
     public required string ServiceModel { get; init; }
     /// <summary>The required level.</summary>

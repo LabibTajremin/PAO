@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using PAO.Core.Areas.Catalog.Features.Icons.Commands;
+using PAO.Core.Areas.Catalog.Features.Icons.Queries;
 using PAO.Core.Areas.Catalog.Features.ManageCatalog.Commands;
 using PAO.Core.Areas.Catalog.Features.ManageCatalog.Queries;
 using PAO.Core.Areas.Catalog.Features.Prices.Commands;
@@ -31,6 +33,20 @@ public sealed class AdminCatalogController(IMediator mediator) : ControllerBase
     [HttpPut("categories/{categoryId}")]
     public Task<CategoryView> UpdateCategory(Guid categoryId, [FromBody] CategoryInput body) =>
         mediator.Send(new SaveCategory(categoryId, body), HttpContext.RequestAborted);
+
+    /// <summary>listIconLibrary.</summary>
+    [HttpGet("icons")]
+    public Task<IconLibraryView> IconLibrary() => mediator.Send(new ListIconLibrary(), HttpContext.RequestAborted);
+
+    /// <summary>uploadIcon.</summary>
+    [HttpPost("icons")]
+    public async Task<IActionResult> UploadIcon([FromBody] IconUpload body) =>
+        StatusCode(201, await mediator.Send(new UploadIcon(body, HttpContext.Caller().AccountId), HttpContext.RequestAborted));
+
+    /// <summary>addIconFromLink.</summary>
+    [HttpPost("icons/from-link")]
+    public async Task<IActionResult> AddIconFromLink([FromBody] IconLink body) =>
+        StatusCode(201, await mediator.Send(new AddIconFromLink(body, HttpContext.Caller().AccountId), HttpContext.RequestAborted));
 
     /// <summary>createService.</summary>
     [HttpPost("services")]

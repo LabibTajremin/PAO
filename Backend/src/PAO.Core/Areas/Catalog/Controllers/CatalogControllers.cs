@@ -16,6 +16,13 @@ public sealed class CatalogErrorMap : IErrorMap
         [CatalogReasons.NotFound] = ApiErrors.NotFound,
         [CatalogReasons.Invalid] = ApiErrors.ValidationFailed,
         [CatalogReasons.PriceNegative] = ApiErrors.Validation("field", "amount"),
+        [CatalogReasons.IconNotStored] = ApiErrors.Validation("field", "iconUrl"),
+        [CatalogReasons.IconTooLarge] = ApiErrors.Validation("reason", "icon_too_large"),
+        [CatalogReasons.IconUnreadable] = ApiErrors.Validation("reason", "icon_unreadable"),
+        [CatalogReasons.IconNotSquare] = ApiErrors.Validation("reason", "icon_not_square"),
+        [CatalogReasons.IconTooSmall] = ApiErrors.Validation("reason", "icon_too_small"),
+        [CatalogReasons.IconOpaque] = ApiErrors.Validation("reason", "icon_opaque"),
+        [CatalogReasons.IconLinkFailed] = ApiErrors.Validation("reason", "icon_link_failed"),
     };
 }
 

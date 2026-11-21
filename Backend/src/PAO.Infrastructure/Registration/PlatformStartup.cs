@@ -30,6 +30,10 @@ public static class PlatformStartup
         var store = services.GetRequiredService<ObjectStore>();
         await store.EnsureBucket(settings.Storage.BucketPrivate, cancellationToken);
         await store.EnsureBucket(settings.Storage.BucketPublic, cancellationToken);
+        if (settings.Storage.PublicReadPolicy)
+        {
+            await store.AllowPublicRead(settings.Storage.BucketPublic, cancellationToken);
+        }
         var logger = services.GetRequiredService<ILoggerFactory>().CreateLogger("PAO");
         logger.LogInformation("platform ready {@Config}", settings.LogFields());
         WarnWhenSmsVerificationIsOff(settings, logger);

@@ -26,6 +26,8 @@ public static class EventEntries
             before: new JsonObject { ["status"] = p.Text("from") }, after: new JsonObject { ["status"] = p.Text("to") }),
         [CatalogEvents.PriceChanged] = p => Entry(p, "catalog.price_changed", "sub_service", Subject(p, "subServiceId"),
             after: new JsonObject { ["amountPaisa"] = p.Number("amountPaisa"), ["priceVersionId"] = p.Id("priceVersionId") }),
+        [CatalogEvents.IconAdded] = p => Entry(p, "catalog.icon_added", "catalog_icon", p.Text("iconUrl"), "admin",
+            after: new JsonObject { ["contentType"] = p.Text("contentType"), ["sourceUrl"] = p.Text("sourceUrl") }),
         [AdminEvents.SettingChanged] = p => Entry(p, "settings.changed", "setting", p.Text("key"),
             before: new JsonObject { ["value"] = p.Text("before") }, after: new JsonObject { ["value"] = p.Text("after") }),
         [AdminEvents.ComplaintResolved] = p => Entry(p, "complaint.resolved", "complaint", Subject(p, "complaintId"),

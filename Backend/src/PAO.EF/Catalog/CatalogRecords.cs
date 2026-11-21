@@ -11,6 +11,8 @@ public sealed class CategoryRecord
     public required string NameBn { get; set; }
     /// <summary>The icon key.</summary>
     public required string IconKey { get; set; }
+    /// <summary>An uploaded or linked icon in our public bucket (ADR-0039); null uses the icon key.</summary>
+    public string? IconUrl { get; set; }
     /// <summary>The sort order.</summary>
     public int SortOrder { get; set; }
     /// <summary>Whether published.</summary>
@@ -30,6 +32,8 @@ public sealed class ServiceRecord
     public required string NameBn { get; set; }
     /// <summary>The icon key.</summary>
     public required string IconKey { get; set; }
+    /// <summary>An uploaded or linked icon in our public bucket (ADR-0039); null uses the icon key.</summary>
+    public string? IconUrl { get; set; }
     /// <summary>The service model.</summary>
     public required string ServiceModel { get; set; }
     /// <summary>The required verification level.</summary>

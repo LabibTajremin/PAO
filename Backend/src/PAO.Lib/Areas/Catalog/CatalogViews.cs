@@ -42,6 +42,9 @@ public sealed record ServiceView
     public required Text Name { get; init; }
     /// <summary>The icon key.</summary>
     public required string IconKey { get; init; }
+    /// <summary>An uploaded or linked icon in our public bucket (ADR-0039); absent uses the icon key.</summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? IconUrl { get; init; }
     /// <summary>The service model.</summary>
     public required string ServiceModel { get; init; }
     /// <summary>The required level.</summary>
@@ -69,6 +72,9 @@ public sealed record CategoryView
     public required Text Name { get; init; }
     /// <summary>The icon key.</summary>
     public required string IconKey { get; init; }
+    /// <summary>An uploaded or linked icon in our public bucket (ADR-0039); absent uses the icon key.</summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? IconUrl { get; init; }
     /// <summary>The sort order.</summary>
     public required int SortOrder { get; init; }
     /// <summary>Whether published.</summary>

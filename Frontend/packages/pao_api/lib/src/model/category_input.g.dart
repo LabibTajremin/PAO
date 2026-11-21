@@ -11,6 +11,8 @@ abstract class _$CategoryInputCWProxy {
 
   CategoryInput iconKey(String iconKey);
 
+  CategoryInput iconUrl(String? iconUrl);
+
   CategoryInput sortOrder(int? sortOrder);
 
   CategoryInput published(bool? published);
@@ -26,6 +28,7 @@ abstract class _$CategoryInputCWProxy {
   CategoryInput call({
     LocalizedText name,
     String iconKey,
+    String? iconUrl,
     int? sortOrder,
     bool? published,
   });
@@ -45,6 +48,9 @@ class _$CategoryInputCWProxyImpl implements _$CategoryInputCWProxy {
   CategoryInput iconKey(String iconKey) => call(iconKey: iconKey);
 
   @override
+  CategoryInput iconUrl(String? iconUrl) => call(iconUrl: iconUrl);
+
+  @override
   CategoryInput sortOrder(int? sortOrder) => call(sortOrder: sortOrder);
 
   @override
@@ -62,6 +68,7 @@ class _$CategoryInputCWProxyImpl implements _$CategoryInputCWProxy {
   CategoryInput call({
     Object? name = const $CopyWithPlaceholder(),
     Object? iconKey = const $CopyWithPlaceholder(),
+    Object? iconUrl = const $CopyWithPlaceholder(),
     Object? sortOrder = const $CopyWithPlaceholder(),
     Object? published = const $CopyWithPlaceholder(),
   }) {
@@ -74,6 +81,10 @@ class _$CategoryInputCWProxyImpl implements _$CategoryInputCWProxy {
           ? _value.iconKey
           // ignore: cast_nullable_to_non_nullable
           : iconKey as String,
+      iconUrl: iconUrl == const $CopyWithPlaceholder()
+          ? _value.iconUrl
+          // ignore: cast_nullable_to_non_nullable
+          : iconUrl as String?,
       sortOrder: sortOrder == const $CopyWithPlaceholder()
           ? _value.sortOrder
           // ignore: cast_nullable_to_non_nullable
@@ -106,6 +117,7 @@ CategoryInput _$CategoryInputFromJson(Map<String, dynamic> json) =>
           (v) => LocalizedText.fromJson(v as Map<String, dynamic>),
         ),
         iconKey: $checkedConvert('iconKey', (v) => v as String),
+        iconUrl: $checkedConvert('iconUrl', (v) => v as String?),
         sortOrder: $checkedConvert('sortOrder', (v) => (v as num?)?.toInt()),
         published: $checkedConvert('published', (v) => v as bool?),
       );
@@ -116,6 +128,7 @@ Map<String, dynamic> _$CategoryInputToJson(CategoryInput instance) =>
     <String, dynamic>{
       'name': instance.name.toJson(),
       'iconKey': instance.iconKey,
+      'iconUrl': ?instance.iconUrl,
       'sortOrder': ?instance.sortOrder,
       'published': ?instance.published,
     };

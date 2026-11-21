@@ -27,6 +27,8 @@ class Category {
 
     required this.iconKey,
 
+    this.iconUrl,
+
     required this.sortOrder,
 
     required this.published,
@@ -43,6 +45,10 @@ class Category {
   @JsonKey(name: r'iconKey', required: true, includeIfNull: false)
   final String iconKey;
 
+  /// An icon the admin uploaded or linked, stored by us (ADR-0039); when present the apps show it instead of iconKey.
+  @JsonKey(name: r'iconUrl', required: false, includeIfNull: false)
+  final String? iconUrl;
+
   @JsonKey(name: r'sortOrder', required: true, includeIfNull: false)
   final int sortOrder;
 
@@ -57,11 +63,12 @@ class Category {
         other is Category &&
             runtimeType == other.runtimeType &&
             equals(
-              [id, name, iconKey, sortOrder, published, services],
+              [id, name, iconKey, iconUrl, sortOrder, published, services],
               [
                 other.id,
                 other.name,
                 other.iconKey,
+                other.iconUrl,
                 other.sortOrder,
                 other.published,
                 other.services,
@@ -72,7 +79,15 @@ class Category {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      mapPropsToHashCode([id, name, iconKey, sortOrder, published, services]);
+      mapPropsToHashCode([
+        id,
+        name,
+        iconKey,
+        iconUrl,
+        sortOrder,
+        published,
+        services,
+      ]);
 
   factory Category.fromJson(Map<String, dynamic> json) =>
       _$CategoryFromJson(json);

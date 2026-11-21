@@ -115,6 +115,12 @@ public sealed class StorageOptions
 
     /// <summary>What devices reach; inside Docker it differs from <see cref="Endpoint"/>.</summary>
     public string PublicEndpoint { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Where devices read the public bucket, e.g. a CDN in front of it; empty means
+    /// `PublicEndpoint/BucketPublic`. Catalog icon URLs start with it (ADR-0039).
+    /// </summary>
+    public string PublicBaseUrl { get; set; } = string.Empty;
     /// <summary>The region.</summary>
     public string Region { get; set; } = "us-east-1";
     /// <summary>The access key.</summary>
@@ -131,6 +137,13 @@ public sealed class StorageOptions
     /// that encrypt at rest themselves and reject PutBucketEncryption (Cloudflare R2).
     /// </summary>
     public bool EnsureEncryption { get; set; } = true;
+
+    /// <summary>
+    /// Whether start-up makes the public bucket's catalog icon folder readable without signing
+    /// (a bucket policy); off for providers without bucket policies (Cloudflare R2), where the
+    /// bucket's public access is turned on instead (ADR-0039).
+    /// </summary>
+    public bool PublicReadPolicy { get; set; } = true;
 }
 
 /// <summary>Text messages (`config/sms.json`).</summary>

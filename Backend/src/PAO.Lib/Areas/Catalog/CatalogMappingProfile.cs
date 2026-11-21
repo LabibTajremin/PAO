@@ -17,43 +17,47 @@ public sealed class CatalogMappingProfile : IMappingProfile
     /// <inheritdoc />
     public void Configure(MappingRegistry registry)
     {
-        registry
-            .Add<CategoryRecord, CategoryNode>((c, _) => new CategoryNode
-            {
-                Id = c.Id,
-                Name = new Text { En = c.NameEn, Bn = c.NameBn },
-                IconKey = c.IconKey,
-                SortOrder = c.SortOrder,
-                Published = c.Published,
-            })
-            .Add<ServiceRecord, ServiceNode>((s, _) => new ServiceNode
-            {
-                Id = s.Id,
-                CategoryId = s.CategoryId,
-                Name = new Text { En = s.NameEn, Bn = s.NameBn },
-                IconKey = s.IconKey,
-                Model = s.ServiceModel,
-                RequiredLevel = s.RequiredLevel,
-                SearchRadiusM = s.SearchRadiusM,
-                WomenProvidersOnly = s.WomenProvidersOnly,
-                RequiresLevel2 = s.RequiresLevel2,
-                Level2Checklist = Texts(s.Level2Checklist),
-                SortOrder = s.SortOrder,
-                Published = s.Published,
-            })
-            .Add<(SubServiceRecord Row, PriceVersionRecord Price), SubServiceNode>((p, _) => SubService(p.Row, p.Price))
-            .Add<PriceVersionRecord, PriceVersionInfo>((p, _) => new PriceVersionInfo
-            {
-                Id = p.Id,
-                SubServiceId = p.SubServiceId,
-                Amount = p.AmountPaisa,
-                EffectiveFrom = p.EffectiveFrom,
-                CreatedBy = p.CreatedBy,
-            });
+        Records(registry);
         Views(registry);
         TreeViews(registry);
         Inputs(registry);
     }
+
+    private static void Records(MappingRegistry registry) => registry
+        .Add<CategoryRecord, CategoryNode>((c, _) => new CategoryNode
+        {
+            Id = c.Id,
+            Name = new Text { En = c.NameEn, Bn = c.NameBn },
+            IconKey = c.IconKey,
+            IconUrl = c.IconUrl,
+            SortOrder = c.SortOrder,
+            Published = c.Published,
+        })
+        .Add<ServiceRecord, ServiceNode>((s, _) => new ServiceNode
+        {
+            Id = s.Id,
+            CategoryId = s.CategoryId,
+            Name = new Text { En = s.NameEn, Bn = s.NameBn },
+            IconKey = s.IconKey,
+            IconUrl = s.IconUrl,
+            Model = s.ServiceModel,
+            RequiredLevel = s.RequiredLevel,
+            SearchRadiusM = s.SearchRadiusM,
+            WomenProvidersOnly = s.WomenProvidersOnly,
+            RequiresLevel2 = s.RequiresLevel2,
+            Level2Checklist = Texts(s.Level2Checklist),
+            SortOrder = s.SortOrder,
+            Published = s.Published,
+        })
+        .Add<(SubServiceRecord Row, PriceVersionRecord Price), SubServiceNode>((p, _) => SubService(p.Row, p.Price))
+        .Add<PriceVersionRecord, PriceVersionInfo>((p, _) => new PriceVersionInfo
+        {
+            Id = p.Id,
+            SubServiceId = p.SubServiceId,
+            Amount = p.AmountPaisa,
+            EffectiveFrom = p.EffectiveFrom,
+            CreatedBy = p.CreatedBy,
+        });
 
     private static void Views(MappingRegistry registry) => registry
         .Add<SubServiceNode, SubServiceView>((s, _) => new SubServiceView
@@ -76,6 +80,7 @@ public sealed class CatalogMappingProfile : IMappingProfile
             CategoryId = s.CategoryId,
             Name = s.Name,
             IconKey = s.IconKey,
+            IconUrl = s.IconUrl,
             ServiceModel = s.Model,
             RequiredLevel = s.RequiredLevel,
             SearchRadiusM = s.SearchRadiusM,
@@ -92,6 +97,7 @@ public sealed class CatalogMappingProfile : IMappingProfile
             Id = c.Id,
             Name = c.Name,
             IconKey = c.IconKey,
+            IconUrl = c.IconUrl,
             SortOrder = c.SortOrder,
             Published = c.Published,
             Services = m.MapAll<ServiceNode, ServiceView>(c.Services),
@@ -116,6 +122,7 @@ public sealed class CatalogMappingProfile : IMappingProfile
             Id = p.Id,
             Name = p.Input.Name,
             IconKey = p.Input.IconKey,
+            IconUrl = p.Input.IconUrl,
             SortOrder = p.Input.SortOrder ?? 0,
             Published = p.Input.Published ?? false,
         })
@@ -125,6 +132,7 @@ public sealed class CatalogMappingProfile : IMappingProfile
             CategoryId = p.Input.CategoryId,
             Name = p.Input.Name,
             IconKey = p.Input.IconKey,
+            IconUrl = p.Input.IconUrl,
             Model = p.Input.ServiceModel,
             RequiredLevel = p.Input.RequiredLevel,
             SearchRadiusM = p.Input.SearchRadiusM,

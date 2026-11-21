@@ -91,6 +91,8 @@ public static class CatalogEvents
     public const string CatalogChanged = "catalog.CatalogChanged";
     /// <summary>The `"catalog.PriceChanged"` value.</summary>
     public const string PriceChanged = "catalog.PriceChanged";
+    /// <summary>The `"catalog.IconAdded"` value.</summary>
+    public const string IconAdded = "catalog.IconAdded";
 }
 
 /// <summary>The published catalog changed; caches keyed by version are stale.</summary>
@@ -113,6 +115,21 @@ public sealed record PriceChanged : IDomainEvent
     public required Guid PriceVersionId { get; init; }
     /// <summary>The amount paisa.</summary>
     public required long AmountPaisa { get; init; }
+    /// <summary>The actor id.</summary>
+    public Guid? ActorId { get; init; }
+}
+
+/// <summary>An admin stored a catalog icon, uploaded or from a link (ADR-0039).</summary>
+public sealed record IconAdded : IDomainEvent
+{
+    /// <summary>The name.</summary>
+    public string Name { get; } = CatalogEvents.IconAdded;
+    /// <summary>Where devices read it.</summary>
+    public required string IconUrl { get; init; }
+    /// <summary>The content type.</summary>
+    public required string ContentType { get; init; }
+    /// <summary>The link it came from; null for an upload.</summary>
+    public string? SourceUrl { get; init; }
     /// <summary>The actor id.</summary>
     public Guid? ActorId { get; init; }
 }

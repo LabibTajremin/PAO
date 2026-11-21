@@ -61,6 +61,7 @@ lib/src/model/booking_list.dart
 lib/src/model/booking_party.dart
 lib/src/model/booking_status.dart
 lib/src/model/booking_summary.dart
+lib/src/model/catalog_icon.dart
 lib/src/model/catalog_search_results.dart
 lib/src/model/catalog_tree.dart
 lib/src/model/category.dart
@@ -102,6 +103,9 @@ lib/src/model/extras_input.dart
 lib/src/model/extras_proposal.dart
 lib/src/model/gender.dart
 lib/src/model/heartbeat_input.dart
+lib/src/model/icon_library.dart
+lib/src/model/icon_link.dart
+lib/src/model/icon_upload.dart
 lib/src/model/item_status.dart
 lib/src/model/item_type.dart
 lib/src/model/language.dart

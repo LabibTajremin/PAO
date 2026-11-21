@@ -5,11 +5,11 @@
 categories:
   - key: electrical
     name: { en: Electrical, bn: বৈদ্যুতিক }
-    icon: plug
+    icon: electrician
     services:
       - key: electrician
         name: { en: Electrician, bn: ইলেকট্রিশিয়ান }
-        icon: bolt
+        icon: electrician
         model: on_demand
         required_level: 1
         search_radius_m: 5000
@@ -25,11 +25,11 @@ categories:
           - { key: wiring-inspection, name: { en: Wiring inspection, bn: ওয়্যারিং পরিদর্শন }, unit: job, price: 800, max_quantity: 1 }
   - key: plumbing
     name: { en: Plumbing, bn: প্লাম্বিং }
-    icon: droplet
+    icon: plumbing
     services:
       - key: plumber
         name: { en: Plumber, bn: প্লাম্বার }
-        icon: wrench
+        icon: plumbing
         model: on_demand
         required_level: 1
         search_radius_m: 5000
@@ -45,11 +45,11 @@ categories:
           - { key: tank-cleaning, name: { en: Water tank cleaning, bn: পানির ট্যাংক পরিষ্কার }, unit: job, price: 2000, max_quantity: 1 }
   - key: appliances
     name: { en: Appliances, bn: যন্ত্রপাতি }
-    icon: snowflake
+    icon: appliance
     services:
       - key: ac-service
         name: { en: AC service, bn: এসি সার্ভিস }
-        icon: snowflake
+        icon: ac
         model: on_demand
         required_level: 1
         search_radius_m: 7000
@@ -64,11 +64,11 @@ categories:
           - { key: ac-uninstall, name: { en: AC uninstallation, bn: এসি খোলা }, unit: unit, price: 1500, max_quantity: 6 }
   - key: beauty
     name: { en: Beauty, bn: বিউটি }
-    icon: sparkles
+    icon: beauty
     services:
       - key: home-salon
         name: { en: Home salon, bn: হোম স্যালন }
-        icon: scissors
+        icon: salon
         model: on_demand
         required_level: 1
         search_radius_m: 6000
@@ -85,11 +85,11 @@ categories:
           - { key: threading, name: { en: Eyebrow threading, bn: ভ্রু থ্রেডিং }, unit: unit, price: 200, max_quantity: 3 }
   - key: transport
     name: { en: Transport, bn: পরিবহন }
-    icon: car
+    icon: driver
     services:
       - key: driver
         name: { en: Driver, bn: ড্রাইভার }
-        icon: steering-wheel
+        icon: driver
         model: duration_hire
         required_level: 1
         search_radius_m: 10000
@@ -101,11 +101,11 @@ categories:
   # ADR-0035 §5: two categories added on the owner's request; prices are fixed per unit.
   - key: catering
     name: { en: Catering, bn: ক্যাটারিং }
-    icon: utensils
+    icon: catering
     services:
       - key: home-catering
         name: { en: Home catering, bn: হোম ক্যাটারিং }
-        icon: chef-hat
+        icon: chef
         model: on_demand
         required_level: 1
         search_radius_m: 10000
@@ -119,11 +119,11 @@ categories:
           - { key: catering-cook-day, name: { en: Cook for a day, bn: এক দিনের জন্য রাঁধুনি }, unit: day, price: 2000, max_quantity: 3 }
   - key: monthly-bazar
     name: { en: Monthly Bazar, bn: মাসিক বাজার }
-    icon: shopping-basket
+    icon: bazar
     services:
       - key: bazar-delivery
         name: { en: Monthly bazar delivery, bn: মাসিক বাজার ডেলিভারি }
-        icon: shopping-bag
+        icon: grocery
         model: on_demand
         required_level: 1
         search_radius_m: 8000

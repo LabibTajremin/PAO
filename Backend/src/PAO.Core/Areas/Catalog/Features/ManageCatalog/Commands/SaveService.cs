@@ -12,13 +12,16 @@ namespace PAO.Core.Areas.Catalog.Features.ManageCatalog.Commands;
 /// <summary>Creates a service in an existing category, or updates the one with `Id` (A-02).</summary>
 public sealed record SaveService(Guid? Id, ServiceInput Input) : ICommand<ServiceView>;
 
-/// <summary>The catalog rules for services.</summary>
+/// <summary>The catalog rules for services, and an icon we stored if any.</summary>
 public sealed class SaveServiceValidator : AbstractValidator<SaveService>
 {
     /// <summary>Declares the rules.</summary>
-    public SaveServiceValidator(IMapper mapper) =>
+    public SaveServiceValidator(IMapper mapper, IconAddress icons)
+    {
         RuleFor(r => r.Input).Must(i => CatalogRules.IsValidService(mapper.Map<(Guid, ServiceInput), ServiceNode>((Guid.Empty, i))))
             .WithMessage(CatalogReasons.Invalid);
+        RuleFor(r => r.Input.IconUrl).Must(icons.IsStoredOrAbsent).WithMessage(CatalogReasons.IconNotStored);
+    }
 }
 
 /// <summary>Saves the service and bumps the catalog version.</summary>

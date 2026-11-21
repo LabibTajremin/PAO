@@ -248,6 +248,10 @@ There is no deploy workflow in `.github/workflows` today. A job would:
    encryption (`PutBucketEncryption`) on every start. R2 encrypts every object at rest
    itself and may not implement that call, so on R2 set `S3_ENSURE_ENCRYPTION=false`
    (ADR-0036). Create the buckets yourself first if the token cannot create them.
+   Catalog icons (ADR-0039) are read by the apps straight from `S3_BUCKET_PUBLIC`: R2 has no
+   bucket policies, so also set `S3_PUBLIC_READ_POLICY=false`, connect a custom domain (or the
+   r2.dev URL) to the public bucket and set it as `S3_PUBLIC_BASE_URL`. Nothing private goes in
+   that bucket.
    On AWS S3: an IAM user limited to the two buckets, endpoint
    `https://s3.<region>.amazonaws.com`.
 4. **Firebase.** Create one project; add the Android and iOS apps (§4.3); create a
@@ -285,6 +289,8 @@ line (`invalid configuration: …`). Give API, worker and migrate the same envir
 | `DATA_ENCRYPTION_PREVIOUS_KEYS` | no | empty on first deploy | earlier data keys, comma-separated, newest first, original key last; only after a rotation |
 | `ADMIN_CORS_ORIGIN` | no (default `http://localhost:5000`) | `https://admin.pao.com.bd` | the admin web origin, or a comma-separated list (§2.6) |
 | `S3_ENSURE_ENCRYPTION` | no (default `true`) | `false` on R2 | `false` skips `PutBucketEncryption` for providers that encrypt at rest themselves |
+| `S3_PUBLIC_BASE_URL` | no | `https://icons.pao.com.bd` | where phones read catalog icons: a CDN or custom domain in front of `S3_BUCKET_PUBLIC`; empty uses `S3_PUBLIC_ENDPOINT/S3_BUCKET_PUBLIC` (ADR-0039) |
+| `S3_PUBLIC_READ_POLICY` | no (default `true`) | `false` on R2 | `false` skips the bucket policy that makes `catalog-icons/` in the public bucket readable; then turn on public access for that bucket yourself |
 | `SMS_ADAPTER` | no (default `console`); prod needs `sslwireless` while verification is on | `sslwireless` | — |
 | `SSLWIRELESS_API_TOKEN` | when `SMS_ADAPTER=sslwireless` and verification is on | `…` | SSL Wireless |
 | `SSLWIRELESS_SID` | when `SMS_ADAPTER=sslwireless` and verification is on | `…` | SSL Wireless |

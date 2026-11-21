@@ -30,6 +30,8 @@ class Service {
 
     required this.iconKey,
 
+    this.iconUrl,
+
     required this.serviceModel,
 
     required this.requiredLevel,
@@ -58,6 +60,10 @@ class Service {
 
   @JsonKey(name: r'iconKey', required: true, includeIfNull: false)
   final String iconKey;
+
+  /// An icon the admin uploaded or linked, stored by us (ADR-0039); when present the apps show it instead of iconKey.
+  @JsonKey(name: r'iconUrl', required: false, includeIfNull: false)
+  final String? iconUrl;
 
   @JsonKey(name: r'serviceModel', required: true, includeIfNull: false)
   final ServiceModel serviceModel;
@@ -98,6 +104,7 @@ class Service {
                 categoryId,
                 name,
                 iconKey,
+                iconUrl,
                 serviceModel,
                 requiredLevel,
                 searchRadiusM,
@@ -112,6 +119,7 @@ class Service {
                 other.categoryId,
                 other.name,
                 other.iconKey,
+                other.iconUrl,
                 other.serviceModel,
                 other.requiredLevel,
                 other.searchRadiusM,
@@ -132,6 +140,7 @@ class Service {
         categoryId,
         name,
         iconKey,
+        iconUrl,
         serviceModel,
         requiredLevel,
         searchRadiusM,

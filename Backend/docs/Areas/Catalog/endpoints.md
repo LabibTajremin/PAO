@@ -35,3 +35,5 @@ Every action: `[Admin(Permission = "catalog:manage")]`.
 | `CustomerBannersController` | getBanners | `GET /v1/customer/banners` | `[AllUserType(Permission = "catalog:read")]` |
 | `AdminBannersController` | listBanners, createBanner | `GET`, `POST /v1/admin/catalog/banners` | `[Admin(Permission = "catalog:manage")]` |
 | `AdminBannersController` | updateBanner, deleteBanner | `PUT`, `DELETE .../banners/{bannerId}` | `[Admin(Permission = "catalog:manage")]` |
+| `AdminCatalogController` | listIconLibrary, uploadIcon | `GET`, `POST /v1/admin/catalog/icons` | `[Admin(Permission = "catalog:manage")]` |
+| `AdminCatalogController` | addIconFromLink | `POST /v1/admin/catalog/icons/from-link` | `[Admin(Permission = "catalog:manage")]` |

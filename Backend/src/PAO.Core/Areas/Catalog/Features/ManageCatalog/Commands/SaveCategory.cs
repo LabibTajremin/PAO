@@ -12,12 +12,15 @@ namespace PAO.Core.Areas.Catalog.Features.ManageCatalog.Commands;
 /// <summary>Creates a category, or updates the one with `Id` (A-02).</summary>
 public sealed record SaveCategory(Guid? Id, CategoryInput Input) : ICommand<CategoryView>;
 
-/// <summary>Both names and an icon.</summary>
+/// <summary>Both names, a library icon and, if any, an icon we stored.</summary>
 public sealed class SaveCategoryValidator : AbstractValidator<SaveCategory>
 {
     /// <summary>Declares the rules.</summary>
-    public SaveCategoryValidator() =>
+    public SaveCategoryValidator(IconAddress icons)
+    {
         RuleFor(r => r.Input).Must(i => CatalogRules.IsValidCategory(i.Name, i.IconKey)).WithMessage(CatalogReasons.Invalid);
+        RuleFor(r => r.Input.IconUrl).Must(icons.IsStoredOrAbsent).WithMessage(CatalogReasons.IconNotStored);
+    }
 }
 
 /// <summary>Saves the category and bumps the catalog version.</summary>

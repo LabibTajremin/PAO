@@ -16,7 +16,7 @@ Validation messages are stable (`DATABASE_URL is required`, …). Back to [Confi
 | `HTTP_ADDR`, `METRICS_ADDR` | `Http:Address`, `Http:MetricsAddress` | Go `host:port` form |
 | `DATABASE_URL` | `Database:Url` | `postgres://` URL with pgxpool pool parameters |
 | `REDIS_URL` | `Redis:Url` | `redis://` or `rediss://` |
-| `S3_ENDPOINT`, `S3_PUBLIC_ENDPOINT`, `S3_REGION`, `S3_ACCESS_KEY`, `S3_SECRET_KEY`, `S3_BUCKET_PRIVATE`, `S3_BUCKET_PUBLIC`, `S3_ENSURE_ENCRYPTION` | `Storage:*` | keys are secrets; `S3_ENSURE_ENCRYPTION=false` skips PutBucketEncryption (R2) |
+| `S3_ENDPOINT`, `S3_PUBLIC_ENDPOINT`, `S3_REGION`, `S3_ACCESS_KEY`, `S3_SECRET_KEY`, `S3_BUCKET_PRIVATE`, `S3_BUCKET_PUBLIC`, `S3_ENSURE_ENCRYPTION`, `S3_PUBLIC_BASE_URL`, `S3_PUBLIC_READ_POLICY` | `Storage:*` | keys are secrets; `S3_ENSURE_ENCRYPTION=false` skips PutBucketEncryption (R2); `S3_PUBLIC_BASE_URL` is where devices read catalog icons (a CDN, or empty for `S3_PUBLIC_ENDPOINT/S3_BUCKET_PUBLIC`); `S3_PUBLIC_READ_POLICY=false` skips the icon-folder bucket policy (R2, ADR-0039) |
 | `JWT_SIGNING_KEY`, `JWT_KEY_ID`, `JWT_PREVIOUS_PUBLIC_KEYS` | `Jwt:*` | seed is a secret |
 | `SMS_ADAPTER`, `SSLWIRELESS_API_TOKEN`, `SSLWIRELESS_SID` | `Sms:*` | console or sslwireless |
 | `SMS_VERIFICATION_ENABLED` | `Sms:VerificationEnabled` | default `true`; `false` sends no SMS and accepts `SMS_FIXED_CODE` for every phone code (rate limits, lockouts and bans still apply), lets `APP_ENV=prod` start without sslwireless credentials, and logs a start-up warning ([ADR-0036](../../../docs/adr/0036-mvp-launch-defaults.md)) |

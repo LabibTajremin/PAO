@@ -144,7 +144,7 @@ public sealed class AreaContractTests
     [Fact]
     public void Contracts_keep_the_stored_names_and_scope_their_reasons()
     {
-        Assert.Equal(["catalog.CatalogChanged", "catalog.PriceChanged"], Constants(typeof(CatalogEvents)));
+        Assert.Equal(["catalog.CatalogChanged", "catalog.PriceChanged", "catalog.IconAdded"], Constants(typeof(CatalogEvents)));
         Assert.All(Constants(typeof(CatalogErrors)).Concat(Constants(typeof(CatalogReasons))), r => Assert.StartsWith("catalog.", r, StringComparison.Ordinal));
         Assert.All(Constants(typeof(MediaErrors)).Concat(Constants(typeof(MediaReasons))), r => Assert.StartsWith("media.", r, StringComparison.Ordinal));
         Assert.Equal(["avatar", "nid_front", "nid_back", "selfie", "police_clearance", "skill_proof", "address_proof", "complaint_photo", "level2_photo"], Constants(typeof(MediaPurpose)));

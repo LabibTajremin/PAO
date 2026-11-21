@@ -124,6 +124,22 @@ public sealed class ObjectStore : IDisposable
         }, cancellationToken);
     }
 
+    /// <summary>The one folder of the public bucket devices read without signing: catalog icons (ADR-0039).</summary>
+    public const string PublicFolder = "catalog-icons";
+
+    /// <summary>
+    /// Lets anyone read objects under <see cref="PublicFolder"/> in `bucket`, and nothing else;
+    /// setting it again replaces the bucket's policy with the same one.
+    /// </summary>
+    public Task AllowPublicRead(string bucket, CancellationToken cancellationToken) =>
+        client.PutBucketPolicyAsync(new PutBucketPolicyRequest
+        {
+            BucketName = bucket,
+            Policy = $$"""
+                {"Version":"2012-10-17","Statement":[{"Sid":"PublicCatalogIcons","Effect":"Allow","Principal":{"AWS":["*"]},"Action":["s3:GetObject"],"Resource":["arn:aws:s3:::{{bucket}}/{{PublicFolder}}/*"]}]}
+                """,
+        }, cancellationToken);
+
     /// <summary>Checks that storage answers and the bucket exists, for readiness.</summary>
     public Task Ping(string bucket, CancellationToken cancellationToken) =>
         client.GetBucketLocationAsync(new GetBucketLocationRequest { BucketName = bucket }, cancellationToken);

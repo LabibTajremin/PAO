@@ -42,6 +42,8 @@ public sealed record ServiceNode
     public required Text Name { get; init; }
     /// <summary>The icon key.</summary>
     public required string IconKey { get; init; }
+    /// <summary>An uploaded or linked icon in our public bucket (ADR-0039); null uses the icon key.</summary>
+    public string? IconUrl { get; init; }
     /// <summary>The service model.</summary>
     public required string Model { get; init; }
     /// <summary>The required verification level.</summary>
@@ -71,6 +73,8 @@ public sealed record CategoryNode
     public required Text Name { get; init; }
     /// <summary>The icon key.</summary>
     public required string IconKey { get; init; }
+    /// <summary>An uploaded or linked icon in our public bucket (ADR-0039); null uses the icon key.</summary>
+    public string? IconUrl { get; init; }
     /// <summary>The sort order.</summary>
     public required int SortOrder { get; init; }
     /// <summary>Whether published.</summary>
@@ -112,4 +116,18 @@ public static class CatalogReasons
     public const string Invalid = "catalog.invalid";
     /// <summary>A price below zero, or none where one is needed.</summary>
     public const string PriceNegative = "catalog.price_negative";
+    /// <summary>An icon URL that is not one of the icons we stored (ADR-0039).</summary>
+    public const string IconNotStored = "catalog.icon_not_stored";
+    /// <summary>The icon file is larger than its format allows.</summary>
+    public const string IconTooLarge = "catalog.icon_too_large";
+    /// <summary>The icon file is not a well-formed SVG, PNG or WebP of the stated type.</summary>
+    public const string IconUnreadable = "catalog.icon_unreadable";
+    /// <summary>A PNG or WebP icon whose sides differ.</summary>
+    public const string IconNotSquare = "catalog.icon_not_square";
+    /// <summary>A PNG or WebP icon smaller than 96 x 96.</summary>
+    public const string IconTooSmall = "catalog.icon_too_small";
+    /// <summary>A PNG or WebP icon without an alpha channel.</summary>
+    public const string IconOpaque = "catalog.icon_opaque";
+    /// <summary>The icon link could not be downloaded, or points at a private address.</summary>
+    public const string IconLinkFailed = "catalog.icon_link_failed";
 }

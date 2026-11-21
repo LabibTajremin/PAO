@@ -17,6 +17,9 @@ request, validator and handler. Overview: [overview.md](overview.md).
 | `ManageCatalog` | `CreateSubService`, `UpdateSubService` | command | create with a first price (`initialPrice` required, reported as field `amount`); an update never changes the price |
 | `Prices` | `ChangePrice` | command | inserts an immutable price version and publishes `PriceChanged` |
 | `Prices` | `ListPriceHistory` | query | newest first |
+| `Icons` | `ListIconLibrary` | query | the library keys every app ships (`IconLibrary.Keys`) |
+| `Icons` | `UploadIcon` | command | base64 body; SVG sanitised, PNG/WebP square, 96 px or more, with alpha; stored in the public bucket and audited (`IconAdded`, ADR-0039) |
+| `Icons` | `AddIconFromLink` | command | downloads an https link once through `IconFetcher`, then the same checks and storage as an upload |
 | `Seed` | `SeedCatalog` | command | `migrate seed`; idempotent |
 
 Every command bumps the catalog version and publishes `CatalogChanged` in its transaction.

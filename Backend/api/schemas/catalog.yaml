@@ -31,6 +31,7 @@ Service:
     categoryId: { type: string, format: uuid }
     name: { $ref: "./common.yaml#/LocalizedText" }
     iconKey: { type: string, example: bolt }
+    iconUrl: { type: string, format: uri, maxLength: 500, description: "An icon the admin uploaded or linked, stored by us (ADR-0039); when present the apps show it instead of iconKey." }
     serviceModel: { $ref: "#/ServiceModel" }
     requiredLevel: { $ref: "./common.yaml#/Level" }
     searchRadiusM: { type: integer, minimum: 500, maximum: 50000, example: 5000 }
@@ -46,6 +47,7 @@ Category:
     id: { type: string, format: uuid }
     name: { $ref: "./common.yaml#/LocalizedText" }
     iconKey: { type: string, example: plug }
+    iconUrl: { type: string, format: uri, maxLength: 500, description: "An icon the admin uploaded or linked, stored by us (ADR-0039); when present the apps show it instead of iconKey." }
     sortOrder: { type: integer, example: 1 }
     published: { type: boolean }
     services: { type: array, items: { $ref: "#/Service" } }
@@ -94,6 +96,7 @@ CategoryInput:
   properties:
     name: { $ref: "./common.yaml#/LocalizedText" }
     iconKey: { type: string, minLength: 1, maxLength: 40, example: plug }
+    iconUrl: { type: string, format: uri, pattern: "^https?://", maxLength: 500, description: "An iconUrl returned by the icon endpoints; absent uses iconKey." }
     sortOrder: { type: integer, example: 1 }
     published: { type: boolean, example: true }
 ServiceInput:
@@ -103,6 +106,7 @@ ServiceInput:
     categoryId: { type: string, format: uuid }
     name: { $ref: "./common.yaml#/LocalizedText" }
     iconKey: { type: string, minLength: 1, maxLength: 40, example: bolt }
+    iconUrl: { type: string, format: uri, pattern: "^https?://", maxLength: 500, description: "An iconUrl returned by the icon endpoints; absent uses iconKey." }
     serviceModel: { $ref: "#/ServiceModel" }
     requiredLevel: { $ref: "./common.yaml#/Level" }
     searchRadiusM: { type: integer, minimum: 500, maximum: 50000, example: 5000 }
@@ -142,3 +146,28 @@ PriceHistory:
   required: [items]
   properties:
     items: { type: array, items: { $ref: "#/PriceVersion" } }
+IconLibrary:
+  type: object
+  description: The icons every app ships; a category or service names one as iconKey.
+  required: [keys]
+  properties:
+    keys: { type: array, items: { type: string }, example: [plumbing, electrician, ac] }
+IconUpload:
+  type: object
+  description: "SVG up to 100 KB, or a square PNG or WebP with transparency, at least 96 x 96 and up to 200 KB (ADR-0039)."
+  required: [contentType, data]
+  properties:
+    contentType: { type: string, enum: [image/svg+xml, image/png, image/webp] }
+    data: { type: string, format: byte, minLength: 4, maxLength: 273068, description: The file, base64. }
+IconLink:
+  type: object
+  required: [url]
+  properties:
+    url: { type: string, format: uri, pattern: "^https://", maxLength: 500, example: "https://example.com/icon.svg" }
+CatalogIcon:
+  type: object
+  description: A stored icon; put iconUrl on a category or service.
+  required: [iconUrl, contentType]
+  properties:
+    iconUrl: { type: string, format: uri, maxLength: 500 }
+    contentType: { type: string, enum: [image/svg+xml, image/png, image/webp] }

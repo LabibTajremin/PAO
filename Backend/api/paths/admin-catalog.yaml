@@ -336,3 +336,72 @@ banner:
         $ref: ../components/responses.yaml#/Forbidden
       '404':
         $ref: ../components/responses.yaml#/NotFound
+icons:
+  get:
+    operationId: listIconLibrary
+    tags:
+    - Admin catalog
+    summary: The library icons the apps ship, for the icon picker
+    x-permission: catalog:manage
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/IconLibrary
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+  post:
+    operationId: uploadIcon
+    tags:
+    - Admin catalog
+    summary: Store an uploaded icon (SVG sanitised; PNG or WebP square with transparency)
+    x-permission: catalog:manage
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/IconUpload
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/CatalogIcon
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+iconsFromLink:
+  post:
+    operationId: addIconFromLink
+    tags:
+    - Admin catalog
+    summary: Download an icon once from an HTTPS link, check it like an upload and store it
+    x-permission: catalog:manage
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/IconLink
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/CatalogIcon
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

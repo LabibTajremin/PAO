@@ -236,6 +236,10 @@ paths:
     $ref: ./paths/admin-catalog.yaml#/banners
   /v1/admin/catalog/banners/{bannerId}:
     $ref: ./paths/admin-catalog.yaml#/banner
+  /v1/admin/catalog/icons:
+    $ref: ./paths/admin-catalog.yaml#/icons
+  /v1/admin/catalog/icons/from-link:
+    $ref: ./paths/admin-catalog.yaml#/iconsFromLink
   /v1/admin/verifications:
     $ref: ./paths/admin-verification.yaml#/queue
   /v1/admin/verifications/{providerId}:

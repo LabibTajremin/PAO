@@ -2617,6 +2617,75 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+  /v1/admin/catalog/icons:
+    get:
+      operationId: listIconLibrary
+      tags:
+        - Admin catalog
+      summary: The library icons the apps ship, for the icon picker
+      x-permission: catalog:manage
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IconLibrary'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      operationId: uploadIcon
+      tags:
+        - Admin catalog
+      summary: Store an uploaded icon (SVG sanitised; PNG or WebP square with transparency)
+      x-permission: catalog:manage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IconUpload'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogIcon'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/catalog/icons/from-link:
+    post:
+      operationId: addIconFromLink
+      tags:
+        - Admin catalog
+      summary: Download an icon once from an HTTPS link, check it like an upload and store it
+      x-permission: catalog:manage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IconLink'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogIcon'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
   /v1/admin/verifications:
     get:
       operationId: listVerificationQueue
@@ -4646,6 +4715,11 @@ components:
         iconKey:
           type: string
           example: bolt
+        iconUrl:
+          type: string
+          format: uri
+          maxLength: 500
+          description: An icon the admin uploaded or linked, stored by us (ADR-0039); when present the apps show it instead of iconKey.
         serviceModel:
           $ref: '#/components/schemas/ServiceModel'
         requiredLevel:
@@ -4689,6 +4763,11 @@ components:
         iconKey:
           type: string
           example: plug
+        iconUrl:
+          type: string
+          format: uri
+          maxLength: 500
+          description: An icon the admin uploaded or linked, stored by us (ADR-0039); when present the apps show it instead of iconKey.
         sortOrder:
           type: integer
           example: 1
@@ -4740,6 +4819,12 @@ components:
           minLength: 1
           maxLength: 40
           example: plug
+        iconUrl:
+          type: string
+          format: uri
+          pattern: ^https?://
+          maxLength: 500
+          description: An iconUrl returned by the icon endpoints; absent uses iconKey.
         sortOrder:
           type: integer
           example: 1
@@ -4766,6 +4851,12 @@ components:
           minLength: 1
           maxLength: 40
           example: bolt
+        iconUrl:
+          type: string
+          format: uri
+          pattern: ^https?://
+          maxLength: 500
+          description: An iconUrl returned by the icon endpoints; absent uses iconKey.
         serviceModel:
           $ref: '#/components/schemas/ServiceModel'
         requiredLevel:
@@ -7186,3 +7277,65 @@ components:
         published:
           type: boolean
           example: true
+    IconLibrary:
+      type: object
+      description: The icons every app ships; a category or service names one as iconKey.
+      required:
+        - keys
+      properties:
+        keys:
+          type: array
+          items:
+            type: string
+          example:
+            - plumbing
+            - electrician
+            - ac
+    IconUpload:
+      type: object
+      description: SVG up to 100 KB, or a square PNG or WebP with transparency, at least 96 x 96 and up to 200 KB (ADR-0039).
+      required:
+        - contentType
+        - data
+      properties:
+        contentType:
+          type: string
+          enum:
+            - image/svg+xml
+            - image/png
+            - image/webp
+        data:
+          type: string
+          format: byte
+          minLength: 4
+          maxLength: 273068
+          description: The file
+          base64.: null
+    CatalogIcon:
+      type: object
+      description: A stored icon; put iconUrl on a category or service.
+      required:
+        - iconUrl
+        - contentType
+      properties:
+        iconUrl:
+          type: string
+          format: uri
+          maxLength: 500
+        contentType:
+          type: string
+          enum:
+            - image/svg+xml
+            - image/png
+            - image/webp
+    IconLink:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+          format: uri
+          pattern: ^https://
+          maxLength: 500
+          example: https://example.com/icon.svg

@@ -66,6 +66,7 @@ public sealed class AuditTests
     {
         ["identity.AccountStatusChanged"] = new { accountId = Guid.NewGuid(), from = "active", to = "banned", reason = "x", actorId = actor },
         ["catalog.PriceChanged"] = new { subServiceId = Guid.NewGuid(), priceVersionId = Guid.NewGuid(), amountPaisa = 100, actorId = (Guid?)null },
+        ["catalog.IconAdded"] = new { iconUrl = "https://cdn.example.com/catalog-icons/a.svg", contentType = "image/svg+xml", sourceUrl = "https://example.com/a.svg", actorId = actor },
         ["verification.DocumentApproved"] = new { providerId = Guid.NewGuid(), item = "nid", actorId = actor },
         ["verification.DocumentRejected"] = new { providerId = Guid.NewGuid(), item = "nid", reason = "blurred", actorId = actor },
         ["verification.ProviderLevelChanged"] = new { providerId = Guid.NewGuid(), from = 0, to = 1, reason = string.Empty },
@@ -100,7 +101,7 @@ public sealed class AuditTests
             await bus.Dispatch(Of(payload), CancellationToken.None);
             await Assert.ThrowsAsync<EventDeliveryException>(() => bus.Dispatch(Of(new { name }), CancellationToken.None));
         }
-        Assert.Equal(13, repo.Entries.Count);
+        Assert.Equal(14, repo.Entries.Count);
         var first = repo.Entries[0].Entry;
         Assert.Equal(("account.status_changed", (Guid?)actor, "active", "banned"), (first.Action, first.ActorId, (string?)first.Before!["status"], (string?)first.After!["status"]));
         Assert.All(repo.Entries, e => Assert.Equal((Now, true), (e.Entry.At, e.EventId is not null)));

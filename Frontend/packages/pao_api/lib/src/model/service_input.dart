@@ -27,6 +27,8 @@ class ServiceInput {
 
     required this.iconKey,
 
+    this.iconUrl,
+
     required this.serviceModel,
 
     required this.requiredLevel,
@@ -50,6 +52,10 @@ class ServiceInput {
 
   @JsonKey(name: r'iconKey', required: true, includeIfNull: false)
   final String iconKey;
+
+  /// An iconUrl returned by the icon endpoints; absent uses iconKey.
+  @JsonKey(name: r'iconUrl', required: false, includeIfNull: false)
+  final String? iconUrl;
 
   @JsonKey(name: r'serviceModel', required: true, includeIfNull: false)
   final ServiceModel serviceModel;
@@ -86,6 +92,7 @@ class ServiceInput {
                 categoryId,
                 name,
                 iconKey,
+                iconUrl,
                 serviceModel,
                 requiredLevel,
                 searchRadiusM,
@@ -98,6 +105,7 @@ class ServiceInput {
                 other.categoryId,
                 other.name,
                 other.iconKey,
+                other.iconUrl,
                 other.serviceModel,
                 other.requiredLevel,
                 other.searchRadiusM,
@@ -116,6 +124,7 @@ class ServiceInput {
         categoryId,
         name,
         iconKey,
+        iconUrl,
         serviceModel,
         requiredLevel,
         searchRadiusM,

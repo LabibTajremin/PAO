@@ -41,8 +41,9 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P22. Done: task 1 (icon library). Next: task 2 (backend `iconUrl`;
-admin endpoints to list library icons, upload an icon, add one by link). Owner checks open: P18
+Update round 2026-11 — P22. Done: tasks 1–3 (icon library; backend `iconUrl`, icon library,
+upload and from-link endpoints, ADR-0039; seed keys). Next: task 4 (admin icon picker), then task 5
+(apps). Owner asked to batch: push after 2–3 phases, then fix CI in one go. Owner checks open: P18
 heads-up on real phones, P21 icons on installed builds.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
@@ -85,6 +86,13 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P22.2–3 Icons on the backend (ADR-0039): `iconUrl` on categories and services
+  (`catalog/0003_icon_urls.sql`), only pointing at our public bucket's `catalog-icons/`;
+  `GET|POST /v1/admin/catalog/icons` and `POST .../icons/from-link` (SVG sanitised, PNG/WebP square
+  ≥ 96 px with alpha, links fetched once over https to public addresses only); `IconAdded` audited;
+  start-up sets an anonymous-read policy on that folder (`S3_PUBLIC_READ_POLICY`, `S3_PUBLIC_BASE_URL`).
+  Seeded categories and services use library keys. Integration tests run on CI only (no Docker here).
 
 - 2026-11-21 P21 done: all PR checks green on 5cb0104.
 
