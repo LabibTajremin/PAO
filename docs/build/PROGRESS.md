@@ -41,10 +41,10 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P18. Done: task 2 (FCM payload), tasks 1 and 3 in code (channels,
-default channel in both manifests, foreground display on Android, iOS presentation
-options, local-notification taps routed). Next: the permission reason sheet (task 1),
-then tasks 4–5.
+Update round 2026-11 — P18. Done: tasks 1–3 (FCM payload, channels, default channel,
+foreground display, permission reason sheet after sign-in). Next: task 4 (iOS push
+capability, Time Sensitive entitlement), then task 5 (`docs/guides/push-testing.md`,
+channel-off deep link).
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -86,6 +86,10 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P18.1 permission reason sheet (`showPushReason`, en/bn) before the first
+  permission prompt, after sign-in; `PushService.permissionUndecided`. flutter_local_notifications
+  pinned to 22.x: 23.x needs compileSdk 37.
 
 - 2026-11-20 P18.1/3 `LocalNotifier` (flutter_local_notifications) creates the three
   high-importance channels and shows foreground messages on Android; iOS foreground

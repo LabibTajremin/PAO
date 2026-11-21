@@ -660,6 +660,24 @@ abstract class PaoL10n {
   /// In en, this message translates to:
   /// **'Load more'**
   String get actionLoadMore;
+
+  /// Sheet shown after sign-in, before the phone asks for notification permission.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on notifications'**
+  String get pushReasonTitle;
+
+  /// Why PAO needs notifications, under pushReasonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hear about your bookings the moment something changes: new requests, a provider on the way, payments.'**
+  String get pushReasonBody;
+
+  /// Button that closes the sheet; the phone then asks for permission.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get pushReasonContinue;
 }
 
 class _PaoL10nDelegate extends LocalizationsDelegate<PaoL10n> {

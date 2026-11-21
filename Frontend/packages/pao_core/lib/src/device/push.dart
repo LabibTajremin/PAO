@@ -10,6 +10,10 @@ abstract interface class PushService {
   /// app is open. Call once at start, before listening to [opened].
   Future<void> start();
 
+  /// Whether the user has not yet answered the notification permission
+  /// prompt, so the app can explain before [token] asks.
+  Future<bool> permissionUndecided();
+
   /// The FCM token, after asking permission; null when unavailable.
   Future<String?> token();
 
@@ -70,6 +74,11 @@ class FcmPushService implements PushService {
   }
 
   @override
+  Future<bool> permissionUndecided() async =>
+      (await _messaging.getNotificationSettings()).authorizationStatus ==
+      AuthorizationStatus.notDetermined;
+
+  @override
   Future<String?> token() async {
     await _messaging.requestPermission();
     return await _messaging.getToken();
@@ -98,6 +107,9 @@ class NoPushService implements PushService {
 
   @override
   Future<void> start() async {}
+
+  @override
+  Future<bool> permissionUndecided() async => false;
 
   @override
   Future<String?> token() async => null;

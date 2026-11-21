@@ -332,4 +332,14 @@ class PaoL10nEn extends PaoL10n {
 
   @override
   String get actionLoadMore => 'Load more';
+
+  @override
+  String get pushReasonTitle => 'Turn on notifications';
+
+  @override
+  String get pushReasonBody =>
+      'Hear about your bookings the moment something changes: new requests, a provider on the way, payments.';
+
+  @override
+  String get pushReasonContinue => 'Continue';
 }

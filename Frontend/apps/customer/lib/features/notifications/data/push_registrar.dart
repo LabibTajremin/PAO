@@ -7,18 +7,21 @@ import 'package:pao_customer/features/notifications/domain/push_route.dart';
 /// Registers the device for push while signed in and turns tapped
 /// notifications into app locations (C-13).
 class PushRegistrar {
-  /// Creates the registrar; `open` navigates to a location.
+  /// Creates the registrar; `open` navigates to a location and `explain`
+  /// says why notifications matter before the permission prompt.
   PushRegistrar({
     required this._sessions,
     required this._push,
     required this._repo,
     required this._open,
+    this._explain,
   });
 
   final SessionManager _sessions;
   final PushService _push;
   final NotificationsRepository _repo;
   final void Function(String location) _open;
+  final Future<void> Function()? _explain;
   final _subs = <StreamSubscription<Object?>>[];
   bool _registered = false;
 
@@ -46,6 +49,8 @@ class PushRegistrar {
   }
 
   Future<void> _registerCurrent() async {
+    final explain = _explain;
+    if (explain != null && await _push.permissionUndecided()) await explain();
     final token = await _push.token();
     if (token != null) await _register(token);
   }

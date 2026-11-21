@@ -119,6 +119,34 @@ void main() {
     await sub.cancel();
   });
 
+  test('permission is undecided only before the first answer', () async {
+    final m = _messaging();
+    for (final (status, undecided) in [
+      (AuthorizationStatus.notDetermined, true),
+      (AuthorizationStatus.denied, false),
+    ]) {
+      when(m.getNotificationSettings).thenAnswer(
+        (_) async => NotificationSettings(
+          alert: AppleNotificationSetting.enabled,
+          announcement: AppleNotificationSetting.disabled,
+          authorizationStatus: status,
+          badge: AppleNotificationSetting.enabled,
+          carPlay: AppleNotificationSetting.disabled,
+          lockScreen: AppleNotificationSetting.enabled,
+          notificationCenter: AppleNotificationSetting.enabled,
+          showPreviews: AppleShowPreviewSetting.always,
+          timeSensitive: AppleNotificationSetting.disabled,
+          criticalAlert: AppleNotificationSetting.disabled,
+          sound: AppleNotificationSetting.enabled,
+          providesAppNotificationSettings: AppleNotificationSetting.disabled,
+        ),
+      );
+      final push = FcmPushService(m, openedApp: const Stream.empty());
+      expect(await push.permissionUndecided(), undecided);
+    }
+    expect(await const NoPushService().permissionUndecided(), isFalse);
+  });
+
   test('without a local notifier start only sets the iOS options', () async {
     final m = _messaging();
     await FcmPushService(m, openedApp: const Stream.empty()).start();

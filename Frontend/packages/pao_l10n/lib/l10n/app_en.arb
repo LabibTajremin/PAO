@@ -390,5 +390,17 @@
   "actionLoadMore": "Load more",
   "@actionLoadMore": {
     "description": "Button that loads the next page of a list."
+  },
+  "pushReasonTitle": "Turn on notifications",
+  "@pushReasonTitle": {
+    "description": "Sheet shown after sign-in, before the phone asks for notification permission."
+  },
+  "pushReasonBody": "Hear about your bookings the moment something changes: new requests, a provider on the way, payments.",
+  "@pushReasonBody": {
+    "description": "Why PAO needs notifications, under pushReasonTitle."
+  },
+  "pushReasonContinue": "Continue",
+  "@pushReasonContinue": {
+    "description": "Button that closes the sheet; the phone then asks for permission."
   }
 }

@@ -42,6 +42,12 @@ class FakePush implements PushService {
   @override
   Future<void> start() async => started = true;
 
+  /// Returned by [permissionUndecided].
+  bool undecided = false;
+
+  @override
+  Future<bool> permissionUndecided() async => undecided;
+
   @override
   Future<String?> token() async => value;
 
