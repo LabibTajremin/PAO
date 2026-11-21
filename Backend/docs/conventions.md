@@ -1,4 +1,4 @@
-# PAO.AI — agent instructions for the .NET backend
+# Backend conventions
 
 Read this before changing anything under `Backend/`. The repo-wide
 rules in `CLAUDE.md` and `docs/build/` still apply; ADR-0034 is the source of these rules.
@@ -6,22 +6,25 @@ rules in `CLAUDE.md` and `docs/build/` still apply; ADR-0034 is the source of th
 ## Layout
 
 ```
-Api/               the OpenAPI contract (openapi.yaml), bundled into PAO.Core/Spec
-PAO.sln  global.json  Directory.Build.props  Directory.Packages.props (every version pinned)
-Config/            one JSON file per concern, defaults only, never secrets
-database/changes/        goose SQL scripts per module + modules.json — the only schema source
-Docs/              Areas/<Area>/, Architecture/, Config/, Database/, Operations/, Testing/, Api/
-Logs/              runtime logs, Logs/<yyyy-MM-dd>/pao-<host>.log (git-ignored)
-PAO.Core/          web API: Areas/<Area>/{Controllers,Features,Services,Repositories}, Registration/
-PAO.Lib/           request/view models, DTOs, events, error reasons, mapping, validation, mediator contracts
-PAO.EF/            PaoDbContext, db models, IEntityTypeConfiguration, design-time factory
-PAO.Infrastructure/ platform (config, logging, Redis, crypto, HTTP edge, outbox, …), Registration/
-PAO.BackgroundJobs/ scheduler, relay loop, platform jobs
-PAO.Worker/  PAO.Migrator/   the other two hosts
-tools/PAO.Gates/   size and docs checkers
-Test/              PAO.UnitTests, PAO.IntegrationTests, PAO.E2ETests, PAO.TestKit, Load/
-scripts/           ci.sh, coverage.py, gen-spec.sh
+api/                the OpenAPI contract (openapi.yaml), bundled into src/PAO.Core/Spec
+global.json  Directory.Build.props  Directory.Packages.props (every version pinned)
+config/             one JSON file per concern, defaults only, never secrets
+database/changes/   goose SQL scripts per module + modules.json, the only schema source
+database/seed/      the catalog and demo data `migrate seed` loads
+docs/               Areas/<Area>/, Architecture/, Config/, Database/, Operations/, Testing/, Api/
+Logs/               runtime logs, Logs/<yyyy-MM-dd>/pao-<host>.log (git-ignored)
+src/PAO.Core/       web API: Areas/<Area>/{Controllers,Features,Services,Repositories}, Registration/
+src/PAO.Lib/        request/view models, DTOs, events, error reasons, mapping, validation, mediator contracts
+src/PAO.EF/         PaoDbContext, db models, IEntityTypeConfiguration, design-time factory
+src/PAO.Infrastructure/  platform (config, logging, Redis, crypto, HTTP edge, outbox, …), Registration/
+src/PAO.BackgroundJobs/  scheduler, relay loop, platform jobs
+src/PAO.Worker/  src/PAO.Migrator/   the other two hosts
+tools/PAO.Gates/    size and docs checkers
+tests/              PAO.UnitTests, PAO.IntegrationTests, PAO.E2ETests, PAO.TestKit, PAO.LoadTests
+scripts/            ci.sh, coverage.py, gen-spec.sh
 ```
+
+The solution, `PAO.sln`, is at the repository root.
 
 ## Rules
 

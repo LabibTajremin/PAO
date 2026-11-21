@@ -57,6 +57,7 @@ Tapping a banner should open the booking it is about, whether the app was closed
 - **iOS: it arrives but doesn't break through Focus.** Check that the Time Sensitive
   entitlement is in the profile. The user can also turn it off per app in Settings ›
   Notifications.
-- **Any platform: check what the backend sent.** In local development the backend keeps the
-  last pushes at `GET /__test/pushes?token=<device token>`, so you can see each push's
-  type and data.
+- **Any platform: check what the backend sent.** In the test stack (`APP_ENV=test`, which
+  `infra/e2e/stack.sh` uses) the backend records every push instead of sending it, and
+  `GET /__test/pushes?token=<device token>` shows each one's type and data. Against real FCM,
+  the worker and API logs show each send and any error FCM returned.

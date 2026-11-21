@@ -23,7 +23,7 @@ api, worker and migrate services are the .NET hosts built from `Backend/docker/D
   the request push), reject / timeout / cancel exits, document expiry and renewal, bans,
   RBAC per admin role, request → push latency (PRD §11) and a smoke test of the stack's
   api, worker and migrate entry points.
-- `Frontend/test/e2e/run.sh` drives the Flutter apps' journeys against the same stack.
+- `Frontend/e2e/run.sh` drives the Flutter apps' journeys against the same stack.
 
 Run everything with `./pao test e2e`, or `infra/e2e/stack.sh` once and then, while
 iterating:
