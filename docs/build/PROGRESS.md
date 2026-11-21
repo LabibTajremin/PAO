@@ -41,9 +41,10 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P19, task 1 (target layout: `git mv` into `Backend/src`, `tests`,
-`tools`, `api`, `config`, `database`, `docs`; root `PAO.sln`). P18 is done; its owner check
-(heads-up on a real Android 14 phone and an iPhone, `docs/guides/push-testing.md`) is open.
+Update round 2026-11 — P19. Done: .NET projects in `Backend/src`, `tests`, `tools`; root
+`PAO.sln`. Next: move `Api`, `Config`, `DB Changes`, `Seed`, `Docs`, `PAO.AI`, drop `Logs`;
+then `Frontend/e2e`, the VS Code workspace and the READMEs. P18 owner check (real phones) is
+open.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -85,6 +86,10 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P19.1 .NET projects in `Backend/src`, `Backend/tests`, `Backend/tools`; `PAO.sln` at
+  the root. `PaoPaths` finds the backend by `Directory.Packages.props`; gates, `.editorconfig`,
+  scripts, Dockerfile and docs follow.
 
 - 2026-11-21 P18 complete: every PR check green on 9de597f.
 
