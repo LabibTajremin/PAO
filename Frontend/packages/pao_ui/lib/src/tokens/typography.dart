@@ -1,19 +1,26 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pao_ui/src/tokens/accent.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 
-/// Fraunces for headings, Plus Jakarta Sans for body and UI text, and Noto
-/// Sans Bengali for Bangla and ৳: the fallback in English, the main family in
-/// Bangla (see [paoTextTheme]).
+/// Neutral grotesque type (ADR-0038): the system font on iOS (SF Pro, and
+/// Kohinoor Bangla for Bangla), and the bundled Inter and Noto Sans Bengali
+/// elsewhere, because SF Pro and Helvetica may not ship inside an Android or
+/// web app.
 abstract final class PaoFonts {
-  /// Latin UI family bundled with `pao_ui`.
-  static const latin = 'packages/pao_ui/PlusJakartaSans';
-
-  /// Display serif bundled with `pao_ui`.
-  static const display = 'packages/pao_ui/Fraunces';
+  /// Latin family bundled with `pao_ui`.
+  static const latin = 'packages/pao_ui/Inter';
 
   /// Bangla family bundled with `pao_ui`.
   static const bangla = 'packages/pao_ui/NotoSansBengali';
+
+  /// The Latin family on [platform]; null means the system font.
+  static String? latinOn(TargetPlatform platform) =>
+      platform == TargetPlatform.iOS ? null : latin;
+
+  /// The Bangla family on [platform]; null means the system font.
+  static String? banglaOn(TargetPlatform platform) =>
+      platform == TargetPlatform.iOS ? null : bangla;
 }
 
 /// Bangla sizes and line heights against the Latin scale. Bengali letters
@@ -27,65 +34,86 @@ abstract final class PaoBanglaScale {
   static const height = 0.3;
 }
 
-/// A Fraunces style. Variable fonts ignore [FontWeight] on some engines, so
-/// the axes are set explicitly; `opsz` follows the size for crisp headings
-/// and `SOFT` rounds the serifs a little to match the leaf corners.
-TextStyle paoDisplayStyle(double size, Color color) => TextStyle(
-  fontFamily: PaoFonts.display,
-  fontFamilyFallback: const [PaoFonts.bangla],
-  fontSize: size,
-  fontWeight: FontWeight.w600,
-  fontVariations: [
-    const FontVariation('wght', 600),
-    FontVariation('opsz', size),
-    const FontVariation('SOFT', 50),
-  ],
-  height: 1.2,
-  letterSpacing: -0.2,
-  color: color,
-);
-
-/// A style in the body family; in [bangla] Noto Sans Bengali leads at the
-/// larger Bangla size and height, with Plus Jakarta Sans for Latin text.
+/// A style in the PAO family; in [bangla] the Bangla family leads at the
+/// larger Bangla size and height, with the Latin family for Latin text.
 TextStyle paoBodyStyle(
   double size,
   FontWeight weight,
   Color color, {
-  double height = 1.35,
+  double height = 1.4,
   bool bangla = false,
-}) => TextStyle(
-  fontFamily: bangla ? PaoFonts.bangla : PaoFonts.latin,
-  fontFamilyFallback: [if (bangla) PaoFonts.latin else PaoFonts.bangla],
-  fontSize: bangla ? size * PaoBanglaScale.size : size,
-  fontWeight: weight,
-  // Both families are variable; the axis makes the weight hold everywhere.
-  fontVariations: [FontVariation('wght', weight.value.toDouble())],
-  height: bangla ? height + PaoBanglaScale.height : height,
-  color: color,
-);
+  TargetPlatform? platform,
+}) {
+  final p = platform ?? defaultTargetPlatform;
+  final family = bangla ? PaoFonts.banglaOn(p) : PaoFonts.latinOn(p);
+  final fallback = bangla ? PaoFonts.latinOn(p) : PaoFonts.banglaOn(p);
+  return TextStyle(
+    fontFamily: family,
+    fontFamilyFallback: [?fallback],
+    fontSize: bangla ? size * PaoBanglaScale.size : size,
+    fontWeight: weight,
+    // The bundled families are variable; the axis makes the weight hold on
+    // every engine. The system font takes the weight as it is.
+    fontVariations: [
+      if (family != null) FontVariation('wght', weight.value.toDouble()),
+    ],
+    height: bangla ? height + PaoBanglaScale.height : height,
+    color: color,
+  );
+}
 
-/// The PAO type scale mapped onto Material roles; [dark] picks ink colours
-/// for the dark palette and [bangla] the Bangla family and metrics. Headings
-/// stay in Fraunces in English; in Bangla they are bold Noto, which has the
-/// glyphs Fraunces lacks.
-TextTheme paoTextTheme({bool dark = false, bool bangla = false}) {
+/// A heading: the body family, heavier and a little tighter.
+TextStyle paoHeadingStyle(
+  double size,
+  Color color, {
+  double height = 1.25,
+  bool bangla = false,
+  TargetPlatform? platform,
+}) => paoBodyStyle(
+  size,
+  FontWeight.w700,
+  color,
+  height: height,
+  bangla: bangla,
+  platform: platform,
+).copyWith(letterSpacing: bangla ? 0 : -0.2);
+
+/// The one PAO type scale (display 28, title 22, headline 18, body 16,
+/// label 14, caption 12) mapped onto Material roles; [dark] picks ink colours
+/// and [bangla] the Bangla family and metrics.
+TextTheme paoTextTheme({
+  bool dark = false,
+  bool bangla = false,
+  TargetPlatform? platform,
+}) {
   final c = PaoColors(AccentPreset.navy, dark: dark);
-  TextStyle style(double size, FontWeight weight, [double height = 1.35]) =>
-      paoBodyStyle(size, weight, c.ink, height: height, bangla: bangla);
-  TextStyle heading(double size, double height) => bangla
-      ? style(size, FontWeight.w700, height)
-      : paoDisplayStyle(size, c.ink).copyWith(height: height);
+  TextStyle style(double size, FontWeight weight, [double height = 1.4]) =>
+      paoBodyStyle(
+        size,
+        weight,
+        c.ink,
+        height: height,
+        bangla: bangla,
+        platform: platform,
+      );
+  TextStyle heading(double size, double height) => paoHeadingStyle(
+    size,
+    c.ink,
+    height: height,
+    bangla: bangla,
+    platform: platform,
+  );
   return TextTheme(
-    displaySmall: heading(30, 1.15),
-    headlineSmall: heading(24, 1.2),
-    titleLarge: heading(20, 1.25),
+    displaySmall: heading(28, 34 / 28),
+    headlineSmall: heading(22, 1.27),
+    titleLarge: heading(18, 1.33).copyWith(fontWeight: FontWeight.w600),
     titleMedium: style(16, FontWeight.w600),
     titleSmall: style(14, FontWeight.w600),
-    bodyLarge: style(15, FontWeight.w400, 1.55),
-    bodyMedium: style(14, FontWeight.w400, 1.5),
-    bodySmall: style(12, FontWeight.w500, 1.45).copyWith(color: c.inkMuted),
-    labelLarge: style(15, FontWeight.w600).copyWith(letterSpacing: 0.2),
-    labelMedium: style(13, FontWeight.w600).copyWith(letterSpacing: 0.1),
-    labelSmall: style(11, FontWeight.w600).copyWith(letterSpacing: 0.3),
+    bodyLarge: style(16, FontWeight.w400, 1.5),
+    bodyMedium: style(16, FontWeight.w400, 1.45),
+    bodySmall: style(12, FontWeight.w500).copyWith(color: c.inkMuted),
+    labelLarge: style(14, FontWeight.w600),
+    labelMedium: style(12, FontWeight.w600),
+    labelSmall: style(12, FontWeight.w500),
   );
 }

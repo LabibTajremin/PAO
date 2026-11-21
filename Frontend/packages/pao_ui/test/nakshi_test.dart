@@ -75,13 +75,31 @@ void main() {
     );
   });
 
-  test('headings use Fraunces with Bangla fallback; body stays sans', () {
-    final text = paoTextTheme();
-    for (final s in [text.displaySmall!, text.titleLarge!]) {
-      expect(s.fontFamily, PaoFonts.display);
+  test('Inter and Noto Sans Bengali off iOS, the system font on iOS', () {
+    final text = paoTextTheme(platform: TargetPlatform.android);
+    for (final s in [text.displaySmall!, text.titleLarge!, text.bodyMedium!]) {
+      expect(s.fontFamily, PaoFonts.latin);
       expect(s.fontFamilyFallback, [PaoFonts.bangla]);
     }
-    expect(text.bodyMedium!.fontFamily, PaoFonts.latin);
+    expect(text.displaySmall!.fontSize, 28);
+    expect(text.displaySmall!.fontWeight, FontWeight.w700);
+    expect(text.displaySmall!.letterSpacing, -0.2);
+    expect(text.bodyMedium!.fontSize, 16);
+    final bn = paoTextTheme(bangla: true, platform: TargetPlatform.android);
+    expect(bn.bodyMedium!.fontFamily, PaoFonts.bangla);
+    expect(bn.displaySmall!.letterSpacing, 0);
+    final ios = paoTextTheme(platform: TargetPlatform.iOS);
+    expect(ios.bodyMedium!.fontFamily, isNull);
+    expect(ios.bodyMedium!.fontFamilyFallback, isEmpty);
+    expect(ios.bodyMedium!.fontVariations, isEmpty);
+    // Unset in PAO's styles, so Material fills in the iOS system font.
+    for (final theme in [
+      PaoTheme.light(platform: TargetPlatform.iOS),
+      PaoTheme.dark(bangla: true, platform: TargetPlatform.iOS),
+    ]) {
+      expect(theme.textTheme.bodyMedium!.fontFamily, isNot(PaoFonts.latin));
+      expect(theme.textTheme.bodyMedium!.fontFamily, isNot(PaoFonts.bangla));
+    }
     expect(PaoShape.leaf.bottomRight.x, PaoShape.tip);
     expect(PaoShape.leaf.topLeft.x, PaoShape.round);
     expect(PaoMotion.fast, lessThan(PaoMotion.base));

@@ -41,9 +41,9 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P20. Done: task 1 (Navy trust tokens, `AccentPreset.navy` default).
-Next: task 2 (type: system font on iOS, Inter + Noto Sans Bengali elsewhere; drop Fraunces and
-Plus Jakarta Sans). P18 owner check (real phones) is open.
+Update round 2026-11 — P20. Done: tasks 1–2 (palette; type). Next: task 3 (light by
+default; Appearance under Account/Profile › Settings; admin toggle). P18 owner check (real
+phones) is open.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -85,6 +85,11 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P20.2 Inter + Noto Sans Bengali bundled, system font on iOS (`PaoFonts.latinOn`);
+  Fraunces and Plus Jakarta Sans removed; one scale (28/22/18/16/14/12), headings w600–700
+  at -0.2. Fixed what the larger body text exposed: the home search hint overflowed narrow
+  phones; the admin provider search clipped its retry button.
 
 - 2026-11-21 P20.1 `PaoColors` on the §2 palette (light canvas F6F4EC, white cards, Ground
   wells; dark navy-ink 0E1322/151B2D/1B2338), new `elevated`, `sunken`, `spark`, `sparkInk`,

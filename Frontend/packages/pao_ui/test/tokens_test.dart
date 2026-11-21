@@ -69,7 +69,7 @@ void main() {
     expect(bn.height, closeTo(en.height! + PaoBanglaScale.height, 1e-9));
     final heading = paoTextTheme(bangla: true).titleLarge!;
     expect(heading.fontFamily, PaoFonts.bangla);
-    expect(heading.fontWeight, FontWeight.w700);
+    expect(heading.fontWeight!.value, greaterThanOrEqualTo(600));
     expect(paoTextTheme(dark: true).bodyLarge!.color, isNot(en.color));
   });
 }

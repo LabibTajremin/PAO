@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
 import 'package:pao_ui/src/tokens/shape.dart';
-import 'package:pao_ui/src/tokens/typography.dart';
 import 'package:pao_ui/src/widgets/button.dart';
 import 'package:pao_ui/src/widgets/stitch.dart';
 
@@ -59,7 +58,7 @@ class PaoMessageState extends StatelessWidget {
             const SizedBox(height: PaoSpace.lg),
             Text(
               title,
-              style: paoDisplayStyle(18, c.ink),
+              style: Theme.of(context).textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),
             if (message != null) ...[
