@@ -25,7 +25,10 @@ import 'package:pao_ui/src/widgets/text_field.dart';
 /// it with `flutter run -t example/main.dart` inside `pao_ui`.
 class PaoGalleryPage extends StatefulWidget {
   /// Creates the gallery.
-  const PaoGalleryPage({super.key});
+  const PaoGalleryPage({this.dark = false, super.key});
+
+  /// Starts in the dark palette.
+  final bool dark;
 
   @override
   State<PaoGalleryPage> createState() => _PaoGalleryPageState();
@@ -33,7 +36,7 @@ class PaoGalleryPage extends StatefulWidget {
 
 class _PaoGalleryPageState extends State<PaoGalleryPage> {
   AccentPreset _accent = AccentPreset.navy;
-  bool _dark = false;
+  late bool _dark = widget.dark;
   int _qty = 1;
 
   Widget _pickers() => Wrap(
@@ -118,9 +121,10 @@ class _PaoGalleryPageState extends State<PaoGalleryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bangla = Localizations.localeOf(context).languageCode == 'bn';
     final theme = _dark
-        ? PaoTheme.dark(accent: _accent)
-        : PaoTheme.light(accent: _accent);
+        ? PaoTheme.dark(accent: _accent, bangla: bangla)
+        : PaoTheme.light(accent: _accent, bangla: bangla);
     return Theme(
       data: theme,
       child: Scaffold(
@@ -128,7 +132,7 @@ class _PaoGalleryPageState extends State<PaoGalleryPage> {
         body: ListView(
           padding: const EdgeInsets.all(PaoSpace.xl),
           children: [
-            Text('Nakshi', style: theme.textTheme.displaySmall),
+            Text('PAO', style: theme.textTheme.displaySmall),
             Text('পাও — ঘরের সেবা', style: theme.textTheme.bodyMedium),
             const PaoStitchDivider(),
             _pickers(),
