@@ -41,8 +41,9 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P20, task 1 (colour tokens from `06-update-2026-11.md` §2,
-`AccentPreset.navy` as the default). P18 and P19 are done; P18 owner check (real phones) is open.
+Update round 2026-11 — P20. Done: task 1 (Navy trust tokens, `AccentPreset.navy` default).
+Next: task 2 (type: system font on iOS, Inter + Noto Sans Bengali elsewhere; drop Fraunces and
+Plus Jakarta Sans). P18 owner check (real phones) is open.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -84,6 +85,10 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P20.1 `PaoColors` on the §2 palette (light canvas F6F4EC, white cards, Ground
+  wells; dark navy-ink 0E1322/151B2D/1B2338), new `elevated`, `sunken`, `spark`, `sparkInk`,
+  `actionStrong`, `cardShadow`; `AccentPreset.navy` first and the default. AA tests extended.
 
 - 2026-11-21 P19 complete: every PR check green on e319ed7 (Android builds included).
 

@@ -9,13 +9,13 @@ abstract final class PaoTheme {
   /// The light (paper) theme for [accent]; Midnight is the default
   /// (05-screens.md). [bangla] sets the Bangla family and metrics.
   static ThemeData light({
-    AccentPreset accent = AccentPreset.midnight,
+    AccentPreset accent = AccentPreset.navy,
     bool bangla = false,
   }) => _build(PaoColors(accent), bangla: bangla);
 
   /// The dark (deep ink) theme for [accent]; [bangla] as for [light].
   static ThemeData dark({
-    AccentPreset accent = AccentPreset.midnight,
+    AccentPreset accent = AccentPreset.navy,
     bool bangla = false,
   }) => _build(PaoColors(accent, dark: true), bangla: bangla);
 

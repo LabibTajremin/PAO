@@ -32,7 +32,7 @@ class PaoGalleryPage extends StatefulWidget {
 }
 
 class _PaoGalleryPageState extends State<PaoGalleryPage> {
-  AccentPreset _accent = AccentPreset.midnight;
+  AccentPreset _accent = AccentPreset.navy;
   bool _dark = false;
   int _qty = 1;
 

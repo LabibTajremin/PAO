@@ -11,8 +11,9 @@ void main() {
       expect(theme.colorScheme.primary, accent.primary);
       expect(theme.extension<PaoColors>()!.accent, accent);
     }
-    expect(AccentPreset.values, hasLength(10));
-    expect(PaoTheme.light().colorScheme.primary, const Color(0xFF1F3A6E));
+    expect(AccentPreset.values, hasLength(11));
+    expect(PaoTheme.light().colorScheme.primary, const Color(0xFF16336F));
+    expect(AccentPreset.values.first, AccentPreset.navy);
   });
 
   test('colour extension copies and lerps', () {
@@ -25,7 +26,7 @@ void main() {
     expect(a.lerp(null, 0.8).accent, AccentPreset.midnight);
   });
 
-  testWidgets('context.pao falls back to Midnight without the extension', (
+  testWidgets('context.pao falls back to Navy without the extension', (
     tester,
   ) async {
     late PaoColors got;
@@ -37,7 +38,7 @@ void main() {
         },
       ),
     );
-    expect(got.accent, AccentPreset.midnight);
+    expect(got.accent, AccentPreset.navy);
     await pumpPao(
       tester,
       Builder(

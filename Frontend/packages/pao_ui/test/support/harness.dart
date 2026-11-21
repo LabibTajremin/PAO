@@ -8,7 +8,7 @@ import 'package:pao_ui/pao_ui.dart';
 Future<void> pumpPao(
   WidgetTester tester,
   Widget child, {
-  AccentPreset accent = AccentPreset.midnight,
+  AccentPreset accent = AccentPreset.navy,
   double textScale = 1,
   Locale locale = const Locale('en'),
 }) => tester.pumpWidget(

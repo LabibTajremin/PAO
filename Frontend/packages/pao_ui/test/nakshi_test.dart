@@ -22,8 +22,8 @@ void _expectAA(Color fg, Color bg, String what) => expect(
 void main() {
   test('text colours meet WCAG AA on paper, card and well in both modes', () {
     for (final dark in [false, true]) {
-      final c = PaoColors(AccentPreset.midnight, dark: dark);
-      for (final bg in [c.paper, c.card, c.well]) {
+      final c = PaoColors(AccentPreset.navy, dark: dark);
+      for (final bg in [c.paper, c.card, c.well, c.elevated, c.sunken]) {
         for (final fg in [c.ink, c.inkMuted, c.inkFaint, c.dangerInk]) {
           _expectAA(fg, bg, 'dark=$dark $fg on $bg');
         }
@@ -32,6 +32,16 @@ void main() {
         _expectAA(tone, _over(tone.withValues(alpha: 0.12), c.card), 'badge');
       }
     }
+  });
+
+  test('the Action orange is AA as text and under white labels', () {
+    for (final dark in [false, true]) {
+      final c = PaoColors(AccentPreset.navy, dark: dark);
+      _expectAA(c.sparkInk, c.paper, 'dark=$dark orange text');
+    }
+    _expectAA(PaoColors.onPrimary, PaoColors.actionStrong, 'urgent button');
+    expect(const PaoColors(AccentPreset.navy).spark, PaoColors.highlight);
+    expect(PaoColors.cardShadow, hasLength(2));
   });
 
   test('every accent meets WCAG AA for actions in both modes', () {

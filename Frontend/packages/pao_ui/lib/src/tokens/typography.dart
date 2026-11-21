@@ -69,7 +69,7 @@ TextStyle paoBodyStyle(
 /// stay in Fraunces in English; in Bangla they are bold Noto, which has the
 /// glyphs Fraunces lacks.
 TextTheme paoTextTheme({bool dark = false, bool bangla = false}) {
-  final c = PaoColors(AccentPreset.midnight, dark: dark);
+  final c = PaoColors(AccentPreset.navy, dark: dark);
   TextStyle style(double size, FontWeight weight, [double height = 1.35]) =>
       paoBodyStyle(size, weight, c.ink, height: height, bangla: bangla);
   TextStyle heading(double size, double height) => bangla

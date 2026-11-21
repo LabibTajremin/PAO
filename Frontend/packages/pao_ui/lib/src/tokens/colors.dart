@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pao_ui/src/tokens/accent.dart';
 
-/// PAO colours in the Nakshi direction (ADR 0033): warm paper surfaces, deep
-/// ink text and the accent from Figma `Accent`. Read them with `context.pao`.
+/// PAO colours, the "Navy trust" palette (ADR-0038, `06-update-2026-11.md`
+/// §2): a warm ground, white cards, ink text and the active accent. Read them
+/// with `context.pao`.
 ///
 /// The static constants are the light-mode values and stay for app code that
 /// predates dark mode; widgets read the mode-aware getters instead.
@@ -20,26 +21,45 @@ class PaoColors extends ThemeExtension<PaoColors> {
   /// Text and icons on [AccentPreset.primary]; white in every mode.
   static const onPrimary = Color(0xFFFFFFFF);
 
-  /// Page background: warm paper.
-  static const canvas = Color(0xFFFAF6EF);
+  /// Page background: the owner's Ground lifted a step so large areas stay
+  /// bright.
+  static const canvas = Color(0xFFF6F4EC);
 
-  /// Cards and sheets, a shade lighter than the paper.
-  static const surface = Color(0xFFFFFDF8);
+  /// Cards, sheets and bars.
+  static const surface = Color(0xFFFFFFFF);
 
-  /// Filled inputs and wells, a shade deeper than the paper.
-  static const field = Color(0xFFF2ECE2);
+  /// The owner's Ground: section bands, wells and input fills.
+  static const field = Color(0xFFF0EEDF);
 
   /// Hairlines and card borders.
-  static const border = Color(0xFFE6DCCB);
+  static const border = Color(0xFFE4E0CF);
 
-  /// Headings and body text: deep ink.
-  static const textPrimary = Color(0xFF1F1B16);
+  /// Headings and body text: the owner's Ink.
+  static const textPrimary = Color(0xFF1C1C1A);
 
-  /// Supporting text: warm grey.
-  static const textSecondary = Color(0xFF655C52);
+  /// Supporting text.
+  static const textSecondary = Color(0xFF56554F);
 
-  /// Hints and disabled text; still AA on paper so hints stay readable.
-  static const textTertiary = Color(0xFF6F665A);
+  /// Hints and inactive icons; still AA so hints stay readable.
+  static const textTertiary = Color(0xFF6B6A62);
+
+  /// The owner's Action orange: badges, live dots and highlights. Never for
+  /// text or under white labels, where it fails contrast.
+  static const highlight = Color(0xFFFE492A);
+
+  /// Filled "urgent" buttons that carry white text.
+  static const actionStrong = Color(0xFFD4341A);
+
+  /// Card shadow: navy-tinted, never grey.
+  static const cardShadow = [
+    BoxShadow(color: Color(0x0F16336F), offset: Offset(0, 1), blurRadius: 2),
+    BoxShadow(
+      color: Color(0x1A16336F),
+      offset: Offset(0, 8),
+      blurRadius: 24,
+      spreadRadius: -8,
+    ),
+  ];
 
   /// Errors and destructive actions.
   static const danger = Color(0xFFB42318);
@@ -50,26 +70,39 @@ class PaoColors extends ThemeExtension<PaoColors> {
   /// Warnings such as an expiring document.
   static const warning = Color(0xFF8A4F05);
 
-  /// Page background.
-  Color get paper => dark ? const Color(0xFF16130F) : canvas;
+  /// Page background; dark mode is deep navy-ink, never pure black.
+  Color get paper => dark ? const Color(0xFF0E1322) : canvas;
 
-  /// Cards, sheets and bars.
-  Color get card => dark ? const Color(0xFF201B16) : surface;
+  /// Cards and bars.
+  Color get card => dark ? const Color(0xFF151B2D) : surface;
 
-  /// Filled inputs and skeleton blocks.
-  Color get well => dark ? const Color(0xFF2A241D) : field;
+  /// Sheets and menus, which sit above cards.
+  Color get elevated => dark ? const Color(0xFF1B2338) : surface;
+
+  /// Section bands, filled inputs and skeleton blocks.
+  Color get well => dark ? const Color(0xFF1B2338) : field;
+
+  /// The same as [well]; the palette's name for section bands.
+  Color get sunken => well;
 
   /// Hairline borders.
-  Color get hairline => dark ? const Color(0xFF3A3229) : border;
+  Color get hairline => dark ? const Color(0xFF263049) : border;
 
   /// Primary text.
-  Color get ink => dark ? const Color(0xFFF3ECE0) : textPrimary;
+  Color get ink => dark ? const Color(0xFFEEEBDD) : textPrimary;
 
   /// Secondary text.
-  Color get inkMuted => dark ? const Color(0xFFBDB2A3) : textSecondary;
+  Color get inkMuted => dark ? const Color(0xFFA7AEC2) : textSecondary;
 
   /// Hints, inactive icons and disabled text.
-  Color get inkFaint => dark ? const Color(0xFFA0958A) : textTertiary;
+  Color get inkFaint => dark ? const Color(0xFF8C93A8) : textTertiary;
+
+  /// Badges, live dots and highlights in the owner's Action orange.
+  Color get spark => dark ? const Color(0xFFFF7A5E) : highlight;
+
+  /// Orange text, for the rare word that must stand out.
+  Color get sparkInk =>
+      dark ? const Color(0xFFFF7A5E) : const Color(0xFFC2301A);
 
   /// Fill of primary actions and accent-coloured text or icons. Dark mode
   /// uses the light soft tone because the accents are too dark on ink.
@@ -110,8 +143,8 @@ class PaoColors extends ThemeExtension<PaoColors> {
 
 /// Shortcut to the PAO colours of the current theme.
 extension PaoColorsContext on BuildContext {
-  /// The [PaoColors] of the nearest theme (light Midnight when none is set).
+  /// The [PaoColors] of the nearest theme (light Navy when none is set).
   PaoColors get pao =>
       Theme.of(this).extension<PaoColors>() ??
-      const PaoColors(AccentPreset.midnight);
+      const PaoColors(AccentPreset.navy);
 }
