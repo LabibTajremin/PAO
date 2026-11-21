@@ -21,7 +21,27 @@ Receipt _receipt({String? area = 'Banani'}) => Receipt.fromJson(
 );
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(initializeDateFormatting);
+
+  test(
+    'the receipt carries the logo and a watermark behind the items',
+    () async {
+      final art = await loadReceiptArt();
+      expect(art.logo, contains('<svg'));
+      expect(art.watermark, contains('opacity="0.06"'));
+      const blank =
+          '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>';
+      final marked = await receiptPdf(_receipt(), art: art);
+      final plain = await receiptPdf(
+        _receipt(),
+        art: (logo: art.logo, watermark: blank),
+      );
+      // The watermark adds its own drawing to the page.
+      expect(marked.length, greaterThan(plain.length));
+      expect(receiptTagline, 'Ask for it. PAO it.');
+    },
+  );
 
   test('the receipt renders as a PDF named after its number', () async {
     final bytes = await receiptPdf(_receipt());

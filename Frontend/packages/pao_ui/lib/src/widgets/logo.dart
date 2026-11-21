@@ -53,3 +53,31 @@ class PaoLogo extends StatelessWidget {
     );
   }
 }
+
+/// The PAO wordmark at 6% opacity, laid behind the line items of a receipt.
+/// On a dark surface it turns ivory so it stays as faint as on paper.
+class PaoWatermark extends StatelessWidget {
+  /// Creates the watermark [width] logical pixels wide.
+  const PaoWatermark({this.width = 240, super.key});
+
+  /// Width; the height follows the artwork.
+  final double width;
+
+  /// The watermark asset inside `pao_ui`.
+  static const asset = 'assets/brand/watermark.svg';
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    return ExcludeSemantics(
+      child: SvgPicture.asset(
+        asset,
+        package: 'pao_ui',
+        width: width,
+        colorFilter: dark
+            ? const ColorFilter.mode(Color(0xFFF5F2EB), BlendMode.srcIn)
+            : null,
+      ),
+    );
+  }
+}

@@ -41,8 +41,8 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P21. Done: tasks 1–3 (logo, icons, splash). Next: task 4 (receipts:
-logo tile header, watermark behind the items, tagline footer) and the two-apps naming task.
+Update round 2026-11 — P21. Done: tasks 1–4 (logo, icons, splash, receipts). Next: task 5
+(two apps, two names: `pao-customer-*` / `pao-partner-*` APK, AAB and CI artifacts).
 P18 owner check (real phones) is open.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
@@ -85,6 +85,10 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P21.4 Receipts carry the brand: logo tile header, `PaoWatermark` behind the items
+  (ivory on dark) and the "Ask for it. PAO it." footer, on the customer receipt page and PDF and
+  the partner receipt sheet.
 
 - 2026-11-21 P21.3 Native splash via `tools/brand/splash.sh` (flutter_native_splash would need the
   same blocked dependency): Android pre-12 layer-list and 12+ SplashScreen API, light and night;

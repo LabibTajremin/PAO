@@ -36,17 +36,32 @@ class _ReceiptBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Flexible(
     child: SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          Text(
-            '${receipt.number} · ${context.local(receipt.serviceName)}',
-            style: Theme.of(context).textTheme.titleSmall,
+          const Positioned.fill(child: Center(child: PaoWatermark())),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const PaoLogo(height: 36),
+              const SizedBox(height: PaoSpace.sm),
+              Text(
+                '${receipt.number} · ${context.local(receipt.serviceName)}',
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              Text(context.when(receipt.completedAt)),
+              Text(context.t.jobsCustomer(receipt.customerName)),
+              ItemRows(items: receipt.items, total: receipt.total),
+              Text(context.t.jobsPaidCash),
+              const SizedBox(height: PaoSpace.lg),
+              // The admin-edited tagline replaces this line in P23.
+              Center(
+                child: Text(
+                  'Ask for it. PAO it.',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
+            ],
           ),
-          Text(context.when(receipt.completedAt)),
-          Text(context.t.jobsCustomer(receipt.customerName)),
-          ItemRows(items: receipt.items, total: receipt.total),
-          Text(context.t.jobsPaidCash),
         ],
       ),
     ),

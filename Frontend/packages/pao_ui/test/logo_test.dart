@@ -36,4 +36,24 @@ void main() {
       endsWith('wordmark-ink.svg'),
     );
   });
+
+  testWidgets('the watermark is ink on light and ivory on dark', (
+    tester,
+  ) async {
+    for (final (theme, tinted) in [
+      (PaoTheme.light(), false),
+      (PaoTheme.dark(), true),
+    ]) {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: PaoWatermark(width: 200, key: UniqueKey()),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final svg = tester.widget<SvgPicture>(find.byType(SvgPicture));
+      expect(svg.colorFilter != null, tinted);
+      expect(assetOf(tester), endsWith('watermark.svg'));
+    }
+  });
 }
