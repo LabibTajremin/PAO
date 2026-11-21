@@ -41,10 +41,8 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P18. Done: tasks 1–3 (FCM payload, channels, default channel,
-foreground display, permission reason sheet after sign-in). Next: task 4 (iOS push
-capability, Time Sensitive entitlement), then task 5 (`docs/guides/push-testing.md`,
-channel-off deep link).
+Update round 2026-11 — P18. Done: tasks 1–4. Next: task 5 (`docs/guides/push-testing.md`,
+channel-off deep link from the Notifications page), then the phase check.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -86,6 +84,10 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P18.4 iOS: `Runner.entitlements` (aps-environment, time-sensitive) on all 12
+  Runner configurations of both apps, `UIBackgroundModes` remote-notification. The App IDs and
+  provisioning profiles need Push Notifications and Time Sensitive enabled (owner action).
 
 - 2026-11-21 P18.1 permission reason sheet (`showPushReason`, en/bn) before the first
   permission prompt, after sign-in; `PushService.permissionUndecided`. flutter_local_notifications
