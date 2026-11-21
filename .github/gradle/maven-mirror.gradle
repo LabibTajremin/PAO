@@ -1,8 +1,12 @@
-// CI only (.github/workflows/frontend.yml). Maven Central has answered some downloads by
-// redirecting to GitHub Releases, which returned 504 and failed every Android build; Google's
-// mirror of Maven Central serves the same files directly. Applies to included builds too
-// (Flutter's Gradle plugin), and leaves google() and Flutter's own repository alone.
+// CI only (.github/workflows/frontend.yml). Maven Central has answered downloads with
+// redirects to GitHub Releases that returned 504, and with 429 when the six Android jobs
+// start together; Google's mirror of Maven Central serves the same files directly.
+// Repositories that name Central are pointed at the mirror. The Gradle Plugin Portal
+// redirects to Central too, so build scripts (Flutter's plugin loader among them) get the
+// mirror first and only fall through to the portal for plugin markers. Applies to
+// included builds too, and leaves google() and Flutter's own repository alone.
 def mirror = 'https://maven-central.storage-download.googleapis.com/maven2/'
+def mirrorName = 'GoogleMavenCentralMirror'
 def centralHosts = ['repo.maven.apache.org', 'repo1.maven.org']
 def useMirror = { RepositoryHandler repos ->
     repos.withType(MavenArtifactRepository).configureEach { repo ->
@@ -11,12 +15,20 @@ def useMirror = { RepositoryHandler repos ->
         }
     }
 }
+def mirrorFirst = { RepositoryHandler repos ->
+    useMirror(repos)
+    if (repos.findByName(mirrorName) == null) {
+        def first = repos.maven { name = mirrorName; url = mirror }
+        repos.remove(first)
+        repos.addFirst(first)
+    }
+}
 beforeSettings { settings ->
-    useMirror(settings.pluginManagement.repositories)
-    useMirror(settings.buildscript.repositories)
+    mirrorFirst(settings.pluginManagement.repositories)
+    mirrorFirst(settings.buildscript.repositories)
     useMirror(settings.dependencyResolutionManagement.repositories)
 }
 allprojects { project ->
-    useMirror(project.buildscript.repositories)
+    mirrorFirst(project.buildscript.repositories)
     useMirror(project.repositories)
 }

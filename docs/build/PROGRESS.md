@@ -85,6 +85,10 @@ None.
 
 ## Log
 
+- 2026-11-21 CI: Android builds failed on 429s from Maven Central reached through the Gradle
+  Plugin Portal; `.github/gradle/maven-mirror.gradle` now puts Google's Central mirror first in
+  build-script repositories (checked with a local Gradle build).
+
 - 2026-11-21 P19.4 READMEs for the root, `Backend`, `Frontend`, `infra`, `tools`, `docs` and every
   .NET project; `docs/guides/getting-started.md`; `Backend/docs/conventions.md` retitled.
   `appsettings.Local.example.json` stays in `Backend/`: every `config/*.json` is loaded at run time.
