@@ -41,8 +41,8 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P20. Done: tasks 1–5. Next: task 6 (ADR-0038: palette, type,
-light default), then the phase check. P18 owner check (real phones) is open.
+Update round 2026-11 — P20. Tasks 1–6 done; waiting for green PR checks, then mark P20
+`done` and start P21 task 1 (`PaoLogo`). P18 owner check (real phones) is open.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -84,6 +84,8 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P20.6 ADR-0038 (palette, type, light default, surfaces).
 
 - 2026-11-21 P20.5 Goldens of the component gallery in light/dark × en/bn with the real Inter
   and Noto fonts (`pao_ui/test/goldens/`); the gallery takes `dark:` and follows a Bangla locale.
