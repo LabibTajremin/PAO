@@ -41,8 +41,9 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P21. Done: tasks 1–5 (logo, icons, splash, receipts, two app names).
-Next: task 6 check (tests) and `docs/guides/brand.md` with screenshots, then close P21.
+Update round 2026-11 — P21. All tasks done (logo, icons, splash, receipts, two app names,
+tests, `docs/guides/brand.md`). Next: green CI, then close P21 and start P22. Owner check: icons on
+installed builds (Android light/dark/themed, iOS light/dark/tinted).
 P18 owner check (real phones) is open.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
@@ -85,6 +86,11 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P21.6 Tests were already in tasks 1 and 4 (logo in both brightnesses, watermark layer
+  in the PDF). `docs/guides/brand.md` explains the brand assets and regeneration, with preview sheets
+  drawn by `tools/brand/preview.sh` from the generated icons and splash screens (no devices here, so
+  the installed-build check is the owner's).
 
 - 2026-11-21 P21.5 Two apps, two names: `tools/build-release.sh` copies each APK/AAB to
   `build/release/pao-<app>-<flavour>-<x.y.z-n>.<ext>` (`tools/lib/release_name.sh`, bats-tested);

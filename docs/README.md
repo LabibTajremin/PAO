@@ -10,6 +10,7 @@ Start with [`guides/getting-started.md`](guides/getting-started.md) if you're ne
 | [`guides/release.md`](guides/release.md) | Flavours, signing, versions and store builds |
 | [`guides/deployment.md`](guides/deployment.md) | Hosting the backend and the admin web, every environment variable |
 | [`guides/push-testing.md`](guides/push-testing.md) | Checking that notifications pop up on real phones |
+| [`guides/brand.md`](guides/brand.md) | Logo, watermark, app icons and splash screens, and how to regenerate them |
 | [`guides/booking-states.md`](guides/booking-states.md), [`guides/verification.md`](guides/verification.md) | The two state machines that matter most |
 | [`guides/domain-glossary.md`](guides/domain-glossary.md) | What words like "level 2" or "start code" mean here |
 | [`guides/security-checklist.md`](guides/security-checklist.md), [`guides/launch-values.md`](guides/launch-values.md) | Before going live |
