@@ -67,16 +67,23 @@ class _NotificationsPageState extends State<NotificationsPage> {
               ),
             ],
           ),
-          body: RefreshIndicator(
-            onRefresh: _cubit.load,
-            child: PagedView<Notification>(
-              itemBuilder: (_, n) => _Row(note: n, onTap: () => _open(n)),
-              empty: PaoEmptyState(
-                icon: Icons.notifications_none_outlined,
-                title: context.t.notifEmpty,
-                message: context.t.notifEmptyBody,
+          body: Column(
+            children: [
+              PushOffNotice(push: widget.services.push),
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: _cubit.load,
+                  child: PagedView<Notification>(
+                    itemBuilder: (_, n) => _Row(note: n, onTap: () => _open(n)),
+                    empty: PaoEmptyState(
+                      icon: Icons.notifications_none_outlined,
+                      title: context.t.notifEmpty,
+                      message: context.t.notifEmptyBody,
+                    ),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ),
       );

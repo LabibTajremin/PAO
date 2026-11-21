@@ -41,8 +41,9 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P18. Done: tasks 1–4. Next: task 5 (`docs/guides/push-testing.md`,
-channel-off deep link from the Notifications page), then the phase check.
+Update round 2026-11 — P18. Tasks 1–5 done; waiting for green PR checks, then mark P18
+`done` and start P19 task 1. Owner check outstanding: heads-up on a real Android 14 phone
+and an iPhone (`docs/guides/push-testing.md`).
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -84,6 +85,9 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-21 P18.5 `docs/guides/push-testing.md`; Notifications pages show "Notifications are
+  off" with a settings shortcut (`PushOffNotice`, `PushService.allowed/openSettings`).
 
 - 2026-11-21 P18.4 iOS: `Runner.entitlements` (aps-environment, time-sensitive) on all 12
   Runner configurations of both apps, `UIBackgroundModes` remote-notification. The App IDs and

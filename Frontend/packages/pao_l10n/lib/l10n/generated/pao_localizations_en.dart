@@ -342,4 +342,11 @@ class PaoL10nEn extends PaoL10n {
 
   @override
   String get pushReasonContinue => 'Continue';
+
+  @override
+  String get pushOffBody =>
+      'Notifications are off, so booking updates won\'t pop up.';
+
+  @override
+  String get pushOffAction => 'Turn on';
 }

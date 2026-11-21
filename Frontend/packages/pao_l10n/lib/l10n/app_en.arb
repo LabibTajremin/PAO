@@ -402,5 +402,13 @@
   "pushReasonContinue": "Continue",
   "@pushReasonContinue": {
     "description": "Button that closes the sheet; the phone then asks for permission."
+  },
+  "pushOffBody": "Notifications are off, so booking updates won't pop up.",
+  "@pushOffBody": {
+    "description": "Strip on the Notifications page when the phone blocks PAO notifications."
+  },
+  "pushOffAction": "Turn on",
+  "@pushOffAction": {
+    "description": "Opens the phone's settings for PAO, next to pushOffBody."
   }
 }

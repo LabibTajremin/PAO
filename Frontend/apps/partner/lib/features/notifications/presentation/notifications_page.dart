@@ -45,22 +45,29 @@ class NotificationsPage extends StatelessWidget {
             ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: cubit.refresh,
-        child: ViewStateView<NotificationList>(
-          state: s,
-          onRetry: cubit.load,
-          isEmpty: (d) => d.items.isEmpty,
-          empty: PaoEmptyState(
-            icon: Icons.notifications_none_outlined,
-            title: context.t.notifEmpty,
-            message: context.t.notifEmptyBody,
+      body: Column(
+        children: [
+          PushOffNotice(push: services.push),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: cubit.refresh,
+              child: ViewStateView<NotificationList>(
+                state: s,
+                onRetry: cubit.load,
+                isEmpty: (d) => d.items.isEmpty,
+                empty: PaoEmptyState(
+                  icon: Icons.notifications_none_outlined,
+                  title: context.t.notifEmpty,
+                  message: context.t.notifEmptyBody,
+                ),
+                builder: (context, d) => ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [for (final n in d.items) _row(context, n)],
+                ),
+              ),
+            ),
           ),
-          builder: (context, d) => ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            children: [for (final n in d.items) _row(context, n)],
-          ),
-        ),
+        ],
       ),
     );
   }

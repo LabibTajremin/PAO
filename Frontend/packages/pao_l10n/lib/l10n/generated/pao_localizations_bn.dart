@@ -339,4 +339,10 @@ class PaoL10nBn extends PaoL10n {
 
   @override
   String get pushReasonContinue => 'চালিয়ে যান';
+
+  @override
+  String get pushOffBody => 'নোটিফিকেশন বন্ধ, তাই বুকিংয়ের খবর ভেসে উঠবে না।';
+
+  @override
+  String get pushOffAction => 'চালু করুন';
 }

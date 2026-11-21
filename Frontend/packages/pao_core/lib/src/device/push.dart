@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:pao_core/src/device/local_notifications.dart';
 
 /// Push notifications: the device token to register and the data of tapped
@@ -13,6 +14,13 @@ abstract interface class PushService {
   /// Whether the user has not yet answered the notification permission
   /// prompt, so the app can explain before [token] asks.
   Future<bool> permissionUndecided();
+
+  /// Whether the phone lets PAO show notifications.
+  Future<bool> allowed();
+
+  /// Opens the phone's settings for this app, where notifications can be
+  /// turned back on.
+  Future<void> openSettings();
 
   /// The FCM token, after asking permission; null when unavailable.
   Future<String?> token();
@@ -37,10 +45,13 @@ class FcmPushService implements PushService {
     Stream<RemoteMessage>? foreground,
     this._local,
     this._showForeground = false,
-  }) : _openedApp = openedApp ?? FirebaseMessaging.onMessageOpenedApp,
+    Future<bool> Function()? settings,
+  }) : _settings = settings ?? Geolocator.openAppSettings,
+       _openedApp = openedApp ?? FirebaseMessaging.onMessageOpenedApp,
        _foreground = foreground ?? FirebaseMessaging.onMessage;
 
   final FirebaseMessaging _messaging;
+  final Future<bool> Function() _settings;
   final Stream<RemoteMessage> _openedApp;
   final Stream<RemoteMessage> _foreground;
   final LocalNotifier? _local;
@@ -79,6 +90,17 @@ class FcmPushService implements PushService {
       AuthorizationStatus.notDetermined;
 
   @override
+  Future<bool> allowed() async => switch ((await _messaging
+          .getNotificationSettings())
+      .authorizationStatus) {
+    AuthorizationStatus.authorized || AuthorizationStatus.provisional => true,
+    _ => false,
+  };
+
+  @override
+  Future<void> openSettings() => _settings();
+
+  @override
   Future<String?> token() async {
     await _messaging.requestPermission();
     return await _messaging.getToken();
@@ -110,6 +132,12 @@ class NoPushService implements PushService {
 
   @override
   Future<bool> permissionUndecided() async => false;
+
+  @override
+  Future<bool> allowed() async => true;
+
+  @override
+  Future<void> openSettings() async {}
 
   @override
   Future<String?> token() async => null;

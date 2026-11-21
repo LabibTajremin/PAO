@@ -50,6 +50,18 @@ class FakePush implements PushService {
   @override
   Future<bool> permissionUndecided() async => undecided;
 
+  /// Returned by [allowed].
+  bool on = true;
+
+  /// How often [openSettings] ran.
+  int settingsOpened = 0;
+
+  @override
+  Future<bool> allowed() async => on;
+
+  @override
+  Future<void> openSettings() async => settingsOpened++;
+
   @override
   Future<String?> token() async => value;
 

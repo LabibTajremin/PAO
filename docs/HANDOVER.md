@@ -49,6 +49,8 @@ plan) sets `JOBS_IN_API=true` so the API runs the outbox relay and the jobs (ADR
   `infra/e2e/stack.sh` (ADR-0031).
 - Release builds, flavours (dev/staging/prod), signing, versioning and the store
   checklist: [`docs/guides/release.md`](guides/release.md).
+- Checking that notifications pop up on real phones, and what to do when they don't:
+  [`docs/guides/push-testing.md`](guides/push-testing.md).
 - Conventions (file and function limits, comments, naming):
   [`docs/build/01-conventions.md`](build/01-conventions.md).
 - Deployment guide (admin web on Vercel, backend hosting, env vars, mobile config):

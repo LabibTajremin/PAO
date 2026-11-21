@@ -96,5 +96,7 @@
   "actionLoadMore": "আরও দেখুন",
   "pushReasonTitle": "নোটিফিকেশন চালু করুন",
   "pushReasonBody": "বুকিংয়ে কিছু বদলালেই সঙ্গে সঙ্গে জানবেন: নতুন অনুরোধ, সেবাদাতা রওনা হয়েছেন, পেমেন্ট।",
-  "pushReasonContinue": "চালিয়ে যান"
+  "pushReasonContinue": "চালিয়ে যান",
+  "pushOffBody": "নোটিফিকেশন বন্ধ, তাই বুকিংয়ের খবর ভেসে উঠবে না।",
+  "pushOffAction": "চালু করুন"
 }

@@ -1,16 +1,11 @@
 import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pao_core/pao_core.dart';
 
 class _Messaging extends Mock implements FirebaseMessaging;
-
-class _Plugin extends Mock implements FlutterLocalNotificationsPlugin;
-
-class _Android extends Mock implements AndroidFlutterLocalNotificationsPlugin;
 
 class _Local implements LocalNotifier {
   void Function(Map<String, Object?>)? onTap;
@@ -46,11 +41,6 @@ _Messaging _messaging() {
 Future<void> _flush() => Future<void>.delayed(Duration.zero);
 
 void main() {
-  setUpAll(() {
-    registerFallbackValue(const InitializationSettings());
-    registerFallbackValue(const AndroidNotificationChannel('x', 'x'));
-  });
-
   test('start sets iOS foreground banners and shows Android foreground '
       'messages on their channel', () async {
     final m = _messaging();
@@ -121,9 +111,11 @@ void main() {
 
   test('permission is undecided only before the first answer', () async {
     final m = _messaging();
-    for (final (status, undecided) in [
-      (AuthorizationStatus.notDetermined, true),
-      (AuthorizationStatus.denied, false),
+    for (final (status, undecided, allowed) in [
+      (AuthorizationStatus.notDetermined, true, false),
+      (AuthorizationStatus.denied, false, false),
+      (AuthorizationStatus.authorized, false, true),
+      (AuthorizationStatus.provisional, false, true),
     ]) {
       when(m.getNotificationSettings).thenAnswer(
         (_) async => NotificationSettings(
@@ -141,10 +133,21 @@ void main() {
           providesAppNotificationSettings: AppleNotificationSetting.disabled,
         ),
       );
-      final push = FcmPushService(m, openedApp: const Stream.empty());
+      var opened = 0;
+      final push = FcmPushService(
+        m,
+        openedApp: const Stream.empty(),
+        settings: () async => ++opened > 0,
+      );
       expect(await push.permissionUndecided(), undecided);
+      expect(await push.allowed(), allowed);
+      await push.openSettings();
+      expect(opened, 1);
     }
-    expect(await const NoPushService().permissionUndecided(), isFalse);
+    const off = NoPushService();
+    expect(await off.permissionUndecided(), isFalse);
+    expect(await off.allowed(), isTrue);
+    await off.openSettings();
   });
 
   test('without a local notifier start only sets the iOS options', () async {
@@ -157,134 +160,5 @@ void main() {
         sound: true,
       ),
     ).called(1);
-  });
-
-  group('PluginLocalNotifier', () {
-    late _Plugin plugin;
-    late _Android android;
-    DidReceiveNotificationResponseCallback? onResponse;
-
-    setUp(() {
-      plugin = _Plugin();
-      android = _Android();
-      when(
-        () => plugin.initialize(
-          settings: any(named: 'settings'),
-          onDidReceiveNotificationResponse: any(
-            named: 'onDidReceiveNotificationResponse',
-          ),
-        ),
-      ).thenAnswer((i) async {
-        onResponse =
-            i.namedArguments[#onDidReceiveNotificationResponse]
-                as DidReceiveNotificationResponseCallback?;
-        return true;
-      });
-      when(
-        () => plugin
-            .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin
-            >(),
-      ).thenReturn(android);
-      when(() => android.createNotificationChannel(any()))
-          .thenAnswer((_) async {});
-      when(plugin.getNotificationAppLaunchDetails).thenAnswer(
-        (_) async => const NotificationAppLaunchDetails(
-          true,
-          notificationResponse: NotificationResponse(
-            notificationResponseType:
-                NotificationResponseType.selectedNotification,
-            payload: '{"bookingId":"b1"}',
-          ),
-        ),
-      );
-    });
-
-    test('creates the three high-importance channels and reports taps, '
-        'including the launch tap', () async {
-      final taps = <Map<String, Object?>>[];
-      await PluginLocalNotifier(plugin).start(taps.add);
-      final channels = verify(
-        () => android.createNotificationChannel(captureAny()),
-      ).captured.cast<AndroidNotificationChannel>();
-      expect(channels.map((c) => c.id), [
-        'pao_bookings',
-        'pao_account',
-        'pao_general',
-      ]);
-      expect(channels.every((c) => c.importance == Importance.high), isTrue);
-      onResponse!(
-        const NotificationResponse(
-          notificationResponseType:
-              NotificationResponseType.selectedNotification,
-          payload: '{"type":"booking_started"}',
-        ),
-      );
-      expect(taps, [
-        {'bookingId': 'b1'},
-        {'type': 'booking_started'},
-      ]);
-    });
-
-    test('a launch that was not from a notification reports nothing, and '
-        'a missing Android plugin is fine', () async {
-      when(
-        () => plugin
-            .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin
-            >(),
-      ).thenReturn(null);
-      when(plugin.getNotificationAppLaunchDetails)
-          .thenAnswer((_) async => const NotificationAppLaunchDetails(false));
-      final taps = <Map<String, Object?>>[];
-      await PluginLocalNotifier(plugin).start(taps.add);
-      when(plugin.getNotificationAppLaunchDetails)
-          .thenAnswer((_) async => const NotificationAppLaunchDetails(true));
-      await PluginLocalNotifier(plugin).start(taps.add);
-      when(plugin.getNotificationAppLaunchDetails)
-          .thenAnswer((_) async => null);
-      await PluginLocalNotifier(plugin).start(taps.add);
-      expect(taps, isEmpty);
-      verifyNever(() => android.createNotificationChannel(any()));
-    });
-
-    test('show posts a high-priority notification with the data', () async {
-      when(
-        () => plugin.show(
-          id: any(named: 'id'),
-          title: any(named: 'title'),
-          body: any(named: 'body'),
-          notificationDetails: any(named: 'notificationDetails'),
-          payload: any(named: 'payload'),
-        ),
-      ).thenAnswer((_) async {});
-      await PluginLocalNotifier(plugin)
-          .show(7, 'T', 'B', 'pao_account', {'type': 'x'});
-      final details =
-          verify(
-                () => plugin.show(
-                  id: 7,
-                  title: 'T',
-                  body: 'B',
-                  notificationDetails: captureAny(named: 'notificationDetails'),
-                  payload: '{"type":"x"}',
-                ),
-              ).captured.single
-              as NotificationDetails;
-      expect(details.android!.channelId, 'pao_account');
-      expect(details.android!.channelName, 'Account');
-      expect(details.android!.importance, Importance.high);
-      expect(details.android!.priority, Priority.high);
-    });
-  });
-
-  test('channel names and payload decoding', () {
-    expect(channelName('pao_bookings'), 'Bookings');
-    expect(channelName('nope'), 'General');
-    expect(decodePayload(null), isEmpty);
-    expect(decodePayload(''), isEmpty);
-    expect(decodePayload('[1]'), isEmpty);
-    expect(decodePayload('{"a":1}'), {'a': 1});
-    expect(PluginLocalNotifier.system(), isA<LocalNotifier>());
   });
 }

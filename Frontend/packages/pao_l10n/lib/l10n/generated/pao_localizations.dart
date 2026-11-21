@@ -678,6 +678,18 @@ abstract class PaoL10n {
   /// In en, this message translates to:
   /// **'Continue'**
   String get pushReasonContinue;
+
+  /// Strip on the Notifications page when the phone blocks PAO notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are off, so booking updates won\'t pop up.'**
+  String get pushOffBody;
+
+  /// Opens the phone's settings for PAO, next to pushOffBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get pushOffAction;
 }
 
 class _PaoL10nDelegate extends LocalizationsDelegate<PaoL10n> {
