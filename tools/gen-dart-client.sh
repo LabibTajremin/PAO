@@ -8,7 +8,7 @@ set -euo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
 image="${OPENAPI_GENERATOR_IMAGE:-openapitools/openapi-generator-cli:v7.16.0}"
-spec="Backend/PAO.Core/Spec/openapi.gen.yaml"
+spec="Backend/src/PAO.Core/Spec/openapi.gen.yaml"
 out="Frontend/packages/pao_api"
 
 find "$root/$out/lib" -name '*.dart' -delete 2>/dev/null || true

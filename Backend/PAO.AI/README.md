@@ -18,7 +18,7 @@ PAO.EF/            PaoDbContext, db models, IEntityTypeConfiguration, design-tim
 PAO.Infrastructure/ platform (config, logging, Redis, crypto, HTTP edge, outbox, …), Registration/
 PAO.BackgroundJobs/ scheduler, relay loop, platform jobs
 PAO.Worker/  PAO.Migrator/   the other two hosts
-Tools/PAO.Gates/   size and docs checkers
+tools/PAO.Gates/   size and docs checkers
 Test/              PAO.UnitTests, PAO.IntegrationTests, PAO.E2ETests, PAO.TestKit, Load/
 scripts/           ci.sh, coverage.py, gen-spec.sh
 ```
@@ -63,9 +63,9 @@ C# files ≤ 250 lines (tests ≤ 400), methods ≤ 40 lines — `SizeChecker` e
 ## Adding a feature
 
 1. Request + validator + handler in `Areas/<Area>/Features/<Feature>/Commands|Queries/`;
-   DTOs and view models in `PAO.Lib/Areas/<Area>/`, maps in a mapping profile.
+   DTOs and view models in `src/PAO.Lib/Areas/<Area>/`, maps in a mapping profile.
 2. Repository methods in `Areas/<Area>/Repositories/`, registered in `AddRepositories`;
-   entities and configurations in `PAO.EF/<Area>/`.
+   entities and configurations in `src/PAO.EF/<Area>/`.
 3. A controller action in `Areas/<Area>/Controllers/` with `[Area("<Area>")]`, the spec path
    and the attribute for its `x-permission`, calling only `IMediator`.
 4. Unit and integration tests (100% coverage), the entries in `Docs/Areas/<Area>/`.

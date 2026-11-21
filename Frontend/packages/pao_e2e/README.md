@@ -3,7 +3,7 @@
 Test support for the app journeys in `apps/*/integration_test` (P14). Not used by
 any app at run time; apps list it under `dev_dependencies`.
 
-- `stack.dart` (pure Dart): the e2e stack over plain HTTP, as `Backend/Test/PAO.E2ETests` does it —
+- `stack.dart` (pure Dart): the e2e stack over plain HTTP, as `Backend/tests/PAO.E2ETests` does it —
   `StackClient` (one-time codes from `/__test/sms`, a client address per device),
   `PartnerDriver` (sign-in, enrolment with uploads, presence), `AdminDriver`
   (password + TOTP sign-in, approvals), `JobDriver` (the provider's side of a job),

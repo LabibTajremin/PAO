@@ -11,9 +11,9 @@
 | `PAO.Core` | the web API: `Areas/<Area>/`, `Registration/`, the 501 catch-all | `PAO.Infrastructure`; `PAO.BackgroundJobs` only from `Registration/BackgroundJobsInApiRegistration.cs` (JOBS_IN_API, [events and jobs](events-and-jobs.md#running-the-jobs-in-the-api)) |
 | `PAO.Worker` | worker host | `PAO.Core`, `PAO.BackgroundJobs` |
 | `PAO.Migrator` | migration tool | `PAO.Infrastructure` |
-| `Tools/PAO.Gates` | size and docs checkers | nothing in PAO |
+| `tools/PAO.Gates` | size and docs checkers | nothing in PAO |
 
-The architecture tests (`Test/PAO.UnitTests/Architecture`) enforce these rules, that areas
+The architecture tests (`tests/PAO.UnitTests/Architecture`) enforce these rules, that areas
 reach other areas only through `Services/Shared`, and that controllers depend only on
 `IMediator`.
 

@@ -11,7 +11,7 @@ real device.
 
 | Where | What | Code |
 |---|---|---|
-| Backend | Every push names its channel (`pao_bookings`, `pao_account` or `pao_general`), with high priority and a sound; on iOS it sends APNs priority 10 and an alert push type, and booking events are time-sensitive | `Backend/PAO.Infrastructure/Push/PushChannels.cs`, `FcmPushSender.Payload` |
+| Backend | Every push names its channel (`pao_bookings`, `pao_account` or `pao_general`), with high priority and a sound; on iOS it sends APNs priority 10 and an alert push type, and booking events are time-sensitive | `Backend/src/PAO.Infrastructure/Push/PushChannels.cs`, `FcmPushSender.Payload` |
 | Android app | The three channels are created at start with high importance; `pao_bookings` is FCM's default channel (`AndroidManifest.xml`); messages that arrive while the app is open are shown by the app, because FCM doesn't show those on Android | `pao_core/lib/src/device/local_notifications.dart`, `push.dart` |
 | iOS app | Push Notifications and Time Sensitive entitlements, the remote-notification background mode, and foreground presentation options | `ios/Runner/Runner.entitlements`, `Info.plist` |
 

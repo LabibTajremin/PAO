@@ -4,7 +4,7 @@ Platform settings (A-10), complaints and reports (C-14, A-07), the dashboard (A-
 provider and customer console with bans and suspensions (A-05). Admin users and roles belong
 to Identity; verification documents to Verification; the bookings monitor to Booking (ADR-0026).
 
-Code: `PAO.Core/Areas/Admin/`; contracts: `PAO.Lib/Areas/Admin/`. Back to the [area index](../README.md).
+Code: `src/PAO.Core/Areas/Admin/`; contracts: `src/PAO.Lib/Areas/Admin/`. Back to the [area index](../README.md).
 
 ## Services
 

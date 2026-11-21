@@ -18,7 +18,7 @@
 The worker host (`PAO.Worker`) runs the relay and the jobs through
 `WorkerServices.AddBackgroundJobs`. With `JOBS_IN_API=true` (`Jobs:RunInApi`) the API host
 calls the same method from `AddBackgroundJobsInApi`
-(`PAO.Core/Registration/BackgroundJobsInApiRegistration.cs`), so both hosts register one
+(`src/PAO.Core/Registration/BackgroundJobsInApiRegistration.cs`), so both hosts register one
 identical set: the `EventBus` with every `IEventSubscriptions`, `OutboxRelay`,
 `OutboxMaintenance`, every `IScheduledJob`, `JobScheduler` and the hosted `WorkerLoop`. It
 is meant for the MVP on a single free instance (ADR-0036 §14). Off, the API registers none

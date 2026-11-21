@@ -17,9 +17,9 @@ Related: [`docs/guides/release.md`](release.md) (flavours, signing, store checkl
 | Piece | Source | Runs as |
 |---|---|---|
 | Admin web | `Frontend/apps/admin` (Flutter web) | static files (`build/web`) |
-| API | `Backend/PAO.Core` → `/app/api` | long-running ASP.NET Core server on `HTTP_ADDR` (`:8080`), metrics on `METRICS_ADDR` (`:9090`) |
-| Worker | `Backend/PAO.Worker` → `/app/worker` | long-running process: outbox relay and periodic jobs, liveness on `:9090/healthz`; not deployed when the API runs them (`JOBS_IN_API=true`, §3.4.1) |
-| Migrations | `Backend/PAO.Migrator` → `/app/migrate up` / `seed` | one-off job per release |
+| API | `Backend/src/PAO.Core` → `/app/api` | long-running ASP.NET Core server on `HTTP_ADDR` (`:8080`), metrics on `METRICS_ADDR` (`:9090`) |
+| Worker | `Backend/src/PAO.Worker` → `/app/worker` | long-running process: outbox relay and periodic jobs, liveness on `:9090/healthz`; not deployed when the API runs them (`JOBS_IN_API=true`, §3.4.1) |
+| Migrations | `Backend/src/PAO.Migrator` → `/app/migrate up` / `seed` | one-off job per release |
 | PostgreSQL 16 + PostGIS 3 | — | managed database (migrations run `CREATE EXTENSION postgis` and `pg_trgm`) |
 | Redis 7 | — | sessions, refresh tokens, OTP codes, rate limits, cache (StackExchange.Redis) |
 | S3-compatible storage | — | two buckets (`S3_BUCKET_PRIVATE`, `S3_BUCKET_PUBLIC`); the API creates them at start-up if missing |
@@ -217,7 +217,7 @@ There is no deploy workflow in `.github/workflows` today. A job would:
 - Add the custom domain (e.g. `admin.pao.com.bd`) under Project → Domains and create
   the CNAME Vercel shows.
 - The API's CORS check (`EdgeMiddleware` in
-  `Backend/PAO.Infrastructure/Http/Edge/EdgeMiddleware.cs`) allows the origins listed in
+  `Backend/src/PAO.Infrastructure/Http/Edge/EdgeMiddleware.cs`) allows the origins listed in
   `ADMIN_CORS_ORIGIN`: one origin or a comma-separated list, each compared as an exact
   string. Write each with scheme and no path or trailing slash; the API refuses to start
   otherwise: `ADMIN_CORS_ORIGIN=https://admin.pao.com.bd`.

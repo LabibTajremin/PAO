@@ -1,7 +1,7 @@
 # Configuration
 
 Each concern has one file in `Config/`, bound to a typed options class
-(`PAO.Infrastructure/Configuration/Options.cs`) and validated at start
+(`src/PAO.Infrastructure/Configuration/Options.cs`) and validated at start
 (`ConfigValidator`). Files hold defaults only; secrets come from the environment, either as
 `Section__Key` or through the deployment variable names listed in [variables](variables.md).
 
@@ -36,7 +36,7 @@ back to `true` with a real `SMS_ADAPTER` once one is contracted
 `Jobs:RunInApi` (`JOBS_IN_API`, default `false`) is for a deployment that runs only the API
 service, such as the MVP on Render's free plan. When `true`, the API host also registers
 what the worker registers, through the same `AddBackgroundJobs` method
-(`AddBackgroundJobsInApi` in `PAO.Core/Registration`): the event bus with every area's
+(`AddBackgroundJobsInApi` in `src/PAO.Core/Registration`): the event bus with every area's
 subscribers, the outbox relay and the scheduler with every job. They start after the
 start-up checks and stop with the API. `/readyz` does not depend on them. Every host logs
 `background jobs: in api` or `background jobs: in worker` at start. Run either the worker

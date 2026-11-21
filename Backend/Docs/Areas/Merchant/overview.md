@@ -2,7 +2,7 @@
 
 Merchant (provider) profiles, the enrolment wizard, services offered, presence and nearby search. "Merchant" is the owner's name for the provider role; the schema, events and API paths keep `provider`.
 
-Code: `PAO.Core/Areas/Merchant/`; contracts: `PAO.Lib/Areas/Merchant/`. Back to the [area index](../README.md).
+Code: `src/PAO.Core/Areas/Merchant/`; contracts: `src/PAO.Lib/Areas/Merchant/`. Back to the [area index](../README.md).
 
 ## Services
 

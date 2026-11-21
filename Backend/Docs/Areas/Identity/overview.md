@@ -2,8 +2,8 @@
 
 Accounts, roles, permissions and screen permissions; phone OTP sign-in for customers and merchants, email, password and TOTP for admins; refresh-token families and the access-token denylist.
 
-Code: `PAO.Core/Areas/Identity/`; contracts, records, request and view models and the
-`IdentityMappingProfile`: `PAO.Lib/Areas/Identity/`. Back to the [area index](../README.md).
+Code: `src/PAO.Core/Areas/Identity/`; contracts, records, request and view models and the
+`IdentityMappingProfile`: `src/PAO.Lib/Areas/Identity/`. Back to the [area index](../README.md).
 
 ## Services
 

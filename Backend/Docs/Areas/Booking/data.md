@@ -1,7 +1,7 @@
 # Booking area — data
 
 Schema `booking`, created by the scripts in `DB Changes/booking/` ([database index](../../Database/README.md)).
-EF models: `PAO.EF/Booking/BookingRecords.cs`.
+EF models: `src/PAO.EF/Booking/BookingRecords.cs`.
 
 | Table | Created by |
 |---|---|

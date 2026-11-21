@@ -1,7 +1,7 @@
 # Customer area — data
 
 Schema `customer`, created by the scripts in `DB Changes/customer/` ([database index](../../Database/README.md)).
-EF models: `PAO.EF/Customer/CustomerRecords.cs` (`CustomerProfileRecord`, `AddressRecord` with a PostGIS `geography(Point)`).
+EF models: `src/PAO.EF/Customer/CustomerRecords.cs` (`CustomerProfileRecord`, `AddressRecord` with a PostGIS `geography(Point)`).
 
 | Table | Created by |
 |---|---|

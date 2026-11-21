@@ -41,7 +41,7 @@ dotnet_diagnostic.CS1591.severity = error
 # ASP.NET Core has no synchronisation context, so ConfigureAwait(false) adds nothing.
 dotnet_diagnostic.CA2007.severity = none
 
-[Test/**.cs]
+[tests/**.cs]
 # Test classes and methods describe themselves through their names.
 dotnet_diagnostic.CS1591.severity = none
 # Test names describe behaviour in sentences with underscores.

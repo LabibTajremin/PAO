@@ -1,7 +1,7 @@
 # Billing area — data
 
 Schema `billing`, created by the scripts in `DB Changes/billing/` ([database index](../../Database/README.md)).
-EF models: `PAO.EF/Billing/BillingRecords.cs`.
+EF models: `src/PAO.EF/Billing/BillingRecords.cs`.
 
 | Table | Created by |
 |---|---|

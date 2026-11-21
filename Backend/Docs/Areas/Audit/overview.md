@@ -2,8 +2,8 @@
 
 The append-only audit log; subscribes to every event that changes a person's status or money.
 
-Code: `PAO.Core/Areas/Audit/`; contracts, filter, page and view models and the
-`AuditMappingProfile`: `PAO.Lib/Areas/Audit/`. Back to the [area index](../README.md).
+Code: `src/PAO.Core/Areas/Audit/`; contracts, filter, page and view models and the
+`AuditMappingProfile`: `src/PAO.Lib/Areas/Audit/`. Back to the [area index](../README.md).
 
 ## Services
 

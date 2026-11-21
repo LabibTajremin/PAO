@@ -2,7 +2,7 @@
 # Test runners for every level in docs/build/03-testing.md §1.
 
 test_backend_unit() {
-  [[ -f "$BACKEND/PAO.sln" ]] || return 0
+  [[ -f "$PAO_ROOT/PAO.sln" ]] || return 0
   backend_ci unit || die "backend unit tests failed"
   ok "backend unit tests"
 }
@@ -35,7 +35,7 @@ test_dart() {
 # test_backend_integration runs the unit and integration projects with merged coverage,
 # the report the 100% gate (pao cover) applies to.
 test_backend_integration() {
-  [[ -f "$BACKEND/PAO.sln" ]] || {
+  [[ -f "$PAO_ROOT/PAO.sln" ]] || {
     nothing_to_run "backend integration"
     return 0
   }
@@ -52,7 +52,7 @@ test_e2e() {
     ensure_test_services
     backend_ci e2e || die "start-up smoke tests failed"
     "$E2E_STACK" || die "e2e stack failed"
-    (cd "$BACKEND" && PAO_E2E_STATE="$E2E_STATE" dotnet test --project Test/PAO.E2ETests --no-build -- \
+    (cd "$BACKEND" && PAO_E2E_STATE="$E2E_STATE" dotnet test --project tests/PAO.E2ETests --no-build -- \
       --filter-trait "Category=Journey") || die "API e2e journeys failed"
     ran=1
   fi

@@ -2,7 +2,7 @@
 
 Categories, services, sub-services and price versions; the published catalog tree and its version.
 
-Code: `PAO.Core/Areas/Catalog/`; contracts: `PAO.Lib/Areas/Catalog/`. Back to the [area index](../README.md).
+Code: `src/PAO.Core/Areas/Catalog/`; contracts: `src/PAO.Lib/Areas/Catalog/`. Back to the [area index](../README.md).
 
 ## Services
 
@@ -13,7 +13,7 @@ Code: `PAO.Core/Areas/Catalog/`; contracts: `PAO.Lib/Areas/Catalog/`. Back to th
 | `CatalogTreeService` | The published tree from the Redis cache keyed by version; the admin tree from the database. |
 | `CatalogChanges` | Runs a write in the command's transaction, bumps the version and publishes `CatalogChanged`. |
 
-Mapping: `CatalogMappingProfile` (`PAO.Lib/Areas/Catalog/`).
+Mapping: `CatalogMappingProfile` (`src/PAO.Lib/Areas/Catalog/`).
 
 ## Shared contract
 

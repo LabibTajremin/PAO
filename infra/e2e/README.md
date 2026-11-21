@@ -10,10 +10,10 @@ api, worker and migrate services are the .NET hosts built from `Backend/docker/D
   admins with a random password and writes the endpoints to `out/e2e/.stack.env`
   (`PAO_E2E_STATE` moves the folder).
 - With `APP_ENV=test` the API and worker mount test-only hooks
-  (`Backend/PAO.Infrastructure/Testing/TestHooks.cs`): `GET /__test/sms?phone=` (the last
+  (`Backend/src/PAO.Infrastructure/Testing/TestHooks.cs`): `GET /__test/sms?phone=` (the last
   text, for one-time codes), `GET /__test/pushes?token=` (on the worker, pushes sent to a device
   token) and `POST /__test/verification/expire?at=` (the expiry sweep as of a time).
-- The black-box API journeys are C# in `Backend/Test/PAO.E2ETests/Journeys` (xUnit, trait
+- The black-box API journeys are C# in `Backend/tests/PAO.E2ETests/Journeys` (xUnit, trait
   `Category=Journey`): plain HTTP, no backend references. Admins sign in with the seeded
   password and a TOTP code; their enrolment secrets are kept in `out/e2e/.admins.env` for
   later runs against the same stack. Each actor sends `X-Forwarded-For` with its own
@@ -29,8 +29,8 @@ Run everything with `./pao test e2e`, or `infra/e2e/stack.sh` once and then, whi
 iterating:
 
 ```sh
-cd Backend && dotnet test --project Test/PAO.E2ETests -- --filter-trait "Category=Journey"
-dotnet test --project Test/PAO.E2ETests -- --filter-class "PAO.E2ETests.Journeys.BookingJourney"
+cd Backend && dotnet test --project tests/PAO.E2ETests -- --filter-trait "Category=Journey"
+dotnet test --project tests/PAO.E2ETests -- --filter-class "PAO.E2ETests.Journeys.BookingJourney"
 ```
 
 Behind a TLS-intercepting proxy, copy its CA bundle into the project (for example

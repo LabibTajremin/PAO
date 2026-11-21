@@ -3,7 +3,7 @@
 **Goal:** every push notification (booking, job, billing, admin broadcast) shows as a
 heads-up banner on Android and iOS, in background and in foreground, in both apps.
 
-**Read first:** `06-update-2026-11.md` §8; `Backend/PAO.Infrastructure/Push/FcmPushSender.cs`;
+**Read first:** `06-update-2026-11.md` §8; `Backend/src/PAO.Infrastructure/Push/FcmPushSender.cs`;
 `Frontend/packages/pao_core/lib/src/device/push.dart`; both apps' `main.dart`.
 
 ## Tasks

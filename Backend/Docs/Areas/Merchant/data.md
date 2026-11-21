@@ -1,7 +1,7 @@
 # Merchant area — data
 
 Schema `provider` (kept so existing databases carry over), created by `DB Changes/provider/` ([database index](../../Database/README.md)).
-EF models: `PAO.EF/Merchant/MerchantRecords.cs`.
+EF models: `src/PAO.EF/Merchant/MerchantRecords.cs`.
 
 | Table | Created by |
 |---|---|

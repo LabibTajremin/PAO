@@ -41,7 +41,7 @@ databases carry over.
 Regenerate both after changing a migration or the seed file, and commit them:
 
 ```sh
-Backend/scripts/gen-db-bundle.sh      # or: ./pao gen; or: dotnet run --project Backend/PAO.Migrator -- bundle
+Backend/scripts/gen-db-bundle.sh      # or: ./pao gen; or: dotnet run --project Backend/src/PAO.Migrator -- bundle
 ```
 
 `scripts/gen-db-bundle.sh --check` (run by `scripts/ci.sh spec` and `./pao gen --check`)

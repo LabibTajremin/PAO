@@ -3,7 +3,7 @@
 Two-way reviews after completed bookings (C-11, P-09) and the running aggregates of merchants
 and customers.
 
-Code: `PAO.Core/Areas/Rating/`; contracts: `PAO.Lib/Areas/Rating/`. Back to the [area index](../README.md).
+Code: `src/PAO.Core/Areas/Rating/`; contracts: `src/PAO.Lib/Areas/Rating/`. Back to the [area index](../README.md).
 
 ## Services
 

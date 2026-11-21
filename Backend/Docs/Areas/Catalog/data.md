@@ -21,7 +21,7 @@ Schema `catalog`, created by the scripts in `DB Changes/catalog/` ([database ind
 | `CatalogRepository` | Reads: the whole tree in three queries assembled in memory (no N+1), a service with its sub-services, a sub-service with its current price, price history, trigram search, the catalog version. |
 | `CatalogWriteRepository` | Writes on the command's transaction: upserts of categories, services and sub-services (idempotent reseeding), immutable price versions, the version bump and outbox events. |
 
-Db models: `PAO.EF/Catalog/` (`CategoryRecord`, `ServiceRecord`, `SubServiceRecord`, `PriceVersionRecord`, `CatalogVersionRecord`, `BannerRecord`).
+Db models: `src/PAO.EF/Catalog/` (`CategoryRecord`, `ServiceRecord`, `SubServiceRecord`, `PriceVersionRecord`, `CatalogVersionRecord`, `BannerRecord`).
 
 ## Cache
 

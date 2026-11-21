@@ -63,7 +63,7 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 - Docker builds behind the sandbox proxy need `PAO_EXTRA_CA_FILE=/root/.ccr/ca-bundle.crt`
   in `.env` (build secret `extra_ca`).
 - No Android SDK in the build container: APK builds run only in CI (`frontend.yml`).
-- Backend integration tests (`Backend/Test/PAO.IntegrationTests`) need the compose
+- Backend integration tests (`Backend/tests/PAO.IntegrationTests`) need the compose
   Postgres/Redis/RustFS (ADR-0008); each spec file gets a private database and key prefix.
 - `./pao gen` bundles the spec with redocly (npx) and builds `pao_api` with the
   `openapitools/openapi-generator-cli:v7.16.0` Docker image (Maven Central rate-limits).
@@ -72,10 +72,10 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 - Cross-area calls go through `I<Area>SharedService`, resolved by each area's peers on first use.
 - Request timeouts run as a 15 s periodic sweep (`booking.expire_requests`) rather than a
   job per booking, so a missed run catches up on the next one.
-- `./pao perf` needs only the .NET SDK (the load test is `Backend/Test/PAO.LoadTests`).
+- `./pao perf` needs only the .NET SDK (the load test is `Backend/tests/PAO.LoadTests`).
 - Flutter tests that await real I/O (http_mock_adapter) inside `testWidgets` must use
   `tester.runAsync`, or they hang in fake async.
-- `Backend/Test/PAO.TestKit` has the test environment, private databases and fakes.
+- `Backend/tests/PAO.TestKit` has the test environment, private databases and fakes.
 - E2E: `infra/e2e/stack.sh` (separate compose project), `./pao test e2e` runs API and app
   journeys. Locally the admin web journey needs `CHROMEDRIVER`/`CHROME_EXECUTABLE`
   matching the installed Chromium (chromedriver 141 for Playwright's Chromium 141).
@@ -139,10 +139,10 @@ Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (c
   `DB Changes/bundle/{schema,seed}.sql` from `migrate bundle`, checked in CI.
 
 - 2026-10-25 P17 follow-up: last NestJS/JavaScript traces removed. k6 replaced by the C#
-  load test `Backend/Test/PAO.LoadTests` (`./pao perf`, CI perf job without k6);
+  load test `Backend/tests/PAO.LoadTests` (`./pao perf`, CI perf job without k6);
   `LegacyEnvironment` → `EnvironmentVariables`; comments, test names and docs neutral;
   security checklist evidence re-mapped to C# tests (3 tests added); PRD PDF regenerated.
-- 2026-10-24 P17.8 cut-over: journeys ported to C# (13/13), k6 to Backend/Test/Load,
+- 2026-10-24 P17.8 cut-over: journeys ported to C# (13/13), k6 to Backend/tests/Load,
   NestJS backend and tooling deleted, ADR-0034 layout applied (Backend, Frontend, infra,
   tools, docs/guides, out/), CLI, hooks, workflows and docs switched.
 - 2026-10-24 P17.6 apps for ADR-0035: partner due banner, 409 MERCHANT_DUE_LIMIT pay link,
@@ -189,7 +189,7 @@ Newest first. One line per finished task: `YYYY-MM-DD P00.1 short description (c
   incremental aggregates with distribution, public review lists, provider public
   profile; `testkit.CompletedJob` and `PAO_TEST_LOG=1` for server logs in tests.
 - 2026-10-09 P07 perf: `./pao perf` seeds 2,000 online providers (`migrate perf-seed`)
-  and runs `Backend/Test/Load/nearby.js`; nearby search p95 14 ms locally (limit 300 ms).
+  and runs `Backend/tests/Load/nearby.js`; nearby search p95 14 ms locally (limit 300 ms).
 - 2026-10-09 P07.1–9 booking: state machine per booking-states.md, idempotent create with
   price/name snapshots, accept under provider + row locks (one active ASAP job), reject,
   timeout sweep, start code with lockout, catalog-only extras, cancel rules, lists,

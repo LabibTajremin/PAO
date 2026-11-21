@@ -5,7 +5,7 @@ debit on the merchant's ledger, the merchant cannot accept new jobs while the du
 block limit, and the merchant clears the due by reporting payments that an admin confirms or
 rejects.
 
-Code: `PAO.Core/Areas/Billing/`; contracts: `PAO.Lib/Areas/Billing/`. Back to the [area index](../README.md).
+Code: `src/PAO.Core/Areas/Billing/`; contracts: `src/PAO.Lib/Areas/Billing/`. Back to the [area index](../README.md).
 
 ## The due, precisely
 

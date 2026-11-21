@@ -16,7 +16,7 @@ Schema `identity`, created by the scripts in `DB Changes/identity/` ([database i
 | `identity.outbox` | `DB Changes/identity/0001_init.sql` |
 | `identity.processed_events` | `DB Changes/identity/0001_init.sql` |
 
-EF models: `PAO.EF/Identity/` (`Account`, `AccountRole`, `AdminCredentials`, `BlockedPhone`
+EF models: `src/PAO.EF/Identity/` (`Account`, `AccountRole`, `AdminCredentials`, `BlockedPhone`
 and the RBAC tables).
 
 | Repository | Store |

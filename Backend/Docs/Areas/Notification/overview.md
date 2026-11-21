@@ -2,7 +2,7 @@
 
 Templates, the inbox, device tokens and delivery by push and SMS; subscribes to booking and verification events.
 
-Code: `PAO.Core/Areas/Notification/`; contracts: `PAO.Lib/Areas/Notification/`. Back to the [area index](../README.md).
+Code: `src/PAO.Core/Areas/Notification/`; contracts: `src/PAO.Lib/Areas/Notification/`. Back to the [area index](../README.md).
 
 ## Services
 

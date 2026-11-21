@@ -22,7 +22,7 @@ action parameters *before* action filters run, and its `[FromBody]` binder answe
 (wrong or missing content type) or 400 there, ahead of `AccessFilter`.
 
 The edge closes that gap once for every controller: `EdgeBodyBinderProvider`
-(`PAO.Infrastructure/Http/Edge/EdgeBodyBinder.cs`), registered first in `AddHttpEdge`,
+(`src/PAO.Infrastructure/Http/Edge/EdgeBodyBinder.cs`), registered first in `AddHttpEdge`,
 serves every `BindingSource.Body` parameter. `EdgeBodyBinder` reads the JSON that
 `EdgeMiddleware.ReadBody` already parsed into `EdgeState.Body` and never fails: a missing
 body, or one of the wrong shape, binds as the empty model. Nothing is reported at binding

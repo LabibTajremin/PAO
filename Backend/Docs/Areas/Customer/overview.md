@@ -2,7 +2,7 @@
 
 Customer profiles, saved addresses and launch areas.
 
-Code: `PAO.Core/Areas/Customer/`; contracts: `PAO.Lib/Areas/Customer/`. Back to the [area index](../README.md).
+Code: `src/PAO.Core/Areas/Customer/`; contracts: `src/PAO.Lib/Areas/Customer/`. Back to the [area index](../README.md).
 
 ## Services
 

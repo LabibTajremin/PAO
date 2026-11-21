@@ -19,7 +19,7 @@ after the API journeys; `run.sh` runs them alone.
   excludes. On Linux they need a D-Bus session and an unlocked keyring for
   `flutter_secure_storage`, which `desktop-session.sh` provides; connectivity_plus
   cannot reach NetworkManager there, and that error alone is tolerated.
-- What the apps do not drive is done over plain HTTP, as in `Backend/Test/PAO.E2ETests`
+- What the apps do not drive is done over plain HTTP, as in `Backend/tests/PAO.E2ETests`
   (`package:pao_e2e`): reading one-time codes from `GET /__test/sms`, the verifier's
   approvals (password + TOTP, secrets shared in `out/e2e/.admins.env`), the online
   provider customers book, and the provider's side of a job. The browser can neither

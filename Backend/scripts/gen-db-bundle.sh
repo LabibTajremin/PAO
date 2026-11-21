@@ -11,4 +11,4 @@ check=""
 if [[ "${1:-}" == --check || "${CI:-}" == true ]]; then
   check=--check
 fi
-PAO_HOME="$ROOT" dotnet run --project "$ROOT/PAO.Migrator/PAO.Migrator.csproj" --no-launch-profile -v quiet -- bundle ${check:+"$check"}
+PAO_HOME="$ROOT" dotnet run --project "$ROOT/src/PAO.Migrator/PAO.Migrator.csproj" --no-launch-profile -v quiet -- bundle ${check:+"$check"}

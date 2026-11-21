@@ -1,7 +1,7 @@
 # Rating area — data
 
 Schema `rating`, created by the scripts in `DB Changes/rating/` ([database index](../../Database/README.md)).
-EF models: `PAO.EF/Rating/RatingRecords.cs`.
+EF models: `src/PAO.EF/Rating/RatingRecords.cs`.
 
 | Table | Created by |
 |---|---|

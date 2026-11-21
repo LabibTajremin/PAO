@@ -9,7 +9,7 @@ violations.
 | Limit | C# | Dart | Enforced by |
 |---|---|---|---|
 | Lines per source file | 250 | 200 | C#: `SizeChecker` gate (`./pao lint backend`); Dart: `./pao lint` file-length check |
-| Lines per test file (`Backend/Test/**`, Dart `test/`, `integration_test/`) | 400 | 300 | same |
+| Lines per test file (`Backend/tests/**`, Dart `test/`, `integration_test/`) | 400 | 300 | same |
 | Lines per method or function | 40 | 40 | `SizeChecker` / `dart_code_linter` |
 | Cyclomatic complexity | 10 | 10 | review / `dart_code_linter` |
 | Nesting depth | 3 | 3 | review |

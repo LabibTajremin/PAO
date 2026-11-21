@@ -2,7 +2,7 @@
 
 Uploads to private buckets through presigned URLs, upload confirmation, signed view URLs and the orphan purge.
 
-Code: `PAO.Core/Areas/Media/`; contracts: `PAO.Lib/Areas/Media/`. Back to the [area index](../README.md).
+Code: `src/PAO.Core/Areas/Media/`; contracts: `src/PAO.Lib/Areas/Media/`. Back to the [area index](../README.md).
 
 ## Services
 

@@ -2,7 +2,7 @@
 
 Verification items and documents, NID records, levels, Level 2 sessions, expiry and reminders, and the purge of closed accounts' documents.
 
-Code: `PAO.Core/Areas/Verification/`; contracts: `PAO.Lib/Areas/Verification/`. Back to the [area index](../README.md).
+Code: `src/PAO.Core/Areas/Verification/`; contracts: `src/PAO.Lib/Areas/Verification/`. Back to the [area index](../README.md).
 
 ## Services
 

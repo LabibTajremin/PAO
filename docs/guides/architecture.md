@@ -23,7 +23,7 @@ engineering reference is [`docs/build/02-architecture.md`](../build/02-architect
 
 ## Boundary rules (PRD §9.3)
 
-1. Each module is an ASP.NET area (`Backend/PAO.Core/Areas/<Area>`) and exposes only its
+1. Each module is an ASP.NET area (`Backend/src/PAO.Core/Areas/<Area>`) and exposes only its
    shared service (`Services/Shared/I<Area>SharedService`), DTOs and events (`PAO.Lib`).
 2. An area uses other areas only through their shared services and the platform
    (`PAO.Infrastructure`) — nothing else. Architecture tests enforce this in `./pao lint`.
@@ -100,7 +100,7 @@ serialisable data.
    service's worker.
 8. **Prove it.** Run the area's unit and integration tests in the new service, the
    shared-service tests against the remote implementation, and the black-box journeys in
-   `Backend/Test/PAO.E2ETests` against the split deployment. They need no change because the public
+   `Backend/tests/PAO.E2ETests` against the split deployment. They need no change because the public
    API is the same.
 
 Peers resolve other areas' shared services on first use, so they already tolerate a peer

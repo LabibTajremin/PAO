@@ -15,9 +15,9 @@ over the source tree and the backend image). Scanner configuration and accepted 
 live in `infra/security/` (`gitleaks.toml`, `osv-scanner.toml`, `trivyignore`) with reasons.
 
 The audit was done in P16 and re-checked against the .NET backend after P17. Evidence
-names the C# test as `Class.Method`: unit tests live in `Backend/Test/PAO.UnitTests`,
-integration tests in `Backend/Test/PAO.IntegrationTests`, journeys in
-`Backend/Test/PAO.E2ETests`. Rows marked *gap* name a check the earlier suite had and
+names the C# test as `Class.Method`: unit tests live in `Backend/tests/PAO.UnitTests`,
+integration tests in `Backend/tests/PAO.IntegrationTests`, journeys in
+`Backend/tests/PAO.E2ETests`. Rows marked *gap* name a check the earlier suite had and
 the C# suite does not yet repeat; the control itself is in place.
 
 ## P16 fixes

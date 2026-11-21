@@ -1329,7 +1329,7 @@ Keys: PK `PRIMARY KEY (handler, event_id)`.
 
 ## Index review
 
-Checked against the repository queries (`PAO.Core/Areas/*/Repositories`, the jobs and the
+Checked against the repository queries (`src/PAO.Core/Areas/*/Repositories`, the jobs and the
 outbox). Added where a hot or growing lookup had no supporting index:
 
 | Script | Index | Why |

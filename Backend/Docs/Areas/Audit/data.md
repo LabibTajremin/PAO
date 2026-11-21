@@ -7,7 +7,7 @@ Schema `audit`, created by the scripts in `DB Changes/audit/` ([database index](
 | `audit.entries` | `DB Changes/audit/0001_init.sql` |
 | `audit.processed_events` | `DB Changes/audit/0001_init.sql` |
 
-EF model: `PAO.EF/Audit/AuditModels.cs` (`Entry`).
+EF model: `src/PAO.EF/Audit/AuditModels.cs` (`Entry`).
 
 | Repository | Store |
 |---|---|

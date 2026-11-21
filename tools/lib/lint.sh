@@ -2,7 +2,7 @@
 # Static checks: formatting, analyzers, architecture rules and file-size limits.
 
 # size_limit prints the Dart line limit of docs/build/01-conventions.md §1 for a file.
-# C# limits are enforced by the backend's size gate (Backend/Tools/PAO.Gates).
+# C# limits are enforced by the backend's size gate (Backend/tools/PAO.Gates).
 size_limit() {
   case "$1" in
     */test/*.dart | */integration_test/*.dart) echo 300 ;;
@@ -35,7 +35,7 @@ check_file_sizes() {
 # lint_backend builds the .NET solution with warnings as errors, checks its formatting and
 # runs the architecture, authorisation, size and docs gates (journeys included).
 lint_backend() {
-  [[ -f "$BACKEND/PAO.sln" ]] || return 0
+  [[ -f "$PAO_ROOT/PAO.sln" ]] || return 0
   backend_ci format || die "backend format check failed"
   backend_ci gates || die "backend gates failed"
   ok "backend build, format, architecture, size and docs gates"

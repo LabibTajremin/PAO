@@ -14,7 +14,7 @@ query uses only metrics the backend exports. CI runs it in the backend workflow 
 
 ## Metrics
 
-Defined in `Backend/PAO.Infrastructure/Metrics`; both processes serve them on `METRICS_ADDR`.
+Defined in `Backend/src/PAO.Infrastructure/Metrics`; both processes serve them on `METRICS_ADDR`.
 
 | Metric | Labels | Source |
 |---|---|---|

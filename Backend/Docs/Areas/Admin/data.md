@@ -1,7 +1,7 @@
 # Admin area — data
 
 Schema `admin`, created by the scripts in `DB Changes/admin/` ([database index](../../Database/README.md)).
-EF models: `PAO.EF/Admin/AdminRecords.cs`.
+EF models: `src/PAO.EF/Admin/AdminRecords.cs`.
 
 | Table | Created by |
 |---|---|

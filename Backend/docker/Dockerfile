@@ -6,13 +6,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 COPY global.json Directory.Build.props Directory.Packages.props .editorconfig ./
-COPY PAO.EF ./PAO.EF
-COPY PAO.Lib ./PAO.Lib
-COPY PAO.Infrastructure ./PAO.Infrastructure
-COPY PAO.BackgroundJobs ./PAO.BackgroundJobs
-COPY PAO.Core ./PAO.Core
-COPY PAO.Worker ./PAO.Worker
-COPY PAO.Migrator ./PAO.Migrator
+COPY src ./src
 # An optional extra CA bundle (build secret "extra_ca") lets restores work behind a
 # TLS-intercepting proxy; it never reaches the final image.
 RUN --mount=type=secret,id=extra_ca,required=false \
@@ -20,7 +14,7 @@ RUN --mount=type=secret,id=extra_ca,required=false \
       cp /run/secrets/extra_ca /usr/local/share/ca-certificates/extra.crt && update-ca-certificates; \
     fi; \
     for p in PAO.Core PAO.Worker PAO.Migrator; do \
-      dotnet publish "$p/$p.csproj" -c Release -o /out --no-self-contained -p:UseAppHost=false || exit 1; \
+      dotnet publish "src/$p/$p.csproj" -c Release -o /out --no-self-contained -p:UseAppHost=false || exit 1; \
     done
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0

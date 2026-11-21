@@ -1,7 +1,7 @@
 # PAO backend (.NET) documentation
 
 The .NET backend of PAO (ADR-0034), in `Backend/`. Every area, feature, controller, service, repository, job, config file and
-script has a page or an index entry here; `DocsChecker` (`Tools/PAO.Gates`) fails the
+script has a page or an index entry here; `DocsChecker` (`tools/PAO.Gates`) fails the
 gates when one is missing or a link is broken.
 
 | Folder | What it covers |

@@ -1,7 +1,7 @@
 # API
 
 The contract is `Backend/Api/openapi.yaml` (121 operations), bundled into
-`PAO.Core/Spec/openapi.gen.yaml` by `scripts/gen-spec.sh` (`--check` fails on drift). The
+`src/PAO.Core/Spec/openapi.gen.yaml` by `scripts/gen-spec.sh` (`--check` fails on drift). The
 edge matches every request to an operation of the bundle ([HTTP edge](../Architecture/http-edge.md)).
 
 ## Platform controllers

@@ -35,7 +35,7 @@ Backend/
 ├── PAO.BackgroundJobs/       scheduler, relay loop, platform jobs
 ├── Config/  DB Changes/  Seed/   JSON config per concern, goose SQL per module, seed data
 ├── Docs/                     areas, architecture, config, database, operations, testing, API
-├── Tools/PAO.Gates/          size and docs checkers
+├── tools/PAO.Gates/          size and docs checkers
 ├── Test/                     PAO.UnitTests, PAO.IntegrationTests, PAO.TestKit,
 │                             PAO.E2ETests (start-up smoke + black-box journeys), PAO.LoadTests
 ├── docker/                   Dockerfile and the api, worker, migrate entry points
@@ -78,7 +78,7 @@ tools/cli/                    bats tests for the pao CLI and git hooks
 tools/fixtures/               shared test data for the CLI tests
 ```
 
-Backend unit and integration tests are separate projects under `Backend/Test/`;
+Backend unit and integration tests are separate projects under `Backend/tests/`;
 integration tests run against real Postgres, Redis and S3 (ADR-0008).
 
 ## 2. Runtime view
@@ -212,7 +212,7 @@ every event that changes a person's status or money.
 
 ## 9. Background jobs (scheduler)
 
-Only periodic jobs. The worker runs an in-process scheduler (`JobScheduler` in `Backend/PAO.BackgroundJobs`)
+Only periodic jobs. The worker runs an in-process scheduler (`JobScheduler` in `Backend/src/PAO.BackgroundJobs`)
 with interval and daily (Asia/Dhaka) schedules; each run takes a Postgres
 advisory lock named after the job, so with several workers exactly one runs it.
 

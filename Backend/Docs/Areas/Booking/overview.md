@@ -4,7 +4,7 @@ Bookings and their state machine (PRD §5, docs/guides/booking-states.md): disco
 price, requests with every snapshot copied in, acceptance, start codes, extras, completion,
 cancellation, the timeout sweep, earnings and the admin bookings monitor.
 
-Code: `PAO.Core/Areas/Booking/`; contracts: `PAO.Lib/Areas/Booking/`. Back to the [area index](../README.md).
+Code: `src/PAO.Core/Areas/Booking/`; contracts: `src/PAO.Lib/Areas/Booking/`. Back to the [area index](../README.md).
 
 ## Services
 
