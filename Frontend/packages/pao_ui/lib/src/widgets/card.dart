@@ -3,8 +3,9 @@ import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
 import 'package:pao_ui/src/tokens/shape.dart';
 
-/// A leaf-shaped surface with a hairline edge; [highlighted] uses the accent
-/// tint.
+/// A white card lifted by a soft navy shadow in light mode, and an edged navy
+/// surface in dark mode, where shadows don't show; [highlighted] uses the
+/// accent tint.
 class PaoCard extends StatelessWidget {
   /// Creates a card.
   const PaoCard({
@@ -30,16 +31,24 @@ class PaoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.pao;
-    return Material(
-      color: highlighted ? c.tintFill : c.card,
-      shape: RoundedRectangleBorder(
+    final lifted = !c.dark && !highlighted;
+    final edge = highlighted ? c.selectedFill : c.hairline;
+    return DecoratedBox(
+      decoration: BoxDecoration(
         borderRadius: PaoShape.leaf,
-        side: BorderSide(color: highlighted ? c.selectedFill : c.hairline),
+        boxShadow: lifted ? PaoColors.cardShadow : null,
       ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(padding: padding, child: child),
+      child: Material(
+        color: highlighted ? c.tintFill : c.card,
+        shape: RoundedRectangleBorder(
+          borderRadius: PaoShape.leaf,
+          side: lifted ? BorderSide.none : BorderSide(color: edge),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(padding: padding, child: child),
+        ),
       ),
     );
   }

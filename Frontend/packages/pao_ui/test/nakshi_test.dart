@@ -100,8 +100,10 @@ void main() {
       expect(theme.textTheme.bodyMedium!.fontFamily, isNot(PaoFonts.latin));
       expect(theme.textTheme.bodyMedium!.fontFamily, isNot(PaoFonts.bangla));
     }
-    expect(PaoShape.leaf.bottomRight.x, PaoShape.tip);
-    expect(PaoShape.leaf.topLeft.x, PaoShape.round);
+    expect(PaoShape.leaf, BorderRadius.circular(16));
+    expect(PaoShape.leafSmall, BorderRadius.circular(12));
+    expect(PaoShape.sheet.topLeft.x, 24);
+    expect(PaoShape.sheet.bottomLeft.x, 0);
     expect(PaoMotion.fast, lessThan(PaoMotion.base));
   });
 
