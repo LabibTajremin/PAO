@@ -45,6 +45,23 @@ CI (`.github/workflows/frontend.yml`) builds the admin web bundle, an app bundle
 an APK for every app × flavour (`android` job), and the prod iOS archive for both apps
 (`ios` job, macOS runner). Artifacts include the symbols.
 
+### Telling the two apps apart
+
+The customer and partner apps are separate installs. Every place they show up has its own name,
+so a tester or the Play Console never gets the wrong one:
+
+| Where | Customer | Partner |
+|---|---|---|
+| Launcher name | PAO | PAO Partner |
+| Launcher icon | PAO tile | PAO tile with an orange wrench badge |
+| Release file (`build/release/`) | `pao-customer-<flavour>-<version>.apk` / `.aab` | `pao-partner-<flavour>-<version>.apk` / `.aab` |
+| CI artifact | `pao-customer-<flavour>-android`, `pao-customer-prod-ios` | `pao-partner-<flavour>-android`, `pao-partner-prod-ios` |
+
+`<version>` is `x.y.z-n` from the pubspec, with `n` replaced by `PAO_BUILD_NUMBER` when it is
+set, e.g. `pao-partner-prod-1.2.0-45.apk`. `tools/build-release.sh` copies Flutter's output
+(always `app-<flavour>-release.apk`, the same for both apps) to that name after the build. Share
+only the files from `build/release/`.
+
 ## Versioning
 
 - `version: x.y.z+n` in each app's `pubspec.yaml` is the source of truth: `x.y.z` is the

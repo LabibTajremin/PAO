@@ -92,3 +92,25 @@ setup() {
   run "$ROOT/tools/hooks/commit-msg" "$BATS_TEST_TMPDIR/msg"
   [ "$status" -eq 1 ]
 }
+
+@test "release files name the app, flavour and version" {
+  source "$ROOT/tools/lib/release_name.sh"
+  pubspec="$BATS_TEST_TMPDIR/pubspec.yaml"
+  printf 'name: x\nversion: 1.2.0+7\n' >"$pubspec"
+  [ "$(release_version "$pubspec")" = "1.2.0-7" ]
+  [ "$(release_version "$pubspec" 45)" = "1.2.0-45" ]
+  [ "$(release_name partner prod 1.2.0-45 apk)" = "pao-partner-prod-1.2.0-45.apk" ]
+  [ "$(release_name customer dev 1.2.0-7 aab)" = "pao-customer-dev-1.2.0-7.aab" ]
+}
+
+@test "a version without a build number counts as build 0" {
+  source "$ROOT/tools/lib/release_name.sh"
+  pubspec="$BATS_TEST_TMPDIR/pubspec.yaml"
+  printf 'version: 2.0.1\n' >"$pubspec"
+  [ "$(release_version "$pubspec")" = "2.0.1-0" ]
+}
+
+@test "the mobile apps' release builds never keep Flutter's app-release name" {
+  run grep -n 'app-release\|\*-release\.apk' "$ROOT/.github/workflows/frontend.yml"
+  [ "$status" -eq 1 ]
+}

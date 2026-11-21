@@ -60,3 +60,16 @@ esac
 
 cd "$dir"
 flutter build "$target" "${args[@]}"
+
+# shellcheck source=/dev/null
+source "$root/tools/lib/release_name.sh"
+version="$(release_version pubspec.yaml "${PAO_BUILD_NUMBER:-}")"
+case "$target" in
+  apk) built="build/app/outputs/flutter-apk/app-$flavour-release.apk" ext=apk ;;
+  appbundle) built="build/app/outputs/bundle/${flavour}Release/app-$flavour-release.aab" ext=aab ;;
+  *) exit 0 ;;
+esac
+mkdir -p build/release
+named="build/release/$(release_name "$app" "$flavour" "$version" "$ext")"
+cp "$built" "$named"
+echo "release file: Frontend/apps/$app/$named"
