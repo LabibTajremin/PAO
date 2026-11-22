@@ -3516,6 +3516,90 @@ abstract class AdminL10n {
   /// In en, this message translates to:
   /// **'The link could not be downloaded.'**
   String get iconErrorLink;
+
+  /// Settings section title
+  ///
+  /// In en, this message translates to:
+  /// **'Brand'**
+  String get settingsBrand;
+
+  /// Field label
+  ///
+  /// In en, this message translates to:
+  /// **'Tagline (English)'**
+  String get settingsTaglineEn;
+
+  /// Field label
+  ///
+  /// In en, this message translates to:
+  /// **'Tagline (Bangla)'**
+  String get settingsTaglineBn;
+
+  /// Help under the tagline fields
+  ///
+  /// In en, this message translates to:
+  /// **'Shown on the splash and sign-in screens, in the share text and on receipts. At most 40 characters in each language.'**
+  String get settingsTaglineHint;
+
+  /// Label before the suggestion chips
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestions'**
+  String get settingsTaglineSuggestions;
+
+  /// Page title and the button that opens it
+  ///
+  /// In en, this message translates to:
+  /// **'Illustrations'**
+  String get appearanceTitle;
+
+  /// Rules at the top of the page
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred: SVG up to 300 KB. Otherwise PNG or WebP at exactly the size shown, with a transparent background, up to 800 KB. Keep the subject inside the dashed safe area, use only the palette colours, and put no text in the picture: it must work in both languages.'**
+  String get appearanceRules;
+
+  /// Button
+  ///
+  /// In en, this message translates to:
+  /// **'Upload'**
+  String get appearanceUpload;
+
+  /// Button that resets a slot to its seed image
+  ///
+  /// In en, this message translates to:
+  /// **'Use the original'**
+  String get appearanceReset;
+
+  /// Status of a slot an admin replaced
+  ///
+  /// In en, this message translates to:
+  /// **'Uploaded'**
+  String get appearanceReplaced;
+
+  /// Status of a slot showing its seed image
+  ///
+  /// In en, this message translates to:
+  /// **'Original'**
+  String get appearanceOriginal;
+
+  /// Status of a slot without a server image
+  ///
+  /// In en, this message translates to:
+  /// **'Shown from the app'**
+  String get appearanceBundled;
+
+  /// Upload refused: wrong size
+  ///
+  /// In en, this message translates to:
+  /// **'Use an image of {expected} pixels, or an SVG with that ratio.'**
+  String appearanceErrorSize(String expected);
+
+  /// Upload refused: too large
+  ///
+  /// In en, this message translates to:
+  /// **'The file is too large: SVG up to 300 KB, PNG or WebP up to 800 KB.'**
+  String get appearanceErrorTooLarge;
 }
 
 class _AdminL10nDelegate extends LocalizationsDelegate<AdminL10n> {

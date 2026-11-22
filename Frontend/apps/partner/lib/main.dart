@@ -34,7 +34,10 @@ Future<void> main() async {
     launcher: Launcher(),
     photos: PhotoSource(),
     push: await _push(),
+    look: AppLookService(api, await FileLookStore.support(), app: 'partner'),
   );
+  // The cached look shows at once; the network check must not delay launch.
+  unawaited(services.look.start());
   await sessions.restore();
   if (sessions.signedIn) {
     // Offline at launch is fine: the guards re-check once these load.

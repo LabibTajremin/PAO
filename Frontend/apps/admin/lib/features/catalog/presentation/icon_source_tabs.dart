@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pao_admin/features/catalog/domain/catalog_repository.dart';
-import 'package:pao_admin/features/catalog/presentation/icon_picker.dart';
+import 'package:pao_admin/shared/image_file.dart';
 import 'package:pao_admin/shared/l10n.dart';
 import 'package:pao_core/pao_core.dart';
 import 'package:pao_ui/pao_ui.dart';
@@ -19,19 +19,6 @@ String? iconFailureText(BuildContext context, AppFailure? failure) {
     'icon_link_failed' => t.iconErrorLink,
     _ => context.failureText(failure),
   };
-}
-
-/// The content type of an icon file: its stated type when it is one the
-/// backend takes (browsers often state none, or a generic one), else from the
-/// name.
-String? iconType(String? mimeType, String name) {
-  const accepted = {'image/svg+xml', 'image/png', 'image/webp'};
-  if (accepted.contains(mimeType)) return mimeType;
-  final lower = name.toLowerCase();
-  if (lower.endsWith('.svg')) return 'image/svg+xml';
-  if (lower.endsWith('.png')) return 'image/png';
-  if (lower.endsWith('.webp')) return 'image/webp';
-  return null;
 }
 
 /// Runs `store`, closes the picker with the stored icon's URL, or keeps it
@@ -76,7 +63,7 @@ class IconUploadTab extends StatefulWidget {
   final CatalogRepository icons;
 
   /// Asks for the file.
-  final IconFileChooser chooseFile;
+  final ImageFileChooser chooseFile;
 
   @override
   State<IconUploadTab> createState() => _IconUploadTabState();
@@ -87,7 +74,7 @@ class _IconUploadTabState extends State<IconUploadTab>
   Future<void> _upload() async {
     final file = await widget.chooseFile();
     if (file == null) return;
-    final type = iconType(file.mimeType, file.name);
+    final type = imageType(file.mimeType, file.name);
     if (type == null) {
       return setState(
         () => failure = const ApiFailure(

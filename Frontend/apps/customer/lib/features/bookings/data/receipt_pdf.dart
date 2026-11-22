@@ -4,6 +4,7 @@ import 'package:flutter/services.dart' show AssetBundle, rootBundle;
 import 'package:flutter/widgets.dart' show Locale;
 import 'package:intl/intl.dart';
 import 'package:pao_api/pao_api.dart';
+import 'package:pao_core/pao_core.dart';
 import 'package:pao_customer/l10n/generated/customer_localizations.dart';
 import 'package:pao_l10n/pao_l10n.dart';
 import 'package:pdf/pdf.dart';
@@ -20,9 +21,6 @@ String _money(int paisa) {
   );
   return 'BDT ${format.format(paisa / 100)}';
 }
-
-/// The line under every receipt until admins can edit the tagline (P23).
-const receiptTagline = 'Ask for it. PAO it.';
 
 /// The brand artwork on a receipt: the logo tile and the faint wordmark, as
 /// SVG text.
@@ -44,8 +42,12 @@ Future<ReceiptArt> loadReceiptArt([AssetBundle? bundle]) async {
 String receiptFileName(Receipt receipt) => 'PAO-receipt-${receipt.number}.pdf';
 
 /// Renders [receipt] as an A5 PDF with the logo, a watermark behind the
-/// items and the tagline; [art] defaults to the bundled artwork.
-Future<Uint8List> receiptPdf(Receipt receipt, {ReceiptArt? art}) async {
+/// items and the English [tagline]; [art] defaults to the bundled artwork.
+Future<Uint8List> receiptPdf(
+  Receipt receipt, {
+  ReceiptArt? art,
+  String tagline = AppLook.seedTaglineEn,
+}) async {
   final a = art ?? await loadReceiptArt();
   final doc = pw.Document(title: receiptFileName(receipt), author: 'PAO')
     ..addPage(
@@ -58,7 +60,7 @@ Future<Uint8List> receiptPdf(Receipt receipt, {ReceiptArt? art}) async {
                 child: pw.SvgImage(svg: a.watermark, width: 300),
               ),
             ),
-            _body(receipt, a),
+            _body(receipt, a, tagline),
           ],
         ),
       ),
@@ -66,7 +68,7 @@ Future<Uint8List> receiptPdf(Receipt receipt, {ReceiptArt? art}) async {
   return await doc.save();
 }
 
-pw.Widget _body(Receipt receipt, ReceiptArt art) => pw.Column(
+pw.Widget _body(Receipt receipt, ReceiptArt art, String tagline) => pw.Column(
   crossAxisAlignment: pw.CrossAxisAlignment.start,
   children: [
     pw.SvgImage(svg: art.logo, width: 40),
@@ -84,7 +86,7 @@ pw.Widget _body(Receipt receipt, ReceiptArt art) => pw.Column(
     pw.Text(_t.bookingsPaidCash),
     pw.Text(_t.bookingsReceiptThanks),
     pw.Spacer(),
-    pw.Center(child: pw.Text(receiptTagline)),
+    pw.Center(child: pw.Text(tagline)),
   ],
 );
 

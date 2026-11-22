@@ -24,6 +24,9 @@ abstract final class Routes {
   /// The customer home's banners, under the catalog's screen (A03).
   static const banners = '/catalog/banners';
 
+  /// Appearance › Illustrations, under the settings screen (A12).
+  static const appearance = '/settings/appearance/illustrations';
+
   /// A05.
   static const verification = '/verification';
 
@@ -76,6 +79,7 @@ abstract final class Routes {
     catalog: 'A03',
     service: 'A04',
     banners: 'A03',
+    appearance: 'A12',
     verification: 'A05',
     review: 'A06',
     level2: 'A07',

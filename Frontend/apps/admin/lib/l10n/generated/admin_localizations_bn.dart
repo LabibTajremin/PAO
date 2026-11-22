@@ -1835,4 +1835,51 @@ class AdminL10nBn extends AdminL10n {
 
   @override
   String get iconErrorLink => 'লিংক থেকে নামানো গেল না।';
+
+  @override
+  String get settingsBrand => 'ব্র্যান্ড';
+
+  @override
+  String get settingsTaglineEn => 'ট্যাগলাইন (ইংরেজি)';
+
+  @override
+  String get settingsTaglineBn => 'ট্যাগলাইন (বাংলা)';
+
+  @override
+  String get settingsTaglineHint =>
+      'স্প্ল্যাশ ও সাইন-ইন স্ক্রিনে, শেয়ার টেক্সটে এবং রসিদে দেখানো হয়। প্রতিটি ভাষায় সর্বোচ্চ ৪০ অক্ষর।';
+
+  @override
+  String get settingsTaglineSuggestions => 'প্রস্তাব';
+
+  @override
+  String get appearanceTitle => 'ইলাস্ট্রেশন';
+
+  @override
+  String get appearanceRules =>
+      'পছন্দনীয়: ৩০০ KB পর্যন্ত SVG। নইলে দেখানো মাপেই স্বচ্ছ পটভূমির PNG বা WebP, ৮০০ KB পর্যন্ত। মূল বিষয় ড্যাশ দেওয়া নিরাপদ অংশের ভিতরে রাখুন, শুধু প্যালেটের রং ব্যবহার করুন, আর ছবিতে কোনো লেখা রাখবেন না: দুই ভাষাতেই চলতে হবে।';
+
+  @override
+  String get appearanceUpload => 'আপলোড';
+
+  @override
+  String get appearanceReset => 'মূলটি ব্যবহার করুন';
+
+  @override
+  String get appearanceReplaced => 'আপলোড করা';
+
+  @override
+  String get appearanceOriginal => 'মূল';
+
+  @override
+  String get appearanceBundled => 'অ্যাপ থেকে দেখানো';
+
+  @override
+  String appearanceErrorSize(String expected) {
+    return '$expected পিক্সেলের ছবি, অথবা সেই অনুপাতের SVG ব্যবহার করুন।';
+  }
+
+  @override
+  String get appearanceErrorTooLarge =>
+      'ফাইলটি অনেক বড়: SVG ৩০০ KB পর্যন্ত, PNG বা WebP ৮০০ KB পর্যন্ত।';
 }

@@ -21,8 +21,10 @@ class AppServices {
     required this.photos,
     required this.push,
     this.places = const NoPlacesService(),
+    AppLookService? look,
     DateTime Function()? clock,
   }) : now = clock ?? DateTime.now,
+       look = look ?? AppLookService(api, MemoryLookStore(), app: 'customer'),
        gate = ProfileGate(api),
        themeMode = ThemeModeController(prefs);
 
@@ -67,4 +69,7 @@ class AppServices {
 
   /// Whether the signed-in customer still has to set up a profile.
   final ProfileGate gate;
+
+  /// Tagline and illustrations the admin changes without a release (ADR-0040).
+  final AppLookService look;
 }

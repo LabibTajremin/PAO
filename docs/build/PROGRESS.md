@@ -30,8 +30,8 @@ it first and continues from **Current task**.
 | P20 Palette, type & theme | done | #12 | ADR-0038 |
 | P21 Logo & app icons | done | #12 | update round 2026-11 |
 | P22 Service icons | done | #12 | update round 2026-11 |
-| P23 Artwork & tagline | in_progress | — | update round 2026-11 |
-| P24 Illustrations, welcome & sign-in | todo | — | update round 2026-11 |
+| P23 Artwork & tagline | done | #12 | update round 2026-11 |
+| P24 Illustrations, welcome & sign-in | in_progress | — | update round 2026-11 |
 | P25 Scheduled delivery | todo | — | update round 2026-11 |
 | P26 Free Dhaka map | todo | — | update round 2026-11 |
 | P27 Motion | todo | — | update round 2026-11 |
@@ -41,10 +41,10 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P23. P22 is done locally (all tasks; Dart gate green, backend unit and
-gates green; backend integration tests and e2e still to run on CI). Owner asked to batch: push after
-P23, then fix CI in one go. Done: P23 tasks 1–3 (artwork slots, tagline, seed pipeline; ADR-0040). Next: task 4 (admin
-Appearance › Illustrations page, Settings › Brand tagline), then task 5 (`PaoArtwork` in the apps).
+Update round 2026-11 — P24. P22 and P23 are done and pushed together (owner asked to batch);
+CI on that push decides whether anything needs a fix before P24 starts. Next: P24 task 1 (draw the
+illustrations into `design/illustrations/`, copy to `Backend/database/seed/artwork/` and
+`pao_ui/assets/artwork/`).
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -86,6 +86,14 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-22 P23.4–5 Admin: Settings › Brand (tagline in both languages, live preview on the
+  wordmark, the §6 suggestion chips) and Appearance › Illustrations (`/settings/appearance/
+  illustrations`: every slot with size, status, light/dark preview, safe-area overlay, upload,
+  reset; refusals name the expected size). Apps: `AppLookService` (pao_core) fetches
+  `/v1/app-config` with its ETag, caches config and images in the app support folder, works
+  offline; `PaoArtwork` (pao_ui) shows the bundled seed until the server image is cached, in a
+  fixed-ratio box; empty notifications, search and jobs show their slot; receipts use the tagline.
 
 - 2026-11-22 P23.1–3 Admin-managed artwork (ADR-0040): `admin.artwork_slots`, the 16 slots of §5
   in code, `GET /v1/admin/artwork`, `PUT|DELETE /v1/admin/artwork/{slotKey}` (size, ratio ±2%,

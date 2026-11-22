@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:pao_api/pao_api.dart';
+import 'package:pao_core/pao_core.dart';
 import 'package:pao_customer/features/bookings/data/receipt_pdf.dart';
 import 'package:pao_customer/features/bookings/data/share_pdf.dart';
 import 'package:pao_customer/features/bookings/presentation/receipt_page.dart';
@@ -39,7 +40,7 @@ void main() {
       );
       // The watermark adds its own drawing to the page.
       expect(marked.length, greaterThan(plain.length));
-      expect(receiptTagline, 'Ask for it. PAO it.');
+      expect(AppLook.seedTaglineEn, 'Ask for it. PAO it.');
     },
   );
 

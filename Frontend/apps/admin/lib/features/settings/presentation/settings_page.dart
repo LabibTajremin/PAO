@@ -40,6 +40,15 @@ class SettingsPage extends StatelessWidget {
       initialIndex: tabs.indexOf(open),
       child: ConsolePage(
         title: context.t.settingsTitle,
+        actions: [
+          PaoButton(
+            label: context.t.appearanceTitle,
+            icon: Icons.image_outlined,
+            variant: PaoButtonVariant.outline,
+            expand: false,
+            onPressed: () => context.push(Routes.appearance),
+          ),
+        ],
         child: Column(
           children: [
             TabBar(

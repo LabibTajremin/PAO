@@ -569,5 +569,19 @@
   "iconErrorNotSquare": "ছবিটি বর্গাকার হতে হবে।",
   "iconErrorTooSmall": "ছবিটি কমপক্ষে ৯৬ × ৯৬ হতে হবে।",
   "iconErrorOpaque": "ছবির পটভূমি স্বচ্ছ হতে হবে।",
-  "iconErrorLink": "লিংক থেকে নামানো গেল না।"
+  "iconErrorLink": "লিংক থেকে নামানো গেল না।",
+  "settingsBrand": "ব্র্যান্ড",
+  "settingsTaglineEn": "ট্যাগলাইন (ইংরেজি)",
+  "settingsTaglineBn": "ট্যাগলাইন (বাংলা)",
+  "settingsTaglineHint": "স্প্ল্যাশ ও সাইন-ইন স্ক্রিনে, শেয়ার টেক্সটে এবং রসিদে দেখানো হয়। প্রতিটি ভাষায় সর্বোচ্চ ৪০ অক্ষর।",
+  "settingsTaglineSuggestions": "প্রস্তাব",
+  "appearanceTitle": "ইলাস্ট্রেশন",
+  "appearanceRules": "পছন্দনীয়: ৩০০ KB পর্যন্ত SVG। নইলে দেখানো মাপেই স্বচ্ছ পটভূমির PNG বা WebP, ৮০০ KB পর্যন্ত। মূল বিষয় ড্যাশ দেওয়া নিরাপদ অংশের ভিতরে রাখুন, শুধু প্যালেটের রং ব্যবহার করুন, আর ছবিতে কোনো লেখা রাখবেন না: দুই ভাষাতেই চলতে হবে।",
+  "appearanceUpload": "আপলোড",
+  "appearanceReset": "মূলটি ব্যবহার করুন",
+  "appearanceReplaced": "আপলোড করা",
+  "appearanceOriginal": "মূল",
+  "appearanceBundled": "অ্যাপ থেকে দেখানো",
+  "appearanceErrorSize": "{expected} পিক্সেলের ছবি, অথবা সেই অনুপাতের SVG ব্যবহার করুন।",
+  "appearanceErrorTooLarge": "ফাইলটি অনেক বড়: SVG ৩০০ KB পর্যন্ত, PNG বা WebP ৮০০ KB পর্যন্ত।"
 }

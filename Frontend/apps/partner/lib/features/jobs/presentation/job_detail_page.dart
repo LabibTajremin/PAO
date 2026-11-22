@@ -34,7 +34,8 @@ class JobDetailPage extends StatelessWidget {
           builder: (context, state) => ViewStateView<Booking>(
             state: state,
             onRetry: context.read<LoadCubit<Booking>>().load,
-            builder: (_, job) => JobDetailView(job: job, repo: repo),
+            builder: (_, job) =>
+                JobDetailView(job: job, repo: repo, look: services.look.look),
           ),
         ),
       ),

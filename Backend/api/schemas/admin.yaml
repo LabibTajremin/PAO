@@ -147,7 +147,7 @@ Setting:
   properties:
     key: { type: string, example: booking.accept_timeout_asap_seconds }
     value: { type: string, description: The value encoded as text; `type` says how to read it., example: "180" }
-    type: { type: string, enum: [integer, number, boolean, string, geojson] }
+    type: { type: string, enum: [integer, number, boolean, string, geojson, tagline] }
     description: { type: string }
     updatedAt: { type: string, format: date-time }
     updatedBy: { type: string, format: uuid }

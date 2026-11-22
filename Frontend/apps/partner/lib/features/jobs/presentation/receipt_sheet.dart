@@ -8,12 +8,14 @@ import 'package:pao_partner/shared/formats.dart';
 import 'package:pao_partner/shared/l10n.dart';
 import 'package:pao_ui/pao_ui.dart';
 
-/// Shows the receipt of the completed job [bookingId] in a sheet.
+/// Shows the receipt of the completed job [bookingId] in a sheet, with the
+/// admin's [tagline] at the foot.
 Future<void> showReceipt(
   BuildContext context,
   JobsRepository repo,
-  String bookingId,
-) => showPaoSheet<void>(
+  String bookingId, {
+  required String tagline,
+}) => showPaoSheet<void>(
   context,
   title: context.t.jobsReceiptTitle,
   child: BlocProvider(
@@ -22,16 +24,18 @@ Future<void> showReceipt(
       builder: (context, state) => ViewStateView<Receipt>(
         state: state,
         onRetry: context.read<LoadCubit<Receipt>>().load,
-        builder: (_, receipt) => _ReceiptBody(receipt: receipt),
+        builder: (_, receipt) =>
+            _ReceiptBody(receipt: receipt, tagline: tagline),
       ),
     ),
   ),
 );
 
 class _ReceiptBody extends StatelessWidget {
-  const _ReceiptBody({required this.receipt});
+  const _ReceiptBody({required this.receipt, required this.tagline});
 
   final Receipt receipt;
+  final String tagline;
 
   @override
   Widget build(BuildContext context) => Flexible(
@@ -53,10 +57,9 @@ class _ReceiptBody extends StatelessWidget {
               ItemRows(items: receipt.items, total: receipt.total),
               Text(context.t.jobsPaidCash),
               const SizedBox(height: PaoSpace.lg),
-              // The admin-edited tagline replaces this line in P23.
               Center(
                 child: Text(
-                  'Ask for it. PAO it.',
+                  tagline,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),

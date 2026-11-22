@@ -2,6 +2,10 @@
 /// by every PAO app.
 library;
 
+export 'src/appearance/app_look.dart';
+export 'src/appearance/app_look_service.dart';
+export 'src/appearance/look_artwork.dart';
+export 'src/appearance/look_store.dart';
 export 'src/connectivity.dart';
 export 'src/device/launcher.dart';
 export 'src/device/local_notifications.dart';

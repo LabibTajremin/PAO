@@ -2526,5 +2526,67 @@
   "iconErrorLink": "The link could not be downloaded.",
   "@iconErrorLink": {
     "description": "Icon refused"
+  },
+  "settingsBrand": "Brand",
+  "@settingsBrand": {
+    "description": "Settings section title"
+  },
+  "settingsTaglineEn": "Tagline (English)",
+  "@settingsTaglineEn": {
+    "description": "Field label"
+  },
+  "settingsTaglineBn": "Tagline (Bangla)",
+  "@settingsTaglineBn": {
+    "description": "Field label"
+  },
+  "settingsTaglineHint": "Shown on the splash and sign-in screens, in the share text and on receipts. At most 40 characters in each language.",
+  "@settingsTaglineHint": {
+    "description": "Help under the tagline fields"
+  },
+  "settingsTaglineSuggestions": "Suggestions",
+  "@settingsTaglineSuggestions": {
+    "description": "Label before the suggestion chips"
+  },
+  "appearanceTitle": "Illustrations",
+  "@appearanceTitle": {
+    "description": "Page title and the button that opens it"
+  },
+  "appearanceRules": "Preferred: SVG up to 300 KB. Otherwise PNG or WebP at exactly the size shown, with a transparent background, up to 800 KB. Keep the subject inside the dashed safe area, use only the palette colours, and put no text in the picture: it must work in both languages.",
+  "@appearanceRules": {
+    "description": "Rules at the top of the page"
+  },
+  "appearanceUpload": "Upload",
+  "@appearanceUpload": {
+    "description": "Button"
+  },
+  "appearanceReset": "Use the original",
+  "@appearanceReset": {
+    "description": "Button that resets a slot to its seed image"
+  },
+  "appearanceReplaced": "Uploaded",
+  "@appearanceReplaced": {
+    "description": "Status of a slot an admin replaced"
+  },
+  "appearanceOriginal": "Original",
+  "@appearanceOriginal": {
+    "description": "Status of a slot showing its seed image"
+  },
+  "appearanceBundled": "Shown from the app",
+  "@appearanceBundled": {
+    "description": "Status of a slot without a server image"
+  },
+  "appearanceErrorSize": "Use an image of {expected} pixels, or an SVG with that ratio.",
+  "@appearanceErrorSize": {
+    "description": "Upload refused: wrong size",
+    "placeholders": {
+      "expected": {
+        "type": "String",
+        "example": "1170x1200"
+      }
+    }
+  },
+  "appearanceErrorTooLarge": "The file is too large: SVG up to 300 KB, PNG or WebP up to 800 KB.",
+  "@appearanceErrorTooLarge": {
+    "description": "Upload refused: too large"
   }
 }

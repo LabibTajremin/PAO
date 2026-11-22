@@ -14,11 +14,15 @@ class PaoMessageState extends StatelessWidget {
     required this.title,
     this.message,
     this.action,
+    this.illustration,
     super.key,
   });
 
   /// Illustration icon.
   final IconData icon;
+
+  /// A picture shown instead of [icon], such as a `PaoArtwork` slot.
+  final Widget? illustration;
 
   /// Heading.
   final String title;
@@ -42,19 +46,22 @@ class PaoMessageState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            PaoStitchFrame(
-              frame: PaoShape.leaf,
-              padding: PaoSpace.xs,
-              child: Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: c.tintFill,
-                  borderRadius: PaoShape.leafSmall,
+            if (illustration case final picture?)
+              SizedBox(width: 240, child: picture)
+            else
+              PaoStitchFrame(
+                frame: PaoShape.leaf,
+                padding: PaoSpace.xs,
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: c.tintFill,
+                    borderRadius: PaoShape.leafSmall,
+                  ),
+                  child: Icon(icon, size: 26, color: c.action),
                 ),
-                child: Icon(icon, size: 26, color: c.action),
               ),
-            ),
             const SizedBox(height: PaoSpace.lg),
             Text(
               title,
@@ -88,6 +95,7 @@ class PaoEmptyState extends PaoMessageState {
     super.message,
     super.action,
     super.icon = Icons.inbox_outlined,
+    super.illustration,
     super.key,
   });
 }

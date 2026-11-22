@@ -36,6 +36,7 @@ class _JobsPageState extends State<JobsPage> {
     child: PagedView<BookingSummary>(
       itemBuilder: (_, job) => JobRow(job: job),
       empty: PaoEmptyState(
+        illustration: LookArtwork(widget.services.look.look, 'empty.jobs'),
         title: tab == JobsTab.upcoming
             ? context.t.jobsEmptyUpcoming
             : context.t.jobsEmptyPast,

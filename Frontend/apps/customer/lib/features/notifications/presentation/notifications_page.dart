@@ -77,6 +77,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                     itemBuilder: (_, n) => _Row(note: n, onTap: () => _open(n)),
                     empty: PaoEmptyState(
                       icon: Icons.notifications_none_outlined,
+                      illustration: LookArtwork(
+                        widget.services.look.look,
+                        'empty.notifications',
+                      ),
                       title: context.t.notifEmpty,
                       message: context.t.notifEmptyBody,
                     ),

@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pao_admin/features/catalog/data/api_catalog_repository.dart';
 import 'package:pao_admin/features/catalog/presentation/icon_field.dart';
-import 'package:pao_admin/features/catalog/presentation/icon_picker.dart';
 import 'package:pao_admin/features/catalog/presentation/icon_source_tabs.dart';
+import 'package:pao_admin/shared/image_file.dart';
 import 'package:pao_core/pao_core.dart';
 import 'package:pao_ui/pao_ui.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -52,7 +52,7 @@ void main() {
     url = ValueNotifier(null);
   });
 
-  Future<void> pump(WidgetTester tester, [IconFileChooser? choose]) async {
+  Future<void> pump(WidgetTester tester, [ImageFileChooser? choose]) async {
     desktop(tester);
     await pumpPage(
       tester,
@@ -211,15 +211,15 @@ void main() {
     }
     expect(iconFailureText(context, const NetworkFailure()), isNotNull);
     expect(iconFailureText(context, null), isNull);
-    expect(iconType('application/octet-stream', 'x.webp'), 'image/webp');
-    expect(iconType('image/png', 'x.bin'), 'image/png');
-    expect(iconType(null, 'x.png'), 'image/png');
+    expect(imageType('application/octet-stream', 'x.webp'), 'image/webp');
+    expect(imageType('image/png', 'x.bin'), 'image/png');
+    expect(imageType(null, 'x.png'), 'image/png');
   });
 
   test('the default chooser asks the browser for svg, png and webp', () async {
     final selector = _Selector();
     FileSelectorPlatform.instance = selector;
-    expect((await chooseIconFile())?.name, 'a.svg');
+    expect((await chooseImageFile())?.name, 'a.svg');
     expect(selector.asked!.single.extensions, ['svg', 'png', 'webp']);
   });
 }

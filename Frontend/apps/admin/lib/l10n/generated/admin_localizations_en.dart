@@ -1849,4 +1849,51 @@ class AdminL10nEn extends AdminL10n {
 
   @override
   String get iconErrorLink => 'The link could not be downloaded.';
+
+  @override
+  String get settingsBrand => 'Brand';
+
+  @override
+  String get settingsTaglineEn => 'Tagline (English)';
+
+  @override
+  String get settingsTaglineBn => 'Tagline (Bangla)';
+
+  @override
+  String get settingsTaglineHint =>
+      'Shown on the splash and sign-in screens, in the share text and on receipts. At most 40 characters in each language.';
+
+  @override
+  String get settingsTaglineSuggestions => 'Suggestions';
+
+  @override
+  String get appearanceTitle => 'Illustrations';
+
+  @override
+  String get appearanceRules =>
+      'Preferred: SVG up to 300 KB. Otherwise PNG or WebP at exactly the size shown, with a transparent background, up to 800 KB. Keep the subject inside the dashed safe area, use only the palette colours, and put no text in the picture: it must work in both languages.';
+
+  @override
+  String get appearanceUpload => 'Upload';
+
+  @override
+  String get appearanceReset => 'Use the original';
+
+  @override
+  String get appearanceReplaced => 'Uploaded';
+
+  @override
+  String get appearanceOriginal => 'Original';
+
+  @override
+  String get appearanceBundled => 'Shown from the app';
+
+  @override
+  String appearanceErrorSize(String expected) {
+    return 'Use an image of $expected pixels, or an SVG with that ratio.';
+  }
+
+  @override
+  String get appearanceErrorTooLarge =>
+      'The file is too large: SVG up to 300 KB, PNG or WebP up to 800 KB.';
 }

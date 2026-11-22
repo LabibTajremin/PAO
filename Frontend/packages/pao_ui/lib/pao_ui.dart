@@ -10,6 +10,7 @@ export 'src/tokens/metrics.dart';
 export 'src/tokens/shape.dart';
 export 'src/tokens/typography.dart';
 export 'src/widgets/app_bar.dart';
+export 'src/widgets/artwork.dart';
 export 'src/widgets/avatar.dart';
 export 'src/widgets/badge.dart';
 export 'src/widgets/banner.dart';

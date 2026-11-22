@@ -6928,6 +6928,7 @@ components:
             - boolean
             - string
             - geojson
+            - tagline
         description:
           type: string
         updatedAt:

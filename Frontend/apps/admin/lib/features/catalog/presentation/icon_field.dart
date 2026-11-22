@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pao_admin/features/catalog/domain/catalog_repository.dart';
 import 'package:pao_admin/features/catalog/presentation/icon_picker.dart';
+import 'package:pao_admin/shared/image_file.dart';
 import 'package:pao_admin/shared/l10n.dart';
 import 'package:pao_ui/pao_ui.dart';
 
@@ -14,7 +15,7 @@ class IconField extends StatelessWidget {
     required this.url,
     required this.icons,
     this.error,
-    this.chooseFile = chooseIconFile,
+    this.chooseFile = chooseImageFile,
     super.key,
   });
 
@@ -31,7 +32,7 @@ class IconField extends StatelessWidget {
   final String? error;
 
   /// Asks for a file to upload.
-  final IconFileChooser chooseFile;
+  final ImageFileChooser chooseFile;
 
   Future<void> _pick(BuildContext context) async {
     final pick = await showIconPicker(
