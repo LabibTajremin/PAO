@@ -44,6 +44,8 @@ public static class AdminEvents
     public const string ComplaintResolved = "admin.ComplaintResolved";
     /// <summary>The `"admin.SettingChanged"` value.</summary>
     public const string SettingChanged = "admin.SettingChanged";
+    /// <summary>The `"admin.ArtworkChanged"` value.</summary>
+    public const string ArtworkChanged = "admin.ArtworkChanged";
 }
 
 /// <summary>A party filed a complaint about a booking.</summary>

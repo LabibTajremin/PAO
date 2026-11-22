@@ -72,6 +72,7 @@ public sealed class AuditTests
         ["verification.ProviderLevelChanged"] = new { providerId = Guid.NewGuid(), from = 0, to = 1, reason = string.Empty },
         ["verification.Level2ResultRecorded"] = new { providerId = Guid.NewGuid(), sessionId = Guid.NewGuid(), result = "pass", actorId = actor },
         ["verification.DocumentExpired"] = new { providerId = Guid.NewGuid(), item = "police_clearance" },
+        ["admin.ArtworkChanged"] = new { key = "customer.signin.hero", url = "https://cdn.example/artwork/x.svg", reset = false, actorId = actor },
         ["admin.SettingChanged"] = new { key = "search.default_radius_m", before = "5000", after = "6000", actorId = actor },
         ["admin.ComplaintResolved"] = new { complaintId = Guid.NewGuid(), ticketNumber = "TCK-000001", verified = true, againstId = Guid.NewGuid(), actorId = actor },
         ["billing.CommissionCharged"] = new { providerId = Guid.NewGuid(), bookingId = Guid.NewGuid(), amountPaisa = 113, duePaisa = 113 },
@@ -101,7 +102,7 @@ public sealed class AuditTests
             await bus.Dispatch(Of(payload), CancellationToken.None);
             await Assert.ThrowsAsync<EventDeliveryException>(() => bus.Dispatch(Of(new { name }), CancellationToken.None));
         }
-        Assert.Equal(14, repo.Entries.Count);
+        Assert.Equal(15, repo.Entries.Count);
         var first = repo.Entries[0].Entry;
         Assert.Equal(("account.status_changed", (Guid?)actor, "active", "banned"), (first.Action, first.ActorId, (string?)first.Before!["status"], (string?)first.After!["status"]));
         Assert.All(repo.Entries, e => Assert.Equal((Now, true), (e.Entry.At, e.EventId is not null)));

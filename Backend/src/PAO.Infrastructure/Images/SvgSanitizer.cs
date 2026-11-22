@@ -1,13 +1,12 @@
+using System.Globalization;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-using PAO.Lib.Areas.Catalog;
-using PAO.Lib.Errors;
 
-namespace PAO.Core.Areas.Catalog.Services.Icons;
+namespace PAO.Infrastructure.Images;
 
 /// <summary>
-/// Keeps only the drawing parts of an uploaded SVG (ADR-0039): an allow-list of shape,
+/// Keeps only the drawing parts of an uploaded SVG (ADR-0039, ADR-0040): an allow-list of shape,
 /// grouping and gradient elements and their presentation attributes. Scripts, event handlers,
 /// `foreignObject`, images, external references and CSS `url()` to anything but a local
 /// fragment are dropped, as is everything in an editor's own namespace.
@@ -32,13 +31,13 @@ public static class SvgSanitizer
         "stop-color", "stop-opacity", "gradientUnits", "gradientTransform", "fx", "fy", "href", "version",
     ];
 
-    /// <summary>The sanitised SVG as UTF-8; throws `catalog.icon_unreadable` for anything but a well-formed SVG.</summary>
+    /// <summary>The sanitised SVG as UTF-8; throws <see cref="ImageFormatException"/> for anything but a well-formed SVG.</summary>
     public static byte[] Clean(byte[] file)
     {
         var root = Parse(file).Root;
         if (root is null || root.Name != Svg + "svg")
         {
-            throw new DomainException(CatalogReasons.IconUnreadable);
+            throw new ImageFormatException("not an SVG document");
         }
         CleanElement(root);
         var output = new StringBuilder();
@@ -48,6 +47,23 @@ public static class SvgSanitizer
         }
         return Encoding.UTF8.GetBytes(output.ToString());
     }
+
+    /// <summary>
+    /// Width over height from the `viewBox`, else from `width` and `height`; null when neither
+    /// gives two positive numbers.
+    /// </summary>
+    public static double? AspectRatio(byte[] file)
+    {
+        var root = Parse(file).Root!;
+        var box = ((string?)root.Attribute("viewBox"))?.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries);
+        var (width, height) = box is { Length: 4 }
+            ? (Number(box[2]), Number(box[3]))
+            : (Number((string?)root.Attribute("width")), Number((string?)root.Attribute("height")));
+        return width > 0 && height > 0 ? width / height : null;
+    }
+
+    private static double Number(string? text) =>
+        double.TryParse(text?.Replace("px", string.Empty, StringComparison.Ordinal), NumberStyles.Float, CultureInfo.InvariantCulture, out var n) ? n : 0;
 
     private static XDocument Parse(byte[] file)
     {
@@ -60,7 +76,7 @@ public static class SvgSanitizer
         }
         catch (XmlException error)
         {
-            throw new DomainException(CatalogReasons.IconUnreadable, error);
+            throw new ImageFormatException(error.Message, error);
         }
     }
 

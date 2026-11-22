@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720" width="720" height="720">
+  <title>success.job</title>
+  <circle cx="360" cy="396" r="259" fill="#F0EEDF"/>
+  <circle cx="547" cy="223" r="65" fill="#B1BFE2"/>
+  <rect x="58" y="554" width="605" height="36" rx="18" fill="#B1BFE2"/>
+  <path d="M245 554V367l115 -101 115 101V554z" fill="#FFFFFF" stroke="#16336F" stroke-width="10" stroke-linejoin="round"/>
+  <rect x="328" y="454" width="65" height="101" fill="#B1BFE2" stroke="#16336F" stroke-width="7"/>
+  <circle cx="439" cy="324" r="16" fill="#FE492A"/>
+</svg>

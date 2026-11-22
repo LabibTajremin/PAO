@@ -23,6 +23,16 @@ public static class AdminReasons
     public const string AlreadyResolved = "admin.complaint_already_resolved";
     /// <summary>No provider or customer has the id.</summary>
     public const string PersonNotFound = "admin.person_not_found";
+    /// <summary>No artwork slot has the key.</summary>
+    public const string ArtworkSlotNotFound = "admin.artwork_slot_not_found";
+    /// <summary>The artwork file is larger than its type allows.</summary>
+    public const string ArtworkTooLarge = "admin.artwork_too_large";
+    /// <summary>The artwork is not a well-formed SVG, PNG or WebP of the stated type.</summary>
+    public const string ArtworkUnreadable = "admin.artwork_unreadable";
+    /// <summary>The artwork's size or ratio does not fit the slot; details name the expected size.</summary>
+    public const string ArtworkWrongSize = "admin.artwork_wrong_size";
+    /// <summary>A PNG or WebP artwork without an alpha channel.</summary>
+    public const string ArtworkOpaque = "admin.artwork_opaque";
 }
 
 /// <summary>An internal support note on a complaint.</summary>

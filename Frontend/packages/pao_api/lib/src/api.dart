@@ -23,6 +23,7 @@ import 'package:pao_api/src/api/provider_api.dart';
 import 'package:pao_api/src/api/provider_billing_api.dart';
 import 'package:pao_api/src/api/provider_enrolment_api.dart';
 import 'package:pao_api/src/api/provider_jobs_api.dart';
+import 'package:pao_api/src/api/public_api.dart';
 
 class PaoApi {
   static const String basePath = r'http://localhost:8080';
@@ -179,5 +180,11 @@ class PaoApi {
   /// by doing that all interceptors will not be executed
   ProviderJobsApi getProviderJobsApi() {
     return ProviderJobsApi(dio);
+  }
+
+  /// Get PublicApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  PublicApi getPublicApi() {
+    return PublicApi(dio);
   }
 }

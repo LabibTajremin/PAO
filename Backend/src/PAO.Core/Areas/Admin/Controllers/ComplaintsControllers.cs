@@ -26,6 +26,11 @@ public sealed class AdminErrorMap : IErrorMap
         [AdminReasons.AlreadyResolved] = new(409, "COMPLAINT_INVALID_TRANSITION", "This complaint is already resolved."),
         [AdminReasons.PersonNotFound] = ApiErrors.NotFound,
         [IdentityErrors.StatusInvalid] = new(409, "CONFLICT", "The account already has this status."),
+        [AdminReasons.ArtworkSlotNotFound] = ApiErrors.NotFound,
+        [AdminReasons.ArtworkTooLarge] = ApiErrors.Validation("reason", "artwork_too_large"),
+        [AdminReasons.ArtworkUnreadable] = ApiErrors.Validation("reason", "artwork_unreadable"),
+        [AdminReasons.ArtworkWrongSize] = ApiErrors.Validation("reason", "artwork_wrong_size"),
+        [AdminReasons.ArtworkOpaque] = ApiErrors.Validation("reason", "artwork_opaque"),
     };
 }
 

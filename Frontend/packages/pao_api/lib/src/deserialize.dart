@@ -18,6 +18,11 @@ import 'package:pao_api/src/model/admin_user_invite.dart';
 import 'package:pao_api/src/model/admin_user_invited.dart';
 import 'package:pao_api/src/model/admin_user_list.dart';
 import 'package:pao_api/src/model/admin_user_update.dart';
+import 'package:pao_api/src/model/app_config.dart';
+import 'package:pao_api/src/model/artwork_image.dart';
+import 'package:pao_api/src/model/artwork_slot.dart';
+import 'package:pao_api/src/model/artwork_slot_list.dart';
+import 'package:pao_api/src/model/artwork_upload.dart';
 import 'package:pao_api/src/model/audit_entry.dart';
 import 'package:pao_api/src/model/audit_list.dart';
 import 'package:pao_api/src/model/banner.dart';
@@ -228,7 +233,20 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'AdminUserUpdate':
       return AdminUserUpdate.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'AppConfig':
+      return AppConfig.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'AppKind':
+    case 'AppName':
+    case 'ArtworkImage':
+      return ArtworkImage.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'ArtworkSlot':
+      return ArtworkSlot.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'ArtworkSlotList':
+      return ArtworkSlotList.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'ArtworkUpload':
+      return ArtworkUpload.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
     case 'AuditEntry':
       return AuditEntry.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'AuditList':

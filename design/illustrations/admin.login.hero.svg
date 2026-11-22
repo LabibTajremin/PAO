@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200">
+  <title>admin.login.hero</title>
+  <circle cx="800" cy="660" r="432" fill="#F0EEDF"/>
+  <circle cx="1112" cy="372" r="108" fill="#B1BFE2"/>
+  <rect x="296" y="924" width="1008" height="60" rx="30" fill="#B1BFE2"/>
+  <path d="M608 924V612l192 -168 192 168V924z" fill="#FFFFFF" stroke="#16336F" stroke-width="17" stroke-linejoin="round"/>
+  <rect x="746" y="756" width="108" height="168" fill="#B1BFE2" stroke="#16336F" stroke-width="12"/>
+  <circle cx="932" cy="540" r="26" fill="#FE492A"/>
+</svg>

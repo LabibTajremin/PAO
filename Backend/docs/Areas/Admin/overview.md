@@ -14,6 +14,8 @@ Code: `src/PAO.Core/Areas/Admin/`; contracts: `src/PAO.Lib/Areas/Admin/`. Back t
 | `AdminSharedService` | Its implementation: Booking, Customer, Merchant and Verification read the typed settings here. |
 | `AdminRules` | setting types (Go's parsing rules), report and resolution rules, the 30-day dashboard window |
 | `SettingValues` | values by key cached in Redis under `cache:settings` (10 minutes, dropped on update), typed with defaults for damaged rows |
+| `Tagline` | the `brand.tagline` setting: `{en, bn}`, 1–40 characters each, the seed line as fallback |
+| `ArtworkStore` | checks artwork against its slot and stores it in the public bucket under `artwork/<slot>/` |
 | `ComplaintSteps` | the resolved check and cursor pages shared by the queue and the console |
 | `AdminPeers` | Merchant, Customer, Verification, Booking, Rating, Identity, Audit, Catalog and Media, resolved on first use; booking parties, complaint photos, who may work complaints |
 | `AdminConsole` | provider and customer rows and detail pages, status changes through Identity |

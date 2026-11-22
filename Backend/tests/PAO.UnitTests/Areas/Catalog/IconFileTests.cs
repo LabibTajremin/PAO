@@ -5,6 +5,7 @@ using PAO.Core.Areas.Catalog.Features.Icons.Queries;
 using PAO.Core.Areas.Catalog.Services;
 using PAO.Core.Areas.Catalog.Services.Icons;
 using PAO.Infrastructure.Hosting;
+using PAO.Infrastructure.Images;
 using PAO.Lib.Areas.Catalog;
 using PAO.Lib.Errors;
 using PAO.TestKit;
@@ -113,8 +114,21 @@ public sealed class IconFileTests
     [InlineData("<svg xmlns='http://www.w3.org/2000/svg'>")]
     [InlineData("<!DOCTYPE svg [<!ENTITY x 'y'>]><svg xmlns='http://www.w3.org/2000/svg'>&x;</svg>")]
     [InlineData("<svg/>")]
-    public void Svg_that_is_not_a_well_formed_svg_document_is_unreadable(string text) =>
-        Assert.Equal(CatalogReasons.IconUnreadable, Reason(() => SvgSanitizer.Clean(Encoding.UTF8.GetBytes(text))));
+    public void Svg_that_is_not_a_well_formed_svg_document_is_refused(string text) =>
+        Assert.Throws<ImageFormatException>(() => SvgSanitizer.Clean(Encoding.UTF8.GetBytes(text)));
+
+    [Theory]
+    [InlineData("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1170 1200'/>", 0.975)]
+    [InlineData("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0,0,720,540' width='10' height='10'/>", 1.3333)]
+    [InlineData("<svg xmlns='http://www.w3.org/2000/svg' width='720px' height='720'/>", 1.0)]
+    [InlineData("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10'/>", null)]
+    [InlineData("<svg xmlns='http://www.w3.org/2000/svg' width='auto' height='5'/>", null)]
+    public void Svg_ratio_comes_from_the_view_box_or_the_size(string text, double? ratio)
+    {
+        var found = SvgSanitizer.AspectRatio(Encoding.UTF8.GetBytes(text));
+        Assert.Equal(ratio is null, found is null);
+        Assert.Equal(ratio ?? 0, found ?? 0, 3);
+    }
 
     [Fact]
     public void Png_and_webp_icons_must_be_square_large_enough_and_transparent()
@@ -138,7 +152,7 @@ public sealed class IconFileTests
             BinaryPrimitives.WriteUInt16LittleEndian(f.AsSpan(26), 96);
             BinaryPrimitives.WriteUInt16LittleEndian(f.AsSpan(28), 96);
         });
-        Assert.Equal(new RasterIcon.Header(96, 96, false), RasterIcon.ReadWebp(lossy));
+        Assert.Equal(new ImageHeader(96, 96, false), ImageHeaders.ReadWebp(lossy));
     }
 
     [Fact]
@@ -146,13 +160,13 @@ public sealed class IconFileTests
     {
         Assert.Equal(CatalogReasons.IconUnreadable, Reason(() => RasterIcon.Check(IconTypes.Png, Encoding.ASCII.GetBytes("GIF89a, not a png at all, not at all."))));
         Assert.Equal(CatalogReasons.IconUnreadable, Reason(() => RasterIcon.Check(IconTypes.Webp, Png(96, 96, 6))));
-        Assert.Null(RasterIcon.ReadPng(Png(96, 96, 6)[..20]));
-        Assert.Null(RasterIcon.ReadWebp(Webp("VP8L", _ => { })));
-        Assert.Null(RasterIcon.ReadWebp(Webp("ALPH", _ => { })));
+        Assert.Null(ImageHeaders.ReadPng(Png(96, 96, 6)[..20]));
+        Assert.Null(ImageHeaders.ReadWebp(Webp("VP8L", _ => { })));
+        Assert.Null(ImageHeaders.ReadWebp(Webp("ALPH", _ => { })));
         var broken = Png(96, 96, 2, "teXt");
         BinaryPrimitives.WriteInt32BigEndian(broken.AsSpan(33), int.MaxValue);
-        Assert.False(RasterIcon.ReadPng(broken)!.Value.HasAlpha);
-        Assert.False(RasterIcon.ReadPng(Png(96, 96, 2, "teXt")[..50])!.Value.HasAlpha);
+        Assert.False(ImageHeaders.ReadPng(broken)!.Value.HasAlpha);
+        Assert.False(ImageHeaders.ReadPng(Png(96, 96, 2, "teXt")[..50])!.Value.HasAlpha);
     }
 
     [Fact]

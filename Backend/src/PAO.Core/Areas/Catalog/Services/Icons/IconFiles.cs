@@ -1,6 +1,7 @@
 using PAO.Core.Areas.Catalog.Repositories;
 using PAO.Infrastructure.Configuration;
 using PAO.Infrastructure.Data;
+using PAO.Infrastructure.Images;
 using PAO.Infrastructure.Storage;
 using PAO.Lib.Areas.Catalog;
 using PAO.Lib.Errors;
@@ -33,7 +34,14 @@ public sealed class IconFiles(ObjectStore store, PaoSettings settings, IconAddre
     {
         if (contentType == IconTypes.Svg)
         {
-            return SvgSanitizer.Clean(file);
+            try
+            {
+                return SvgSanitizer.Clean(file);
+            }
+            catch (ImageFormatException error)
+            {
+                throw new DomainException(CatalogReasons.IconUnreadable, error);
+            }
         }
         RasterIcon.Check(contentType, file);
         return file;

@@ -21,6 +21,8 @@ servers:
 security:
   - bearerAuth: []
 tags:
+  - name: Public
+    description: Anonymous app configuration (tagline, artwork).
   - name: Auth
     description: Sign-in by OTP, token refresh, logout and admin 2FA.
   - name: Me
@@ -508,6 +510,40 @@ paths:
           $ref: '#/components/responses/Unauthenticated'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/app-config:
+    get:
+      operationId: getAppConfig
+      tags:
+        - Public
+      summary: The tagline and artwork an app shows without a release
+      x-permission: public
+      security: []
+      parameters:
+        - name: app
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/AppName'
+        - name: If-None-Match
+          in: header
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppConfig'
+        '304':
+          description: Not modified since the ETag sent
         '422':
           $ref: '#/components/responses/ValidationFailed'
   /v1/customer/catalog:
@@ -2686,6 +2722,75 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/artwork:
+    get:
+      operationId: listArtwork
+      tags:
+        - Admin settings
+      summary: Every artwork slot with its size and current image
+      x-permission: settings:read
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtworkSlotList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/admin/artwork/{slotKey}:
+    put:
+      operationId: uploadArtwork
+      tags:
+        - Admin settings
+      summary: Replace a slot's image; refused with the expected size when it does not fit
+      x-permission: settings:manage
+      parameters:
+        - $ref: '#/components/parameters/SlotKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtworkUpload'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtworkSlot'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+    delete:
+      operationId: resetArtwork
+      tags:
+        - Admin settings
+      summary: Put the seed image back
+      x-permission: settings:manage
+      parameters:
+        - $ref: '#/components/parameters/SlotKey'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtworkSlot'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /v1/admin/verifications:
     get:
       operationId: listVerificationQueue
@@ -4016,6 +4121,15 @@ components:
       schema:
         type: string
         format: uuid
+    SlotKey:
+      name: slotKey
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^[a-z0-9]+(\.[a-z0-9]+)+$
+        maxLength: 60
+        example: customer.signin.hero
   responses:
     Unauthenticated:
       description: Missing, invalid or expired access token (UNAUTHENTICATED, TOKEN_EXPIRED) or a failed credential check.
@@ -7215,6 +7329,44 @@ components:
           $ref: '#/components/schemas/DueSummary'
         entries:
           $ref: '#/components/schemas/LedgerEntryList'
+    AppName:
+      type: string
+      enum:
+        - customer
+        - partner
+        - admin
+    ArtworkImage:
+      type: object
+      description: The server image of a slot; apps show their bundled seed until it is cached.
+      required:
+        - key
+        - url
+        - version
+      properties:
+        key:
+          type: string
+          example: customer.signin.hero
+        url:
+          type: string
+          format: uri
+          maxLength: 500
+        version:
+          type: integer
+          minimum: 1
+          example: 3
+    AppConfig:
+      type: object
+      description: What an app shows without a release. Cache it; send its ETag back as If-None-Match.
+      required:
+        - tagline
+        - artwork
+      properties:
+        tagline:
+          $ref: '#/components/schemas/LocalizedText'
+        artwork:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArtworkImage'
     Banner:
       type: object
       description: A home banner (C07). Without an image the app draws it in the accent's deep colour.
@@ -7339,3 +7491,71 @@ components:
           pattern: ^https://
           maxLength: 500
           example: https://example.com/icon.svg
+    ArtworkSlot:
+      type: object
+      required:
+        - key
+        - app
+        - width
+        - height
+        - version
+        - replaced
+      properties:
+        key:
+          type: string
+          example: customer.signin.hero
+        app:
+          $ref: '#/components/schemas/AppName'
+        width:
+          type: integer
+          example: 1170
+        height:
+          type: integer
+          example: 1200
+        url:
+          type: string
+          format: uri
+          maxLength: 500
+          description: Absent until seeded or uploaded.
+        contentType:
+          type: string
+          enum:
+            - image/svg+xml
+            - image/png
+            - image/webp
+        version:
+          type: integer
+          minimum: 0
+          description: 0 until the slot has an image.
+        replaced:
+          type: boolean
+          description: An admin uploaded it; seeding leaves it alone.
+    ArtworkSlotList:
+      type: object
+      required:
+        - slots
+      properties:
+        slots:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArtworkSlot'
+    ArtworkUpload:
+      type: object
+      description: SVG up to 300 KB (sanitised), or PNG or WebP at exactly the slot's size with transparency, up to 800 KB; the ratio must match within 2%.
+      required:
+        - contentType
+        - data
+      properties:
+        contentType:
+          type: string
+          enum:
+            - image/svg+xml
+            - image/png
+            - image/webp
+        data:
+          type: string
+          format: byte
+          minLength: 4
+          maxLength: 1092268
+          description: The file
+          base64.: null

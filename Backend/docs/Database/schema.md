@@ -592,6 +592,7 @@ Created in `catalog/0001_init.sql`.
 | `name_en` | text | no | — |
 | `name_bn` | text | no | — |
 | `icon_key` | text | no | — |
+| `icon_url` | text | yes | — |
 | `sort_order` | integer | no | `0` |
 | `published` | boolean | no | `false` |
 | `created_at` | timestamp with time zone | no | `now()` |
@@ -659,6 +660,7 @@ Created in `catalog/0001_init.sql`.
 | `name_en` | text | no | — |
 | `name_bn` | text | no | — |
 | `icon_key` | text | no | — |
+| `icon_url` | text | yes | — |
 | `service_model` | text | no | — |
 | `required_level` | integer | no | `1` |
 | `search_radius_m` | integer | no | `5000` |
@@ -1084,6 +1086,22 @@ Keys: PK `PRIMARY KEY (handler, event_id)`.
 
 ## `admin`
 Tables: [`complaint_comments`](#admincomplaint_comments), [`complaints`](#admincomplaints), [`outbox`](#adminoutbox), [`processed_events`](#adminprocessed_events), [`settings`](#adminsettings), [`stats_bookings_daily`](#adminstats_bookings_daily), [`stats_providers`](#adminstats_providers).
+
+### admin.artwork_slots
+The image each artwork slot shows; a slot without a row shows the app's bundled seed (ADR-0040). Created in `admin/0004_artwork_and_tagline.sql`.
+
+| Column | Type | Null | Default |
+|---|---|---|---|
+| `key` | text | no | — |
+| `url` | text | yes | — |
+| `content_type` | text | yes | — |
+| `seed_url` | text | yes | — |
+| `version` | integer | no | `0` |
+| `replaced` | boolean | no | `false` |
+| `updated_at` | timestamp with time zone | no | `now()` |
+| `updated_by` | uuid | yes | — |
+
+Keys: PK `PRIMARY KEY (key)`.
 
 ### admin.complaint_comments
 Created in `admin/0001_init.sql`.

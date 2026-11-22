@@ -75,6 +75,7 @@ an empty database and compares schema, version rows and catalog with `migrate up
 | `admin/0001_init.sql` | Admin: platform settings, complaints and the dashboard read model. |
 | `admin/0002_billing_settings.sql` | Settings `billing.commission_rate_bp` and `billing.due_block_amount` (ADR-0035). |
 | `admin/0003_complaints_against_index.sql` | `complaints_against_all_idx`: every complaint against a person, for the admin person view. |
+| `admin/0004_artwork_and_tagline.sql` | `admin.artwork_slots` for admin-managed illustrations and the `brand.tagline` setting (ADR-0040). |
 | `audit/0001_init.sql` | Audit: the append-only trail of decisions and status changes (PRD §6.4, A-08). |
 | `billing/0001_init.sql` | Billing: the merchant ledger, payment submissions, outbox (ADR-0035). |
 | `bundle/schema.sql` | Generated: every script above in one idempotent file (`migrate bundle`). |

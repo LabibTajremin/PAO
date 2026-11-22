@@ -16,6 +16,7 @@ EF models: `src/PAO.EF/Admin/AdminRecords.cs`.
 | Repository | Role |
 |---|---|
 | `SettingsRepository` | list, get, update with `admin.SettingChanged` |
+| `ArtworkRepository` | artwork slots: list, find, save with `admin.ArtworkChanged`, seed (keeps slots an admin replaced) |
 | `ComplaintRepository` | complaints with ticket numbers and notes, the queue, locked updates with their events, counts |
 | `DashboardRepository` | the dashboard counts and the read-model writes the subscribers make |
 

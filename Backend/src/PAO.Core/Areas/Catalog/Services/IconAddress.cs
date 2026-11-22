@@ -12,20 +12,10 @@ namespace PAO.Core.Areas.Catalog.Services;
 public sealed partial class IconAddress(PaoSettings settings)
 {
     /// <summary>The folder of the public bucket that holds catalog icons, and the only readable one.</summary>
-    public const string Folder = ObjectStore.PublicFolder;
+    public const string Folder = ObjectStore.IconFolder;
 
     /// <summary>The URL prefix every stored icon starts with, ending in a slash.</summary>
-    public string Base
-    {
-        get
-        {
-            var s = settings.Storage;
-            var root = string.IsNullOrEmpty(s.PublicBaseUrl)
-                ? $"{(string.IsNullOrEmpty(s.PublicEndpoint) ? s.Endpoint : s.PublicEndpoint).TrimEnd('/')}/{s.BucketPublic}"
-                : s.PublicBaseUrl.TrimEnd('/');
-            return $"{root}/{Folder}/";
-        }
-    }
+    public string Base => $"{ObjectStore.PublicBase(settings.Storage)}/{Folder}/";
 
     /// <summary>The object key of a stored icon file.</summary>
     public static string KeyOf(string fileName) => $"{Folder}/{fileName}";

@@ -16,6 +16,7 @@ lib/src/api/provider_api.dart
 lib/src/api/provider_billing_api.dart
 lib/src/api/provider_enrolment_api.dart
 lib/src/api/provider_jobs_api.dart
+lib/src/api/public_api.dart
 lib/src/auth/api_key_auth.dart
 lib/src/auth/auth.dart
 lib/src/auth/basic_auth.dart
@@ -45,7 +46,13 @@ lib/src/model/admin_user_invite.dart
 lib/src/model/admin_user_invited.dart
 lib/src/model/admin_user_list.dart
 lib/src/model/admin_user_update.dart
+lib/src/model/app_config.dart
 lib/src/model/app_kind.dart
+lib/src/model/app_name.dart
+lib/src/model/artwork_image.dart
+lib/src/model/artwork_slot.dart
+lib/src/model/artwork_slot_list.dart
+lib/src/model/artwork_upload.dart
 lib/src/model/audit_entry.dart
 lib/src/model/audit_list.dart
 lib/src/model/badge.dart

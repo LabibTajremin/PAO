@@ -18,6 +18,17 @@ public sealed class AdminMappingProfile : IMappingProfile
     public void Configure(MappingRegistry registry) => Customers(People(Complaints(registry)));
 
     private static MappingRegistry Complaints(MappingRegistry registry) => registry
+        .Add<(ArtworkSpec Slot, ArtworkRecord? Row), ArtworkSlotView>((p, _) => new ArtworkSlotView
+        {
+            Key = p.Slot.Key,
+            App = p.Slot.App,
+            Width = p.Slot.Width,
+            Height = p.Slot.Height,
+            Url = p.Row?.Url,
+            ContentType = p.Row?.Url is null ? null : p.Row.ContentType,
+            Version = p.Row?.Version ?? 0,
+            Replaced = p.Row?.Replaced ?? false,
+        })
         .Add<SettingRecord, SettingView>((s, _) => new SettingView
         {
             Key = s.Key,

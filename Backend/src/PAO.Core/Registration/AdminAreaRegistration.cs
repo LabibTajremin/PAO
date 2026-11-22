@@ -15,6 +15,7 @@ public static class AdminAreaRegistration
     public static IServiceCollection AddAdminArea(this IServiceCollection services) => services
         .AddSingleton<IEventSubscriptions, AdminStatsSubscriptions>()
         .AddScoped<SettingValues>()
+        .AddScoped<ArtworkStore>()
         .AddScoped<AdminPeers>()
         .AddScoped<AdminConsole>()
         .AddScoped<IAdminSharedService, AdminSharedService>();

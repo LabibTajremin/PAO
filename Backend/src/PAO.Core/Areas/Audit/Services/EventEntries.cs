@@ -30,6 +30,8 @@ public static class EventEntries
             after: new JsonObject { ["contentType"] = p.Text("contentType"), ["sourceUrl"] = p.Text("sourceUrl") }),
         [AdminEvents.SettingChanged] = p => Entry(p, "settings.changed", "setting", p.Text("key"),
             before: new JsonObject { ["value"] = p.Text("before") }, after: new JsonObject { ["value"] = p.Text("after") }),
+        [AdminEvents.ArtworkChanged] = p => Entry(p, "appearance.artwork_changed", "artwork_slot", p.Text("key"), "admin",
+            after: new JsonObject { ["url"] = p.Text("url"), ["reset"] = p.Flag("reset") }),
         [AdminEvents.ComplaintResolved] = p => Entry(p, "complaint.resolved", "complaint", Subject(p, "complaintId"),
             after: new JsonObject { ["ticket"] = p.Text("ticketNumber"), ["verified"] = p.Flag("verified"), ["againstId"] = p.Id("againstId") }),
         [VerificationEvents.DocumentApproved] = p => Entry(p, "verification.item_approved", "provider", Subject(p, "providerId"), Verifier,

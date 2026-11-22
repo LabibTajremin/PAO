@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 540" width="720" height="540">
+  <title>empty.search</title>
+  <circle cx="360" cy="297" r="194" fill="#F0EEDF"/>
+  <circle cx="500" cy="167" r="49" fill="#B1BFE2"/>
+  <rect x="133" y="416" width="454" height="27" rx="14" fill="#B1BFE2"/>
+  <path d="M274 416V275l86 -76 86 76V416z" fill="#FFFFFF" stroke="#16336F" stroke-width="8" stroke-linejoin="round"/>
+  <rect x="336" y="340" width="49" height="76" fill="#B1BFE2" stroke="#16336F" stroke-width="5"/>
+  <circle cx="419" cy="243" r="12" fill="#FE492A"/>
+</svg>

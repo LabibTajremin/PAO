@@ -43,7 +43,8 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 Update round 2026-11 — P23. P22 is done locally (all tasks; Dart gate green, backend unit and
 gates green; backend integration tests and e2e still to run on CI). Owner asked to batch: push after
-P23, then fix CI in one go. Next: P23 task 1.
+P23, then fix CI in one go. Done: P23 tasks 1–3 (artwork slots, tagline, seed pipeline; ADR-0040). Next: task 4 (admin
+Appearance › Illustrations page, Settings › Brand tagline), then task 5 (`PaoArtwork` in the apps).
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -85,6 +86,15 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-22 P23.1–3 Admin-managed artwork (ADR-0040): `admin.artwork_slots`, the 16 slots of §5
+  in code, `GET /v1/admin/artwork`, `PUT|DELETE /v1/admin/artwork/{slotKey}` (size, ratio ±2%,
+  alpha, SVG sanitised; refusals name the expected size), audited as `admin.ArtworkChanged`; files
+  in the public bucket under `artwork/`. Public `GET /v1/app-config?app=` returns the tagline and
+  the app's artwork with an ETag (304 on match). Setting `brand.tagline` (type `tagline`).
+  `migrate seed` uploads `database/seed/artwork/*.svg` (placeholders from `design/illustrations/`
+  until P24) and keeps slots an admin replaced. SVG and PNG/WebP checks moved to
+  `PAO.Infrastructure/Images`.
 
 - 2026-11-22 P22.4–5 `PaoServiceIcon` and `PaoIconTile.service` in `pao_ui` (library SVGs or the
   uploaded icon as a one-colour mask, tools icon as fallback) replace `catalogIcon()` in the customer

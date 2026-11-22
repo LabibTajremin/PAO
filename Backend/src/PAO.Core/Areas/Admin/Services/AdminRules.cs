@@ -43,6 +43,7 @@ public static partial class AdminRules
         "boolean" => Booleans.Contains(value),
         "string" => true,
         "geojson" => value.Length == 0 || IsArea(value),
+        Tagline.Type => Tagline.Parse(value) is not null,
         _ => false,
     };
 

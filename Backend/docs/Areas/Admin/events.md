@@ -8,6 +8,7 @@ least once ([events and jobs](../../Architecture/events-and-jobs.md)).
 | `admin.ComplaintCreated` | `complaintId`, `ticketNumber`, `bookingId`, `reporterId`, `reporterRole`, `againstId` |
 | `admin.ComplaintResolved` | the above with `verified`, `actorId` |
 | `admin.SettingChanged` | `key`, `before`, `after`, `actorId` |
+| `admin.ArtworkChanged` | `key`, `url` (empty when the slot fell back to the bundled seed), `reset`, `actorId` |
 
 Consumed by `AdminStatsSubscriptions` (handler name = event name), each once per event:
 `identity.AccountCreated`, `identity.AccountStatusChanged`, `identity.AccountDeleted`,

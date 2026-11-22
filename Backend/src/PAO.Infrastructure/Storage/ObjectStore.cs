@@ -124,11 +124,17 @@ public sealed class ObjectStore : IDisposable
         }, cancellationToken);
     }
 
-    /// <summary>The one folder of the public bucket devices read without signing: catalog icons (ADR-0039).</summary>
-    public const string PublicFolder = "catalog-icons";
+    /// <summary>The public bucket's folder of catalog icons (ADR-0039).</summary>
+    public const string IconFolder = "catalog-icons";
+
+    /// <summary>The public bucket's folder of app artwork (ADR-0040).</summary>
+    public const string ArtworkFolder = "artwork";
+
+    /// <summary>The folders of the public bucket devices read without signing; nothing else is readable.</summary>
+    public static readonly IReadOnlyList<string> PublicFolders = [IconFolder, ArtworkFolder];
 
     /// <summary>
-    /// Lets anyone read objects under <see cref="PublicFolder"/> in `bucket`, and nothing else;
+    /// Lets anyone read objects under <see cref="PublicFolders"/> in `bucket`, and nothing else;
     /// setting it again replaces the bucket's policy with the same one.
     /// </summary>
     public Task AllowPublicRead(string bucket, CancellationToken cancellationToken) =>
@@ -136,9 +142,17 @@ public sealed class ObjectStore : IDisposable
         {
             BucketName = bucket,
             Policy = $$"""
-                {"Version":"2012-10-17","Statement":[{"Sid":"PublicCatalogIcons","Effect":"Allow","Principal":{"AWS":["*"]},"Action":["s3:GetObject"],"Resource":["arn:aws:s3:::{{bucket}}/{{PublicFolder}}/*"]}]}
+                {"Version":"2012-10-17","Statement":[{"Sid":"PublicAppAssets","Effect":"Allow","Principal":{"AWS":["*"]},"Action":["s3:GetObject"],"Resource":[{{string.Join(",", PublicFolders.Select(f => $"\"arn:aws:s3:::{bucket}/{f}/*\""))}}]}]}
                 """,
         }, cancellationToken);
+
+    /// <summary>
+    /// Where devices read the public bucket, without a trailing slash: `Storage:PublicBaseUrl`
+    /// (a CDN in front of it), else the public endpoint and the bucket name.
+    /// </summary>
+    public static string PublicBase(StorageOptions s) => string.IsNullOrEmpty(s.PublicBaseUrl)
+        ? $"{(string.IsNullOrEmpty(s.PublicEndpoint) ? s.Endpoint : s.PublicEndpoint).TrimEnd('/')}/{s.BucketPublic}"
+        : s.PublicBaseUrl.TrimEnd('/');
 
     /// <summary>Checks that storage answers and the bucket exists, for readiness.</summary>
     public Task Ping(string bucket, CancellationToken cancellationToken) =>
