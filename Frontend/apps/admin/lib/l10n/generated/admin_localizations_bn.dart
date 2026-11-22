@@ -1226,9 +1226,6 @@ class AdminL10nBn extends AdminL10n {
   String get catalogIconKey => 'আইকন কী';
 
   @override
-  String get catalogPickIcon => 'পরিচিত আইকন বেছে নিন';
-
-  @override
   String get catalogSortOrder => 'সাজানোর ক্রম';
 
   @override
@@ -1786,4 +1783,56 @@ class AdminL10nBn extends AdminL10n {
 
   @override
   String get shellDarkMode => 'ডার্ক মোড';
+
+  @override
+  String get iconChoose => 'আইকন বেছে নিন';
+
+  @override
+  String get iconUseLibrary => 'লাইব্রেরির আইকন ব্যবহার করুন';
+
+  @override
+  String get iconRules =>
+      'লাইব্রেরির আইকন, অথবা আপনার নিজের: ১০০ KB পর্যন্ত SVG, অথবা স্বচ্ছ পটভূমির বর্গাকার PNG বা WebP, কমপক্ষে ৯৬ × ৯৬ এবং ২০০ KB পর্যন্ত। অ্যাপ এটি অ্যাকসেন্ট রঙে দেখায়।';
+
+  @override
+  String get iconTabLibrary => 'লাইব্রেরি';
+
+  @override
+  String get iconTabUpload => 'আপলোড';
+
+  @override
+  String get iconTabLink => 'লিংক থেকে';
+
+  @override
+  String get iconSearch => 'আইকন খুঁজুন';
+
+  @override
+  String get iconUploadButton => 'ফাইল বেছে নিন';
+
+  @override
+  String get iconLinkLabel => 'আইকনের লিংক (https)';
+
+  @override
+  String get iconLinkAdd => 'যোগ করুন';
+
+  @override
+  String get iconUploaded => 'আপলোড করা আইকন';
+
+  @override
+  String get iconErrorTooLarge => 'ফাইলটি অনেক বড়।';
+
+  @override
+  String get iconErrorUnreadable => 'এটি পড়া যায় এমন SVG, PNG বা WebP নয়।';
+
+  @override
+  String get iconErrorNotSquare => 'ছবিটি বর্গাকার হতে হবে।';
+
+  @override
+  String get iconErrorTooSmall => 'ছবিটি কমপক্ষে ৯৬ × ৯৬ হতে হবে।';
+
+  @override
+  String get iconErrorOpaque => 'ছবির পটভূমি স্বচ্ছ হতে হবে।';
+
+  @override
+  String get iconErrorLink => 'লিংক থেকে নামানো গেল না।';
 }

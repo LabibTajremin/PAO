@@ -20,4 +20,13 @@ abstract interface class CatalogRepository {
 
   /// Sets a new price in paisa; it applies to bookings made from now on.
   Future<PriceVersion> changePrice(String subServiceId, int amount);
+
+  /// The library icon keys the apps ship.
+  Future<List<String>> iconLibrary();
+
+  /// Stores an uploaded icon file of [contentType]; returns its URL.
+  Future<String> uploadIcon(String contentType, List<int> file);
+
+  /// Downloads the icon at [url] once and stores it; returns its URL.
+  Future<String> iconFromLink(String url);
 }

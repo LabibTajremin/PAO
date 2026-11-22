@@ -26,6 +26,7 @@ export 'src/widgets/money_text.dart';
 export 'src/widgets/otp_input.dart';
 export 'src/widgets/rating_stars.dart';
 export 'src/widgets/segmented.dart';
+export 'src/widgets/service_icon.dart';
 export 'src/widgets/session_views.dart';
 export 'src/widgets/sheet.dart';
 export 'src/widgets/skeleton.dart';

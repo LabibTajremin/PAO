@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pao_admin/features/catalog/presentation/catalog_cubits.dart';
-import 'package:pao_admin/features/catalog/presentation/icon_key_field.dart';
+import 'package:pao_admin/features/catalog/presentation/icon_field.dart';
 import 'package:pao_admin/features/catalog/presentation/localized_fields.dart';
 import 'package:pao_admin/shared/form_checks.dart';
 import 'package:pao_admin/shared/form_dialog.dart';
@@ -33,6 +33,7 @@ class _CategoryDialog extends StatefulWidget {
 class _CategoryDialogState extends State<_CategoryDialog> {
   late final _name = LocalizedInput(widget.category?.name);
   late final _icon = TextEditingController(text: widget.category?.iconKey);
+  late final _iconUrl = ValueNotifier<String?>(widget.category?.iconUrl);
   late final _sort = TextEditingController(
     text: '${widget.category?.sortOrder ?? 0}',
   );
@@ -45,6 +46,7 @@ class _CategoryDialogState extends State<_CategoryDialog> {
   void dispose() {
     _name.dispose();
     _icon.dispose();
+    _iconUrl.dispose();
     _sort.dispose();
     super.dispose();
   }
@@ -62,6 +64,7 @@ class _CategoryDialogState extends State<_CategoryDialog> {
       CategoryInput(
         name: _name.value,
         iconKey: _icon.text.trim(),
+        iconUrl: _iconUrl.value,
         sortOrder: int.parse(_sort.text.trim()),
         published: _published,
       ),
@@ -88,7 +91,12 @@ class _CategoryDialogState extends State<_CategoryDialog> {
     final t = context.t;
     return [
       LocalizedFields(input: _name, label: t.catalogName, errors: _errors),
-      IconKeyField(controller: _icon, error: _errors.of(_icon)),
+      IconField(
+        keyController: _icon,
+        url: _iconUrl,
+        icons: widget.cubit.repository,
+        error: _errors.of(_icon),
+      ),
       PaoTextField(
         label: t.catalogSortOrder,
         controller: _sort,

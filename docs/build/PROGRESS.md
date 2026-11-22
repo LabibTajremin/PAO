@@ -29,8 +29,8 @@ it first and continues from **Current task**.
 | P19 Repo layout & docs | done | #12 | |
 | P20 Palette, type & theme | done | #12 | ADR-0038 |
 | P21 Logo & app icons | done | #12 | update round 2026-11 |
-| P22 Service icons | in_progress | #12 | update round 2026-11 |
-| P23 Artwork & tagline | todo | — | update round 2026-11 |
+| P22 Service icons | done | #12 | update round 2026-11 |
+| P23 Artwork & tagline | in_progress | — | update round 2026-11 |
 | P24 Illustrations, welcome & sign-in | todo | — | update round 2026-11 |
 | P25 Scheduled delivery | todo | — | update round 2026-11 |
 | P26 Free Dhaka map | todo | — | update round 2026-11 |
@@ -41,10 +41,9 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P22. Done: tasks 1–3 (icon library; backend `iconUrl`, icon library,
-upload and from-link endpoints, ADR-0039; seed keys). Next: task 4 (admin icon picker), then task 5
-(apps). Owner asked to batch: push after 2–3 phases, then fix CI in one go. Owner checks open: P18
-heads-up on real phones, P21 icons on installed builds.
+Update round 2026-11 — P23. P22 is done locally (all tasks; Dart gate green, backend unit and
+gates green; backend integration tests and e2e still to run on CI). Owner asked to batch: push after
+P23, then fix CI in one go. Next: P23 task 1.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -86,6 +85,11 @@ with `main` so `main` stays green after the merge. Preflight is not done yet.
 None.
 
 ## Log
+
+- 2026-11-22 P22.4–5 `PaoServiceIcon` and `PaoIconTile.service` in `pao_ui` (library SVGs or the
+  uploaded icon as a one-colour mask, tools icon as fallback) replace `catalogIcon()` in the customer
+  and admin apps. Admin `IconField`: key field, light and dark previews, rules, and a picker with
+  Library (search), Upload (`file_selector`) and From link tabs; refusals shown by reason.
 
 - 2026-11-21 P22.2–3 Icons on the backend (ADR-0039): `iconUrl` on categories and services
   (`catalog/0003_icon_urls.sql`), only pointing at our public bucket's `catalog-icons/`;

@@ -9,6 +9,9 @@ class CatalogCubit extends LoadCubit<CatalogTree> {
 
   final CatalogRepository _repo;
 
+  /// The repository, for the icon field's uploads.
+  CatalogRepository get repository => _repo;
+
   /// Creates ([id] null) or updates a category, then reloads the tree.
   Future<AppFailure?> saveCategory(String? id, CategoryInput input) async {
     final failure = await attempt(() => _repo.saveCategory(id, input));
@@ -39,7 +42,7 @@ class ServiceEditorCubit extends LoadCubit<ServiceEditorData> {
 
   final CatalogRepository _repo;
 
-  /// The repository, for the price panel.
+  /// The repository, for the price panel and the icon field's uploads.
   CatalogRepository get repository => _repo;
 
   // There is no single-service endpoint; the admin tree is small and cached.

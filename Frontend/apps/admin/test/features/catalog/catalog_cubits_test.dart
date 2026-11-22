@@ -47,6 +47,16 @@ class _Catalog implements CatalogRepository {
         () =>
             PriceVersion.fromJson(fx.priceVersion(amount, '2026-10-09T00:00Z')),
       );
+
+  @override
+  Future<List<String>> iconLibrary() => throw UnimplementedError();
+
+  @override
+  Future<String> uploadIcon(String contentType, List<int> file) =>
+      throw UnimplementedError();
+
+  @override
+  Future<String> iconFromLink(String url) => throw UnimplementedError();
 }
 
 void main() {

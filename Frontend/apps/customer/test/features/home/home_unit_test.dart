@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pao_api/pao_api.dart';
 import 'package:pao_core/pao_core.dart';
@@ -6,7 +5,6 @@ import 'package:pao_customer/features/home/domain/home_repository.dart';
 import 'package:pao_customer/features/home/presentation/home_cubit.dart';
 import 'package:pao_customer/features/home/presentation/home_parts.dart';
 import 'package:pao_customer/l10n/generated/customer_localizations_en.dart';
-import 'package:pao_customer/shared/catalog_icons.dart';
 
 import '../service/fixtures.dart';
 
@@ -86,10 +84,5 @@ void main() {
     expect((await cubit.switchTo('a3'))!.code, 'NETWORK');
     expect(repo.loads, 1);
     expect(const HomeData(addresses: [], categories: []).current, isNull);
-  });
-
-  test('catalog icons fall back to a tool', () {
-    expect(catalogIcon('bolt'), Icons.bolt);
-    expect(catalogIcon('unknown'), Icons.handyman_outlined);
   });
 }

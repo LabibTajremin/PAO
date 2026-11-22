@@ -6,7 +6,6 @@ import 'package:pao_customer/app/routes.dart';
 import 'package:pao_customer/app/services.dart';
 import 'package:pao_customer/features/search/data/api_search_repository.dart';
 import 'package:pao_customer/features/search/presentation/search_cubit.dart';
-import 'package:pao_customer/shared/catalog_icons.dart';
 import 'package:pao_customer/shared/formats.dart';
 import 'package:pao_customer/shared/l10n.dart';
 import 'package:pao_customer/shared/price_units.dart';
@@ -101,7 +100,11 @@ class _Results extends StatelessWidget {
           Text(context.t.searchServices, style: heading),
         for (final s in results.services)
           PaoListRow(
-            leading: PaoIconTile(icon: catalogIcon(s.iconKey), size: 40),
+            leading: PaoIconTile.service(
+              iconKey: s.iconKey,
+              iconUrl: s.iconUrl,
+              size: 40,
+            ),
             title: context.local(s.name),
             onTap: () => context.push(Routes.serviceOf(s.id)),
           ),

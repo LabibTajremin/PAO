@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pao_admin/app/routes.dart';
 import 'package:pao_admin/features/catalog/presentation/catalog_cubits.dart';
-import 'package:pao_admin/features/catalog/presentation/icon_key_field.dart';
+import 'package:pao_admin/features/catalog/presentation/icon_field.dart';
 import 'package:pao_admin/features/catalog/presentation/localized_fields.dart';
 import 'package:pao_admin/features/catalog/presentation/service_choices.dart';
 import 'package:pao_admin/features/catalog/presentation/service_draft.dart';
@@ -85,8 +85,10 @@ class _ServiceFormState extends State<ServiceForm> {
             label: t.catalogName,
             errors: _draft.errors,
           ),
-          IconKeyField(
-            controller: _draft.icon,
+          IconField(
+            keyController: _draft.icon,
+            url: _draft.iconUrl,
+            icons: widget.cubit.repository,
             error: _draft.errors.of(_draft.icon),
           ),
           PaoTextField(

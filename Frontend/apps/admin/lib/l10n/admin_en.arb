@@ -1694,10 +1694,6 @@
   "@catalogIconKey": {
     "description": "Field label"
   },
-  "catalogPickIcon": "Pick a known icon",
-  "@catalogPickIcon": {
-    "description": "Icon menu tooltip"
-  },
   "catalogSortOrder": "Sort order",
   "@catalogSortOrder": {
     "description": "Field label; smaller shows first"
@@ -2462,5 +2458,73 @@
   "shellDarkMode": "Dark mode",
   "@shellDarkMode": {
     "description": "Sidebar switch between the light (default) and dark theme."
+  },
+  "iconChoose": "Choose icon",
+  "@iconChoose": {
+    "description": "Button that opens the icon picker"
+  },
+  "iconUseLibrary": "Use the library icon",
+  "@iconUseLibrary": {
+    "description": "Button that drops an uploaded icon"
+  },
+  "iconRules": "A library icon, or your own: SVG up to 100 KB, or a square PNG or WebP with a transparent background, at least 96 × 96 and up to 200 KB. Apps draw it in the accent colour.",
+  "@iconRules": {
+    "description": "Rules under the icon field"
+  },
+  "iconTabLibrary": "Library",
+  "@iconTabLibrary": {
+    "description": "Icon picker tab"
+  },
+  "iconTabUpload": "Upload",
+  "@iconTabUpload": {
+    "description": "Icon picker tab"
+  },
+  "iconTabLink": "From link",
+  "@iconTabLink": {
+    "description": "Icon picker tab"
+  },
+  "iconSearch": "Search icons",
+  "@iconSearch": {
+    "description": "Icon library search field"
+  },
+  "iconUploadButton": "Choose a file",
+  "@iconUploadButton": {
+    "description": "Button that opens the file chooser"
+  },
+  "iconLinkLabel": "Icon link (https)",
+  "@iconLinkLabel": {
+    "description": "Field label"
+  },
+  "iconLinkAdd": "Add",
+  "@iconLinkAdd": {
+    "description": "Button that downloads the linked icon"
+  },
+  "iconUploaded": "Uploaded icon",
+  "@iconUploaded": {
+    "description": "Shown instead of the key when an uploaded icon is set"
+  },
+  "iconErrorTooLarge": "The file is too large.",
+  "@iconErrorTooLarge": {
+    "description": "Icon refused"
+  },
+  "iconErrorUnreadable": "This is not a readable SVG, PNG or WebP.",
+  "@iconErrorUnreadable": {
+    "description": "Icon refused"
+  },
+  "iconErrorNotSquare": "The image must be square.",
+  "@iconErrorNotSquare": {
+    "description": "Icon refused"
+  },
+  "iconErrorTooSmall": "The image must be at least 96 × 96.",
+  "@iconErrorTooSmall": {
+    "description": "Icon refused"
+  },
+  "iconErrorOpaque": "The image needs a transparent background.",
+  "@iconErrorOpaque": {
+    "description": "Icon refused"
+  },
+  "iconErrorLink": "The link could not be downloaded.",
+  "@iconErrorLink": {
+    "description": "Icon refused"
   }
 }

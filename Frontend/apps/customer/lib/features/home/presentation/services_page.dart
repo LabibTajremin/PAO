@@ -6,7 +6,6 @@ import 'package:pao_core/pao_core.dart';
 import 'package:pao_customer/app/routes.dart';
 import 'package:pao_customer/app/services.dart';
 import 'package:pao_customer/features/home/data/api_home_repository.dart';
-import 'package:pao_customer/shared/catalog_icons.dart';
 import 'package:pao_customer/shared/formats.dart';
 import 'package:pao_customer/shared/l10n.dart';
 import 'package:pao_ui/pao_ui.dart';
@@ -66,7 +65,11 @@ class _List extends StatelessWidget {
         ),
         for (final s in c.services)
           PaoListRow(
-            leading: PaoIconTile(icon: catalogIcon(s.iconKey), size: 40),
+            leading: PaoIconTile.service(
+              iconKey: s.iconKey,
+              iconUrl: s.iconUrl,
+              size: 40,
+            ),
             title: context.local(s.name),
             onTap: () => context.push(Routes.serviceOf(s.id)),
           ),

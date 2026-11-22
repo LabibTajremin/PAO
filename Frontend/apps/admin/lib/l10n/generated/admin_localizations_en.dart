@@ -1241,9 +1241,6 @@ class AdminL10nEn extends AdminL10n {
   String get catalogIconKey => 'Icon key';
 
   @override
-  String get catalogPickIcon => 'Pick a known icon';
-
-  @override
   String get catalogSortOrder => 'Sort order';
 
   @override
@@ -1800,4 +1797,56 @@ class AdminL10nEn extends AdminL10n {
 
   @override
   String get shellDarkMode => 'Dark mode';
+
+  @override
+  String get iconChoose => 'Choose icon';
+
+  @override
+  String get iconUseLibrary => 'Use the library icon';
+
+  @override
+  String get iconRules =>
+      'A library icon, or your own: SVG up to 100 KB, or a square PNG or WebP with a transparent background, at least 96 × 96 and up to 200 KB. Apps draw it in the accent colour.';
+
+  @override
+  String get iconTabLibrary => 'Library';
+
+  @override
+  String get iconTabUpload => 'Upload';
+
+  @override
+  String get iconTabLink => 'From link';
+
+  @override
+  String get iconSearch => 'Search icons';
+
+  @override
+  String get iconUploadButton => 'Choose a file';
+
+  @override
+  String get iconLinkLabel => 'Icon link (https)';
+
+  @override
+  String get iconLinkAdd => 'Add';
+
+  @override
+  String get iconUploaded => 'Uploaded icon';
+
+  @override
+  String get iconErrorTooLarge => 'The file is too large.';
+
+  @override
+  String get iconErrorUnreadable => 'This is not a readable SVG, PNG or WebP.';
+
+  @override
+  String get iconErrorNotSquare => 'The image must be square.';
+
+  @override
+  String get iconErrorTooSmall => 'The image must be at least 96 × 96.';
+
+  @override
+  String get iconErrorOpaque => 'The image needs a transparent background.';
+
+  @override
+  String get iconErrorLink => 'The link could not be downloaded.';
 }

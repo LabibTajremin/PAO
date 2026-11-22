@@ -11,6 +11,7 @@ class ServiceDraft {
     : categoryId = service?.categoryId ?? categoryId,
       name = LocalizedInput(service?.name),
       icon = TextEditingController(text: service?.iconKey),
+      iconUrl = ValueNotifier(service?.iconUrl),
       radius = TextEditingController(
         text: '${service?.searchRadiusM ?? defaultRadiusM}',
       ),
@@ -41,6 +42,9 @@ class ServiceDraft {
 
   /// Icon key.
   final TextEditingController icon;
+
+  /// The uploaded or linked icon, null for the library icon.
+  final ValueNotifier<String?> iconUrl;
 
   /// How far to look for providers, in metres.
   final TextEditingController radius;
@@ -91,6 +95,7 @@ class ServiceDraft {
     categoryId: categoryId!,
     name: name.value,
     iconKey: icon.text.trim(),
+    iconUrl: iconUrl.value,
     serviceModel: model,
     requiredLevel: level,
     searchRadiusM: int.parse(radius.text.trim()),
@@ -108,6 +113,7 @@ class ServiceDraft {
   void dispose() {
     name.dispose();
     icon.dispose();
+    iconUrl.dispose();
     radius.dispose();
     for (final item in checklist) {
       item.dispose();

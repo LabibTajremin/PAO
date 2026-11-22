@@ -2371,12 +2371,6 @@ abstract class AdminL10n {
   /// **'Icon key'**
   String get catalogIconKey;
 
-  /// Icon menu tooltip
-  ///
-  /// In en, this message translates to:
-  /// **'Pick a known icon'**
-  String get catalogPickIcon;
-
   /// Field label; smaller shows first
   ///
   /// In en, this message translates to:
@@ -3420,6 +3414,108 @@ abstract class AdminL10n {
   /// In en, this message translates to:
   /// **'Dark mode'**
   String get shellDarkMode;
+
+  /// Button that opens the icon picker
+  ///
+  /// In en, this message translates to:
+  /// **'Choose icon'**
+  String get iconChoose;
+
+  /// Button that drops an uploaded icon
+  ///
+  /// In en, this message translates to:
+  /// **'Use the library icon'**
+  String get iconUseLibrary;
+
+  /// Rules under the icon field
+  ///
+  /// In en, this message translates to:
+  /// **'A library icon, or your own: SVG up to 100 KB, or a square PNG or WebP with a transparent background, at least 96 × 96 and up to 200 KB. Apps draw it in the accent colour.'**
+  String get iconRules;
+
+  /// Icon picker tab
+  ///
+  /// In en, this message translates to:
+  /// **'Library'**
+  String get iconTabLibrary;
+
+  /// Icon picker tab
+  ///
+  /// In en, this message translates to:
+  /// **'Upload'**
+  String get iconTabUpload;
+
+  /// Icon picker tab
+  ///
+  /// In en, this message translates to:
+  /// **'From link'**
+  String get iconTabLink;
+
+  /// Icon library search field
+  ///
+  /// In en, this message translates to:
+  /// **'Search icons'**
+  String get iconSearch;
+
+  /// Button that opens the file chooser
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a file'**
+  String get iconUploadButton;
+
+  /// Field label
+  ///
+  /// In en, this message translates to:
+  /// **'Icon link (https)'**
+  String get iconLinkLabel;
+
+  /// Button that downloads the linked icon
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get iconLinkAdd;
+
+  /// Shown instead of the key when an uploaded icon is set
+  ///
+  /// In en, this message translates to:
+  /// **'Uploaded icon'**
+  String get iconUploaded;
+
+  /// Icon refused
+  ///
+  /// In en, this message translates to:
+  /// **'The file is too large.'**
+  String get iconErrorTooLarge;
+
+  /// Icon refused
+  ///
+  /// In en, this message translates to:
+  /// **'This is not a readable SVG, PNG or WebP.'**
+  String get iconErrorUnreadable;
+
+  /// Icon refused
+  ///
+  /// In en, this message translates to:
+  /// **'The image must be square.'**
+  String get iconErrorNotSquare;
+
+  /// Icon refused
+  ///
+  /// In en, this message translates to:
+  /// **'The image must be at least 96 × 96.'**
+  String get iconErrorTooSmall;
+
+  /// Icon refused
+  ///
+  /// In en, this message translates to:
+  /// **'The image needs a transparent background.'**
+  String get iconErrorOpaque;
+
+  /// Icon refused
+  ///
+  /// In en, this message translates to:
+  /// **'The link could not be downloaded.'**
+  String get iconErrorLink;
 }
 
 class _AdminL10nDelegate extends LocalizationsDelegate<AdminL10n> {
