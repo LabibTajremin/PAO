@@ -85,6 +85,7 @@ public sealed class AppearanceApiTests(MigratedDatabase database) : IClassFixtur
             new { contentType = "image/svg+xml", data = Convert.ToBase64String(Svg(1170, 1200)) });
         Assert.Equal(HttpStatusCode.Forbidden, forbidden.Status);
         var uploaded = await Upload("offline", "image/svg+xml", Svg(720, 540));
+        Assert.True(uploaded.Status == HttpStatusCode.OK, uploaded.Body.ToString());
         Assert.Equal((true, 2), (uploaded.Body.GetProperty("replaced").GetBoolean(), uploaded.Body.GetProperty("version").GetInt32()));
         var url = uploaded.Body.GetProperty("url").GetString()!;
         using (var anonymous = new HttpClient())
@@ -133,5 +134,8 @@ public sealed class AppearanceApiTests(MigratedDatabase database) : IClassFixtur
         var tooLong = await api.Call(HttpMethod.Put, "/v1/admin/settings/brand.tagline", admin,
             new { value = $$"""{"en":"{{new string('x', 41)}}","bn":"x"}""" });
         Assert.Equal(HttpStatusCode.UnprocessableEntity, tooLong.Status);
+        // The tests of this class share one database; the others read the seed line.
+        await api.Call(HttpMethod.Put, "/v1/admin/settings/brand.tagline", admin,
+            new { value = """{"en":"Ask for it. PAO it.","bn":"যা চাও, তাই PAO"}""" });
     }
 }

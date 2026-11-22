@@ -18,7 +18,7 @@ IdempotencyKey:
 AddressId: { name: addressId, in: path, required: true, schema: { type: string, format: uuid } }
 ServiceId: { name: serviceId, in: path, required: true, schema: { type: string, format: uuid } }
 CategoryId: { name: categoryId, in: path, required: true, schema: { type: string, format: uuid } }
-SlotKey: { name: slotKey, in: path, required: true, schema: { type: string, pattern: "^[a-z0-9]+(\\.[a-z0-9]+)+$", maxLength: 60, example: customer.signin.hero } }
+SlotKey: { name: slotKey, in: path, required: true, schema: { type: string, pattern: "^[a-z0-9]+(\\.[a-z0-9]+)*$", maxLength: 60, example: customer.signin.hero } }
 BannerId: { name: bannerId, in: path, required: true, schema: { type: string, format: uuid } }
 SubServiceId: { name: subServiceId, in: path, required: true, schema: { type: string, format: uuid } }
 ProviderId: { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }
