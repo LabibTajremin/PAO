@@ -23,7 +23,7 @@ class ArtworkUpload {
   @JsonKey(name: r'contentType', required: true, includeIfNull: false)
   final ArtworkUploadContentTypeEnum contentType;
 
-  /// The file
+  /// The file, base64.
   @JsonKey(name: r'data', required: true, includeIfNull: false)
   final String data;
 

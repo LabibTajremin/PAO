@@ -23,7 +23,7 @@ class IconUpload {
   @JsonKey(name: r'contentType', required: true, includeIfNull: false)
   final IconUploadContentTypeEnum contentType;
 
-  /// The file
+  /// The file, base64.
   @JsonKey(name: r'data', required: true, includeIfNull: false)
   final String data;
 

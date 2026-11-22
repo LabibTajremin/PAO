@@ -7461,8 +7461,7 @@ components:
           format: byte
           minLength: 4
           maxLength: 273068
-          description: The file
-          base64.: null
+          description: The file, base64.
     CatalogIcon:
       type: object
       description: A stored icon; put iconUrl on a category or service.
@@ -7557,5 +7556,4 @@ components:
           format: byte
           minLength: 4
           maxLength: 1092268
-          description: The file
-          base64.: null
+          description: The file, base64.
