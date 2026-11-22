@@ -1559,8 +1559,11 @@ CREATE TABLE admin.artwork_slots (
     updated_at   timestamptz NOT NULL DEFAULT now(),
     updated_by   uuid
 );$pao_stmt$;
-    EXECUTE $pao_stmt$-- The tagline on splash, sign-in, share text and receipts (06-update §6).
-INSERT INTO admin.settings (key, value, type, description) VALUES
+    EXECUTE $pao_stmt$-- The tagline on splash, sign-in, share text and receipts (06-update §6), a type of its own.
+ALTER TABLE admin.settings DROP CONSTRAINT settings_type_check;$pao_stmt$;
+    EXECUTE $pao_stmt$ALTER TABLE admin.settings ADD CONSTRAINT settings_type_check
+    CHECK (type IN ('integer', 'number', 'boolean', 'string', 'geojson', 'tagline'));$pao_stmt$;
+    EXECUTE $pao_stmt$INSERT INTO admin.settings (key, value, type, description) VALUES
     ('brand.tagline', '{"en":"Ask for it. PAO it.","bn":"যা চাও, তাই PAO"}', 'tagline',
      'Tagline in English and Bangla, at most 40 characters each');$pao_stmt$;
     INSERT INTO goose_admin (version_id, is_applied) VALUES (4, true);
