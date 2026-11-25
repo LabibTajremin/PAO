@@ -31,8 +31,8 @@ it first and continues from **Current task**.
 | P21 Logo & app icons | done | #12 | update round 2026-11 |
 | P22 Service icons | done | #12 | update round 2026-11 |
 | P23 Artwork & tagline | done | #12 | update round 2026-11 |
-| P24 Illustrations, welcome & sign-in | in_progress | — | update round 2026-11 |
-| P25 Scheduled delivery | todo | — | update round 2026-11 |
+| P24 Illustrations, welcome & sign-in | done | — | update round 2026-11 |
+| P25 Scheduled delivery | in_progress | — | update round 2026-11 |
 | P26 Free Dhaka map | todo | — | update round 2026-11 |
 | P27 Motion | todo | — | update round 2026-11 |
 | P28 Design polish & handover | todo | — | update round 2026-11 |
@@ -42,8 +42,8 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 ## Current task
 
 Update round 2026-11 — P24. P22 and P23 are done and pushed together (owner asked to batch);
-that batch is green on 08a5735. P24 task 1 is done (local commit); next: P24 task 2, the sign-in
-pages of both apps per the demo (no social sign-in). P24 and P25 are pushed together.
+that batch is green on 08a5735. P24 is done in local commits (not pushed yet); next: P25 (homemade
+food, catering, monthly bazar). P24 and P25 are pushed together.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -86,6 +86,15 @@ None.
 
 ## Log
 
+- 2026-11-25 P24.2–5 Sign-in per the demo in both apps: `PaoSignInLayout` (hero slot in the top 55%,
+  ivory wordmark and the admin tagline over it, rounded sheet with "Welcome to PAO" / "Welcome to
+  PAO Partner", the +880 field and "Send OTP", terms line; no social sign-in). The +880 prefix now
+  shows before the field is focused. Onboarding uses `PaoOnboardingSlide` with the three slots of
+  each app; the language chooser stays. `LookScope` hands the look to shared views: network
+  failures in `ViewStateView` and `PagedView` show the `offline` scene, bookings and the partner
+  feed show their empty scenes, booking confirmed and rate-the-customer show the success scenes.
+  Goldens of the sign-in and welcome slide at 393 × 852 in light/dark × en/bn. Heroes keep their
+  top-left clear for the wordmark; the scenes stand on a rounded mound so they sit on any page.
 - 2026-11-25 P24.1 The 16 seed illustrations, drawn by `design/illustrations/draw.py` (motifs) and
   `scenes.py` (one scene per slot): navy heroes with ivory line art over a Dhaka skyline with
   Sangsad Bhaban, transparent scenes outlined in Primary elsewhere (rickshaw, tiffin, jute bag,

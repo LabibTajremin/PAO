@@ -34,7 +34,11 @@ class HomeFeed extends StatelessWidget {
         const SizedBox(height: PaoSpace.lg),
         Text(t.homeRequests, style: title),
         if (summary.requests.isEmpty)
-          PaoEmptyState(title: t.homeNoRequests, message: t.homeNoRequestsBody)
+          PaoEmptyState(
+            title: t.homeNoRequests,
+            message: t.homeNoRequestsBody,
+            illustration: const ScopedArtwork('empty.jobs'),
+          )
         else
           for (final r in summary.requests)
             _job(context, r, Routes.requestOf(r.id)),

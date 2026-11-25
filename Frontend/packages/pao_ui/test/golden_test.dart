@@ -7,9 +7,9 @@ import 'package:pao_ui/pao_ui.dart';
 
 import 'support/harness.dart';
 
-// The bundled families, so the images show real Inter and Bangla text
-// instead of the test font's boxes.
-Future<void> _loadFonts() async {
+/// The bundled families, so the images show real Inter and Bangla text
+/// instead of the test font's boxes.
+Future<void> loadFonts() async {
   for (final (family, file) in [
     (PaoFonts.latin, 'fonts/Inter-Variable.ttf'),
     (PaoFonts.bangla, 'fonts/NotoSansBengali-Variable.ttf'),
@@ -22,7 +22,7 @@ Future<void> _loadFonts() async {
 }
 
 void main() {
-  setUpAll(_loadFonts);
+  setUpAll(loadFonts);
 
   for (final dark in [false, true]) {
     for (final lang in ['en', 'bn']) {

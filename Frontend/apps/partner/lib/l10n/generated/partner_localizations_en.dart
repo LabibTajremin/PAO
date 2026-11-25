@@ -19,6 +19,16 @@ class PartnerL10nEn extends PartnerL10n {
   String get authPhoneBody => 'We will text you a code to sign in.';
 
   @override
+  String get authWelcome => 'Welcome to PAO Partner';
+
+  @override
+  String get authSendOtp => 'Send OTP';
+
+  @override
+  String get authTermsNote =>
+      'By continuing you agree to PAO\'s partner terms and privacy policy.';
+
+  @override
   String get authPhoneLabel => 'Mobile number';
 
   @override

@@ -19,6 +19,12 @@ class CustomerL10nBn extends CustomerL10n {
   String get authPhoneBody => 'সাইন ইনের জন্য আমরা একটি কোড পাঠাব।';
 
   @override
+  String get authWelcome => 'পাও-তে স্বাগতম';
+
+  @override
+  String get authSendOtp => 'OTP পাঠান';
+
+  @override
   String get authPhoneLabel => 'মোবাইল নম্বর';
 
   @override

@@ -19,6 +19,16 @@ class PartnerL10nBn extends PartnerL10n {
   String get authPhoneBody => 'সাইন ইনের জন্য আমরা একটি কোড পাঠাব।';
 
   @override
+  String get authWelcome => 'পাও পার্টনারে স্বাগতম';
+
+  @override
+  String get authSendOtp => 'OTP পাঠান';
+
+  @override
+  String get authTermsNote =>
+      'এগিয়ে গেলে আপনি পাও-এর পার্টনার শর্তাবলি ও গোপনীয়তা নীতিতে সম্মত হচ্ছেন।';
+
+  @override
   String get authPhoneLabel => 'মোবাইল নম্বর';
 
   @override

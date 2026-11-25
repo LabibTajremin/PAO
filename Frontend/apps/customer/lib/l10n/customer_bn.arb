@@ -3,6 +3,8 @@
   "appTitle": "পাও",
   "authPhoneTitle": "আপনার ফোন নম্বর কত?",
   "authPhoneBody": "সাইন ইনের জন্য আমরা একটি কোড পাঠাব।",
+  "authWelcome": "পাও-তে স্বাগতম",
+  "authSendOtp": "OTP পাঠান",
   "authPhoneLabel": "মোবাইল নম্বর",
   "authPhoneInvalid": "১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন।",
   "authSendCode": "কোড পাঠান",

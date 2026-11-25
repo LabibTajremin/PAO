@@ -31,7 +31,7 @@ void main() {
   ) async {
     final h = await start(tester);
     await tester.enterText(find.byType(TextField), '123');
-    await tester.tap(find.text('Send code'));
+    await tester.tap(find.text('Send OTP'));
     await h.settle(tester);
     expect(
       find.text('Enter an 11-digit Bangladeshi mobile number.'),
@@ -42,7 +42,7 @@ void main() {
       (s) => s.reply(503, apiError('INTERNAL')),
     );
     await tester.enterText(find.byType(TextField), '1712345678');
-    await tester.tap(find.text('Send code'));
+    await tester.tap(find.text('Send OTP'));
     await h.settle(tester);
     expect(
       find.text('Our service had a problem. Please try again.'),
@@ -52,7 +52,7 @@ void main() {
       '/v1/auth/otp/request',
       (s) => s.reply(202, {'expiresInSeconds': 300, 'resendAfterSeconds': 30}),
     );
-    await tester.tap(find.text('Send code'));
+    await tester.tap(find.text('Send OTP'));
     await h.settle(tester);
     expect(find.text('We sent it to 01712345678.'), findsOneWidget);
     expect(h.bodyOf('/v1/auth/otp/request'), {
@@ -100,7 +100,9 @@ void main() {
 
   testWidgets('the terms link opens the legal page signed out', (tester) async {
     final h = await start(tester);
-    await tester.tap(find.text('Read the terms and privacy policy'));
+    final link = find.text('Read the terms and privacy policy');
+    await tester.ensureVisible(link);
+    await tester.tap(link);
     await h.settle(tester);
     expect(find.byType(LegalPage), findsOneWidget);
   });

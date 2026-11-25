@@ -193,10 +193,10 @@ def svg(w, h, body, background=None):
 
 
 def ground(w, h, y, fill, line):
-    """The soft ground; only its top edge is outlined so the scene fades out at the sides."""
-    top = f"M0 {y}q{w * .25} -{h * .03} {w * .5} 0t{w * .5} 0"
-    return (f'<path d="{top}V{h}H0z" fill="{fill}"/>'
-            f'<path d="{top}" fill="none" stroke="{line}" stroke-width="{w * .004:.1f}"/>')
+    """A soft rounded mound under the scene, so it sits on any page colour."""
+    return (f'<path d="M{w * .04:.1f} {y + h * .1:.1f}q{w * .02:.1f} -{h * .1:.1f} {w * .2:.1f} -{h * .1:.1f}'
+            f'h{w * .52:.1f}q{w * .18:.1f} 0 {w * .2:.1f} {h * .1:.1f}z" fill="{fill}" stroke="{line}" '
+            f'stroke-width="{w * .004:.1f}" stroke-linejoin="round"/>')
 
 if __name__ == "__main__":
     import sys

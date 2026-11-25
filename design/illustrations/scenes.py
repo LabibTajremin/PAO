@@ -18,10 +18,11 @@ def skyline(w, base, line, fill, scale=1.0):
 def hero(w, h, people, services):
     """Navy hero: ivory line art, white service bubbles floating over the city."""
     base = h * .78
-    body = [cloud(w * .08, h * .1, 220, G), cloud(w * .66, h * .16, 260, G), skyline(w, base, G, P)]
+    # The top-left stays clear: the app sets the wordmark and tagline there.
+    body = [cloud(w * .64, h * .08, 260, G), skyline(w, base, G, P)]
     body.append(f'<rect x="0" y="{base}" width="{w}" height="{h - base}" fill="{INK}"/>')
     body.append(kantha(0, base + 30, w, G))
-    spots = [(.16, .3), (.38, .2), (.62, .27), (.85, .36), (.27, .45), (.74, .5)]
+    spots = [(.56, .3), (.8, .2), (.8, .44), (.18, .46), (.36, .36), (.62, .5)]
     for (fx, fy), key in zip(spots, services):
         body.append(bubble(w * fx, h * fy, 62, key, G, W))
     body.append(people(base))
@@ -95,10 +96,10 @@ def success(slot):
 def admin_hero():
     w, h = 1600, 1200
     base = h * .78
-    body = [cloud(w * .1, h * .1, 260, G), cloud(w * .7, h * .14, 300, G), skyline(w, base, G, P, 1.3),
+    body = [cloud(w * .7, h * .1, 300, G), skyline(w, base, G, P, 1.3),
             f'<rect x="0" y="{base}" width="{w}" height="{h - base}" fill="{INK}"/>', kantha(0, base + 36, w, G)]
     for i, key in enumerate(["cleaning", "plumbing", "electrician", "salon", "homemade-food", "bazar", "ac", "tutoring"]):
-        body.append(bubble(w * (.12 + i * .108), h * (.32 if i % 2 else .44), 58, key, G, W))
+        body.append(bubble(w * (.12 + i * .108), h * (.36 if i % 2 else .48), 58, key, G, W))
     return svg(w, h, "".join(body), P)
 
 

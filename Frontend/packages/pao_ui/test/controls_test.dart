@@ -43,7 +43,7 @@ void main() {
     await tester.enterText(find.byType(TextField), '17');
     expect(typed, '17');
     expect(find.text('Wrong number'), findsOneWidget);
-    expect(find.text('+880 '), findsOneWidget);
+    expect(find.text('+880'), findsOneWidget);
     await pumpPao(
       tester,
       const PaoTextField(label: 'Password', obscureText: true),

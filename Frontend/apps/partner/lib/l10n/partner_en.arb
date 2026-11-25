@@ -12,6 +12,18 @@
   "@authPhoneBody": {
     "description": "M03 body."
   },
+  "authWelcome": "Welcome to PAO Partner",
+  "@authWelcome": {
+    "description": "M03 sheet heading"
+  },
+  "authSendOtp": "Send OTP",
+  "@authSendOtp": {
+    "description": "M03 button"
+  },
+  "authTermsNote": "By continuing you agree to PAO's partner terms and privacy policy.",
+  "@authTermsNote": {
+    "description": "M03 consent note"
+  },
   "authPhoneLabel": "Mobile number",
   "@authPhoneLabel": {
     "description": "Phone field label."

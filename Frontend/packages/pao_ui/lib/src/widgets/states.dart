@@ -108,11 +108,15 @@ class PaoErrorState extends StatelessWidget {
     required this.message,
     this.onRetry,
     this.retryLabel = 'Try again',
+    this.illustration,
     super.key,
   });
 
   /// Heading.
   final String title;
+
+  /// A picture instead of the icon, such as the offline scene.
+  final Widget? illustration;
 
   /// Translated failure message.
   final String message;
@@ -126,6 +130,7 @@ class PaoErrorState extends StatelessWidget {
   @override
   Widget build(BuildContext context) => PaoMessageState(
     icon: Icons.cloud_off_outlined,
+    illustration: illustration,
     title: title,
     message: message,
     action: onRetry == null

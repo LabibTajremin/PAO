@@ -19,6 +19,12 @@ class CustomerL10nEn extends CustomerL10n {
   String get authPhoneBody => 'We will text you a code to sign in.';
 
   @override
+  String get authWelcome => 'Welcome to PAO';
+
+  @override
+  String get authSendOtp => 'Send OTP';
+
+  @override
   String get authPhoneLabel => 'Mobile number';
 
   @override

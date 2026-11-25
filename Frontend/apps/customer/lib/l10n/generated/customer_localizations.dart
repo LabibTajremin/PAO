@@ -116,6 +116,18 @@ abstract class CustomerL10n {
   /// **'We will text you a code to sign in.'**
   String get authPhoneBody;
 
+  /// C03 sheet heading
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to PAO'**
+  String get authWelcome;
+
+  /// C03 button
+  ///
+  /// In en, this message translates to:
+  /// **'Send OTP'**
+  String get authSendOtp;
+
   /// Phone field label
   ///
   /// In en, this message translates to:

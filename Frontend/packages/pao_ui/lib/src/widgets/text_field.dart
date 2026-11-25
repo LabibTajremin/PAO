@@ -93,12 +93,27 @@ class _PaoTextFieldState extends State<PaoTextField> {
           decoration: InputDecoration(
             hintText: widget.hint,
             errorText: widget.error,
-            prefixText: widget.prefix == null ? null : '${widget.prefix} ',
+            // A prefix icon, unlike prefixText, shows before the field is
+            // focused, so the +880 is visible as in the owner's demo.
+            prefixIcon: _prefix(context),
+            prefixIconConstraints: const BoxConstraints(),
             suffixIcon: _eye(context),
             semanticCounterText: widget.label,
           ),
         ),
       ],
+    );
+  }
+
+  Widget? _prefix(BuildContext context) {
+    final prefix = widget.prefix;
+    if (prefix == null) return null;
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(
+        start: PaoSpace.lg,
+        end: PaoSpace.xs,
+      ),
+      child: Text(prefix, style: Theme.of(context).textTheme.bodyLarge),
     );
   }
 }

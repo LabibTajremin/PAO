@@ -116,6 +116,24 @@ abstract class PartnerL10n {
   /// **'We will text you a code to sign in.'**
   String get authPhoneBody;
 
+  /// M03 sheet heading
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to PAO Partner'**
+  String get authWelcome;
+
+  /// M03 button
+  ///
+  /// In en, this message translates to:
+  /// **'Send OTP'**
+  String get authSendOtp;
+
+  /// M03 consent note
+  ///
+  /// In en, this message translates to:
+  /// **'By continuing you agree to PAO\'s partner terms and privacy policy.'**
+  String get authTermsNote;
+
   /// Phone field label.
   ///
   /// In en, this message translates to:

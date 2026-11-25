@@ -91,8 +91,10 @@ class _PaoAppState extends State<PaoApp> {
         supportedLocales: PaoLocales.all,
         localizationsDelegates: partnerDelegates,
         routerConfig: _router,
-        builder: (_, child) =>
-            OfflineBanner(watcher: widget.services.online, child: child!),
+        builder: (_, child) => LookScope(
+          look: widget.services.look.look,
+          child: OfflineBanner(watcher: widget.services.online, child: child!),
+        ),
       );
     },
   );

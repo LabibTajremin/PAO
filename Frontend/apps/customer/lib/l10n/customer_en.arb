@@ -12,6 +12,14 @@
   "@authPhoneBody": {
     "description": "C03 explanation"
   },
+  "authWelcome": "Welcome to PAO",
+  "@authWelcome": {
+    "description": "C03 sheet heading"
+  },
+  "authSendOtp": "Send OTP",
+  "@authSendOtp": {
+    "description": "C03 button"
+  },
   "authPhoneLabel": "Mobile number",
   "@authPhoneLabel": {
     "description": "Phone field label"

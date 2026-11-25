@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pao_core/src/appearance/look_scope.dart';
 import 'package:pao_core/src/state/paging/paged_cubit.dart';
 import 'package:pao_l10n/pao_l10n.dart';
 import 'package:pao_ui/pao_ui.dart';
@@ -50,6 +51,7 @@ class PagedView<T> extends StatelessWidget {
       message: failureMessage(common, s.failure!.code),
       onRetry: context.read<PagedCubit<T>>().load,
       retryLabel: common.actionRetry,
+      illustration: failureArtwork(s.failure),
     );
   }
 
