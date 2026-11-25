@@ -4,6 +4,7 @@ import 'package:pao_admin/features/catalog/presentation/icon_library_tab.dart';
 import 'package:pao_admin/features/catalog/presentation/icon_source_tabs.dart';
 import 'package:pao_admin/shared/image_file.dart';
 import 'package:pao_admin/shared/l10n.dart';
+import 'package:pao_ui/pao_ui.dart';
 
 /// What the admin picked: a library key, or the URL of an icon they uploaded
 /// or linked, which the backend has stored.
@@ -14,7 +15,7 @@ Future<IconPick?> showIconPicker(
   BuildContext context, {
   required CatalogRepository icons,
   ImageFileChooser chooseFile = chooseImageFile,
-}) => showDialog<IconPick>(
+}) => showPaoDialog<IconPick>(
   context: context,
   builder: (_) => IconPickerDialog(icons: icons, chooseFile: chooseFile),
 );

@@ -41,6 +41,11 @@ class OtpPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(PaoSpace.xl),
         children: [
+          // The sign-in art rises into this strip and fades.
+          const PaoHero.vanish(
+            tag: PaoHero.signInArt,
+            child: SizedBox(height: PaoSpace.xl),
+          ),
           Text(context.t.authOtpSentTo(phone)),
           const SizedBox(height: PaoSpace.xxl),
           PaoOtpInput(onCompleted: cubit.verify, hasError: s.wrongCode),

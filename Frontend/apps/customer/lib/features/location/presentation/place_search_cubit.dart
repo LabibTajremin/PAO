@@ -8,7 +8,7 @@ class PlaceSearchCubit extends Cubit<List<Place>> {
   PlaceSearchCubit(
     this._places, {
     this.language = 'en',
-    Duration delay = const Duration(milliseconds: 300),
+    Duration delay = Debouncer.typingPause,
   }) : _debounce = Debouncer(delay),
        super(const []);
 

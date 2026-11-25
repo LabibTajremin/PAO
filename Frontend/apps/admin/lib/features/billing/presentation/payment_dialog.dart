@@ -4,6 +4,7 @@ import 'package:pao_admin/shared/l10n.dart';
 import 'package:pao_admin/shared/ops/formats.dart';
 import 'package:pao_admin/shared/ops/layout.dart';
 import 'package:pao_api/pao_api.dart';
+import 'package:pao_ui/pao_ui.dart';
 
 /// What the admin chose to do with a submission.
 enum PaymentAction {
@@ -21,7 +22,7 @@ enum PaymentAction {
 Future<PaymentAction?> showPaymentDialog(
   BuildContext context,
   PaymentSubmission payment,
-) => showDialog<PaymentAction>(
+) => showPaoDialog<PaymentAction>(
   context: context,
   builder: (context) => _PaymentDialog(payment: payment),
 );

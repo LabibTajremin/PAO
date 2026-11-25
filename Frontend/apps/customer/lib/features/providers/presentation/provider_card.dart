@@ -26,7 +26,14 @@ class ProviderCardView extends StatelessWidget {
         onTap: onTap,
         child: Row(
           children: [
-            PaoAvatar(name: card.name, image: photoOf(card.photoUrl), size: 56),
+            PaoHero(
+              tag: PaoHero.provider(card.id),
+              child: PaoAvatar(
+                name: card.name,
+                image: photoOf(card.photoUrl),
+                size: 56,
+              ),
+            ),
             const SizedBox(width: PaoSpace.md),
             Expanded(
               child: Column(

@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pao_ui/src/tokens/motion.dart';
 
 /// The admin-replaceable illustration slots and their size in pixels
 /// (06-update §5, ADR-0040). Each app bundles the seed of each slot.
@@ -61,7 +62,7 @@ class PaoArtwork extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: size.width / size.height,
         child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 250),
+          duration: PaoMotion.fast,
           child: KeyedSubtree(key: ValueKey(file), child: picture),
         ),
       ),

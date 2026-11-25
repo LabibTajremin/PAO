@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pao_ui/src/motion/hero.dart';
 import 'package:pao_ui/src/tokens/accent.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
@@ -56,7 +57,10 @@ class PaoSignInLayout extends StatelessWidget {
                 SizedBox(
                   height: heroHeight,
                   width: box.maxWidth,
-                  child: _Hero(hero: hero, tagline: tagline),
+                  child: _Hero(
+                    hero: PaoHero(tag: PaoHero.signInArt, child: hero),
+                    tagline: tagline,
+                  ),
                 ),
                 ConstrainedBox(
                   constraints: BoxConstraints(

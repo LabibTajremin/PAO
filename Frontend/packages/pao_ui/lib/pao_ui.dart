@@ -2,11 +2,22 @@
 library;
 
 export 'src/gallery.dart';
+export 'src/motion/count_up.dart';
+export 'src/motion/entrance.dart';
+export 'src/motion/fade_through.dart';
+export 'src/motion/hero.dart';
+export 'src/motion/opening.dart';
+export 'src/motion/opening_logo.dart';
+export 'src/motion/overlays.dart';
+export 'src/motion/pressable.dart';
+export 'src/motion/success_mark.dart';
+export 'src/motion/transitions.dart';
 export 'src/placeholder_page.dart';
 export 'src/theme.dart';
 export 'src/tokens/accent.dart';
 export 'src/tokens/colors.dart';
 export 'src/tokens/metrics.dart';
+export 'src/tokens/motion.dart';
 export 'src/tokens/shape.dart';
 export 'src/tokens/typography.dart';
 export 'src/widgets/app_bar.dart';

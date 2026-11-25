@@ -37,10 +37,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   Future<void> _next(int count) => _index == count - 1
       ? _finish()
-      : _pages.nextPage(
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeOut,
-        );
+      : _pages.nextPage(duration: PaoMotion.page, curve: PaoMotion.enter);
 
   @override
   Widget build(BuildContext context) {

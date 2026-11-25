@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pao_ui/src/motion/pressable.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
 import 'package:pao_ui/src/tokens/shape.dart';
@@ -33,21 +34,24 @@ class PaoCard extends StatelessWidget {
     final c = context.pao;
     final lifted = !c.dark && !highlighted;
     final edge = highlighted ? c.selectedFill : c.hairline;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: PaoShape.leaf,
-        boxShadow: lifted ? PaoColors.cardShadow : null,
-      ),
-      child: Material(
-        color: highlighted ? c.tintFill : c.card,
-        shape: RoundedRectangleBorder(
+    return PaoPressable(
+      enabled: onTap != null,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
           borderRadius: PaoShape.leaf,
-          side: lifted ? BorderSide.none : BorderSide(color: edge),
+          boxShadow: lifted ? PaoColors.cardShadow : null,
         ),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onTap,
-          child: Padding(padding: padding, child: child),
+        child: Material(
+          color: highlighted ? c.tintFill : c.card,
+          shape: RoundedRectangleBorder(
+            borderRadius: PaoShape.leaf,
+            side: lifted ? BorderSide.none : BorderSide(color: edge),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onTap,
+            child: Padding(padding: padding, child: child),
+          ),
         ),
       ),
     );

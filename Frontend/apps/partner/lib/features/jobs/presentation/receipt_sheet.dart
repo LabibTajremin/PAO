@@ -18,14 +18,18 @@ Future<void> showReceipt(
 }) => showPaoSheet<void>(
   context,
   title: context.t.jobsReceiptTitle,
-  child: BlocProvider(
-    create: (_) => LoadCubit<Receipt>(() => repo.receipt(bookingId)).loading(),
-    child: BlocBuilder<LoadCubit<Receipt>, ViewState<Receipt>>(
-      builder: (context, state) => ViewStateView<Receipt>(
-        state: state,
-        onRetry: context.read<LoadCubit<Receipt>>().load,
-        builder: (_, receipt) =>
-            _ReceiptBody(receipt: receipt, tagline: tagline),
+  // Flexible sits above the state view, which cross-fades its own child.
+  child: Flexible(
+    child: BlocProvider(
+      create: (_) =>
+          LoadCubit<Receipt>(() => repo.receipt(bookingId)).loading(),
+      child: BlocBuilder<LoadCubit<Receipt>, ViewState<Receipt>>(
+        builder: (context, state) => ViewStateView<Receipt>(
+          state: state,
+          onRetry: context.read<LoadCubit<Receipt>>().load,
+          builder: (_, receipt) =>
+              _ReceiptBody(receipt: receipt, tagline: tagline),
+        ),
       ),
     ),
   ),
@@ -38,35 +42,33 @@ class _ReceiptBody extends StatelessWidget {
   final String tagline;
 
   @override
-  Widget build(BuildContext context) => Flexible(
-    child: SingleChildScrollView(
-      child: Stack(
-        children: [
-          const Positioned.fill(child: Center(child: PaoWatermark())),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const PaoLogo(height: 36),
-              const SizedBox(height: PaoSpace.sm),
-              Text(
-                '${receipt.number} · ${context.local(receipt.serviceName)}',
-                style: Theme.of(context).textTheme.titleSmall,
+  Widget build(BuildContext context) => SingleChildScrollView(
+    child: Stack(
+      children: [
+        const Positioned.fill(child: Center(child: PaoWatermark())),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const PaoLogo(height: 36),
+            const SizedBox(height: PaoSpace.sm),
+            Text(
+              '${receipt.number} · ${context.local(receipt.serviceName)}',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            Text(context.when(receipt.completedAt)),
+            Text(context.t.jobsCustomer(receipt.customerName)),
+            ItemRows(items: receipt.items, total: receipt.total),
+            Text(context.t.jobsPaidCash),
+            const SizedBox(height: PaoSpace.lg),
+            Center(
+              child: Text(
+                tagline,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
-              Text(context.when(receipt.completedAt)),
-              Text(context.t.jobsCustomer(receipt.customerName)),
-              ItemRows(items: receipt.items, total: receipt.total),
-              Text(context.t.jobsPaidCash),
-              const SizedBox(height: PaoSpace.lg),
-              Center(
-                child: Text(
-                  tagline,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     ),
   );
 }

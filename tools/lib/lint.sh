@@ -32,6 +32,20 @@ check_file_sizes() {
   ok "file sizes within limits"
 }
 
+# check_motion keeps animation timing on the PaoMotion tokens (P27): no raw millisecond
+# durations or Flutter curves in feature or widget code. Timers in seconds are not motion.
+check_motion() {
+  local hits
+  hits=$(grep -rnE 'Duration\((milliseconds|microseconds):|Curves\.' --include='*.dart' \
+    "$FRONTEND"/apps/*/lib/features "$FRONTEND"/apps/*/lib/app "$FRONTEND"/packages/pao_ui/lib/src/widgets \
+    "$FRONTEND"/packages/pao_ui/lib/src/motion "$FRONTEND"/packages/pao_core/lib 2>/dev/null || true)
+  if [[ -n "$hits" ]]; then
+    printf '%s\n' "${hits//"$PAO_ROOT"\//}" >&2
+    die "raw animation timing: use PaoMotion (docs/guides/motion.md)"
+  fi
+  ok "motion timing on PaoMotion tokens"
+}
+
 # lint_backend builds the .NET solution with warnings as errors, checks its formatting and
 # runs the architecture, authorisation, size and docs gates (journeys included).
 lint_backend() {
@@ -58,7 +72,7 @@ lint_dart() {
 
 lint_shell() {
   require_tool shellcheck "apt install shellcheck"
-  shellcheck "$PAO_ROOT/pao" "$PAO_ROOT/tools/pao" "$PAO_ROOT"/tools/*.sh "$PAO_ROOT"/tools/lib/*.sh \
+  shellcheck "$PAO_ROOT/pao" "$PAO_ROOT/tools/pao" "$PAO_ROOT"/tools/*.sh "$PAO_ROOT"/tools/places/*.sh "$PAO_ROOT"/tools/lib/*.sh \
     "$PAO_ROOT"/tools/hooks/* "$INFRA"/e2e/*.sh "$APP_JOURNEYS"/*.sh \
     "$BACKEND"/scripts/*.sh || die "shellcheck failed"
   ok "shellcheck"
@@ -68,10 +82,11 @@ lint_shell() {
 cmd_lint() {
   case "${1:-all}" in
     backend) lint_backend ;;
-    dart) check_file_sizes && lint_dart ;;
+    dart) check_file_sizes && check_motion && lint_dart ;;
     shell) lint_shell ;;
     sizes) check_file_sizes ;;
-    all) check_file_sizes && lint_shell && lint_backend && lint_dart ;;
-    *) die "usage: pao lint [backend|dart|shell|sizes|all]" ;;
+    motion) check_motion ;;
+    all) check_file_sizes && check_motion && lint_shell && lint_backend && lint_dart ;;
+    *) die "usage: pao lint [backend|dart|shell|sizes|motion|all]" ;;
   esac
 }

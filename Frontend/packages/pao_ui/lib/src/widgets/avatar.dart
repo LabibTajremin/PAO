@@ -25,13 +25,18 @@ class PaoAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accent = context.pao.accent;
+    final photo = image;
+    // Decoded at the size drawn, so a large upload never fills memory.
+    final pixels = (size * MediaQuery.devicePixelRatioOf(context)).round();
     return Semantics(
       label: name,
       image: true,
       child: CircleAvatar(
         radius: size / 2,
         backgroundColor: accent.soft,
-        foregroundImage: image,
+        foregroundImage: photo == null
+            ? null
+            : ResizeImage.resizeIfNeeded(pixels, pixels, photo),
         child: ExcludeSemantics(
           child: Text(
             initials(name),

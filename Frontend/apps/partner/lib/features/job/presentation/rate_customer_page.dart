@@ -64,6 +64,7 @@ class _RateCustomerPageState extends State<RateCustomerPage> {
             child: LookArtwork(widget.services.look.look, 'success.job'),
           ),
         ),
+        const Center(child: PaoSuccessMark(size: 48)),
         const SizedBox(height: PaoSpace.lg),
         Text(context.t.jobRateQuestion),
         const SizedBox(height: PaoSpace.lg),

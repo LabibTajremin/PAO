@@ -105,28 +105,32 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
-    return PaoCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  context.local(booking.serviceName),
-                  style: text.titleLarge,
+    return PaoHero(
+      tag: PaoHero.booking(booking.id),
+      surface: true,
+      child: PaoCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    context.local(booking.serviceName),
+                    style: text.titleLarge,
+                  ),
                 ),
-              ),
-              PaoBadge(
-                label: bookingStatusLabel(context.t, booking.status),
-                tone: bookingStatusTone(booking.status),
-              ),
-            ],
-          ),
-          Text(booking.number, style: text.bodySmall),
-          const SizedBox(height: PaoSpace.md),
-          Text(context.when(booking.scheduledAt ?? booking.createdAt)),
-        ],
+                PaoBadge(
+                  label: bookingStatusLabel(context.t, booking.status),
+                  tone: bookingStatusTone(booking.status),
+                ),
+              ],
+            ),
+            Text(booking.number, style: text.bodySmall),
+            const SizedBox(height: PaoSpace.md),
+            Text(context.when(booking.scheduledAt ?? booking.createdAt)),
+          ],
+        ),
       ),
     );
   }

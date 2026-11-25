@@ -96,6 +96,7 @@ class _Body extends StatelessWidget {
           child: LookArtwork(services.look.look, 'success.booking'),
         ),
       ),
+      const Center(child: PaoSuccessMark(size: 48)),
       const SizedBox(height: PaoSpace.md),
       Text(
         context.t.bookingConfirmedHeading,

@@ -38,11 +38,7 @@ class CategoryGrid extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              PaoIconTile.service(
-                iconKey: c.iconKey,
-                iconUrl: c.iconUrl,
-                size: 64,
-              ),
+              _icon(c),
               const SizedBox(height: PaoSpace.sm),
               Text(
                 context.local(c.name),
@@ -57,4 +53,16 @@ class CategoryGrid extends StatelessWidget {
         ),
     ],
   );
+}
+
+// A category of one service opens that service, so its icon flies there.
+Widget _icon(Category c) {
+  final tile = PaoIconTile.service(
+    iconKey: c.iconKey,
+    iconUrl: c.iconUrl,
+    size: 64,
+  );
+  return c.services.length == 1
+      ? PaoHero(tag: PaoHero.service(c.services.single.id), child: tile)
+      : tile;
 }

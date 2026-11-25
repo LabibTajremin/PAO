@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
-import 'package:pao_ui/src/tokens/shape.dart';
+import 'package:pao_ui/src/tokens/motion.dart';
 
 /// Tabs in a pill, e.g. Upcoming / Past.
 class PaoSegmented<T> extends StatelessWidget {
@@ -34,7 +34,7 @@ class PaoSegmented<T> extends StatelessWidget {
           onTap: () => onChanged(value),
           child: AnimatedContainer(
             duration: PaoMotion.base,
-            curve: PaoMotion.curve,
+            curve: PaoMotion.enter,
             constraints: const BoxConstraints(minHeight: minTapTarget),
             alignment: Alignment.center,
             decoration: BoxDecoration(

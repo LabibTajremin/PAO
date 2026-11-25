@@ -32,7 +32,7 @@ setup() {
 @test "lint, cover with an unknown scope fail with usage" {
   run "$PAO" lint go
   [ "$status" -eq 1 ]
-  [[ "$output" == *"usage: pao lint [backend|dart|shell|sizes|all]"* ]]
+  [[ "$output" == *"usage: pao lint [backend|dart|shell|sizes|motion|all]"* ]]
   run "$PAO" cover go
   [ "$status" -eq 1 ]
   [[ "$output" == *"usage: pao cover [backend|dart|all]"* ]]
@@ -43,6 +43,19 @@ setup() {
     size_limit a/integration_test/c_test.dart; size_limit Backend/A.cs"
   [ "$status" -eq 0 ]
   [ "$output" == "$(printf '200\n300\n300')" ]
+}
+
+@test "motion timing: raw milliseconds and curves fail, seconds and tokens pass" {
+  local fe="$BATS_TEST_TMPDIR/Frontend" lib
+  lib="$fe/apps/x/lib/features/y"
+  mkdir -p "$lib" "$fe/packages/pao_ui/lib/src/widgets"
+  printf 'const a = PaoMotion.base;\nconst t = Duration(seconds: 1);\n' >"$lib/ok.dart"
+  run bash -c ". '$ROOT/tools/lib/common.sh'; . '$ROOT/tools/lib/lint.sh'; FRONTEND='$fe' check_motion"
+  [ "$status" -eq 0 ]
+  printf 'const d = Duration(milliseconds: 250);\n' >"$lib/bad.dart"
+  run bash -c ". '$ROOT/tools/lib/common.sh'; . '$ROOT/tools/lib/lint.sh'; FRONTEND='$fe' check_motion"
+  [ "$status" -ne 0 ]
+  [[ "$output" == *"bad.dart:1"* ]]
 }
 
 @test "the root wrapper runs tools/pao" {

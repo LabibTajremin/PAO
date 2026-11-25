@@ -23,8 +23,12 @@ class PaoApp extends StatefulWidget {
   const PaoApp({
     required this.services,
     this.initial = Routes.dashboard,
+    this.reducedMotion = false,
     super.key,
   });
+
+  /// The browser asks for reduced motion (`prefers-reduced-motion`).
+  final bool reducedMotion;
 
   /// App services.
   final AppServices services;
@@ -66,6 +70,8 @@ class _PaoAppState extends State<PaoApp> {
         supportedLocales: PaoLocales.all,
         localizationsDelegates: adminDelegates,
         routerConfig: _router,
+        builder: (_, child) =>
+            PaoMotionScope(lowEnd: widget.reducedMotion, child: child!),
       );
     },
   );

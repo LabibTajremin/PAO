@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:pao_ui/src/motion/overlays.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
+import 'package:pao_ui/src/tokens/motion.dart';
 import 'package:pao_ui/src/tokens/shape.dart';
 
-/// Shows [child] in a leaf-topped bottom sheet with a drag handle and [title].
+/// Shows [child] in a leaf-topped bottom sheet with a drag handle and [title];
+/// it slides up over [PaoMotion.sheet] while the scrim fades in.
 Future<T?> showPaoSheet<T>(
   BuildContext context, {
   required String title,
@@ -11,6 +14,7 @@ Future<T?> showPaoSheet<T>(
 }) => showModalBottomSheet<T>(
   context: context,
   isScrollControlled: true,
+  sheetAnimationStyle: paoSheetAnimation(context),
   backgroundColor: context.pao.card,
   shape: const RoundedRectangleBorder(borderRadius: PaoShape.sheet),
   builder: (context) => PaoSheet(title: title, child: child),

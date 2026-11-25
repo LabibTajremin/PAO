@@ -16,7 +16,7 @@ Future<void> showRoleDialog(
   required RoleList list,
   required RoleDefinition role,
 }) async {
-  final saved = await showDialog<bool>(
+  final saved = await showPaoDialog<bool>(
     context: context,
     builder: (_) => _RoleDialog(cubit: cubit, list: list, role: role),
   );

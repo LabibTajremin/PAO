@@ -21,39 +21,43 @@ class BookingCard extends StatelessWidget {
     final provider = booking.counterpartName;
     return Padding(
       padding: const EdgeInsets.only(bottom: PaoSpace.md),
-      child: PaoCard(
-        onTap: () => context.push(Routes.booking(booking.id)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    context.local(booking.serviceName),
-                    style: text.titleMedium,
+      child: PaoHero(
+        tag: PaoHero.booking(booking.id),
+        surface: true,
+        child: PaoCard(
+          onTap: () => context.push(Routes.booking(booking.id)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      context.local(booking.serviceName),
+                      style: text.titleMedium,
+                    ),
                   ),
-                ),
-                PaoBadge(
-                  label: bookingStatusLabel(context.t, booking.status),
-                  tone: bookingStatusTone(booking.status),
-                ),
-              ],
-            ),
-            if (provider != null) Text(provider, style: text.bodyMedium),
-            const SizedBox(height: PaoSpace.sm),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    context.when(booking.scheduledAt ?? booking.createdAt),
-                    style: text.bodySmall,
+                  PaoBadge(
+                    label: bookingStatusLabel(context.t, booking.status),
+                    tone: bookingStatusTone(booking.status),
                   ),
-                ),
-                PaoMoneyText(booking.total, style: text.titleSmall),
-              ],
-            ),
-          ],
+                ],
+              ),
+              if (provider != null) Text(provider, style: text.bodyMedium),
+              const SizedBox(height: PaoSpace.sm),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      context.when(booking.scheduledAt ?? booking.createdAt),
+                      style: text.bodySmall,
+                    ),
+                  ),
+                  PaoMoneyText(booking.total, style: text.titleSmall),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

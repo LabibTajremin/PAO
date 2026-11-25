@@ -15,7 +15,7 @@ Future<bool?> showCategoryDialog(
   BuildContext context, {
   required CatalogCubit cubit,
   Category? category,
-}) => showDialog<bool>(
+}) => showPaoDialog<bool>(
   context: context,
   builder: (_) => _CategoryDialog(cubit: cubit, category: category),
 );

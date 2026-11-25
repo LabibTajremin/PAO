@@ -8,6 +8,7 @@ import 'package:pao_admin/app/services.dart';
 import 'package:pao_admin/features/auth/data/session_restore.dart';
 import 'package:pao_core/pao_core.dart';
 import 'package:pao_l10n/pao_l10n.dart';
+import 'package:web/web.dart' as web;
 
 Future<void> main() async {
   // Plain paths (/verification) instead of /#/verification; vercel.json
@@ -33,5 +34,8 @@ Future<void> main() async {
     themeMode: ThemeModeController(await Prefs.open()),
   );
   await restoreSession(services);
-  runApp(PaoApp(services: services));
+  final reduced = web.window
+      .matchMedia('(prefers-reduced-motion: reduce)')
+      .matches;
+  runApp(PaoApp(services: services, reducedMotion: reduced));
 }

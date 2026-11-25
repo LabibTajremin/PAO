@@ -16,7 +16,7 @@ Future<String?> showBannerDialog(
   required BannersCubit cubit,
   required List<Service> services,
   Banner? banner,
-}) => showDialog<String>(
+}) => showPaoDialog<String>(
   context: context,
   builder: (_) =>
       _BannerDialog(cubit: cubit, services: services, banner: banner),

@@ -28,6 +28,7 @@ flutter:
   assets:
     - assets/artwork/
     - assets/brand/
+    - assets/brand/opening/
     - assets/icons/
   fonts:
     - family: Inter

@@ -98,6 +98,17 @@ class _Loaded extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(PaoSpace.lg),
       children: [
+        Center(
+          child: PaoHero(
+            tag: PaoHero.service(service.id),
+            child: PaoIconTile.service(
+              iconKey: service.iconKey,
+              iconUrl: service.iconUrl,
+              size: 64,
+            ),
+          ),
+        ),
+        const SizedBox(height: PaoSpace.md),
         if (service.womenProvidersOnly)
           Padding(
             padding: const EdgeInsets.only(bottom: PaoSpace.md),

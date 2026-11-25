@@ -34,15 +34,15 @@ it first and continues from **Current task**.
 | P24 Illustrations, welcome & sign-in | done | — | update round 2026-11 |
 | P25 Scheduled delivery | done | — | update round 2026-11 |
 | P26 Free Dhaka map | done | — | update round 2026-11 |
-| P27 Motion | in_progress | — | update round 2026-11 |
-| P28 Design polish & handover | todo | — | update round 2026-11 |
+| P27 Motion | done | — | update round 2026-11 |
+| P28 Design polish & handover | in_progress | — | update round 2026-11 |
 
 Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (merged).
 
 ## Current task
 
-Update round 2026-11 — P27 (motion). P26 is committed locally and is pushed together with P27
-(owner asked to batch); then P28 (no deployment: that step is the owner's).
+Update round 2026-11 — P28 (design polish and handover; no deployment: that step is the
+owner's). P26 and P27 were pushed together (owner asked to batch).
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -85,6 +85,17 @@ None.
 
 ## Log
 
+- 2026-11-26 P27 Motion: `PaoMotion` tokens (`./pao lint dart` rejects raw milliseconds and
+  curves), shared-axis push/pop (Cupertino on iOS, fade on the web), tab fade-through,
+  `showPaoSheet`/`showPaoDialog` motion, the cold-start `PaoOpening` (splash-identical first
+  frame, letters settle, routing starts once the session has loaded), heroes, press scale with a
+  light haptic, skeleton cross-fade, first-load list stagger, stepper fill, success check with a
+  dot burst, dashboard count-up. Light motion set for reduced motion, low-RAM Android
+  (`isLowEndDevice`) and `prefers-reduced-motion` on the admin web. Impeller on; avatars decode
+  at display size. Device perf test `integration_test/perf/` + `test_driver/perf_driver.dart`
+  (budgets in `docs/guides/motion.md`). Owner action: run it on the reference low-end phone.
+  Deviations: battery saver is not read (battery_plus conflicts with connectivity_plus over
+  dbus); admin "panels slide" is covered by the route fade only.
 - 2026-11-25 P26 Free Dhaka map (ADR-0042): `customer.places` (pg_trgm + PostGIS) holds Dhaka's
   OpenStreetMap areas, streets, places and addresses; `tools/places/build.sh` makes the file and
   `migrate import-places FILE` replaces the table in one transaction (guide

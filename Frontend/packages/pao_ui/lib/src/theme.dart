@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:pao_ui/src/motion/transitions.dart';
 import 'package:pao_ui/src/theme_parts.dart';
 import 'package:pao_ui/src/tokens/accent.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
@@ -44,6 +45,7 @@ abstract final class PaoTheme {
       fontFamilyFallback: [?fallback],
       materialTapTargetSize: MaterialTapTargetSize.padded,
       extensions: [c],
+      pageTransitionsTheme: paoPageTransitions(web: kIsWeb),
       dividerTheme: DividerThemeData(color: c.hairline, space: 1),
       appBarTheme: AppBarTheme(
         backgroundColor: c.paper,

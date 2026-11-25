@@ -54,6 +54,7 @@ class HomeFeed extends StatelessWidget {
         PaoMoneyText(
           summary.earnedToday,
           style: Theme.of(context).textTheme.headlineSmall,
+          countUp: true,
         ),
         Text(context.t.homeJobsToday(summary.jobsToday)),
       ],

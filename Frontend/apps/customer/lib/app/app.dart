@@ -28,8 +28,16 @@ class PaoApp extends StatefulWidget {
   const PaoApp({
     required this.services,
     this.initial = Routes.splash,
+    this.ready,
+    this.lowEnd = false,
     super.key,
   });
+
+  /// The cold-start load the opening plays over; none skips the opening.
+  final Future<void>? ready;
+
+  /// A low-end phone: the light motion set everywhere.
+  final bool lowEnd;
 
   /// App services.
   final AppServices services;
@@ -91,9 +99,18 @@ class _PaoAppState extends State<PaoApp> {
         supportedLocales: PaoLocales.all,
         localizationsDelegates: customerDelegates,
         routerConfig: _router,
-        builder: (_, child) => LookScope(
-          look: widget.services.look.look,
-          child: OfflineBanner(watcher: widget.services.online, child: child!),
+        builder: (_, child) => PaoMotionScope(
+          lowEnd: widget.lowEnd,
+          child: PaoOpening(
+            ready: widget.ready,
+            child: LookScope(
+              look: widget.services.look.look,
+              child: OfflineBanner(
+                watcher: widget.services.online,
+                child: child!,
+              ),
+            ),
+          ),
         ),
       );
     },

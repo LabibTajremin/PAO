@@ -8,6 +8,7 @@ export 'src/appearance/look_artwork.dart';
 export 'src/appearance/look_scope.dart';
 export 'src/appearance/look_store.dart';
 export 'src/connectivity.dart';
+export 'src/device/device_class.dart';
 export 'src/device/launcher.dart';
 export 'src/device/local_notifications.dart';
 export 'src/device/location.dart';

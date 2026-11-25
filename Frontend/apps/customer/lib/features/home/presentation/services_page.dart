@@ -65,10 +65,13 @@ class _List extends StatelessWidget {
         ),
         for (final s in c.services)
           PaoListRow(
-            leading: PaoIconTile.service(
-              iconKey: s.iconKey,
-              iconUrl: s.iconUrl,
-              size: 40,
+            leading: PaoHero(
+              tag: PaoHero.service(s.id),
+              child: PaoIconTile.service(
+                iconKey: s.iconKey,
+                iconUrl: s.iconUrl,
+                size: 40,
+              ),
             ),
             title: context.local(s.name),
             onTap: () => context.push(Routes.serviceOf(s.id)),

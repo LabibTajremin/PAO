@@ -28,17 +28,20 @@ class PagedView<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       BlocBuilder<PagedCubit<T>, PagedState<T>>(
-        builder: (context, s) => ListView(
-          padding: const EdgeInsets.all(PaoSpace.lg),
-          children: [
-            ...header,
-            if (s.items.isEmpty)
-              _first(context, s)
-            else ...[
-              for (final item in s.items) itemBuilder(context, item),
-              _footer(context, s),
+        builder: (context, s) => PaoEntranceGroup(
+          child: ListView(
+            padding: const EdgeInsets.all(PaoSpace.lg),
+            children: [
+              ...header,
+              if (s.items.isEmpty)
+                _first(context, s)
+              else ...[
+                for (final (i, item) in s.items.indexed)
+                  PaoEntrance(index: i, child: itemBuilder(context, item)),
+                _footer(context, s),
+              ],
             ],
-          ],
+          ),
         ),
       );
 

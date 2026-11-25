@@ -42,7 +42,11 @@ class _Summary extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(range, style: text.bodySmall),
-              PaoMoneyText(summary.total, style: text.headlineMedium),
+              PaoMoneyText(
+                summary.total,
+                style: text.headlineMedium,
+                countUp: true,
+              ),
               Text(
                 context.t.earnJobs(summary.jobs, context.count(summary.jobs)),
               ),

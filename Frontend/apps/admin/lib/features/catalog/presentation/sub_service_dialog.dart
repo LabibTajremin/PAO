@@ -17,7 +17,7 @@ Future<bool?> showSubServiceDialog(
   required ServiceEditorCubit cubit,
   required String serviceId,
   SubService? sub,
-}) => showDialog<bool>(
+}) => showPaoDialog<bool>(
   context: context,
   builder: (_) => _SubServiceDialog(
     cubit: cubit,

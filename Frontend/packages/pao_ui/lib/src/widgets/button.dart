@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:pao_ui/src/motion/pressable.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
+import 'package:pao_ui/src/tokens/motion.dart';
 import 'package:pao_ui/src/tokens/shape.dart';
 
 /// Visual weight of a [PaoButton].
@@ -87,23 +90,34 @@ class PaoButton extends StatelessWidget {
     return Semantics(
       button: true,
       label: loading ? label : null,
-      child: FilledButton(
-        onPressed: loading ? null : onPressed,
-        style: FilledButton.styleFrom(
-          backgroundColor: bg,
-          foregroundColor: fg,
-          disabledBackgroundColor: bg.withValues(alpha: 0.5),
-          disabledForegroundColor: fg.withValues(alpha: 0.7),
-          side: side,
-          minimumSize: Size(expand ? double.infinity : minTapTarget, 52),
-          padding: const EdgeInsets.symmetric(horizontal: PaoSpace.xl),
-          elevation: 0,
-          animationDuration: PaoMotion.fast,
-          shape: const RoundedRectangleBorder(borderRadius: PaoShape.leaf),
-          textStyle: Theme.of(context).textTheme.labelLarge,
+      child: PaoPressable(
+        enabled: !loading && onPressed != null,
+        child: FilledButton(
+          onPressed: loading || onPressed == null ? null : _press,
+          style: FilledButton.styleFrom(
+            backgroundColor: bg,
+            foregroundColor: fg,
+            disabledBackgroundColor: bg.withValues(alpha: 0.5),
+            disabledForegroundColor: fg.withValues(alpha: 0.7),
+            side: side,
+            minimumSize: Size(expand ? double.infinity : minTapTarget, 52),
+            padding: const EdgeInsets.symmetric(horizontal: PaoSpace.xl),
+            elevation: 0,
+            animationDuration: PaoMotion.fast,
+            shape: const RoundedRectangleBorder(borderRadius: PaoShape.leaf),
+            textStyle: Theme.of(context).textTheme.labelLarge,
+          ),
+          child: _content(fg),
         ),
-        child: _content(fg),
       ),
     );
+  }
+
+  // Primary actions confirm with a light tap of the motor.
+  void _press() {
+    if (variant == PaoButtonVariant.primary) {
+      HapticFeedback.lightImpact().ignore();
+    }
+    onPressed!();
   }
 }

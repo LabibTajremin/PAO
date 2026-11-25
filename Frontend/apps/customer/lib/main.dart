@@ -9,6 +9,7 @@ import 'package:pao_customer/app/app.dart';
 import 'package:pao_customer/app/services.dart';
 import 'package:pao_customer/features/location/data/api_places.dart';
 import 'package:pao_l10n/pao_l10n.dart';
+import 'package:pao_ui/pao_ui.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,13 +41,24 @@ Future<void> main() async {
   );
   // The cached look shows at once; the network check must not delay launch.
   unawaited(services.look.start());
-  await sessions.restore();
-  if (sessions.signedIn) {
+  // The opening plays while the session loads; routing starts once it has.
+  await precacheOpening();
+  runApp(
+    PaoApp(
+      services: services,
+      ready: _load(services),
+      lowEnd: await isLowEndDevice(),
+    ),
+  );
+}
+
+Future<void> _load(AppServices services) async {
+  await services.sessions.restore();
+  if (services.sessions.signedIn) {
     // Offline at launch is fine: the guards re-check once these load.
-    await Future.wait([permissions.load(), services.gate.load()])
+    await Future.wait([services.permissions.load(), services.gate.load()])
         .catchError((Object _) => <void>[]);
   }
-  runApp(PaoApp(services: services));
 }
 
 /// FCM is configured with `--dart-define`; without it the app runs without

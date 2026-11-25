@@ -1,4 +1,3 @@
-import 'package:flutter/animation.dart';
 import 'package:flutter/painting.dart';
 
 /// Corner radii (ADR-0038): calm, even corners. The names come from the
@@ -25,16 +24,4 @@ abstract final class PaoShape {
   static const BorderRadius sheet = BorderRadius.vertical(
     top: Radius.circular(sheetRound),
   );
-}
-
-/// Motion stays subtle: short, eased transitions only.
-abstract final class PaoMotion {
-  /// State changes on small controls such as chips.
-  static const fast = Duration(milliseconds: 150);
-
-  /// Larger surfaces such as segments and boxes.
-  static const base = Duration(milliseconds: 200);
-
-  /// The easing for every PAO transition.
-  static const Curve curve = Curves.easeOutCubic;
 }
