@@ -1,9 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 540" width="720" height="540">
-  <title>empty.search</title>
-  <circle cx="360" cy="297" r="194" fill="#F0EEDF"/>
-  <circle cx="500" cy="167" r="49" fill="#B1BFE2"/>
-  <rect x="133" y="416" width="454" height="27" rx="14" fill="#B1BFE2"/>
-  <path d="M274 416V275l86 -76 86 76V416z" fill="#FFFFFF" stroke="#16336F" stroke-width="8" stroke-linejoin="round"/>
-  <rect x="336" y="340" width="49" height="76" fill="#B1BFE2" stroke="#16336F" stroke-width="5"/>
-  <circle cx="419" cy="243" r="12" fill="#FE492A"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 540" width="720" height="540"><path d="M0 442.79999999999995q180.0 -16.2 360.0 0t360.0 0V540H0z" fill="#F0EEDF"/><path d="M0 442.79999999999995q180.0 -16.2 360.0 0t360.0 0" fill="none" stroke="#16336F" stroke-width="2.9"/><circle cx="324.0" cy="243.0" r="120" fill="#FFFFFF" stroke="#16336F" stroke-width="14"/><path d="M409.0 328.0l90 90" stroke="#16336F" stroke-width="26" stroke-linecap="round"/><path d="M80.2 415.4h70.0l-8.4 49.0h-53.2z" fill="#B1BFE2" stroke="#16336F" stroke-width="5.6" stroke-linejoin="round"/><path d="M115.2 415.4q-49.0 -42.0 -14.0 -91.0q14.0 49.0 14.0 91.0z" fill="#B1BFE2" stroke="#16336F" stroke-width="5.6" stroke-linejoin="round"/><path d="M115.2 415.4q49.0 -42.0 14.0 -91.0q-14.0 49.0 -14.0 91.0z" fill="#B1BFE2" stroke="#16336F" stroke-width="5.6" stroke-linejoin="round"/><path d="M115.2 415.4q14.7 -42.0 4.2 -91.0q-4.2 49.0 -4.2 91.0z" fill="#B1BFE2" stroke="#16336F" stroke-width="5.6" stroke-linejoin="round"/></svg>

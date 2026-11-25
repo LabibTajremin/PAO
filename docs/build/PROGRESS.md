@@ -42,9 +42,8 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 ## Current task
 
 Update round 2026-11 — P24. P22 and P23 are done and pushed together (owner asked to batch);
-CI on that push decides whether anything needs a fix before P24 starts. Next: P24 task 1 (draw the
-illustrations into `design/illustrations/`, copy to `Backend/database/seed/artwork/` and
-`pao_ui/assets/artwork/`).
+that batch is green on 08a5735. P24 task 1 is done (local commit); next: P24 task 2, the sign-in
+pages of both apps per the demo (no social sign-in). P24 and P25 are pushed together.
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -87,6 +86,11 @@ None.
 
 ## Log
 
+- 2026-11-25 P24.1 The 16 seed illustrations, drawn by `design/illustrations/draw.py` (motifs) and
+  `scenes.py` (one scene per slot): navy heroes with ivory line art over a Dhaka skyline with
+  Sangsad Bhaban, transparent scenes outlined in Primary elsewhere (rickshaw, tiffin, jute bag,
+  tea cup, sleeping cat, paper boat, marigold garland); no text. The script copies every file
+  to the backend seed and the `pao_ui` bundle so the copy test stays true.
 - 2026-11-22 P23.4–5 Admin: Settings › Brand (tagline in both languages, live preview on the
   wordmark, the §6 suggestion chips) and Appearance › Illustrations (`/settings/appearance/
   illustrations`: every slot with size, status, light/dark preview, safe-area overlay, upload,
