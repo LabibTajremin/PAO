@@ -57,14 +57,14 @@ void main() {
       ..onGet('/v1/admin/bookings', (s) => s.reply(200, {'items': <Object>[]}))
       ..onGet(
         _list,
-        (s) => s.reply(200, {
-          'items': [_order()],
-        }),
-      )
-      ..onGet(
-        _list,
-        (s) => s.reply(200, {'items': <Object>[]}),
-        queryParameters: {'status': 'paused'},
+        (s) => s.replyCallback(
+          200,
+          (o) => {
+            'items': '${o.queryParameters['status']}' == 'paused'
+                ? <Object>[]
+                : [_order()],
+          },
+        ),
       )
       ..onGet('$_list/o1', (s) => s.reply(200, _order()))
       ..onGet('/v1/admin/bookings/$bookingId', (s) => s.reply(200, booking()));

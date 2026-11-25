@@ -7,7 +7,7 @@ import '../../support/harness.dart';
 import 'fixtures.dart';
 
 const _path = '/v1/admin/catalog/services/$serviceId';
-const _schedule = {
+const Map<String, Object> _schedule = {
   'patterns': ['once', 'weekdays'],
   'windows': [
     {'start': '12:00', 'end': '13:00'},
@@ -102,7 +102,7 @@ void main() {
   });
 
   testWidgets(
-    'a saved schedule is shown and sent back unchanged; windows must run forward',
+    'a saved schedule is sent back unchanged; windows must run forward',
     (tester) async {
       final h = await _open(tester, {
         ...service(),
