@@ -29,6 +29,8 @@ tags:
   description: The signed-in account, its permissions and deletion.
 - name: Customer
   description: Customer profile, addresses, catalog and provider discovery.
+- name: Places
+  description: OpenStreetMap place search and reverse lookup for the map pickers (ADR-0042).
 - name: Customer bookings
   description: Booking lifecycle from the customer side.
 - name: Provider
@@ -90,6 +92,10 @@ paths:
     $ref: ./paths/customer-profile.yaml#/addressDefault
   /v1/customer/service-area:
     $ref: ./paths/customer-profile.yaml#/serviceArea
+  /v1/places/search:
+    $ref: ./paths/places.yaml#/search
+  /v1/places/reverse:
+    $ref: ./paths/places.yaml#/reverse
   /v1/app-config:
     $ref: ./paths/appearance.yaml#/appConfig
   /v1/customer/catalog:

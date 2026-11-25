@@ -1,6 +1,6 @@
 # Customer area — overview
 
-Customer profiles, saved addresses and launch areas.
+Customer profiles, saved addresses, launch areas and the OpenStreetMap places the map pickers search (ADR-0042).
 
 Code: `src/PAO.Core/Areas/Customer/`; contracts: `src/PAO.Lib/Areas/Customer/`. Back to the [area index](../README.md).
 
@@ -13,6 +13,7 @@ Code: `src/PAO.Core/Areas/Customer/`; contracts: `src/PAO.Lib/Areas/Customer/`. 
 | `CustomerProfiles` | profile details and saves |
 | `CustomerRules` | name, language and address rules, the Bangladesh box |
 | `LaunchArea` | the GeoJSON polygon test (C35) |
+| `PlaceCache` | the place answers in Redis for a day; an outage reads as a miss |
 | `CustomerPeers` | Media, Identity and Admin contracts, resolved on first use |
 | `CustomerSubscriptions` | event subscribers (see [events](events.md)) |
 

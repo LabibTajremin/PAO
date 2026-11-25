@@ -185,7 +185,7 @@ Created in `identity/0001_init.sql`.
 Keys: PK `PRIMARY KEY (id)`.
 
 ## `customer`
-Tables: [`addresses`](#customeraddresses), [`customers`](#customercustomers), [`outbox`](#customeroutbox), [`processed_events`](#customerprocessed_events).
+Tables: [`addresses`](#customeraddresses), [`customers`](#customercustomers), [`outbox`](#customeroutbox), [`places`](#customerplaces), [`processed_events`](#customerprocessed_events).
 
 ### customer.addresses
 Created in `customer/0001_init.sql`.
@@ -253,6 +253,26 @@ Keys: PK `PRIMARY KEY (id)`.
 | Index | Columns | Kind | Serves |
 |---|---|---|---|
 | `outbox_pending_idx` | `(next_attempt_at, created_at) WHERE ((published_at IS NULL) AND (NOT dead))` | partial | Outbox relay: pending, not dead events oldest first (`FOR UPDATE SKIP LOCKED`, OutboxRelay); partial, so delivered rows cost nothing. |
+
+### customer.places
+Created in `customer/0003_places.sql`. Replaced whole by `migrate import-places` (ADR-0042).
+
+| Column | Type | Null | Default |
+|---|---|---|---|
+| `id` | text | no | — |
+| `kind` | text | no | — |
+| `name_en` | text | no | — |
+| `name_bn` | text | no | `''::text` |
+| `area` | text | no | `''::text` |
+| `search_text` | text | no | — |
+| `location` | geography(Point,4326) | no | — |
+
+Keys: PK `PRIMARY KEY (id)`; CHECK `kind IN ('area', 'street', 'place', 'address')`.
+
+| Index | Columns | Kind | Serves |
+|---|---|---|---|
+| `places_search_idx` | `USING gin (search_text gin_trgm_ops)` | — | Typed place search with `<%` (SearchPlaces). |
+| `places_location_idx` | `USING gist (location)` | — | Reverse lookup and nearest-first ranking (ReversePlace, SearchPlaces). |
 
 ### customer.processed_events
 Handlers record events they have applied so redelivery is harmless. Created in `customer/0001_init.sql`.

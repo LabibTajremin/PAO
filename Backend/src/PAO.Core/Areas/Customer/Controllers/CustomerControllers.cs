@@ -24,6 +24,8 @@ public sealed class CustomerErrorMap : IErrorMap
         [CustomerReasons.InvalidPhoto] = new(422, "UPLOAD_INVALID", "Upload the photo again."),
         [CustomerReasons.OutsideCountry] = new(422, "OUTSIDE_SERVICE_AREA", "Place the pin inside Bangladesh."),
         [CustomerReasons.AddressLimit] = new(409, "ADDRESS_LIMIT_REACHED", "You can save up to 10 addresses. Delete one first."),
+        [CustomerReasons.OutsideLaunchArea] = new(422, "OUTSIDE_SERVICE_AREA", "PAO is coming to this area soon."),
+        [CustomerReasons.PlaceNotFound] = ApiErrors.NotFound,
         [CustomerReasons.ProfileRequired] = new(409, "PROFILE_REQUIRED", "Set up your profile first."),
     };
 }

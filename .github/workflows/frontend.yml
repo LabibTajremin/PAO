@@ -46,7 +46,6 @@ jobs:
         flavour: [dev, staging, prod]
     env:
       PAO_BUILD_NUMBER: ${{ github.run_number }}
-      PAO_MAPS_API_KEY: ${{ secrets.PAO_MAPS_API_KEY }}
       PAO_FCM_API_KEY: ${{ secrets.PAO_FCM_API_KEY }}
       # The per-platform App ID wins over the older per-app one (build-release.sh).
       PAO_FCM_APP_ID: ${{ secrets[format('PAO_FCM_APP_ID_{0}', matrix.app)] }}
@@ -152,7 +151,6 @@ jobs:
         app: [customer, partner]
     env:
       PAO_BUILD_NUMBER: ${{ github.run_number }}
-      PAO_MAPS_API_KEY: ${{ secrets.PAO_MAPS_API_KEY }}
       PAO_FCM_API_KEY: ${{ secrets.PAO_FCM_API_KEY }}
       PAO_FCM_APP_ID: ${{ secrets[format('PAO_FCM_APP_ID_{0}', matrix.app)] }}
       PAO_FCM_APP_ID_CUSTOMER_IOS: ${{ secrets.PAO_FCM_APP_ID_CUSTOMER_IOS }}

@@ -23,6 +23,7 @@ public static class RepositoriesRegistration
         .AddScoped<SubscriptionRepository>()
         .AddScoped<BookingQueries>()
         .AddScoped<RatingRepository>()
+        .AddScoped<PlaceRepository>()
         .AddScoped<BillingRepository>()
         .AddScoped<SettingsRepository>()
         .AddScoped<ArtworkRepository>()

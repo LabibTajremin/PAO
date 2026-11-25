@@ -1,4 +1,4 @@
-// The migration tool (`migrate up|seed|perf-seed N|create-admin|reencrypt|bundle`). Composition root:
+// The migration tool (`migrate up|seed|perf-seed N|create-admin|reencrypt|bundle|import-places FILE`). Composition root:
 // one named call (excluded from coverage; the start-up smoke tests run it).
 using PAO.Infrastructure.Hosting;
 using PAO.Migrator;
@@ -16,6 +16,7 @@ try
             ["create-admin"] = rest => CreateAdminCommand.Run(paths, environment, rest, Console.Out),
             ["reencrypt"] = _ => ReencryptCommand.Run(paths, environment, Console.Out),
             ["bundle"] = rest => BundleCommand.Run(paths, rest, Console.Out),
+            ["import-places"] = rest => ImportPlacesCommand.Run(paths, environment, rest, Console.Out),
         });
 }
 catch (Exception error)

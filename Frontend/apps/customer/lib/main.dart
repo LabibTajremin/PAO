@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:pao_core/pao_core.dart';
 import 'package:pao_customer/app/app.dart';
 import 'package:pao_customer/app/services.dart';
-import 'package:pao_customer/features/location/data/google_places.dart';
+import 'package:pao_customer/features/location/data/api_places.dart';
 import 'package:pao_l10n/pao_l10n.dart';
 
 Future<void> main() async {
@@ -35,7 +35,7 @@ Future<void> main() async {
     launcher: Launcher(),
     photos: PhotoSource(),
     push: await _push(),
-    places: placesFromEnvironment(),
+    places: ApiPlacesService(api),
     look: AppLookService(api, await FileLookStore.support(), app: 'customer'),
   );
   // The cached look shows at once; the network check must not delay launch.

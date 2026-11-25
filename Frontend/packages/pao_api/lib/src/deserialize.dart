@@ -89,6 +89,8 @@ import 'package:pao_api/src/model/level2_session_input.dart';
 import 'package:pao_api/src/model/level2_session_list.dart';
 import 'package:pao_api/src/model/localized_text.dart';
 import 'package:pao_api/src/model/logout_request.dart';
+import 'package:pao_api/src/model/map_place.dart';
+import 'package:pao_api/src/model/map_place_list.dart';
 import 'package:pao_api/src/model/media_object.dart';
 import 'package:pao_api/src/model/merchant_ledger.dart';
 import 'package:pao_api/src/model/my_permissions.dart';
@@ -446,6 +448,10 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'LogoutRequest':
       return LogoutRequest.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'MapPlace':
+      return MapPlace.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'MapPlaceList':
+      return MapPlaceList.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'MediaObject':
       return MediaObject.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'MerchantLedger':

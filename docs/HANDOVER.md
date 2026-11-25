@@ -115,7 +115,7 @@ The owner supplies these; none belong in the repository.
 |---|---|
 | Support phone and email | `Frontend/apps/*/config/prod.json` (`PAO_SUPPORT_PHONE`, `PAO_SUPPORT_EMAIL`) |
 | Terms, privacy policy, FAQ (legal review) | app copy (ARB files) and a public privacy-policy URL for the stores |
-| Google Maps key (Geocoding, restricted) | CI secret `PAO_MAPS_API_KEY` |
+| Dhaka places (OpenStreetMap, free) | `tools/places/build.sh` then `migrate import-places`, monthly ([places.md](guides/places.md)) |
 | Firebase project: app configs and a service account | CI secrets `PAO_FCM_*`; backend `PUSH_ADAPTER=fcm`, `FCM_CREDENTIALS_FILE` |
 | SMS gateway (SSL Wireless) account and sender ID | backend `SMS_ADAPTER=sslwireless`, `SSLWIRELESS_API_TOKEN`, `SSLWIRELESS_SID`, `SMS_VERIFICATION_ENABLED=true` (until then `false` with the fixed code, `deployment.md` §3.2.1) |
 | Production secrets | `JWT_SIGNING_KEY`, `DATA_ENCRYPTION_KEY`, S3 credentials, database and Redis URLs, `ADMIN_PASSWORD` for `migrate create-admin` (the first super admin, ADR-0036) |

@@ -68,3 +68,7 @@ DeliveryDatePath: { name: date, in: path, required: true, description: The deliv
 SubscriptionStatusQuery: { name: status, in: query, schema: { $ref: "../schemas/delivery.yaml#/SubscriptionStatus" } }
 DateFrom: { name: from, in: query, required: true, schema: { type: string, format: date } }
 DateTo: { name: to, in: query, required: true, description: At most 62 days after from., schema: { type: string, format: date } }
+PlaceQuery: { name: q, in: query, required: true, description: "Bangla or English text, two characters or more.", schema: { type: string, minLength: 2, maxLength: 80 } }
+PlaceNearLat: { name: lat, in: query, description: Use with lng to rank nearer places first., schema: { type: number, format: double, minimum: -90, maximum: 90 } }
+PlaceNearLng: { name: lng, in: query, description: Use with lat to rank nearer places first., schema: { type: number, format: double, minimum: -180, maximum: 180 } }
+PlaceLanguage: { name: lang, in: query, description: The language of each title., schema: { type: string, enum: [en, bn], default: en } }

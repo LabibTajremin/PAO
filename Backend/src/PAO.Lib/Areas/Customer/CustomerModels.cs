@@ -119,4 +119,8 @@ public static class CustomerReasons
     public const string AddressLimit = "customer.address_limit";
     /// <summary>Addresses need a profile first.</summary>
     public const string ProfileRequired = "customer.profile_required";
+    /// <summary>The point is outside the launch area, where places are not loaded (ADR-0042).</summary>
+    public const string OutsideLaunchArea = "customer.outside_launch_area";
+    /// <summary>No place is near the point.</summary>
+    public const string PlaceNotFound = "customer.place_not_found";
 }

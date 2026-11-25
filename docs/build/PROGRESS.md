@@ -33,18 +33,16 @@ it first and continues from **Current task**.
 | P23 Artwork & tagline | done | #12 | update round 2026-11 |
 | P24 Illustrations, welcome & sign-in | done | — | update round 2026-11 |
 | P25 Scheduled delivery | done | — | update round 2026-11 |
-| P26 Free Dhaka map | in_progress | — | update round 2026-11 |
-| P27 Motion | todo | — | update round 2026-11 |
+| P26 Free Dhaka map | done | — | update round 2026-11 |
+| P27 Motion | in_progress | — | update round 2026-11 |
 | P28 Design polish & handover | todo | — | update round 2026-11 |
 
 Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (merged).
 
 ## Current task
 
-Update round 2026-11 — P26. P24 and P25 are done and pushed together (owner asked to batch);
-that batch is green on f1c3d56 (the app journeys needed the "Send OTP" label). Next: P26 (free
-Dhaka map). P26 and
-P27 are pushed together, then P28 (no deployment: that step is the owner's).
+Update round 2026-11 — P27 (motion). P26 is committed locally and is pushed together with P27
+(owner asked to batch); then P28 (no deployment: that step is the owner's).
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -87,6 +85,16 @@ None.
 
 ## Log
 
+- 2026-11-25 P26 Free Dhaka map (ADR-0042): `customer.places` (pg_trgm + PostGIS) holds Dhaka's
+  OpenStreetMap areas, streets, places and addresses; `tools/places/build.sh` makes the file and
+  `migrate import-places FILE` replaces the table in one transaction (guide
+  `docs/guides/places.md`); dev/e2e seed a sample. `GET /v1/places/search` (English, Bangla,
+  Bangla digits; areas first, nearest among equals) and `GET /v1/places/reverse` (300 m, launch
+  area only), cached a day. The customer app's `ApiPlacesService` replaces Google;
+  `PAO_MAPS_API_KEY` is gone from the app, scripts, CI and docs. Every map frame credits
+  "© OpenStreetMap contributors". Deviation: drawing PMTiles with MapLibre is left to the owner
+  (native plugin the widget tests and Linux journeys cannot run); `tools/places/tiles.sh` builds
+  and uploads the tiles, and the apps keep the pin frame.
 - 2026-11-25 P24 + P25 complete: every PR check green on f1c3d56.
 - 2026-11-25 P25 Scheduled delivery (ADR-0041): `scheduled_delivery` services carry an admin-set
   schedule (patterns, windows, lead hours, cutoff, unit, quantity range). Customers order a

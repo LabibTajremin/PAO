@@ -15,6 +15,7 @@ public static class CustomerAreaRegistration
     public static IServiceCollection AddCustomerArea(this IServiceCollection services) => services
         .AddSingleton<IEventSubscriptions, CustomerSubscriptions>()
         .AddScoped<CustomerPeers>()
+        .AddScoped<PAO.Core.Areas.Customer.Features.Places.Queries.PlaceCache>()
         .AddScoped<CustomerProfiles>()
         .AddScoped<ICustomerSharedService, CustomerSharedService>();
 }

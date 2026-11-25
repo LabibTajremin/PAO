@@ -113,6 +113,7 @@ void main() {
     );
     expect(find.text('Banani'), findsOneWidget);
     expect(find.text('real map'), findsOneWidget);
+    expect(find.text('© OpenStreetMap contributors'), findsNWidgets(2));
     expect(find.text('Offline'), findsOneWidget);
     expect(find.bySemanticsLabel('Loading'), findsOneWidget);
     expect(find.byType(PaoSkeleton), findsNWidgets(7));

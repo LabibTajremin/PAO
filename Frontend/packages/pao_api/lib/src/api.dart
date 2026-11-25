@@ -20,6 +20,7 @@ import 'package:pao_api/src/api/customer_api.dart';
 import 'package:pao_api/src/api/customer_bookings_api.dart';
 import 'package:pao_api/src/api/customer_subscriptions_api.dart';
 import 'package:pao_api/src/api/me_api.dart';
+import 'package:pao_api/src/api/places_api.dart';
 import 'package:pao_api/src/api/provider_api.dart';
 import 'package:pao_api/src/api/provider_billing_api.dart';
 import 'package:pao_api/src/api/provider_enrolment_api.dart';
@@ -164,6 +165,12 @@ class PaoApi {
   /// by doing that all interceptors will not be executed
   MeApi getMeApi() {
     return MeApi(dio);
+  }
+
+  /// Get PlacesApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  PlacesApi getPlacesApi() {
+    return PlacesApi(dio);
   }
 
   /// Get ProviderApi instance, base route and serializer can be overridden by a given but be careful,

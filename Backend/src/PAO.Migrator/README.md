@@ -2,7 +2,7 @@
 
 The database tool: applies the SQL in `database/changes`, loads seed data and does one-off maintenance.
 
-Commands: `up`, `seed`, `bundle`, `perf-seed N`, `create-admin`, `reencrypt`. EF never creates schema; these scripts own it.
+Commands: `up`, `seed`, `bundle`, `perf-seed N`, `create-admin`, `reencrypt`, `import-places FILE` (Dhaka places from OpenStreetMap, ADR-0042). EF never creates schema; these scripts own it.
 
 ## Run it
 

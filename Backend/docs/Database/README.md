@@ -59,6 +59,7 @@ an empty database and compares schema, version rows and catalog with `migrate up
 | `identity/0004_admin_email_index.sql` | `accounts_email_lower_idx`: admin sign-in by `lower(email)` without a full scan. |
 | `customer/0001_init.sql` | Customer: profiles and saved addresses (C-01, C-02). |
 | `customer/0002_admin.sql` | Copies kept current for the admin customer list (A-05, PRD §9.3 rule 4). |
+| `customer/0003_places.sql` | OpenStreetMap places for Dhaka with a trigram and a spatial index (ADR-0042); needs `pg_trgm`. |
 | `provider/0001_init.sql` | Provider: enrolment profile, services offered and read-model copies used for search. |
 | `provider/0002_quality.sql` | Provider cancellations after acceptance, counted over 30 days for the quality review |
 | `verification/0001_init.sql` | Verification: items, documents, levels, Level 2 sessions and the NID block list. |

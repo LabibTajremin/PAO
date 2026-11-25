@@ -29,6 +29,8 @@ tags:
     description: The signed-in account, its permissions and deletion.
   - name: Customer
     description: Customer profile, addresses, catalog and provider discovery.
+  - name: Places
+    description: OpenStreetMap place search and reverse lookup for the map pickers (ADR-0042).
   - name: Customer bookings
     description: Booking lifecycle from the customer side.
   - name: Provider
@@ -516,6 +518,61 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/ValidationFailed'
+  /v1/places/search:
+    get:
+      operationId: searchPlaces
+      tags:
+        - Places
+      summary: Dhaka places matching a text, nearest first among equals (ADR-0042)
+      x-permission: catalog:read
+      parameters:
+        - $ref: '#/components/parameters/PlaceQuery'
+        - $ref: '#/components/parameters/PlaceNearLat'
+        - $ref: '#/components/parameters/PlaceNearLng'
+        - $ref: '#/components/parameters/PlaceLanguage'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MapPlaceList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/places/reverse:
+    get:
+      operationId: reversePlace
+      tags:
+        - Places
+      summary: The nearest named place to a pin inside the launch area (ADR-0042)
+      x-permission: catalog:read
+      parameters:
+        - $ref: '#/components/parameters/Lat'
+        - $ref: '#/components/parameters/Lng'
+        - $ref: '#/components/parameters/PlaceLanguage'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MapPlace'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
   /v1/app-config:
     get:
       operationId: getAppConfig
@@ -4502,6 +4559,43 @@ components:
       schema:
         type: string
         format: uuid
+    PlaceQuery:
+      name: q
+      in: query
+      required: true
+      description: Bangla or English text, two characters or more.
+      schema:
+        type: string
+        minLength: 2
+        maxLength: 80
+    PlaceNearLat:
+      name: lat
+      in: query
+      description: Use with lng to rank nearer places first.
+      schema:
+        type: number
+        format: double
+        minimum: -90
+        maximum: 90
+    PlaceNearLng:
+      name: lng
+      in: query
+      description: Use with lat to rank nearer places first.
+      schema:
+        type: number
+        format: double
+        minimum: -180
+        maximum: 180
+    PlaceLanguage:
+      name: lang
+      in: query
+      description: The language of each title.
+      schema:
+        type: string
+        enum:
+          - en
+          - bn
+        default: en
     SubscriptionId:
       name: subscriptionId
       in: path
@@ -7759,6 +7853,46 @@ components:
           $ref: '#/components/schemas/DueSummary'
         entries:
           $ref: '#/components/schemas/LedgerEntryList'
+    MapPlace:
+      type: object
+      description: A Dhaka place from OpenStreetMap (ADR-0042).
+      required:
+        - id
+        - kind
+        - title
+        - location
+      properties:
+        id:
+          type: string
+          example: n2715439871
+        kind:
+          type: string
+          enum:
+            - area
+            - street
+            - place
+            - address
+          example: place
+        title:
+          type: string
+          description: The name in the caller's language when OSM has one.
+          example: Bashundhara City
+        area:
+          type: string
+          description: The neighbourhood; absent when none is known.
+          example: Panthapath
+        location:
+          $ref: '#/components/schemas/Point'
+    MapPlaceList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/MapPlace'
     AppName:
       type: string
       enum:

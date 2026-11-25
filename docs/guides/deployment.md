@@ -41,7 +41,6 @@ flowchart LR
   A -- HTTPS + CORS --> API
   C -- HTTPS, pinned --> API
   P -- HTTPS, pinned --> API
-  C -- Geocoding --> G[maps.googleapis.com]
   subgraph Container host
     API[API /app/api]
     W[Worker /app/worker]
@@ -153,7 +152,7 @@ Notes:
 
 - Vercel serves existing files before applying `rewrites`, so the catch-all only hits
   unknown paths (deep links into the panel).
-- The CSP is the one in `docs/guides/release.md`. The admin web makes no calls to Maps or FCM,
+- The CSP is the one in `docs/guides/release.md`. The admin web makes no calls to maps or FCM,
   so only the API and the storage host appear in `connect-src`/`img-src`.
 - Flutter web does not fingerprint its file names (`main.dart.js` keeps its name between
   releases), so do **not** mark `main.dart.js` immutable; the one-day cache above covers
@@ -502,7 +501,6 @@ All app configuration is compiled in with `--dart-define`; nothing is read at ru
 | `PAO_FLAVOUR` | all | `config/<flavour>.json` | `--dart-define-from-file` (by the script) |
 | `PAO_API_BASE_URL` | all | `config/<flavour>.json`; your API host | same |
 | `PAO_SUPPORT_PHONE`, `PAO_SUPPORT_EMAIL` | customer, partner | `config/<flavour>.json` | same |
-| `PAO_MAPS_API_KEY` | customer (Geocoding via `maps.googleapis.com`) | Google Cloud console → APIs & Services → Credentials; enable the Geocoding API; restrict to the package names / bundle IDs and SHA-256 certs | env var, forwarded by `build-release.sh` |
 | `PAO_FCM_API_KEY`, `PAO_FCM_APP_ID`, `PAO_FCM_SENDER_ID`, `PAO_FCM_PROJECT_ID` | customer, partner | Firebase console → Project settings → Your apps (API key, App ID, Sender ID, Project ID) | env vars, forwarded by `build-release.sh`. Without `PAO_FCM_API_KEY` the app runs without push. |
 | `PAO_FCM_APP_ID_<APP>_<PLATFORM>` | customer, partner | Firebase console → Your apps: the App ID of that platform's app, e.g. `PAO_FCM_APP_ID_CUSTOMER_ANDROID`, `PAO_FCM_APP_ID_PARTNER_IOS` | env vars; `build-release.sh` uses the one for the app and target (`ipa` → IOS, else ANDROID) in place of `PAO_FCM_APP_ID` when set |
 | `PAO_PIN_SHA256` | all | computed from the live API certificate (below) | env var, forwarded by `build-release.sh` when set; empty leaves pinning off |
@@ -580,7 +578,7 @@ Without either, release builds are signed with the debug key and Play rejects th
 ### 4.6 Build
 
 ```sh
-export PAO_MAPS_API_KEY=… PAO_FCM_API_KEY=… PAO_FCM_SENDER_ID=… PAO_FCM_PROJECT_ID=…
+export PAO_FCM_API_KEY=… PAO_FCM_SENDER_ID=… PAO_FCM_PROJECT_ID=…
 export PAO_FCM_APP_ID_CUSTOMER_ANDROID=… PAO_FCM_APP_ID_CUSTOMER_IOS=…   # one per platform and app
 export PAO_PIN_SHA256="<live pin>,<backup pin>" PAO_SENTRY_DSN=…        # optional; empty = off
 export PAO_BUILD_NUMBER=42                      # strictly increasing per store upload
@@ -597,7 +595,6 @@ The equivalent raw command:
 cd Frontend/apps/customer
 flutter build appbundle --release --flavor=prod \
   --dart-define-from-file=config/prod.json \
-  --dart-define=PAO_MAPS_API_KEY="$PAO_MAPS_API_KEY" \
   --dart-define=PAO_FCM_API_KEY="$PAO_FCM_API_KEY" \
   --dart-define=PAO_FCM_APP_ID="$PAO_FCM_APP_ID" \
   --dart-define=PAO_FCM_SENDER_ID="$PAO_FCM_SENDER_ID" \
@@ -628,7 +625,6 @@ The full store checklist is in [`docs/guides/release.md`](release.md#store-check
 
 | Secret | Used for |
 |---|---|
-| `PAO_MAPS_API_KEY` | Maps define |
 | `PAO_FCM_API_KEY`, `PAO_FCM_SENDER_ID`, `PAO_FCM_PROJECT_ID` | FCM defines |
 | `PAO_FCM_APP_ID_CUSTOMER_ANDROID`, `PAO_FCM_APP_ID_CUSTOMER_IOS`, `PAO_FCM_APP_ID_PARTNER_ANDROID`, `PAO_FCM_APP_ID_PARTNER_IOS` | FCM App ID per platform and app (preferred) |
 | `PAO_FCM_APP_ID_customer`, `PAO_FCM_APP_ID_partner` | fallback FCM App ID per app, used when the per-platform secret is missing |

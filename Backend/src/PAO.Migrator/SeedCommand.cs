@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using PAO.Core;
 using PAO.Core.Areas.Admin.Features.Appearance.Commands;
 using PAO.Core.Areas.Catalog.Features.Seed.Commands;
+using PAO.Core.Areas.Customer.Features.Places.Commands;
 using PAO.Core.Areas.Identity.Features.AdminUsers.Commands;
 using PAO.Core.Registration;
 using PAO.Infrastructure.Configuration;
@@ -16,13 +17,16 @@ namespace PAO.Migrator;
 
 /// <summary>
 /// `migrate seed`: loads `database/seed/catalog.yaml` idempotently through the areas that own the
-/// data: the catalog through Catalog and, outside production and only with
+/// data: the catalog through Catalog, the sample places outside production and, outside production and only with
 /// SEED_ADMIN_PASSWORD set, the demo admins through Identity.
 /// </summary>
 public static class SeedCommand
 {
     /// <summary>The seed file under the backend home.</summary>
     public static string CatalogFile(PaoPaths paths) => Path.Combine(paths.Home, "database", "seed", "catalog.yaml");
+
+    /// <summary>The few Dhaka places dev and e2e search (ADR-0042).</summary>
+    public static string PlacesSample(PaoPaths paths) => Path.Combine(paths.Home, "database", "seed", "places-sample.geojsonseq");
 
     /// <summary>The seed illustrations, one `&lt;slot&gt;.svg` per artwork slot (ADR-0040).</summary>
     public static string ArtworkFolder(PaoPaths paths) => Path.Combine(paths.Home, "database", "seed", "artwork");
@@ -54,6 +58,13 @@ public static class SeedCommand
         await output.WriteLineAsync($"migrate seed: {categories.Count} categories");
         await output.WriteLineAsync($"migrate seed: {await SeedArtwork(host, paths)} artwork slots");
         var app = host.Services.GetRequiredService<PaoSettings>().App;
+        if (app.Environment != AppEnvironments.Prod)
+        {
+            // Dev and e2e get a handful of Dhaka places; production imports the real extract.
+            await using var scope = host.Services.CreateAsyncScope();
+            var places = await scope.ServiceProvider.GetRequiredService<IMediator>().Send(new ImportPlaces(File.ReadLines(PlacesSample(paths)), KeepExisting: true));
+            await output.WriteLineAsync($"migrate seed: {places} places");
+        }
         if (app.Environment == AppEnvironments.Prod || app.SeedAdminPassword.Length == 0)
         {
             return 0;

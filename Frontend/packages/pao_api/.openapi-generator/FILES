@@ -13,6 +13,7 @@ lib/src/api/customer_api.dart
 lib/src/api/customer_bookings_api.dart
 lib/src/api/customer_subscriptions_api.dart
 lib/src/api/me_api.dart
+lib/src/api/places_api.dart
 lib/src/api/provider_api.dart
 lib/src/api/provider_billing_api.dart
 lib/src/api/provider_enrolment_api.dart
@@ -135,6 +136,8 @@ lib/src/model/level2_session_input.dart
 lib/src/model/level2_session_list.dart
 lib/src/model/localized_text.dart
 lib/src/model/logout_request.dart
+lib/src/model/map_place.dart
+lib/src/model/map_place_list.dart
 lib/src/model/media_object.dart
 lib/src/model/merchant_ledger.dart
 lib/src/model/my_permissions.dart
