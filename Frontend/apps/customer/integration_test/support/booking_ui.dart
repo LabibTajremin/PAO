@@ -13,7 +13,7 @@ Future<void> signUp(
 ) async {
   await tapText(tester, 'Skip');
   await typeInto(tester, 'Mobile number', phone);
-  await tapText(tester, 'Send code');
+  await tapText(tester, 'Send OTP');
   await pumpUntil(tester, find.text('Enter the 6-digit code'));
   await enterCode(tester, await stack.lastCode(phone));
   await typeInto(tester, 'Your name', 'Nusrat Jahan');
