@@ -91,6 +91,15 @@ abstract final class Routes {
   /// All reviews of the provider [id].
   static String providerReviewsOf(String id) => '/providers/$id/reviews';
 
+  /// Scheduled-delivery orders (P25).
+  static const subscriptions = '/subscriptions';
+
+  /// One scheduled-delivery order.
+  static const subscription = '/subscriptions/:id';
+
+  /// The path of order [id].
+  static String subscriptionOf(String id) => '/subscriptions/$id';
+
   /// Screen ID per route, checked against the account's screens.
   static const Map<String, String> screens = {
     home: 'C07',

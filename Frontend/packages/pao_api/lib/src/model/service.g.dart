@@ -31,6 +31,8 @@ abstract class _$ServiceCWProxy {
 
   Service published(bool published);
 
+  Service schedule(ServiceSchedule? schedule);
+
   Service subServices(List<SubService>? subServices);
 
   /// Creates a new instance with the provided field values.
@@ -54,6 +56,7 @@ abstract class _$ServiceCWProxy {
     bool requiresLevel2,
     List<LocalizedText>? level2Checklist,
     bool published,
+    ServiceSchedule? schedule,
     List<SubService>? subServices,
   });
 }
@@ -108,6 +111,9 @@ class _$ServiceCWProxyImpl implements _$ServiceCWProxy {
   Service published(bool published) => call(published: published);
 
   @override
+  Service schedule(ServiceSchedule? schedule) => call(schedule: schedule);
+
+  @override
   Service subServices(List<SubService>? subServices) =>
       call(subServices: subServices);
 
@@ -133,6 +139,7 @@ class _$ServiceCWProxyImpl implements _$ServiceCWProxy {
     Object? requiresLevel2 = const $CopyWithPlaceholder(),
     Object? level2Checklist = const $CopyWithPlaceholder(),
     Object? published = const $CopyWithPlaceholder(),
+    Object? schedule = const $CopyWithPlaceholder(),
     Object? subServices = const $CopyWithPlaceholder(),
   }) {
     return Service(
@@ -192,6 +199,10 @@ class _$ServiceCWProxyImpl implements _$ServiceCWProxy {
           ? _value.published
           // ignore: cast_nullable_to_non_nullable
           : published as bool,
+      schedule: schedule == const $CopyWithPlaceholder()
+          ? _value.schedule
+          // ignore: cast_nullable_to_non_nullable
+          : schedule as ServiceSchedule?,
       subServices: subServices == const $CopyWithPlaceholder()
           ? _value.subServices
           // ignore: cast_nullable_to_non_nullable
@@ -253,6 +264,12 @@ Service _$ServiceFromJson(
           .toList(),
     ),
     published: $checkedConvert('published', (v) => v as bool),
+    schedule: $checkedConvert(
+      'schedule',
+      (v) => v == null
+          ? null
+          : ServiceSchedule.fromJson(v as Map<String, dynamic>),
+    ),
     subServices: $checkedConvert(
       'subServices',
       (v) => (v as List<dynamic>?)
@@ -276,6 +293,7 @@ Map<String, dynamic> _$ServiceToJson(Service instance) => <String, dynamic>{
   'requiresLevel2': instance.requiresLevel2,
   'level2Checklist': ?instance.level2Checklist?.map((e) => e.toJson()).toList(),
   'published': instance.published,
+  'schedule': ?instance.schedule?.toJson(),
   'subServices': ?instance.subServices?.map((e) => e.toJson()).toList(),
 };
 
@@ -284,4 +302,5 @@ const _$ServiceModelEnumMap = {
   ServiceModel.durationHire: 'duration_hire',
   ServiceModel.listing: 'listing',
   ServiceModel.partnerReferral: 'partner_referral',
+  ServiceModel.scheduledDelivery: 'scheduled_delivery',
 };

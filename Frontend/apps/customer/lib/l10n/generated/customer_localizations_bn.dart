@@ -1443,4 +1443,115 @@ class CustomerL10nBn extends CustomerL10n {
 
   @override
   String get bookingsReceiptPayment => 'পেমেন্ট';
+
+  @override
+  String get orderTitle => 'ডেলিভারির সময়সূচি';
+
+  @override
+  String get orderRepeat => 'কতবার';
+
+  @override
+  String get orderPatternOnce => 'একবার';
+
+  @override
+  String get orderPatternDaily => 'প্রতিদিন';
+
+  @override
+  String get orderPatternWeekdays => 'নির্বাচিত দিনে';
+
+  @override
+  String get orderPatternWeekly => 'সপ্তাহে একবার';
+
+  @override
+  String get orderPatternMonthly => 'মাসে একবার';
+
+  @override
+  String get orderDays => 'দিন';
+
+  @override
+  String get orderDayOfMonth => 'মাসের তারিখ';
+
+  @override
+  String get orderWindow => 'ডেলিভারির সময়';
+
+  @override
+  String get orderStart => 'প্রথম ডেলিভারি';
+
+  @override
+  String get orderCount => 'ডেলিভারির সংখ্যা';
+
+  @override
+  String get orderPerDelivery => 'প্রতি ডেলিভারি';
+
+  @override
+  String get orderNote => 'সেবাদাতার জন্য নোট';
+
+  @override
+  String get orderConfirm => 'অর্ডার করুন';
+
+  @override
+  String get orderCash => 'প্রতিটি ডেলিভারিতে নগদে পরিশোধ করুন।';
+
+  @override
+  String get ordersTitle => 'নির্ধারিত অর্ডার';
+
+  @override
+  String get ordersEmpty => 'এখনো কোনো নির্ধারিত অর্ডার নেই';
+
+  @override
+  String get orderUpcoming => 'আসন্ন ডেলিভারি';
+
+  @override
+  String get orderSkip => 'বাদ দিন';
+
+  @override
+  String get orderUnskip => 'ফিরিয়ে আনুন';
+
+  @override
+  String get orderPause => 'বিরতি দিন';
+
+  @override
+  String get orderResume => 'আবার চালু করুন';
+
+  @override
+  String get orderCancel => 'অর্ডার বাতিল করুন';
+
+  @override
+  String get subRequested => 'সেবাদাতার অপেক্ষায়';
+
+  @override
+  String get subActive => 'চালু';
+
+  @override
+  String get subPaused => 'বিরতিতে';
+
+  @override
+  String get subFinished => 'শেষ';
+
+  @override
+  String get subDeclined => 'গৃহীত হয়নি';
+
+  @override
+  String get subCancelled => 'বাতিল';
+
+  @override
+  String get deliveryScheduled => 'নির্ধারিত';
+
+  @override
+  String get deliveryPreparing => 'প্রস্তুত হচ্ছে';
+
+  @override
+  String get deliveryOut => 'পথে';
+
+  @override
+  String get deliveryDelivered => 'পৌঁছে গেছে';
+
+  @override
+  String get deliverySkipped => 'বাদ';
+
+  @override
+  String get deliveryDeclined => 'হবে না';
+
+  @override
+  String get deliveryCancelled => 'বাতিল';
 }

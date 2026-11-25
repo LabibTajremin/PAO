@@ -47,7 +47,16 @@ class _BookingsPageState extends State<BookingsPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: PaoAppBar(title: context.t.bookingsTitle),
+    appBar: PaoAppBar(
+      title: context.t.bookingsTitle,
+      actions: [
+        IconButton(
+          tooltip: context.t.ordersTitle,
+          icon: const Icon(Icons.event_repeat_outlined),
+          onPressed: () => context.push(Routes.subscriptions),
+        ),
+      ],
+    ),
     body: Column(
       children: [
         Padding(

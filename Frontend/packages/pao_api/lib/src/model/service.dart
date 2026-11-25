@@ -3,6 +3,7 @@
 //
 
 // ignore_for_file: unused_element
+import 'package:pao_api/src/model/service_schedule.dart';
 import 'package:pao_api/src/model/sub_service.dart';
 import 'package:pao_api/src/model/localized_text.dart';
 import 'package:pao_api/src/model/service_model.dart';
@@ -45,6 +46,8 @@ class Service {
     this.level2Checklist,
 
     required this.published,
+
+    this.schedule,
 
     this.subServices,
   });
@@ -91,6 +94,9 @@ class Service {
   @JsonKey(name: r'published', required: true, includeIfNull: false)
   final bool published;
 
+  @JsonKey(name: r'schedule', required: false, includeIfNull: false)
+  final ServiceSchedule? schedule;
+
   @JsonKey(name: r'subServices', required: false, includeIfNull: false)
   final List<SubService>? subServices;
 
@@ -112,6 +118,7 @@ class Service {
                 requiresLevel2,
                 level2Checklist,
                 published,
+                schedule,
                 subServices,
               ],
               [
@@ -127,6 +134,7 @@ class Service {
                 other.requiresLevel2,
                 other.level2Checklist,
                 other.published,
+                other.schedule,
                 other.subServices,
               ],
             );
@@ -148,6 +156,7 @@ class Service {
         requiresLevel2,
         level2Checklist,
         published,
+        schedule,
         subServices,
       ]);
 

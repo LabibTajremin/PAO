@@ -3,6 +3,7 @@
 //
 
 // ignore_for_file: unused_element
+import 'package:pao_api/src/model/service_schedule.dart';
 import 'package:pao_api/src/model/localized_text.dart';
 import 'package:pao_api/src/model/service_model.dart';
 import 'package:copy_with_extension/copy_with_extension.dart';
@@ -42,6 +43,8 @@ class ServiceInput {
     this.level2Checklist,
 
     this.published,
+
+    this.schedule,
   });
 
   @JsonKey(name: r'categoryId', required: true, includeIfNull: false)
@@ -83,6 +86,9 @@ class ServiceInput {
   @JsonKey(name: r'published', required: false, includeIfNull: false)
   final bool? published;
 
+  @JsonKey(name: r'schedule', required: false, includeIfNull: false)
+  final ServiceSchedule? schedule;
+
   bool operator ==(Object other) {
     return identical(this, other) ||
         other is ServiceInput &&
@@ -100,6 +106,7 @@ class ServiceInput {
                 requiresLevel2,
                 level2Checklist,
                 published,
+                schedule,
               ],
               [
                 other.categoryId,
@@ -113,6 +120,7 @@ class ServiceInput {
                 other.requiresLevel2,
                 other.level2Checklist,
                 other.published,
+                other.schedule,
               ],
             );
   }
@@ -132,6 +140,7 @@ class ServiceInput {
         requiresLevel2,
         level2Checklist,
         published,
+        schedule,
       ]);
 
   factory ServiceInput.fromJson(Map<String, dynamic> json) =>

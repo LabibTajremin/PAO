@@ -244,6 +244,10 @@ enum ErrorCode {
   MERCHANT_DUE_LIMIT(r'MERCHANT_DUE_LIMIT'),
 
   /// Stable error codes the apps translate (04-decisions.md E11).
+  @JsonValue(r'DELIVERY_CUTOFF_PASSED')
+  DELIVERY_CUTOFF_PASSED(r'DELIVERY_CUTOFF_PASSED'),
+
+  /// Stable error codes the apps translate (04-decisions.md E11).
   @JsonValue(r'PAYMENT_NOT_PENDING')
   PAYMENT_NOT_PENDING(r'PAYMENT_NOT_PENDING');
 

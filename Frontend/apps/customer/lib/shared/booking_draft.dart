@@ -7,7 +7,12 @@ class BookingDraft {
     this.items = const {},
     this.providerId,
     this.scheduledAt,
+    this.delivery = false,
   });
+
+  /// Whether the service is delivered on a schedule, so the provider's
+  /// "book" step opens the order form instead (P25).
+  final bool delivery;
 
   /// The service being booked.
   final String serviceId;
@@ -27,6 +32,7 @@ class BookingDraft {
     items: items,
     providerId: id,
     scheduledAt: scheduledAt,
+    delivery: delivery,
   );
 
   /// The draft as query parameters.
@@ -36,6 +42,7 @@ class BookingDraft {
       'items': [for (final e in items.entries) '${e.key}:${e.value}'].join(','),
     'provider': ?providerId,
     'at': ?scheduledAt,
+    if (delivery) 'delivery': '1',
   };
 
   /// Reads a draft from [query]; null without a service.
@@ -53,6 +60,7 @@ class BookingDraft {
       items: items,
       providerId: query['provider'],
       scheduledAt: query['at'],
+      delivery: query['delivery'] == '1',
     );
   }
 }

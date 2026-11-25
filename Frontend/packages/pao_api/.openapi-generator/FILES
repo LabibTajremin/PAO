@@ -11,11 +11,13 @@ lib/src/api/admin_verification_api.dart
 lib/src/api/auth_api.dart
 lib/src/api/customer_api.dart
 lib/src/api/customer_bookings_api.dart
+lib/src/api/customer_subscriptions_api.dart
 lib/src/api/me_api.dart
 lib/src/api/provider_api.dart
 lib/src/api/provider_billing_api.dart
 lib/src/api/provider_enrolment_api.dart
 lib/src/api/provider_jobs_api.dart
+lib/src/api/provider_subscriptions_api.dart
 lib/src/api/public_api.dart
 lib/src/auth/api_key_auth.dart
 lib/src/auth/auth.dart
@@ -90,6 +92,11 @@ lib/src/model/customer_profile_update.dart
 lib/src/model/dashboard.dart
 lib/src/model/dashboard_bookings_per_day_inner.dart
 lib/src/model/delete_account_request.dart
+lib/src/model/delivery_change.dart
+lib/src/model/delivery_date.dart
+lib/src/model/delivery_pattern.dart
+lib/src/model/delivery_status.dart
+lib/src/model/delivery_window.dart
 lib/src/model/device_token_input.dart
 lib/src/model/due_summary.dart
 lib/src/model/earnings_job.dart
@@ -157,9 +164,12 @@ lib/src/model/price_unit.dart
 lib/src/model/price_version.dart
 lib/src/model/provider_cancel_input.dart
 lib/src/model/provider_card.dart
+lib/src/model/provider_delivery.dart
+lib/src/model/provider_delivery_list.dart
 lib/src/model/provider_profile.dart
 lib/src/model/provider_profile_update.dart
 lib/src/model/provider_public_profile.dart
+lib/src/model/quantity_unit.dart
 lib/src/model/rating_breakdown.dart
 lib/src/model/receipt.dart
 lib/src/model/refresh_request.dart
@@ -181,6 +191,7 @@ lib/src/model/service_area_input.dart
 lib/src/model/service_input.dart
 lib/src/model/service_model.dart
 lib/src/model/service_ref.dart
+lib/src/model/service_schedule.dart
 lib/src/model/services_input.dart
 lib/src/model/setting.dart
 lib/src/model/setting_list.dart
@@ -190,6 +201,10 @@ lib/src/model/start_code.dart
 lib/src/model/status_reason.dart
 lib/src/model/sub_service.dart
 lib/src/model/sub_service_input.dart
+lib/src/model/subscription.dart
+lib/src/model/subscription_create.dart
+lib/src/model/subscription_list.dart
+lib/src/model/subscription_status.dart
 lib/src/model/timeline_entry.dart
 lib/src/model/timing.dart
 lib/src/model/token_pair.dart

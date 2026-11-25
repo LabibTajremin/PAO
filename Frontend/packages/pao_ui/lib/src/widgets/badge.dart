@@ -76,9 +76,15 @@ class PaoBadge extends StatelessWidget {
               decoration: BoxDecoration(color: fg, shape: BoxShape.circle),
             ),
           const SizedBox(width: PaoSpace.xs + 2),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.labelSmall!.copyWith(color: fg),
+          // A long status in a narrow card ends with an ellipsis, not an
+          // overflow.
+          Flexible(
+            child: Text(
+              label,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.labelSmall!
+                  .copyWith(color: fg),
+            ),
           ),
         ],
       ),

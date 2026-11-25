@@ -56,6 +56,9 @@ import 'package:pao_api/src/model/customer_profile_update.dart';
 import 'package:pao_api/src/model/dashboard.dart';
 import 'package:pao_api/src/model/dashboard_bookings_per_day_inner.dart';
 import 'package:pao_api/src/model/delete_account_request.dart';
+import 'package:pao_api/src/model/delivery_change.dart';
+import 'package:pao_api/src/model/delivery_date.dart';
+import 'package:pao_api/src/model/delivery_window.dart';
 import 'package:pao_api/src/model/device_token_input.dart';
 import 'package:pao_api/src/model/due_summary.dart';
 import 'package:pao_api/src/model/earnings_job.dart';
@@ -110,6 +113,8 @@ import 'package:pao_api/src/model/price_summary.dart';
 import 'package:pao_api/src/model/price_version.dart';
 import 'package:pao_api/src/model/provider_cancel_input.dart';
 import 'package:pao_api/src/model/provider_card.dart';
+import 'package:pao_api/src/model/provider_delivery.dart';
+import 'package:pao_api/src/model/provider_delivery_list.dart';
 import 'package:pao_api/src/model/provider_profile.dart';
 import 'package:pao_api/src/model/provider_profile_update.dart';
 import 'package:pao_api/src/model/provider_public_profile.dart';
@@ -131,6 +136,7 @@ import 'package:pao_api/src/model/service_area_check.dart';
 import 'package:pao_api/src/model/service_area_input.dart';
 import 'package:pao_api/src/model/service_input.dart';
 import 'package:pao_api/src/model/service_ref.dart';
+import 'package:pao_api/src/model/service_schedule.dart';
 import 'package:pao_api/src/model/services_input.dart';
 import 'package:pao_api/src/model/setting.dart';
 import 'package:pao_api/src/model/setting_list.dart';
@@ -140,6 +146,9 @@ import 'package:pao_api/src/model/start_code.dart';
 import 'package:pao_api/src/model/status_reason.dart';
 import 'package:pao_api/src/model/sub_service.dart';
 import 'package:pao_api/src/model/sub_service_input.dart';
+import 'package:pao_api/src/model/subscription.dart';
+import 'package:pao_api/src/model/subscription_create.dart';
+import 'package:pao_api/src/model/subscription_list.dart';
 import 'package:pao_api/src/model/timeline_entry.dart';
 import 'package:pao_api/src/model/token_pair.dart';
 import 'package:pao_api/src/model/totp_enrolment.dart';
@@ -337,6 +346,16 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'DeleteAccountRequest':
       return DeleteAccountRequest.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'DeliveryChange':
+      return DeliveryChange.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'DeliveryDate':
+      return DeliveryDate.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'DeliveryPattern':
+    case 'DeliveryStatus':
+    case 'DeliveryWindow':
+      return DeliveryWindow.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
     case 'DeviceTokenInput':
       return DeviceTokenInput.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -494,6 +513,12 @@ ReturnType deserialize<ReturnType, BaseType>(
           as ReturnType;
     case 'ProviderCard':
       return ProviderCard.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'ProviderDelivery':
+      return ProviderDelivery.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'ProviderDeliveryList':
+      return ProviderDeliveryList.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
     case 'ProviderProfile':
       return ProviderProfile.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -503,6 +528,7 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'ProviderPublicProfile':
       return ProviderPublicProfile.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'QuantityUnit':
     case 'RatingBreakdown':
       return RatingBreakdown.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -548,6 +574,9 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'ServiceModel':
     case 'ServiceRef':
       return ServiceRef.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'ServiceSchedule':
+      return ServiceSchedule.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
     case 'ServicesInput':
       return ServicesInput.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -570,6 +599,15 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'SubServiceInput':
       return SubServiceInput.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'Subscription':
+      return Subscription.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'SubscriptionCreate':
+      return SubscriptionCreate.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'SubscriptionList':
+      return SubscriptionList.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'SubscriptionStatus':
     case 'TimelineEntry':
       return TimelineEntry.fromJson(value as Map<String, dynamic>)
           as ReturnType;
