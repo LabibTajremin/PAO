@@ -35,7 +35,7 @@ public sealed class NotificationEventNotes(NotificationSender sender, Notificati
 
     /// <summary>Every event name that notifies someone.</summary>
     public static IEnumerable<string> EventNames =>
-        [AdminEvents.ComplaintResolved, .. VerificationNotes.Keys, .. BillingNotes.Notes.Keys, .. BookingNotes.Recipients.Keys];
+        [AdminEvents.ComplaintResolved, .. VerificationNotes.Keys, .. BillingNotes.Notes.Keys, .. BookingNotes.Recipients.Keys, .. SubscriptionNotes.Recipients.Keys];
 
     /// <summary>Notifies whoever `envelope` concerns.</summary>
     public Task Handle(Envelope envelope, CancellationToken cancellationToken)
@@ -54,7 +54,29 @@ public sealed class NotificationEventNotes(NotificationSender sender, Notificati
             var (template, data) = billing(p);
             return ToProvider(envelope, p, template, (_, _) => data, cancellationToken);
         }
+        if (SubscriptionNotes.Recipients.TryGetValue(envelope.Name, out var subscription))
+        {
+            return OnSubscription(envelope, p, subscription(p), cancellationToken);
+        }
         return OnBooking(envelope, p, BookingNotes.Recipients[envelope.Name](p), cancellationToken);
+    }
+
+    private async Task OnSubscription(Envelope envelope, EventPayload p, IReadOnlyList<Note> notes, CancellationToken cancellationToken)
+    {
+        foreach (var n in notes)
+        {
+            var language = await peers.Language(Guid.Parse(n.To), n.App, cancellationToken);
+            var data = new Dictionary<string, string>
+            {
+                ["number"] = p.Text("number"),
+                ["service"] = language == "en" ? p.Text("serviceEn") : p.Text("serviceBn"),
+            };
+            foreach (var (key, value) in n.Extra ?? new Dictionary<string, string>())
+            {
+                data[key] = value;
+            }
+            await sender.Send(new Outgoing(Guid.Parse(n.To), n.App, n.Template, data, null, $"{envelope.Id}:{n.Template}", language), cancellationToken);
+        }
     }
 
     private async Task ToProvider(Envelope envelope, EventPayload p, string template, Func<EventPayload, string, Dictionary<string, string>> data, CancellationToken cancellationToken)

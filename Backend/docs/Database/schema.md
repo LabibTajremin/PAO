@@ -846,6 +846,78 @@ Handlers record events they have applied so redelivery is harmless. Created in `
 
 Keys: PK `PRIMARY KEY (handler, event_id)`.
 
+### booking.subscription_dates
+Created in `booking/0004_subscriptions.sql`. Only dates that differ from the plan or became a booking (ADR-0041 §3).
+
+| Column | Type | Null | Default |
+|---|---|---|---|
+| `subscription_id` | uuid | no | — |
+| `date` | date | no | — |
+| `state` | text | no | — |
+| `items` | jsonb | yes | — |
+| `booking_id` | uuid | yes | — |
+| `updated_at` | timestamp with time zone | no | `now()` |
+
+Keys: PK `PRIMARY KEY (subscription_id, date)`; FK `FOREIGN KEY (subscription_id) REFERENCES booking.subscriptions(id) ON DELETE CASCADE`; FK `FOREIGN KEY (booking_id) REFERENCES booking.bookings(id)`.
+
+| Index | Columns | Kind | Serves |
+|---|---|---|---|
+| `subscription_dates_pkey` | `(subscription_id, date)` | unique | A subscription's dates, in a date range (SubscriptionRepository.Get and WithDates). |
+| `subscription_dates_date_idx` | `(date)` | — | Dates across subscriptions for a day, for the delivery sweep and support. |
+
+### booking.subscriptions
+Created in `booking/0004_subscriptions.sql`. A scheduled-delivery order and its snapshots (ADR-0041).
+
+| Column | Type | Null | Default |
+|---|---|---|---|
+| `id` | uuid | no | — |
+| `number` | bigint | no | `nextval('booking.subscription_number_seq'::regclass)` |
+| `customer_id` | uuid | no | — |
+| `provider_id` | uuid | no | — |
+| `service_id` | uuid | no | — |
+| `service_name_en` | text | no | — |
+| `service_name_bn` | text | no | — |
+| `customer_name` | text | no | — |
+| `customer_phone` | text | no | — |
+| `provider_name` | text | no | — |
+| `provider_phone` | text | no | — |
+| `address_id` | uuid | no | — |
+| `address_area` | text | no | — |
+| `address_line1` | text | no | — |
+| `address_line2` | text | no | `''::text` |
+| `address_lat` | double precision | no | — |
+| `address_lng` | double precision | no | — |
+| `note` | text | no | `''::text` |
+| `items` | jsonb | no | — |
+| `total_paisa` | bigint | no | — |
+| `unit` | text | no | — |
+| `pattern` | text | no | — |
+| `weekdays` | integer[] | no | `'{}'::integer[]` |
+| `day_of_month` | integer | yes | — |
+| `window_start` | time without time zone | no | — |
+| `window_end` | time without time zone | no | — |
+| `cutoff` | time without time zone | no | — |
+| `start_date` | date | no | — |
+| `end_date` | date | yes | — |
+| `count` | integer | yes | — |
+| `status` | text | no | — |
+| `decline_reason` | text | no | `''::text` |
+| `idempotency_key` | text | no | — |
+| `created_at` | timestamp with time zone | no | `now()` |
+| `updated_at` | timestamp with time zone | no | `now()` |
+| `accepted_at` | timestamp with time zone | yes | — |
+
+Keys: PK `PRIMARY KEY (id)`.
+
+| Index | Columns | Kind | Serves |
+|---|---|---|---|
+| `subscriptions_active_idx` | `(start_date) WHERE (status = 'active'::text)` | partial | The five-minute delivery sweep reads only active subscriptions that have started (MaterialiseDeliveries). |
+| `subscriptions_created_idx` | `(created_at DESC, id DESC)` | — | The admin list without a status filter, newest first. |
+| `subscriptions_customer_id_idempotency_key_key` | `(customer_id, idempotency_key)` | unique | An `Idempotency-Key` replay returns the stored order. |
+| `subscriptions_customer_idx` | `(customer_id, created_at DESC, id DESC)` | — | A customer's subscriptions newest first. |
+| `subscriptions_number_key` | `(number)` | unique | The human-readable number. |
+| `subscriptions_provider_idx` | `(provider_id, status, created_at DESC)` | — | A merchant's inbox by status and the delivery calendar. |
+
 ### booking.timeline
 Created in `booking/0001_init.sql`.
 

@@ -14,4 +14,9 @@ request, validator and handler. Overview: [overview.md](overview.md).
 | `Monitor` | `MonitorBookings`, `GetSupportBooking` | query | admin filters by status, service, area and Dhaka dates (A-06) |
 | `Discovery` | `FindNearbyProviders` | query | the fixed price and verified, online providers (C10) |
 | `Earnings` | `GetEarningsSummary`, `ListEarningsJobs` | query | every day of the period; jobs default to this month |
-| `Erasure` | `EraseBookingSnapshots` | command | blanks a deleted account's details (PRD §11) |
+| `Erasure` | `EraseBookingSnapshots` | command | blanks a deleted account's details in bookings and subscriptions (PRD §11) |
+| `Subscriptions` | `CreateSubscription` | request with its own transaction | a scheduled-delivery order (ADR-0041): pattern, window and quantity checked against the service's schedule, lead time and cutoff (`booking.lead_time`), idempotency key |
+| `Subscriptions` | `SetSubscriptionStatus`, `ChangeDelivery` | command | the customer pauses, resumes or cancels; skips, brings back or changes one date before its cutoff (DELIVERY_CUTOFF_PASSED) |
+| `Subscriptions` | `AcceptSubscription`, `DeclineSubscription`, `DeclineDelivery` | command | the merchant answers once (the due limit applies) and may decline single dates before their cutoff |
+| `Subscriptions` | `ListSubscriptions`, `GetSubscription`, `ListProviderDeliveries` | query | per side or for support; the next 31 days of dates; the merchant's deliveries over at most 62 days |
+| `Subscriptions` | `MaterialiseDeliveries` | request | the `booking.materialise_deliveries` sweep: dates past their cutoff become accepted bookings, one transaction and key per date; the last date finishes the subscription |

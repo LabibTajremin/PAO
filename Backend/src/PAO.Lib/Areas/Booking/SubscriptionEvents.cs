@@ -1,4 +1,5 @@
 using PAO.Lib.Events;
+using PAO.Lib.Mediator;
 
 namespace PAO.Lib.Areas.Booking;
 
@@ -92,3 +93,11 @@ public sealed record DeliveryBooked() : BookingEvent(SubscriptionEvents.Delivery
     /// <summary>The window, e.g. 12:00–13:00.</summary>
     public required string Window { get; init; }
 }
+
+/// <summary>
+/// The cutoff sweep (ADR-0041 §4): every active subscription's dates whose cutoff passed and
+/// whose window has not ended become accepted bookings, today's and tomorrow's only. Each
+/// booking writes in its own transaction with a key per date, so a rerun after a failure
+/// finds the booking instead of making a second one. Returns how many it made.
+/// </summary>
+public sealed record MaterialiseDeliveries : IRequest<int>;

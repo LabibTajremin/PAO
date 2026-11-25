@@ -4,7 +4,7 @@ using PAO.Lib.Mediator;
 
 namespace PAO.Core.Areas.Booking.Features.Erasure.Commands;
 
-/// <summary>Blanks a deleted account's personal details in the booking snapshots (PRD §11); the account may have booked, served, or both.</summary>
+/// <summary>Blanks a deleted account's personal details in the booking and subscription snapshots (PRD §11); the account may have booked, served, or both.</summary>
 public sealed record EraseBookingSnapshots(Guid AccountId) : ICommand;
 
 /// <summary>Checks <see cref="EraseBookingSnapshots"/>.</summary>
@@ -15,12 +15,13 @@ public sealed class EraseBookingSnapshotsValidator : AbstractValidator<EraseBook
 }
 
 /// <summary>Answers <see cref="EraseBookingSnapshots"/>; both updates are idempotent, so a redelivered event is harmless.</summary>
-public sealed class EraseBookingSnapshotsHandler(BookingRepository repository) : IRequestHandler<EraseBookingSnapshots, Unit>
+public sealed class EraseBookingSnapshotsHandler(BookingRepository repository, SubscriptionRepository subscriptions) : IRequestHandler<EraseBookingSnapshots, Unit>
 {
     /// <inheritdoc />
     public async Task<Unit> Handle(EraseBookingSnapshots request, CancellationToken cancellationToken)
     {
         await repository.Erase(request.AccountId, cancellationToken);
+        await subscriptions.Erase(request.AccountId, cancellationToken);
         return Unit.Value;
     }
 }

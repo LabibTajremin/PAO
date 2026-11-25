@@ -32,6 +32,6 @@ public sealed class JobsInApiRegistrationTests
         var worker = new ServiceCollection().AddBackgroundJobs(Paths);
         Assert.Equal(Described(worker), Described(api));
         Assert.Equal(typeof(WorkerLoop), Assert.Single(api, d => d.ServiceType == typeof(IHostedService)).ImplementationType);
-        Assert.Equal(7, api.Count(d => d.ServiceType == typeof(IScheduledJob)));
+        Assert.Equal(8, api.Count(d => d.ServiceType == typeof(IScheduledJob)));
     }
 }

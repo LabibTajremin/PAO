@@ -66,9 +66,11 @@ an empty database and compares schema, version rows and catalog with `migrate up
 | `catalog/0001_init.sql` | Catalog: Category → Service → Sub-service with immutable price versions (PRD §4). |
 | `catalog/0002_banners.sql` | Home banners managed in the admin panel, with one seeded demo banner (ADR-0037 §2). |
 | `catalog/0003_icon_urls.sql` | `icon_url` on categories and services: an uploaded or linked icon in the public bucket, shown instead of the library `icon_key` (ADR-0039). |
+| `catalog/0004_service_schedule.sql` | The `scheduled_delivery` service model and `services.schedule`, the ordering rules an admin sets (ADR-0041). |
 | `booking/0001_init.sql` | Booking: lifecycle, snapshots, items, extras and the timeline (PRD §5). |
 | `booking/0002_payment_method.sql` | `payment_method`, only `cash_on_delivery` in the first release (ADR-0035 §1). |
 | `booking/0003_lookup_indexes.sql` | Indexes for the expiry sweep, the admin monitor and proposals by booking ([schema](schema.md#index-review)). |
+| `booking/0004_subscriptions.sql` | `booking.subscriptions` and `booking.subscription_dates` for scheduled delivery; dates are computed, only exceptions are stored (ADR-0041). |
 | `rating/0001_init.sql` | Rating: two-way reviews and incrementally updated aggregates (C-11, P-09). |
 | `notification/0001_init.sql` | Notification: in-app inbox and device tokens (C-13, P-12). |
 | `media/0001_init.sql` | Media: metadata for objects uploaded directly to private storage (PRD §6.6). |
@@ -76,6 +78,7 @@ an empty database and compares schema, version rows and catalog with `migrate up
 | `admin/0002_billing_settings.sql` | Settings `billing.commission_rate_bp` and `billing.due_block_amount` (ADR-0035). |
 | `admin/0003_complaints_against_index.sql` | `complaints_against_all_idx`: every complaint against a person, for the admin person view. |
 | `admin/0004_artwork_and_tagline.sql` | `admin.artwork_slots` for admin-managed illustrations and the `brand.tagline` setting (ADR-0040). |
+| `admin/0005_delivery_holidays.sql` | The `booking.delivery_holidays` setting: dates without scheduled deliveries. |
 | `audit/0001_init.sql` | Audit: the append-only trail of decisions and status changes (PRD §6.4, A-08). |
 | `billing/0001_init.sql` | Billing: the merchant ledger, payment submissions, outbox (ADR-0035). |
 | `bundle/schema.sql` | Generated: every script above in one idempotent file (`migrate bundle`). |

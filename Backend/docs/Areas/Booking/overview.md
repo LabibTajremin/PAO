@@ -19,6 +19,10 @@ Code: `src/PAO.Core/Areas/Booking/`; contracts: `src/PAO.Lib/Areas/Booking/`. Ba
 | `BookingPeers` | Catalog, Customer, Identity, Merchant, Verification, Media, Admin, Rating and Billing, resolved on first use; `EnsureCanAccept` is the one place Billing's due limit is checked before an accept (ADR-0035 §3) |
 | `BookingSides` | what each side sees: the provider gets the exact address and either side the other's phone only after acceptance; support sees all |
 | `BookingPaging` | keyset pages over (time, id) with one look-ahead row |
+| `DeliveryCalendar` | a subscription's dates from its pattern in Asia/Dhaka (month ends fall on the last day, holidays left out, the count kept), cutoffs and windows as instants (ADR-0041) |
+| `SubscriptionAccess` | loads and changes subscriptions for one party (others' are not found), stamps subscription events, reads the holidays setting and the next 31 days |
+| `SubscriptionDays` | merges planned dates with stored exceptions and derives each date's status, from the booking once the sweep made one |
+| `SubscriptionSides` | what each side sees of a subscription: phones and the exact address once accepted |
 | `EarningsCalendar` | Asia/Dhaka days, Saturday weeks and months (P-08) |
 | `BookingSubscriptions` | erasure on `identity.AccountDeleted` (see [events](events.md)) |
 
@@ -31,7 +35,7 @@ Code: `src/PAO.Core/Areas/Booking/`; contracts: `src/PAO.Lib/Areas/Booking/`. Ba
 | `GetMerchantStats` | Returns completed jobs and recent merchant cancellations, for search cards and quality thresholds (D13). |
 | `ListRecentBookings` | Returns a party's latest bookings for admin detail pages. |
 
-Mapping: `BookingMappingProfile`, `BookingRecordProfile`. Job: `BookingExpiryJob` ([jobs](../../Operations/jobs.md)).
+Mapping: `BookingMappingProfile`, `BookingRecordProfile`. Jobs: `BookingExpiryJob`, `MaterialiseDeliveriesJob` ([jobs](../../Operations/jobs.md)).
 
 ## Billing seams (P17 task 5)
 

@@ -2,6 +2,7 @@ using FluentValidation;
 using PAO.Core.Areas.Booking.Services;
 using PAO.Lib.Areas.Booking;
 using PAO.Lib.Areas.Catalog;
+using PAO.Lib.Areas.Merchant;
 using PAO.Lib.Errors;
 using PAO.Lib.Mapping;
 using PAO.Lib.Mediator;
@@ -53,29 +54,32 @@ public sealed class CreateSubscriptionHandler(SubscriptionAccess access, Booking
         }
         await EnsureLeadTime(plan, window, schedule, cancellationToken);
         var (customer, address, provider) = await pricing.Sides(request.CustomerId, input.AddressId, input.ProviderId, service.Id, cancellationToken);
-        var subscription = new StoredSubscription
-        {
-            Id = access.NewId(),
-            Customer = customer,
-            Provider = new BookingParty(provider.Id, provider.FullName, provider.Phone),
-            ServiceId = service.Id,
-            ServiceName = service.Name,
-            Address = address,
-            Note = (input.Note ?? string.Empty).Trim(),
-            Lines = lines,
-            TotalPaisa = BookingStates.Total(lines),
-            Unit = schedule.Unit,
-            Plan = plan,
-            Window = window,
-            Cutoff = schedule.CutoffTime,
-            Status = SubscriptionStatus.Requested,
-            IdempotencyKey = request.IdempotencyKey,
-            CreatedAt = access.Now,
-        };
+        var subscription = Draft(request, service, schedule, plan, lines, customer, address, provider);
         var stored = await access.Repository.Create(subscription,
             s => access.Event(new SubscriptionRequested { StartDate = EarningsCalendar.Iso(s.Plan.StartDate) }, s), cancellationToken);
         return mapper.Customer(stored, await access.Upcoming(stored, cancellationToken));
     }
+
+    private StoredSubscription Draft(CreateSubscription request, CatalogService service, ServiceSchedule schedule, DeliveryPlan plan,
+    List<BookingLine> lines, BookingParty customer, AddressSnapshot address, MerchantProfile provider) => new()
+    {
+        Id = access.NewId(),
+        Customer = customer,
+        Provider = new BookingParty(provider.Id, provider.FullName, provider.Phone),
+        ServiceId = service.Id,
+        ServiceName = service.Name,
+        Address = address,
+        Note = (request.Input.Note ?? string.Empty).Trim(),
+        Lines = lines,
+        TotalPaisa = BookingStates.Total(lines),
+        Unit = schedule.Unit,
+        Plan = plan,
+        Window = request.Input.Window!,
+        Cutoff = schedule.CutoffTime,
+        Status = SubscriptionStatus.Requested,
+        IdempotencyKey = request.IdempotencyKey,
+        CreatedAt = access.Now,
+    };
 
     private static DeliveryPlan Plan(SubscriptionCreateInput input) => new()
     {

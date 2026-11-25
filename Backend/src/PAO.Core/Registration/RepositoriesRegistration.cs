@@ -20,6 +20,7 @@ public static class RepositoriesRegistration
     /// <summary>Adds the repositories; each area's are added here as its use cases are ported (P17 tasks 2–5).</summary>
     public static IServiceCollection AddRepositories(this IServiceCollection services) => services
         .AddScoped<BookingRepository>()
+        .AddScoped<SubscriptionRepository>()
         .AddScoped<BookingQueries>()
         .AddScoped<RatingRepository>()
         .AddScoped<BillingRepository>()

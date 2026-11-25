@@ -70,10 +70,10 @@ public sealed class SubscriptionRepository(PaoDbContext db, OutboxWriter outbox,
         return [.. rows.Select(SubscriptionRows.ToModel)];
     }
 
-    /// <summary>The subscriptions matching <paramref name="filter"/> with their dates between two days.</summary>
-    public async Task<IReadOnlyList<StoredSubscription>> WithDates(Func<IQueryable<SubscriptionRecord>, IQueryable<SubscriptionRecord>> filter, DateOnly from, DateOnly to, CancellationToken cancellationToken)
+    /// <summary>The subscriptions matching <paramref name="filter"/> (at most <paramref name="limit"/>) with their dates between two days.</summary>
+    public async Task<IReadOnlyList<StoredSubscription>> WithDates(Func<IQueryable<SubscriptionRecord>, IQueryable<SubscriptionRecord>> filter, DateOnly from, DateOnly to, int limit, CancellationToken cancellationToken)
     {
-        var subscriptions = await List(filter, 500, cancellationToken);
+        var subscriptions = await List(filter, limit, cancellationToken);
         var dates = await Dates([.. subscriptions.Select(s => s.Id)], from, to, cancellationToken);
         var byId = subscriptions.ToDictionary(s => s.Id);
         foreach (var d in dates)

@@ -51,7 +51,7 @@ public sealed class CatalogRuleTests
         Assert.False(CatalogRules.IsValidSubService(Name, "job", 0));
         Assert.True(CatalogRules.IsValidPrice(0));
         Assert.False(CatalogRules.IsValidPrice(-1));
-        Assert.Equal(["on_demand", "duration_hire", "listing", "partner_referral"], CatalogRules.Models);
+        Assert.Equal(["on_demand", "duration_hire", "listing", "partner_referral", "scheduled_delivery"], CatalogRules.Models);
         Assert.Equal(["job", "unit", "hour", "day"], CatalogRules.Units);
     }
 
@@ -149,7 +149,7 @@ public sealed class AreaContractTests
         Assert.All(Constants(typeof(MediaErrors)).Concat(Constants(typeof(MediaReasons))), r => Assert.StartsWith("media.", r, StringComparison.Ordinal));
         Assert.Equal(["avatar", "nid_front", "nid_back", "selfie", "police_clearance", "skill_proof", "address_proof", "complaint_photo", "level2_photo"], Constants(typeof(MediaPurpose)));
         Assert.Equal(["push", "sms", "inbox"], Constants(typeof(Channel)));
-        Assert.Equal(["on_demand", "duration_hire", "listing", "partner_referral"], Constants(typeof(ServiceModel)));
+        Assert.Equal(["on_demand", "duration_hire", "listing", "partner_referral", "scheduled_delivery"], Constants(typeof(ServiceModel)));
         Assert.Equal(["job", "unit", "hour", "day"], Constants(typeof(PriceUnit)));
     }
 }

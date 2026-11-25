@@ -16,6 +16,7 @@ public static class BookingAreaRegistration
         .AddSingleton<IEventSubscriptions, BookingSubscriptions>()
         .AddScoped<BookingPeers>()
         .AddScoped<BookingAccess>()
+        .AddScoped<SubscriptionAccess>()
         .AddScoped<BookingPricing>()
         .AddScoped<IBookingSharedService, BookingSharedService>();
 }

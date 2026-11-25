@@ -11,6 +11,10 @@ Errors map through `BookingErrorMap`.
 | `DiscoveryControllers` | the file holding the error map and the three controllers below | |
 | `NearbyController` | `GET /v1/customer/providers/nearby` | `[Customer(Permission = "provider:browse")]` |
 | `AdminBookingsController` | `GET /v1/admin/bookings`, `GET …/{bookingId}` | `[Admin(Permission = "booking:read:any")]` |
+| `SubscriptionControllers` | the file holding the three subscription controllers below (ADR-0041) | |
+| `CustomerSubscriptionsController` | `POST /v1/customer/subscriptions` (201, Idempotency-Key), `GET …`, `GET …/{subscriptionId}`, `POST …/pause`, `…/resume`, `…/cancel`, `PUT …/deliveries/{date}` | `[Customer(Permission = "booking:create" / "booking:read:own" / "booking:update:own" / "booking:cancel:own")]` |
+| `ProviderSubscriptionsController` | `GET /v1/provider/subscriptions`, `GET …/{subscriptionId}`, `POST …/accept`, `…/decline`, `…/deliveries/{date}/decline`, `GET /v1/provider/deliveries` | `[Merchant(Permission = "job:read:own" / "job:respond")]` |
+| `AdminSubscriptionsController` | `GET /v1/admin/subscriptions`, `GET …/{subscriptionId}` | `[Admin(Permission = "booking:read:any")]` |
 | `EarningsController` | `GET /v1/provider/earnings/summary`, `…/jobs` | `[Merchant(Permission = "earnings:read:own")]` |
 
 Reviews and reports on bookings belong to Rating and Admin.

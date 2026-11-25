@@ -24,6 +24,11 @@ public static class BookingNotes
             [BookingEvents.ExtraItemsDecided] = p =>
                 [Provider(p, "extras_decided") with { Extra = new Dictionary<string, string> { ["decision"] = p.Flag("approved") ? "approved" : "declined" } }],
             [BookingEvents.BookingCompleted] = p => [Customer(p, "booking_completed"), Provider(p, "booking_completed")],
+            [SubscriptionEvents.DeliveryBooked] = p =>
+            [
+                Customer(p, "delivery_tomorrow") with { Extra = When(p) },
+                Provider(p, "deliveries_tomorrow") with { Extra = When(p) },
+            ],
             [BookingEvents.BookingCancelled] = p =>
                 p.Text("by") == "customer" ? [Provider(p, "booking_cancelled")] : [Customer(p, "booking_cancelled")],
         };
@@ -31,6 +36,8 @@ public static class BookingNotes
     private static Note Customer(EventPayload p, string template) => new(p.Id("customerId"), NotificationApp.Customer, template);
 
     private static Note Provider(EventPayload p, string template) => new(p.Id("providerId"), NotificationApp.Partner, template);
+
+    private static Dictionary<string, string> When(EventPayload p) => new() { ["date"] = p.Text("date"), ["window"] = p.Text("window") };
 
     private static string Taka(double paisa) => Math.Truncate(paisa / 100).ToString(CultureInfo.InvariantCulture);
 }

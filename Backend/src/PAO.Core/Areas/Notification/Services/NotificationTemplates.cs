@@ -33,6 +33,14 @@ public static partial class NotificationTemplates
         ["payment_submitted"] = (new("Payment received for review", "We received your payment of ৳{{amount}} and will check it soon."), new("পেমেন্ট যাচাইয়ের জন্য গৃহীত", "আপনার ৳{{amount}} পেমেন্ট পেয়েছি, শীঘ্রই যাচাই করা হবে।")),
         ["payment_confirmed"] = (new("Payment confirmed", "Your payment of ৳{{amount}} was confirmed. Your due is ৳{{due}}."), new("পেমেন্ট নিশ্চিত", "আপনার ৳{{amount}} পেমেন্ট নিশ্চিত হয়েছে। আপনার বকেয়া ৳{{due}}।")),
         ["payment_rejected"] = (new("Payment not accepted", "Your payment of ৳{{amount}} was not accepted: {{reason}}"), new("পেমেন্ট গৃহীত হয়নি", "আপনার ৳{{amount}} পেমেন্ট গৃহীত হয়নি: {{reason}}")),
+        ["subscription_requested"] = (new("New delivery order", "{{service}} from {{date}} ({{number}}). Accept it to start the deliveries."), new("নতুন ডেলিভারি অর্ডার", "{{date}} থেকে {{service}} ({{number}})। ডেলিভারি শুরু করতে গ্রহণ করুন।")),
+        ["subscription_accepted"] = (new("Order accepted", "Your {{service}} order {{number}} is confirmed."), new("অর্ডার গৃহীত", "আপনার {{service}} অর্ডার {{number}} নিশ্চিত হয়েছে।")),
+        ["subscription_declined"] = (new("Order declined", "Your {{service}} order {{number}} was declined. Please choose another provider."), new("অর্ডার গৃহীত হয়নি", "আপনার {{service}} অর্ডার {{number}} গৃহীত হয়নি। অন্য সেবাদাতা বেছে নিন।")),
+        ["subscription_changed"] = (new("Order updated", "Order {{number}} is now {{status}}."), new("অর্ডার হালনাগাদ", "অর্ডার {{number}} এখন {{status}}।")),
+        ["delivery_changed"] = (new("Delivery changed", "The customer changed the {{date}} delivery of order {{number}}."), new("ডেলিভারি পরিবর্তন", "গ্রাহক অর্ডার {{number}}-এর {{date}} তারিখের ডেলিভারি বদলেছেন।")),
+        ["delivery_declined"] = (new("Delivery not possible", "There is no {{service}} delivery on {{date}} for order {{number}}."), new("ডেলিভারি হবে না", "অর্ডার {{number}}-এর {{date}} তারিখে {{service}} ডেলিভারি হবে না।")),
+        ["delivery_tomorrow"] = (new("Delivery tomorrow", "{{service}} arrives on {{date}} between {{window}}. Pay cash on delivery."), new("আগামীকাল ডেলিভারি", "{{date}} তারিখে {{window}}-এর মধ্যে {{service}} পৌঁছাবে। ডেলিভারির সময় নগদে পরিশোধ করুন।")),
+        ["deliveries_tomorrow"] = (new("Delivery to prepare", "{{service}} for {{customer}} on {{date}}, {{window}} ({{number}})."), new("ডেলিভারির প্রস্তুতি", "{{date}}, {{window}}: {{customer}}-এর জন্য {{service}} ({{number}})।")),
         ["complaint_resolved"] = (new("Report resolved", "Your report {{ticket}} has been resolved."), new("অভিযোগের সমাধান", "আপনার অভিযোগ {{ticket}}-এর সমাধান হয়েছে।")),
     };
 

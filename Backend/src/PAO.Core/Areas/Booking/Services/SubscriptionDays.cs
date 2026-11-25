@@ -28,8 +28,9 @@ public static class SubscriptionDays
         s.Dates.TryGetValue(date, out var row);
         var lines = row?.Lines ?? s.Lines;
         var open = s.Status is SubscriptionStatus.Requested or SubscriptionStatus.Active;
-        var changeable = open && row?.State != DateState.Booked && row?.State != DateState.Declined
-            && now < DeliveryCalendar.Cutoff(date, s.Cutoff);
+        // Only a planned, skipped or changed date can still change; the others are settled.
+        var settled = row?.State is DateState.Booked or DateState.Declined or DateState.Cancelled;
+        var changeable = open && !settled && now < DeliveryCalendar.Cutoff(date, s.Cutoff);
         return new DayOfSubscription(date, Status(s, row, date, now), lines, row?.BookingId, changeable);
     }
 
