@@ -26,7 +26,7 @@ public sealed class CatalogApiTests(MigratedDatabase database) : IClassFixture<M
         var output = new StringWriter();
         Assert.Equal(0, await new[] { "seed" }.RunMigrator(Hosts.Environment(database.Url), Hosts.Paths.Migrations, output,
             () => SeedCommand.Run(Hosts.Paths, Hosts.Environment(database.Url), output)));
-        Assert.Contains("migrate seed: 7 categories", output.ToString(), StringComparison.Ordinal);
+        Assert.Contains("migrate seed: 8 categories", output.ToString(), StringComparison.Ordinal);
         api = await AreaApi.Start(database.Url);
         customer = api.Token("customer");
         admin = api.Token("catalog_manager");
@@ -43,8 +43,8 @@ public sealed class CatalogApiTests(MigratedDatabase database) : IClassFixture<M
     {
         var tree = await api.Call(HttpMethod.Get, "/v1/customer/catalog", customer);
         Assert.Equal(HttpStatusCode.OK, tree.Status);
-        Assert.Equal(7, tree.Body.GetProperty("categories").GetArrayLength());
-        Assert.Equal(7, (await api.Call(HttpMethod.Get, "/v1/customer/catalog", customer)).Body.GetProperty("categories").GetArrayLength());
+        Assert.Equal(8, tree.Body.GetProperty("categories").GetArrayLength());
+        Assert.Equal(8, (await api.Call(HttpMethod.Get, "/v1/customer/catalog", customer)).Body.GetProperty("categories").GetArrayLength());
         var searches = new Dictionary<string, Guid>
         {
             ["fan"] = SeedIds.For("sub-service", "fan-install"),
@@ -105,8 +105,8 @@ public sealed class CatalogApiTests(MigratedDatabase database) : IClassFixture<M
         {
             Assert.Equal(HttpStatusCode.OK, (await api.Call(HttpMethod.Put, path, admin, body)).Status);
         }
-        Assert.Equal(8, (await api.Call(HttpMethod.Get, "/v1/admin/catalog", admin)).Body.GetProperty("categories").GetArrayLength());
-        Assert.Equal(7, (await api.Call(HttpMethod.Get, "/v1/customer/catalog", customer)).Body.GetProperty("categories").GetArrayLength());
+        Assert.Equal(9, (await api.Call(HttpMethod.Get, "/v1/admin/catalog", admin)).Body.GetProperty("categories").GetArrayLength());
+        Assert.Equal(8, (await api.Call(HttpMethod.Get, "/v1/customer/catalog", customer)).Body.GetProperty("categories").GetArrayLength());
         var db = api.Services.CreateScope().ServiceProvider.GetRequiredService<PaoDbContext>();
         var events = await db.Database.SqlQuery<string>($"""SELECT event_name AS "Value" FROM catalog.outbox""").ToListAsync();
         Assert.Contains(CatalogEvents.PriceChanged, events);
@@ -153,7 +153,7 @@ public sealed class CatalogApiTests(MigratedDatabase database) : IClassFixture<M
         Assert.True(salon.WomenProvidersOnly);
         Assert.Equal(ServiceModel.OnDemand, salon.Model);
         Assert.Equal(2, salon.Level2Checklist.Count);
-        Assert.Equal(7, (await Contract(scope).ListServices(CancellationToken.None)).Count);
+        Assert.Equal(9, (await Contract(scope).ListServices(CancellationToken.None)).Count);
     }
 
     [Fact]
@@ -165,6 +165,6 @@ public sealed class CatalogApiTests(MigratedDatabase database) : IClassFixture<M
         var tree = new CatalogTreeService(
             scope.ServiceProvider.GetRequiredService<CatalogRepository>(), new JsonCache(broken), scope.ServiceProvider.GetRequiredService<RedisKeys>(),
             NullLogger<CatalogTreeService>.Instance);
-        Assert.Equal(7, (await tree.Published(CancellationToken.None)).Categories.Count);
+        Assert.Equal(8, (await tree.Published(CancellationToken.None)).Categories.Count);
     }
 }

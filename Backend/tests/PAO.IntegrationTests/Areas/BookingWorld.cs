@@ -40,6 +40,10 @@ public sealed class BookingWorld
         return new BookingWorld(api, provider, customer, address);
     }
 
+    /// <summary>A world of parties made for another service, such as scheduled delivery.</summary>
+    public static BookingWorld For(PeopleApi api, (Guid Id, string Token) provider, (Guid Id, string Token) customer, Guid addressId) =>
+        new(api, provider, customer, addressId);
+
     /// <summary>A Level 1 merchant online near Banani, verified in Verification and Merchant alike.</summary>
     public static async Task<(Guid Id, string Token)> VerifiedProvider(PeopleApi api, string phone, Guid service, string gender = "male")
     {

@@ -6,7 +6,7 @@ using static PAO.IntegrationTests.Areas.BookingWorld;
 namespace PAO.IntegrationTests.Areas;
 
 /// <summary>The ids one account owns in the sweep.</summary>
-public sealed record OwnedIds(Guid Address, Guid Booking, Guid Completed, Guid CustomerNote, Guid ProviderNote, Guid CustomerUpload, Guid ProviderUpload);
+public sealed record OwnedIds(Guid Address, Guid Booking, Guid Completed, Guid CustomerNote, Guid ProviderNote, Guid CustomerUpload, Guid ProviderUpload, Guid Subscription);
 
 /// <summary>
 /// Insecure direct object references (ASVS V4.2.1): every customer and provider route of the
@@ -16,6 +16,7 @@ public sealed record OwnedIds(Guid Address, Guid Booking, Guid Completed, Guid C
 public sealed partial class CrossAccountTests : IAsyncLifetime
 {
     private static readonly Guid Proposal = Guid.Parse("0190f3a0-0000-7000-8000-000000000001");
+    private static readonly string Later = DateTime.UtcNow.AddDays(5).ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
     private static readonly object Report = new { reason = "late", description = "Arrived two hours late." };
     private static readonly object Address = new { label = "home", line1 = "House 1", area = "Gulshan", location = new { lat = 23.79, lng = 90.41 } };
 
@@ -54,6 +55,15 @@ public sealed partial class CrossAccountTests : IAsyncLifetime
         ["POST /v1/provider/jobs/{bookingId}/reports"] = Job("reports", Report),
         ["GET /v1/provider/jobs/{bookingId}/receipt"] = (o => $"/v1/provider/jobs/{o.Booking}/receipt", null),
         ["POST /v1/provider/notifications/{notificationId}/read"] = (o => $"/v1/provider/notifications/{o.ProviderNote}/read", null),
+        ["GET /v1/customer/subscriptions/{subscriptionId}"] = (o => $"/v1/customer/subscriptions/{o.Subscription}", null),
+        ["POST /v1/customer/subscriptions/{subscriptionId}/pause"] = (o => $"/v1/customer/subscriptions/{o.Subscription}/pause", null),
+        ["POST /v1/customer/subscriptions/{subscriptionId}/resume"] = (o => $"/v1/customer/subscriptions/{o.Subscription}/resume", null),
+        ["POST /v1/customer/subscriptions/{subscriptionId}/cancel"] = (o => $"/v1/customer/subscriptions/{o.Subscription}/cancel", null),
+        ["PUT /v1/customer/subscriptions/{subscriptionId}/deliveries/{date}"] = (o => $"/v1/customer/subscriptions/{o.Subscription}/deliveries/{Later}", new { skip = true }),
+        ["GET /v1/provider/subscriptions/{subscriptionId}"] = (o => $"/v1/provider/subscriptions/{o.Subscription}", null),
+        ["POST /v1/provider/subscriptions/{subscriptionId}/accept"] = (o => $"/v1/provider/subscriptions/{o.Subscription}/accept", null),
+        ["POST /v1/provider/subscriptions/{subscriptionId}/decline"] = (o => $"/v1/provider/subscriptions/{o.Subscription}/decline", new { reason = "busy" }),
+        ["POST /v1/provider/subscriptions/{subscriptionId}/deliveries/{date}/decline"] = (o => $"/v1/provider/subscriptions/{o.Subscription}/deliveries/{Later}/decline", null),
         ["POST /v1/provider/uploads/{mediaId}/confirm"] = (o => $"/v1/provider/uploads/{o.ProviderUpload}/confirm", null),
     };
 
@@ -106,7 +116,7 @@ public sealed partial class CrossAccountTests : IAsyncLifetime
         var owned = new OwnedIds(
             w.AddressId, booking, completed,
             await FirstNotification(w.Customer.Token, "customer"), await FirstNotification(w.Provider.Token, "provider"),
-            await api.Avatar(w.Customer.Token, "customer"), await api.Avatar(w.Provider.Token, "provider"));
+            await api.Avatar(w.Customer.Token, "customer"), await api.Avatar(w.Provider.Token, "provider"), await Subscription(w));
         var strangers = new Dictionary<string, string>(StringComparer.Ordinal)
         {
             ["customer"] = (await NewCustomer(api, "01812345699")).Customer.Token,
@@ -129,6 +139,21 @@ public sealed partial class CrossAccountTests : IAsyncLifetime
         }
         Assert.Empty(leaks);
         Assert.Equal(HttpStatusCode.OK, (await w.AsCustomer(HttpMethod.Get, $"/v1/customer/bookings/{booking}")).Status);
+    }
+
+    /// <summary>A requested daily subscription between the two parties, written straight to the table.</summary>
+    private async Task<Guid> Subscription(BookingWorld w)
+    {
+        var id = Guid.CreateVersion7();
+        await api.Sql($"""
+            INSERT INTO booking.subscriptions (id, customer_id, provider_id, service_id, service_name_en, service_name_bn, customer_name,
+                customer_phone, provider_name, provider_phone, address_id, address_area, address_line1, address_lat, address_lng, items,
+                total_paisa, unit, pattern, window_start, window_end, cutoff, start_date, status, idempotency_key)
+            VALUES ('{id}', '{w.Customer.Id}', '{w.Provider.Id}', '{DeliveryFlowTests.Lunch}', 'Office lunch', 'অফিস লাঞ্চ', 'Nusrat',
+                '+8801812345602', 'Rafiq', '+8801712345601', '{w.AddressId}', 'Banani', 'House 12', 23.79, 90.40, '[]',
+                0, 'meals', 'daily', '12:00', '13:00', '20:00', '{Later}', 'requested', 'idor-subscription')
+            """);
+        return id;
     }
 
     private async Task<Guid> FirstNotification(string token, string side)

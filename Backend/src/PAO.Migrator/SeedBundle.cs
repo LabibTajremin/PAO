@@ -45,9 +45,9 @@ public static class SeedBundle
         sql.Append(Upsert(
             "catalog.services",
             ["id", "category_id", "name_en", "name_bn", "icon_key", "service_model", "required_level", "search_radius_m",
-                "women_providers_only", "requires_level_2", "level2_checklist", "sort_order", "published"],
+                "women_providers_only", "requires_level_2", "level2_checklist", "schedule", "sort_order", "published"],
             [Uuid(id), Uuid(categoryId), Str(s.Name.En), Str(s.Name.Bn), Str(s.Icon), Str(s.Model), Int(s.RequiredLevel),
-                Int(s.SearchRadiusM), Bool(s.WomenProvidersOnly), Bool(s.RequiresLevel2), Json(s.Level2Checklist), Int(sortOrder), "true"]));
+                Int(s.SearchRadiusM), Bool(s.WomenProvidersOnly), Bool(s.RequiresLevel2), Json(s.Level2Checklist), s.Schedule is null ? "NULL" : Json(s.Schedule), Int(sortOrder), "true"]));
         foreach (var (sub, order) in s.SubServices.Select((x, i) => (x, i)))
         {
             var subId = SeedIds.For("sub-service", sub.Key);

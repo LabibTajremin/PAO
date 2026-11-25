@@ -39,6 +39,7 @@ public static class SeedFile
                 WomenProvidersOnly = s.WomenProvidersOnly,
                 RequiresLevel2 = s.RequiresLevel2,
                 Level2Checklist = [.. s.Level2Checklist.Select(t => t.ToText())],
+                Schedule = s.Schedule?.ToSchedule(),
                 SubServices = [.. s.SubServices.Select(ss => new SeedSubService
                 {
                     Key = ss.Key, Name = ss.Name.ToText(), Unit = ss.Unit, PricePaisa = ss.Price * 100, MaxQuantity = ss.MaxQuantity,
@@ -84,7 +85,31 @@ public static class SeedFile
         public bool RequiresLevel2 { get; set; }
         [YamlMember(Alias = "level2_checklist")]
         public List<TextRow> Level2Checklist { get; set; } = [];
+        public ScheduleRow? Schedule { get; set; }
         public List<SubServiceRow> SubServices { get; set; } = [];
+    }
+
+    private sealed class ScheduleRow
+    {
+        public List<string> Patterns { get; set; } = [];
+        public List<string> Windows { get; set; } = [];
+        public int LeadHours { get; set; }
+        public string Cutoff { get; set; } = string.Empty;
+        public string Unit { get; set; } = string.Empty;
+        public int MinQuantity { get; set; }
+        public int MaxQuantity { get; set; }
+
+        // Windows are written "12:00-13:00" in the file.
+        public ServiceSchedule ToSchedule() => new()
+        {
+            Patterns = Patterns,
+            Windows = [.. Windows.Select(w => w.Split('-')).Select(p => new DeliveryWindow { Start = p[0], End = p[^1] })],
+            LeadHours = LeadHours,
+            Cutoff = Cutoff,
+            Unit = Unit,
+            MinQuantity = MinQuantity,
+            MaxQuantity = MaxQuantity,
+        };
     }
 
     private sealed class SubServiceRow

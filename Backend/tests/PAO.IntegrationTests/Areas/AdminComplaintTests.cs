@@ -36,7 +36,7 @@ public sealed class AdminComplaintTests : IAsyncLifetime
         var r = await api.Call(HttpMethod.Put, Radius, token, new { value = "7000" });
         Assert.Equal((HttpStatusCode.OK, "7000", root.ToString()), (r.Status, r.Body.GetProperty("value").GetString(), r.Body.GetProperty("updatedBy").GetString()));
         Assert.Equal(7000, (await Admin(a => a.GetSettings(CancellationToken.None))).DefaultSearchRadiusM);
-        Assert.Equal(15, (await api.Call(HttpMethod.Get, "/v1/admin/settings", token)).Body.GetProperty("items").GetArrayLength());
+        Assert.Equal(16, (await api.Call(HttpMethod.Get, "/v1/admin/settings", token)).Body.GetProperty("items").GetArrayLength());
         Assert.Equal("SETTING_INVALID", Code(await api.Call(HttpMethod.Put, Radius, token, new { value = "far" })));
         Assert.Equal("SETTING_INVALID", Code(await api.Call(HttpMethod.Put, "/v1/admin/settings/billing.commission_rate_bp", token, new { value = "10001" })));
         Assert.Equal("SETTING_INVALID", Code(await api.Call(HttpMethod.Put, "/v1/admin/settings/billing.due_block_amount", token, new { value = "-1" })));

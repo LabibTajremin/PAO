@@ -58,6 +58,7 @@ public sealed class SeedCatalogHandler(CatalogRepository repository, CatalogChan
             WomenProvidersOnly = s.WomenProvidersOnly,
             RequiresLevel2 = s.RequiresLevel2,
             Level2Checklist = s.Level2Checklist,
+            Schedule = s.Schedule,
             SortOrder = sortOrder,
             Published = true,
         };

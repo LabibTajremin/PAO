@@ -62,10 +62,7 @@ public sealed class SubscriptionAccess(SubscriptionRepository repository, Bookin
         return SubscriptionDays.Between(s, today, today.AddDays(SubscriptionDays.Horizon), clock.Now, await Holidays(cancellationToken));
     }
 
-    private static bool TakesPart(StoredSubscription s, Guid party, Side side) => side switch
-    {
-        Side.Customer => s.Customer.Id == party,
-        Side.Provider => s.Provider.Id == party,
-        _ => s.Customer.Id == party || s.Provider.Id == party,
-    };
+    // Support reads through the repository; a party acts only on its own side.
+    private static bool TakesPart(StoredSubscription s, Guid party, Side side) =>
+        (side == Side.Customer ? s.Customer : s.Provider).Id == party;
 }

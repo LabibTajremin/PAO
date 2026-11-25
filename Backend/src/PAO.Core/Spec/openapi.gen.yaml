@@ -4712,6 +4712,7 @@ components:
         - ACCEPT_DEADLINE_PASSED
         - NO_PENDING_EXTRAS
         - MERCHANT_DUE_LIMIT
+        - DELIVERY_CUTOFF_PASSED
         - PAYMENT_NOT_PENDING
     Money:
       type: integer

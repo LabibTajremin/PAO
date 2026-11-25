@@ -38,6 +38,8 @@ public sealed record SeedService
     public bool RequiresLevel2 { get; init; }
     /// <summary>The Level 2 checklist.</summary>
     public IReadOnlyList<Text> Level2Checklist { get; init; } = [];
+    /// <summary>The ordering rules of a scheduled-delivery service (ADR-0041).</summary>
+    public ServiceSchedule? Schedule { get; init; }
     /// <summary>The sub-services, in file order.</summary>
     public IReadOnlyList<SeedSubService> SubServices { get; init; } = [];
 }

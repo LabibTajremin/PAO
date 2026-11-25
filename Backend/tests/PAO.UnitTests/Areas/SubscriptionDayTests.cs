@@ -121,10 +121,22 @@ public sealed class SubscriptionDayTests
         var plain = Subscription();
         var once = new StoredSubscription
         {
-            Id = plain.Id, Customer = plain.Customer, Provider = plain.Provider, ServiceId = plain.ServiceId, ServiceName = plain.ServiceName,
-            Address = plain.Address, Note = "Gate 2", Lines = plain.Lines, TotalPaisa = plain.TotalPaisa, Unit = plain.Unit,
-            Plan = new DeliveryPlan { Pattern = DeliveryPattern.Once, StartDate = Sunday, EndDate = Sunday }, Window = plain.Window,
-            Cutoff = plain.Cutoff, Status = plain.Status, IdempotencyKey = plain.IdempotencyKey, CreatedAt = plain.CreatedAt,
+            Id = plain.Id,
+            Customer = plain.Customer,
+            Provider = plain.Provider,
+            ServiceId = plain.ServiceId,
+            ServiceName = plain.ServiceName,
+            Address = plain.Address,
+            Note = "Gate 2",
+            Lines = plain.Lines,
+            TotalPaisa = plain.TotalPaisa,
+            Unit = plain.Unit,
+            Plan = new DeliveryPlan { Pattern = DeliveryPattern.Once, StartDate = Sunday, EndDate = Sunday },
+            Window = plain.Window,
+            Cutoff = plain.Cutoff,
+            Status = plain.Status,
+            IdempotencyKey = plain.IdempotencyKey,
+            CreatedAt = plain.CreatedAt,
         };
         Assert.Equal((null, "2026-12-06", "Gate 2"), (mapper.Support(once).Weekdays, mapper.Support(once).EndDate, mapper.Support(once).Note));
     }

@@ -53,7 +53,7 @@ public sealed class GooseMigratorTests : IAsyncLifetime
         await Migrator().Up(CancellationToken.None);
         await Migrator().Up(CancellationToken.None);
         Assert.Equal([0L, 1L, 2L, 3L, 4L], await Versions("identity"));
-        Assert.Equal([0L, 1L, 2L, 3L], await Versions("booking"));
+        Assert.Equal([0L, 1L, 2L, 3L, 4L], await Versions("booking"));
         await using var columns = dataSource.CreateCommand(
             "SELECT string_agg(column_name || ':' || data_type, ',' ORDER BY ordinal_position) FROM information_schema.columns WHERE table_name = 'goose_identity'");
         Assert.Equal("id:integer,version_id:bigint,is_applied:boolean,tstamp:timestamp without time zone", await columns.ExecuteScalarAsync());

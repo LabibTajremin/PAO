@@ -106,9 +106,10 @@ categories:
       - key: home-catering
         name: { en: Home catering, bn: হোম ক্যাটারিং }
         icon: chef
-        model: on_demand
+        model: scheduled_delivery
         required_level: 1
         search_radius_m: 10000
+        schedule: { patterns: [once, weekly, monthly], windows: ["12:00-14:00", "19:00-21:00"], lead_hours: 48, cutoff: "18:00", unit: guests, min_quantity: 10, max_quantity: 500 }
         level2_checklist:
           - { en: Food hygiene, bn: খাদ্য পরিচ্ছন্নতা }
           - { en: Safe food handling, bn: নিরাপদ খাবার ব্যবস্থাপনা }
@@ -117,6 +118,36 @@ categories:
           - { key: catering-biryani, name: { en: Kacchi biryani (per person), bn: কাচ্চি বিরিয়ানি (জনপ্রতি) }, unit: unit, price: 450, max_quantity: 200 }
           - { key: catering-snacks, name: { en: Snacks box (per person), bn: নাস্তার বক্স (জনপ্রতি) }, unit: unit, price: 150, max_quantity: 200 }
           - { key: catering-cook-day, name: { en: Cook for a day, bn: এক দিনের জন্য রাঁধুনি }, unit: day, price: 2000, max_quantity: 3 }
+  # ADR-0041: homemade food for offices and parties, delivered on a schedule.
+  - key: homemade-food
+    name: { en: Homemade food, bn: ঘরের রান্না }
+    icon: homemade-food
+    services:
+      - key: office-lunch
+        name: { en: Office lunch, bn: অফিস লাঞ্চ }
+        icon: homemade-food
+        model: scheduled_delivery
+        required_level: 1
+        search_radius_m: 8000
+        level2_checklist:
+          - { en: Food hygiene, bn: খাদ্য পরিচ্ছন্নতা }
+          - { en: Safe food handling, bn: নিরাপদ খাবার ব্যবস্থাপনা }
+        schedule: { patterns: [once, daily, weekdays], windows: ["12:00-13:00", "13:00-14:00"], lead_hours: 12, cutoff: "20:00", unit: meals, min_quantity: 1, max_quantity: 50 }
+        sub_services:
+          - { key: lunch-box, name: { en: "Lunch box (rice, curry, dal)", bn: "লাঞ্চ বক্স (ভাত, তরকারি, ডাল)" }, unit: unit, price: 180, max_quantity: 50 }
+          - { key: lunch-box-veg, name: { en: Vegetable lunch box, bn: সবজি লাঞ্চ বক্স }, unit: unit, price: 150, max_quantity: 50 }
+      - key: party-food
+        name: { en: Party food, bn: পার্টির খাবার }
+        icon: food
+        model: scheduled_delivery
+        required_level: 1
+        search_radius_m: 10000
+        level2_checklist:
+          - { en: Food hygiene, bn: খাদ্য পরিচ্ছন্নতা }
+        schedule: { patterns: [once], windows: ["12:00-14:00", "19:00-21:00"], lead_hours: 24, cutoff: "18:00", unit: guests, min_quantity: 5, max_quantity: 300 }
+        sub_services:
+          - { key: party-plate, name: { en: Party plate (per guest), bn: পার্টি প্লেট (অতিথিপ্রতি) }, unit: unit, price: 350, max_quantity: 300 }
+          - { key: party-biryani, name: { en: Biryani plate (per guest), bn: বিরিয়ানি প্লেট (অতিথিপ্রতি) }, unit: unit, price: 420, max_quantity: 300 }
   - key: monthly-bazar
     name: { en: Monthly Bazar, bn: মাসিক বাজার }
     icon: bazar
@@ -124,9 +155,10 @@ categories:
       - key: bazar-delivery
         name: { en: Monthly bazar delivery, bn: মাসিক বাজার ডেলিভারি }
         icon: grocery
-        model: on_demand
+        model: scheduled_delivery
         required_level: 1
         search_radius_m: 8000
+        schedule: { patterns: [once, monthly], windows: ["09:00-12:00", "16:00-19:00"], lead_hours: 24, cutoff: "20:00", unit: package, min_quantity: 1, max_quantity: 4 }
         level2_checklist:
           - { en: Fair pricing, bn: ন্যায্য মূল্য }
           - { en: Fresh goods, bn: তাজা পণ্য }
