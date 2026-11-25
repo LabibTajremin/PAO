@@ -42,7 +42,8 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 ## Current task
 
 Update round 2026-11 — P26. P24 and P25 are done and pushed together (owner asked to batch);
-CI on that push decides whether anything needs a fix before P26 (free Dhaka map) starts. P26 and
+that batch is green on f1c3d56 (the app journeys needed the "Send OTP" label). Next: P26 (free
+Dhaka map). P26 and
 P27 are pushed together, then P28 (no deployment: that step is the owner's).
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
@@ -86,6 +87,7 @@ None.
 
 ## Log
 
+- 2026-11-25 P24 + P25 complete: every PR check green on f1c3d56.
 - 2026-11-25 P25 Scheduled delivery (ADR-0041): `scheduled_delivery` services carry an admin-set
   schedule (patterns, windows, lead hours, cutoff, unit, quantity range). Customers order a
   subscription from one merchant; dates are computed in Asia/Dhaka (month ends, holidays from
