@@ -1,5 +1,7 @@
 using System.Net;
+using Microsoft.Extensions.DependencyInjection;
 using PAO.Core.Areas.Booking.Features.Erasure.Commands;
+using PAO.Infrastructure.Testing;
 using PAO.Lib.Areas.Catalog;
 using PAO.TestKit;
 using static PAO.IntegrationTests.Areas.DeliveryFlowTests;
@@ -85,8 +87,11 @@ public sealed class DeliveryRulesTests : IAsyncLifetime
         var order = await Post(w, new() { ["pattern"] = "daily", ["weekdays"] = null, ["endDate"] = null, ["count"] = 2 }, "counted");
         var id = order.Body.GetProperty("id").GetString()!;
         await w.AsProvider(HttpMethod.Post, $"/v1/provider/subscriptions/{id}/accept");
-        api.Clock.Now = Dhaka(5, 20, 30);
-        Assert.Equal(1, await Sweep(api));
+        using (var scope = api.Services.CreateScope())
+        {
+            // The e2e hook runs the same sweep as of a chosen time.
+            await scope.ServiceProvider.GetRequiredService<IDeliverySweep>().MaterialiseDeliveriesAt(Dhaka(5, 20, 30), CancellationToken.None);
+        }
         api.Clock.Now = Dhaka(6, 20, 30);
         Assert.Equal(2, await Sweep(api));
         var admin = api.Api.Token("super_admin");

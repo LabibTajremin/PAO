@@ -30,6 +30,13 @@ public interface IDocumentExpiry
     Task ExpireDocumentsAt(DateTimeOffset at, CancellationToken cancellationToken);
 }
 
+/// <summary>Runs the scheduled-delivery cutoff sweep at a chosen time; the Booking area provides it.</summary>
+public interface IDeliverySweep
+{
+    /// <summary>Makes the dates due at `at` into bookings.</summary>
+    Task MaterialiseDeliveriesAt(DateTimeOffset at, CancellationToken cancellationToken);
+}
+
 /// <summary>
 /// The `/__test/` endpoints the end-to-end journeys use to read the one-time codes and
 /// pushes the fake adapters captured and to run the expiry sweep on demand. Hosts mount
@@ -52,7 +59,10 @@ public static partial class TestHooks
                 await context.Response.WriteAsJsonAsync(new { pushes });
                 return true;
             case "POST /__test/verification/expire":
-                await ExpireDocuments(context, services.GetService<IDocumentExpiry>());
+                await RunAt(context, services.GetService<IDocumentExpiry>() is { } expiry ? expiry.ExpireDocumentsAt : null, "document expiry");
+                return true;
+            case "POST /__test/booking/deliveries":
+                await RunAt(context, services.GetService<IDeliverySweep>() is { } sweep ? sweep.MaterialiseDeliveriesAt : null, "the delivery sweep");
                 return true;
             default:
                 return false;
@@ -76,7 +86,7 @@ public static partial class TestHooks
         await context.Response.WriteAsJsonAsync(new { message });
     }
 
-    private static async Task ExpireDocuments(HttpContext context, IDocumentExpiry? expiry)
+    private static async Task RunAt(HttpContext context, Func<DateTimeOffset, CancellationToken, Task>? run, string name)
     {
         var at = context.Request.Query["at"].ToString();
         if (!Rfc3339().IsMatch(at) || !DateTimeOffset.TryParse(at, CultureInfo.InvariantCulture, DateTimeStyles.None, out var when))
@@ -84,12 +94,12 @@ public static partial class TestHooks
             await Text(context, 400, "at must be RFC 3339");
             return;
         }
-        if (expiry is null)
+        if (run is null)
         {
-            await Text(context, 501, "document expiry is not wired");
+            await Text(context, 501, $"{name} is not wired");
             return;
         }
-        await expiry.ExpireDocumentsAt(when, context.RequestAborted);
+        await run(when, context.RequestAborted);
         context.Response.StatusCode = 204;
     }
 

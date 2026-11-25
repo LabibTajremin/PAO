@@ -30,9 +30,11 @@ namespace PAO.UnitTests.Http;
 
 public sealed class TestHookTests
 {
-    private sealed class Expiry : IDocumentExpiry
+    private sealed class Expiry : IDocumentExpiry, IDeliverySweep
     {
         public DateTimeOffset? At { get; private set; }
+
+        public Task MaterialiseDeliveriesAt(DateTimeOffset at, CancellationToken cancellationToken) => ExpireDocumentsAt(at, cancellationToken);
 
         public Task ExpireDocumentsAt(DateTimeOffset at, CancellationToken cancellationToken)
         {
@@ -58,7 +60,8 @@ public sealed class TestHookTests
         await pushes.Push("dev", new PushMessage("t", "b", new Dictionary<string, string>()), CancellationToken.None);
         var expiry = new Expiry();
         var services = new ServiceCollection()
-            .AddSingleton<ISmsCapture>(sms).AddSingleton<IPushCapture>(pushes).AddSingleton<IDocumentExpiry>(expiry).BuildServiceProvider();
+            .AddSingleton<ISmsCapture>(sms).AddSingleton<IPushCapture>(pushes).AddSingleton<IDocumentExpiry>(expiry)
+            .AddSingleton<IDeliverySweep>(expiry).BuildServiceProvider();
         var (_, code) = await Call(services, "GET", "/__test/sms?phone=01712345678");
         Assert.Equal("code 1", JsonDocument.Parse(Contexts.Body(code)).RootElement.GetProperty("message").GetString());
         Assert.Equal(400, (await Call(services, "GET", "/__test/sms?phone=x")).Context.Response.StatusCode);
@@ -68,6 +71,8 @@ public sealed class TestHookTests
         Assert.Equal(204, (await Call(services, "POST", "/__test/verification/expire?at=2026-10-17T00:00:00Z")).Context.Response.StatusCode);
         Assert.Equal(DateTimeOffset.Parse("2026-10-17T00:00:00Z", System.Globalization.CultureInfo.InvariantCulture), expiry.At);
         Assert.Equal(400, (await Call(services, "POST", "/__test/verification/expire?at=yesterday")).Context.Response.StatusCode);
+        Assert.Equal(204, (await Call(services, "POST", "/__test/booking/deliveries?at=2026-12-05T14:01:00Z")).Context.Response.StatusCode);
+        Assert.Equal(DateTimeOffset.Parse("2026-12-05T14:01:00Z", System.Globalization.CultureInfo.InvariantCulture), expiry.At);
         Assert.False((await Call(services, "GET", "/v1/x")).Handled);
     }
 
@@ -79,6 +84,7 @@ public sealed class TestHookTests
         Assert.Equal(404, (await Call(services, "GET", "/__test/sms?phone=x")).Context.Response.StatusCode);
         Assert.Equal("{\"pushes\":[]}", Contexts.Body((await Call(services, "GET", "/__test/pushes")).Context));
         Assert.Equal(501, (await Call(services, "POST", "/__test/verification/expire?at=2026-10-17T00:00:00%2B06:00")).Context.Response.StatusCode);
+        Assert.Equal(501, (await Call(services, "POST", "/__test/booking/deliveries?at=2026-10-17T00:00:00Z")).Context.Response.StatusCode);
     }
 }
 

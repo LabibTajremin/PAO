@@ -20,7 +20,7 @@ Code: `src/PAO.Core/Areas/Booking/`; contracts: `src/PAO.Lib/Areas/Booking/`. Ba
 | `BookingSides` | what each side sees: the provider gets the exact address and either side the other's phone only after acceptance; support sees all |
 | `BookingPaging` | keyset pages over (time, id) with one look-ahead row |
 | `DeliveryCalendar` | a subscription's dates from its pattern in Asia/Dhaka (month ends fall on the last day, holidays left out, the count kept), cutoffs and windows as instants (ADR-0041) |
-| `SubscriptionAccess` | loads and changes subscriptions for one party (others' are not found), stamps subscription events, reads the holidays setting and the next 31 days |
+| `SubscriptionAccess` | loads and changes subscriptions for one party (others' are not found), stamps subscription events, reads the holidays setting and the next 31 days; the same file holds `DeliverySweepHook`, the `/__test/booking/deliveries` hook |
 | `SubscriptionDays` | merges planned dates with stored exceptions and derives each date's status, from the booking once the sweep made one |
 | `SubscriptionSides` | what each side sees of a subscription: phones and the exact address once accepted |
 | `EarningsCalendar` | Asia/Dhaka days, Saturday weeks and months (P-08) |

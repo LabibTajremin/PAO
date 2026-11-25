@@ -1,9 +1,11 @@
 using PAO.Core.Areas.Booking.Repositories;
 using PAO.Infrastructure.Data;
+using PAO.Infrastructure.Testing;
 using PAO.Lib.Areas.Booking;
 using PAO.Lib.Common;
 using PAO.Lib.Errors;
 using PAO.Lib.Events;
+using PAO.Lib.Mediator;
 
 namespace PAO.Core.Areas.Booking.Services;
 
@@ -65,4 +67,12 @@ public sealed class SubscriptionAccess(SubscriptionRepository repository, Bookin
     // Support reads through the repository; a party acts only on its own side.
     private static bool TakesPart(StoredSubscription s, Guid party, Side side) =>
         (side == Side.Customer ? s.Customer : s.Provider).Id == party;
+}
+
+/// <summary>Runs the cutoff sweep at a chosen time for the `/__test/booking/deliveries` hook.</summary>
+public sealed class DeliverySweepHook(IMediator mediator) : IDeliverySweep
+{
+    /// <inheritdoc />
+    public Task MaterialiseDeliveriesAt(DateTimeOffset at, CancellationToken cancellationToken) =>
+        mediator.Send(new MaterialiseDeliveries(at), cancellationToken);
 }

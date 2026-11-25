@@ -1,6 +1,7 @@
 using PAO.Core.Areas.Booking.Services;
 using PAO.Core.Areas.Booking.Services.Shared;
 using PAO.Infrastructure.Events;
+using PAO.Infrastructure.Testing;
 
 namespace PAO.Core.Registration;
 
@@ -17,6 +18,7 @@ public static class BookingAreaRegistration
         .AddScoped<BookingPeers>()
         .AddScoped<BookingAccess>()
         .AddScoped<SubscriptionAccess>()
+        .AddScoped<IDeliverySweep, DeliverySweepHook>()
         .AddScoped<BookingPricing>()
         .AddScoped<IBookingSharedService, BookingSharedService>();
 }

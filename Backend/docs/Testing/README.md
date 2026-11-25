@@ -37,7 +37,7 @@ references), the app journeys
 (`Frontend/e2e/run.sh`: partner, customer and admin) and the load-test thresholds
 (`./pao perf e2e`). With `APP_ENV=test` the hosts mount the hooks in
 `src/PAO.Infrastructure/Testing/TestHooks.cs` (`/__test/sms`, `/__test/pushes`,
-`/__test/verification/expire`); `migrate seed` and `migrate perf-seed N` prepare the data.
+`/__test/verification/expire`, `/__test/booking/deliveries`); `migrate seed` and `migrate perf-seed N` prepare the data.
 `./pao test e2e` runs the smoke tests and journeys, `./pao perf e2e` the load tests
 (`tests/PAO.LoadTests`); `./pao ci` runs both. The commission is charged from
 the booking-completed event, so journeys wait for the due to appear rather than reading it

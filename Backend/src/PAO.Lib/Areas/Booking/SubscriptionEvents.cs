@@ -98,6 +98,7 @@ public sealed record DeliveryBooked() : BookingEvent(SubscriptionEvents.Delivery
 /// The cutoff sweep (ADR-0041 §4): every active subscription's dates whose cutoff passed and
 /// whose window has not ended become accepted bookings, today's and tomorrow's only. Each
 /// booking writes in its own transaction with a key per date, so a rerun after a failure
-/// finds the booking instead of making a second one. Returns how many it made.
+/// finds the booking instead of making a second one. Returns how many it made; `At`
+/// decides what is due at another time, for the `/__test/booking/deliveries` hook.
 /// </summary>
-public sealed record MaterialiseDeliveries : IRequest<int>;
+public sealed record MaterialiseDeliveries(DateTimeOffset? At = null) : IRequest<int>;

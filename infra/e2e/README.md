@@ -12,7 +12,8 @@ api, worker and migrate services are the .NET hosts built from `Backend/docker/D
 - With `APP_ENV=test` the API and worker mount test-only hooks
   (`Backend/src/PAO.Infrastructure/Testing/TestHooks.cs`): `GET /__test/sms?phone=` (the last
   text, for one-time codes), `GET /__test/pushes?token=` (on the worker, pushes sent to a device
-  token) and `POST /__test/verification/expire?at=` (the expiry sweep as of a time).
+  token), `POST /__test/verification/expire?at=` (the expiry sweep as of a time) and
+  `POST /__test/booking/deliveries?at=` (the scheduled-delivery cutoff sweep as of a time).
 - The black-box API journeys are C# in `Backend/tests/PAO.E2ETests/Journeys` (xUnit, trait
   `Category=Journey`): plain HTTP, no backend references. Admins sign in with the seeded
   password and a TOTP code; their enrolment secrets are kept in `out/e2e/.admins.env` for

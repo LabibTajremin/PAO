@@ -14,7 +14,7 @@ public sealed class MaterialiseDeliveriesHandler(SubscriptionAccess subscription
     /// <inheritdoc />
     public async Task<int> Handle(MaterialiseDeliveries request, CancellationToken cancellationToken)
     {
-        var now = subscriptions.Now;
+        var now = request.At ?? subscriptions.Now;
         var today = DeliveryCalendar.Today(now);
         var holidays = await subscriptions.Holidays(cancellationToken);
         var active = await subscriptions.Repository.WithDates(

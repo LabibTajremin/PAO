@@ -32,8 +32,8 @@ it first and continues from **Current task**.
 | P22 Service icons | done | #12 | update round 2026-11 |
 | P23 Artwork & tagline | done | #12 | update round 2026-11 |
 | P24 Illustrations, welcome & sign-in | done | — | update round 2026-11 |
-| P25 Scheduled delivery | in_progress | — | update round 2026-11 |
-| P26 Free Dhaka map | todo | — | update round 2026-11 |
+| P25 Scheduled delivery | done | — | update round 2026-11 |
+| P26 Free Dhaka map | in_progress | — | update round 2026-11 |
 | P27 Motion | todo | — | update round 2026-11 |
 | P28 Design polish & handover | todo | — | update round 2026-11 |
 
@@ -41,9 +41,9 @@ Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (me
 
 ## Current task
 
-Update round 2026-11 — P24. P22 and P23 are done and pushed together (owner asked to batch);
-that batch is green on 08a5735. P24 is done in local commits (not pushed yet); next: P25 (homemade
-food, catering, monthly bazar). P24 and P25 are pushed together.
+Update round 2026-11 — P26. P24 and P25 are done and pushed together (owner asked to batch);
+CI on that push decides whether anything needs a fix before P26 (free Dhaka map) starts. P26 and
+P27 are pushed together, then P28 (no deployment: that step is the owner's).
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -86,6 +86,17 @@ None.
 
 ## Log
 
+- 2026-11-25 P25 Scheduled delivery (ADR-0041): `scheduled_delivery` services carry an admin-set
+  schedule (patterns, windows, lead hours, cutoff, unit, quantity range). Customers order a
+  subscription from one merchant; dates are computed in Asia/Dhaka (month ends, holidays from
+  `booking.delivery_holidays`, counts) and only exceptions are stored. The five-minute sweep
+  `booking.materialise_deliveries` makes each date past its cutoff an accepted booking, so COD,
+  receipts, the commission debit and the job screens work per delivery. Customer: order form,
+  orders list and detail (skip, pause, resume, cancel). Partner: new orders (accept/decline with
+  a reason), this week's deliveries, declining a date. Admin: schedule editor on the service form
+  and scheduled orders in the bookings monitor. Seeds Homemade food (Office lunch, Party food) and
+  moves Catering and Monthly Bazar to the model. Tests: calendar units, integration journey and
+  refusals, IDOR cases, e2e `DeliveryJourney` via `/__test/booking/deliveries`.
 - 2026-11-25 P24.2–5 Sign-in per the demo in both apps: `PaoSignInLayout` (hero slot in the top 55%,
   ivory wordmark and the admin tagline over it, rounded sheet with "Welcome to PAO" / "Welcome to
   PAO Partner", the +880 field and "Send OTP", terms line; no social sign-in). The +880 prefix now
