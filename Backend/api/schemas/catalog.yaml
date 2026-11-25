@@ -1,7 +1,7 @@
 # Catalog: Category → Service → Sub-service with versioned prices (PRD §4).
 ServiceModel:
   type: string
-  enum: [on_demand, duration_hire, listing, partner_referral]
+  enum: [on_demand, duration_hire, listing, partner_referral, scheduled_delivery]
   example: on_demand
 PriceUnit:
   type: string
@@ -39,6 +39,7 @@ Service:
     requiresLevel2: { type: boolean, example: false }
     level2Checklist: { type: array, items: { $ref: "./common.yaml#/LocalizedText" } }
     published: { type: boolean }
+    schedule: { $ref: "./delivery.yaml#/ServiceSchedule" }
     subServices: { type: array, items: { $ref: "#/SubService" } }
 Category:
   type: object
@@ -114,6 +115,7 @@ ServiceInput:
     requiresLevel2: { type: boolean, example: false }
     level2Checklist: { type: array, items: { $ref: "./common.yaml#/LocalizedText" } }
     published: { type: boolean, example: true }
+    schedule: { $ref: "./delivery.yaml#/ServiceSchedule" }
 SubServiceInput:
   type: object
   required: [serviceId, name, unit]

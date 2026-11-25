@@ -66,6 +66,7 @@ public sealed class CatalogSharedService(CatalogRepository repository, CatalogTr
         WomenProvidersOnly = s.WomenProvidersOnly,
         RequiresLevel2 = s.RequiresLevel2,
         Level2Checklist = s.Level2Checklist,
+        Schedule = s.Schedule,
         Published = s.Published,
     };
 }

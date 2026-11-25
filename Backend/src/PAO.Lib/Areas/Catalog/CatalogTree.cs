@@ -56,6 +56,8 @@ public sealed record ServiceNode
     public required bool RequiresLevel2 { get; init; }
     /// <summary>What the Level 2 session checks.</summary>
     public required IReadOnlyList<Text> Level2Checklist { get; init; }
+    /// <summary>The ordering rules of a scheduled-delivery service; null for the other models.</summary>
+    public ServiceSchedule? Schedule { get; init; }
     /// <summary>The sort order.</summary>
     public required int SortOrder { get; init; }
     /// <summary>Whether published.</summary>

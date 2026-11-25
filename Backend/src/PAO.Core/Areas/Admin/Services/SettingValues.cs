@@ -94,6 +94,7 @@ public sealed class SettingValues(SettingsRepository repository, JsonCache cache
             ServiceAreaGeoJson = v.GetValueOrDefault("service_area.geojson", string.Empty),
             CommissionRateBp = (int)Math.Clamp(Int(v, "billing.commission_rate_bp"), 0, 10_000),
             DueBlockAmountPaisa = Math.Max(0, Int(v, "billing.due_block_amount")),
+            DeliveryHolidays = v.GetValueOrDefault("booking.delivery_holidays", string.Empty),
         };
     }
 

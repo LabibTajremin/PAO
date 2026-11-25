@@ -15,10 +15,20 @@ public sealed class BookingPricing(BookingPeers peers, BookingAccess access)
     private static readonly string[] BookableModels = ["on_demand", "duration_hire"];
 
     /// <summary>A published, bookable service; listing and referral services are not booked directly.</summary>
-    public async Task<CatalogService> Service(Guid id, CancellationToken cancellationToken)
+    public Task<CatalogService> Service(Guid id, CancellationToken cancellationToken) => Published(id, BookableModels, cancellationToken);
+
+    /// <summary>A published service whose merchants the customer can search: bookable or delivered on a schedule.</summary>
+    public Task<CatalogService> Findable(Guid id, CancellationToken cancellationToken) =>
+        Published(id, [.. BookableModels, ServiceModel.ScheduledDelivery], cancellationToken);
+
+    /// <summary>A published scheduled-delivery service, ordered only as a subscription (ADR-0041).</summary>
+    public Task<CatalogService> Scheduled(Guid id, CancellationToken cancellationToken) =>
+        Published(id, [ServiceModel.ScheduledDelivery], cancellationToken);
+
+    private async Task<CatalogService> Published(Guid id, string[] models, CancellationToken cancellationToken)
     {
         var s = await peers.Service(id, cancellationToken);
-        return s.Published && BookableModels.Contains(s.Model) ? s : throw new DomainException(BookingReasons.NotBookable);
+        return s.Published && models.Contains(s.Model) ? s : throw new DomainException(BookingReasons.NotBookable);
     }
 
     /// <summary>

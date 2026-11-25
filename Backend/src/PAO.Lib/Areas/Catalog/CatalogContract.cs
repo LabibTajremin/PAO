@@ -14,6 +14,8 @@ public static class ServiceModel
     public const string Listing = "listing";
     /// <summary>The `"partner_referral"` value.</summary>
     public const string PartnerReferral = "partner_referral";
+    /// <summary>The `"scheduled_delivery"` value: dates on a schedule (ADR-0041).</summary>
+    public const string ScheduledDelivery = "scheduled_delivery";
 }
 
 /// <summary>What a price is per.</summary>
@@ -50,6 +52,8 @@ public sealed record CatalogService
     public required bool RequiresLevel2 { get; init; }
     /// <summary>The level 2 checklist.</summary>
     public required IReadOnlyList<Text> Level2Checklist { get; init; }
+    /// <summary>The ordering rules of a scheduled-delivery service; null for the other models.</summary>
+    public ServiceSchedule? Schedule { get; init; }
     /// <summary>Whether published.</summary>
     public required bool Published { get; init; }
 }

@@ -63,3 +63,8 @@ PeriodParam:
   required: true
   schema: { type: string, enum: [day, week, month] }
 SubmissionId: { name: submissionId, in: path, required: true, schema: { type: string, format: uuid } }
+SubscriptionId: { name: subscriptionId, in: path, required: true, schema: { type: string, format: uuid } }
+DeliveryDatePath: { name: date, in: path, required: true, description: The delivery date in Asia/Dhaka., schema: { type: string, format: date } }
+SubscriptionStatusQuery: { name: status, in: query, schema: { $ref: "../schemas/delivery.yaml#/SubscriptionStatus" } }
+DateFrom: { name: from, in: query, required: true, schema: { type: string, format: date } }
+DateTo: { name: to, in: query, required: true, description: At most 62 days after from., schema: { type: string, format: date } }

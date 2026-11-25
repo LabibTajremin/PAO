@@ -24,6 +24,7 @@ public sealed class ServiceConfiguration : IEntityTypeConfiguration<ServiceRecor
         builder.HasKey(s => s.Id);
         builder.Property(s => s.RequiresLevel2).HasColumnName("requires_level_2");
         builder.Property(s => s.Level2Checklist).HasColumnType("jsonb");
+        builder.Property(s => s.Schedule).HasColumnType("jsonb");
     }
 }
 

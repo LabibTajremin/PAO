@@ -40,6 +40,8 @@ public sealed record ServiceInput
     public bool? RequiresLevel2 { get; init; }
     /// <summary>The Level 2 checklist.</summary>
     public IReadOnlyList<Text>? Level2Checklist { get; init; }
+    /// <summary>The ordering rules of a scheduled-delivery service; null for the other models.</summary>
+    public ServiceSchedule? Schedule { get; init; }
     /// <summary>Whether published.</summary>
     public bool? Published { get; init; }
 }

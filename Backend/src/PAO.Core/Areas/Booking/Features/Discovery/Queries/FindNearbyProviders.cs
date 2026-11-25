@@ -32,7 +32,7 @@ public sealed class FindNearbyProvidersHandler(BookingPricing pricing, BookingPe
     public async Task<NearbyProvidersView> Handle(FindNearbyProviders request, CancellationToken cancellationToken)
     {
         var q = request.Input;
-        var service = await pricing.Service(q.ServiceId, cancellationToken);
+        var service = await pricing.Findable(q.ServiceId, cancellationToken);
         var price = (await pricing.Lines(q.ServiceId, [new BookingItemInput { SubServiceId = q.SubServiceId, Quantity = q.Quantity }], 0, cancellationToken))[0];
         var at = q.AddressId is { } a
             ? (await peers.Address(request.CustomerId, a, cancellationToken)).Location

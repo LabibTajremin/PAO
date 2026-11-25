@@ -55,6 +55,10 @@ tags:
     description: Merchant dues, ledger and payment submissions (ADR-0035).
   - name: Admin billing
     description: Merchant payment review and ledgers (ADR-0035).
+  - name: Customer subscriptions
+    description: Scheduled delivery orders and their dates (ADR-0041).
+  - name: Provider subscriptions
+    description: Scheduled delivery inbox, calendar and dates (ADR-0041).
 paths:
   /v1/auth/otp/request:
     post:
@@ -986,6 +990,190 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/subscriptions:
+    post:
+      operationId: createSubscription
+      tags:
+        - Customer subscriptions
+      summary: Order a scheduled delivery from one merchant (idempotent)
+      x-permission: booking:create
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+    get:
+      operationId: listCustomerSubscriptions
+      tags:
+        - Customer subscriptions
+      summary: My subscriptions, newest first
+      x-permission: booking:read:own
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/customer/subscriptions/{subscriptionId}:
+    get:
+      operationId: getCustomerSubscription
+      tags:
+        - Customer subscriptions
+      summary: A subscription with its upcoming dates
+      x-permission: booking:read:own
+      parameters:
+        - $ref: '#/components/parameters/SubscriptionId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/subscriptions/{subscriptionId}/pause:
+    post:
+      operationId: pauseSubscription
+      tags:
+        - Customer subscriptions
+      summary: Pause the dates not yet made into bookings
+      x-permission: booking:update:own
+      parameters:
+        - $ref: '#/components/parameters/SubscriptionId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/subscriptions/{subscriptionId}/resume:
+    post:
+      operationId: resumeSubscription
+      tags:
+        - Customer subscriptions
+      summary: Resume a paused subscription
+      x-permission: booking:update:own
+      parameters:
+        - $ref: '#/components/parameters/SubscriptionId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/subscriptions/{subscriptionId}/cancel:
+    post:
+      operationId: cancelSubscription
+      tags:
+        - Customer subscriptions
+      summary: Cancel the dates not yet made into bookings
+      x-permission: booking:cancel:own
+      parameters:
+        - $ref: '#/components/parameters/SubscriptionId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/customer/subscriptions/{subscriptionId}/deliveries/{date}:
+    put:
+      operationId: changeDelivery
+      tags:
+        - Customer subscriptions
+      summary: Skip, bring back or change one date before its cutoff
+      x-permission: booking:update:own
+      parameters:
+        - $ref: '#/components/parameters/SubscriptionId'
+        - $ref: '#/components/parameters/DeliveryDatePath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryChange'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryDate'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
   /v1/customer/notifications:
     get:
       operationId: listCustomerNotifications
@@ -1764,6 +1952,160 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '409':
           $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/subscriptions:
+    get:
+      operationId: listProviderSubscriptions
+      tags:
+        - Provider subscriptions
+      summary: Subscriptions ordered from me, by status
+      x-permission: job:read:own
+      parameters:
+        - $ref: '#/components/parameters/SubscriptionStatusQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/subscriptions/{subscriptionId}:
+    get:
+      operationId: getProviderSubscription
+      tags:
+        - Provider subscriptions
+      summary: A subscription with its upcoming dates
+      x-permission: job:read:own
+      parameters:
+        - $ref: '#/components/parameters/SubscriptionId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/subscriptions/{subscriptionId}/accept:
+    post:
+      operationId: acceptSubscription
+      tags:
+        - Provider subscriptions
+      summary: Accept a requested subscription (checks the due limit)
+      x-permission: job:respond
+      parameters:
+        - $ref: '#/components/parameters/SubscriptionId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/subscriptions/{subscriptionId}/decline:
+    post:
+      operationId: declineSubscription
+      tags:
+        - Provider subscriptions
+      summary: Decline a requested subscription
+      x-permission: job:respond
+      parameters:
+        - $ref: '#/components/parameters/SubscriptionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RejectInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/subscriptions/{subscriptionId}/deliveries/{date}/decline:
+    post:
+      operationId: declineDelivery
+      tags:
+        - Provider subscriptions
+      summary: Decline one date before its cutoff
+      x-permission: job:respond
+      parameters:
+        - $ref: '#/components/parameters/SubscriptionId'
+        - $ref: '#/components/parameters/DeliveryDatePath'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryDate'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/provider/deliveries:
+    get:
+      operationId: listProviderDeliveries
+      tags:
+        - Provider subscriptions
+      summary: My deliveries between two dates, for the daily list and calendar
+      x-permission: job:read:own
+      parameters:
+        - $ref: '#/components/parameters/DateFrom'
+        - $ref: '#/components/parameters/DateTo'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderDeliveryList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/ValidationFailed'
   /v1/provider/jobs:
@@ -3363,6 +3705,52 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/subscriptions:
+    get:
+      operationId: listAdminSubscriptions
+      tags:
+        - Admin bookings
+      summary: Subscriptions, newest first, by status
+      x-permission: booking:read:any
+      parameters:
+        - $ref: '#/components/parameters/SubscriptionStatusQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionList'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /v1/admin/subscriptions/{subscriptionId}:
+    get:
+      operationId: getAdminSubscription
+      tags:
+        - Admin bookings
+      summary: A subscription with its upcoming dates
+      x-permission: booking:read:any
+      parameters:
+        - $ref: '#/components/parameters/SubscriptionId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
   /v1/admin/complaints:
     get:
       operationId: listComplaints
@@ -4114,6 +4502,41 @@ components:
       schema:
         type: string
         format: uuid
+    SubscriptionId:
+      name: subscriptionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    DeliveryDatePath:
+      name: date
+      in: path
+      required: true
+      description: The delivery date in Asia/Dhaka.
+      schema:
+        type: string
+        format: date
+    SubscriptionStatusQuery:
+      name: status
+      in: query
+      schema:
+        $ref: '#/components/schemas/SubscriptionStatus'
+    DateFrom:
+      name: from
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date
+    DateTo:
+      name: to
+      in: query
+      required: true
+      description: At most 62 days after from.
+      schema:
+        type: string
+        format: date
     BannerId:
       name: bannerId
       in: path
@@ -4752,6 +5175,7 @@ components:
         - duration_hire
         - listing
         - partner_referral
+        - scheduled_delivery
       example: on_demand
     PriceUnit:
       type: string
@@ -4855,6 +5279,8 @@ components:
             $ref: '#/components/schemas/LocalizedText'
         published:
           type: boolean
+        schedule:
+          $ref: '#/components/schemas/ServiceSchedule'
         subServices:
           type: array
           items:
@@ -4993,6 +5419,8 @@ components:
         published:
           type: boolean
           example: true
+        schedule:
+          $ref: '#/components/schemas/ServiceSchedule'
     SubServiceInput:
       type: object
       required:
@@ -7368,6 +7796,83 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ArtworkImage'
+    DeliveryPattern:
+      type: string
+      description: How the dates repeat; `weekdays` and `weekly` use `weekdays`, `monthly` uses `dayOfMonth`.
+      enum:
+        - once
+        - daily
+        - weekdays
+        - weekly
+        - monthly
+    DeliveryWindow:
+      type: object
+      description: A delivery window in Asia/Dhaka time.
+      required:
+        - start
+        - end
+      properties:
+        start:
+          type: string
+          pattern: ^([01][0-9]|2[0-3]):[0-5][0-9]$
+          example: '12:00'
+        end:
+          type: string
+          pattern: ^([01][0-9]|2[0-3]):[0-5][0-9]$
+          example: '13:00'
+    QuantityUnit:
+      type: string
+      enum:
+        - meals
+        - guests
+        - package
+    ServiceSchedule:
+      type: object
+      description: The ordering rules of a scheduled-delivery service, set by the admin.
+      required:
+        - patterns
+        - windows
+        - leadHours
+        - cutoff
+        - unit
+        - minQuantity
+        - maxQuantity
+      properties:
+        patterns:
+          type: array
+          minItems: 1
+          maxItems: 5
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/DeliveryPattern'
+        windows:
+          type: array
+          minItems: 1
+          maxItems: 8
+          items:
+            $ref: '#/components/schemas/DeliveryWindow'
+        leadHours:
+          type: integer
+          minimum: 0
+          maximum: 336
+          example: 12
+        cutoff:
+          type: string
+          pattern: ^([01][0-9]|2[0-3]):[0-5][0-9]$
+          description: Orders and changes for a date close at this time on the day before.
+          example: '20:00'
+        unit:
+          $ref: '#/components/schemas/QuantityUnit'
+        minQuantity:
+          type: integer
+          minimum: 1
+          maximum: 500
+          example: 1
+        maxQuantity:
+          type: integer
+          minimum: 1
+          maximum: 500
+          example: 50
     Banner:
       type: object
       description: A home banner (C07). Without an image the app draws it in the accent's deep colour.
@@ -7407,6 +7912,251 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Banner'
+    SubscriptionStatus:
+      type: string
+      enum:
+        - requested
+        - active
+        - paused
+        - finished
+        - declined
+        - cancelled
+    DeliveryStatus:
+      type: string
+      description: 'Derived: scheduled until the cutoff sweep makes a booking, then the booking''s progress.'
+      enum:
+        - scheduled
+        - preparing
+        - out_for_delivery
+        - delivered
+        - skipped
+        - declined
+        - cancelled
+    DeliveryDate:
+      type: object
+      required:
+        - date
+        - status
+        - items
+        - total
+      properties:
+        date:
+          type: string
+          format: date
+        status:
+          $ref: '#/components/schemas/DeliveryStatus'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingItemInput'
+        total:
+          $ref: '#/components/schemas/Money'
+        bookingId:
+          type: string
+          format: uuid
+          description: The booking the delivery became.
+        changeable:
+          type: boolean
+          description: Whether the date's cutoff has not passed yet.
+    Subscription:
+      type: object
+      required:
+        - id
+        - number
+        - status
+        - serviceId
+        - serviceName
+        - items
+        - total
+        - pattern
+        - window
+        - startDate
+        - address
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        number:
+          type: string
+          example: PAO-S-104233
+        status:
+          $ref: '#/components/schemas/SubscriptionStatus'
+        serviceId:
+          type: string
+          format: uuid
+        serviceName:
+          $ref: '#/components/schemas/LocalizedText'
+        provider:
+          $ref: '#/components/schemas/BookingParty'
+        customer:
+          $ref: '#/components/schemas/BookingParty'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingItem'
+        total:
+          $ref: '#/components/schemas/Money'
+        unit:
+          $ref: '#/components/schemas/QuantityUnit'
+        pattern:
+          $ref: '#/components/schemas/DeliveryPattern'
+        weekdays:
+          type: array
+          items:
+            type: integer
+        dayOfMonth:
+          type: integer
+        window:
+          $ref: '#/components/schemas/DeliveryWindow'
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        count:
+          type: integer
+        address:
+          $ref: '#/components/schemas/BookingAddress'
+        note:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        upcoming:
+          type: array
+          description: The next dates, up to 31 days ahead.
+          items:
+            $ref: '#/components/schemas/DeliveryDate'
+    SubscriptionList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+    SubscriptionCreate:
+      type: object
+      required:
+        - providerId
+        - serviceId
+        - items
+        - addressId
+        - pattern
+        - window
+        - startDate
+      properties:
+        providerId:
+          type: string
+          format: uuid
+        serviceId:
+          type: string
+          format: uuid
+        items:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/BookingItemInput'
+        addressId:
+          type: string
+          format: uuid
+        pattern:
+          $ref: '#/components/schemas/DeliveryPattern'
+        weekdays:
+          type: array
+          maxItems: 7
+          uniqueItems: true
+          description: 0 is Sunday and 5 is Friday.
+          items:
+            type: integer
+            minimum: 0
+            maximum: 6
+        dayOfMonth:
+          type: integer
+          minimum: 1
+          maximum: 31
+        window:
+          $ref: '#/components/schemas/DeliveryWindow'
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+          description: The last date; leave out with count for an open subscription.
+        count:
+          type: integer
+          minimum: 1
+          maximum: 366
+          description: How many deliveries, instead of an end date.
+        note:
+          type: string
+          maxLength: 500
+    DeliveryChange:
+      type: object
+      description: 'Skip a date (skip: true), bring it back (skip: false) or change its items, before its cutoff.'
+      properties:
+        skip:
+          type: boolean
+        items:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/BookingItemInput'
+    ProviderDelivery:
+      type: object
+      required:
+        - subscriptionId
+        - number
+        - date
+        - window
+        - status
+        - serviceName
+        - items
+        - total
+        - address
+      properties:
+        subscriptionId:
+          type: string
+          format: uuid
+        number:
+          type: string
+        date:
+          type: string
+          format: date
+        window:
+          $ref: '#/components/schemas/DeliveryWindow'
+        status:
+          $ref: '#/components/schemas/DeliveryStatus'
+        serviceName:
+          $ref: '#/components/schemas/LocalizedText'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingItemInput'
+        total:
+          $ref: '#/components/schemas/Money'
+        address:
+          $ref: '#/components/schemas/BookingAddress'
+        customerName:
+          type: string
+        bookingId:
+          type: string
+          format: uuid
+    ProviderDeliveryList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderDelivery'
     BannerInput:
       type: object
       required:

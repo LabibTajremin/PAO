@@ -55,6 +55,10 @@ tags:
   description: Merchant dues, ledger and payment submissions (ADR-0035).
 - name: Admin billing
   description: Merchant payment review and ledgers (ADR-0035).
+- name: Customer subscriptions
+  description: Scheduled delivery orders and their dates (ADR-0041).
+- name: Provider subscriptions
+  description: Scheduled delivery inbox, calendar and dates (ADR-0041).
 security:
 - bearerAuth: []
 paths:
@@ -118,6 +122,18 @@ paths:
     $ref: ./paths/customer-bookings.yaml#/review
   /v1/customer/bookings/{bookingId}/reports:
     $ref: ./paths/customer-bookings.yaml#/report
+  /v1/customer/subscriptions:
+    $ref: ./paths/customer-subscriptions.yaml#/subscriptions
+  /v1/customer/subscriptions/{subscriptionId}:
+    $ref: ./paths/customer-subscriptions.yaml#/subscription
+  /v1/customer/subscriptions/{subscriptionId}/pause:
+    $ref: ./paths/customer-subscriptions.yaml#/pause
+  /v1/customer/subscriptions/{subscriptionId}/resume:
+    $ref: ./paths/customer-subscriptions.yaml#/resume
+  /v1/customer/subscriptions/{subscriptionId}/cancel:
+    $ref: ./paths/customer-subscriptions.yaml#/cancel
+  /v1/customer/subscriptions/{subscriptionId}/deliveries/{date}:
+    $ref: ./paths/customer-subscriptions.yaml#/delivery
   /v1/customer/notifications:
     $ref: ./paths/notifications.yaml#/customerNotifications
   /v1/customer/notifications/{notificationId}/read:
@@ -182,6 +198,18 @@ paths:
     $ref: ./paths/provider-presence.yaml#/offline
   /v1/provider/presence/heartbeat:
     $ref: ./paths/provider-presence.yaml#/heartbeat
+  /v1/provider/subscriptions:
+    $ref: ./paths/provider-subscriptions.yaml#/subscriptions
+  /v1/provider/subscriptions/{subscriptionId}:
+    $ref: ./paths/provider-subscriptions.yaml#/subscription
+  /v1/provider/subscriptions/{subscriptionId}/accept:
+    $ref: ./paths/provider-subscriptions.yaml#/accept
+  /v1/provider/subscriptions/{subscriptionId}/decline:
+    $ref: ./paths/provider-subscriptions.yaml#/decline
+  /v1/provider/subscriptions/{subscriptionId}/deliveries/{date}/decline:
+    $ref: ./paths/provider-subscriptions.yaml#/declineDate
+  /v1/provider/deliveries:
+    $ref: ./paths/provider-subscriptions.yaml#/deliveries
   /v1/provider/jobs:
     $ref: ./paths/provider-jobs.yaml#/jobs
   /v1/provider/jobs/{bookingId}:
@@ -280,6 +308,10 @@ paths:
     $ref: ./paths/admin-ops.yaml#/bookings
   /v1/admin/bookings/{bookingId}:
     $ref: ./paths/admin-ops.yaml#/booking
+  /v1/admin/subscriptions:
+    $ref: ./paths/admin-subscriptions.yaml#/subscriptions
+  /v1/admin/subscriptions/{subscriptionId}:
+    $ref: ./paths/admin-subscriptions.yaml#/subscription
   /v1/admin/complaints:
     $ref: ./paths/admin-ops.yaml#/complaints
   /v1/admin/complaints/{complaintId}:

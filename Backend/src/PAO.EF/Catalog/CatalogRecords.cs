@@ -46,6 +46,8 @@ public sealed class ServiceRecord
     public bool RequiresLevel2 { get; set; }
     /// <summary>The Level 2 checklist as stored JSON (`[{"en","bn"}]`).</summary>
     public required string Level2Checklist { get; set; }
+    /// <summary>The scheduled-delivery rules as JSON, or null.</summary>
+    public string? Schedule { get; set; }
     /// <summary>The sort order.</summary>
     public int SortOrder { get; set; }
     /// <summary>Whether published.</summary>

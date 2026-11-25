@@ -33,6 +33,8 @@ public sealed record PlatformSettings
     public int CommissionRateBp { get; init; } = 1000;
     /// <summary>The due in paisa above which a merchant cannot accept (ADR-0035 §3).</summary>
     public long DueBlockAmountPaisa { get; init; } = 50_000;
+    /// <summary>Dates without scheduled deliveries, comma-separated YYYY-MM-DD (ADR-0041 §3).</summary>
+    public string DeliveryHolidays { get; init; } = string.Empty;
 }
 
 /// <summary>Names of the events the Admin area publishes.</summary>

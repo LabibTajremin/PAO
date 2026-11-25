@@ -1,0 +1,185 @@
+# Scheduled delivery for customers (ADR-0041): order, follow and change a subscription.
+subscriptions:
+  post:
+    operationId: createSubscription
+    tags:
+    - Customer subscriptions
+    summary: Order a scheduled delivery from one merchant (idempotent)
+    x-permission: booking:create
+    parameters:
+    - $ref: ../components/parameters.yaml#/IdempotencyKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/delivery.yaml#/SubscriptionCreate
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/delivery.yaml#/Subscription
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+  get:
+    operationId: listCustomerSubscriptions
+    tags:
+    - Customer subscriptions
+    summary: My subscriptions, newest first
+    x-permission: booking:read:own
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/delivery.yaml#/SubscriptionList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+subscription:
+  get:
+    operationId: getCustomerSubscription
+    tags:
+    - Customer subscriptions
+    summary: A subscription with its upcoming dates
+    x-permission: booking:read:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubscriptionId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/delivery.yaml#/Subscription
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+pause:
+  post:
+    operationId: pauseSubscription
+    tags:
+    - Customer subscriptions
+    summary: Pause the dates not yet made into bookings
+    x-permission: booking:update:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubscriptionId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/delivery.yaml#/Subscription
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+resume:
+  post:
+    operationId: resumeSubscription
+    tags:
+    - Customer subscriptions
+    summary: Resume a paused subscription
+    x-permission: booking:update:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubscriptionId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/delivery.yaml#/Subscription
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+cancel:
+  post:
+    operationId: cancelSubscription
+    tags:
+    - Customer subscriptions
+    summary: Cancel the dates not yet made into bookings
+    x-permission: booking:cancel:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubscriptionId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/delivery.yaml#/Subscription
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+delivery:
+  put:
+    operationId: changeDelivery
+    tags:
+    - Customer subscriptions
+    summary: Skip, bring back or change one date before its cutoff
+    x-permission: booking:update:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubscriptionId
+    - $ref: ../components/parameters.yaml#/DeliveryDatePath
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/delivery.yaml#/DeliveryChange
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/delivery.yaml#/DeliveryDate
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

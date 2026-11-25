@@ -26,13 +26,13 @@ public sealed class CatalogWriteRepository(PaoDbContext db, OutboxWriter outbox,
     /// <summary>Creates or updates a service (not its sub-services).</summary>
     public Task SaveService(ServiceNode s, CancellationToken cancellationToken) => db.Database.ExecuteSqlAsync($"""
         INSERT INTO catalog.services (id, category_id, name_en, name_bn, icon_key, icon_url, service_model, required_level, search_radius_m,
-            women_providers_only, requires_level_2, level2_checklist, sort_order, published, created_at, updated_at)
+            women_providers_only, requires_level_2, level2_checklist, schedule, sort_order, published, created_at, updated_at)
         VALUES ({s.Id}, {s.CategoryId}, {s.Name.En}, {s.Name.Bn}, {s.IconKey}, {s.IconUrl}, {s.Model}, {s.RequiredLevel}, {s.SearchRadiusM},
-            {s.WomenProvidersOnly}, {s.RequiresLevel2}, {ToJson(s.Level2Checklist)}::jsonb, {s.SortOrder}, {s.Published}, {clock.Now}, {clock.Now})
+            {s.WomenProvidersOnly}, {s.RequiresLevel2}, {ToJson(s.Level2Checklist)}::jsonb, {ScheduleJson(s.Schedule)}::jsonb, {s.SortOrder}, {s.Published}, {clock.Now}, {clock.Now})
         ON CONFLICT (id) DO UPDATE SET category_id = excluded.category_id, name_en = excluded.name_en, name_bn = excluded.name_bn,
             icon_key = excluded.icon_key, icon_url = excluded.icon_url, service_model = excluded.service_model, required_level = excluded.required_level,
             search_radius_m = excluded.search_radius_m, women_providers_only = excluded.women_providers_only,
-            requires_level_2 = excluded.requires_level_2, level2_checklist = excluded.level2_checklist,
+            requires_level_2 = excluded.requires_level_2, level2_checklist = excluded.level2_checklist, schedule = excluded.schedule,
             sort_order = excluded.sort_order, published = excluded.published, updated_at = excluded.updated_at
         """, cancellationToken);
 

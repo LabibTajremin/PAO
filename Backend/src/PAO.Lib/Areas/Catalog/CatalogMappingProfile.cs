@@ -14,6 +14,9 @@ public sealed class CatalogMappingProfile : IMappingProfile
     /// <summary>Texts as the jsonb columns store them.</summary>
     public static string ToJson<T>(T value) => JsonSerializer.Serialize(value, Json);
 
+    /// <summary>The schedule as JSON for a jsonb column, or null for services without one.</summary>
+    public static string? ScheduleJson(ServiceSchedule? schedule) => schedule is null ? null : ToJson(schedule);
+
     /// <inheritdoc />
     public void Configure(MappingRegistry registry)
     {
@@ -46,6 +49,7 @@ public sealed class CatalogMappingProfile : IMappingProfile
             WomenProvidersOnly = s.WomenProvidersOnly,
             RequiresLevel2 = s.RequiresLevel2,
             Level2Checklist = Texts(s.Level2Checklist),
+            Schedule = s.Schedule is null ? null : JsonSerializer.Deserialize<ServiceSchedule>(s.Schedule, Json),
             SortOrder = s.SortOrder,
             Published = s.Published,
         })
@@ -87,6 +91,7 @@ public sealed class CatalogMappingProfile : IMappingProfile
             WomenProvidersOnly = s.WomenProvidersOnly,
             RequiresLevel2 = s.RequiresLevel2,
             Level2Checklist = s.Level2Checklist,
+            Schedule = s.Schedule,
             Published = s.Published,
             SubServices = m.MapAll<SubServiceNode, SubServiceView>(s.SubServices),
         });
@@ -139,6 +144,7 @@ public sealed class CatalogMappingProfile : IMappingProfile
             WomenProvidersOnly = p.Input.WomenProvidersOnly ?? false,
             RequiresLevel2 = p.Input.RequiresLevel2 ?? false,
             Level2Checklist = p.Input.Level2Checklist ?? [],
+            Schedule = p.Input.Schedule,
             SortOrder = 0,
             Published = p.Input.Published ?? false,
         })

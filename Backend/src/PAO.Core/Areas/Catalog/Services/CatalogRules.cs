@@ -7,7 +7,7 @@ namespace PAO.Core.Areas.Catalog.Services;
 public static class CatalogRules
 {
     /// <summary>The service models, in PRD order.</summary>
-    public static readonly IReadOnlyList<string> Models = [ServiceModel.OnDemand, ServiceModel.DurationHire, ServiceModel.Listing, ServiceModel.PartnerReferral];
+    public static readonly IReadOnlyList<string> Models = [ServiceModel.OnDemand, ServiceModel.DurationHire, ServiceModel.Listing, ServiceModel.PartnerReferral, ServiceModel.ScheduledDelivery];
 
     /// <summary>What one quantity of a sub-service can mean.</summary>
     public static readonly IReadOnlyList<string> Units = [PriceUnit.Job, PriceUnit.Unit, PriceUnit.Hour, PriceUnit.Day];
@@ -21,7 +21,9 @@ public static class CatalogRules
         var wellFormed = ValidName(s.Name) && Filled(s.IconKey) && Models.Contains(s.Model)
             && s.RequiredLevel is >= 0 and <= 2 && s.SearchRadiusM is >= 500 and <= 50_000;
         // A service that needs Level 2 before the first booking requires level 2 (D7).
-        return wellFormed && (!s.RequiresLevel2 || s.RequiredLevel >= 2);
+        // Only a scheduled-delivery service has, and must have, valid ordering rules (ADR-0041).
+        var scheduled = s.Model == ServiceModel.ScheduledDelivery ? s.Schedule?.IsValid == true : s.Schedule is null;
+        return wellFormed && scheduled && (!s.RequiresLevel2 || s.RequiredLevel >= 2);
     }
 
     /// <summary>Reports whether a sub-service has names, a known unit and a positive maximum.</summary>

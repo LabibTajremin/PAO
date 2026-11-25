@@ -31,6 +31,8 @@ public sealed class BookingErrorMap : IErrorMap
         [BookingReasons.CancelNotAllowed] = new(409, "CANCELLATION_NOT_ALLOWED", "The job has started; report a problem instead."),
         [BookingReasons.OutsideArea] = new(422, "OUTSIDE_SERVICE_AREA", "This address is outside our service area."),
         [BookingReasons.ProfileRequired] = new(409, "PROFILE_REQUIRED", "Set up your profile first."),
+        [BookingReasons.CutoffPassed] = new(409, "DELIVERY_CUTOFF_PASSED", "Changes for this date have closed."),
+        [BookingReasons.LeadTime] = new(422, "VALIDATION_FAILED", "Choose a later first date."),
         [BillingErrors.DueLimit] = new(409, "MERCHANT_DUE_LIMIT", "Your due to PAO is above the limit. Pay it to accept new jobs."),
     };
 }

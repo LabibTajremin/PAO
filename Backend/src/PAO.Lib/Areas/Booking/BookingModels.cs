@@ -36,6 +36,10 @@ public static class BookingReasons
     public const string OutsideArea = "booking.outside_area";
     /// <summary>The `"booking.profile_required"` value.</summary>
     public const string ProfileRequired = "booking.profile_required";
+    /// <summary>The date's cutoff has passed, so it can no longer change (ADR-0041 §5).</summary>
+    public const string CutoffPassed = "booking.cutoff_passed";
+    /// <summary>The first delivery is sooner than the service's lead time allows.</summary>
+    public const string LeadTime = "booking.lead_time";
 
 }
 
