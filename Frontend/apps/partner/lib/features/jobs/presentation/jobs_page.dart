@@ -47,7 +47,16 @@ class _JobsPageState extends State<JobsPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: PaoAppBar(title: context.t.jobsTitle),
+    appBar: PaoAppBar(
+      title: context.t.jobsTitle,
+      actions: [
+        IconButton(
+          tooltip: context.t.ordersTitle,
+          icon: const Icon(Icons.event_repeat_outlined),
+          onPressed: () => context.push(Routes.orders),
+        ),
+      ],
+    ),
     body: Column(
       children: [
         Padding(

@@ -1465,4 +1465,91 @@ class PartnerL10nBn extends PartnerL10n {
 
   @override
   String get paySent => 'পেমেন্ট জমা হয়েছে। শিগগিরই অ্যাডমিন নিশ্চিত করবেন।';
+
+  @override
+  String get ordersTitle => 'ডেলিভারি অর্ডার';
+
+  @override
+  String get ordersNew => 'নতুন অর্ডার';
+
+  @override
+  String get ordersDeliveries => 'এই সপ্তাহ';
+
+  @override
+  String get ordersNoNew => 'নতুন কোনো অর্ডার নেই';
+
+  @override
+  String get ordersNoDeliveries => 'এই সপ্তাহে কোনো ডেলিভারি নেই';
+
+  @override
+  String get orderAccept => 'অর্ডার গ্রহণ করুন';
+
+  @override
+  String get orderDecline => 'গ্রহণ করবেন না';
+
+  @override
+  String get orderDeclineTitle => 'কেন নিতে পারবেন না?';
+
+  @override
+  String get orderDeclineDate => 'দিতে পারব না';
+
+  @override
+  String get orderUpcoming => 'আসন্ন ডেলিভারি';
+
+  @override
+  String get orderPerDelivery => 'প্রতি ডেলিভারি';
+
+  @override
+  String get orderPatternOnce => 'একবার';
+
+  @override
+  String get orderPatternDaily => 'প্রতিদিন';
+
+  @override
+  String get orderPatternWeekdays => 'নির্বাচিত দিনে';
+
+  @override
+  String get orderPatternWeekly => 'সপ্তাহে একবার';
+
+  @override
+  String get orderPatternMonthly => 'মাসে একবার';
+
+  @override
+  String get subRequested => 'নতুন';
+
+  @override
+  String get subActive => 'চালু';
+
+  @override
+  String get subPaused => 'বিরতিতে';
+
+  @override
+  String get subFinished => 'শেষ';
+
+  @override
+  String get subDeclined => 'গ্রহণ করা হয়নি';
+
+  @override
+  String get subCancelled => 'বাতিল';
+
+  @override
+  String get deliveryScheduled => 'নির্ধারিত';
+
+  @override
+  String get deliveryPreparing => 'আজ প্রস্তুত করুন';
+
+  @override
+  String get deliveryOut => 'পথে';
+
+  @override
+  String get deliveryDelivered => 'পৌঁছে গেছে';
+
+  @override
+  String get deliverySkipped => 'বাদ';
+
+  @override
+  String get deliveryDeclined => 'দেবেন না';
+
+  @override
+  String get deliveryCancelled => 'বাতিল';
 }

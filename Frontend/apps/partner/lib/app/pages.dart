@@ -6,6 +6,8 @@ import 'package:pao_partner/features/auth/presentation/otp_page.dart';
 import 'package:pao_partner/features/auth/presentation/phone_page.dart';
 import 'package:pao_partner/features/billing/presentation/billing_page.dart';
 import 'package:pao_partner/features/billing/presentation/pay_page.dart';
+import 'package:pao_partner/features/delivery/presentation/order_page.dart';
+import 'package:pao_partner/features/delivery/presentation/orders_page.dart';
 import 'package:pao_partner/features/earnings/presentation/earnings_page.dart';
 import 'package:pao_partner/features/enrolment/presentation/enrolment_page.dart';
 import 'package:pao_partner/features/home/presentation/home_page.dart';
@@ -52,6 +54,11 @@ List<RouteBase> entryRoutes(AppServices s) => [
   _page(Routes.notifications, (_) => NotificationsPage(services: s)),
   _page(Routes.billing, (_) => BillingPage(services: s)),
   _page(Routes.pay, (_) => PayPage(services: s)),
+  _page(Routes.orders, (_) => OrdersPage(services: s)),
+  _page(
+    Routes.order,
+    (st) => OrderPage(services: s, subscriptionId: st.pathParameters['id']!),
+  ),
 ];
 
 /// Full-screen job screens opened over the tabs.

@@ -51,6 +51,15 @@ abstract final class Routes {
   /// One enrolment step.
   static String enrolStep(String step) => '/enrol/$step';
 
+  /// Scheduled-delivery orders (P25).
+  static const orders = '/orders';
+
+  /// One scheduled-delivery order.
+  static const order = '/orders/:id';
+
+  /// The path of order [id].
+  static String orderOf(String id) => '/orders/$id';
+
   /// An incoming request.
   static String requestOf(String id) => '/requests/$id';
 

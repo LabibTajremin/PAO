@@ -1981,5 +1981,121 @@
   "paySent": "Payment submitted. An admin will confirm it soon.",
   "@paySent": {
     "description": "Snack after submit."
+  },
+  "ordersTitle": "Delivery orders",
+  "@ordersTitle": {
+    "description": "P25 scheduled delivery"
+  },
+  "ordersNew": "New orders",
+  "@ordersNew": {
+    "description": "P25 scheduled delivery"
+  },
+  "ordersDeliveries": "This week",
+  "@ordersDeliveries": {
+    "description": "P25 scheduled delivery"
+  },
+  "ordersNoNew": "No new orders",
+  "@ordersNoNew": {
+    "description": "P25 scheduled delivery"
+  },
+  "ordersNoDeliveries": "No deliveries this week",
+  "@ordersNoDeliveries": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderAccept": "Accept order",
+  "@orderAccept": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderDecline": "Decline",
+  "@orderDecline": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderDeclineTitle": "Why can't you take it?",
+  "@orderDeclineTitle": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderDeclineDate": "Can't deliver",
+  "@orderDeclineDate": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderUpcoming": "Upcoming deliveries",
+  "@orderUpcoming": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderPerDelivery": "Per delivery",
+  "@orderPerDelivery": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderPatternOnce": "One time",
+  "@orderPatternOnce": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderPatternDaily": "Every day",
+  "@orderPatternDaily": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderPatternWeekdays": "Chosen days",
+  "@orderPatternWeekdays": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderPatternWeekly": "Once a week",
+  "@orderPatternWeekly": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderPatternMonthly": "Once a month",
+  "@orderPatternMonthly": {
+    "description": "P25 scheduled delivery"
+  },
+  "subRequested": "New",
+  "@subRequested": {
+    "description": "P25 scheduled delivery"
+  },
+  "subActive": "Active",
+  "@subActive": {
+    "description": "P25 scheduled delivery"
+  },
+  "subPaused": "Paused",
+  "@subPaused": {
+    "description": "P25 scheduled delivery"
+  },
+  "subFinished": "Finished",
+  "@subFinished": {
+    "description": "P25 scheduled delivery"
+  },
+  "subDeclined": "Declined",
+  "@subDeclined": {
+    "description": "P25 scheduled delivery"
+  },
+  "subCancelled": "Cancelled",
+  "@subCancelled": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryScheduled": "Scheduled",
+  "@deliveryScheduled": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryPreparing": "Prepare today",
+  "@deliveryPreparing": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryOut": "On the way",
+  "@deliveryOut": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryDelivered": "Delivered",
+  "@deliveryDelivered": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliverySkipped": "Skipped",
+  "@deliverySkipped": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryDeclined": "Declined",
+  "@deliveryDeclined": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryCancelled": "Cancelled",
+  "@deliveryCancelled": {
+    "description": "P25 scheduled delivery"
   }
 }
