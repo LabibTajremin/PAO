@@ -1896,4 +1896,115 @@ class AdminL10nEn extends AdminL10n {
   @override
   String get appearanceErrorTooLarge =>
       'The file is too large: SVG up to 300 KB, PNG or WebP up to 800 KB.';
+
+  @override
+  String get catalogModelScheduled => 'Scheduled delivery';
+
+  @override
+  String get catalogSchedule => 'Delivery schedule';
+
+  @override
+  String get catalogPatterns => 'Repeat options';
+
+  @override
+  String get catalogWindows => 'Delivery windows';
+
+  @override
+  String get catalogWindowsHint => '12:00-13:00, 19:00-21:00';
+
+  @override
+  String get catalogLeadHours => 'Lead time (hours)';
+
+  @override
+  String get catalogCutoff => 'Cutoff the day before';
+
+  @override
+  String get catalogTimeFormat => 'Use 24-hour times like 12:00-13:00.';
+
+  @override
+  String get catalogPatternsRequired => 'Choose at least one.';
+
+  @override
+  String get unitMeals => 'Meals';
+
+  @override
+  String get unitGuests => 'Guests';
+
+  @override
+  String get unitPackage => 'Packages';
+
+  @override
+  String get patternOnce => 'One time';
+
+  @override
+  String get patternDaily => 'Every day';
+
+  @override
+  String get patternWeekdays => 'Chosen days';
+
+  @override
+  String get patternWeekly => 'Once a week';
+
+  @override
+  String get patternMonthly => 'Once a month';
+
+  @override
+  String get ordersTitle => 'Scheduled orders';
+
+  @override
+  String get ordersEmpty => 'No scheduled orders';
+
+  @override
+  String get ordersAll => 'All';
+
+  @override
+  String get ordersUpcoming => 'Next deliveries';
+
+  @override
+  String get subRequested => 'Requested';
+
+  @override
+  String get subActive => 'Active';
+
+  @override
+  String get subPaused => 'Paused';
+
+  @override
+  String get subFinished => 'Finished';
+
+  @override
+  String get subDeclined => 'Declined';
+
+  @override
+  String get subCancelled => 'Cancelled';
+
+  @override
+  String get deliveryScheduled => 'Scheduled';
+
+  @override
+  String get deliveryPreparing => 'Preparing';
+
+  @override
+  String get deliveryOut => 'Out for delivery';
+
+  @override
+  String get deliveryDelivered => 'Delivered';
+
+  @override
+  String get deliverySkipped => 'Skipped';
+
+  @override
+  String get deliveryDeclined => 'Declined';
+
+  @override
+  String get deliveryCancelled => 'Cancelled';
+
+  @override
+  String get catalogScheduleUnit => 'Counted in';
+
+  @override
+  String get catalogScheduleMax => 'Largest order';
+
+  @override
+  String get catalogScheduleMin => 'Smallest order';
 }

@@ -2588,5 +2588,153 @@
   "appearanceErrorTooLarge": "The file is too large: SVG up to 300 KB, PNG or WebP up to 800 KB.",
   "@appearanceErrorTooLarge": {
     "description": "Upload refused: too large"
+  },
+  "catalogModelScheduled": "Scheduled delivery",
+  "@catalogModelScheduled": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogSchedule": "Delivery schedule",
+  "@catalogSchedule": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogPatterns": "Repeat options",
+  "@catalogPatterns": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogWindows": "Delivery windows",
+  "@catalogWindows": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogWindowsHint": "12:00-13:00, 19:00-21:00",
+  "@catalogWindowsHint": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogLeadHours": "Lead time (hours)",
+  "@catalogLeadHours": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogCutoff": "Cutoff the day before",
+  "@catalogCutoff": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogTimeFormat": "Use 24-hour times like 12:00-13:00.",
+  "@catalogTimeFormat": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogPatternsRequired": "Choose at least one.",
+  "@catalogPatternsRequired": {
+    "description": "P25 scheduled delivery"
+  },
+  "unitMeals": "Meals",
+  "@unitMeals": {
+    "description": "P25 scheduled delivery"
+  },
+  "unitGuests": "Guests",
+  "@unitGuests": {
+    "description": "P25 scheduled delivery"
+  },
+  "unitPackage": "Packages",
+  "@unitPackage": {
+    "description": "P25 scheduled delivery"
+  },
+  "patternOnce": "One time",
+  "@patternOnce": {
+    "description": "P25 scheduled delivery"
+  },
+  "patternDaily": "Every day",
+  "@patternDaily": {
+    "description": "P25 scheduled delivery"
+  },
+  "patternWeekdays": "Chosen days",
+  "@patternWeekdays": {
+    "description": "P25 scheduled delivery"
+  },
+  "patternWeekly": "Once a week",
+  "@patternWeekly": {
+    "description": "P25 scheduled delivery"
+  },
+  "patternMonthly": "Once a month",
+  "@patternMonthly": {
+    "description": "P25 scheduled delivery"
+  },
+  "ordersTitle": "Scheduled orders",
+  "@ordersTitle": {
+    "description": "P25 scheduled delivery"
+  },
+  "ordersEmpty": "No scheduled orders",
+  "@ordersEmpty": {
+    "description": "P25 scheduled delivery"
+  },
+  "ordersAll": "All",
+  "@ordersAll": {
+    "description": "P25 scheduled delivery"
+  },
+  "ordersUpcoming": "Next deliveries",
+  "@ordersUpcoming": {
+    "description": "P25 scheduled delivery"
+  },
+  "subRequested": "Requested",
+  "@subRequested": {
+    "description": "P25 scheduled delivery"
+  },
+  "subActive": "Active",
+  "@subActive": {
+    "description": "P25 scheduled delivery"
+  },
+  "subPaused": "Paused",
+  "@subPaused": {
+    "description": "P25 scheduled delivery"
+  },
+  "subFinished": "Finished",
+  "@subFinished": {
+    "description": "P25 scheduled delivery"
+  },
+  "subDeclined": "Declined",
+  "@subDeclined": {
+    "description": "P25 scheduled delivery"
+  },
+  "subCancelled": "Cancelled",
+  "@subCancelled": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryScheduled": "Scheduled",
+  "@deliveryScheduled": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryPreparing": "Preparing",
+  "@deliveryPreparing": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryOut": "Out for delivery",
+  "@deliveryOut": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryDelivered": "Delivered",
+  "@deliveryDelivered": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliverySkipped": "Skipped",
+  "@deliverySkipped": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryDeclined": "Declined",
+  "@deliveryDeclined": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryCancelled": "Cancelled",
+  "@deliveryCancelled": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogScheduleUnit": "Counted in",
+  "@catalogScheduleUnit": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogScheduleMax": "Largest order",
+  "@catalogScheduleMax": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogScheduleMin": "Smallest order",
+  "@catalogScheduleMin": {
+    "description": "P25 scheduled delivery"
   }
 }

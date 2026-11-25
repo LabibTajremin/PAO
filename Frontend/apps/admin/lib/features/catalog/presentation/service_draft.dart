@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:pao_admin/features/catalog/presentation/localized_fields.dart';
+import 'package:pao_admin/features/catalog/presentation/schedule_draft.dart';
 import 'package:pao_admin/l10n/generated/admin_localizations.dart';
 import 'package:pao_admin/shared/form_checks.dart';
 import 'package:pao_api/pao_api.dart';
@@ -23,7 +24,8 @@ class ServiceDraft {
         for (final item in service?.level2Checklist ?? const <LocalizedText>[])
           LocalizedInput(item),
       ],
-      published = service?.published ?? false;
+      published = service?.published ?? false,
+      schedule = ScheduleDraft(service?.schedule);
 
   /// Search radius of a new service, in metres.
   static const defaultRadiusM = 5000;
@@ -67,6 +69,11 @@ class ServiceDraft {
   /// Customers can see the service.
   bool published;
 
+  /// The ordering rules, sent only for a scheduled-delivery service.
+  final ScheduleDraft schedule;
+
+  bool get _scheduled => model == ServiceModel.scheduledDelivery;
+
   /// Field errors from the last [check].
   final errors = FormErrors();
 
@@ -87,7 +94,8 @@ class ServiceDraft {
       item.check(t, errors);
     }
     categoryError = categoryId == null ? t.formRequired : null;
-    return errors.isEmpty && categoryError == null;
+    final scheduleOk = !_scheduled || schedule.check(t, errors);
+    return errors.isEmpty && categoryError == null && scheduleOk;
   }
 
   /// The draft as the API takes it; call after [check] passed.
@@ -103,6 +111,7 @@ class ServiceDraft {
     requiresLevel2: requiresLevel2,
     level2Checklist: [for (final item in _sentChecklist) item.value],
     published: published,
+    schedule: _scheduled ? schedule.toSchedule() : null,
   );
 
   // The checklist is hidden, and cleared on the server, without Level 2.
@@ -115,6 +124,7 @@ class ServiceDraft {
     icon.dispose();
     iconUrl.dispose();
     radius.dispose();
+    schedule.dispose();
     for (final item in checklist) {
       item.dispose();
     }

@@ -3600,6 +3600,228 @@ abstract class AdminL10n {
   /// In en, this message translates to:
   /// **'The file is too large: SVG up to 300 KB, PNG or WebP up to 800 KB.'**
   String get appearanceErrorTooLarge;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled delivery'**
+  String get catalogModelScheduled;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery schedule'**
+  String get catalogSchedule;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat options'**
+  String get catalogPatterns;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery windows'**
+  String get catalogWindows;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'12:00-13:00, 19:00-21:00'**
+  String get catalogWindowsHint;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Lead time (hours)'**
+  String get catalogLeadHours;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Cutoff the day before'**
+  String get catalogCutoff;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Use 24-hour times like 12:00-13:00.'**
+  String get catalogTimeFormat;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Choose at least one.'**
+  String get catalogPatternsRequired;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Meals'**
+  String get unitMeals;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Guests'**
+  String get unitGuests;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Packages'**
+  String get unitPackage;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'One time'**
+  String get patternOnce;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Every day'**
+  String get patternDaily;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Chosen days'**
+  String get patternWeekdays;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Once a week'**
+  String get patternWeekly;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Once a month'**
+  String get patternMonthly;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled orders'**
+  String get ordersTitle;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'No scheduled orders'**
+  String get ordersEmpty;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get ordersAll;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Next deliveries'**
+  String get ordersUpcoming;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Requested'**
+  String get subRequested;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get subActive;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get subPaused;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Finished'**
+  String get subFinished;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get subDeclined;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get subCancelled;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled'**
+  String get deliveryScheduled;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing'**
+  String get deliveryPreparing;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Out for delivery'**
+  String get deliveryOut;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get deliveryDelivered;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped'**
+  String get deliverySkipped;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get deliveryDeclined;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get deliveryCancelled;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Counted in'**
+  String get catalogScheduleUnit;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Largest order'**
+  String get catalogScheduleMax;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Smallest order'**
+  String get catalogScheduleMin;
 }
 
 class _AdminL10nDelegate extends LocalizationsDelegate<AdminL10n> {

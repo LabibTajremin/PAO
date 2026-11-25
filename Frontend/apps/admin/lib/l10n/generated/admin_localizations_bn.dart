@@ -1882,4 +1882,115 @@ class AdminL10nBn extends AdminL10n {
   @override
   String get appearanceErrorTooLarge =>
       'ফাইলটি অনেক বড়: SVG ৩০০ KB পর্যন্ত, PNG বা WebP ৮০০ KB পর্যন্ত।';
+
+  @override
+  String get catalogModelScheduled => 'নির্ধারিত ডেলিভারি';
+
+  @override
+  String get catalogSchedule => 'ডেলিভারির সময়সূচি';
+
+  @override
+  String get catalogPatterns => 'পুনরাবৃত্তির ধরন';
+
+  @override
+  String get catalogWindows => 'ডেলিভারির সময়';
+
+  @override
+  String get catalogWindowsHint => '12:00-13:00, 19:00-21:00';
+
+  @override
+  String get catalogLeadHours => 'আগাম সময় (ঘণ্টা)';
+
+  @override
+  String get catalogCutoff => 'আগের দিনের শেষ সময়';
+
+  @override
+  String get catalogTimeFormat => '২৪ ঘণ্টার সময় লিখুন, যেমন 12:00-13:00।';
+
+  @override
+  String get catalogPatternsRequired => 'অন্তত একটি বেছে নিন।';
+
+  @override
+  String get unitMeals => 'খাবার';
+
+  @override
+  String get unitGuests => 'অতিথি';
+
+  @override
+  String get unitPackage => 'প্যাকেজ';
+
+  @override
+  String get patternOnce => 'একবার';
+
+  @override
+  String get patternDaily => 'প্রতিদিন';
+
+  @override
+  String get patternWeekdays => 'নির্বাচিত দিনে';
+
+  @override
+  String get patternWeekly => 'সপ্তাহে একবার';
+
+  @override
+  String get patternMonthly => 'মাসে একবার';
+
+  @override
+  String get ordersTitle => 'নির্ধারিত অর্ডার';
+
+  @override
+  String get ordersEmpty => 'কোনো নির্ধারিত অর্ডার নেই';
+
+  @override
+  String get ordersAll => 'সব';
+
+  @override
+  String get ordersUpcoming => 'আসন্ন ডেলিভারি';
+
+  @override
+  String get subRequested => 'অনুরোধ';
+
+  @override
+  String get subActive => 'চালু';
+
+  @override
+  String get subPaused => 'বিরতিতে';
+
+  @override
+  String get subFinished => 'শেষ';
+
+  @override
+  String get subDeclined => 'প্রত্যাখ্যাত';
+
+  @override
+  String get subCancelled => 'বাতিল';
+
+  @override
+  String get deliveryScheduled => 'নির্ধারিত';
+
+  @override
+  String get deliveryPreparing => 'প্রস্তুত হচ্ছে';
+
+  @override
+  String get deliveryOut => 'পথে';
+
+  @override
+  String get deliveryDelivered => 'পৌঁছে গেছে';
+
+  @override
+  String get deliverySkipped => 'বাদ';
+
+  @override
+  String get deliveryDeclined => 'প্রত্যাখ্যাত';
+
+  @override
+  String get deliveryCancelled => 'বাতিল';
+
+  @override
+  String get catalogScheduleUnit => 'গণনার একক';
+
+  @override
+  String get catalogScheduleMax => 'সর্বোচ্চ পরিমাণ';
+
+  @override
+  String get catalogScheduleMin => 'সর্বনিম্ন পরিমাণ';
 }
