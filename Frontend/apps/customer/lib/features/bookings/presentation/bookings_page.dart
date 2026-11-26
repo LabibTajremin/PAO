@@ -47,7 +47,16 @@ class _BookingsPageState extends State<BookingsPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: PaoAppBar(title: context.t.bookingsTitle),
+    appBar: PaoAppBar(
+      title: context.t.bookingsTitle,
+      actions: [
+        IconButton(
+          tooltip: context.t.ordersTitle,
+          icon: const Icon(Icons.event_repeat_outlined),
+          onPressed: () => context.push(Routes.subscriptions),
+        ),
+      ],
+    ),
     body: Column(
       children: [
         Padding(
@@ -83,6 +92,7 @@ class _Empty extends StatelessWidget {
     return tab == BookingsTab.upcoming
         ? PaoEmptyState(
             icon: Icons.event_available_outlined,
+            illustration: const ScopedArtwork('empty.bookings'),
             title: t.bookingsEmptyUpcoming,
             message: t.bookingsEmptyUpcomingBody,
             action: PaoButton(
@@ -93,6 +103,7 @@ class _Empty extends StatelessWidget {
           )
         : PaoEmptyState(
             icon: Icons.history,
+            illustration: const ScopedArtwork('empty.bookings'),
             title: t.bookingsEmptyPast,
             message: t.bookingsEmptyPastBody,
           );

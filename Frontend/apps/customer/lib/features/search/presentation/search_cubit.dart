@@ -36,7 +36,7 @@ class SearchState {
 /// Searches as the customer types, once per pause.
 class SearchCubit extends Cubit<SearchState> {
   /// Creates the cubit; [delay] is the typing pause.
-  SearchCubit(this._repo, {Duration delay = const Duration(milliseconds: 300)})
+  SearchCubit(this._repo, {Duration delay = Debouncer.typingPause})
     : _debounce = Debouncer(delay),
       super(const SearchState());
 

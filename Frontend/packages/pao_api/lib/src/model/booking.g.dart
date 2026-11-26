@@ -450,6 +450,7 @@ const _$ServiceModelEnumMap = {
   ServiceModel.durationHire: 'duration_hire',
   ServiceModel.listing: 'listing',
   ServiceModel.partnerReferral: 'partner_referral',
+  ServiceModel.scheduledDelivery: 'scheduled_delivery',
 };
 
 const _$TimingEnumMap = {Timing.asap: 'asap', Timing.scheduled: 'scheduled'};

@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:pao_ui/src/motion/transitions.dart';
 import 'package:pao_ui/src/theme_parts.dart';
 import 'package:pao_ui/src/tokens/accent.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
@@ -6,31 +8,44 @@ import 'package:pao_ui/src/tokens/typography.dart';
 
 /// Builds the Material theme every PAO app uses.
 abstract final class PaoTheme {
-  /// The light (paper) theme for [accent]; Midnight is the default
-  /// (05-screens.md). [bangla] sets the Bangla family and metrics.
+  /// The light theme for [accent]; Navy is the default (ADR-0038). [bangla]
+  /// sets the Bangla family and metrics; [platform] picks the system font on
+  /// iOS and defaults to the running platform.
   static ThemeData light({
-    AccentPreset accent = AccentPreset.midnight,
+    AccentPreset accent = AccentPreset.navy,
     bool bangla = false,
-  }) => _build(PaoColors(accent), bangla: bangla);
+    TargetPlatform? platform,
+  }) => _build(PaoColors(accent), bangla: bangla, platform: platform);
 
-  /// The dark (deep ink) theme for [accent]; [bangla] as for [light].
+  /// The dark (navy-ink) theme; the parameters are as for [light].
   static ThemeData dark({
-    AccentPreset accent = AccentPreset.midnight,
+    AccentPreset accent = AccentPreset.navy,
     bool bangla = false,
-  }) => _build(PaoColors(accent, dark: true), bangla: bangla);
+    TargetPlatform? platform,
+  }) =>
+      _build(PaoColors(accent, dark: true), bangla: bangla, platform: platform);
 
-  static ThemeData _build(PaoColors c, {required bool bangla}) {
-    final text = paoTextTheme(dark: c.dark, bangla: bangla);
+  static ThemeData _build(
+    PaoColors c, {
+    required bool bangla,
+    TargetPlatform? platform,
+  }) {
+    final p = platform ?? defaultTargetPlatform;
+    final text = paoTextTheme(dark: c.dark, bangla: bangla, platform: p);
+    final family = bangla ? PaoFonts.banglaOn(p) : PaoFonts.latinOn(p);
+    final fallback = bangla ? PaoFonts.latinOn(p) : PaoFonts.banglaOn(p);
     return ThemeData(
       useMaterial3: true,
+      platform: p,
       colorScheme: paoColorScheme(c),
       scaffoldBackgroundColor: c.paper,
       canvasColor: c.paper,
       textTheme: text,
-      fontFamily: bangla ? PaoFonts.bangla : PaoFonts.latin,
-      fontFamilyFallback: [if (bangla) PaoFonts.latin else PaoFonts.bangla],
+      fontFamily: family,
+      fontFamilyFallback: [?fallback],
       materialTapTargetSize: MaterialTapTargetSize.padded,
       extensions: [c],
+      pageTransitionsTheme: paoPageTransitions(web: kIsWeb),
       dividerTheme: DividerThemeData(color: c.hairline, space: 1),
       appBarTheme: AppBarTheme(
         backgroundColor: c.paper,

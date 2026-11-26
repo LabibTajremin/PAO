@@ -69,4 +69,5 @@ BookingDraft draftOf(Service service, Selection selection) => BookingDraft(
   serviceId: service.id,
   items: selection.items,
   scheduledAt: selection.start?.toIso8601String(),
+  delivery: service.serviceModel == ServiceModel.scheduledDelivery,
 );

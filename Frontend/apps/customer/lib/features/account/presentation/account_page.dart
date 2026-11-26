@@ -71,6 +71,7 @@ class _Pages extends StatelessWidget {
         t.accountAddresses,
       ),
       (Routes.accountPage('language'), Icons.translate, t.accountLanguage),
+      (Routes.accountPage('appearance'), Icons.contrast, t.accountAppearance),
       (Routes.accountPage('help'), Icons.help_outline, t.accountHelp),
       (Routes.legal, Icons.policy_outlined, t.accountLegal),
     ];

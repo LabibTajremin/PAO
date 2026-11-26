@@ -30,7 +30,7 @@ void main() {
   ) async {
     final h = await start(tester);
     await tester.enterText(find.byType(TextField), '123');
-    await tester.tap(find.text('Send code'));
+    await tester.tap(find.text('Send OTP'));
     await h.settle(tester);
     expect(
       find.text('Enter an 11-digit Bangladeshi mobile number.'),
@@ -43,7 +43,7 @@ void main() {
       }),
     );
     await tester.enterText(find.byType(TextField), '1712345678');
-    await tester.tap(find.text('Send code'));
+    await tester.tap(find.text('Send OTP'));
     await h.settle(tester);
     expect(
       find.text('Our service had a problem. Please try again.'),
@@ -53,7 +53,7 @@ void main() {
       '/v1/auth/otp/request',
       (s) => s.reply(202, {'expiresInSeconds': 300, 'resendAfterSeconds': 30}),
     );
-    await tester.tap(find.text('Send code'));
+    await tester.tap(find.text('Send OTP'));
     await h.settle(tester);
     expect(find.text('We sent it to 01712345678.'), findsOneWidget);
     expect(h.bodyOf('/v1/auth/otp/request'), {

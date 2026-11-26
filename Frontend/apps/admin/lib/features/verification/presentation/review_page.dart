@@ -15,6 +15,7 @@ import 'package:pao_admin/shared/confirm_reason.dart';
 import 'package:pao_admin/shared/l10n.dart';
 import 'package:pao_api/pao_api.dart';
 import 'package:pao_core/pao_core.dart';
+import 'package:pao_ui/pao_ui.dart';
 
 /// Reviews one provider's documents (A06). Keys: A approves and R rejects
 /// the focused item, N opens the next provider, ↑/↓ move the focus.
@@ -167,7 +168,7 @@ class _ReviewViewState extends State<_ReviewView> {
 
   Future<void> _documents(VerificationReview review, ReviewItem item) async {
     final t = context.t;
-    await showDialog<void>(
+    await showPaoDialog<void>(
       context: context,
       builder: (_) => DocumentsDialog(
         title: itemLabel(t, item.type),

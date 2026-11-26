@@ -145,9 +145,6 @@ void main() {
     await h.settle(tester);
     expect(h.services.prefs.string(Prefs.languageKey), 'en');
     expect(find.textContaining('Saved on this phone'), findsNothing);
-    await tester.tap(find.text('Dark'));
-    await h.settle(tester);
-    expect(h.services.themeMode.value, ThemeMode.dark);
     await h.go(tester, Routes.profile);
     h.services.locale.select(const Locale('bn'));
     await h.settle(tester);
@@ -155,6 +152,19 @@ void main() {
       (o) => o.method == 'PUT' && o.path == '/v1/provider/profile',
     );
     expect(profilePuts, hasLength(2));
+  });
+
+  testWidgets('the app opens light; Appearance in Profile switches it', (
+    tester,
+  ) async {
+    final h = await start(tester);
+    await h.pumpApp(tester, Routes.profile);
+    expect(h.services.themeMode.value, ThemeMode.light);
+    await tester.tap(find.text('Appearance'));
+    await h.settle(tester);
+    await tester.tap(find.text('Dark'));
+    await h.settle(tester);
+    expect(h.services.themeMode.value, ThemeMode.dark);
   });
 
   testWidgets('help expands topics and calls support', (tester) async {

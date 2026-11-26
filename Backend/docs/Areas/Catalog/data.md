@@ -1,0 +1,36 @@
+# Catalog area — data
+
+Schema `catalog`, created by the scripts in `database/changes/catalog/` ([database index](../../Database/README.md)).
+
+| Table | Created by |
+|---|---|
+| `catalog.banners` | `database/changes/catalog/0002_banners.sql` |
+| `catalog.categories` | `database/changes/catalog/0001_init.sql` |
+| `catalog.services` | `database/changes/catalog/0001_init.sql` |
+| `catalog.sub_services` | `database/changes/catalog/0001_init.sql` |
+| `catalog.price_versions` | `database/changes/catalog/0001_init.sql` |
+| `catalog.catalog_version` | `database/changes/catalog/0001_init.sql` |
+| `catalog.outbox` | `database/changes/catalog/0001_init.sql` |
+| `catalog.processed_events` | `database/changes/catalog/0001_init.sql` |
+
+## Repositories
+
+| Repository | Role |
+|---|---|
+| `BannerRepository` | Home banners: the list in display order (all, or published only), existence, upsert and delete on the command's transaction. |
+| `CatalogRepository` | Reads: the whole tree in three queries assembled in memory (no N+1), a service with its sub-services, a sub-service with its current price, price history, trigram search, the catalog version. |
+| `CatalogWriteRepository` | Writes on the command's transaction: upserts of categories, services and sub-services (idempotent reseeding), immutable price versions, the version bump and outbox events. |
+
+Db models: `src/PAO.EF/Catalog/` (`CategoryRecord`, `ServiceRecord`, `SubServiceRecord`, `PriceVersionRecord`, `CatalogVersionRecord`, `BannerRecord`).
+
+## Cache
+
+The published tree is cached in Redis under `cache:catalog:v{version}` for 10 minutes. Every
+edit bumps `catalog.catalog_version` in the same transaction, so a new version is visible at
+once; a Redis failure only costs a database read.
+
+## Seeding
+
+`migrate seed` loads `database/seed/catalog.yaml` (see [operations](../../Operations/README.md)) through
+the `SeedCatalog` command: ids derive from the seed keys (UUIDv5, `SeedIds`), every item is
+published in file order, and a price version is added only when a seeded price changed.

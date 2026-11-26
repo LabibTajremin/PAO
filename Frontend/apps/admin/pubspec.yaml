@@ -10,6 +10,7 @@ environment:
 
 dependencies:
   dio: ^5.11.1
+  file_selector: ^1.0.3
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
@@ -27,9 +28,11 @@ dependencies:
     path: ../../packages/pao_l10n
   pao_ui:
     path: ../../packages/pao_ui
+  web: ^1.1.1
 
 dev_dependencies:
   dart_code_linter: ^4.4.2
+  file_selector_platform_interface: ^2.6.2
   flutter_test:
     sdk: flutter
   http_mock_adapter: ^0.6.1
@@ -38,13 +41,12 @@ dev_dependencies:
   mocktail: ^1.0.5
   pao_e2e:
     path: ../../packages/pao_e2e
+  plugin_platform_interface: ^2.1.8
   very_good_analysis: ^11.0.0
 
 flutter:
   generate: true
   uses-material-design: true
-  assets:
-    - assets/brand/
 
 coverage_exclude:
   - 'lib/main\.dart$'

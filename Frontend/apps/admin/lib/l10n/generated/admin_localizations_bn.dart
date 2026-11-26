@@ -1226,9 +1226,6 @@ class AdminL10nBn extends AdminL10n {
   String get catalogIconKey => 'আইকন কী';
 
   @override
-  String get catalogPickIcon => 'পরিচিত আইকন বেছে নিন';
-
-  @override
   String get catalogSortOrder => 'সাজানোর ক্রম';
 
   @override
@@ -1783,4 +1780,217 @@ class AdminL10nBn extends AdminL10n {
   @override
   String get settingsAmountHint =>
       'পয়সা: ৫০০০০ = ৳৫০০। এর বেশি বকেয়ায় মার্চেন্ট কাজ নিতে পারবেন না।';
+
+  @override
+  String get shellDarkMode => 'ডার্ক মোড';
+
+  @override
+  String get iconChoose => 'আইকন বেছে নিন';
+
+  @override
+  String get iconUseLibrary => 'লাইব্রেরির আইকন ব্যবহার করুন';
+
+  @override
+  String get iconRules =>
+      'লাইব্রেরির আইকন, অথবা আপনার নিজের: ১০০ KB পর্যন্ত SVG, অথবা স্বচ্ছ পটভূমির বর্গাকার PNG বা WebP, কমপক্ষে ৯৬ × ৯৬ এবং ২০০ KB পর্যন্ত। অ্যাপ এটি অ্যাকসেন্ট রঙে দেখায়।';
+
+  @override
+  String get iconTabLibrary => 'লাইব্রেরি';
+
+  @override
+  String get iconTabUpload => 'আপলোড';
+
+  @override
+  String get iconTabLink => 'লিংক থেকে';
+
+  @override
+  String get iconSearch => 'আইকন খুঁজুন';
+
+  @override
+  String get iconUploadButton => 'ফাইল বেছে নিন';
+
+  @override
+  String get iconLinkLabel => 'আইকনের লিংক (https)';
+
+  @override
+  String get iconLinkAdd => 'যোগ করুন';
+
+  @override
+  String get iconUploaded => 'আপলোড করা আইকন';
+
+  @override
+  String get iconErrorTooLarge => 'ফাইলটি অনেক বড়।';
+
+  @override
+  String get iconErrorUnreadable => 'এটি পড়া যায় এমন SVG, PNG বা WebP নয়।';
+
+  @override
+  String get iconErrorNotSquare => 'ছবিটি বর্গাকার হতে হবে।';
+
+  @override
+  String get iconErrorTooSmall => 'ছবিটি কমপক্ষে ৯৬ × ৯৬ হতে হবে।';
+
+  @override
+  String get iconErrorOpaque => 'ছবির পটভূমি স্বচ্ছ হতে হবে।';
+
+  @override
+  String get iconErrorLink => 'লিংক থেকে নামানো গেল না।';
+
+  @override
+  String get settingsBrand => 'ব্র্যান্ড';
+
+  @override
+  String get settingsTaglineEn => 'ট্যাগলাইন (ইংরেজি)';
+
+  @override
+  String get settingsTaglineBn => 'ট্যাগলাইন (বাংলা)';
+
+  @override
+  String get settingsTaglineHint =>
+      'স্প্ল্যাশ ও সাইন-ইন স্ক্রিনে, শেয়ার টেক্সটে এবং রসিদে দেখানো হয়। প্রতিটি ভাষায় সর্বোচ্চ ৪০ অক্ষর।';
+
+  @override
+  String get settingsTaglineSuggestions => 'প্রস্তাব';
+
+  @override
+  String get appearanceTitle => 'ইলাস্ট্রেশন';
+
+  @override
+  String get appearanceRules =>
+      'পছন্দনীয়: ৩০০ KB পর্যন্ত SVG। নইলে দেখানো মাপেই স্বচ্ছ পটভূমির PNG বা WebP, ৮০০ KB পর্যন্ত। মূল বিষয় ড্যাশ দেওয়া নিরাপদ অংশের ভিতরে রাখুন, শুধু প্যালেটের রং ব্যবহার করুন, আর ছবিতে কোনো লেখা রাখবেন না: দুই ভাষাতেই চলতে হবে।';
+
+  @override
+  String get appearanceUpload => 'আপলোড';
+
+  @override
+  String get appearanceReset => 'মূলটি ব্যবহার করুন';
+
+  @override
+  String get appearanceReplaced => 'আপলোড করা';
+
+  @override
+  String get appearanceOriginal => 'মূল';
+
+  @override
+  String get appearanceBundled => 'অ্যাপ থেকে দেখানো';
+
+  @override
+  String appearanceErrorSize(String expected) {
+    return '$expected পিক্সেলের ছবি, অথবা সেই অনুপাতের SVG ব্যবহার করুন।';
+  }
+
+  @override
+  String get appearanceErrorTooLarge =>
+      'ফাইলটি অনেক বড়: SVG ৩০০ KB পর্যন্ত, PNG বা WebP ৮০০ KB পর্যন্ত।';
+
+  @override
+  String get catalogModelScheduled => 'নির্ধারিত ডেলিভারি';
+
+  @override
+  String get catalogSchedule => 'ডেলিভারির সময়সূচি';
+
+  @override
+  String get catalogPatterns => 'পুনরাবৃত্তির ধরন';
+
+  @override
+  String get catalogWindows => 'ডেলিভারির সময়';
+
+  @override
+  String get catalogWindowsHint => '12:00-13:00, 19:00-21:00';
+
+  @override
+  String get catalogLeadHours => 'আগাম সময় (ঘণ্টা)';
+
+  @override
+  String get catalogCutoff => 'আগের দিনের শেষ সময়';
+
+  @override
+  String get catalogTimeFormat => '২৪ ঘণ্টার সময় লিখুন, যেমন 12:00-13:00।';
+
+  @override
+  String get catalogPatternsRequired => 'অন্তত একটি বেছে নিন।';
+
+  @override
+  String get unitMeals => 'খাবার';
+
+  @override
+  String get unitGuests => 'অতিথি';
+
+  @override
+  String get unitPackage => 'প্যাকেজ';
+
+  @override
+  String get patternOnce => 'একবার';
+
+  @override
+  String get patternDaily => 'প্রতিদিন';
+
+  @override
+  String get patternWeekdays => 'নির্বাচিত দিনে';
+
+  @override
+  String get patternWeekly => 'সপ্তাহে একবার';
+
+  @override
+  String get patternMonthly => 'মাসে একবার';
+
+  @override
+  String get ordersTitle => 'নির্ধারিত অর্ডার';
+
+  @override
+  String get ordersEmpty => 'কোনো নির্ধারিত অর্ডার নেই';
+
+  @override
+  String get ordersAll => 'সব';
+
+  @override
+  String get ordersUpcoming => 'আসন্ন ডেলিভারি';
+
+  @override
+  String get subRequested => 'অনুরোধ';
+
+  @override
+  String get subActive => 'চালু';
+
+  @override
+  String get subPaused => 'বিরতিতে';
+
+  @override
+  String get subFinished => 'শেষ';
+
+  @override
+  String get subDeclined => 'প্রত্যাখ্যাত';
+
+  @override
+  String get subCancelled => 'বাতিল';
+
+  @override
+  String get deliveryScheduled => 'নির্ধারিত';
+
+  @override
+  String get deliveryPreparing => 'প্রস্তুত হচ্ছে';
+
+  @override
+  String get deliveryOut => 'পথে';
+
+  @override
+  String get deliveryDelivered => 'পৌঁছে গেছে';
+
+  @override
+  String get deliverySkipped => 'বাদ';
+
+  @override
+  String get deliveryDeclined => 'প্রত্যাখ্যাত';
+
+  @override
+  String get deliveryCancelled => 'বাতিল';
+
+  @override
+  String get catalogScheduleUnit => 'গণনার একক';
+
+  @override
+  String get catalogScheduleMax => 'সর্বোচ্চ পরিমাণ';
+
+  @override
+  String get catalogScheduleMin => 'সর্বনিম্ন পরিমাণ';
 }

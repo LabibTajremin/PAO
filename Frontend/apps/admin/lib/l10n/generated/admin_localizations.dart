@@ -2296,7 +2296,7 @@ abstract class AdminL10n {
   /// A03 category subtitle: name in the other language, sort order, number of services
   ///
   /// In en, this message translates to:
-  /// **'{other} · order {order} · {count} services'**
+  /// **'{other} · order {order} · services: {count}'**
   String catalogCategoryLine(String other, String order, String count);
 
   /// A03 add-service button, A04 title
@@ -2370,12 +2370,6 @@ abstract class AdminL10n {
   /// In en, this message translates to:
   /// **'Icon key'**
   String get catalogIconKey;
-
-  /// Icon menu tooltip
-  ///
-  /// In en, this message translates to:
-  /// **'Pick a known icon'**
-  String get catalogPickIcon;
 
   /// Field label; smaller shows first
   ///
@@ -3414,6 +3408,420 @@ abstract class AdminL10n {
   /// In en, this message translates to:
   /// **'Paisa: 50000 = ৳500. Merchants above it cannot accept jobs.'**
   String get settingsAmountHint;
+
+  /// Sidebar switch between the light (default) and dark theme.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark mode'**
+  String get shellDarkMode;
+
+  /// Button that opens the icon picker
+  ///
+  /// In en, this message translates to:
+  /// **'Choose icon'**
+  String get iconChoose;
+
+  /// Button that drops an uploaded icon
+  ///
+  /// In en, this message translates to:
+  /// **'Use the library icon'**
+  String get iconUseLibrary;
+
+  /// Rules under the icon field
+  ///
+  /// In en, this message translates to:
+  /// **'A library icon, or your own: SVG up to 100 KB, or a square PNG or WebP with a transparent background, at least 96 × 96 and up to 200 KB. Apps draw it in the accent colour.'**
+  String get iconRules;
+
+  /// Icon picker tab
+  ///
+  /// In en, this message translates to:
+  /// **'Library'**
+  String get iconTabLibrary;
+
+  /// Icon picker tab
+  ///
+  /// In en, this message translates to:
+  /// **'Upload'**
+  String get iconTabUpload;
+
+  /// Icon picker tab
+  ///
+  /// In en, this message translates to:
+  /// **'From link'**
+  String get iconTabLink;
+
+  /// Icon library search field
+  ///
+  /// In en, this message translates to:
+  /// **'Search icons'**
+  String get iconSearch;
+
+  /// Button that opens the file chooser
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a file'**
+  String get iconUploadButton;
+
+  /// Field label
+  ///
+  /// In en, this message translates to:
+  /// **'Icon link (https)'**
+  String get iconLinkLabel;
+
+  /// Button that downloads the linked icon
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get iconLinkAdd;
+
+  /// Shown instead of the key when an uploaded icon is set
+  ///
+  /// In en, this message translates to:
+  /// **'Uploaded icon'**
+  String get iconUploaded;
+
+  /// Icon refused
+  ///
+  /// In en, this message translates to:
+  /// **'The file is too large.'**
+  String get iconErrorTooLarge;
+
+  /// Icon refused
+  ///
+  /// In en, this message translates to:
+  /// **'This is not a readable SVG, PNG or WebP.'**
+  String get iconErrorUnreadable;
+
+  /// Icon refused
+  ///
+  /// In en, this message translates to:
+  /// **'The image must be square.'**
+  String get iconErrorNotSquare;
+
+  /// Icon refused
+  ///
+  /// In en, this message translates to:
+  /// **'The image must be at least 96 × 96.'**
+  String get iconErrorTooSmall;
+
+  /// Icon refused
+  ///
+  /// In en, this message translates to:
+  /// **'The image needs a transparent background.'**
+  String get iconErrorOpaque;
+
+  /// Icon refused
+  ///
+  /// In en, this message translates to:
+  /// **'The link could not be downloaded.'**
+  String get iconErrorLink;
+
+  /// Settings section title
+  ///
+  /// In en, this message translates to:
+  /// **'Brand'**
+  String get settingsBrand;
+
+  /// Field label
+  ///
+  /// In en, this message translates to:
+  /// **'Tagline (English)'**
+  String get settingsTaglineEn;
+
+  /// Field label
+  ///
+  /// In en, this message translates to:
+  /// **'Tagline (Bangla)'**
+  String get settingsTaglineBn;
+
+  /// Help under the tagline fields
+  ///
+  /// In en, this message translates to:
+  /// **'Shown on the splash and sign-in screens, in the share text and on receipts. At most 40 characters in each language.'**
+  String get settingsTaglineHint;
+
+  /// Label before the suggestion chips
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestions'**
+  String get settingsTaglineSuggestions;
+
+  /// Page title and the button that opens it
+  ///
+  /// In en, this message translates to:
+  /// **'Illustrations'**
+  String get appearanceTitle;
+
+  /// Rules at the top of the page
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred: SVG up to 300 KB. Otherwise PNG or WebP at exactly the size shown, with a transparent background, up to 800 KB. Keep the subject inside the dashed safe area, use only the palette colours, and put no text in the picture: it must work in both languages.'**
+  String get appearanceRules;
+
+  /// Button
+  ///
+  /// In en, this message translates to:
+  /// **'Upload'**
+  String get appearanceUpload;
+
+  /// Button that resets a slot to its seed image
+  ///
+  /// In en, this message translates to:
+  /// **'Use the original'**
+  String get appearanceReset;
+
+  /// Status of a slot an admin replaced
+  ///
+  /// In en, this message translates to:
+  /// **'Uploaded'**
+  String get appearanceReplaced;
+
+  /// Status of a slot showing its seed image
+  ///
+  /// In en, this message translates to:
+  /// **'Original'**
+  String get appearanceOriginal;
+
+  /// Status of a slot without a server image
+  ///
+  /// In en, this message translates to:
+  /// **'Shown from the app'**
+  String get appearanceBundled;
+
+  /// Upload refused: wrong size
+  ///
+  /// In en, this message translates to:
+  /// **'Use an image of {expected} pixels, or an SVG with that ratio.'**
+  String appearanceErrorSize(String expected);
+
+  /// Upload refused: too large
+  ///
+  /// In en, this message translates to:
+  /// **'The file is too large: SVG up to 300 KB, PNG or WebP up to 800 KB.'**
+  String get appearanceErrorTooLarge;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled delivery'**
+  String get catalogModelScheduled;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery schedule'**
+  String get catalogSchedule;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat options'**
+  String get catalogPatterns;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery windows'**
+  String get catalogWindows;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'12:00-13:00, 19:00-21:00'**
+  String get catalogWindowsHint;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Lead time (hours)'**
+  String get catalogLeadHours;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Cutoff the day before'**
+  String get catalogCutoff;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Use 24-hour times like 12:00-13:00.'**
+  String get catalogTimeFormat;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Choose at least one.'**
+  String get catalogPatternsRequired;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Meals'**
+  String get unitMeals;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Guests'**
+  String get unitGuests;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Packages'**
+  String get unitPackage;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'One time'**
+  String get patternOnce;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Every day'**
+  String get patternDaily;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Chosen days'**
+  String get patternWeekdays;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Once a week'**
+  String get patternWeekly;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Once a month'**
+  String get patternMonthly;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled orders'**
+  String get ordersTitle;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'No scheduled orders'**
+  String get ordersEmpty;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get ordersAll;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Next deliveries'**
+  String get ordersUpcoming;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Requested'**
+  String get subRequested;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get subActive;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get subPaused;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Finished'**
+  String get subFinished;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get subDeclined;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get subCancelled;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled'**
+  String get deliveryScheduled;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing'**
+  String get deliveryPreparing;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Out for delivery'**
+  String get deliveryOut;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get deliveryDelivered;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped'**
+  String get deliverySkipped;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get deliveryDeclined;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get deliveryCancelled;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Counted in'**
+  String get catalogScheduleUnit;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Largest order'**
+  String get catalogScheduleMax;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Smallest order'**
+  String get catalogScheduleMin;
 }
 
 class _AdminL10nDelegate extends LocalizationsDelegate<AdminL10n> {

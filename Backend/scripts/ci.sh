@@ -14,34 +14,34 @@ step() { printf '\033[1;34m▸\033[0m %s\n' "$*" >&2; }
 
 ci_build() {
   step "dotnet build (warnings as errors)"
-  dotnet build PAO.sln -warnaserror -nologo -v quiet
+  dotnet build ../PAO.sln -warnaserror -nologo -v quiet
 }
 
 ci_spec() {
   step "bundled OpenAPI document is up to date"
   scripts/gen-spec.sh --check
-  step "single-file database scripts (DB Changes/bundle) are up to date"
+  step "single-file database scripts (database/changes/bundle) are up to date"
   scripts/gen-db-bundle.sh --check
 }
 
 ci_format() {
   step "dotnet format --verify-no-changes"
-  dotnet format PAO.sln --verify-no-changes
+  dotnet format ../PAO.sln --verify-no-changes
 }
 
 ci_gates() {
   step "architecture, authorisation, size and docs gates"
-  dotnet test --project Test/PAO.UnitTests --no-build -- --filter-trait "Category=Gate"
+  dotnet test --project tests/PAO.UnitTests --no-build -- --filter-trait "Category=Gate"
 }
 
 ci_test() {
   local out="${PAO_COVERAGE_OUT:-$DOTNET_ROOT_DIR/../out/coverage/backend}" settings="$DOTNET_ROOT_DIR/coverage.config"
   rm -rf "$out" && mkdir -p "$out"
   step "unit tests with coverage"
-  dotnet test --project Test/PAO.UnitTests --no-build -- --coverage --coverage-output-format cobertura \
+  dotnet test --project tests/PAO.UnitTests --no-build -- --coverage --coverage-output-format cobertura \
     --coverage-output "$out/unit.cobertura.xml" --coverage-settings "$settings"
   step "integration tests with coverage (Postgres, Redis, S3 from PAO_TEST_* or compose)"
-  dotnet test --project Test/PAO.IntegrationTests --no-build -- --coverage --coverage-output-format cobertura \
+  dotnet test --project tests/PAO.IntegrationTests --no-build -- --coverage --coverage-output-format cobertura \
     --coverage-output "$out/integration.cobertura.xml" --coverage-settings "$settings"
   step "merged coverage gate (100% of hand-written lines)"
   python3 -I scripts/coverage.py "$out/summary.md" "$out/unit.cobertura.xml" "$out/integration.cobertura.xml"
@@ -49,12 +49,12 @@ ci_test() {
 
 ci_unit() {
   step "unit tests"
-  dotnet test --project Test/PAO.UnitTests --no-build
+  dotnet test --project tests/PAO.UnitTests --no-build
 }
 
 ci_e2e() {
   step "start-up smoke tests"
-  dotnet test --project Test/PAO.E2ETests --no-build -- --filter-not-trait "Category=Journey"
+  dotnet test --project tests/PAO.E2ETests --no-build -- --filter-not-trait "Category=Journey"
 }
 
 # Stages run as separate statements, never chained with && or ||: bash ignores set -e

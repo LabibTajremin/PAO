@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:pao_admin/features/catalog/domain/catalog_repository.dart';
 import 'package:pao_api/pao_api.dart';
@@ -46,4 +48,23 @@ class ApiCatalogRepository implements CatalogRepository {
         subServiceId: subServiceId,
         priceInput: PriceInput(amount: amount),
       )).data!;
+
+  @override
+  Future<List<String>> iconLibrary() async =>
+      (await _api.listIconLibrary()).data!.keys;
+
+  @override
+  Future<String> uploadIcon(String contentType, List<int> file) async =>
+      (await _api.uploadIcon(
+        iconUpload: IconUpload(
+          contentType: IconUploadContentTypeEnum.values.firstWhere(
+            (t) => t.value == contentType,
+          ),
+          data: base64Encode(file),
+        ),
+      )).data!.iconUrl;
+
+  @override
+  Future<String> iconFromLink(String url) async =>
+      (await _api.addIconFromLink(iconLink: IconLink(url: url))).data!.iconUrl;
 }

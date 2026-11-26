@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pao_partner/app/routes.dart';
 import 'package:pao_partner/app/services.dart';
+import 'package:pao_partner/features/profile/presentation/appearance_page.dart';
 import 'package:pao_partner/features/profile/presentation/documents_page.dart';
 import 'package:pao_partner/features/profile/presentation/help_page.dart';
 import 'package:pao_partner/features/profile/presentation/language_page.dart';
@@ -25,6 +26,7 @@ GoRoute profileRoute(AppServices s, GlobalKey<NavigatorState> root) {
       sub('level', LevelPage(services: s)),
       sub('services', ServicesPage(services: s)),
       sub('language', LanguagePage(services: s)),
+      sub('appearance', AppearancePage(services: s)),
       sub('help', HelpPage(services: s)),
     ],
   );

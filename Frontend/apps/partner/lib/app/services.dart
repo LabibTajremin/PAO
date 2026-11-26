@@ -19,8 +19,10 @@ class AppServices {
     required this.launcher,
     required this.photos,
     required this.push,
+    AppLookService? look,
     DateTime Function()? clock,
   }) : now = clock ?? DateTime.now,
+       look = look ?? AppLookService(api, MemoryLookStore(), app: 'partner'),
        gate = ProviderGate(api, permissions),
        themeMode = ThemeModeController(prefs);
 
@@ -62,4 +64,7 @@ class AppServices {
 
   /// The verification gate.
   final ProviderGate gate;
+
+  /// Tagline and illustrations the admin changes without a release (ADR-0040).
+  final AppLookService look;
 }

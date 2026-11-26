@@ -19,6 +19,12 @@ class CustomerL10nEn extends CustomerL10n {
   String get authPhoneBody => 'We will text you a code to sign in.';
 
   @override
+  String get authWelcome => 'Welcome to PAO';
+
+  @override
+  String get authSendOtp => 'Send OTP';
+
+  @override
   String get authPhoneLabel => 'Mobile number';
 
   @override
@@ -1446,4 +1452,115 @@ class CustomerL10nEn extends CustomerL10n {
 
   @override
   String get bookingsReceiptPayment => 'Payment';
+
+  @override
+  String get orderTitle => 'Schedule delivery';
+
+  @override
+  String get orderRepeat => 'How often';
+
+  @override
+  String get orderPatternOnce => 'One time';
+
+  @override
+  String get orderPatternDaily => 'Every day';
+
+  @override
+  String get orderPatternWeekdays => 'Chosen days';
+
+  @override
+  String get orderPatternWeekly => 'Once a week';
+
+  @override
+  String get orderPatternMonthly => 'Once a month';
+
+  @override
+  String get orderDays => 'Days';
+
+  @override
+  String get orderDayOfMonth => 'Day of the month';
+
+  @override
+  String get orderWindow => 'Delivery time';
+
+  @override
+  String get orderStart => 'First delivery';
+
+  @override
+  String get orderCount => 'Number of deliveries';
+
+  @override
+  String get orderPerDelivery => 'Per delivery';
+
+  @override
+  String get orderNote => 'Note for the provider';
+
+  @override
+  String get orderConfirm => 'Place order';
+
+  @override
+  String get orderCash => 'Pay cash on each delivery.';
+
+  @override
+  String get ordersTitle => 'Scheduled orders';
+
+  @override
+  String get ordersEmpty => 'No scheduled orders yet';
+
+  @override
+  String get orderUpcoming => 'Upcoming deliveries';
+
+  @override
+  String get orderSkip => 'Skip';
+
+  @override
+  String get orderUnskip => 'Bring back';
+
+  @override
+  String get orderPause => 'Pause';
+
+  @override
+  String get orderResume => 'Resume';
+
+  @override
+  String get orderCancel => 'Cancel order';
+
+  @override
+  String get subRequested => 'Waiting for the provider';
+
+  @override
+  String get subActive => 'Active';
+
+  @override
+  String get subPaused => 'Paused';
+
+  @override
+  String get subFinished => 'Finished';
+
+  @override
+  String get subDeclined => 'Declined';
+
+  @override
+  String get subCancelled => 'Cancelled';
+
+  @override
+  String get deliveryScheduled => 'Scheduled';
+
+  @override
+  String get deliveryPreparing => 'Preparing';
+
+  @override
+  String get deliveryOut => 'On the way';
+
+  @override
+  String get deliveryDelivered => 'Delivered';
+
+  @override
+  String get deliverySkipped => 'Skipped';
+
+  @override
+  String get deliveryDeclined => 'Not delivered';
+
+  @override
+  String get deliveryCancelled => 'Cancelled';
 }

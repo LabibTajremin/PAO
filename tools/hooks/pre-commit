@@ -12,7 +12,7 @@ for file in "${staged[@]}"; do
   case "$file" in
     Backend/scripts/*) shell=1 ;;
     Backend/*) backend=1 ;;
-    pao | tools/* | infra/e2e/*.sh | Frontend/test/e2e/*.sh) shell=1 ;;
+    pao | tools/* | infra/e2e/*.sh | Frontend/e2e/*.sh) shell=1 ;;
     Frontend/*) dart=1 ;;
   esac
 done

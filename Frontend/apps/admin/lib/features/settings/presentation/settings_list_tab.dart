@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pao_admin/features/settings/domain/settings_repository.dart';
+import 'package:pao_admin/features/settings/presentation/brand_section.dart';
 import 'package:pao_admin/features/settings/presentation/setting_dialog.dart';
 import 'package:pao_admin/features/settings/presentation/settings_cubits.dart';
 import 'package:pao_admin/features/settings/presentation/settings_labels.dart';
@@ -52,11 +53,19 @@ class _SettingsListTabState extends State<SettingsListTab> {
         builder: (context, items) => ListView(
           padding: const EdgeInsets.all(PaoSpace.xxl),
           children: [
+            for (final s in items.where((s) => s.key == taglineKey))
+              BrandSection(
+                setting: s,
+                cubit: context.read<SettingsCubit>(),
+                canEdit: widget.canEdit,
+              ),
             FilterBar(
               search: (q) => setState(() => _query = q),
               searchHint: context.t.settingsSearch,
             ),
-            for (final s in items.where(_matches))
+            for (final s in items.where(
+              (s) => s.key != taglineKey && _matches(s),
+            ))
               _SettingRow(
                 setting: s,
                 onEdit: widget.canEdit ? () => _edit(context, s) : null,

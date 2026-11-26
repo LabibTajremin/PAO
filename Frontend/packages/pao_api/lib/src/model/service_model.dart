@@ -13,7 +13,9 @@ enum ServiceModel {
   @JsonValue(r'listing')
   listing(r'listing'),
   @JsonValue(r'partner_referral')
-  partnerReferral(r'partner_referral');
+  partnerReferral(r'partner_referral'),
+  @JsonValue(r'scheduled_delivery')
+  scheduledDelivery(r'scheduled_delivery');
 
   const ServiceModel(this.value);
 

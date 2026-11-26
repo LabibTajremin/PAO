@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pao_admin/app/routes.dart';
 import 'package:pao_admin/app/services.dart';
+import 'package:pao_admin/features/appearance/presentation/artwork_page.dart';
 import 'package:pao_admin/features/auth/presentation/login_page.dart';
 import 'package:pao_admin/features/auth/presentation/password_page.dart';
 import 'package:pao_admin/features/banners/presentation/banners_page.dart';
@@ -20,6 +21,8 @@ import 'package:pao_admin/features/customers/presentation/customers_page.dart';
 import 'package:pao_admin/features/dashboard/presentation/dashboard_page.dart';
 import 'package:pao_admin/features/level2/data/api_level2_repository.dart';
 import 'package:pao_admin/features/level2/presentation/level2_page.dart';
+import 'package:pao_admin/features/orders/order_detail_page.dart';
+import 'package:pao_admin/features/orders/orders_page.dart';
 import 'package:pao_admin/features/providers/presentation/provider_detail_page.dart';
 import 'package:pao_admin/features/providers/presentation/providers_page.dart';
 import 'package:pao_admin/features/settings/presentation/settings_page.dart';
@@ -51,6 +54,7 @@ List<RouteBase> consoleRoutes(AppServices s) => [
   _page(Routes.dashboard, (_) => DashboardPage(services: s)),
   _page(Routes.catalog, (_) => CatalogPage(services: s)),
   _page(Routes.banners, (_) => BannersPage(services: s)),
+  _page(Routes.appearance, (_) => ArtworkPage(services: s)),
   _page(
     Routes.service,
     (state) => ServiceEditorPage(
@@ -97,6 +101,8 @@ List<RouteBase> peopleRoutes(AppServices s) => [
   _page('/customers/:id', (st) => CustomerDetailPage(services: s, id: _id(st))),
   _page(Routes.bookings, (_) => BookingsPage(services: s)),
   _page('/bookings/:id', (st) => BookingDetailPage(services: s, id: _id(st))),
+  _page(Routes.orders, (_) => OrdersPage(services: s)),
+  _page('/orders/:id', (st) => OrderDetailPage(services: s, id: _id(st))),
   _page(Routes.complaints, (_) => ComplaintsPage(services: s)),
   _page(
     '/complaints/:id',

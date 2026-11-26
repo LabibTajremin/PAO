@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:pao_core/src/appearance/look_scope.dart';
 import 'package:pao_core/src/state/view_state.dart';
 import 'package:pao_l10n/pao_l10n.dart';
 import 'package:pao_ui/pao_ui.dart';
 
 /// Renders a [ViewState]: skeletons while loading, a retryable error, an empty
-/// state when [isEmpty] says so, otherwise [builder].
+/// state when [isEmpty] says so, otherwise [builder]. Moving between these
+/// cross-fades (`fast`); a refresh of loaded data does not.
 class ViewStateView<T> extends StatelessWidget {
   /// Creates the view.
   const ViewStateView({
@@ -32,7 +34,20 @@ class ViewStateView<T> extends StatelessWidget {
   final Widget? empty;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => AnimatedSwitcher(
+    duration: context.motion(PaoMotion.fast),
+    switchInCurve: PaoMotion.enter,
+    switchOutCurve: PaoMotion.exit,
+    child: KeyedSubtree(key: ValueKey(_phase), child: _body(context)),
+  );
+
+  int get _phase => switch (state) {
+    ViewLoading() => 0,
+    ViewFailure() => 1,
+    ViewData() => 2,
+  };
+
+  Widget _body(BuildContext context) {
     final l10n = PaoL10n.of(context);
     return switch (state) {
       ViewLoading() => Padding(
@@ -44,6 +59,7 @@ class ViewStateView<T> extends StatelessWidget {
         message: failureMessage(l10n, failure.code),
         onRetry: onRetry,
         retryLabel: l10n.actionRetry,
+        illustration: failureArtwork(failure),
       ),
       ViewData(:final data) when isEmpty?.call(data) ?? false =>
         empty ?? PaoEmptyState(title: l10n.emptyTitle),

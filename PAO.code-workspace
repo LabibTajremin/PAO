@@ -1,0 +1,25 @@
+{
+  "folders": [
+    { "name": "PAO (root)", "path": "." },
+    { "name": "Backend", "path": "Backend" },
+    { "name": "Frontend", "path": "Frontend" },
+    { "name": "docs", "path": "docs" },
+    { "name": "infra", "path": "infra" },
+    { "name": "tools", "path": "tools" },
+    { "name": "design", "path": "design" }
+  ],
+  "settings": {
+    "dotnet.defaultSolution": "PAO.sln",
+    "files.exclude": {
+      "**/bin": true,
+      "**/obj": true,
+      "**/.dart_tool": true,
+      "**/build": true
+    },
+    "search.exclude": {
+      "Frontend/packages/pao_api/lib": true,
+      "**/*.lock": true,
+      "out": true
+    }
+  }
+}

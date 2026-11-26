@@ -12,6 +12,14 @@
   "@authPhoneBody": {
     "description": "C03 explanation"
   },
+  "authWelcome": "Welcome to PAO",
+  "@authWelcome": {
+    "description": "C03 sheet heading"
+  },
+  "authSendOtp": "Send OTP",
+  "@authSendOtp": {
+    "description": "C03 button"
+  },
   "authPhoneLabel": "Mobile number",
   "@authPhoneLabel": {
     "description": "Phone field label"
@@ -1929,5 +1937,153 @@
   "bookingsReceiptPayment": "Payment",
   "@bookingsReceiptPayment": {
     "description": "Receipt payment label."
+  },
+  "orderTitle": "Schedule delivery",
+  "@orderTitle": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderRepeat": "How often",
+  "@orderRepeat": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderPatternOnce": "One time",
+  "@orderPatternOnce": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderPatternDaily": "Every day",
+  "@orderPatternDaily": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderPatternWeekdays": "Chosen days",
+  "@orderPatternWeekdays": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderPatternWeekly": "Once a week",
+  "@orderPatternWeekly": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderPatternMonthly": "Once a month",
+  "@orderPatternMonthly": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderDays": "Days",
+  "@orderDays": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderDayOfMonth": "Day of the month",
+  "@orderDayOfMonth": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderWindow": "Delivery time",
+  "@orderWindow": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderStart": "First delivery",
+  "@orderStart": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderCount": "Number of deliveries",
+  "@orderCount": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderPerDelivery": "Per delivery",
+  "@orderPerDelivery": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderNote": "Note for the provider",
+  "@orderNote": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderConfirm": "Place order",
+  "@orderConfirm": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderCash": "Pay cash on each delivery.",
+  "@orderCash": {
+    "description": "P25 scheduled delivery"
+  },
+  "ordersTitle": "Scheduled orders",
+  "@ordersTitle": {
+    "description": "P25 scheduled delivery"
+  },
+  "ordersEmpty": "No scheduled orders yet",
+  "@ordersEmpty": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderUpcoming": "Upcoming deliveries",
+  "@orderUpcoming": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderSkip": "Skip",
+  "@orderSkip": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderUnskip": "Bring back",
+  "@orderUnskip": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderPause": "Pause",
+  "@orderPause": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderResume": "Resume",
+  "@orderResume": {
+    "description": "P25 scheduled delivery"
+  },
+  "orderCancel": "Cancel order",
+  "@orderCancel": {
+    "description": "P25 scheduled delivery"
+  },
+  "subRequested": "Waiting for the provider",
+  "@subRequested": {
+    "description": "P25 scheduled delivery"
+  },
+  "subActive": "Active",
+  "@subActive": {
+    "description": "P25 scheduled delivery"
+  },
+  "subPaused": "Paused",
+  "@subPaused": {
+    "description": "P25 scheduled delivery"
+  },
+  "subFinished": "Finished",
+  "@subFinished": {
+    "description": "P25 scheduled delivery"
+  },
+  "subDeclined": "Declined",
+  "@subDeclined": {
+    "description": "P25 scheduled delivery"
+  },
+  "subCancelled": "Cancelled",
+  "@subCancelled": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryScheduled": "Scheduled",
+  "@deliveryScheduled": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryPreparing": "Preparing",
+  "@deliveryPreparing": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryOut": "On the way",
+  "@deliveryOut": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryDelivered": "Delivered",
+  "@deliveryDelivered": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliverySkipped": "Skipped",
+  "@deliverySkipped": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryDeclined": "Not delivered",
+  "@deliveryDeclined": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryCancelled": "Cancelled",
+  "@deliveryCancelled": {
+    "description": "P25 scheduled delivery"
   }
 }

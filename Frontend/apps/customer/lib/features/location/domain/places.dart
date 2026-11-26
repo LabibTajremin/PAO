@@ -24,8 +24,8 @@ abstract interface class PlacesService {
   Future<Place?> reverse(GeoPoint point, {String language = 'en'});
 }
 
-/// Used without a maps key: nothing is found and the customer types the
-/// address by hand.
+/// Finds nothing, so the customer types the address by hand; the default
+/// where no API client is wired, as in widget tests.
 class NoPlacesService implements PlacesService {
   /// Creates the service.
   const NoPlacesService();

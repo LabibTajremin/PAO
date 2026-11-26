@@ -3,7 +3,10 @@ import 'dart:async';
 /// Runs only the last action of a burst, e.g. one search per pause in typing.
 class Debouncer {
   /// Creates the debouncer; [delay] is the pause that ends a burst.
-  Debouncer([this.delay = const Duration(milliseconds: 300)]);
+  Debouncer([this.delay = typingPause]);
+
+  /// The pause in typing that starts a search; a timer, not motion.
+  static const typingPause = Duration(milliseconds: 300);
 
   /// The pause that ends a burst.
   final Duration delay;

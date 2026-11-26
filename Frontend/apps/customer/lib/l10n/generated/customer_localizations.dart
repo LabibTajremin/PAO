@@ -116,6 +116,18 @@ abstract class CustomerL10n {
   /// **'We will text you a code to sign in.'**
   String get authPhoneBody;
 
+  /// C03 sheet heading
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to PAO'**
+  String get authWelcome;
+
+  /// C03 button
+  ///
+  /// In en, this message translates to:
+  /// **'Send OTP'**
+  String get authSendOtp;
+
   /// Phone field label
   ///
   /// In en, this message translates to:
@@ -2659,6 +2671,228 @@ abstract class CustomerL10n {
   /// In en, this message translates to:
   /// **'Payment'**
   String get bookingsReceiptPayment;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule delivery'**
+  String get orderTitle;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'How often'**
+  String get orderRepeat;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'One time'**
+  String get orderPatternOnce;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Every day'**
+  String get orderPatternDaily;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Chosen days'**
+  String get orderPatternWeekdays;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Once a week'**
+  String get orderPatternWeekly;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Once a month'**
+  String get orderPatternMonthly;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Days'**
+  String get orderDays;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Day of the month'**
+  String get orderDayOfMonth;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery time'**
+  String get orderWindow;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'First delivery'**
+  String get orderStart;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Number of deliveries'**
+  String get orderCount;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Per delivery'**
+  String get orderPerDelivery;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Note for the provider'**
+  String get orderNote;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Place order'**
+  String get orderConfirm;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Pay cash on each delivery.'**
+  String get orderCash;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled orders'**
+  String get ordersTitle;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'No scheduled orders yet'**
+  String get ordersEmpty;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming deliveries'**
+  String get orderUpcoming;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get orderSkip;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Bring back'**
+  String get orderUnskip;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get orderPause;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get orderResume;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel order'**
+  String get orderCancel;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the provider'**
+  String get subRequested;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get subActive;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get subPaused;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Finished'**
+  String get subFinished;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get subDeclined;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get subCancelled;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled'**
+  String get deliveryScheduled;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing'**
+  String get deliveryPreparing;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'On the way'**
+  String get deliveryOut;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get deliveryDelivered;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped'**
+  String get deliverySkipped;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Not delivered'**
+  String get deliveryDeclined;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get deliveryCancelled;
 }
 
 class _CustomerL10nDelegate extends LocalizationsDelegate<CustomerL10n> {

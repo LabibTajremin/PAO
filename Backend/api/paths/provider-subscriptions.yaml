@@ -1,0 +1,155 @@
+# Scheduled delivery for merchants (ADR-0041): the inbox, the calendar and declining a date.
+subscriptions:
+  get:
+    operationId: listProviderSubscriptions
+    tags:
+    - Provider subscriptions
+    summary: Subscriptions ordered from me, by status
+    x-permission: job:read:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubscriptionStatusQuery
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/delivery.yaml#/SubscriptionList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+subscription:
+  get:
+    operationId: getProviderSubscription
+    tags:
+    - Provider subscriptions
+    summary: A subscription with its upcoming dates
+    x-permission: job:read:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubscriptionId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/delivery.yaml#/Subscription
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+accept:
+  post:
+    operationId: acceptSubscription
+    tags:
+    - Provider subscriptions
+    summary: Accept a requested subscription (checks the due limit)
+    x-permission: job:respond
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubscriptionId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/delivery.yaml#/Subscription
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+decline:
+  post:
+    operationId: declineSubscription
+    tags:
+    - Provider subscriptions
+    summary: Decline a requested subscription
+    x-permission: job:respond
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubscriptionId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/booking.yaml#/RejectInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/delivery.yaml#/Subscription
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+declineDate:
+  post:
+    operationId: declineDelivery
+    tags:
+    - Provider subscriptions
+    summary: Decline one date before its cutoff
+    x-permission: job:respond
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubscriptionId
+    - $ref: ../components/parameters.yaml#/DeliveryDatePath
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/delivery.yaml#/DeliveryDate
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '409':
+        $ref: ../components/responses.yaml#/Conflict
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+deliveries:
+  get:
+    operationId: listProviderDeliveries
+    tags:
+    - Provider subscriptions
+    summary: My deliveries between two dates, for the daily list and calendar
+    x-permission: job:read:own
+    parameters:
+    - $ref: ../components/parameters.yaml#/DateFrom
+    - $ref: ../components/parameters.yaml#/DateTo
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/delivery.yaml#/ProviderDeliveryList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

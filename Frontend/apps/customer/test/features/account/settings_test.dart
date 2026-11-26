@@ -35,13 +35,6 @@ void main() {
     await h.settle(tester);
     expect(h.services.prefs.string(Prefs.languageKey), 'en');
     expect(find.textContaining('Saved on this phone'), findsNothing);
-    await tester.tap(find.text('Dark'));
-    await h.settle(tester);
-    expect(h.services.themeMode.value, ThemeMode.dark);
-    expect(
-      Theme.of(tester.element(find.text('Dark'))).brightness,
-      Brightness.dark,
-    );
     h.services.gate.clear();
     await tester.tap(find.text('বাংলা'));
     await h.settle(tester);
@@ -82,5 +75,23 @@ void main() {
     expect(find.text('Terms of use'), findsOneWidget);
     expect(find.text('Privacy'), findsOneWidget);
     expect(find.text('Your choices'), findsOneWidget);
+  });
+
+  testWidgets('the app opens light; Appearance in Account switches it', (
+    tester,
+  ) async {
+    final h = await Harness.create();
+    await h.signIn(tester);
+    await h.pumpApp(tester, Routes.account);
+    expect(h.services.themeMode.value, ThemeMode.light);
+    await tester.tap(find.text('Appearance'));
+    await h.settle(tester);
+    await tester.tap(find.text('Dark'));
+    await h.settle(tester);
+    expect(h.services.themeMode.value, ThemeMode.dark);
+    expect(
+      Theme.of(tester.element(find.text('Dark'))).brightness,
+      Brightness.dark,
+    );
   });
 }

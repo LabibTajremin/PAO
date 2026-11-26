@@ -98,11 +98,21 @@ class _BookingsPageState extends State<BookingsPage> {
           header: [
             ListHeading(
               t.bookingsTitle,
-              trailing: Text(
-                t.bookingsAutoRefresh(
-                  context.count(widget.refreshEvery.inSeconds),
-                ),
-                style: Theme.of(context).textTheme.bodySmall,
+              trailing: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: PaoSpace.md,
+                children: [
+                  Text(
+                    t.bookingsAutoRefresh(
+                      context.count(widget.refreshEvery.inSeconds),
+                    ),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  TextButton(
+                    onPressed: () => context.go(Routes.orders),
+                    child: Text(t.ordersTitle),
+                  ),
+                ],
               ),
             ),
             BookingFilters(

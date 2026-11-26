@@ -4,6 +4,7 @@ import 'package:pao_admin/features/level2/domain/level2_repository.dart';
 import 'package:pao_admin/features/level2/presentation/provider_search.dart';
 import 'package:pao_admin/shared/l10n.dart';
 import 'package:pao_api/pao_api.dart';
+import 'package:pao_ui/pao_ui.dart';
 
 /// A filter chip for one provider: tapping it searches for a provider, the
 /// clear icon shows every provider again.
@@ -26,7 +27,7 @@ class ProviderFilter extends StatelessWidget {
   final ValueChanged<AdminProviderSummary?> onChanged;
 
   Future<void> _choose(BuildContext context) async {
-    final picked = await showDialog<AdminProviderSummary>(
+    final picked = await showPaoDialog<AdminProviderSummary>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(context.t.level2FilterProvider),

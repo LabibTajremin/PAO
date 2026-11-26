@@ -38,6 +38,30 @@ class FakePush implements PushService {
   /// Tapped notifications.
   final taps = StreamController<Map<String, Object?>>.broadcast();
 
+  /// Whether [start] ran.
+  bool started = false;
+
+  @override
+  Future<void> start() async => started = true;
+
+  /// Returned by [permissionUndecided].
+  bool undecided = false;
+
+  @override
+  Future<bool> permissionUndecided() async => undecided;
+
+  /// Returned by [allowed].
+  bool on = true;
+
+  /// How often [openSettings] ran.
+  int settingsOpened = 0;
+
+  @override
+  Future<bool> allowed() async => on;
+
+  @override
+  Future<void> openSettings() async => settingsOpened++;
+
   @override
   Future<String?> token() async => value;
 

@@ -6,6 +6,7 @@ import 'package:pao_admin/shared/form_dialog.dart';
 import 'package:pao_admin/shared/l10n.dart';
 import 'package:pao_api/pao_api.dart';
 import 'package:pao_core/pao_core.dart';
+import 'package:pao_ui/pao_ui.dart';
 
 /// Changes [user]'s roles or deactivates them; deactivating asks first since
 /// it ends their sessions at once.
@@ -14,7 +15,7 @@ Future<void> showAdminUserDialog(
   required AdminUsersCubit cubit,
   required AdminUser user,
 }) async {
-  final saved = await showDialog<bool>(
+  final saved = await showPaoDialog<bool>(
     context: context,
     builder: (_) => _AdminUserDialog(cubit: cubit, user: user),
   );

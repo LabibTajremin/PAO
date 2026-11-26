@@ -22,8 +22,8 @@ void _expectAA(Color fg, Color bg, String what) => expect(
 void main() {
   test('text colours meet WCAG AA on paper, card and well in both modes', () {
     for (final dark in [false, true]) {
-      final c = PaoColors(AccentPreset.midnight, dark: dark);
-      for (final bg in [c.paper, c.card, c.well]) {
+      final c = PaoColors(AccentPreset.navy, dark: dark);
+      for (final bg in [c.paper, c.card, c.well, c.elevated, c.sunken]) {
         for (final fg in [c.ink, c.inkMuted, c.inkFaint, c.dangerInk]) {
           _expectAA(fg, bg, 'dark=$dark $fg on $bg');
         }
@@ -32,6 +32,16 @@ void main() {
         _expectAA(tone, _over(tone.withValues(alpha: 0.12), c.card), 'badge');
       }
     }
+  });
+
+  test('the Action orange is AA as text and under white labels', () {
+    for (final dark in [false, true]) {
+      final c = PaoColors(AccentPreset.navy, dark: dark);
+      _expectAA(c.sparkInk, c.paper, 'dark=$dark orange text');
+    }
+    _expectAA(PaoColors.onPrimary, PaoColors.actionStrong, 'urgent button');
+    expect(const PaoColors(AccentPreset.navy).spark, PaoColors.highlight);
+    expect(PaoColors.cardShadow, hasLength(2));
   });
 
   test('every accent meets WCAG AA for actions in both modes', () {
@@ -65,15 +75,35 @@ void main() {
     );
   });
 
-  test('headings use Fraunces with Bangla fallback; body stays sans', () {
-    final text = paoTextTheme();
-    for (final s in [text.displaySmall!, text.titleLarge!]) {
-      expect(s.fontFamily, PaoFonts.display);
+  test('Inter and Noto Sans Bengali off iOS, the system font on iOS', () {
+    final text = paoTextTheme(platform: TargetPlatform.android);
+    for (final s in [text.displaySmall!, text.titleLarge!, text.bodyMedium!]) {
+      expect(s.fontFamily, PaoFonts.latin);
       expect(s.fontFamilyFallback, [PaoFonts.bangla]);
     }
-    expect(text.bodyMedium!.fontFamily, PaoFonts.latin);
-    expect(PaoShape.leaf.bottomRight.x, PaoShape.tip);
-    expect(PaoShape.leaf.topLeft.x, PaoShape.round);
+    expect(text.displaySmall!.fontSize, 28);
+    expect(text.displaySmall!.fontWeight, FontWeight.w700);
+    expect(text.displaySmall!.letterSpacing, -0.2);
+    expect(text.bodyMedium!.fontSize, 16);
+    final bn = paoTextTheme(bangla: true, platform: TargetPlatform.android);
+    expect(bn.bodyMedium!.fontFamily, PaoFonts.bangla);
+    expect(bn.displaySmall!.letterSpacing, 0);
+    final ios = paoTextTheme(platform: TargetPlatform.iOS);
+    expect(ios.bodyMedium!.fontFamily, isNull);
+    expect(ios.bodyMedium!.fontFamilyFallback, isEmpty);
+    expect(ios.bodyMedium!.fontVariations, isEmpty);
+    // Unset in PAO's styles, so Material fills in the iOS system font.
+    for (final theme in [
+      PaoTheme.light(platform: TargetPlatform.iOS),
+      PaoTheme.dark(bangla: true, platform: TargetPlatform.iOS),
+    ]) {
+      expect(theme.textTheme.bodyMedium!.fontFamily, isNot(PaoFonts.latin));
+      expect(theme.textTheme.bodyMedium!.fontFamily, isNot(PaoFonts.bangla));
+    }
+    expect(PaoShape.leaf, BorderRadius.circular(16));
+    expect(PaoShape.leafSmall, BorderRadius.circular(12));
+    expect(PaoShape.sheet.topLeft.x, 24);
+    expect(PaoShape.sheet.bottomLeft.x, 0);
     expect(PaoMotion.fast, lessThan(PaoMotion.base));
   });
 

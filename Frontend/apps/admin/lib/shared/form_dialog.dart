@@ -71,7 +71,7 @@ Future<bool> confirmAction(
   required String body,
   required String confirmLabel,
 }) async {
-  final yes = await showDialog<bool>(
+  final yes = await showPaoDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
       title: Text(title),

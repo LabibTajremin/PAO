@@ -30,6 +30,17 @@ below is `done` in `PROGRESS.md`.
 | P15 | [Interim backend](phases/P15-nestjs-backend.md) | An interim backend rewrite (ADR-0032), Go removed; superseded by P17 |
 | P16 | [Hardening & handover](phases/P16-hardening.md) | Security and performance pass, docs, release builds |
 | P17 | [.NET backend](phases/P17-dotnet-backend.md) | The backend rebuilt on .NET (ADR-0034), billing (ADR-0035), the interim backend removed, repository re-laid out |
+| P18 | [Notifications pop up](phases/P18-notifications-popup.md) | Heads-up notifications for every type, background and foreground |
+| P19 | [Repo layout & docs](phases/P19-repo-layout-and-docs.md) | Root `PAO.sln`, VS Code workspace, tidy folders, human-written docs |
+| P20 | [Palette, type & theme](phases/P20-palette-type-theme.md) | Navy trust palette, system/Inter fonts, light by default, premium surfaces |
+| P21 | [Logo & app icons](phases/P21-logo-and-app-icons.md) | New logo (inverse in dark mode), launcher icons, splash, receipt watermark |
+| P22 | [Service icons](phases/P22-service-icons.md) | Service icon library, admin upload/link, accent-coloured icons |
+| P23 | [Artwork & tagline](phases/P23-artwork-and-tagline.md) | Admin-managed illustrations and tagline |
+| P24 | [Illustrations, welcome & sign-in](phases/P24-illustrations-welcome-signin.md) | Bangladeshi illustrations, welcome and sign-in pages |
+| P25 | [Scheduled delivery](phases/P25-scheduled-delivery.md) | Homemade food, catering, monthly bazar with scheduled delivery |
+| P26 | [Free Dhaka map](phases/P26-free-dhaka-map.md) | Free Dhaka map (OpenStreetMap), Google Places removed |
+| P27 | [Motion](phases/P27-motion.md) | Smooth app-opening animation and transitions, fast on low-end phones |
+| P28 | [Design polish & handover](phases/P28-design-polish-handover.md) | Design polish, brand guide, release builds |
 
 Phases are strictly sequential. A phase may not start until the previous one is merged.
 

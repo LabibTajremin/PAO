@@ -30,8 +30,8 @@ jobs:
           cache: true
       - name: OpenAPI lint
         run: |
-          if [ -f Backend/Api/openapi.yaml ]; then
-            npx --yes @redocly/cli@1.34.3 lint Backend/Api/openapi.yaml
+          if [ -f Backend/api/openapi.yaml ]; then
+            npx --yes @redocly/cli@1.34.3 lint Backend/api/openapi.yaml
           else
             echo "no spec yet: nothing to run"
           fi

@@ -1,11 +1,11 @@
 {
-    "name": "pao_admin",
-    "short_name": "pao_admin",
+    "name": "PAO Admin",
+    "short_name": "PAO Admin",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#F6F4EC",
+    "theme_color": "#16336F",
+    "description": "The PAO operations panel.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -1197,7 +1197,7 @@ class AdminL10nEn extends AdminL10n {
 
   @override
   String catalogCategoryLine(String other, String order, String count) {
-    return '$other · order $order · $count services';
+    return '$other · order $order · services: $count';
   }
 
   @override
@@ -1239,9 +1239,6 @@ class AdminL10nEn extends AdminL10n {
 
   @override
   String get catalogIconKey => 'Icon key';
-
-  @override
-  String get catalogPickIcon => 'Pick a known icon';
 
   @override
   String get catalogSortOrder => 'Sort order';
@@ -1797,4 +1794,217 @@ class AdminL10nEn extends AdminL10n {
   @override
   String get settingsAmountHint =>
       'Paisa: 50000 = ৳500. Merchants above it cannot accept jobs.';
+
+  @override
+  String get shellDarkMode => 'Dark mode';
+
+  @override
+  String get iconChoose => 'Choose icon';
+
+  @override
+  String get iconUseLibrary => 'Use the library icon';
+
+  @override
+  String get iconRules =>
+      'A library icon, or your own: SVG up to 100 KB, or a square PNG or WebP with a transparent background, at least 96 × 96 and up to 200 KB. Apps draw it in the accent colour.';
+
+  @override
+  String get iconTabLibrary => 'Library';
+
+  @override
+  String get iconTabUpload => 'Upload';
+
+  @override
+  String get iconTabLink => 'From link';
+
+  @override
+  String get iconSearch => 'Search icons';
+
+  @override
+  String get iconUploadButton => 'Choose a file';
+
+  @override
+  String get iconLinkLabel => 'Icon link (https)';
+
+  @override
+  String get iconLinkAdd => 'Add';
+
+  @override
+  String get iconUploaded => 'Uploaded icon';
+
+  @override
+  String get iconErrorTooLarge => 'The file is too large.';
+
+  @override
+  String get iconErrorUnreadable => 'This is not a readable SVG, PNG or WebP.';
+
+  @override
+  String get iconErrorNotSquare => 'The image must be square.';
+
+  @override
+  String get iconErrorTooSmall => 'The image must be at least 96 × 96.';
+
+  @override
+  String get iconErrorOpaque => 'The image needs a transparent background.';
+
+  @override
+  String get iconErrorLink => 'The link could not be downloaded.';
+
+  @override
+  String get settingsBrand => 'Brand';
+
+  @override
+  String get settingsTaglineEn => 'Tagline (English)';
+
+  @override
+  String get settingsTaglineBn => 'Tagline (Bangla)';
+
+  @override
+  String get settingsTaglineHint =>
+      'Shown on the splash and sign-in screens, in the share text and on receipts. At most 40 characters in each language.';
+
+  @override
+  String get settingsTaglineSuggestions => 'Suggestions';
+
+  @override
+  String get appearanceTitle => 'Illustrations';
+
+  @override
+  String get appearanceRules =>
+      'Preferred: SVG up to 300 KB. Otherwise PNG or WebP at exactly the size shown, with a transparent background, up to 800 KB. Keep the subject inside the dashed safe area, use only the palette colours, and put no text in the picture: it must work in both languages.';
+
+  @override
+  String get appearanceUpload => 'Upload';
+
+  @override
+  String get appearanceReset => 'Use the original';
+
+  @override
+  String get appearanceReplaced => 'Uploaded';
+
+  @override
+  String get appearanceOriginal => 'Original';
+
+  @override
+  String get appearanceBundled => 'Shown from the app';
+
+  @override
+  String appearanceErrorSize(String expected) {
+    return 'Use an image of $expected pixels, or an SVG with that ratio.';
+  }
+
+  @override
+  String get appearanceErrorTooLarge =>
+      'The file is too large: SVG up to 300 KB, PNG or WebP up to 800 KB.';
+
+  @override
+  String get catalogModelScheduled => 'Scheduled delivery';
+
+  @override
+  String get catalogSchedule => 'Delivery schedule';
+
+  @override
+  String get catalogPatterns => 'Repeat options';
+
+  @override
+  String get catalogWindows => 'Delivery windows';
+
+  @override
+  String get catalogWindowsHint => '12:00-13:00, 19:00-21:00';
+
+  @override
+  String get catalogLeadHours => 'Lead time (hours)';
+
+  @override
+  String get catalogCutoff => 'Cutoff the day before';
+
+  @override
+  String get catalogTimeFormat => 'Use 24-hour times like 12:00-13:00.';
+
+  @override
+  String get catalogPatternsRequired => 'Choose at least one.';
+
+  @override
+  String get unitMeals => 'Meals';
+
+  @override
+  String get unitGuests => 'Guests';
+
+  @override
+  String get unitPackage => 'Packages';
+
+  @override
+  String get patternOnce => 'One time';
+
+  @override
+  String get patternDaily => 'Every day';
+
+  @override
+  String get patternWeekdays => 'Chosen days';
+
+  @override
+  String get patternWeekly => 'Once a week';
+
+  @override
+  String get patternMonthly => 'Once a month';
+
+  @override
+  String get ordersTitle => 'Scheduled orders';
+
+  @override
+  String get ordersEmpty => 'No scheduled orders';
+
+  @override
+  String get ordersAll => 'All';
+
+  @override
+  String get ordersUpcoming => 'Next deliveries';
+
+  @override
+  String get subRequested => 'Requested';
+
+  @override
+  String get subActive => 'Active';
+
+  @override
+  String get subPaused => 'Paused';
+
+  @override
+  String get subFinished => 'Finished';
+
+  @override
+  String get subDeclined => 'Declined';
+
+  @override
+  String get subCancelled => 'Cancelled';
+
+  @override
+  String get deliveryScheduled => 'Scheduled';
+
+  @override
+  String get deliveryPreparing => 'Preparing';
+
+  @override
+  String get deliveryOut => 'Out for delivery';
+
+  @override
+  String get deliveryDelivered => 'Delivered';
+
+  @override
+  String get deliverySkipped => 'Skipped';
+
+  @override
+  String get deliveryDeclined => 'Declined';
+
+  @override
+  String get deliveryCancelled => 'Cancelled';
+
+  @override
+  String get catalogScheduleUnit => 'Counted in';
+
+  @override
+  String get catalogScheduleMax => 'Largest order';
+
+  @override
+  String get catalogScheduleMin => 'Smallest order';
 }

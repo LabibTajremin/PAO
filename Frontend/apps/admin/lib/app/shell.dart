@@ -70,9 +70,14 @@ class _Menu extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            title: Text(
-              context.t.appTitle,
-              style: Theme.of(context).textTheme.titleLarge,
+            title: Align(
+              alignment: Alignment.centerLeft,
+              child: Semantics(
+                label: context.t.appTitle,
+                child: const ExcludeSemantics(
+                  child: PaoLogo(variant: PaoLogoVariant.wordmark, height: 28),
+                ),
+              ),
             ),
           ),
           Expanded(
@@ -91,6 +96,17 @@ class _Menu extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(PaoSpace.md),
             child: PaoLanguageSwitch(controller: services.locale),
+          ),
+          ValueListenableBuilder(
+            valueListenable: services.themeMode,
+            builder: (context, mode, _) => SwitchListTile(
+              secondary: const Icon(Icons.dark_mode_outlined),
+              title: Text(context.t.shellDarkMode),
+              value: mode == ThemeMode.dark,
+              onChanged: (on) => services.themeMode.value = on
+                  ? ThemeMode.dark
+                  : ThemeMode.light,
+            ),
           ),
           ListTile(
             leading: const Icon(Icons.logout),

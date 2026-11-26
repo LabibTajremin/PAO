@@ -19,6 +19,16 @@ class PartnerL10nEn extends PartnerL10n {
   String get authPhoneBody => 'We will text you a code to sign in.';
 
   @override
+  String get authWelcome => 'Welcome to PAO Partner';
+
+  @override
+  String get authSendOtp => 'Send OTP';
+
+  @override
+  String get authTermsNote =>
+      'By continuing you agree to PAO\'s partner terms and privacy policy.';
+
+  @override
   String get authPhoneLabel => 'Mobile number';
 
   @override
@@ -647,9 +657,6 @@ class PartnerL10nEn extends PartnerL10n {
 
   @override
   String get earnEmptyBody => 'Completed jobs and what you earned appear here.';
-
-  @override
-  String get profTitle => 'Profile';
 
   @override
   String get profChangePhoto => 'Change photo';
@@ -1463,4 +1470,91 @@ class PartnerL10nEn extends PartnerL10n {
 
   @override
   String get paySent => 'Payment submitted. An admin will confirm it soon.';
+
+  @override
+  String get ordersTitle => 'Delivery orders';
+
+  @override
+  String get ordersNew => 'New orders';
+
+  @override
+  String get ordersDeliveries => 'This week';
+
+  @override
+  String get ordersNoNew => 'No new orders';
+
+  @override
+  String get ordersNoDeliveries => 'No deliveries this week';
+
+  @override
+  String get orderAccept => 'Accept order';
+
+  @override
+  String get orderDecline => 'Decline';
+
+  @override
+  String get orderDeclineTitle => 'Why can\'t you take it?';
+
+  @override
+  String get orderDeclineDate => 'Can\'t deliver';
+
+  @override
+  String get orderUpcoming => 'Upcoming deliveries';
+
+  @override
+  String get orderPerDelivery => 'Per delivery';
+
+  @override
+  String get orderPatternOnce => 'One time';
+
+  @override
+  String get orderPatternDaily => 'Every day';
+
+  @override
+  String get orderPatternWeekdays => 'Chosen days';
+
+  @override
+  String get orderPatternWeekly => 'Once a week';
+
+  @override
+  String get orderPatternMonthly => 'Once a month';
+
+  @override
+  String get subRequested => 'New';
+
+  @override
+  String get subActive => 'Active';
+
+  @override
+  String get subPaused => 'Paused';
+
+  @override
+  String get subFinished => 'Finished';
+
+  @override
+  String get subDeclined => 'Declined';
+
+  @override
+  String get subCancelled => 'Cancelled';
+
+  @override
+  String get deliveryScheduled => 'Scheduled';
+
+  @override
+  String get deliveryPreparing => 'Prepare today';
+
+  @override
+  String get deliveryOut => 'On the way';
+
+  @override
+  String get deliveryDelivered => 'Delivered';
+
+  @override
+  String get deliverySkipped => 'Skipped';
+
+  @override
+  String get deliveryDeclined => 'Declined';
+
+  @override
+  String get deliveryCancelled => 'Cancelled';
 }

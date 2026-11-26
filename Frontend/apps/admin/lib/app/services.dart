@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:pao_core/pao_core.dart';
 import 'package:pao_l10n/pao_l10n.dart';
 
@@ -12,8 +12,10 @@ class AppServices {
     required this.permissions,
     required this.locale,
     required this.api,
+    ValueNotifier<ThemeMode>? themeMode,
     DateTime Function()? clock,
-  }) : now = clock ?? DateTime.now;
+  }) : themeMode = themeMode ?? ValueNotifier(ThemeMode.light),
+       now = clock ?? DateTime.now;
 
   /// The signed-in session; the access token lives only in memory.
   final SessionManager sessions;
@@ -29,6 +31,9 @@ class AppServices {
 
   /// Current time; injectable so relative dates are testable.
   final DateTime Function() now;
+
+  /// Light (the default) or dark; [ThemeModeController] in the app keeps it.
+  final ValueNotifier<ThemeMode> themeMode;
 
   /// The admin still signs in with the temporary password from the invite and
   /// must replace it before using the console.

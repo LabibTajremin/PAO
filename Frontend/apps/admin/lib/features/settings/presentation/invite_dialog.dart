@@ -15,12 +15,12 @@ Future<void> showInviteDialog(
   BuildContext context, {
   required AdminUsersCubit cubit,
 }) async {
-  final invited = await showDialog<(String, String)>(
+  final invited = await showPaoDialog<(String, String)>(
     context: context,
     builder: (_) => _InviteDialog(cubit: cubit),
   );
   if (invited == null || !context.mounted) return;
-  await showDialog<void>(
+  await showPaoDialog<void>(
     context: context,
     barrierDismissible: false,
     builder: (_) => _PasswordDialog(name: invited.$1, password: invited.$2),

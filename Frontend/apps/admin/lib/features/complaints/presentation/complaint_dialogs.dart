@@ -12,7 +12,7 @@ typedef Resolution = ({String note, bool verified});
 /// Asks for the resolution note and whether the complaint is verified;
 /// resolves with null if the admin cancels.
 Future<Resolution?> askResolution(BuildContext context, String ticket) =>
-    showDialog<Resolution>(
+    showPaoDialog<Resolution>(
       context: context,
       builder: (_) => _ResolveDialog(ticket: ticket),
     );
@@ -85,7 +85,7 @@ class _ResolveDialogState extends State<_ResolveDialog> {
 Future<String?> pickAgent(
   BuildContext context,
   Future<List<AdminUser>> Function() load,
-) => showDialog<String>(
+) => showPaoDialog<String>(
   context: context,
   builder: (_) => BlocProvider(
     create: (_) => LoadCubit<List<AdminUser>>(load).loading(),

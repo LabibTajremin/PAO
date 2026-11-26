@@ -16,7 +16,7 @@ Future<String?> confirmWithReason(
   List<String> templates = const [],
   int minLength = minReasonLength,
   int? maxLength,
-}) => showDialog<String>(
+}) => showPaoDialog<String>(
   context: context,
   builder: (_) => _ReasonDialog(
     title: title,

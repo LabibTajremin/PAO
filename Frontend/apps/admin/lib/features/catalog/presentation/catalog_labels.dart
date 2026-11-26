@@ -10,6 +10,23 @@ String modelLabel(AdminL10n t, ServiceModel model) => switch (model) {
   ServiceModel.durationHire => t.catalogModelDuration,
   ServiceModel.listing => t.catalogModelListing,
   ServiceModel.partnerReferral => t.catalogModelPartner,
+  ServiceModel.scheduledDelivery => t.catalogModelScheduled,
+};
+
+/// How a scheduled delivery repeats.
+String patternLabel(AdminL10n t, DeliveryPattern p) => switch (p) {
+  DeliveryPattern.once => t.patternOnce,
+  DeliveryPattern.daily => t.patternDaily,
+  DeliveryPattern.weekdays => t.patternWeekdays,
+  DeliveryPattern.weekly => t.patternWeekly,
+  DeliveryPattern.monthly => t.patternMonthly,
+};
+
+/// What a scheduled delivery's quantity counts.
+String quantityLabel(AdminL10n t, QuantityUnit unit) => switch (unit) {
+  QuantityUnit.meals => t.unitMeals,
+  QuantityUnit.guests => t.unitGuests,
+  QuantityUnit.package => t.unitPackage,
 };
 
 /// What one quantity of a sub-service means.

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
 import 'package:pao_ui/src/tokens/shape.dart';
-import 'package:pao_ui/src/tokens/typography.dart';
 import 'package:pao_ui/src/widgets/button.dart';
 import 'package:pao_ui/src/widgets/stitch.dart';
 
@@ -15,11 +14,15 @@ class PaoMessageState extends StatelessWidget {
     required this.title,
     this.message,
     this.action,
+    this.illustration,
     super.key,
   });
 
   /// Illustration icon.
   final IconData icon;
+
+  /// A picture shown instead of [icon], such as a `PaoArtwork` slot.
+  final Widget? illustration;
 
   /// Heading.
   final String title;
@@ -43,23 +46,26 @@ class PaoMessageState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            PaoStitchFrame(
-              frame: PaoShape.leaf,
-              padding: PaoSpace.xs,
-              child: Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: c.tintFill,
-                  borderRadius: PaoShape.leafSmall,
+            if (illustration case final picture?)
+              SizedBox(width: 240, child: picture)
+            else
+              PaoStitchFrame(
+                frame: PaoShape.leaf,
+                padding: PaoSpace.xs,
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: c.tintFill,
+                    borderRadius: PaoShape.leafSmall,
+                  ),
+                  child: Icon(icon, size: 26, color: c.action),
                 ),
-                child: Icon(icon, size: 26, color: c.action),
               ),
-            ),
             const SizedBox(height: PaoSpace.lg),
             Text(
               title,
-              style: paoDisplayStyle(18, c.ink),
+              style: Theme.of(context).textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),
             if (message != null) ...[
@@ -89,6 +95,7 @@ class PaoEmptyState extends PaoMessageState {
     super.message,
     super.action,
     super.icon = Icons.inbox_outlined,
+    super.illustration,
     super.key,
   });
 }
@@ -101,11 +108,15 @@ class PaoErrorState extends StatelessWidget {
     required this.message,
     this.onRetry,
     this.retryLabel = 'Try again',
+    this.illustration,
     super.key,
   });
 
   /// Heading.
   final String title;
+
+  /// A picture instead of the icon, such as the offline scene.
+  final Widget? illustration;
 
   /// Translated failure message.
   final String message;
@@ -119,6 +130,7 @@ class PaoErrorState extends StatelessWidget {
   @override
   Widget build(BuildContext context) => PaoMessageState(
     icon: Icons.cloud_off_outlined,
+    illustration: illustration,
     title: title,
     message: message,
     action: onRetry == null

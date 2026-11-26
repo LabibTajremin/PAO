@@ -14,6 +14,9 @@ import 'package:pao_customer/features/bookings/presentation/booking_detail_page.
 import 'package:pao_customer/features/bookings/presentation/bookings_page.dart';
 import 'package:pao_customer/features/bookings/presentation/receipt_page.dart';
 import 'package:pao_customer/features/cancel/presentation/cancel_page.dart';
+import 'package:pao_customer/features/delivery/presentation/order_page.dart';
+import 'package:pao_customer/features/delivery/presentation/subscription_page.dart';
+import 'package:pao_customer/features/delivery/presentation/subscriptions_page.dart';
 import 'package:pao_customer/features/home/presentation/home_page.dart';
 import 'package:pao_customer/features/live/presentation/completed_page.dart';
 import 'package:pao_customer/features/live/presentation/extras_page.dart';
@@ -50,12 +53,17 @@ List<RouteBase> entryRoutes(AppServices s) => [
   _page(Routes.denied, (_) => const Scaffold(body: PaoAccessDeniedView())),
   ...publicAccountRoutes(),
   ...discoveryRoutes(s),
+  _page(Routes.book, (st) {
+    final draft = BookingDraft.fromQuery(st.uri.queryParameters);
+    return draft != null && draft.delivery && draft.providerId != null
+        ? OrderPage(services: s, draft: draft)
+        : SetupPage(services: s, draft: draft);
+  }),
+  _page(Routes.subscriptions, (_) => SubscriptionsPage(services: s)),
   _page(
-    Routes.book,
-    (st) => SetupPage(
-      services: s,
-      draft: BookingDraft.fromQuery(st.uri.queryParameters),
-    ),
+    Routes.subscription,
+    (st) =>
+        SubscriptionPage(services: s, subscriptionId: st.pathParameters['id']!),
   ),
 ];
 

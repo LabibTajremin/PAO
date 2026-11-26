@@ -66,6 +66,7 @@ void main() {
       repo: repo,
       open: opened.add,
     )..start();
+    expect(push.started, isTrue);
     push.refreshes.add('ignored-signed-out');
     await _flush();
     expect(repo.tokens, isEmpty);

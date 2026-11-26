@@ -71,8 +71,10 @@ class _ProviderSearchState extends State<ProviderSearch> {
           onSubmitted: cubit.search,
         ),
         if (state != null)
+          // Tall enough for the whole error state, retry button included,
+          // at the Bangla text size.
           SizedBox(
-            height: 220,
+            height: 320,
             child: ViewStateView<List<AdminProviderSummary>>(
               state: state,
               onRetry: () => cubit.search(_query.text),

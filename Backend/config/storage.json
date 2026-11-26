@@ -1,0 +1,14 @@
+{
+  "Storage": {
+    "Endpoint": "",
+    "PublicEndpoint": "",
+    "PublicBaseUrl": "",
+    "Region": "us-east-1",
+    "AccessKey": "",
+    "SecretKey": "",
+    "BucketPrivate": "pao-private",
+    "BucketPublic": "pao-public",
+    "EnsureEncryption": true,
+    "PublicReadPolicy": true
+  }
+}

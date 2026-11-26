@@ -24,6 +24,9 @@ abstract final class Routes {
   /// The customer home's banners, under the catalog's screen (A03).
   static const banners = '/catalog/banners';
 
+  /// Appearance › Illustrations, under the settings screen (A12).
+  static const appearance = '/settings/appearance/illustrations';
+
   /// A05.
   static const verification = '/verification';
 
@@ -44,6 +47,9 @@ abstract final class Routes {
 
   /// A11.
   static const complaints = '/complaints';
+
+  /// Scheduled-delivery orders, part of the bookings monitor (ADR-0041).
+  static const orders = '/orders';
 
   /// A12.
   static const settings = '/settings';
@@ -76,6 +82,7 @@ abstract final class Routes {
     catalog: 'A03',
     service: 'A04',
     banners: 'A03',
+    appearance: 'A12',
     verification: 'A05',
     review: 'A06',
     level2: 'A07',
@@ -85,6 +92,8 @@ abstract final class Routes {
     '/customers/:id': 'A09',
     bookings: 'A10',
     '/bookings/:id': 'A10',
+    orders: 'A10',
+    '/orders/:id': 'A10',
     complaints: 'A11',
     '/complaints/:id': 'A11',
     settings: 'A12',

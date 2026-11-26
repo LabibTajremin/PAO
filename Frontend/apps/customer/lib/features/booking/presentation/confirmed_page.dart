@@ -90,7 +90,13 @@ class _Body extends StatelessWidget {
   List<Widget> _heading(BuildContext context) {
     final at = booking.scheduledAt;
     return [
-      Icon(Icons.event_available, size: 64, color: context.pao.action),
+      Center(
+        child: SizedBox(
+          width: 200,
+          child: LookArtwork(services.look.look, 'success.booking'),
+        ),
+      ),
+      const Center(child: PaoSuccessMark(size: 48)),
       const SizedBox(height: PaoSpace.md),
       Text(
         context.t.bookingConfirmedHeading,

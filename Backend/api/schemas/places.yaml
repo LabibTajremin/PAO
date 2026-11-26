@@ -1,0 +1,18 @@
+MapPlace:
+  type: object
+  description: A Dhaka place from OpenStreetMap (ADR-0042).
+  required: [id, kind, title, location]
+  properties:
+    id: { type: string, example: n2715439871 }
+    kind: { type: string, enum: [area, street, place, address], example: place }
+    title: { type: string, description: The name in the caller's language when OSM has one., example: Bashundhara City }
+    area: { type: string, description: The neighbourhood; absent when none is known., example: Panthapath }
+    location: { $ref: "./common.yaml#/Point" }
+MapPlaceList:
+  type: object
+  required: [items]
+  properties:
+    items:
+      type: array
+      maxItems: 10
+      items: { $ref: "#/MapPlace" }

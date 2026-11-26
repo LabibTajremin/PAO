@@ -94,7 +94,9 @@ enum SettingTypeEnum {
   @JsonValue(r'string')
   string(r'string'),
   @JsonValue(r'geojson')
-  geojson(r'geojson');
+  geojson(r'geojson'),
+  @JsonValue(r'tagline')
+  tagline(r'tagline');
 
   const SettingTypeEnum(this.value);
 

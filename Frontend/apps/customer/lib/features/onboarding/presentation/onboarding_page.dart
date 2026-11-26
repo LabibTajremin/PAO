@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pao_core/pao_core.dart';
 import 'package:pao_customer/app/routes.dart';
 import 'package:pao_customer/app/services.dart';
 import 'package:pao_customer/features/onboarding/data/onboarding_prefs.dart';
-import 'package:pao_customer/features/onboarding/presentation/onboarding_slide.dart';
 import 'package:pao_customer/shared/l10n.dart';
 import 'package:pao_ui/pao_ui.dart';
 
@@ -37,18 +37,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   Future<void> _next(int count) => _index == count - 1
       ? _finish()
-      : _pages.nextPage(
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeOut,
-        );
+      : _pages.nextPage(duration: PaoMotion.page, curve: PaoMotion.enter);
 
   @override
   Widget build(BuildContext context) {
     final t = context.t;
     final slides = [
-      (Icons.near_me_outlined, t.onbSlide1Title, t.onbSlide1Body),
-      (Icons.verified_user_outlined, t.onbSlide2Title, t.onbSlide2Body),
-      (Icons.sell_outlined, t.onbSlide3Title, t.onbSlide3Body),
+      ('customer.onboarding.1', t.onbSlide1Title, t.onbSlide1Body),
+      ('customer.onboarding.2', t.onbSlide2Title, t.onbSlide2Body),
+      ('customer.onboarding.3', t.onbSlide3Title, t.onbSlide3Body),
     ];
     final last = _index == slides.length - 1;
     return Scaffold(
@@ -61,8 +58,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 controller: _pages,
                 onPageChanged: (i) => setState(() => _index = i),
                 children: [
-                  for (final (icon, title, body) in slides)
-                    OnboardingSlide(icon: icon, title: title, body: body),
+                  for (final (slot, title, body) in slides)
+                    PaoOnboardingSlide(
+                      illustration: LookArtwork(
+                        widget.services.look.look,
+                        slot,
+                      ),
+                      title: title,
+                      body: body,
+                    ),
                 ],
               ),
             ),

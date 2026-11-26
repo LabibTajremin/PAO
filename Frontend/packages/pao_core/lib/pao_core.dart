@@ -2,12 +2,21 @@
 /// by every PAO app.
 library;
 
+export 'src/appearance/app_look.dart';
+export 'src/appearance/app_look_service.dart';
+export 'src/appearance/look_artwork.dart';
+export 'src/appearance/look_scope.dart';
+export 'src/appearance/look_store.dart';
 export 'src/connectivity.dart';
+export 'src/device/device_class.dart';
 export 'src/device/launcher.dart';
+export 'src/device/local_notifications.dart';
 export 'src/device/location.dart';
 export 'src/device/photo_source.dart';
 export 'src/device/prefs.dart';
 export 'src/device/push.dart';
+export 'src/device/push_off_notice.dart';
+export 'src/device/push_reason.dart';
 export 'src/device/secure_screen.dart';
 export 'src/device/theme_mode.dart';
 export 'src/env.dart';

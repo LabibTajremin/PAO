@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pao_admin/app/routes.dart';
 import 'package:pao_admin/features/catalog/presentation/service_editor_page.dart';
 import 'package:pao_l10n/pao_l10n.dart';
+import 'package:pao_ui/pao_ui.dart';
 
 import '../../support/harness.dart';
 import 'fixtures.dart';
@@ -33,7 +34,7 @@ void main() {
       tester.getTopLeft(find.text('Cleaning')).dy,
       lessThan(tester.getTopLeft(find.text('Electrical')).dy),
     );
-    expect(find.text('বাংলা Electrical · order 2 · 1 services'), findsOne);
+    expect(find.text('বাংলা Electrical · order 2 · services: 1'), findsOne);
     expect(find.text('On-demand visit · Level 1 · Verified'), findsOne);
     expect(find.text('Ceiling fan installation'), findsOneWidget);
     expect(find.text('৳500 per unit'), findsNWidgets(2));
@@ -59,11 +60,17 @@ void main() {
     await tester.enterText(field('Name (English)'), ' Plumbing ');
     await tester.enterText(field('Name (Bangla)'), 'প্লাম্বিং');
     await tester.enterText(field('Sort order'), '3');
-    await tester.tap(find.byTooltip('Pick a known icon'));
+    h.http.onGet(
+      '$catalogPath/icons',
+      (s) => s.reply(200, {
+        'keys': ['plumbing', 'spa'],
+      }),
+    );
+    await tester.tap(find.text('Choose icon'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('faucet'));
+    await tester.tap(find.text('plumbing'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byType(Switch));
+    await tester.tap(find.byType(Switch).last);
     h.http.onPost(_categories, (s) => s.reply(409, apiError('CONFLICT')));
     await _save(tester, h);
     expect(find.text(failureMessage(_l10n(tester), 'CONFLICT')), findsOne);
@@ -72,7 +79,7 @@ void main() {
     expect(find.text('Saved.'), findsOneWidget);
     expect(h.bodyOf(_categories), {
       'name': {'en': 'Plumbing', 'bn': 'প্লাম্বিং'},
-      'iconKey': 'faucet',
+      'iconKey': 'plumbing',
       'sortOrder': 3,
       'published': true,
     });
@@ -90,7 +97,12 @@ void main() {
     expect(find.text('Edit category'), findsOneWidget);
     await tester.enterText(field('Icon key'), 'unknown-key');
     await tester.pump();
-    expect(find.byIcon(Icons.handyman_outlined), findsOneWidget);
+    expect(
+      find.byWidgetPredicate(
+        (w) => w is PaoServiceIcon && w.iconKey == 'unknown-key',
+      ),
+      findsNWidgets(2),
+    );
     const path = '$_categories/$categoryId';
     h.http.onPut(path, (s) => s.reply(200, category()));
     await _save(tester, h);

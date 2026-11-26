@@ -17,9 +17,9 @@ Related: [`docs/guides/release.md`](release.md) (flavours, signing, store checkl
 | Piece | Source | Runs as |
 |---|---|---|
 | Admin web | `Frontend/apps/admin` (Flutter web) | static files (`build/web`) |
-| API | `Backend/PAO.Core` → `/app/api` | long-running ASP.NET Core server on `HTTP_ADDR` (`:8080`), metrics on `METRICS_ADDR` (`:9090`) |
-| Worker | `Backend/PAO.Worker` → `/app/worker` | long-running process: outbox relay and periodic jobs, liveness on `:9090/healthz`; not deployed when the API runs them (`JOBS_IN_API=true`, §3.4.1) |
-| Migrations | `Backend/PAO.Migrator` → `/app/migrate up` / `seed` | one-off job per release |
+| API | `Backend/src/PAO.Core` → `/app/api` | long-running ASP.NET Core server on `HTTP_ADDR` (`:8080`), metrics on `METRICS_ADDR` (`:9090`) |
+| Worker | `Backend/src/PAO.Worker` → `/app/worker` | long-running process: outbox relay and periodic jobs, liveness on `:9090/healthz`; not deployed when the API runs them (`JOBS_IN_API=true`, §3.4.1) |
+| Migrations | `Backend/src/PAO.Migrator` → `/app/migrate up` / `seed` | one-off job per release |
 | PostgreSQL 16 + PostGIS 3 | — | managed database (migrations run `CREATE EXTENSION postgis` and `pg_trgm`) |
 | Redis 7 | — | sessions, refresh tokens, OTP codes, rate limits, cache (StackExchange.Redis) |
 | S3-compatible storage | — | two buckets (`S3_BUCKET_PRIVATE`, `S3_BUCKET_PUBLIC`); the API creates them at start-up if missing |
@@ -41,7 +41,6 @@ flowchart LR
   A -- HTTPS + CORS --> API
   C -- HTTPS, pinned --> API
   P -- HTTPS, pinned --> API
-  C -- Geocoding --> G[maps.googleapis.com]
   subgraph Container host
     API[API /app/api]
     W[Worker /app/worker]
@@ -153,7 +152,7 @@ Notes:
 
 - Vercel serves existing files before applying `rewrites`, so the catch-all only hits
   unknown paths (deep links into the panel).
-- The CSP is the one in `docs/guides/release.md`. The admin web makes no calls to Maps or FCM,
+- The CSP is the one in `docs/guides/release.md`. The admin web makes no calls to maps or FCM,
   so only the API and the storage host appear in `connect-src`/`img-src`.
 - Flutter web does not fingerprint its file names (`main.dart.js` keeps its name between
   releases), so do **not** mark `main.dart.js` immutable; the one-day cache above covers
@@ -217,7 +216,7 @@ There is no deploy workflow in `.github/workflows` today. A job would:
 - Add the custom domain (e.g. `admin.pao.com.bd`) under Project → Domains and create
   the CNAME Vercel shows.
 - The API's CORS check (`EdgeMiddleware` in
-  `Backend/PAO.Infrastructure/Http/Edge/EdgeMiddleware.cs`) allows the origins listed in
+  `Backend/src/PAO.Infrastructure/Http/Edge/EdgeMiddleware.cs`) allows the origins listed in
   `ADMIN_CORS_ORIGIN`: one origin or a comma-separated list, each compared as an exact
   string. Write each with scheme and no path or trailing slash; the API refuses to start
   otherwise: `ADMIN_CORS_ORIGIN=https://admin.pao.com.bd`.
@@ -248,6 +247,10 @@ There is no deploy workflow in `.github/workflows` today. A job would:
    encryption (`PutBucketEncryption`) on every start. R2 encrypts every object at rest
    itself and may not implement that call, so on R2 set `S3_ENSURE_ENCRYPTION=false`
    (ADR-0036). Create the buckets yourself first if the token cannot create them.
+   Catalog icons (ADR-0039) are read by the apps straight from `S3_BUCKET_PUBLIC`: R2 has no
+   bucket policies, so also set `S3_PUBLIC_READ_POLICY=false`, connect a custom domain (or the
+   r2.dev URL) to the public bucket and set it as `S3_PUBLIC_BASE_URL`. Nothing private goes in
+   that bucket.
    On AWS S3: an IAM user limited to the two buckets, endpoint
    `https://s3.<region>.amazonaws.com`.
 4. **Firebase.** Create one project; add the Android and iOS apps (§4.3); create a
@@ -258,7 +261,7 @@ There is no deploy workflow in `.github/workflows` today. A job would:
 
 ### 3.2 Environment variables
 
-Every variable the .NET hosts read (`Backend/Docs/Config/variables.md`; mapped onto
+Every variable the .NET hosts read (`Backend/docs/Config/variables.md`; mapped onto
 configuration keys by `EnvironmentVariables`). The API and the
 worker refuse to start on a missing or invalid value and list all problems in one log
 line (`invalid configuration: …`). Give API, worker and migrate the same environment.
@@ -285,6 +288,8 @@ line (`invalid configuration: …`). Give API, worker and migrate the same envir
 | `DATA_ENCRYPTION_PREVIOUS_KEYS` | no | empty on first deploy | earlier data keys, comma-separated, newest first, original key last; only after a rotation |
 | `ADMIN_CORS_ORIGIN` | no (default `http://localhost:5000`) | `https://admin.pao.com.bd` | the admin web origin, or a comma-separated list (§2.6) |
 | `S3_ENSURE_ENCRYPTION` | no (default `true`) | `false` on R2 | `false` skips `PutBucketEncryption` for providers that encrypt at rest themselves |
+| `S3_PUBLIC_BASE_URL` | no | `https://icons.pao.com.bd` | where phones read catalog icons: a CDN or custom domain in front of `S3_BUCKET_PUBLIC`; empty uses `S3_PUBLIC_ENDPOINT/S3_BUCKET_PUBLIC` (ADR-0039) |
+| `S3_PUBLIC_READ_POLICY` | no (default `true`) | `false` on R2 | `false` skips the bucket policy that makes `catalog-icons/` in the public bucket readable; then turn on public access for that bucket yourself |
 | `SMS_ADAPTER` | no (default `console`); prod needs `sslwireless` while verification is on | `sslwireless` | — |
 | `SSLWIRELESS_API_TOKEN` | when `SMS_ADAPTER=sslwireless` and verification is on | `…` | SSL Wireless |
 | `SSLWIRELESS_SID` | when `SMS_ADAPTER=sslwireless` and verification is on | `…` | SSL Wireless |
@@ -377,7 +382,7 @@ Build behind a TLS-intercepting proxy only: pass the CA as build secret `extra_c
 The worker delivers every event (notifications and push, commission charging on a
 completed booking, opening the rating, dashboard stats) and runs the scheduled jobs
 (booking expiry every 15 s, merchant presence reaping, media orphan purge, document
-expiry and reminders, closed-account purge, outbox purge; [jobs](../../Backend/Docs/Operations/jobs.md)).
+expiry and reminders, closed-account purge, outbox purge; [jobs](../../Backend/docs/Operations/jobs.md)).
 Without it bookings never time out and no push is sent. Render's free plan has no
 Background Workers, so for the MVP the API runs them itself:
 
@@ -405,7 +410,7 @@ Things to know on the free plan:
 - **Migrations.** If the plan offers no pre-deploy command, run `/app/migrate up` with
   the same environment from a machine before deploying a release
   (`docker run --rm --env-file prod.env --entrypoint /app/migrate <image> up`), or apply
-  `DB Changes/bundle/schema.sql` as in §3.5 step 3.
+  `database/changes/bundle/schema.sql` as in §3.5 step 3.
 - **Never both.** Run either a worker or `JOBS_IN_API=true`. Both at once is safe (job
   runs take an advisory lock, the relay claims rows with `SKIP LOCKED`, handlers are
   idempotent) but runs every sweep twice; a worker that sees `JOBS_IN_API=true` logs a
@@ -429,11 +434,11 @@ worker ([ADR-0036](../adr/0036-mvp-launch-defaults.md) §14).
    `PAO_SCAN_IMAGE=<registry>/pao-backend:<git-sha> ./pao security`.
 3. Migrate: run the image with `/app/migrate up`. It applies every module's migrations
    and exits 0. Without a place to run the image yet, paste
-   `Backend/DB Changes/bundle/schema.sql` into Neon's SQL editor instead: it applies the
+   `Backend/database/changes/bundle/schema.sql` into Neon's SQL editor instead: it applies the
    same migrations and records the same versions, so a later `migrate up` finds nothing
-   to do ([Database](../../Backend/Docs/Database/README.md#single-file-scripts-bundle)).
+   to do ([Database](../../Backend/docs/Database/README.md#single-file-scripts-bundle)).
 4. Seed reference data: `/app/migrate seed`. It loads the service catalog
-   (idempotent); `Backend/DB Changes/bundle/seed.sql` in the SQL editor loads the same
+   (idempotent); `Backend/database/changes/bundle/seed.sql` in the SQL editor loads the same
    catalog. In `staging` with `SEED_ADMIN_PASSWORD` set it also creates the demo
    admin users; in `prod` it creates none.
 5. Create the first super admin, once, with the same environment plus `ADMIN_PASSWORD`
@@ -496,7 +501,6 @@ All app configuration is compiled in with `--dart-define`; nothing is read at ru
 | `PAO_FLAVOUR` | all | `config/<flavour>.json` | `--dart-define-from-file` (by the script) |
 | `PAO_API_BASE_URL` | all | `config/<flavour>.json`; your API host | same |
 | `PAO_SUPPORT_PHONE`, `PAO_SUPPORT_EMAIL` | customer, partner | `config/<flavour>.json` | same |
-| `PAO_MAPS_API_KEY` | customer (Geocoding via `maps.googleapis.com`) | Google Cloud console → APIs & Services → Credentials; enable the Geocoding API; restrict to the package names / bundle IDs and SHA-256 certs | env var, forwarded by `build-release.sh` |
 | `PAO_FCM_API_KEY`, `PAO_FCM_APP_ID`, `PAO_FCM_SENDER_ID`, `PAO_FCM_PROJECT_ID` | customer, partner | Firebase console → Project settings → Your apps (API key, App ID, Sender ID, Project ID) | env vars, forwarded by `build-release.sh`. Without `PAO_FCM_API_KEY` the app runs without push. |
 | `PAO_FCM_APP_ID_<APP>_<PLATFORM>` | customer, partner | Firebase console → Your apps: the App ID of that platform's app, e.g. `PAO_FCM_APP_ID_CUSTOMER_ANDROID`, `PAO_FCM_APP_ID_PARTNER_IOS` | env vars; `build-release.sh` uses the one for the app and target (`ipa` → IOS, else ANDROID) in place of `PAO_FCM_APP_ID` when set |
 | `PAO_PIN_SHA256` | all | computed from the live API certificate (below) | env var, forwarded by `build-release.sh` when set; empty leaves pinning off |
@@ -574,7 +578,7 @@ Without either, release builds are signed with the debug key and Play rejects th
 ### 4.6 Build
 
 ```sh
-export PAO_MAPS_API_KEY=… PAO_FCM_API_KEY=… PAO_FCM_SENDER_ID=… PAO_FCM_PROJECT_ID=…
+export PAO_FCM_API_KEY=… PAO_FCM_SENDER_ID=… PAO_FCM_PROJECT_ID=…
 export PAO_FCM_APP_ID_CUSTOMER_ANDROID=… PAO_FCM_APP_ID_CUSTOMER_IOS=…   # one per platform and app
 export PAO_PIN_SHA256="<live pin>,<backup pin>" PAO_SENTRY_DSN=…        # optional; empty = off
 export PAO_BUILD_NUMBER=42                      # strictly increasing per store upload
@@ -591,7 +595,6 @@ The equivalent raw command:
 cd Frontend/apps/customer
 flutter build appbundle --release --flavor=prod \
   --dart-define-from-file=config/prod.json \
-  --dart-define=PAO_MAPS_API_KEY="$PAO_MAPS_API_KEY" \
   --dart-define=PAO_FCM_API_KEY="$PAO_FCM_API_KEY" \
   --dart-define=PAO_FCM_APP_ID="$PAO_FCM_APP_ID" \
   --dart-define=PAO_FCM_SENDER_ID="$PAO_FCM_SENDER_ID" \
@@ -622,7 +625,6 @@ The full store checklist is in [`docs/guides/release.md`](release.md#store-check
 
 | Secret | Used for |
 |---|---|
-| `PAO_MAPS_API_KEY` | Maps define |
 | `PAO_FCM_API_KEY`, `PAO_FCM_SENDER_ID`, `PAO_FCM_PROJECT_ID` | FCM defines |
 | `PAO_FCM_APP_ID_CUSTOMER_ANDROID`, `PAO_FCM_APP_ID_CUSTOMER_IOS`, `PAO_FCM_APP_ID_PARTNER_ANDROID`, `PAO_FCM_APP_ID_PARTNER_IOS` | FCM App ID per platform and app (preferred) |
 | `PAO_FCM_APP_ID_customer`, `PAO_FCM_APP_ID_partner` | fallback FCM App ID per app, used when the per-platform secret is missing |

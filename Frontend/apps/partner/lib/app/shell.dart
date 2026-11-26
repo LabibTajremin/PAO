@@ -15,7 +15,7 @@ class PartnerShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = PaoL10n.of(context);
     return Scaffold(
-      body: shell,
+      body: PaoFadeThrough(index: shell.currentIndex, child: shell),
       bottomNavigationBar: PaoBottomNav(
         index: shell.currentIndex,
         onSelected: (i) => shell.goBranch(i, initialLocation: true),

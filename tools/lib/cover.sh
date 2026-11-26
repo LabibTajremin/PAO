@@ -5,7 +5,7 @@
 # cover_backend reads the merged unit + integration report of `pao test integration`
 # (Backend/scripts/ci.sh test, which already failed below 100% of hand-written lines).
 cover_backend() {
-  [[ -f "$BACKEND/PAO.sln" ]] || return 0
+  [[ -f "$PAO_ROOT/PAO.sln" ]] || return 0
   local report="$COVERAGE_DIR/backend/summary.md" lines covered total
   [[ -f "$report" ]] || test_backend_integration
   lines=$(sed -n 's/^Lines: \([0-9]*\)\/\([0-9]*\) .*/\1 \2/p' "$report")

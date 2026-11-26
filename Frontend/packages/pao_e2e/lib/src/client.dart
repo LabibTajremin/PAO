@@ -43,7 +43,7 @@ class StackClient {
       ..interceptors.add(ClientAddress());
   }
 
-  /// The client for the stack `Frontend/test/e2e/run.sh` passes in with
+  /// The client for the stack `Frontend/e2e/run.sh` passes in with
   /// `--dart-define=PAO_API_BASE_URL`, the URL the app under test uses too.
   factory StackClient.fromDefines() =>
       StackClient(const String.fromEnvironment('PAO_API_BASE_URL'));

@@ -15,6 +15,8 @@ abstract class _$ServiceCWProxy {
 
   Service iconKey(String iconKey);
 
+  Service iconUrl(String? iconUrl);
+
   Service serviceModel(ServiceModel serviceModel);
 
   Service requiredLevel(int requiredLevel);
@@ -28,6 +30,8 @@ abstract class _$ServiceCWProxy {
   Service level2Checklist(List<LocalizedText>? level2Checklist);
 
   Service published(bool published);
+
+  Service schedule(ServiceSchedule? schedule);
 
   Service subServices(List<SubService>? subServices);
 
@@ -44,6 +48,7 @@ abstract class _$ServiceCWProxy {
     String categoryId,
     LocalizedText name,
     String iconKey,
+    String? iconUrl,
     ServiceModel serviceModel,
     int requiredLevel,
     int searchRadiusM,
@@ -51,6 +56,7 @@ abstract class _$ServiceCWProxy {
     bool requiresLevel2,
     List<LocalizedText>? level2Checklist,
     bool published,
+    ServiceSchedule? schedule,
     List<SubService>? subServices,
   });
 }
@@ -73,6 +79,9 @@ class _$ServiceCWProxyImpl implements _$ServiceCWProxy {
 
   @override
   Service iconKey(String iconKey) => call(iconKey: iconKey);
+
+  @override
+  Service iconUrl(String? iconUrl) => call(iconUrl: iconUrl);
 
   @override
   Service serviceModel(ServiceModel serviceModel) =>
@@ -102,6 +111,9 @@ class _$ServiceCWProxyImpl implements _$ServiceCWProxy {
   Service published(bool published) => call(published: published);
 
   @override
+  Service schedule(ServiceSchedule? schedule) => call(schedule: schedule);
+
+  @override
   Service subServices(List<SubService>? subServices) =>
       call(subServices: subServices);
 
@@ -119,6 +131,7 @@ class _$ServiceCWProxyImpl implements _$ServiceCWProxy {
     Object? categoryId = const $CopyWithPlaceholder(),
     Object? name = const $CopyWithPlaceholder(),
     Object? iconKey = const $CopyWithPlaceholder(),
+    Object? iconUrl = const $CopyWithPlaceholder(),
     Object? serviceModel = const $CopyWithPlaceholder(),
     Object? requiredLevel = const $CopyWithPlaceholder(),
     Object? searchRadiusM = const $CopyWithPlaceholder(),
@@ -126,6 +139,7 @@ class _$ServiceCWProxyImpl implements _$ServiceCWProxy {
     Object? requiresLevel2 = const $CopyWithPlaceholder(),
     Object? level2Checklist = const $CopyWithPlaceholder(),
     Object? published = const $CopyWithPlaceholder(),
+    Object? schedule = const $CopyWithPlaceholder(),
     Object? subServices = const $CopyWithPlaceholder(),
   }) {
     return Service(
@@ -146,6 +160,10 @@ class _$ServiceCWProxyImpl implements _$ServiceCWProxy {
           ? _value.iconKey
           // ignore: cast_nullable_to_non_nullable
           : iconKey as String,
+      iconUrl: iconUrl == const $CopyWithPlaceholder()
+          ? _value.iconUrl
+          // ignore: cast_nullable_to_non_nullable
+          : iconUrl as String?,
       serviceModel:
           serviceModel == const $CopyWithPlaceholder() || serviceModel == null
           ? _value.serviceModel
@@ -181,6 +199,10 @@ class _$ServiceCWProxyImpl implements _$ServiceCWProxy {
           ? _value.published
           // ignore: cast_nullable_to_non_nullable
           : published as bool,
+      schedule: schedule == const $CopyWithPlaceholder()
+          ? _value.schedule
+          // ignore: cast_nullable_to_non_nullable
+          : schedule as ServiceSchedule?,
       subServices: subServices == const $CopyWithPlaceholder()
           ? _value.subServices
           // ignore: cast_nullable_to_non_nullable
@@ -226,6 +248,7 @@ Service _$ServiceFromJson(
       (v) => LocalizedText.fromJson(v as Map<String, dynamic>),
     ),
     iconKey: $checkedConvert('iconKey', (v) => v as String),
+    iconUrl: $checkedConvert('iconUrl', (v) => v as String?),
     serviceModel: $checkedConvert(
       'serviceModel',
       (v) => $enumDecode(_$ServiceModelEnumMap, v),
@@ -241,6 +264,12 @@ Service _$ServiceFromJson(
           .toList(),
     ),
     published: $checkedConvert('published', (v) => v as bool),
+    schedule: $checkedConvert(
+      'schedule',
+      (v) => v == null
+          ? null
+          : ServiceSchedule.fromJson(v as Map<String, dynamic>),
+    ),
     subServices: $checkedConvert(
       'subServices',
       (v) => (v as List<dynamic>?)
@@ -256,6 +285,7 @@ Map<String, dynamic> _$ServiceToJson(Service instance) => <String, dynamic>{
   'categoryId': instance.categoryId,
   'name': instance.name.toJson(),
   'iconKey': instance.iconKey,
+  'iconUrl': ?instance.iconUrl,
   'serviceModel': _$ServiceModelEnumMap[instance.serviceModel]!,
   'requiredLevel': instance.requiredLevel,
   'searchRadiusM': instance.searchRadiusM,
@@ -263,6 +293,7 @@ Map<String, dynamic> _$ServiceToJson(Service instance) => <String, dynamic>{
   'requiresLevel2': instance.requiresLevel2,
   'level2Checklist': ?instance.level2Checklist?.map((e) => e.toJson()).toList(),
   'published': instance.published,
+  'schedule': ?instance.schedule?.toJson(),
   'subServices': ?instance.subServices?.map((e) => e.toJson()).toList(),
 };
 
@@ -271,4 +302,5 @@ const _$ServiceModelEnumMap = {
   ServiceModel.durationHire: 'duration_hire',
   ServiceModel.listing: 'listing',
   ServiceModel.partnerReferral: 'partner_referral',
+  ServiceModel.scheduledDelivery: 'scheduled_delivery',
 };

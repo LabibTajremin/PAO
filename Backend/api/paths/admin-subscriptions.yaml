@@ -1,0 +1,47 @@
+# Subscriptions in the bookings monitor (ADR-0041).
+subscriptions:
+  get:
+    operationId: listAdminSubscriptions
+    tags:
+    - Admin bookings
+    summary: Subscriptions, newest first, by status
+    x-permission: booking:read:any
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubscriptionStatusQuery
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/delivery.yaml#/SubscriptionList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+subscription:
+  get:
+    operationId: getAdminSubscription
+    tags:
+    - Admin bookings
+    summary: A subscription with its upcoming dates
+    x-permission: booking:read:any
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubscriptionId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/delivery.yaml#/Subscription
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

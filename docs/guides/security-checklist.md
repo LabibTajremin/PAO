@@ -15,9 +15,9 @@ over the source tree and the backend image). Scanner configuration and accepted 
 live in `infra/security/` (`gitleaks.toml`, `osv-scanner.toml`, `trivyignore`) with reasons.
 
 The audit was done in P16 and re-checked against the .NET backend after P17. Evidence
-names the C# test as `Class.Method`: unit tests live in `Backend/Test/PAO.UnitTests`,
-integration tests in `Backend/Test/PAO.IntegrationTests`, journeys in
-`Backend/Test/PAO.E2ETests`. Rows marked *gap* name a check the earlier suite had and
+names the C# test as `Class.Method`: unit tests live in `Backend/tests/PAO.UnitTests`,
+integration tests in `Backend/tests/PAO.IntegrationTests`, journeys in
+`Backend/tests/PAO.E2ETests`. Rows marked *gap* name a check the earlier suite had and
 the C# suite does not yet repeat; the control itself is in place.
 
 ## P16 fixes
@@ -43,7 +43,7 @@ the C# suite does not yet repeat; the control itself is in place.
 | 1.4 Access control architecture: enforced server-side at one place, deny by default | pass | `AccessFilter`; `AuthorizationTests.Every_attribute_matches_the_spec_permission_and_security`, `RbacContractTests.Every_protected_route_refuses_a_token_without_its_permission` |
 | 1.5 Input/output architecture: schema validation at the edge | pass | `RequestValidationFilter` (`SchemaValidator`, Ajv wording); `ApiTests.Bodies_are_validated_against_the_spec_before_the_action`, `OpenApiTests.Validates_parameters_after_coercing_them` |
 | 1.6 Cryptographic key management: keys from env, rotation | pass | `JWT_SIGNING_KEY` / `JWT_PREVIOUS_PUBLIC_KEYS`, `DATA_ENCRYPTION_KEY` / `DATA_ENCRYPTION_PREVIOUS_KEYS` + `migrate reencrypt`; runbooks `rotate-jwt-keys.md`, `rotate-data-key.md` |
-| 1.7 Logging architecture: central, no sensitive data | pass | `PaoJsonFormatter` (Serilog JSON lines with request id; `LoggingTests.Writes_one_json_line_per_event`); phones/codes never logged (`Backend/Docs/Operations`) |
+| 1.7 Logging architecture: central, no sensitive data | pass | `PaoJsonFormatter` (Serilog JSON lines with request id; `LoggingTests.Writes_one_json_line_per_event`); phones/codes never logged (`Backend/docs/Operations`) |
 | 1.8 Data protection: sensitive data identified and classified | pass | PRD §6.6; NID/documents classed sensitive in `MediaRules` (`MediaRuleTests.Each_uploader_may_send_only_its_purposes_within_type_and_size`) |
 | 1.9 Communications: TLS between all components | risk | TLS ends at the load balancer; inside the private network traffic to Postgres/Redis/S3 is plain. Use managed TLS endpoints at deploy |
 | 1.14 Configuration: build/deploy segregated, secrets not in repo | pass | `.env.example`, gitleaks in `./pao security` |

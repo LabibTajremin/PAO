@@ -3,6 +3,7 @@
 //
 
 // ignore_for_file: unused_element
+import 'package:pao_api/src/model/service_schedule.dart';
 import 'package:pao_api/src/model/sub_service.dart';
 import 'package:pao_api/src/model/localized_text.dart';
 import 'package:pao_api/src/model/service_model.dart';
@@ -30,6 +31,8 @@ class Service {
 
     required this.iconKey,
 
+    this.iconUrl,
+
     required this.serviceModel,
 
     required this.requiredLevel,
@@ -43,6 +46,8 @@ class Service {
     this.level2Checklist,
 
     required this.published,
+
+    this.schedule,
 
     this.subServices,
   });
@@ -58,6 +63,10 @@ class Service {
 
   @JsonKey(name: r'iconKey', required: true, includeIfNull: false)
   final String iconKey;
+
+  /// An icon the admin uploaded or linked, stored by us (ADR-0039); when present the apps show it instead of iconKey.
+  @JsonKey(name: r'iconUrl', required: false, includeIfNull: false)
+  final String? iconUrl;
 
   @JsonKey(name: r'serviceModel', required: true, includeIfNull: false)
   final ServiceModel serviceModel;
@@ -85,6 +94,9 @@ class Service {
   @JsonKey(name: r'published', required: true, includeIfNull: false)
   final bool published;
 
+  @JsonKey(name: r'schedule', required: false, includeIfNull: false)
+  final ServiceSchedule? schedule;
+
   @JsonKey(name: r'subServices', required: false, includeIfNull: false)
   final List<SubService>? subServices;
 
@@ -98,6 +110,7 @@ class Service {
                 categoryId,
                 name,
                 iconKey,
+                iconUrl,
                 serviceModel,
                 requiredLevel,
                 searchRadiusM,
@@ -105,6 +118,7 @@ class Service {
                 requiresLevel2,
                 level2Checklist,
                 published,
+                schedule,
                 subServices,
               ],
               [
@@ -112,6 +126,7 @@ class Service {
                 other.categoryId,
                 other.name,
                 other.iconKey,
+                other.iconUrl,
                 other.serviceModel,
                 other.requiredLevel,
                 other.searchRadiusM,
@@ -119,6 +134,7 @@ class Service {
                 other.requiresLevel2,
                 other.level2Checklist,
                 other.published,
+                other.schedule,
                 other.subServices,
               ],
             );
@@ -132,6 +148,7 @@ class Service {
         categoryId,
         name,
         iconKey,
+        iconUrl,
         serviceModel,
         requiredLevel,
         searchRadiusM,
@@ -139,6 +156,7 @@ class Service {
         requiresLevel2,
         level2Checklist,
         published,
+        schedule,
         subServices,
       ]);
 

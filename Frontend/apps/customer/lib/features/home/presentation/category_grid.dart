@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pao_api/pao_api.dart';
 import 'package:pao_customer/app/routes.dart';
-import 'package:pao_customer/shared/catalog_icons.dart';
 import 'package:pao_customer/shared/formats.dart';
 import 'package:pao_ui/pao_ui.dart';
 
@@ -39,7 +38,7 @@ class CategoryGrid extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              PaoIconTile(icon: catalogIcon(c.iconKey), size: 64),
+              _icon(c),
               const SizedBox(height: PaoSpace.sm),
               Text(
                 context.local(c.name),
@@ -54,4 +53,16 @@ class CategoryGrid extends StatelessWidget {
         ),
     ],
   );
+}
+
+// A category of one service opens that service, so its icon flies there.
+Widget _icon(Category c) {
+  final tile = PaoIconTile.service(
+    iconKey: c.iconKey,
+    iconUrl: c.iconUrl,
+    size: 64,
+  );
+  return c.services.length == 1
+      ? PaoHero(tag: PaoHero.service(c.services.single.id), child: tile)
+      : tile;
 }

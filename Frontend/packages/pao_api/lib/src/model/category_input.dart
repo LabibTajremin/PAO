@@ -24,6 +24,8 @@ class CategoryInput {
 
     required this.iconKey,
 
+    this.iconUrl,
+
     this.sortOrder,
 
     this.published,
@@ -34,6 +36,10 @@ class CategoryInput {
 
   @JsonKey(name: r'iconKey', required: true, includeIfNull: false)
   final String iconKey;
+
+  /// An iconUrl returned by the icon endpoints; absent uses iconKey.
+  @JsonKey(name: r'iconUrl', required: false, includeIfNull: false)
+  final String? iconUrl;
 
   @JsonKey(name: r'sortOrder', required: false, includeIfNull: false)
   final int? sortOrder;
@@ -46,15 +52,21 @@ class CategoryInput {
         other is CategoryInput &&
             runtimeType == other.runtimeType &&
             equals(
-              [name, iconKey, sortOrder, published],
-              [other.name, other.iconKey, other.sortOrder, other.published],
+              [name, iconKey, iconUrl, sortOrder, published],
+              [
+                other.name,
+                other.iconKey,
+                other.iconUrl,
+                other.sortOrder,
+                other.published,
+              ],
             );
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      mapPropsToHashCode([name, iconKey, sortOrder, published]);
+      mapPropsToHashCode([name, iconKey, iconUrl, sortOrder, published]);
 
   factory CategoryInput.fromJson(Map<String, dynamic> json) =>
       _$CategoryInputFromJson(json);

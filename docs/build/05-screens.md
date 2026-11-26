@@ -6,7 +6,13 @@ that matches the Figma frame name prefix. Build each screen from its Figma frame
 use `get_design_context` on the frame; otherwise follow the layout described here and the
 `pao_ui` components.
 
-Theme: colours come from the Figma variable collections `Accent` (10 modes, tokens
+**Current look (update round 2026-11):** the palette, type, illustrations and icons are in
+[`docs/guides/brand.md`](../guides/brand.md) and ADR-0038; motion in
+[`docs/guides/motion.md`](../guides/motion.md). The paragraph and table below record the
+original Figma tokens and are kept for the screen IDs' history. Screenshots of the main screens
+in light/dark × English/Bangla are in [`docs/screenshots/`](../screenshots/README.md).
+
+Theme (original): colours come from the Figma variable collections `Accent` (10 modes, tokens
 `tint, soft, primary, strong, deep, on-primary`) and `Base` (neutrals and status). Since
 ADR-0033 ("Nakshi") the neutrals are warm paper (`#FAF6EF` page, `#FFFDF8` card,
 `#F2ECE2` input) with deep ink text (`#1F1B16`, `#655C52`), plus a matching dark ink

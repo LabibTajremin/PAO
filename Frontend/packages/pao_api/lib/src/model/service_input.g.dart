@@ -13,6 +13,8 @@ abstract class _$ServiceInputCWProxy {
 
   ServiceInput iconKey(String iconKey);
 
+  ServiceInput iconUrl(String? iconUrl);
+
   ServiceInput serviceModel(ServiceModel serviceModel);
 
   ServiceInput requiredLevel(int requiredLevel);
@@ -27,6 +29,8 @@ abstract class _$ServiceInputCWProxy {
 
   ServiceInput published(bool? published);
 
+  ServiceInput schedule(ServiceSchedule? schedule);
+
   /// Creates a new instance with the provided field values.
   /// Omitted fields keep their values; explicit `null` clears nullable fields.
   /// The public API rejects `null` for non-nullable fields. To update a single field use `ServiceInput(...).copyWith.fieldName(value)`.
@@ -39,6 +43,7 @@ abstract class _$ServiceInputCWProxy {
     String categoryId,
     LocalizedText name,
     String iconKey,
+    String? iconUrl,
     ServiceModel serviceModel,
     int requiredLevel,
     int searchRadiusM,
@@ -46,6 +51,7 @@ abstract class _$ServiceInputCWProxy {
     bool? requiresLevel2,
     List<LocalizedText>? level2Checklist,
     bool? published,
+    ServiceSchedule? schedule,
   });
 }
 
@@ -64,6 +70,9 @@ class _$ServiceInputCWProxyImpl implements _$ServiceInputCWProxy {
 
   @override
   ServiceInput iconKey(String iconKey) => call(iconKey: iconKey);
+
+  @override
+  ServiceInput iconUrl(String? iconUrl) => call(iconUrl: iconUrl);
 
   @override
   ServiceInput serviceModel(ServiceModel serviceModel) =>
@@ -92,6 +101,9 @@ class _$ServiceInputCWProxyImpl implements _$ServiceInputCWProxy {
   @override
   ServiceInput published(bool? published) => call(published: published);
 
+  @override
+  ServiceInput schedule(ServiceSchedule? schedule) => call(schedule: schedule);
+
   /// Creates a new instance with the provided field values.
   /// Omitted fields keep their values; explicit `null` clears nullable fields.
   /// The public API rejects `null` for non-nullable fields. To update a single field use `ServiceInput(...).copyWith.fieldName(value)`.
@@ -105,6 +117,7 @@ class _$ServiceInputCWProxyImpl implements _$ServiceInputCWProxy {
     Object? categoryId = const $CopyWithPlaceholder(),
     Object? name = const $CopyWithPlaceholder(),
     Object? iconKey = const $CopyWithPlaceholder(),
+    Object? iconUrl = const $CopyWithPlaceholder(),
     Object? serviceModel = const $CopyWithPlaceholder(),
     Object? requiredLevel = const $CopyWithPlaceholder(),
     Object? searchRadiusM = const $CopyWithPlaceholder(),
@@ -112,6 +125,7 @@ class _$ServiceInputCWProxyImpl implements _$ServiceInputCWProxy {
     Object? requiresLevel2 = const $CopyWithPlaceholder(),
     Object? level2Checklist = const $CopyWithPlaceholder(),
     Object? published = const $CopyWithPlaceholder(),
+    Object? schedule = const $CopyWithPlaceholder(),
   }) {
     return ServiceInput(
       categoryId:
@@ -127,6 +141,10 @@ class _$ServiceInputCWProxyImpl implements _$ServiceInputCWProxy {
           ? _value.iconKey
           // ignore: cast_nullable_to_non_nullable
           : iconKey as String,
+      iconUrl: iconUrl == const $CopyWithPlaceholder()
+          ? _value.iconUrl
+          // ignore: cast_nullable_to_non_nullable
+          : iconUrl as String?,
       serviceModel:
           serviceModel == const $CopyWithPlaceholder() || serviceModel == null
           ? _value.serviceModel
@@ -158,6 +176,10 @@ class _$ServiceInputCWProxyImpl implements _$ServiceInputCWProxy {
           ? _value.published
           // ignore: cast_nullable_to_non_nullable
           : published as bool?,
+      schedule: schedule == const $CopyWithPlaceholder()
+          ? _value.schedule
+          // ignore: cast_nullable_to_non_nullable
+          : schedule as ServiceSchedule?,
     );
   }
 }
@@ -194,6 +216,7 @@ ServiceInput _$ServiceInputFromJson(
       (v) => LocalizedText.fromJson(v as Map<String, dynamic>),
     ),
     iconKey: $checkedConvert('iconKey', (v) => v as String),
+    iconUrl: $checkedConvert('iconUrl', (v) => v as String?),
     serviceModel: $checkedConvert(
       'serviceModel',
       (v) => $enumDecode(_$ServiceModelEnumMap, v),
@@ -212,6 +235,12 @@ ServiceInput _$ServiceInputFromJson(
           .toList(),
     ),
     published: $checkedConvert('published', (v) => v as bool?),
+    schedule: $checkedConvert(
+      'schedule',
+      (v) => v == null
+          ? null
+          : ServiceSchedule.fromJson(v as Map<String, dynamic>),
+    ),
   );
   return val;
 });
@@ -222,6 +251,7 @@ Map<String, dynamic> _$ServiceInputToJson(
   'categoryId': instance.categoryId,
   'name': instance.name.toJson(),
   'iconKey': instance.iconKey,
+  'iconUrl': ?instance.iconUrl,
   'serviceModel': _$ServiceModelEnumMap[instance.serviceModel]!,
   'requiredLevel': instance.requiredLevel,
   'searchRadiusM': instance.searchRadiusM,
@@ -229,6 +259,7 @@ Map<String, dynamic> _$ServiceInputToJson(
   'requiresLevel2': ?instance.requiresLevel2,
   'level2Checklist': ?instance.level2Checklist?.map((e) => e.toJson()).toList(),
   'published': ?instance.published,
+  'schedule': ?instance.schedule?.toJson(),
 };
 
 const _$ServiceModelEnumMap = {
@@ -236,4 +267,5 @@ const _$ServiceModelEnumMap = {
   ServiceModel.durationHire: 'duration_hire',
   ServiceModel.listing: 'listing',
   ServiceModel.partnerReferral: 'partner_referral',
+  ServiceModel.scheduledDelivery: 'scheduled_delivery',
 };

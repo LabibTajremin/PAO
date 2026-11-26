@@ -46,7 +46,7 @@ Future<bool?> showSettingDialog(
   BuildContext context, {
   required SettingsCubit cubit,
   required Setting setting,
-}) => showDialog<bool>(
+}) => showPaoDialog<bool>(
   context: context,
   builder: (_) => _SettingDialog(cubit: cubit, setting: setting),
 );

@@ -46,7 +46,6 @@ jobs:
         flavour: [dev, staging, prod]
     env:
       PAO_BUILD_NUMBER: ${{ github.run_number }}
-      PAO_MAPS_API_KEY: ${{ secrets.PAO_MAPS_API_KEY }}
       PAO_FCM_API_KEY: ${{ secrets.PAO_FCM_API_KEY }}
       # The per-platform App ID wins over the older per-app one (build-release.sh).
       PAO_FCM_APP_ID: ${{ secrets[format('PAO_FCM_APP_ID_{0}', matrix.app)] }}
@@ -136,10 +135,10 @@ jobs:
           rm -f "$RUNNER_TEMP/upload.jks"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: ${{ matrix.app }}-${{ matrix.flavour }}-android
+          name: pao-${{ matrix.app }}-${{ matrix.flavour }}-android
+          if-no-files-found: error
           path: |
-            Frontend/apps/${{ matrix.app }}/build/app/outputs/bundle/${{ matrix.flavour }}Release/*.aab
-            Frontend/apps/${{ matrix.app }}/build/app/outputs/flutter-apk/*-${{ matrix.flavour }}-release.apk
+            Frontend/apps/${{ matrix.app }}/build/release/pao-${{ matrix.app }}-${{ matrix.flavour }}-*
             Frontend/apps/${{ matrix.app }}/build/symbols/${{ matrix.flavour }}
 
   # The prod archive per app; signed when the distribution secrets are present.
@@ -152,7 +151,6 @@ jobs:
         app: [customer, partner]
     env:
       PAO_BUILD_NUMBER: ${{ github.run_number }}
-      PAO_MAPS_API_KEY: ${{ secrets.PAO_MAPS_API_KEY }}
       PAO_FCM_API_KEY: ${{ secrets.PAO_FCM_API_KEY }}
       PAO_FCM_APP_ID: ${{ secrets[format('PAO_FCM_APP_ID_{0}', matrix.app)] }}
       PAO_FCM_APP_ID_CUSTOMER_IOS: ${{ secrets.PAO_FCM_APP_ID_CUSTOMER_IOS }}
@@ -210,7 +208,7 @@ jobs:
           exit 1
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: ${{ matrix.app }}-prod-ios
+          name: pao-${{ matrix.app }}-prod-ios
           path: |
             Frontend/apps/${{ matrix.app }}/build/ios/ipa/*.ipa
             Frontend/apps/${{ matrix.app }}/build/ios/archive

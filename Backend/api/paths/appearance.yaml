@@ -1,0 +1,104 @@
+# Admin-managed artwork and the public app config (ADR-0040).
+appConfig:
+  get:
+    operationId: getAppConfig
+    tags:
+    - Public
+    summary: The tagline and artwork an app shows without a release
+    x-permission: public
+    security: []
+    parameters:
+    - name: app
+      in: query
+      required: true
+      schema:
+        $ref: ../schemas/appearance.yaml#/AppName
+    - name: If-None-Match
+      in: header
+      required: false
+      schema:
+        type: string
+    responses:
+      '200':
+        description: OK
+        headers:
+          ETag:
+            schema:
+              type: string
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/appearance.yaml#/AppConfig
+      '304':
+        description: Not modified since the ETag sent
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+artwork:
+  get:
+    operationId: listArtwork
+    tags:
+    - Admin settings
+    summary: Every artwork slot with its size and current image
+    x-permission: settings:read
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/appearance.yaml#/ArtworkSlotList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+artworkSlot:
+  put:
+    operationId: uploadArtwork
+    tags:
+    - Admin settings
+    summary: Replace a slot's image; refused with the expected size when it does not fit
+    x-permission: settings:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/SlotKey
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/appearance.yaml#/ArtworkUpload
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/appearance.yaml#/ArtworkSlot
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+  delete:
+    operationId: resetArtwork
+    tags:
+    - Admin settings
+    summary: Put the seed image back
+    x-permission: settings:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/SlotKey
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/appearance.yaml#/ArtworkSlot
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound

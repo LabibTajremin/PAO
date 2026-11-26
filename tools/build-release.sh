@@ -6,7 +6,7 @@
 # target: appbundle (default for the mobile apps), apk, ipa, linux, web (admin only).
 # Non-secret settings come from Frontend/apps/<app>/config/<flavour>.json; keys that
 # must stay out of the repo are read from the environment when set:
-#   PAO_MAPS_API_KEY, PAO_FCM_API_KEY, PAO_FCM_APP_ID, PAO_FCM_SENDER_ID,
+#   PAO_FCM_API_KEY, PAO_FCM_APP_ID, PAO_FCM_SENDER_ID,
 #   PAO_FCM_PROJECT_ID, PAO_PIN_SHA256, PAO_SENTRY_DSN, PAO_BUILD_NUMBER,
 #   PAO_WEB_BASE_HREF, PAO_IOS_EXPORT_OPTIONS.
 # Firebase issues one App ID per platform and app, so PAO_FCM_APP_ID_<APP>_<ANDROID|IOS>
@@ -29,7 +29,7 @@ platform=ANDROID
 [[ "$target" == ipa ]] && platform=IOS
 # macOS runners ship bash 3.2, which has no ${var^^}.
 platform_app_id="PAO_FCM_APP_ID_$(printf %s "$app" | tr '[:lower:]' '[:upper:]')_${platform}"
-for key in PAO_MAPS_API_KEY PAO_FCM_API_KEY PAO_FCM_APP_ID PAO_FCM_SENDER_ID PAO_FCM_PROJECT_ID PAO_PIN_SHA256 PAO_SENTRY_DSN; do
+for key in PAO_FCM_API_KEY PAO_FCM_APP_ID PAO_FCM_SENDER_ID PAO_FCM_PROJECT_ID PAO_PIN_SHA256 PAO_SENTRY_DSN; do
   value="${!key:-}"
   if [[ "$key" == PAO_FCM_APP_ID && -n "${!platform_app_id:-}" ]]; then value="${!platform_app_id}"; fi
   if [[ -n "$value" ]]; then args+=("--dart-define=$key=$value"); fi
@@ -60,3 +60,16 @@ esac
 
 cd "$dir"
 flutter build "$target" "${args[@]}"
+
+# shellcheck source=/dev/null
+source "$root/tools/lib/release_name.sh"
+version="$(release_version pubspec.yaml "${PAO_BUILD_NUMBER:-}")"
+case "$target" in
+  apk) built="build/app/outputs/flutter-apk/app-$flavour-release.apk" ext=apk ;;
+  appbundle) built="build/app/outputs/bundle/${flavour}Release/app-$flavour-release.aab" ext=aab ;;
+  *) exit 0 ;;
+esac
+mkdir -p build/release
+named="build/release/$(release_name "$app" "$flavour" "$version" "$ext")"
+cp "$built" "$named"
+echo "release file: Frontend/apps/$app/$named"

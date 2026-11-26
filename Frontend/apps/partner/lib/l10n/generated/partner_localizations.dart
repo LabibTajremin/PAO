@@ -116,6 +116,24 @@ abstract class PartnerL10n {
   /// **'We will text you a code to sign in.'**
   String get authPhoneBody;
 
+  /// M03 sheet heading
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to PAO Partner'**
+  String get authWelcome;
+
+  /// M03 button
+  ///
+  /// In en, this message translates to:
+  /// **'Send OTP'**
+  String get authSendOtp;
+
+  /// M03 consent note
+  ///
+  /// In en, this message translates to:
+  /// **'By continuing you agree to PAO\'s partner terms and privacy policy.'**
+  String get authTermsNote;
+
   /// Phone field label.
   ///
   /// In en, this message translates to:
@@ -1243,12 +1261,6 @@ abstract class PartnerL10n {
   /// In en, this message translates to:
   /// **'Completed jobs and what you earned appear here.'**
   String get earnEmptyBody;
-
-  /// M28 title.
-  ///
-  /// In en, this message translates to:
-  /// **'Profile'**
-  String get profTitle;
 
   /// M28 button.
   ///
@@ -2629,6 +2641,180 @@ abstract class PartnerL10n {
   /// In en, this message translates to:
   /// **'Payment submitted. An admin will confirm it soon.'**
   String get paySent;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery orders'**
+  String get ordersTitle;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'New orders'**
+  String get ordersNew;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get ordersDeliveries;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'No new orders'**
+  String get ordersNoNew;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'No deliveries this week'**
+  String get ordersNoDeliveries;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Accept order'**
+  String get orderAccept;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get orderDecline;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Why can\'t you take it?'**
+  String get orderDeclineTitle;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t deliver'**
+  String get orderDeclineDate;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming deliveries'**
+  String get orderUpcoming;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Per delivery'**
+  String get orderPerDelivery;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'One time'**
+  String get orderPatternOnce;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Every day'**
+  String get orderPatternDaily;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Chosen days'**
+  String get orderPatternWeekdays;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Once a week'**
+  String get orderPatternWeekly;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Once a month'**
+  String get orderPatternMonthly;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get subRequested;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get subActive;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get subPaused;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Finished'**
+  String get subFinished;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get subDeclined;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get subCancelled;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled'**
+  String get deliveryScheduled;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Prepare today'**
+  String get deliveryPreparing;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'On the way'**
+  String get deliveryOut;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get deliveryDelivered;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped'**
+  String get deliverySkipped;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get deliveryDeclined;
+
+  /// P25 scheduled delivery
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get deliveryCancelled;
 }
 
 class _PartnerL10nDelegate extends LocalizationsDelegate<PartnerL10n> {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pao_admin/app/routes.dart';
-import 'package:pao_admin/features/catalog/presentation/catalog_icons.dart';
 import 'package:pao_admin/features/catalog/presentation/catalog_labels.dart';
 import 'package:pao_admin/shared/console_formats.dart';
 import 'package:pao_admin/shared/l10n.dart';
@@ -28,7 +27,11 @@ class CategoryTile extends StatelessWidget {
       child: ExpansionTile(
         initiallyExpanded: true,
         shape: const Border(),
-        leading: PaoIconTile(icon: catalogIcon(category.iconKey), size: 40),
+        leading: PaoIconTile.service(
+          iconKey: category.iconKey,
+          iconUrl: category.iconUrl,
+          size: 40,
+        ),
         title: Text(context.local(category.name)),
         subtitle: Text(
           t.catalogCategoryLine(
@@ -90,7 +93,7 @@ class _ServiceRow extends StatelessWidget {
       children: [
         const Divider(height: 1),
         ListTile(
-          leading: Icon(catalogIcon(service.iconKey)),
+          leading: PaoServiceIcon(service.iconKey, iconUrl: service.iconUrl),
           title: Text(context.local(service.name)),
           subtitle: Text(
             '${modelLabel(t, service.serviceModel)} · '

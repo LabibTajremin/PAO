@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pao_api/pao_api.dart' show ReviewTag;
+import 'package:pao_core/pao_core.dart';
 import 'package:pao_partner/app/routes.dart';
 import 'package:pao_partner/app/services.dart';
 import 'package:pao_partner/features/job/data/api_job_repository.dart';
@@ -57,6 +58,14 @@ class _RateCustomerPageState extends State<RateCustomerPage> {
     return ListView(
       padding: const EdgeInsets.all(PaoSpace.xl),
       children: [
+        Center(
+          child: SizedBox(
+            width: 200,
+            child: LookArtwork(widget.services.look.look, 'success.job'),
+          ),
+        ),
+        const Center(child: PaoSuccessMark(size: 48)),
+        const SizedBox(height: PaoSpace.lg),
         Text(context.t.jobRateQuestion),
         const SizedBox(height: PaoSpace.lg),
         Center(

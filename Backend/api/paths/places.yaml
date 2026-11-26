@@ -1,0 +1,55 @@
+search:
+  get:
+    operationId: searchPlaces
+    tags:
+    - Places
+    summary: Dhaka places matching a text, nearest first among equals (ADR-0042)
+    x-permission: catalog:read
+    parameters:
+    - $ref: ../components/parameters.yaml#/PlaceQuery
+    - $ref: ../components/parameters.yaml#/PlaceNearLat
+    - $ref: ../components/parameters.yaml#/PlaceNearLng
+    - $ref: ../components/parameters.yaml#/PlaceLanguage
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/places.yaml#/MapPlaceList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+      '429':
+        $ref: ../components/responses.yaml#/TooManyRequests
+reverse:
+  get:
+    operationId: reversePlace
+    tags:
+    - Places
+    summary: The nearest named place to a pin inside the launch area (ADR-0042)
+    x-permission: catalog:read
+    parameters:
+    - $ref: ../components/parameters.yaml#/Lat
+    - $ref: ../components/parameters.yaml#/Lng
+    - $ref: ../components/parameters.yaml#/PlaceLanguage
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/places.yaml#/MapPlace
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+      '429':
+        $ref: ../components/responses.yaml#/TooManyRequests

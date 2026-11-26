@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pao_admin/app/routes.dart';
 import 'package:pao_admin/features/catalog/presentation/catalog_cubits.dart';
-import 'package:pao_admin/features/catalog/presentation/icon_key_field.dart';
+import 'package:pao_admin/features/catalog/presentation/icon_field.dart';
 import 'package:pao_admin/features/catalog/presentation/localized_fields.dart';
+import 'package:pao_admin/features/catalog/presentation/schedule_fields.dart';
 import 'package:pao_admin/features/catalog/presentation/service_choices.dart';
 import 'package:pao_admin/features/catalog/presentation/service_draft.dart';
 import 'package:pao_admin/features/catalog/presentation/service_switches.dart';
 import 'package:pao_admin/shared/console_page.dart';
 import 'package:pao_admin/shared/l10n.dart';
+import 'package:pao_api/pao_api.dart';
 import 'package:pao_core/pao_core.dart';
 import 'package:pao_ui/pao_ui.dart';
 
@@ -85,8 +87,10 @@ class _ServiceFormState extends State<ServiceForm> {
             label: t.catalogName,
             errors: _draft.errors,
           ),
-          IconKeyField(
-            controller: _draft.icon,
+          IconField(
+            keyController: _draft.icon,
+            url: _draft.iconUrl,
+            icons: widget.cubit.repository,
             error: _draft.errors.of(_draft.icon),
           ),
           PaoTextField(
@@ -96,6 +100,12 @@ class _ServiceFormState extends State<ServiceForm> {
             keyboardType: TextInputType.number,
             error: _draft.errors.of(_draft.radius),
           ),
+          if (_draft.model == ServiceModel.scheduledDelivery)
+            ScheduleFields(
+              draft: _draft.schedule,
+              errors: _draft.errors,
+              onChanged: () => setState(() {}),
+            ),
           ServiceSwitches(draft: _draft, onChanged: () => setState(() {})),
           ..._footer(context),
         ],

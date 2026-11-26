@@ -1621,7 +1621,7 @@
   "@catalogEditCategory": {
     "description": "A03 dialog title and tooltip"
   },
-  "catalogCategoryLine": "{other} · order {order} · {count} services",
+  "catalogCategoryLine": "{other} · order {order} · services: {count}",
   "@catalogCategoryLine": {
     "description": "A03 category subtitle: name in the other language, sort order, number of services",
     "placeholders": {
@@ -1693,10 +1693,6 @@
   "catalogIconKey": "Icon key",
   "@catalogIconKey": {
     "description": "Field label"
-  },
-  "catalogPickIcon": "Pick a known icon",
-  "@catalogPickIcon": {
-    "description": "Icon menu tooltip"
   },
   "catalogSortOrder": "Sort order",
   "@catalogSortOrder": {
@@ -2458,5 +2454,287 @@
   "settingsAmountHint": "Paisa: 50000 = ৳500. Merchants above it cannot accept jobs.",
   "@settingsAmountHint": {
     "description": "Due limit hint."
+  },
+  "shellDarkMode": "Dark mode",
+  "@shellDarkMode": {
+    "description": "Sidebar switch between the light (default) and dark theme."
+  },
+  "iconChoose": "Choose icon",
+  "@iconChoose": {
+    "description": "Button that opens the icon picker"
+  },
+  "iconUseLibrary": "Use the library icon",
+  "@iconUseLibrary": {
+    "description": "Button that drops an uploaded icon"
+  },
+  "iconRules": "A library icon, or your own: SVG up to 100 KB, or a square PNG or WebP with a transparent background, at least 96 × 96 and up to 200 KB. Apps draw it in the accent colour.",
+  "@iconRules": {
+    "description": "Rules under the icon field"
+  },
+  "iconTabLibrary": "Library",
+  "@iconTabLibrary": {
+    "description": "Icon picker tab"
+  },
+  "iconTabUpload": "Upload",
+  "@iconTabUpload": {
+    "description": "Icon picker tab"
+  },
+  "iconTabLink": "From link",
+  "@iconTabLink": {
+    "description": "Icon picker tab"
+  },
+  "iconSearch": "Search icons",
+  "@iconSearch": {
+    "description": "Icon library search field"
+  },
+  "iconUploadButton": "Choose a file",
+  "@iconUploadButton": {
+    "description": "Button that opens the file chooser"
+  },
+  "iconLinkLabel": "Icon link (https)",
+  "@iconLinkLabel": {
+    "description": "Field label"
+  },
+  "iconLinkAdd": "Add",
+  "@iconLinkAdd": {
+    "description": "Button that downloads the linked icon"
+  },
+  "iconUploaded": "Uploaded icon",
+  "@iconUploaded": {
+    "description": "Shown instead of the key when an uploaded icon is set"
+  },
+  "iconErrorTooLarge": "The file is too large.",
+  "@iconErrorTooLarge": {
+    "description": "Icon refused"
+  },
+  "iconErrorUnreadable": "This is not a readable SVG, PNG or WebP.",
+  "@iconErrorUnreadable": {
+    "description": "Icon refused"
+  },
+  "iconErrorNotSquare": "The image must be square.",
+  "@iconErrorNotSquare": {
+    "description": "Icon refused"
+  },
+  "iconErrorTooSmall": "The image must be at least 96 × 96.",
+  "@iconErrorTooSmall": {
+    "description": "Icon refused"
+  },
+  "iconErrorOpaque": "The image needs a transparent background.",
+  "@iconErrorOpaque": {
+    "description": "Icon refused"
+  },
+  "iconErrorLink": "The link could not be downloaded.",
+  "@iconErrorLink": {
+    "description": "Icon refused"
+  },
+  "settingsBrand": "Brand",
+  "@settingsBrand": {
+    "description": "Settings section title"
+  },
+  "settingsTaglineEn": "Tagline (English)",
+  "@settingsTaglineEn": {
+    "description": "Field label"
+  },
+  "settingsTaglineBn": "Tagline (Bangla)",
+  "@settingsTaglineBn": {
+    "description": "Field label"
+  },
+  "settingsTaglineHint": "Shown on the splash and sign-in screens, in the share text and on receipts. At most 40 characters in each language.",
+  "@settingsTaglineHint": {
+    "description": "Help under the tagline fields"
+  },
+  "settingsTaglineSuggestions": "Suggestions",
+  "@settingsTaglineSuggestions": {
+    "description": "Label before the suggestion chips"
+  },
+  "appearanceTitle": "Illustrations",
+  "@appearanceTitle": {
+    "description": "Page title and the button that opens it"
+  },
+  "appearanceRules": "Preferred: SVG up to 300 KB. Otherwise PNG or WebP at exactly the size shown, with a transparent background, up to 800 KB. Keep the subject inside the dashed safe area, use only the palette colours, and put no text in the picture: it must work in both languages.",
+  "@appearanceRules": {
+    "description": "Rules at the top of the page"
+  },
+  "appearanceUpload": "Upload",
+  "@appearanceUpload": {
+    "description": "Button"
+  },
+  "appearanceReset": "Use the original",
+  "@appearanceReset": {
+    "description": "Button that resets a slot to its seed image"
+  },
+  "appearanceReplaced": "Uploaded",
+  "@appearanceReplaced": {
+    "description": "Status of a slot an admin replaced"
+  },
+  "appearanceOriginal": "Original",
+  "@appearanceOriginal": {
+    "description": "Status of a slot showing its seed image"
+  },
+  "appearanceBundled": "Shown from the app",
+  "@appearanceBundled": {
+    "description": "Status of a slot without a server image"
+  },
+  "appearanceErrorSize": "Use an image of {expected} pixels, or an SVG with that ratio.",
+  "@appearanceErrorSize": {
+    "description": "Upload refused: wrong size",
+    "placeholders": {
+      "expected": {
+        "type": "String",
+        "example": "1170x1200"
+      }
+    }
+  },
+  "appearanceErrorTooLarge": "The file is too large: SVG up to 300 KB, PNG or WebP up to 800 KB.",
+  "@appearanceErrorTooLarge": {
+    "description": "Upload refused: too large"
+  },
+  "catalogModelScheduled": "Scheduled delivery",
+  "@catalogModelScheduled": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogSchedule": "Delivery schedule",
+  "@catalogSchedule": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogPatterns": "Repeat options",
+  "@catalogPatterns": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogWindows": "Delivery windows",
+  "@catalogWindows": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogWindowsHint": "12:00-13:00, 19:00-21:00",
+  "@catalogWindowsHint": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogLeadHours": "Lead time (hours)",
+  "@catalogLeadHours": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogCutoff": "Cutoff the day before",
+  "@catalogCutoff": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogTimeFormat": "Use 24-hour times like 12:00-13:00.",
+  "@catalogTimeFormat": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogPatternsRequired": "Choose at least one.",
+  "@catalogPatternsRequired": {
+    "description": "P25 scheduled delivery"
+  },
+  "unitMeals": "Meals",
+  "@unitMeals": {
+    "description": "P25 scheduled delivery"
+  },
+  "unitGuests": "Guests",
+  "@unitGuests": {
+    "description": "P25 scheduled delivery"
+  },
+  "unitPackage": "Packages",
+  "@unitPackage": {
+    "description": "P25 scheduled delivery"
+  },
+  "patternOnce": "One time",
+  "@patternOnce": {
+    "description": "P25 scheduled delivery"
+  },
+  "patternDaily": "Every day",
+  "@patternDaily": {
+    "description": "P25 scheduled delivery"
+  },
+  "patternWeekdays": "Chosen days",
+  "@patternWeekdays": {
+    "description": "P25 scheduled delivery"
+  },
+  "patternWeekly": "Once a week",
+  "@patternWeekly": {
+    "description": "P25 scheduled delivery"
+  },
+  "patternMonthly": "Once a month",
+  "@patternMonthly": {
+    "description": "P25 scheduled delivery"
+  },
+  "ordersTitle": "Scheduled orders",
+  "@ordersTitle": {
+    "description": "P25 scheduled delivery"
+  },
+  "ordersEmpty": "No scheduled orders",
+  "@ordersEmpty": {
+    "description": "P25 scheduled delivery"
+  },
+  "ordersAll": "All",
+  "@ordersAll": {
+    "description": "P25 scheduled delivery"
+  },
+  "ordersUpcoming": "Next deliveries",
+  "@ordersUpcoming": {
+    "description": "P25 scheduled delivery"
+  },
+  "subRequested": "Requested",
+  "@subRequested": {
+    "description": "P25 scheduled delivery"
+  },
+  "subActive": "Active",
+  "@subActive": {
+    "description": "P25 scheduled delivery"
+  },
+  "subPaused": "Paused",
+  "@subPaused": {
+    "description": "P25 scheduled delivery"
+  },
+  "subFinished": "Finished",
+  "@subFinished": {
+    "description": "P25 scheduled delivery"
+  },
+  "subDeclined": "Declined",
+  "@subDeclined": {
+    "description": "P25 scheduled delivery"
+  },
+  "subCancelled": "Cancelled",
+  "@subCancelled": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryScheduled": "Scheduled",
+  "@deliveryScheduled": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryPreparing": "Preparing",
+  "@deliveryPreparing": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryOut": "Out for delivery",
+  "@deliveryOut": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryDelivered": "Delivered",
+  "@deliveryDelivered": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliverySkipped": "Skipped",
+  "@deliverySkipped": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryDeclined": "Declined",
+  "@deliveryDeclined": {
+    "description": "P25 scheduled delivery"
+  },
+  "deliveryCancelled": "Cancelled",
+  "@deliveryCancelled": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogScheduleUnit": "Counted in",
+  "@catalogScheduleUnit": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogScheduleMax": "Largest order",
+  "@catalogScheduleMax": {
+    "description": "P25 scheduled delivery"
+  },
+  "catalogScheduleMin": "Smallest order",
+  "@catalogScheduleMin": {
+    "description": "P25 scheduled delivery"
   }
 }

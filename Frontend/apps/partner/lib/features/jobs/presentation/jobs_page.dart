@@ -36,6 +36,7 @@ class _JobsPageState extends State<JobsPage> {
     child: PagedView<BookingSummary>(
       itemBuilder: (_, job) => JobRow(job: job),
       empty: PaoEmptyState(
+        illustration: LookArtwork(widget.services.look.look, 'empty.jobs'),
         title: tab == JobsTab.upcoming
             ? context.t.jobsEmptyUpcoming
             : context.t.jobsEmptyPast,
@@ -46,7 +47,16 @@ class _JobsPageState extends State<JobsPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: PaoAppBar(title: context.t.jobsTitle),
+    appBar: PaoAppBar(
+      title: context.t.jobsTitle,
+      actions: [
+        IconButton(
+          tooltip: context.t.ordersTitle,
+          icon: const Icon(Icons.event_repeat_outlined),
+          onPressed: () => context.push(Routes.orders),
+        ),
+      ],
+    ),
     body: Column(
       children: [
         Padding(

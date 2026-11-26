@@ -24,17 +24,7 @@ class AuthFrame extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Center(
-                  child: ClipRRect(
-                    borderRadius: PaoShape.leafSmall,
-                    child: Image.asset(
-                      'assets/brand/pao_logo.png',
-                      width: 72,
-                      height: 72,
-                      semanticLabel: 'PAO',
-                    ),
-                  ),
-                ),
+                const Center(child: PaoLogo(height: 72)),
                 const SizedBox(height: PaoSpace.lg),
                 Text(title, style: Theme.of(context).textTheme.headlineSmall),
                 const SizedBox(height: PaoSpace.xl),

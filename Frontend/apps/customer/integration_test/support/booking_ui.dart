@@ -5,7 +5,8 @@ import 'package:pao_ui/pao_ui.dart';
 
 /// Signs a new customer up from the first launch: onboarding, phone (C03),
 /// the code from the stack's SMS capture (C04), profile (C05) and the address
-/// from the device position (C06), ending on home.
+/// (C06): the pin moved by a search of PAO's own OpenStreetMap places
+/// (ADR-0042), ending on home.
 Future<void> signUp(
   WidgetTester tester,
   StackClient stack,
@@ -13,12 +14,15 @@ Future<void> signUp(
 ) async {
   await tapText(tester, 'Skip');
   await typeInto(tester, 'Mobile number', phone);
-  await tapText(tester, 'Send code');
+  await tapText(tester, 'Send OTP');
   await pumpUntil(tester, find.text('Enter the 6-digit code'));
   await enterCode(tester, await stack.lastCode(phone));
   await typeInto(tester, 'Your name', 'Nusrat Jahan');
   await tapText(tester, 'Continue');
   await tapText(tester, 'Allow location access');
+  await typeInto(tester, 'Search for an address', 'গুলশান ২');
+  await pumpUntil(tester, find.text('Gulshan 2'));
+  await tapText(tester, 'Gulshan 2');
   await typeInto(tester, 'House and road', 'House 12, Road 5, Banani');
   await tapText(tester, 'Save address');
   await pumpUntil(tester, find.text('Services'));

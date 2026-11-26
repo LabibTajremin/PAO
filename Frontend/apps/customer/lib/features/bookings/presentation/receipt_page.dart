@@ -43,7 +43,8 @@ class ReceiptPage extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => ReceiptShareCubit(
-            render: receiptPdf,
+            render: (r) =>
+                receiptPdf(r, tagline: services.look.look.value.taglineEn),
             share: share,
             fileName: receiptFileName,
           ),
@@ -55,7 +56,12 @@ class ReceiptPage extends StatelessWidget {
           builder: (context, state) => ViewStateView<Receipt>(
             state: state,
             onRetry: context.read<LoadCubit<Receipt>>().load,
-            builder: (_, receipt) => _ReceiptView(receipt: receipt),
+            builder: (_, receipt) => _ReceiptView(
+              receipt: receipt,
+              tagline: services.look.look.value.tagline(
+                Localizations.localeOf(context).languageCode,
+              ),
+            ),
           ),
         ),
       ),
@@ -64,9 +70,10 @@ class ReceiptPage extends StatelessWidget {
 }
 
 class _ReceiptView extends StatelessWidget {
-  const _ReceiptView({required this.receipt});
+  const _ReceiptView({required this.receipt, required this.tagline});
 
   final Receipt receipt;
+  final String tagline;
 
   @override
   Widget build(BuildContext context) {
@@ -77,24 +84,35 @@ class _ReceiptView extends StatelessWidget {
       padding: const EdgeInsets.all(PaoSpace.lg),
       children: [
         PaoCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Stack(
             children: [
-              Text('PAO', style: text.headlineSmall),
-              Text(t.bookingsReceiptNumber(r.number), style: text.bodySmall),
-              Text(t.bookingsReceiptCompleted(context.when(r.completedAt))),
-              const Divider(),
-              _Fact(t.bookingsReceiptService, context.local(r.serviceName)),
-              _Fact(t.bookingsReceiptProvider, r.providerName),
-              _Fact(t.bookingsReceiptCustomer, r.customerName),
-              if (r.area case final String area)
-                _Fact(t.bookingsReceiptArea, area),
-              _Fact(t.bookingsReceiptPayment, t.bookingCash),
-              const Divider(),
-              BillRows(items: r.items, total: r.total),
-              Text(t.bookingsPaidCash, style: text.bodySmall),
-              const SizedBox(height: PaoSpace.md),
-              Text(t.bookingsReceiptThanks),
+              const Positioned.fill(child: Center(child: PaoWatermark())),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const PaoLogo(height: 40),
+                  const SizedBox(height: PaoSpace.sm),
+                  Text(
+                    t.bookingsReceiptNumber(r.number),
+                    style: text.bodySmall,
+                  ),
+                  Text(t.bookingsReceiptCompleted(context.when(r.completedAt))),
+                  const Divider(),
+                  _Fact(t.bookingsReceiptService, context.local(r.serviceName)),
+                  _Fact(t.bookingsReceiptProvider, r.providerName),
+                  _Fact(t.bookingsReceiptCustomer, r.customerName),
+                  if (r.area case final String area)
+                    _Fact(t.bookingsReceiptArea, area),
+                  _Fact(t.bookingsReceiptPayment, t.bookingCash),
+                  const Divider(),
+                  BillRows(items: r.items, total: r.total),
+                  Text(t.bookingsPaidCash, style: text.bodySmall),
+                  const SizedBox(height: PaoSpace.md),
+                  Text(t.bookingsReceiptThanks),
+                  const SizedBox(height: PaoSpace.lg),
+                  Center(child: Text(tagline, style: text.bodySmall)),
+                ],
+              ),
             ],
           ),
         ),

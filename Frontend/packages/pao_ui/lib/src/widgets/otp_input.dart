@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pao_ui/src/tokens/colors.dart';
 import 'package:pao_ui/src/tokens/metrics.dart';
-import 'package:pao_ui/src/tokens/shape.dart';
+import 'package:pao_ui/src/tokens/motion.dart';
 
 /// One-time code entry as a row of boxes over a single hidden field, so paste
 /// and SMS autofill work (C04).
@@ -54,7 +54,7 @@ class _PaoOtpInputState extends State<PaoOtpInput> {
         : (i == code.length ? c.action : c.well);
     return AnimatedContainer(
       duration: PaoMotion.base,
-      curve: PaoMotion.curve,
+      curve: PaoMotion.enter,
       width: minTapTarget,
       height: 56,
       alignment: Alignment.center,

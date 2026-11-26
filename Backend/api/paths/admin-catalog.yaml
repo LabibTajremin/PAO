@@ -1,0 +1,407 @@
+# Generated from the operation table during P01; edit by hand from now on.
+catalog:
+  get:
+    operationId: getAdminCatalog
+    tags:
+    - Admin catalog
+    summary: Full catalog including unpublished items (A03)
+    x-permission: catalog:manage
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/CatalogTree
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+categoriesCreate:
+  post:
+    operationId: createCategory
+    tags:
+    - Admin catalog
+    summary: Create a category
+    x-permission: catalog:manage
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/CategoryInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/Category
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+categoriesUpdate:
+  put:
+    operationId: updateCategory
+    tags:
+    - Admin catalog
+    summary: Update a category (publish/unpublish with `published`)
+    x-permission: catalog:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/CategoryId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/CategoryInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/Category
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+servicesCreate:
+  post:
+    operationId: createService
+    tags:
+    - Admin catalog
+    summary: Create a service
+    x-permission: catalog:manage
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/ServiceInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/Service
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+servicesUpdate:
+  put:
+    operationId: updateService
+    tags:
+    - Admin catalog
+    summary: Update a service (publish/unpublish with `published`)
+    x-permission: catalog:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/ServiceId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/ServiceInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/Service
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+subservicesCreate:
+  post:
+    operationId: createSubService
+    tags:
+    - Admin catalog
+    summary: Create a subservice
+    x-permission: catalog:manage
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/SubServiceInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/SubService
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+subservicesUpdate:
+  put:
+    operationId: updateSubService
+    tags:
+    - Admin catalog
+    summary: Update a subservice (publish/unpublish with `published`)
+    x-permission: catalog:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubServiceId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/SubServiceInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/SubService
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+prices:
+  get:
+    operationId: listPriceHistory
+    tags:
+    - Admin catalog
+    summary: Price versions of a sub-service
+    x-permission: catalog:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubServiceId
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/PriceHistory
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+  post:
+    operationId: changePrice
+    tags:
+    - Admin catalog
+    summary: Set a new price (inserts an immutable version)
+    x-permission: catalog:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/SubServiceId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/PriceInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/PriceVersion
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+banners:
+  get:
+    operationId: listBanners
+    tags:
+    - Admin catalog
+    summary: Every home banner, published or not, in display order
+    x-permission: catalog:manage
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/BannerList
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+  post:
+    operationId: createBanner
+    tags:
+    - Admin catalog
+    summary: Add a home banner
+    x-permission: catalog:manage
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/BannerInput
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/Banner
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+banner:
+  put:
+    operationId: updateBanner
+    tags:
+    - Admin catalog
+    summary: Update a home banner (publish/unpublish with `published`)
+    x-permission: catalog:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/BannerId
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/BannerInput
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/Banner
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+  delete:
+    operationId: deleteBanner
+    tags:
+    - Admin catalog
+    summary: Remove a home banner
+    x-permission: catalog:manage
+    parameters:
+    - $ref: ../components/parameters.yaml#/BannerId
+    responses:
+      '204':
+        description: No content
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '404':
+        $ref: ../components/responses.yaml#/NotFound
+icons:
+  get:
+    operationId: listIconLibrary
+    tags:
+    - Admin catalog
+    summary: The library icons the apps ship, for the icon picker
+    x-permission: catalog:manage
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/IconLibrary
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+  post:
+    operationId: uploadIcon
+    tags:
+    - Admin catalog
+    summary: Store an uploaded icon (SVG sanitised; PNG or WebP square with transparency)
+    x-permission: catalog:manage
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/IconUpload
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/CatalogIcon
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed
+iconsFromLink:
+  post:
+    operationId: addIconFromLink
+    tags:
+    - Admin catalog
+    summary: Download an icon once from an HTTPS link, check it like an upload and store it
+    x-permission: catalog:manage
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/catalog.yaml#/IconLink
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/catalog.yaml#/CatalogIcon
+      '401':
+        $ref: ../components/responses.yaml#/Unauthenticated
+      '403':
+        $ref: ../components/responses.yaml#/Forbidden
+      '422':
+        $ref: ../components/responses.yaml#/ValidationFailed

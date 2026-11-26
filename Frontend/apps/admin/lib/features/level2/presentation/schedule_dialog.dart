@@ -18,7 +18,7 @@ Future<Level2Session?> showScheduleDialog(
   BuildContext context, {
   required Level2Repository repo,
   required DateTime Function() now,
-}) => showDialog<Level2Session>(
+}) => showPaoDialog<Level2Session>(
   context: context,
   builder: (_) => MultiBlocProvider(
     providers: [

@@ -58,7 +58,10 @@ class _Identity extends StatelessWidget {
     final p = profile;
     return Row(
       children: [
-        PaoAvatar(name: p.name, image: photoOf(p.photoUrl), size: 72),
+        PaoHero(
+          tag: PaoHero.provider(p.id),
+          child: PaoAvatar(name: p.name, image: photoOf(p.photoUrl), size: 72),
+        ),
         const SizedBox(width: PaoSpace.md),
         Expanded(
           child: Column(

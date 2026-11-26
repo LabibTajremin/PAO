@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:pao_api/pao_api.dart';
+import 'package:pao_core/pao_core.dart';
 import 'package:pao_customer/features/bookings/data/receipt_pdf.dart';
 import 'package:pao_customer/features/bookings/data/share_pdf.dart';
 import 'package:pao_customer/features/bookings/presentation/receipt_page.dart';
@@ -21,7 +22,27 @@ Receipt _receipt({String? area = 'Banani'}) => Receipt.fromJson(
 );
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(initializeDateFormatting);
+
+  test(
+    'the receipt carries the logo and a watermark behind the items',
+    () async {
+      final art = await loadReceiptArt();
+      expect(art.logo, contains('<svg'));
+      expect(art.watermark, contains('opacity="0.06"'));
+      const blank =
+          '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>';
+      final marked = await receiptPdf(_receipt(), art: art);
+      final plain = await receiptPdf(
+        _receipt(),
+        art: (logo: art.logo, watermark: blank),
+      );
+      // The watermark adds its own drawing to the page.
+      expect(marked.length, greaterThan(plain.length));
+      expect(AppLook.seedTaglineEn, 'Ask for it. PAO it.');
+    },
+  );
 
   test('the receipt renders as a PDF named after its number', () async {
     final bytes = await receiptPdf(_receipt());

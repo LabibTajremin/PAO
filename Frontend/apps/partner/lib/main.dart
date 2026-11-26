@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pao_core/pao_core.dart';
 import 'package:pao_l10n/pao_l10n.dart';
 import 'package:pao_partner/app/app.dart';
 import 'package:pao_partner/app/services.dart';
+import 'package:pao_ui/pao_ui.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,14 +35,28 @@ Future<void> main() async {
     launcher: Launcher(),
     photos: PhotoSource(),
     push: await _push(),
+    look: AppLookService(api, await FileLookStore.support(), app: 'partner'),
   );
-  await sessions.restore();
-  if (sessions.signedIn) {
+  // The cached look shows at once; the network check must not delay launch.
+  unawaited(services.look.start());
+  // The opening plays while the session loads; routing starts once it has.
+  await precacheOpening();
+  runApp(
+    PaoApp(
+      services: services,
+      ready: _load(services),
+      lowEnd: await isLowEndDevice(),
+    ),
+  );
+}
+
+Future<void> _load(AppServices services) async {
+  await services.sessions.restore();
+  if (services.sessions.signedIn) {
     // Offline at launch is fine: the guards re-check once these load.
-    await Future.wait([permissions.load(), services.gate.load()])
+    await Future.wait([services.permissions.load(), services.gate.load()])
         .catchError((Object _) => <void>[]);
   }
-  runApp(PaoApp(services: services));
 }
 
 /// FCM is configured with `--dart-define`; without it the app runs without
@@ -56,5 +72,9 @@ Future<PushService> _push() async {
       projectId: String.fromEnvironment('PAO_FCM_PROJECT_ID'),
     ),
   );
-  return FcmPushService(FirebaseMessaging.instance);
+  return FcmPushService(
+    FirebaseMessaging.instance,
+    local: PluginLocalNotifier.system(),
+    showForeground: defaultTargetPlatform == TargetPlatform.android,
+  );
 }

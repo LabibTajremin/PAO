@@ -1,0 +1,43 @@
+# Admin-managed artwork slots and the brand tagline (06-update-2026-11 §5–6, ADR-0040).
+AppName:
+  type: string
+  enum: [customer, partner, admin]
+ArtworkImage:
+  type: object
+  description: The server image of a slot; apps show their bundled seed until it is cached.
+  required: [key, url, version]
+  properties:
+    key: { type: string, example: customer.signin.hero }
+    url: { type: string, format: uri, maxLength: 500 }
+    version: { type: integer, minimum: 1, example: 3 }
+AppConfig:
+  type: object
+  description: What an app shows without a release. Cache it; send its ETag back as If-None-Match.
+  required: [tagline, artwork]
+  properties:
+    tagline: { $ref: "./common.yaml#/LocalizedText" }
+    artwork: { type: array, items: { $ref: "#/ArtworkImage" } }
+ArtworkSlot:
+  type: object
+  required: [key, app, width, height, version, replaced]
+  properties:
+    key: { type: string, example: customer.signin.hero }
+    app: { $ref: "#/AppName" }
+    width: { type: integer, example: 1170 }
+    height: { type: integer, example: 1200 }
+    url: { type: string, format: uri, maxLength: 500, description: Absent until seeded or uploaded. }
+    contentType: { type: string, enum: [image/svg+xml, image/png, image/webp] }
+    version: { type: integer, minimum: 0, description: 0 until the slot has an image. }
+    replaced: { type: boolean, description: An admin uploaded it; seeding leaves it alone. }
+ArtworkSlotList:
+  type: object
+  required: [slots]
+  properties:
+    slots: { type: array, items: { $ref: "#/ArtworkSlot" } }
+ArtworkUpload:
+  type: object
+  description: "SVG up to 300 KB (sanitised), or PNG or WebP at exactly the slot's size with transparency, up to 800 KB; the ratio must match within 2%."
+  required: [contentType, data]
+  properties:
+    contentType: { type: string, enum: [image/svg+xml, image/png, image/webp] }
+    data: { type: string, format: byte, minLength: 4, maxLength: 1092268, description: "The file, base64." }

@@ -15,7 +15,7 @@ Three clients share one .NET 10 (C#) API:
 
 ## Run it locally
 
-Requirements: Docker, the .NET SDK pinned in `Backend/global.json`, Flutter 3.47+ (for the
+You'll need Docker, the .NET SDK pinned in `Backend/global.json`, Flutter 3.47+ (for the
 apps), bash; Node.js (`npx`) only for `./pao gen`, which bundles the OpenAPI contract.
 
 ```sh
@@ -31,13 +31,19 @@ Run the whole quality gate (what CI runs) with `./pao ci`. `./pao help` lists ev
 
 | Path | What it holds |
 |---|---|
-| `Backend/` | .NET solution (ADR-0034): hosts `PAO.Core` (API), `PAO.Worker`, `PAO.Migrator`; `Api/` (the OpenAPI contract), `Config/`, `DB Changes/`, `Seed/`, `Docs/`, `Test/` (unit, integration, `PAO.E2ETests` journeys, `PAO.LoadTests` load tests), `docker/` |
-| `Frontend/` | Flutter workspace: `apps/` (customer, partner, admin) and `packages/` (pao_core, pao_api, pao_ui, pao_l10n, pao_e2e); per-app `config/<flavour>.json`; `test/e2e` (the app journeys) |
-| `docs/` | PRD, build kit, ADRs, `guides/` (architecture, release, deployment, glossary, ...), runbooks, handover, contributing |
-| `infra/` | `docker-compose.yml`, the e2e stack (`e2e/`), `ops/` (Prometheus, Grafana), `security/` (gitleaks, trivy, osv-scanner configs) |
-| `tools/` | the `pao` CLI internals, git hooks, CLI tests, `build-release.sh` |
-| `out/` | generated, ignored: coverage, the perf fixture, the e2e stack's state |
+| `PAO.sln` | The one .NET solution. Open it in Visual Studio, or open `PAO.code-workspace` in VS Code |
+| `Backend/` | The .NET API, worker and migrator: `src/`, `tests/`, `tools/`, the contract in `api/`, `config/`, `database/`, `docs/`. See [`Backend/README.md`](Backend/README.md) |
+| `Frontend/` | The Flutter apps (customer, partner, admin) and their shared packages; `e2e/` runs the app journeys. See [`Frontend/README.md`](Frontend/README.md) |
+| `design/` | The logo, app icons, illustrations, service icons and the owner's references |
+| `docs/` | Guides, ADRs, the PRD, runbooks and the build plan. See [`docs/README.md`](docs/README.md) |
+| `infra/` | The Docker stack, the e2e stack, monitoring and the security scanner settings |
+| `tools/` | What `./pao` runs, the git hooks and the release build script |
+| `.vscode/` | Recommended extensions, run configurations and tasks |
+| `out/` | Generated and ignored: coverage, the perf fixture, the e2e stack's state |
 | `.github/workflows/` | CI: backend, frontend, contract, e2e |
+
+New here? [`docs/guides/getting-started.md`](docs/guides/getting-started.md) goes from clone to
+running apps.
 
 ## Documentation
 

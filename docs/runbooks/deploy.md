@@ -57,4 +57,4 @@ If any check fails and the cause is not obvious within 10 minutes, roll back.
 
 Mobile and admin web builds follow `docs/guides/release.md`. The apps must keep working with
 the previous backend for as long as old app versions are in use: the API contract
-(`Backend/Api/openapi.yaml`) only grows; removing a field needs a new API version.
+(`Backend/api/openapi.yaml`) only grows; removing a field needs a new API version.

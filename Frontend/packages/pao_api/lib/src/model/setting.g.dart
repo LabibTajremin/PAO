@@ -158,4 +158,5 @@ const _$SettingTypeEnumEnumMap = {
   SettingTypeEnum.boolean: 'boolean',
   SettingTypeEnum.string: 'string',
   SettingTypeEnum.geojson: 'geojson',
+  SettingTypeEnum.tagline: 'tagline',
 };

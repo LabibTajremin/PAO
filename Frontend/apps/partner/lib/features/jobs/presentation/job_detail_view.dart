@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pao_api/pao_api.dart';
+import 'package:pao_core/pao_core.dart';
 import 'package:pao_partner/app/routes.dart';
 import 'package:pao_partner/features/jobs/domain/jobs_repository.dart';
 import 'package:pao_partner/features/jobs/presentation/item_rows.dart';
@@ -13,13 +15,21 @@ import 'package:pao_ui/pao_ui.dart';
 /// The loaded content of M24.
 class JobDetailView extends StatelessWidget {
   /// Creates the view of [job].
-  const JobDetailView({required this.job, required this.repo, super.key});
+  const JobDetailView({
+    required this.job,
+    required this.repo,
+    required this.look,
+    super.key,
+  });
 
   /// The job.
   final Booking job;
 
   /// Loads the receipt.
   final JobsRepository repo;
+
+  /// The app's look, for the receipt's tagline.
+  final ValueListenable<AppLook> look;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +71,14 @@ class JobDetailView extends StatelessWidget {
       PaoButton(
         label: context.t.jobsReceipt,
         variant: PaoButtonVariant.soft,
-        onPressed: () => showReceipt(context, repo, job.id),
+        onPressed: () => showReceipt(
+          context,
+          repo,
+          job.id,
+          tagline: look.value.tagline(
+            Localizations.localeOf(context).languageCode,
+          ),
+        ),
       ),
     const SizedBox(height: PaoSpace.sm),
     PaoButton(

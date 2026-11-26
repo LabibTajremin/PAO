@@ -1,12 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pao_api/pao_api.dart';
+import 'package:pao_core/pao_core.dart';
 import 'package:pao_customer/app/routes.dart';
 import 'package:pao_customer/app/services.dart';
 import 'package:pao_customer/features/search/data/api_search_repository.dart';
 import 'package:pao_customer/features/search/presentation/search_cubit.dart';
-import 'package:pao_customer/shared/catalog_icons.dart';
 import 'package:pao_customer/shared/formats.dart';
 import 'package:pao_customer/shared/l10n.dart';
 import 'package:pao_customer/shared/price_units.dart';
@@ -62,19 +63,23 @@ class SearchPage extends StatelessWidget {
         child: PaoSkeletonList(semanticLabel: common.loading),
       );
     }
-    if (s.nothingFound) return _NoResults(query: s.query);
+    if (s.nothingFound) {
+      return _NoResults(query: s.query, look: services.look.look);
+    }
     return _Results(results: results);
   }
 }
 
 class _NoResults extends StatelessWidget {
-  const _NoResults({required this.query});
+  const _NoResults({required this.query, required this.look});
 
   final String query;
+  final ValueListenable<AppLook> look;
 
   @override
   Widget build(BuildContext context) => PaoEmptyState(
     icon: Icons.search_off,
+    illustration: LookArtwork(look, 'empty.search'),
     title: context.t.searchNoResults(query),
     message: context.t.searchNoResultsBody,
     action: PaoButton(
@@ -101,7 +106,11 @@ class _Results extends StatelessWidget {
           Text(context.t.searchServices, style: heading),
         for (final s in results.services)
           PaoListRow(
-            leading: PaoIconTile(icon: catalogIcon(s.iconKey), size: 40),
+            leading: PaoIconTile.service(
+              iconKey: s.iconKey,
+              iconUrl: s.iconUrl,
+              size: 40,
+            ),
             title: context.local(s.name),
             onTap: () => context.push(Routes.serviceOf(s.id)),
           ),
