@@ -41,16 +41,19 @@ class PaoChip extends StatelessWidget {
           curve: PaoMotion.enter,
           constraints: const BoxConstraints(minHeight: minTapTarget),
           padding: const EdgeInsets.symmetric(horizontal: PaoSpace.lg + 2),
-          alignment: Alignment.center,
           decoration: BoxDecoration(
             color: selected ? c.selectedFill : c.card,
             borderRadius: shape,
             border: Border.all(color: selected ? c.action : c.hairline),
           ),
-          child: Text(
-            label,
-            style: Theme.of(context).textTheme.labelMedium!
-                .copyWith(color: selected ? c.selectedInk : c.inkMuted),
+          // Width hugs the label: a chip in a Wrap must not take the row.
+          child: Align(
+            widthFactor: 1,
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.labelMedium!
+                  .copyWith(color: selected ? c.selectedInk : c.inkMuted),
+            ),
           ),
         ),
       ),

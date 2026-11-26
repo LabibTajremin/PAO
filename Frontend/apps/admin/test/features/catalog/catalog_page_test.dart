@@ -34,7 +34,7 @@ void main() {
       tester.getTopLeft(find.text('Cleaning')).dy,
       lessThan(tester.getTopLeft(find.text('Electrical')).dy),
     );
-    expect(find.text('বাংলা Electrical · order 2 · 1 services'), findsOne);
+    expect(find.text('বাংলা Electrical · order 2 · services: 1'), findsOne);
     expect(find.text('On-demand visit · Level 1 · Verified'), findsOne);
     expect(find.text('Ceiling fan installation'), findsOneWidget);
     expect(find.text('৳500 per unit'), findsNWidgets(2));

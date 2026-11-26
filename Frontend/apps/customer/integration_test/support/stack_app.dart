@@ -3,13 +3,15 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:pao_core/pao_core.dart';
 import 'package:pao_customer/app/services.dart';
+import 'package:pao_customer/features/location/data/api_places.dart';
 import 'package:pao_e2e/pao_e2e.dart';
 import 'package:pao_l10n/pao_l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// The customer app's services against the e2e stack, wired as `main.dart`
-/// wires them, except the device: no camera, GPS, push or keyring on the
-/// Linux runner, so those are stand-ins and only the network and UI are real.
+/// wires them (places included), except the device: no camera, GPS, push or
+/// keyring on the Linux runner, so those are stand-ins and only the network
+/// and UI are real.
 Future<AppServices> stackServices() async {
   SharedPreferences.setMockInitialValues({});
   final sessions = SessionManager(MemorySessionStore());
@@ -37,5 +39,6 @@ Future<AppServices> stackServices() async {
     launcher: Launcher(open: (_) async => true),
     photos: StubPhotos(),
     push: const NoPushService(),
+    places: ApiPlacesService(api),
   );
 }

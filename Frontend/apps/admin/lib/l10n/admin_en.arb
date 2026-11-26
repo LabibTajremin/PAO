@@ -1621,7 +1621,7 @@
   "@catalogEditCategory": {
     "description": "A03 dialog title and tooltip"
   },
-  "catalogCategoryLine": "{other} · order {order} · {count} services",
+  "catalogCategoryLine": "{other} · order {order} · services: {count}",
   "@catalogCategoryLine": {
     "description": "A03 category subtitle: name in the other language, sort order, number of services",
     "placeholders": {

@@ -1262,12 +1262,6 @@ abstract class PartnerL10n {
   /// **'Completed jobs and what you earned appear here.'**
   String get earnEmptyBody;
 
-  /// M28 title.
-  ///
-  /// In en, this message translates to:
-  /// **'Profile'**
-  String get profTitle;
-
   /// M28 button.
   ///
   /// In en, this message translates to:

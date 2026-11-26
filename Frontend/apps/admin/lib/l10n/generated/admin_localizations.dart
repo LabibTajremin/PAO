@@ -2296,7 +2296,7 @@ abstract class AdminL10n {
   /// A03 category subtitle: name in the other language, sort order, number of services
   ///
   /// In en, this message translates to:
-  /// **'{other} · order {order} · {count} services'**
+  /// **'{other} · order {order} · services: {count}'**
   String catalogCategoryLine(String other, String order, String count);
 
   /// A03 add-service button, A04 title

@@ -35,14 +35,14 @@ it first and continues from **Current task**.
 | P25 Scheduled delivery | done | — | update round 2026-11 |
 | P26 Free Dhaka map | done | — | update round 2026-11 |
 | P27 Motion | done | — | update round 2026-11 |
-| P28 Design polish & handover | in_progress | — | update round 2026-11 |
+| P28 Design polish & handover | done | — | update round 2026-11 |
 
 Status values: `todo` → `in_progress` → `in_review` (PR open) → `done` (merged).
 
 ## Current task
 
-Update round 2026-11 — P28 (design polish and handover; no deployment: that step is the
-owner's). P26 and P27 were pushed together (owner asked to batch).
+Update round 2026-11 — every phase P18–P28 is done in PR #12, waiting for the owner to merge.
+Deployment is the owner's step (owner asked to keep it).
 
 Requirements and decisions: `docs/build/06-update-2026-11.md`. Run with the
 `automatic-agentic-run` skill (`.claude/skills/automatic-agentic-run/SKILL.md`).
@@ -85,6 +85,16 @@ None.
 
 ## Log
 
+- 2026-11-26 P28 Design polish & handover: screen tours in all three apps
+  (`test/tour/`) check every main screen in light/dark × en/bn on every test run and write
+  `docs/screenshots/` (124 images) with `--update-goldens`. Fixes found by the tours: chips
+  stretched to the full row in a Wrap (admin filters, order status); the partner Account tab
+  opened a page titled "Profile"; "1 services" in the admin catalog. `brand.md` now covers
+  palette, type, illustration slots and sizes, icons and motion; `05-screens.md` points to the
+  current look; HANDOVER lists the screenshots and the CI release artifacts. The e2e customer
+  services now use the PAO places adapter (the sign-up search journey needs it). Owner actions:
+  run the motion perf test on a low-end phone; store screenshots at store sizes from
+  `docs/screenshots/`.
 - 2026-11-26 P27 Motion: `PaoMotion` tokens (`./pao lint dart` rejects raw milliseconds and
   curves), shared-axis push/pop (Cupertino on iOS, fade on the web), tab fade-through,
   `showPaoSheet`/`showPaoDialog` motion, the cold-start `PaoOpening` (splash-identical first

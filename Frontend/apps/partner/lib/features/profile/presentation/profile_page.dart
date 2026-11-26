@@ -22,7 +22,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) => BlocProvider(
     create: (_) => ProfileCubit(ApiProfileRepository(services.api)).loading(),
     child: Scaffold(
-      appBar: PaoAppBar(title: context.t.profTitle),
+      appBar: PaoAppBar(title: context.common.navAccount),
       body: ListView(
         padding: const EdgeInsets.all(PaoSpace.lg),
         children: [

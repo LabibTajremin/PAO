@@ -886,10 +886,6 @@
   "@earnEmptyBody": {
     "description": "M27 empty state body."
   },
-  "profTitle": "Profile",
-  "@profTitle": {
-    "description": "M28 title."
-  },
   "profChangePhoto": "Change photo",
   "@profChangePhoto": {
     "description": "M28 button."

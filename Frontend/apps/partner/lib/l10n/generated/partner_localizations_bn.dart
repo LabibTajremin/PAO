@@ -654,9 +654,6 @@ class PartnerL10nBn extends PartnerL10n {
   String get earnEmptyBody => 'সম্পন্ন কাজ ও আয় এখানে দেখা যাবে।';
 
   @override
-  String get profTitle => 'প্রোফাইল';
-
-  @override
   String get profChangePhoto => 'ছবি বদলান';
 
   @override

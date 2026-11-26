@@ -1197,7 +1197,7 @@ class AdminL10nEn extends AdminL10n {
 
   @override
   String catalogCategoryLine(String other, String order, String count) {
-    return '$other · order $order · $count services';
+    return '$other · order $order · services: $count';
   }
 
   @override

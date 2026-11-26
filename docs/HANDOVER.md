@@ -51,6 +51,10 @@ plan) sets `JOBS_IN_API=true` so the API runs the outbox relay and the jobs (ADR
   checklist: [`docs/guides/release.md`](guides/release.md).
 - Checking that notifications pop up on real phones, and what to do when they don't:
   [`docs/guides/push-testing.md`](guides/push-testing.md).
+- Screenshots of every main screen in light/dark × English/Bangla, and how to refresh them:
+  [`docs/screenshots/`](screenshots/README.md). Release builds of both apps (Android app
+  bundles and APKs, iOS archives) and the admin web are produced by the `frontend` workflow on
+  every PR and kept as artifacts named `pao-customer-…`, `pao-partner-…` and `pao-admin-…`.
 - Motion tokens, transitions, the light motion set and the device performance test:
   [`docs/guides/motion.md`](guides/motion.md).
 - Dhaka places from OpenStreetMap and their monthly refresh:

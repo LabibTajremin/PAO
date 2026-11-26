@@ -659,9 +659,6 @@ class PartnerL10nEn extends PartnerL10n {
   String get earnEmptyBody => 'Completed jobs and what you earned appear here.';
 
   @override
-  String get profTitle => 'Profile';
-
-  @override
   String get profChangePhoto => 'Change photo';
 
   @override
