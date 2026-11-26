@@ -1,3 +1,5 @@
+ALL_PHASES_DONE da6a486
+
 # Build progress
 
 The agent updates this file in the same commit as each finished task. A new session reads
